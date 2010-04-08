@@ -34,7 +34,8 @@ class QuickBooks_IPP_Parser
 			
 			foreach ($List->children() as $Child)
 			{
-				$Object = new QuickBooks_IPP_Object_Customer();
+				$class = 'QuickBooks_IPP_Object_' . $Child->name();
+				$Object = new $class();
 				
 				foreach ($Child->children() as $Data)
 				{

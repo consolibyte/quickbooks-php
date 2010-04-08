@@ -47,6 +47,12 @@ class QuickBooks_IPP_Object
 					
 					return null;
 				}
+				else if (!count($args) and 
+					isset($this->_data[$field]) and 
+					is_array($this->_data[$field]))
+				{
+					return $this->_data[$field][0]; 
+				}
 				else
 				{
 					// Normal data
@@ -67,5 +73,46 @@ class QuickBooks_IPP_Object
 			
 			$this->_data[$field][] = current($args);
 		}
+	}
+	
+	public function resource()
+	{
+		$split = explode('_', get_class($this));
+		return strtolower(end($split));
+	}
+	
+	public function asIDSXML($indent = 0, $parent = null)
+	{
+		if (!$parent)
+		{
+			$parent = $this->resource();
+		}
+		
+		$xml = str_repeat("\t", $indent) . '<' . $parent . '>' . QUICKBOOKS_CRLF;
+		
+		foreach ($this->_data as $key => $value)
+		{
+			if (is_object($value))
+			{
+				//$xml .= $value->asIDSXML($ident + 1);
+			}
+			else if (is_array($value))
+			{
+				foreach ($value as $skey => $svalue)
+				{
+					$xml .= $svalue->asIDSXML($indent + 1, $key);
+				}
+			}
+			else
+			{
+				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+				$xml .= $value;
+				$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+			}
+		}
+		
+		$xml .= str_repeat("\t", $indent) . '</' . $parent . '>' . QUICKBOOKS_CRLF;
+		
+		return $xml;
 	}
 }

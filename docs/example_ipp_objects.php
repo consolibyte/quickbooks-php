@@ -1,8 +1,16 @@
+<html>
+	<head>
+		<title>Intuit IPP/IDS + PHP Test - Keith Palmer</title>
+	</head>
+	
+	<body>
+		
+		<h1>Intuit IPP/IDS + PHP Test - Object Serialization</h1>
+		
 <?php
 
 require_once dirname(__FILE__) . '/../QuickBooks.php';
 
-header('Content-Type: text/plain');
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
@@ -26,7 +34,15 @@ xsi:schemaLocation ="http://www.intuit.com/sb/cdm/v2 ../common/RestDataFilter.xs
 		<TypeOf>Person</TypeOf>
 		<Name>Test Customer 2</Name>
 		<Address>
-			<Id idDomain="QB">00000000000000rt</Id>
+			<Id idDomain="QB">00000000000000rp</Id>
+			<Line1>134 Stonemill Road</Line1>
+			<Line2>Suite 2</Line2>
+			<Line3>Storrs-Mansfield, CT 06279</Line3>
+			<Line4>United States</Line4>
+			<City>Storrs-Mansfield</City>
+			<Country>USA</Country>
+			<CountrySubDivisionCode>CT</CountrySubDivisionCode>
+			<PostalCode>06268</PostalCode>
 			<Default>1</Default>
 			<Tag>Billing</Tag>
 		</Address>
@@ -100,21 +116,23 @@ xsi:schemaLocation ="http://www.intuit.com/sb/cdm/v2 ../common/RestDataFilter.xs
 
 </Customers></RestResponse>';
 
+print('
+	<h2>We start off with a XML IDS Response:</h2>
+	<textarea cols="100" rows="20">' . $xml . '</textarea>
+');
+
 $Parser = new QuickBooks_IPP_Parser();
 
 $list = $Parser->parse($xml);
 
-//print_r($list);
+print('
+	<h2>We can convert that to a list of PHP objects:</h2>
+	<textarea cols="100" rows="20">' . print_r($list, true) . '</textarea>
+');
 
-
-
-
-
-
-
-
-
-
+print('
+	<h2>We can loop through those objects and get data from them:</h2>
+');
 
 
 foreach ($list as $Customer)
@@ -129,5 +147,23 @@ foreach ($list as $Customer)
 		$state = $Address->getCountrySubDivisionCode();
 	}
 	
-	print('Customer name is: ' . $Customer->getName() . ' has an address of: ' . $line . ' ' . $city . ' ' . $state . "\n");
+	print('<strong>Customer name is:</strong> ' . $Customer->getName() . ' <strong>has an address of:</strong> ' . $line . ' ' . $city . ' ' . $state . "<br />\n");
 }
+
+$Customer = end($list);
+
+print('
+	<h2>... and we can convert it back to XML!</h2>
+	<textarea cols="100" rows="20">' . $Customer->asIDSXML() . '</textarea>
+');
+
+?>
+		
+		<br />
+		<br />
+		<br />
+		
+	</body>
+</html>
+
+

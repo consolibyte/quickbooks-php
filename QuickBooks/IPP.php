@@ -58,6 +58,12 @@ QuickBooks_Loader::load('/QuickBooks/HTTP.php');
 // 
 QuickBooks_Loader::load('/QuickBooks/XML.php');
 
+// 
+QuickBooks_Loader::load('/QuickBooks/IPP/Context.php');
+
+// 
+QuickBooks_Loader::load('/QuickBooks/IPP/Parser.php');
+
 class QuickBooks_IPP
 {
 	protected $_test;
@@ -147,7 +153,10 @@ class QuickBooks_IPP
 				}
 			}
 			
-			return true;
+			// @todo Fix this so the context is correct
+			$Context = new QuickBooks_IPP_Context($this);
+			
+			return $Context;
 		}
 		
 		return false;
@@ -189,7 +198,7 @@ class QuickBooks_IPP
 		return $this->_token;
 	}
 	
-	public function application($application = null)
+	public function application($Context, $application = null)
 	{
 		if ($application)
 		{
@@ -345,20 +354,16 @@ class QuickBooks_IPP
 		return true;
 	}
 	
-	public function test($realm)
+	public function IDS($Context, $realmID, $resource, $xml = '')
 	{
 		
-		$url = 'https://services.intuit.com/sb/customer/v2/173642438';
+		$url = 'https://services.intuit.com/sb/' . $resource . '/v2/' . $realmID;
 		//$url = 'https://services.intuit.com/sb/invoice/v2/173642438';
 		
 		//$url = '';
 		
 		$action = null;
-		$xml = '<CustomerQuery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/v2">
-   <!--<IncludeTagElements>Invoice/Header/ARAccountName</IncludeTagElements>
-   <IncludeTagElements>Invoice/Header/Notes</IncludeTagElements>
-   <IncludeTagElements>Invoice/Header/CustomerName</IncludeTagElements>-->
-</CustomerQuery>';
+		//$xml = '';
 		
 		$response = $this->_request(QUICKBOOKS_IPP_REQUEST_IDS, $url, $action, $xml);
 		
@@ -367,8 +372,21 @@ class QuickBooks_IPP
 			return false;
 		}
 		
+		$data = $this->_stripHTTPHeaders($response);
+		
+		$Parser = new QuickBooks_IPP_Parser();
+		$parsed = $Parser->parse($data);
+		
 		// @todo Parse and return an object? 
-		return $response;		
+		return $parsed;		
+	}
+	
+	protected function _stripHTTPHeaders($response)
+	{
+		$pos = strpos($response, "\r\n\r\n");
+		
+		// @todo Error checking, what if \r\n\r\n isn't present?
+		return substr($response, $pos + 4);
 	}
 	
 	protected function _extractCookie($name, $response)

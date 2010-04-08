@@ -9,7 +9,7 @@ $token = 'tex3r7hwifx6cci3zk43ibmnd';
 $IPP = new QuickBooks_IPP();
 
 $IPP->authenticate($username, $password, $token);
-$IPP->application('be9mh7qd5');
+$IPP->application($Context, 'be9mh7qd5');
 
 //$IPP->useDebugMode(true);
 
