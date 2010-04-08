@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<VehicleMileageQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+<!-- BEGIN OR -->
+<TxnID >IDTYPE</TxnID> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- BEGIN OR -->
+<ModifiedDateRangeFilter> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+</ModifiedDateRangeFilter>
+<!-- OR -->
+<TxnDateRangeFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<FromTxnDate >DATETYPE</FromTxnDate> <!-- optional -->
+<ToTxnDate >DATETYPE</ToTxnDate> <!-- optional -->
+<!-- OR -->
+<!-- DateMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisCalendarQuarter, ThisCalendarQuarterToDate, ThisFiscalQuarter, ThisFiscalQuarterToDate, ThisCalendarYear, ThisCalendarYearToDate, ThisFiscalYear, ThisFiscalYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastCalendarQuarter, LastCalendarQuarterToDate, LastFiscalQuarter, LastFiscalQuarterToDate, LastCalendarYear, LastCalendarYearToDate, LastFiscalYear, LastFiscalYearToDate, NextWeek, NextFourWeeks, NextMonth, NextCalendarQuarter, NextCalendarYear, NextFiscalQuarter, NextFiscalYear -->
+<DateMacro >ENUMTYPE</DateMacro> <!-- optional -->
+<!-- END OR -->
+</TxnDateRangeFilter>
+<!-- END OR -->
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+</VehicleMileageQueryRq>
+<VehicleMileageQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+<VehicleMileageRet> <!-- optional, may repeat -->
+<TxnID >IDTYPE</TxnID> <!-- optional -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- optional -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- optional -->
+<EditSequence >STRTYPE</EditSequence> <!-- optional -->
+<VehicleRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</VehicleRef>
+<CustomerRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</CustomerRef>
+<ItemRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemRef>
+<ClassRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ClassRef>
+<TripStartDate >DATETYPE</TripStartDate> <!-- optional -->
+<TripEndDate >DATETYPE</TripEndDate> <!-- optional -->
+<OdometerStart >QUANTYPE</OdometerStart> <!-- optional -->
+<OdometerEnd >QUANTYPE</OdometerEnd> <!-- optional -->
+<TotalMiles >QUANTYPE</TotalMiles> <!-- optional -->
+<Notes >STRTYPE</Notes> <!-- optional -->
+<!-- BillableStatus may have one of the following values: Billable, NotBillable, HasBeenBilled -->
+<BillableStatus >ENUMTYPE</BillableStatus> <!-- optional -->
+<StandardMileageRate >PERCENTTYPE</StandardMileageRate> <!-- optional -->
+<StandardMileageTotalAmount >AMTTYPE</StandardMileageTotalAmount> <!-- optional -->
+<BillableRate >PRICETYPE</BillableRate> <!-- optional -->
+<BillableAmount >AMTTYPE</BillableAmount> <!-- optional -->
+</VehicleMileageRet>
+</VehicleMileageQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

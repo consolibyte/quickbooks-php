@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<CustomerQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+<ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<TotalBalanceFilter> <!-- optional -->
+<!-- Operator may have one of the following values: LessThan, LessThanEqual, Equal, GreaterThan, GreaterThanEqual -->
+<Operator >ENUMTYPE</Operator> <!-- required -->
+<Amount >AMTTYPE</Amount> <!-- required -->
+</TotalBalanceFilter>
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</CustomerQueryRq>
+<CustomerQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+<CustomerRet> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<FullName >STRTYPE</FullName> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ParentRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ParentRef>
+<Sublevel >INTTYPE</Sublevel> <!-- required -->
+<CompanyName >STRTYPE</CompanyName> <!-- optional -->
+<Salutation >STRTYPE</Salutation> <!-- optional -->
+<FirstName >STRTYPE</FirstName> <!-- optional -->
+<MiddleName >STRTYPE</MiddleName> <!-- optional -->
+<LastName >STRTYPE</LastName> <!-- optional -->
+<BillAddress> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+<City >STRTYPE</City> <!-- optional -->
+<State >STRTYPE</State> <!-- optional -->
+<PostalCode >STRTYPE</PostalCode> <!-- optional -->
+<Country >STRTYPE</Country> <!-- optional -->
+<Note >STRTYPE</Note> <!-- optional -->
+</BillAddress>
+<BillAddressBlock> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+</BillAddressBlock>
+<ShipAddress> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+<City >STRTYPE</City> <!-- optional -->
+<State >STRTYPE</State> <!-- optional -->
+<PostalCode >STRTYPE</PostalCode> <!-- optional -->
+<Country >STRTYPE</Country> <!-- optional -->
+<Note >STRTYPE</Note> <!-- optional -->
+</ShipAddress>
+<ShipAddressBlock> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+</ShipAddressBlock>
+<Phone >STRTYPE</Phone> <!-- optional -->
+<AltPhone >STRTYPE</AltPhone> <!-- optional -->
+<Fax >STRTYPE</Fax> <!-- optional -->
+<Email >STRTYPE</Email> <!-- optional -->
+<Contact >STRTYPE</Contact> <!-- optional -->
+<AltContact >STRTYPE</AltContact> <!-- optional -->
+<CustomerTypeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</CustomerTypeRef>
+<TermsRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</TermsRef>
+<SalesRepRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</SalesRepRef>
+<Balance >AMTTYPE</Balance> <!-- optional -->
+<TotalBalance >AMTTYPE</TotalBalance> <!-- optional -->
+<SalesTaxCodeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</SalesTaxCodeRef>
+<ItemSalesTaxRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemSalesTaxRef>
+<ResaleNumber >STRTYPE</ResaleNumber> <!-- optional -->
+<AccountNumber >STRTYPE</AccountNumber> <!-- optional -->
+<CreditLimit >AMTTYPE</CreditLimit> <!-- optional -->
+<PreferredPaymentMethodRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PreferredPaymentMethodRef>
+<CreditCardInfo> <!-- optional -->
+<CreditCardNumber >STRTYPE</CreditCardNumber> <!-- optional -->
+<ExpirationMonth >INTTYPE</ExpirationMonth> <!-- optional -->
+<ExpirationYear >INTTYPE</ExpirationYear> <!-- optional -->
+<NameOnCard >STRTYPE</NameOnCard> <!-- optional -->
+<CreditCardAddress >STRTYPE</CreditCardAddress> <!-- optional -->
+<CreditCardPostalCode >STRTYPE</CreditCardPostalCode> <!-- optional -->
+</CreditCardInfo>
+<!-- JobStatus may have one of the following values: Awarded, Closed, InProgress, None [DEFAULT], NotAwarded, Pending -->
+<JobStatus >ENUMTYPE</JobStatus> <!-- optional -->
+<JobStartDate >DATETYPE</JobStartDate> <!-- optional -->
+<JobProjectedEndDate >DATETYPE</JobProjectedEndDate> <!-- optional -->
+<JobEndDate >DATETYPE</JobEndDate> <!-- optional -->
+<JobDesc >STRTYPE</JobDesc> <!-- optional -->
+<JobTypeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</JobTypeRef>
+<Notes >STRTYPE</Notes> <!-- optional -->
+<PriceLevelRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PriceLevelRef>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</CustomerRet>
+</CustomerQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

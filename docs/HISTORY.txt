@@ -1,0 +1,312 @@
+
+Future Plans: --
+	X Backups/exports/imports
+	X Users which are "clones" of other users (for backup or mirror purposes)
+	X Command distribution to different users based on command (or type of command?)
+	X SQLite driver support
+	X MS SQL Server driver support 
+	X Bug fix where error messages were not being reported in the queue (error codes showed up, but without the message)
+	X Example integration application - basically a small website mock-up that you can look at for examples on how to make everything work
+	X Flat-file driver support
+	X Lots of new examples! Look in the examples/ directory for various examples on how to do stuff!
+	X YAML export for XML class
+	X JSON export for XML class
+	X Array export for XML class
+	X Support for custom schema maps... map the QB database to your own DB schema?
+	X Support for using qbXML to query the SQL mirror database?
+	X QB RDS server support?
+	X Query the SQL database via qbXML queries
+	X Built-in support for handling qbXML Iterators
+	X Unit tests for many components of the package
+	X Zend_DB support
+	X Support for remotely backing up the QuickBooks database (backups through dumping all objects with xyzQuery requests, no restores... yet)
+	X Included a STRATEGIES.txt document which might help you with planning your QuickBooks integration
+	X Added features to the Frontend: Authorization Tests, Unit Tests, Support Wiki, Debug Form
+	X Bug fixes to the Frontend: SOAP Client, 
+	X Log to syslog() support for errors (via the builtin error handler? via a passthrough error handler?)
+	X Log to a file support for errors (subclasses error handlers?)
+	X Generator should support IncludeRetElement tag outside of wrapper VendorAdd, CustomerAdd, etc.
+	X Added support for auto-truncating the quickbooks_log table
+	X Added support for auto-truncating the quickbooks_ticket table
+	X PostgreSQL driver has been altered to use prepared statements where possible
+	X QuickBooks_XML_Node comment handling (input, output... where to stick them?)
+	X XML Node class offers the ability to get ->children() but only children matching a certain pattern/tag
+	X PEAR MDB2 support
+	X The QuickBooks_Server classes now converts response newlines to \r\n by default (it makes debugging a little easier)
+	X The XML parser correctly encodes and decodes XML entities: &, <, >, "
+	X Included a THANK_YOUS.txt document to thank the people who have made contributions/helped make the framework possible
+	X Automated integration builder - Map database fields to QuickBooks fields and set up default transfer options
+	X Bug fix - the XML parser will now accept XML attributes with 'single' or "double" quotes
+	X Bug fix - the XML parser will now handle elements of the same name nested inside each other
+	X Bug fix - the XML parser doesn't choke on <empty /> elements anymore
+	X Bug fix - non-integer errors are now supported by the 'quickbooks_ticket' table
+	X Methods added to QuickBooks_API and QuickBooks_Utilities to remove an application-to-ListID/TxnID mapping
+	X Bug fix - Fixed various bugs with the QuickBooks Framework frontend
+	X Bug fix - TxnDel requests with a missing requestID="..." attribute would never call response callbacks
+	X Added ability to supply a default username to the QuickBooks_Queue() class
+	X The QuickBooks_API class supports passing an $extra array to all methods
+	X Microsoft SQL Server and PEAR MDB2 support
+	X Bug fix - Iterators are only used for the SQL mirror if supported by the version of qbXML in use
+
+Release v1.5.4: 2010-??-??
+	Changes:
+		X Support for RC4 and Blowfish encryption for using with session and connection tickets
+		- Support for the quickbooks_connection table for QuickBooks Online Edition credentials
+		X Support for the quickbooks_connection table for QuickBooks Merchant Services credentials
+		X SQL mirror dependency mapping moved to QuickBooks_SQL_Schema
+		- Re-structuring of SQL mirror functionality
+		X QuickBooks POP3 and SMTP bridges (fetch qbXML requests from POP3 mail, send qbXML responses via SMTP)
+		X Hooks library and factory methods for pre-defined hooks
+		X Integrators can now load default options from the 'quickbooks_config' table 
+		X Additional bridge examples (Python, Ruby)
+		X Added support for locking a session/account if an unrecoverable error occurs
+		X ALPHA support for running background processes/callback handlers
+		X Added indexes to many of the QuickBooks SQL mirror fields 
+		- Proper boolean TRUE/FALSE handler for SQL mirroring
+		X Sending blank/incorrect credit card information to QBMS no longer results in cURL #58 errors
+		X SQL mirror iterator priorities are now based on the original priority of the first queued request
+		X Bug fix - Defined the method QuickBooks_XML_Node::_asArrayNoAttributesHelper()
+		- Added a QuickBooks_Queue::size() method
+		- Added a QuickBooks_Queue::remove() method
+		X Added a QuickBooks_Queue::summary() method
+		X Added a QuickBooks_SQL_Status class for SQL mirror status information
+		X Added a QuickBooks_Reporting class for handling QuickBooks reports 
+		X Added support for some reports to the SQL mirror code
+		- Bug fix - Fixed a problem with very slow InnoDB performance 
+		X Added a hook which runs when there is nothing to do (a 'none' response)
+		- General clean-up, restructuring, and removal of deprecated methods
+		- Bug fix - Fixed QuickBooks_API problems with items trying to create non-existant class instances
+		- Locale support for converting QuickBooks_Object_* classes to qbXML requests
+		- Foxycart + QuickBooks Online Edition support
+		X Updated PostgreSQL, MS SQL Server, and MySQLi support
+		- Added SQLite support
+		X Added support for QuickBooks_Receiver classes (connection ticket handlers for QBMS and QBOE)
+		X BETA support for QuickBase and IPP
+		X QuickBooks_User class replaces the QuickBooks_Utilities::*user* methods
+		- QuickBooks_QWC class replaces the QuickBooks_Utilities::*QWC* methods
+		- Added a huge number of updates and changes to make the SQL mirror functionality more reliable and accurate
+		- Improved error handling and reporting for protocol errors and errors which occur before the QuickBooks business logic runs
+		- Improved QuickBooks_API support for QuickBooks Online Edition
+		X Bug fix - You can now add items to the queue with the front-end
+		X Bug fix - MySQL in STRICT mode didn't like some of the timestamps returned by QuickBooks 
+		X Bug fix - Very long integer values caused integer overflow with the SQL mirror functionality 
+		X Bug fix - SQL mirror now supports selectively mirroring/not mirroring object types AND correctly registers/unregisteres recurring events
+
+Release v1.5.3: 2009-09-14
+	Changes: 
+		- BETA support for the QuickBooks Merchant Service (QuickBooks_MerchantService class)
+		- BETA support for the QuickBooks Online Edition via the QuickBooks_API classes
+		- BETA support for Microsoft SQL Server
+		- Added support for the MySQLi PHP module (instead of the regular MySQL one) 
+		- Added support for auto-truncating the quickbooks_log, quickbooks_ticket and quickbooks_queue tables 
+		- ALPHA support for bridges (HTTP POST data to the QuickBooks_Server_Bridge from any programming language, PHP framework handles communication with QuickBooks) 
+		- ALPHA support for Foxycart integration with QuickBooks
+ 		- ALPHA support for OSCommerce integration with QuickBooks
+		- Added support for plain-text, MD5 (without salt), and SHA1 (without salt) password storage (in addition to the default SHA1 with salt password scheme)
+		- Added support for some additional QuickBooks_API methods
+		- Added an option to automatically purge old queue and log records
+		- Added some additional QuickBooks_API examples  
+		- Added support for passing an instantiated object as the QuickBooks_Server $map parameter (previously only supported functions or static methods)
+		- Added support for passing an instantiated object as the QuickBooks_Server $onerr parameters
+		- Hooks support has been completely re-written (hook parameters have changed! see HOOKS.txt!)
+		- Added some additional hooks (support for performing actions at certain percentages done, etc.)
+		- Added a parameter to the QuickBooks_Queue constructor to set the default username to queue things as
+		- Better support for auto-mapping of QuickBooks objects to application IDs
+		- Added a QuickBooks_Queue_Singleton class (eliminate need for constant DSN strings)
+		- Bug fix - Fixed lots of serious issues with the queueing request IDs... (based on action instead of a unique ID...?)
+		- Bug fix - $callback_options were not passed correctly by the built-in SOAP server
+		- Bug fix - Fixed the priorities for queries in the SQL mirror server
+		- Bug fix - Moved the SQL mirror queueing/recurring event registers to a login success hook
+		- Bug fix - MySQL will no longer time out on creating the SQL mirror schema
+		- Bug fix - Fixed a bug which caused .QWC generation to always schedule things to run every second
+		- Bug fix - serverVersion() SOAP request failed (XML parser bug and getServerVersion() mis-implementation?)
+		- Bug fix - Fixed some strange queueing bugs that cropped up with very similar queued items having their statuses changed all at once
+		- Bug fix - Fixed a bug that caused all line items after the first to be dropped from QuickBooks_API responses
+		- Bug fix - Fixed a bug with the XML parser not decoding entities correctly
+		- SQL mirror now supports selectively mirroring/not mirroring object types (but doesn't yet correctly registers/unregisteres recurring events)
+		- Re-factored classes/methods for a few shared classes (driver factory, etc.)
+		- Added an SQL index to the quickbooks_log.batch field (it was making some logging queries take a very loooonnnnngggg time to run)
+		- Added support for static method hooks (previously only supported functions)
+		- The framework now *does not allow* requests with an invalid requestID to be processed! 
+		- Raised the time-out time from 6 minutes to 30 minutes (caused "bad ticket" timeouts to occur on large responses from QuickBooks)
+		- Re-factoring for several classes and methods within the framework
+	Caveats: 
+		- QuickBooks Online Edition support is in the BETA stage!
+		- The abstracted API is in the BETA stage, some methods don't work!
+		- The SQL mirror functionality is in the BETA stage
+		- The Front-end HTML interface is in the BETA stage, many things are not supported yet.
+		- SOAP Client functionality is limited or broken!
+		- Some XML parser methods are *broken* (->toArray(), ->toJSON(), ->toYAML(), etc.)			
+
+Release v1.5.2: 2009-01-20
+	Changes:
+		- Added support for an 'extra' field in the mapping tables (quickbooks_ident)
+		- Improved/re-written XML parser (fixes several XML parser bugs)
+		- Improved support for mirroring the QuickBooks database into an SQL database (*extra special thanks* to Garrett Griffin for all his help and hard work on this!)
+		- SQL mirroring hook functions (run something every time the SQL mirror updates/inserts a record)
+		- SQL mirroring queries use the maximum supported qbXML version indicated by QuickBooks
+		- SQL mirroring supports FullName and ListID elements now
+		- Numerous improvements to the QuickBooks_API classes and methods (Customers, Sales Receipts, Invoices, Items, etc. etc. etc.)
+		- Pre-server mapping for the QuickBooks_Integrator and QuickBooks_API classes has been removed (it causes all sorts of scary sync issues...)
+		- Added constants for ItemInventoryAssembly items (thanks Garry Nutting!)
+		- Added constants for PriceLevel, UnitOfMeasureSet, VendorCredit, DateDrivenTerms, InventoryAdjustment, etc. etc. etc. 
+		- Added support for the "NoOp" operation (return QUICKBOOKS_NOOP from your request handler to do nothing / pause and wait for 5 seconds)
+		- Preliminary support for a QUICKBOOKS_SKIP operation (return QUICKBOOKS_SKIP from your request handler to do nothing, inline within framework)
+		- Bug fix - Fixed a bug where newer MySQL versions die when error log messages are longer than 65535 characters
+		- Bug fix - Fixed a bug in the QuickBooks_Utilities::intervalToSeconds() method (thanks Mark Reidenbach!)
+		- Bug fix - Fixed a bug where the $extra parameter for recurring events would not carry over to queued items (thanks again Garry!)
+		- Bug fix - Fixed a bug where empty arrays would not get serialized and would cause a fatal error (thanks again Mark!)
+		- Bug fix - Fixed an SQL schema error with quickbooks_ticket.lasterror_num, should be a VARCHAR (thanks Paul!)
+		- Bug fix - Fixed initialization errors that occurred when you *didn't* pass some params to the QuickBooks_Server constructor (thanks Garrett Griffin!)
+		- Updated examples for: example_server.php and example_sql_server.php
+	Caveats: 
+		- The QuickBooks_API and QuickBooks_Object_* classes are in the BETA stage, some methods don't work!
+		- The SQL mirror functionality is in the BETA stage
+		- The Front-end HTML interface is in the BETA stage, many things are not supported yet.
+		- SOAP Client functionality is limited or broken!
+		- Some XML parser methods are *broken* (->toArray(), ->toJSON(), ->toYAML(), etc.)		
+
+Release v1.5.1: 2008-10-06
+	Changes:
+		- Bug fix - progress was calculated before running response handlers (thus it doesn't know about items queued by the response handler)
+		- Canadian editions of QuickBooks are now (better) supported by the QuickBooks_API classes
+		- The QuickBooks_Driver_Sql_* classes now use trigger_error() when an SQL error occurs (makes for easier debugging)
+		- The QuickBooks_API class supports passing an application ID for queries
+		- The QuickBooks_API class supports some new methods
+		- QuickBooks application ID fields (the $ident or $ID parameter) have been expanded to 40 characters
+		- Added support for disabling users (without deleting them)
+		- Added a new queue status, QUICKBOOKS_ERROR_HANDLED to indicate an item that experienced an error and the error was handled
+		- The built-in pure-PHP SOAP server is now the *default* SOAP server (instead of the PHP SOAP extension)
+		- The SOAP server will now return the WSDL if called as /server.php?WSDL
+		- Bug fix - Differing $log_level parameters would be ignored by the QuickBooks_Utilities::driverFactory() method when returning instances
+		- Improved documentation and doc-blocks for the new QuickBooks_API classes
+		- Improved reporting of QuickBooks_Driver_Sql_* SQL errors within the framework 
+		- You can generate qbXML from QuickBooks_Object_* classes by calling the ->asQBXML() method
+		- Added some new QuickBooks_Object_* classes for the QuickBooks_API (see: QuickBooks/Object/*.php)
+		- QuickBooks_Cast::cast() method provides data-type casting for qbXML requests direct from the qbXML schema
+		- QuickBooks_Utilities::castToField() is *deprecated* (use QuickBooks_Cast::cast() instead!)
+	Caveats: 
+		- The abstracted API is in the BETA stage, some methods don't work!
+		- The SQL mirror functionality is in the ALPHA stage, there are many known issues!
+		- The Front-end HTML interface is in the BETA stage, many things are not supported yet.
+		- SOAP Client functionality is limited or broken!
+		- Some XML parser methods are *broken* (->toArray(), ->toJSON(), ->toYAML(), etc.)
+	
+Release v1.5: 2008-07-17
+	Changes:
+		- The parameter list for the constructor for QuickBooks_Server(...) has *changed*, note the modified parameter list!
+		- The parameter list for the request/response handlers *has changed*, note the modified parameter list! 
+		- ALPHA support for a further abstracted OOP API: ->getCustomersCreatedAfter('November 24th, 2008', 'my_callback_function');
+		- ALPHA support for auto-tracking of ListIDs and TxnIDs of objects added to QuickBooks 
+		- ALPHA Front-end HTML interface for browsing the tables/debugging/testing
+		- Base SOAP Server classes are now accessed via an adaptor pattern, adapters are provided for: PHP ext/SOAP, native built-in SOAP server
+		- Built-in base SOAP server (the package no longer relies on PHP ext/soap support, PHP ext/soap support is now *optional*)
+		- Fixed/improved native PostgreSQL support
+		- Fixed several bugs in the QuickBooks_Queue::exists() method
+		- Revamped error handling: error handler functions can now return TRUE (continue processing if this error occurs) or FALSE (stop processing if this error occurs)
+		- Support for static methods as error handler routines
+		- Bug fix for XML parser (didn't handle some nested similar elements, i.e.: <VendorAdd><VendorAddress></VendorAddress></VendorAdd> would parse incorrectly)
+		- Bug fix for log levels (some log levels were reversed, higher log levels logged more info., lower log levels logged less...?) 
+		- The QuickBooks_Utilities::castToField() method now converts HTML/XML special characters to entities *by default*
+		- Some methods have been added to the QuickBooks_XML_Node class
+		- The $idents array for response handlers supports/contains many new attributes and tag values
+		- Allow and deny QuickBooks Web Connector connections by IP address/CIDR range
+		- QuickBooks_Server $soap_options supports some new configuration options: time_limit, error_handler, use_builtin_error_handler
+		- Built-in custom error handler (makes debugging a little easier, disabled by default, enable with use_builtin_error_handler $soap_options option)
+		- ALPHA Support for mirroring QuickBooks in an SQL database...
+		- Re-registering existing recurring events doesn't forget the last recur dequeue time with the MySQL driver anymore
+		- The MySQL driver doesn't use NOW() anymore, as this was causing "bad ticket" errors due to time differences
+		- Timeout has been increased from 2 minutes to 6 minutes (fixes problems on slower machines, you can adjust it by declaring QUICKBOOKS_TIMEOUT before including the library)
+		- Added an additional logging level for development (it logs all SOAP requests/responses)
+		- Added some additional examples showing off the new features
+		- All code is now BSD licensed and Copyright (c) 2008 Consolibyte Solutions, Keith Palmer <keith@consolibyte.com>
+	Caveats:
+		- *THIS IS A HIGHLY EXPERIMENTAL RELEASE* I do not recommend using this release in a production environment without comprehensive testing!
+		- Microsoft SQL Server PEAR MDB2 support was scheduled for this release, but was cut (no funding/lack of interest)
+		- A Bridge/Pass-through Server which supports other programming languages was scheduled for this release, but was cut (no funding/lack of interest)
+		- The abstracted API is in the ALPHA stage, some methods don't work!
+		- The SQL mirror functionality is in the ALPHA stage, there are many known issues!
+		- The Front-end HTML interface is in the ALPHA stage, many things are not supported yet.
+		- SOAP Client functionality is limited or broken!
+		- Some XML parser methods are *broken* (->toArray(), ->toJSON(), ->toYAML(), etc.)
+
+Release v1.4.2: 2008-04-16
+	Changes:
+		- Bug fix with MySQL driver
+	Caveats:
+		- (same issues as with v1.4)
+
+Release v1.4.1: 2008-04-15
+	Changes:
+		- Bug fix that was causing failed MySQL connections
+	Caveats:
+		- (same issues as with v1.4)	
+	
+Release v1.4: 2008-04-10
+	Changes:
+		- Will now auto-set your timezone if you havn't previously defined it with: date_default_timezone_set('...') (defaults to "America/New_York")
+		- Support for recurring queued events (i.e.: I want to run CustomerQuery once per day... but I don't want to have to keep manually queueing up events!)
+		- Added new options/parameters and fixed some bugs in the QuickBooks_Utilities::generateQWC() method
+		- Added some new constants for various QuickBooks actions
+		- Support some additional fields in the QuickBooks_Utilities::castToField() method
+		- Support for specifying a particular company file to be used when creating the SOAP server
+		- Support for per-user company files, run schedules, and wait before next update times 
+		- Support for per-user queued actions
+		- Support for static methods as request/response handlers (not recommended, there's a good chance it breaks callback error handling)
+		- Support for custom user-defined hook functions which get called in response to certain events
+		- QuickBooks_XML class for parsing XML requests/responses into usable data structures (does not require any PHP XML extensions)
+		- Connecting Web Connector username is now passed to request/response handlers
+		- Two new parameters passed to request/response handlers: action last dequeue time, action/ident last dequeue time
+		- New authentication handlers added: user-defined functions, LDAPv3, CSV
+		- ALPHA QuickBooks_Client class is included for debugging/testing/implementation
+		- The hash method used to store passwords is now user-configurable (defaults to salted SHA1, override by defining QUICKBOOKS_HASH)
+		- Revised schema fields (causing bad ticket errors/MySQL is casting fields strangely?)
+		- Added ->generateFileID(), and ->generateOwnerID() methods to the QuickBooks_Utilities class (I'm not sure I'm generating these correctly... do you know how these are supposed to be generated? E-mail me!)
+		- The ->connectionError() SOAP method now correctly logs connection errors and calls error handlers
+		- Fixed the 'autoadd_missing_requestid' bug that affected people who were not embedding requestID="..." attribute in their qbXML
+		- Restructured the SQL driver back-ends
+		- Examples updated to show new features
+		- License included with this distribution, BSD-style
+	Caveats:
+		- PostgreSQL support is *broken*
+		- Some XML parser methods are *broken* (->toArray(), ->toJSON(), ->toYAML(), etc.)
+		  
+Release v1.3: 2008-02-17
+	Changes:
+		- ini_set('include_path') fix for Windows users
+		- Bug fix for ->receiveResponseXML() SOAP method (not fetching $extra data correctly, oops!)
+		- Bug fix in MySQL table structure, quickbooks_log table had an incorrect field name
+		- Added some constants for QuickBooks time tracking
+		- Started to add error checking/reporting for driver classes
+		- SQL queries that die should no longer kill the entire application
+		- Initial support for a flat-file back-end driver (doesn't really work yet...)
+
+Release v1.2: 2008-02-13
+	Changes:
+		- Minor API changes to various methods (protected and public methods, so watch out!)
+		- Added some additional constants various qbXML commands
+		- Content-Type: text/xml HTTP header now gets sent automatically
+		- Bug fix for ident-less queries to QuickBooks_Queue::enqueue() method
+		- Bug fix for QuickBooks_Driver_Mysql::queueExists() method (forgot to implement it)
+		- Bug fix for QuickBooks_Driver_Mysql::initialize() method (custom MySQL table names did not work)
+		- If you don't pass a requestID="" attribute, the server will try to automatically add one for you
+		- Initial PostgreSQL support (largely untested, IF YOU KNOW ABOUT POSTGRES, I WANT TO TALK TO YOU! PLEASE E-MAIL ME!)
+		- Support for including additional custom data when queueing up requests
+		- Revised custom authentication schemes (use if you want to pull the QuickBooks Web Connector username/password from another source instead of the MySQL 'quickbooks_user' table, included schemes are: MySQL, PostgreSQL, and htpasswd)
+		- Initial support for QuickBooks Web Connector "Interactive Mode" (not fully functional... yet)
+		- Error handlers/callbacks (perform an action whenever an error occurs)
+		- QuickBooks_Server::handle() gets a parameter used for returning the entire SOAP response
+		- Updated WSDL (Intuit one is out-of-date, doesn't support interactive methods, clientVersion(), or serverVersion(), found this on the forums)
+	
+Release v1.1: 2008-01-09
+	Changes:
+		- Minor bug fixes
+		- Better logging to the 'quickbooks_log' table, configurable between three modes: QUICKBOOKS_LOG_NORMAL, QUICKBOOKS_LOG_VERBOSE, and QUICKBOOKS_LOG_DEBUG
+		- Updated documentation
+		- SOAP method clientVersion() support
+		- SOAP method getServerVersion() support
+		- Initial (*UNTESTED, MIGHT CHANGE IN A FUTURE VERSION!*) support for custom authentication schemes instead of the MySQL 'quickbooks_user' table
+
+Release v1.0: 2007-12-20
+	Changes:
+		- Initial release of package

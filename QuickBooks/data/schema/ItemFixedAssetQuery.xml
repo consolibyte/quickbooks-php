@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<ItemFixedAssetQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+<ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</ItemFixedAssetQueryRq>
+<ItemFixedAssetQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+<ItemFixedAssetRet> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<!-- AcquiredAs may have one of the following values: New, Old -->
+<AcquiredAs >ENUMTYPE</AcquiredAs> <!-- required -->
+<PurchaseDesc >STRTYPE</PurchaseDesc> <!-- required -->
+<PurchaseDate >DATETYPE</PurchaseDate> <!-- required -->
+<PurchaseCost >PRICETYPE</PurchaseCost> <!-- optional -->
+<VendorOrPayeeName >STRTYPE</VendorOrPayeeName> <!-- optional -->
+<AssetAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AssetAccountRef>
+<FixedAssetSalesInfo> <!-- optional -->
+<SalesDesc >STRTYPE</SalesDesc> <!-- required -->
+<SalesDate >DATETYPE</SalesDate> <!-- required -->
+<SalesPrice >PRICETYPE</SalesPrice> <!-- optional -->
+<SalesExpense >PRICETYPE</SalesExpense> <!-- optional -->
+</FixedAssetSalesInfo>
+<AssetDesc >STRTYPE</AssetDesc> <!-- optional -->
+<Location >STRTYPE</Location> <!-- optional -->
+<PONumber >STRTYPE</PONumber> <!-- optional -->
+<SerialNumber >STRTYPE</SerialNumber> <!-- optional -->
+<WarrantyExpDate >DATETYPE</WarrantyExpDate> <!-- optional -->
+<Notes >STRTYPE</Notes> <!-- optional -->
+<AssetNumber >STRTYPE</AssetNumber> <!-- optional -->
+<CostBasis >AMTTYPE</CostBasis> <!-- optional -->
+<YearEndAccumulatedDepreciation >AMTTYPE</YearEndAccumulatedDepreciation> <!-- optional -->
+<YearEndBookValue >AMTTYPE</YearEndBookValue> <!-- optional -->
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemFixedAssetRet>
+</ItemFixedAssetQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

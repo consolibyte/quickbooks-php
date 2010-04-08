@@ -1,0 +1,7 @@
+
+query for all neccessary accounts, add them if they dont exist
+
+query for accounts and let them choose accounts via GUI
+
+query for generic shipping, discount, coupon to see if they exist
+

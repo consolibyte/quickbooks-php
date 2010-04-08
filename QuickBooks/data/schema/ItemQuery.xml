@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<ItemQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+<ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</ItemQueryRq>
+<ItemQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+<!-- BEGIN OR -->
+<ItemServiceRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<FullName >STRTYPE</FullName> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ParentRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ParentRef>
+<Sublevel >INTTYPE</Sublevel> <!-- required -->
+<UnitOfMeasureSetRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</UnitOfMeasureSetRef>
+<SalesTaxCodeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</SalesTaxCodeRef>
+<!-- BEGIN OR -->
+<SalesOrPurchase> <!-- optional -->
+<Desc >STRTYPE</Desc> <!-- optional -->
+<!-- BEGIN OR -->
+<Price >PRICETYPE</Price> <!-- optional -->
+<!-- OR -->
+<PricePercent >PERCENTTYPE</PricePercent> <!-- optional -->
+<!-- END OR -->
+<AccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AccountRef>
+</SalesOrPurchase>
+<!-- OR -->
+<SalesAndPurchase> <!-- optional -->
+<SalesDesc >STRTYPE</SalesDesc> <!-- optional -->
+<SalesPrice >PRICETYPE</SalesPrice> <!-- optional -->
+<IncomeAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</IncomeAccountRef>
+<PurchaseDesc >STRTYPE</PurchaseDesc> <!-- optional -->
+<PurchaseCost >PRICETYPE</PurchaseCost> <!-- optional -->
+<ExpenseAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ExpenseAccountRef>
+<PrefVendorRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PrefVendorRef>
+</SalesAndPurchase>
+<!-- END OR -->
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemServiceRet>
+<!-- OR -->
+<ItemNonInventoryRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<FullName >STRTYPE</FullName> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ParentRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ParentRef>
+<Sublevel >INTTYPE</Sublevel> <!-- required -->
+<ManufacturerPartNumber >STRTYPE</ManufacturerPartNumber> <!-- optional -->
+<UnitOfMeasureSetRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</UnitOfMeasureSetRef>
+<SalesTaxCodeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</SalesTaxCodeRef>
+<!-- BEGIN OR -->
+<SalesOrPurchase> <!-- optional -->
+<Desc >STRTYPE</Desc> <!-- optional -->
+<!-- BEGIN OR -->
+<Price >PRICETYPE</Price> <!-- optional -->
+<!-- OR -->
+<PricePercent >PERCENTTYPE</PricePercent> <!-- optional -->
+<!-- END OR -->
+<AccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AccountRef>
+</SalesOrPurchase>
+<!-- OR -->
+<SalesAndPurchase> <!-- optional -->
+<SalesDesc >STRTYPE</SalesDesc> <!-- optional -->
+<SalesPrice >PRICETYPE</SalesPrice> <!-- optional -->
+<IncomeAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</IncomeAccountRef>
+<PurchaseDesc >STRTYPE</PurchaseDesc> <!-- optional -->
+<PurchaseCost >PRICETYPE</PurchaseCost> <!-- optional -->
+<ExpenseAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ExpenseAccountRef>
+<PrefVendorRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PrefVendorRef>
+</SalesAndPurchase>
+<!-- END OR -->
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemNonInventoryRet>
+<!-- OR -->
+<ItemOtherChargeRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<FullName >STRTYPE</FullName> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ParentRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ParentRef>
+<Sublevel >INTTYPE</Sublevel> <!-- required -->
+<SalesTaxCodeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</SalesTaxCodeRef>
+<!-- BEGIN OR -->
+<SalesOrPurchase> <!-- optional -->
+<Desc >STRTYPE</Desc> <!-- optional -->
+<!-- BEGIN OR -->
+<Price >PRICETYPE</Price> <!-- optional -->
+<!-- OR -->
+<PricePercent >PERCENTTYPE</PricePercent> <!-- optional -->
+<!-- END OR -->
+<AccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AccountRef>
+</SalesOrPurchase>
+<!-- OR -->
+<SalesAndPurchase> <!-- optional -->
+<SalesDesc >STRTYPE</SalesDesc> <!-- optional -->
+<SalesPrice >PRICETYPE</SalesPrice> <!-- optional -->
+<IncomeAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</IncomeAccountRef>
+<PurchaseDesc >STRTYPE</PurchaseDesc> <!-- optional -->
+<PurchaseCost >PRICETYPE</PurchaseCost> <!-- optional -->
+<ExpenseAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ExpenseAccountRef>
+<PrefVendorRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PrefVendorRef>
+</SalesAndPurchase>
+<!-- END OR -->
+<!-- SpecialItemType may have one of the following values: FinanceCharge, ReimbursableExpenseGroup, ReimbursableExpenseSubtotal -->
+<SpecialItemType >ENUMTYPE</SpecialItemType> <!-- optional -->
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemOtherChargeRet>
+<!-- OR -->
+<ItemInventoryRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<FullName >STRTYPE</FullName> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ParentRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ParentRef>
+<Sublevel >INTTYPE</Sublevel> <!-- required -->
+<ManufacturerPartNumber >STRTYPE</ManufacturerPartNumber> <!-- optional -->
+<UnitOfMeasureSetRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</UnitOfMeasureSetRef>
+<SalesTaxCodeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</SalesTaxCodeRef>
+<SalesDesc >STRTYPE</SalesDesc> <!-- optional -->
+<SalesPrice >PRICETYPE</SalesPrice> <!-- optional -->
+<IncomeAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</IncomeAccountRef>
+<PurchaseDesc >STRTYPE</PurchaseDesc> <!-- optional -->
+<PurchaseCost >PRICETYPE</PurchaseCost> <!-- optional -->
+<COGSAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</COGSAccountRef>
+<PrefVendorRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PrefVendorRef>
+<AssetAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AssetAccountRef>
+<ReorderPoint >QUANTYPE</ReorderPoint> <!-- optional -->
+<QuantityOnHand >QUANTYPE</QuantityOnHand> <!-- optional -->
+<AverageCost >PRICETYPE</AverageCost> <!-- optional -->
+<QuantityOnOrder >QUANTYPE</QuantityOnOrder> <!-- optional -->
+<QuantityOnSalesOrder >QUANTYPE</QuantityOnSalesOrder> <!-- optional -->
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemInventoryRet>
+<!-- OR -->
+<ItemInventoryAssemblyRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<FullName >STRTYPE</FullName> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ParentRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ParentRef>
+<Sublevel >INTTYPE</Sublevel> <!-- required -->
+<UnitOfMeasureSetRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</UnitOfMeasureSetRef>
+<SalesTaxCodeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</SalesTaxCodeRef>
+<SalesDesc >STRTYPE</SalesDesc> <!-- optional -->
+<SalesPrice >PRICETYPE</SalesPrice> <!-- optional -->
+<IncomeAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</IncomeAccountRef>
+<PurchaseDesc >STRTYPE</PurchaseDesc> <!-- optional -->
+<PurchaseCost >PRICETYPE</PurchaseCost> <!-- optional -->
+<COGSAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</COGSAccountRef>
+<PrefVendorRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PrefVendorRef>
+<AssetAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AssetAccountRef>
+<BuildPoint >QUANTYPE</BuildPoint> <!-- optional -->
+<QuantityOnHand >QUANTYPE</QuantityOnHand> <!-- optional -->
+<AverageCost >PRICETYPE</AverageCost> <!-- optional -->
+<QuantityOnOrder >QUANTYPE</QuantityOnOrder> <!-- optional -->
+<QuantityOnSalesOrder >QUANTYPE</QuantityOnSalesOrder> <!-- optional -->
+<ItemInventoryAssemblyLine> <!-- optional, may repeat -->
+<ItemInventoryRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemInventoryRef>
+<Quantity >QUANTYPE</Quantity> <!-- optional -->
+</ItemInventoryAssemblyLine>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemInventoryAssemblyRet>
+<!-- OR -->
+<ItemFixedAssetRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<!-- AcquiredAs may have one of the following values: New, Old -->
+<AcquiredAs >ENUMTYPE</AcquiredAs> <!-- required -->
+<PurchaseDesc >STRTYPE</PurchaseDesc> <!-- required -->
+<PurchaseDate >DATETYPE</PurchaseDate> <!-- required -->
+<PurchaseCost >PRICETYPE</PurchaseCost> <!-- optional -->
+<VendorOrPayeeName >STRTYPE</VendorOrPayeeName> <!-- optional -->
+<AssetAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AssetAccountRef>
+<FixedAssetSalesInfo> <!-- optional -->
+<SalesDesc >STRTYPE</SalesDesc> <!-- required -->
+<SalesDate >DATETYPE</SalesDate> <!-- required -->
+<SalesPrice >PRICETYPE</SalesPrice> <!-- optional -->
+<SalesExpense >PRICETYPE</SalesExpense> <!-- optional -->
+</FixedAssetSalesInfo>
+<AssetDesc >STRTYPE</AssetDesc> <!-- optional -->
+<Location >STRTYPE</Location> <!-- optional -->
+<PONumber >STRTYPE</PONumber> <!-- optional -->
+<SerialNumber >STRTYPE</SerialNumber> <!-- optional -->
+<WarrantyExpDate >DATETYPE</WarrantyExpDate> <!-- optional -->
+<Notes >STRTYPE</Notes> <!-- optional -->
+<AssetNumber >STRTYPE</AssetNumber> <!-- optional -->
+<CostBasis >AMTTYPE</CostBasis> <!-- optional -->
+<YearEndAccumulatedDepreciation >AMTTYPE</YearEndAccumulatedDepreciation> <!-- optional -->
+<YearEndBookValue >AMTTYPE</YearEndBookValue> <!-- optional -->
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemFixedAssetRet>
+<!-- OR -->
+<ItemSubtotalRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ItemDesc >STRTYPE</ItemDesc> <!-- optional -->
+<!-- SpecialItemType may have one of the following values: FinanceCharge, ReimbursableExpenseGroup, ReimbursableExpenseSubtotal -->
+<SpecialItemType >ENUMTYPE</SpecialItemType> <!-- optional -->
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemSubtotalRet>
+<!-- OR -->
+<ItemDiscountRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<FullName >STRTYPE</FullName> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ParentRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ParentRef>
+<Sublevel >INTTYPE</Sublevel> <!-- required -->
+<ItemDesc >STRTYPE</ItemDesc> <!-- optional -->
+<SalesTaxCodeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</SalesTaxCodeRef>
+<!-- BEGIN OR -->
+<DiscountRate >PRICETYPE</DiscountRate> <!-- optional -->
+<!-- OR -->
+<DiscountRatePercent >PERCENTTYPE</DiscountRatePercent> <!-- optional -->
+<!-- END OR -->
+<AccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AccountRef>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemDiscountRet>
+<!-- OR -->
+<ItemPaymentRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ItemDesc >STRTYPE</ItemDesc> <!-- optional -->
+<DepositToAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</DepositToAccountRef>
+<PaymentMethodRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PaymentMethodRef>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemPaymentRet>
+<!-- OR -->
+<ItemSalesTaxRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ItemDesc >STRTYPE</ItemDesc> <!-- optional -->
+<TaxRate >PERCENTTYPE</TaxRate> <!-- optional -->
+<TaxVendorRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</TaxVendorRef>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemSalesTaxRet>
+<!-- OR -->
+<ItemSalesTaxGroupRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ItemDesc >STRTYPE</ItemDesc> <!-- optional -->
+<ItemSalesTaxRef> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemSalesTaxRef>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemSalesTaxGroupRet>
+<!-- OR -->
+<ItemGroupRet> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ItemDesc >STRTYPE</ItemDesc> <!-- optional -->
+<UnitOfMeasureSetRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</UnitOfMeasureSetRef>
+<IsPrintItemsInGroup >BOOLTYPE</IsPrintItemsInGroup> <!-- optional -->
+<!-- SpecialItemType may have one of the following values: FinanceCharge, ReimbursableExpenseGroup, ReimbursableExpenseSubtotal -->
+<SpecialItemType >ENUMTYPE</SpecialItemType> <!-- optional -->
+<ItemGroupLine> <!-- optional, may repeat -->
+<ItemRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemRef>
+<Quantity >QUANTYPE</Quantity> <!-- optional -->
+<UnitOfMeasure >STRTYPE</UnitOfMeasure> <!-- optional -->
+</ItemGroupLine>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemGroupRet>
+<!-- END OR -->
+</ItemQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

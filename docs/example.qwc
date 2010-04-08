@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<QBWCXML>
+	<AppName>QuickBooks Integrator</AppName>
+	<AppID></AppID>
+	<AppURL>http://localhost/~kpalmer/QuickBooks/example_server_import_invoices.php</AppURL>
+	<AppDescription></AppDescription>
+	<AppSupport>http://localhost/~kpalmer/QuickBooks/example_server_import_invoices.php?support=1</AppSupport>
+	<UserName>quickbooks</UserName>
+	<OwnerID>{90A44FB7-33D9-4815-AC85-AC86A7E7D1EB}</OwnerID>
+	<FileID>{57F3B9B6-86F1-4fcc-B1FF-967DE1813D20}</FileID>
+	<QBType>QBFS</QBType>
+	<Scheduler>
+		<RunEveryNMinutes>1</RunEveryNMinutes>
+	</Scheduler>
+	<IsReadOnly>false</IsReadOnly>
+</QBWCXML>

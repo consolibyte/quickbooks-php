@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<ItemReceiptQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+<!-- BEGIN OR -->
+<TxnID >IDTYPE</TxnID> <!-- optional, may repeat -->
+<!-- OR -->
+<RefNumber >STRTYPE</RefNumber> <!-- optional, may repeat -->
+<!-- OR -->
+<RefNumberCaseSensitive >STRTYPE</RefNumberCaseSensitive> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- BEGIN OR -->
+<ModifiedDateRangeFilter> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+</ModifiedDateRangeFilter>
+<!-- OR -->
+<TxnDateRangeFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<FromTxnDate >DATETYPE</FromTxnDate> <!-- optional -->
+<ToTxnDate >DATETYPE</ToTxnDate> <!-- optional -->
+<!-- OR -->
+<!-- DateMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisCalendarQuarter, ThisCalendarQuarterToDate, ThisFiscalQuarter, ThisFiscalQuarterToDate, ThisCalendarYear, ThisCalendarYearToDate, ThisFiscalYear, ThisFiscalYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastCalendarQuarter, LastCalendarQuarterToDate, LastFiscalQuarter, LastFiscalQuarterToDate, LastCalendarYear, LastCalendarYearToDate, LastFiscalYear, LastFiscalYearToDate, NextWeek, NextFourWeeks, NextMonth, NextCalendarQuarter, NextCalendarYear, NextFiscalQuarter, NextFiscalYear -->
+<DateMacro >ENUMTYPE</DateMacro> <!-- optional -->
+<!-- END OR -->
+</TxnDateRangeFilter>
+<!-- END OR -->
+<EntityFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+<!-- OR -->
+<FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+<!-- END OR -->
+</EntityFilter>
+<AccountFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+<!-- OR -->
+<FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+<!-- END OR -->
+</AccountFilter>
+<!-- BEGIN OR -->
+<RefNumberFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<RefNumber >STRTYPE</RefNumber> <!-- required -->
+</RefNumberFilter>
+<!-- OR -->
+<RefNumberRangeFilter> <!-- optional -->
+<FromRefNumber >STRTYPE</FromRefNumber> <!-- optional -->
+<ToRefNumber >STRTYPE</ToRefNumber> <!-- optional -->
+</RefNumberRangeFilter>
+<!-- END OR -->
+<!-- END OR -->
+<IncludeLineItems >BOOLTYPE</IncludeLineItems> <!-- optional -->
+<IncludeLinkedTxns >BOOLTYPE</IncludeLinkedTxns> <!-- optional -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</ItemReceiptQueryRq>
+<ItemReceiptQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+<ItemReceiptRet> <!-- optional, may repeat -->
+<TxnID >IDTYPE</TxnID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<TxnNumber >INTTYPE</TxnNumber> <!-- optional -->
+<VendorRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</VendorRef>
+<APAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</APAccountRef>
+<TxnDate >DATETYPE</TxnDate> <!-- required -->
+<TotalAmount >AMTTYPE</TotalAmount> <!-- required -->
+<RefNumber >STRTYPE</RefNumber> <!-- optional -->
+<Memo >STRTYPE</Memo> <!-- optional -->
+<LinkedTxn> <!-- optional, may repeat -->
+<TxnID >IDTYPE</TxnID> <!-- required -->
+<!-- TxnType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+<TxnType >ENUMTYPE</TxnType> <!-- required -->
+<TxnDate >DATETYPE</TxnDate> <!-- required -->
+<RefNumber >STRTYPE</RefNumber> <!-- optional -->
+<!-- LinkType may have one of the following values: AMTTYPE, QUANTYPE -->
+<LinkType >ENUMTYPE</LinkType> <!-- optional -->
+<Amount >AMTTYPE</Amount> <!-- required -->
+</LinkedTxn>
+<ExpenseLineRet> <!-- optional, may repeat -->
+<TxnLineID >IDTYPE</TxnLineID> <!-- required -->
+<AccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AccountRef>
+<Amount >AMTTYPE</Amount> <!-- optional -->
+<Memo >STRTYPE</Memo> <!-- optional -->
+<CustomerRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</CustomerRef>
+<ClassRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ClassRef>
+<!-- BillableStatus may have one of the following values: Billable, NotBillable, HasBeenBilled -->
+<BillableStatus >ENUMTYPE</BillableStatus> <!-- optional -->
+</ExpenseLineRet>
+<!-- BEGIN OR -->
+<ItemLineRet> <!-- optional -->
+<TxnLineID >IDTYPE</TxnLineID> <!-- required -->
+<ItemRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemRef>
+<Desc >STRTYPE</Desc> <!-- optional -->
+<Quantity >QUANTYPE</Quantity> <!-- optional -->
+<UnitOfMeasure >STRTYPE</UnitOfMeasure> <!-- optional -->
+<OverrideUOMSetRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</OverrideUOMSetRef>
+<Cost >PRICETYPE</Cost> <!-- optional -->
+<Amount >AMTTYPE</Amount> <!-- optional -->
+<CustomerRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</CustomerRef>
+<ClassRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ClassRef>
+<!-- BillableStatus may have one of the following values: Billable, NotBillable, HasBeenBilled -->
+<BillableStatus >ENUMTYPE</BillableStatus> <!-- optional -->
+</ItemLineRet>
+<!-- OR -->
+<ItemGroupLineRet> <!-- optional -->
+<TxnLineID >IDTYPE</TxnLineID> <!-- required -->
+<ItemGroupRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemGroupRef>
+<Desc >STRTYPE</Desc> <!-- optional -->
+<Quantity >QUANTYPE</Quantity> <!-- optional -->
+<UnitOfMeasure >STRTYPE</UnitOfMeasure> <!-- optional -->
+<OverrideUOMSetRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</OverrideUOMSetRef>
+<TotalAmount >AMTTYPE</TotalAmount> <!-- required -->
+<ItemLineRet> <!-- optional, may repeat -->
+<TxnLineID >IDTYPE</TxnLineID> <!-- required -->
+<ItemRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemRef>
+<Desc >STRTYPE</Desc> <!-- optional -->
+<Quantity >QUANTYPE</Quantity> <!-- optional -->
+<UnitOfMeasure >STRTYPE</UnitOfMeasure> <!-- optional -->
+<OverrideUOMSetRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</OverrideUOMSetRef>
+<Cost >PRICETYPE</Cost> <!-- optional -->
+<Amount >AMTTYPE</Amount> <!-- optional -->
+<CustomerRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</CustomerRef>
+<ClassRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ClassRef>
+<!-- BillableStatus may have one of the following values: Billable, NotBillable, HasBeenBilled -->
+<BillableStatus >ENUMTYPE</BillableStatus> <!-- optional -->
+</ItemLineRet>
+</ItemGroupLineRet>
+<!-- END OR -->
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemReceiptRet>
+</ItemReceiptQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

@@ -1,0 +1,339 @@
+﻿Database quickbooks
+Dumping data for table quickbooks_log
+1
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/serverVersion" Host: k9.academickeys.com Content-Length: 300 Expect: 100-continue Connection: Keep-Alive 
+2008-07-05 09:36:03
+2
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><serverVersion xmlns="http://developer.intuit.com/" /></soap:Body></soap:Envelope>
+2008-07-05 09:36:03
+3
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:03
+4
+NULL
+serverVersion()
+2008-07-05 09:36:03
+5
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:serverVersionResponse><ns1:serverVersionResult>PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php</ns1:serverVersionResult></ns1:serverVersionResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:03
+6
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/clientVersion" Host: k9.academickeys.com Content-Length: 348 Expect: 100-continue 
+2008-07-05 09:36:04
+7
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><clientVersion xmlns="http://developer.intuit.com/"><strVersion>2.0.0.116</strVersion></clientVersion></soap:Body></soap:Envelope>
+2008-07-05 09:36:04
+8
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:04
+9
+NULL
+clientVersion()
+2008-07-05 09:36:04
+10
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:clientVersionResponse><ns1:clientVersionResult></ns1:clientVersionResult></ns1:clientVersionResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:04
+11
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/authenticate" Host: k9.academickeys.com Content-Length: 377 Expect: 100-continue 
+2008-07-05 09:36:04
+12
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><authenticate xmlns="http://developer.intuit.com/"><strUserName>api</strUserName><strPassword>password</strPassword></authenticate></soap:Body></soap:Envelope>
+2008-07-05 09:36:04
+13
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:04
+14
+NULL
+authenticate()
+2008-07-05 09:36:04
+15
+91
+Login: api
+2008-07-05 09:36:04
+16
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:authenticateResponse><ns1:authenticateResult><ns1:string>c94c84b3d59fe7a1603b765dd734e481</ns1:string><ns1:string></ns1:string></ns1:authenticateResult></ns1:authenticateResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:04
+17
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/sendRequestXML" Host: k9.academickeys.com Content-Length: 5767 Expect: 100-continue 
+2008-07-05 09:36:08
+18
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><sendRequestXML xmlns="http://developer.intuit.com/"><ticket>c94c84b3d59fe7a1603b765dd734e481</ticket><strHCPResponse>&lt;?xml version="1.0" ?&gt; &lt;QBXML&gt; &lt;QBXMLMsgsRs&gt; &lt;HostQueryRs requestID="0" statusCode="0" statusSeverity="Info" statusMessage="Status OK"&gt; &lt;HostRet&gt; &lt;ProductName&gt;QuickBooks Pro 2006&lt;/ProductName&gt; &lt;MajorVersion&gt;16&lt;/MajorVersion&gt; &lt;MinorVersion&gt;0&lt;/MinorVersion&gt; &lt;Country&gt;US&lt;/Country&gt; &lt;SupportedQBXMLVersion&gt;1.0&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;1.1&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;2.0&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;2.1&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;3.0&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;4.0&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;4.1&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;5.0&lt;/SupportedQBXMLVersion&gt; &lt;IsAutomaticLogin&gt;false&lt;/IsAutomaticLogin&gt; &lt;QBFileMode&gt;SingleUser&lt;/QBFileMode&gt; &lt;/HostRet&gt; &lt;/HostQueryRs&gt; &lt;CompanyQueryRs requestID="1" statusCode="0" statusSeverity="Info" statusMessage="Status OK"&gt; &lt;CompanyRet&gt; &lt;IsSampleCompany&gt;false&lt;/IsSampleCompany&gt; &lt;CompanyName&gt;Test Company&lt;/CompanyName&gt; &lt;LegalCompanyName&gt;Test Company&lt;/LegalCompanyName&gt; &lt;FirstMonthFiscalYear&gt;January&lt;/FirstMonthFiscalYear&gt; &lt;FirstMonthIncomeTaxYear&gt;January&lt;/FirstMonthIncomeTaxYear&gt; &lt;CompanyType&gt;Service Business&lt;/CompanyType&gt; &lt;TaxForm&gt;OtherOrNone&lt;/TaxForm&gt; &lt;DataExtRet&gt; &lt;OwnerID&gt;{68b5925b-4347-4784-e58d-35a2d190962f}&lt;/OwnerID&gt; &lt;DataExtName&gt;AppLock&lt;/DataExtName&gt; &lt;DataExtType&gt;STR255TYPE&lt;/DataExtType&gt; &lt;DataExtValue&gt;LOCKED:ACCOUNTING:633508623553265188&lt;/DataExtValue&gt; &lt;/DataExtRet&gt; &lt;DataExtRet&gt; &lt;OwnerID&gt;{68b5925b-4347-4784-e58d-35a2d190962f}&lt;/OwnerID&gt; &lt;DataExtName&gt;FileID&lt;/DataExtName&gt; &lt;DataExtType&gt;STR255TYPE&lt;/DataExtType&gt; &lt;DataExtValue&gt;{ee032e95-47f7-2564-096f-2d4545fcb021}&lt;/DataExtValue&gt; &lt;/DataExtRet&gt; &lt;/CompanyRet&gt; &lt;/CompanyQueryRs&gt; &lt;PreferencesQueryRs requestID="2" statusCode="0" statusSeverity="Info" statusMessage="Status OK"&gt; &lt;PreferencesRet&gt; &lt;AccountingPreferences&gt; &lt;IsUsingAccountNumbers&gt;false&lt;/IsUsingAccountNumbers&gt; &lt;IsRequiringAccounts&gt;true&lt;/IsRequiringAccounts&gt; &lt;IsUsingClassTracking&gt;false&lt;/IsUsingClassTracking&gt; &lt;IsUsingAuditTrail&gt;true&lt;/IsUsingAuditTrail&gt; &lt;IsAssigningJournalEntryNumbers&gt;true&lt;/IsAssigningJournalEntryNumbers&gt; &lt;/AccountingPreferences&gt; &lt;FinanceChargePreferences&gt; &lt;AnnualInterestRate&gt;0.00&lt;/AnnualInterestRate&gt; &lt;MinFinanceCharge&gt;0.00&lt;/MinFinanceCharge&gt; &lt;GracePeriod&gt;0&lt;/GracePeriod&gt; &lt;IsAssessingForOverdueCharges&gt;false&lt;/IsAssessingForOverdueCharges&gt; &lt;CalculateChargesFrom&gt;DueDate&lt;/CalculateChargesFrom&gt; &lt;IsMarkedToBePrinted&gt;false&lt;/IsMarkedToBePrinted&gt; &lt;/FinanceChargePreferences&gt; &lt;JobsAndEstimatesPreferences&gt; &lt;IsUsingEstimates&gt;true&lt;/IsUsingEstimates&gt; &lt;IsUsingProgressInvoicing&gt;true&lt;/IsUsingProgressInvoicing&gt; &lt;IsPrintingItemsWithZeroAmounts&gt;false&lt;/IsPrintingItemsWithZeroAmounts&gt; &lt;/JobsAndEstimatesPreferences&gt; &lt;PurchasesAndVendorsPreferences&gt; &lt;IsUsingInventory&gt;true&lt;/IsUsingInventory&gt; &lt;DaysBillsAreDue&gt;10&lt;/DaysBillsAreDue&gt; &lt;IsAutomaticallyUsingDiscounts&gt;false&lt;/IsAutomaticallyUsingDiscounts&gt; &lt;/PurchasesAndVendorsPreferences&gt; &lt;ReportsPreferences&gt; &lt;AgingReportBasis&gt;AgeFromDueDate&lt;/AgingReportBasis&gt; &lt;SummaryReportBasis&gt;Accrual&lt;/SummaryReportBasis&gt; &lt;/ReportsPreferences&gt; &lt;SalesAndCustomersPreferences&gt; &lt;IsTrackingReimbursedExpensesAsIncome&gt;false&lt;/IsTrackingReimbursedExpensesAsIncome&gt; &lt;IsAutoApplyingPayments&gt;true&lt;/IsAutoApplyingPayments&gt; &lt;PriceLevels&gt; &lt;IsUsingPriceLevels&gt;true&lt;/IsUsingPriceLevels&gt; &lt;IsRoundingSalesPriceUp&gt;true&lt;/IsRoundingSalesPriceUp&gt; &lt;/PriceLevels&gt; &lt;/SalesAndCustomersPreferences&gt; &lt;SalesTaxPreferences&gt; &lt;DefaultItemSalesTaxRef&gt; &lt;ListID&gt;10000-1211066051&lt;/ListID&gt; &lt;FullName&gt;Out of State&lt;/FullName&gt; &lt;/DefaultItemSalesTaxRef&gt; &lt;PaySalesTax&gt;Monthly&lt;/PaySalesTax&gt; &lt;DefaultTaxableSalesTaxCodeRef&gt; &lt;ListID&gt;10000-1211065841&lt;/ListID&gt; &lt;FullName&gt;Tax&lt;/FullName&gt; &lt;/DefaultTaxableSalesTaxCodeRef&gt; &lt;DefaultNonTaxableSalesTaxCodeRef&gt; &lt;ListID&gt;20000-1211065841&lt;/ListID&gt; &lt;FullName&gt;Non&lt;/FullName&gt; &lt;/DefaultNonTaxableSalesTaxCodeRef&gt; &lt;/SalesTaxPreferences&gt; &lt;TimeTrackingPreferences&gt; &lt;FirstDayOfWeek&gt;Monday&lt;/FirstDayOfWeek&gt; &lt;/TimeTrackingPreferences&gt; &lt;CurrentAppAccessRights&gt; &lt;IsAutomaticLoginAllowed&gt;false&lt;/IsAutomaticLoginAllowed&gt; &lt;IsPersonalDataAccessAllowed&gt;false&lt;/IsPersonalDataAccessAllowed&gt; &lt;/CurrentAppAccessRights&gt; &lt;/PreferencesRet&gt; &lt;/PreferencesQueryRs&gt; &lt;/QBXMLMsgsRs&gt; &lt;/QBXML&gt; </strHCPResponse><strCompanyFileName>C:\KPALMER\QBW\Test Company.QBW</strCompanyFileName><qbXMLCountry>US</qbXMLCountry><qbXMLMajorVers>5</qbXMLMajorVers><qbXMLMinorVers>0</qbXMLMinorVers></sendRequestXML></soap:Body></soap:Envelope>
+2008-07-05 09:36:08
+19
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:08
+20
+91
+sendRequestXML()
+2008-07-05 09:36:08
+21
+91
+Dequeued: ( ItemServiceQuery, 6eb31874628d86ec11d23b6a0839aea9 ) 
+2008-07-05 09:36:08
+22
+NULL
+Attempting to handle error: -2, No registered functions for action: ItemServiceQuery
+2008-07-05 09:36:08
+23
+91
+Static method error handler: QuickBooks_Server_API_Errors::catchall
+2008-07-05 09:36:08
+24
+91
+Handled error: -2: No registered functions for action: ItemServiceQuery (handler returned: )
+2008-07-05 09:36:08
+25
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:sendRequestXMLResponse><ns1:sendRequestXMLResult></ns1:sendRequestXMLResult></ns1:sendRequestXMLResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:08
+26
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/getLastError" Host: k9.academickeys.com Content-Length: 361 Expect: 100-continue 
+2008-07-05 09:36:08
+27
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><getLastError xmlns="http://developer.intuit.com/"><ticket>c94c84b3d59fe7a1603b765dd734e481</ticket></getLastError></soap:Body></soap:Envelope>
+2008-07-05 09:36:08
+28
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:08
+29
+91
+getLastError()
+2008-07-05 09:36:08
+30
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:getLastErrorResponse><ns1:getLastErrorResult>No registered functions for action: ItemServiceQuery</ns1:getLastErrorResult></ns1:getLastErrorResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:08
+31
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/closeConnection" Host: k9.academickeys.com Content-Length: 367 Expect: 100-continue 
+2008-07-05 09:36:09
+32
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><closeConnection xmlns="http://developer.intuit.com/"><ticket>c94c84b3d59fe7a1603b765dd734e481</ticket></closeConnection></soap:Body></soap:Envelope>
+2008-07-05 09:36:09
+33
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:09
+34
+91
+closeConnection()
+2008-07-05 09:36:09
+35
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:closeConnectionResponse><ns1:closeConnectionResult>Complete!</ns1:closeConnectionResult></ns1:closeConnectionResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:09
+36
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/serverVersion" Host: k9.academickeys.com Content-Length: 300 Expect: 100-continue 
+2008-07-05 09:36:39
+37
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><serverVersion xmlns="http://developer.intuit.com/" /></soap:Body></soap:Envelope>
+2008-07-05 09:36:39
+38
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:39
+39
+NULL
+serverVersion()
+2008-07-05 09:36:39
+40
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:serverVersionResponse><ns1:serverVersionResult>PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php</ns1:serverVersionResult></ns1:serverVersionResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:39
+41
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/clientVersion" Host: k9.academickeys.com Content-Length: 348 Expect: 100-continue 
+2008-07-05 09:36:39
+42
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><clientVersion xmlns="http://developer.intuit.com/"><strVersion>2.0.0.116</strVersion></clientVersion></soap:Body></soap:Envelope>
+2008-07-05 09:36:39
+43
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:39
+44
+NULL
+clientVersion()
+2008-07-05 09:36:39
+45
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:clientVersionResponse><ns1:clientVersionResult></ns1:clientVersionResult></ns1:clientVersionResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:39
+46
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/authenticate" Host: k9.academickeys.com Content-Length: 377 Expect: 100-continue 
+2008-07-05 09:36:39
+47
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><authenticate xmlns="http://developer.intuit.com/"><strUserName>api</strUserName><strPassword>password</strPassword></authenticate></soap:Body></soap:Envelope>
+2008-07-05 09:36:39
+48
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:39
+49
+NULL
+authenticate()
+2008-07-05 09:36:39
+50
+92
+Login: api
+2008-07-05 09:36:39
+51
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:authenticateResponse><ns1:authenticateResult><ns1:string>ea0bf596246b623664adb465cc8662a2</ns1:string><ns1:string></ns1:string></ns1:authenticateResult></ns1:authenticateResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:39
+52
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/sendRequestXML" Host: k9.academickeys.com Content-Length: 5767 Expect: 100-continue 
+2008-07-05 09:36:43
+53
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><sendRequestXML xmlns="http://developer.intuit.com/"><ticket>ea0bf596246b623664adb465cc8662a2</ticket><strHCPResponse>&lt;?xml version="1.0" ?&gt; &lt;QBXML&gt; &lt;QBXMLMsgsRs&gt; &lt;HostQueryRs requestID="0" statusCode="0" statusSeverity="Info" statusMessage="Status OK"&gt; &lt;HostRet&gt; &lt;ProductName&gt;QuickBooks Pro 2006&lt;/ProductName&gt; &lt;MajorVersion&gt;16&lt;/MajorVersion&gt; &lt;MinorVersion&gt;0&lt;/MinorVersion&gt; &lt;Country&gt;US&lt;/Country&gt; &lt;SupportedQBXMLVersion&gt;1.0&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;1.1&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;2.0&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;2.1&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;3.0&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;4.0&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;4.1&lt;/SupportedQBXMLVersion&gt; &lt;SupportedQBXMLVersion&gt;5.0&lt;/SupportedQBXMLVersion&gt; &lt;IsAutomaticLogin&gt;false&lt;/IsAutomaticLogin&gt; &lt;QBFileMode&gt;SingleUser&lt;/QBFileMode&gt; &lt;/HostRet&gt; &lt;/HostQueryRs&gt; &lt;CompanyQueryRs requestID="1" statusCode="0" statusSeverity="Info" statusMessage="Status OK"&gt; &lt;CompanyRet&gt; &lt;IsSampleCompany&gt;false&lt;/IsSampleCompany&gt; &lt;CompanyName&gt;Test Company&lt;/CompanyName&gt; &lt;LegalCompanyName&gt;Test Company&lt;/LegalCompanyName&gt; &lt;FirstMonthFiscalYear&gt;January&lt;/FirstMonthFiscalYear&gt; &lt;FirstMonthIncomeTaxYear&gt;January&lt;/FirstMonthIncomeTaxYear&gt; &lt;CompanyType&gt;Service Business&lt;/CompanyType&gt; &lt;TaxForm&gt;OtherOrNone&lt;/TaxForm&gt; &lt;DataExtRet&gt; &lt;OwnerID&gt;{68b5925b-4347-4784-e58d-35a2d190962f}&lt;/OwnerID&gt; &lt;DataExtName&gt;AppLock&lt;/DataExtName&gt; &lt;DataExtType&gt;STR255TYPE&lt;/DataExtType&gt; &lt;DataExtValue&gt;LOCKED:ACCOUNTING:633508623906863464&lt;/DataExtValue&gt; &lt;/DataExtRet&gt; &lt;DataExtRet&gt; &lt;OwnerID&gt;{68b5925b-4347-4784-e58d-35a2d190962f}&lt;/OwnerID&gt; &lt;DataExtName&gt;FileID&lt;/DataExtName&gt; &lt;DataExtType&gt;STR255TYPE&lt;/DataExtType&gt; &lt;DataExtValue&gt;{ee032e95-47f7-2564-096f-2d4545fcb021}&lt;/DataExtValue&gt; &lt;/DataExtRet&gt; &lt;/CompanyRet&gt; &lt;/CompanyQueryRs&gt; &lt;PreferencesQueryRs requestID="2" statusCode="0" statusSeverity="Info" statusMessage="Status OK"&gt; &lt;PreferencesRet&gt; &lt;AccountingPreferences&gt; &lt;IsUsingAccountNumbers&gt;false&lt;/IsUsingAccountNumbers&gt; &lt;IsRequiringAccounts&gt;true&lt;/IsRequiringAccounts&gt; &lt;IsUsingClassTracking&gt;false&lt;/IsUsingClassTracking&gt; &lt;IsUsingAuditTrail&gt;true&lt;/IsUsingAuditTrail&gt; &lt;IsAssigningJournalEntryNumbers&gt;true&lt;/IsAssigningJournalEntryNumbers&gt; &lt;/AccountingPreferences&gt; &lt;FinanceChargePreferences&gt; &lt;AnnualInterestRate&gt;0.00&lt;/AnnualInterestRate&gt; &lt;MinFinanceCharge&gt;0.00&lt;/MinFinanceCharge&gt; &lt;GracePeriod&gt;0&lt;/GracePeriod&gt; &lt;IsAssessingForOverdueCharges&gt;false&lt;/IsAssessingForOverdueCharges&gt; &lt;CalculateChargesFrom&gt;DueDate&lt;/CalculateChargesFrom&gt; &lt;IsMarkedToBePrinted&gt;false&lt;/IsMarkedToBePrinted&gt; &lt;/FinanceChargePreferences&gt; &lt;JobsAndEstimatesPreferences&gt; &lt;IsUsingEstimates&gt;true&lt;/IsUsingEstimates&gt; &lt;IsUsingProgressInvoicing&gt;true&lt;/IsUsingProgressInvoicing&gt; &lt;IsPrintingItemsWithZeroAmounts&gt;false&lt;/IsPrintingItemsWithZeroAmounts&gt; &lt;/JobsAndEstimatesPreferences&gt; &lt;PurchasesAndVendorsPreferences&gt; &lt;IsUsingInventory&gt;true&lt;/IsUsingInventory&gt; &lt;DaysBillsAreDue&gt;10&lt;/DaysBillsAreDue&gt; &lt;IsAutomaticallyUsingDiscounts&gt;false&lt;/IsAutomaticallyUsingDiscounts&gt; &lt;/PurchasesAndVendorsPreferences&gt; &lt;ReportsPreferences&gt; &lt;AgingReportBasis&gt;AgeFromDueDate&lt;/AgingReportBasis&gt; &lt;SummaryReportBasis&gt;Accrual&lt;/SummaryReportBasis&gt; &lt;/ReportsPreferences&gt; &lt;SalesAndCustomersPreferences&gt; &lt;IsTrackingReimbursedExpensesAsIncome&gt;false&lt;/IsTrackingReimbursedExpensesAsIncome&gt; &lt;IsAutoApplyingPayments&gt;true&lt;/IsAutoApplyingPayments&gt; &lt;PriceLevels&gt; &lt;IsUsingPriceLevels&gt;true&lt;/IsUsingPriceLevels&gt; &lt;IsRoundingSalesPriceUp&gt;true&lt;/IsRoundingSalesPriceUp&gt; &lt;/PriceLevels&gt; &lt;/SalesAndCustomersPreferences&gt; &lt;SalesTaxPreferences&gt; &lt;DefaultItemSalesTaxRef&gt; &lt;ListID&gt;10000-1211066051&lt;/ListID&gt; &lt;FullName&gt;Out of State&lt;/FullName&gt; &lt;/DefaultItemSalesTaxRef&gt; &lt;PaySalesTax&gt;Monthly&lt;/PaySalesTax&gt; &lt;DefaultTaxableSalesTaxCodeRef&gt; &lt;ListID&gt;10000-1211065841&lt;/ListID&gt; &lt;FullName&gt;Tax&lt;/FullName&gt; &lt;/DefaultTaxableSalesTaxCodeRef&gt; &lt;DefaultNonTaxableSalesTaxCodeRef&gt; &lt;ListID&gt;20000-1211065841&lt;/ListID&gt; &lt;FullName&gt;Non&lt;/FullName&gt; &lt;/DefaultNonTaxableSalesTaxCodeRef&gt; &lt;/SalesTaxPreferences&gt; &lt;TimeTrackingPreferences&gt; &lt;FirstDayOfWeek&gt;Monday&lt;/FirstDayOfWeek&gt; &lt;/TimeTrackingPreferences&gt; &lt;CurrentAppAccessRights&gt; &lt;IsAutomaticLoginAllowed&gt;false&lt;/IsAutomaticLoginAllowed&gt; &lt;IsPersonalDataAccessAllowed&gt;false&lt;/IsPersonalDataAccessAllowed&gt; &lt;/CurrentAppAccessRights&gt; &lt;/PreferencesRet&gt; &lt;/PreferencesQueryRs&gt; &lt;/QBXMLMsgsRs&gt; &lt;/QBXML&gt; </strHCPResponse><strCompanyFileName>C:\KPALMER\QBW\Test Company.QBW</strCompanyFileName><qbXMLCountry>US</qbXMLCountry><qbXMLMajorVers>5</qbXMLMajorVers><qbXMLMinorVers>0</qbXMLMinorVers></sendRequestXML></soap:Body></soap:Envelope>
+2008-07-05 09:36:43
+54
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:43
+55
+92
+sendRequestXML()
+2008-07-05 09:36:43
+56
+92
+Dequeued: ( CustomerAdd, 15 ) 
+2008-07-05 09:36:43
+57
+92
+Outgoing XML request: <?xml version="1.0" encoding="utf-8"?> <?qbxml version="5.0"?> <QBXML> <QBXMLMsgsRq onError="stopOnError"><CustomerAddRq requestID="Q3VzdG9tZXJBZGR8MTU=" > <CustomerAdd> <Name>Shannon 171 Daniels</Name> <Salutation>Mr.</Salutation> <FirstName>Shannon 171</FirstName> <MiddleName>R</MiddleName> <LastName>Daniels</LastName> <ShipAddress> <Addr1>56 Cowles Road</Addr1> <City>Willington</City> <State>CT</State> </ShipAddress> <Phone>1.860.634.1602</Phone> </CustomerAdd> </CustomerAddRq> </QBXMLMsgsRq> </QBXML>
+2008-07-05 09:36:43
+58
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:sendRequestXMLResponse><ns1:sendRequestXMLResult>&lt;?xml version="1.0" encoding="utf-8"?&gt;&#13; &lt;?qbxml version="5.0"?&gt;&#13; &lt;QBXML&gt;&#13; &lt;QBXMLMsgsRq onError="stopOnError"&gt;&lt;CustomerAddRq requestID="Q3VzdG9tZXJBZGR8MTU=" &gt;&#13; &lt;CustomerAdd&gt;&#13; &lt;Name&gt;Shannon 171 Daniels&lt;/Name&gt;&#13; &lt;Salutation&gt;Mr.&lt;/Salutation&gt;&#13; &lt;FirstName&gt;Shannon 171&lt;/FirstName&gt;&#13; &lt;MiddleName&gt;R&lt;/MiddleName&gt;&#13; &lt;LastName&gt;Daniels&lt;/LastName&gt;&#13; &lt;ShipAddress&gt;&#13; &lt;Addr1&gt;56 Cowles Road&lt;/Addr1&gt;&#13; &lt;City&gt;Willington&lt;/City&gt;&#13; &lt;State&gt;CT&lt;/State&gt;&#13; &lt;/ShipAddress&gt;&#13; &lt;Phone&gt;1.860.634.1602&lt;/Phone&gt;&#13; &lt;/CustomerAdd&gt;&#13; &lt;/CustomerAddRq&gt;&#13; &lt;/QBXMLMsgsRq&gt;&#13; &lt;/QBXML&gt;</ns1:sendRequestXMLResult></ns1:sendRequestXMLResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:43
+59
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/receiveResponseXML" Host: k9.academickeys.com Content-Length: 1852 Expect: 100-continue 
+2008-07-05 09:36:44
+60
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><receiveResponseXML xmlns="http://developer.intuit.com/"><ticket>ea0bf596246b623664adb465cc8662a2</ticket><response>&lt;?xml version="1.0" ?&gt; &lt;QBXML&gt; &lt;QBXMLMsgsRs&gt; &lt;CustomerAddRs requestID="Q3VzdG9tZXJBZGR8MTU=" statusCode="0" statusSeverity="Info" statusMessage="Status OK"&gt; &lt;CustomerRet&gt; &lt;ListID&gt;F0000-1215265593&lt;/ListID&gt; &lt;TimeCreated&gt;2008-07-05T09:46:33-05:00&lt;/TimeCreated&gt; &lt;TimeModified&gt;2008-07-05T09:46:33-05:00&lt;/TimeModified&gt; &lt;EditSequence&gt;1215265593&lt;/EditSequence&gt; &lt;Name&gt;Shannon 171 Daniels&lt;/Name&gt; &lt;FullName&gt;Shannon 171 Daniels&lt;/FullName&gt; &lt;IsActive&gt;true&lt;/IsActive&gt; &lt;Sublevel&gt;0&lt;/Sublevel&gt; &lt;Salutation&gt;Mr.&lt;/Salutation&gt; &lt;FirstName&gt;Shannon 171&lt;/FirstName&gt; &lt;MiddleName&gt;R&lt;/MiddleName&gt; &lt;LastName&gt;Daniels&lt;/LastName&gt; &lt;ShipAddress&gt; &lt;Addr1&gt;56 Cowles Road&lt;/Addr1&gt; &lt;City&gt;Willington&lt;/City&gt; &lt;State&gt;CT&lt;/State&gt; &lt;/ShipAddress&gt; &lt;Phone&gt;1.860.634.1602&lt;/Phone&gt; &lt;Balance&gt;0.00&lt;/Balance&gt; &lt;TotalBalance&gt;0.00&lt;/TotalBalance&gt; &lt;SalesTaxCodeRef&gt; &lt;ListID&gt;10000-1211065841&lt;/ListID&gt; &lt;FullName&gt;Tax&lt;/FullName&gt; &lt;/SalesTaxCodeRef&gt; &lt;ItemSalesTaxRef&gt; &lt;ListID&gt;10000-1211066051&lt;/ListID&gt; &lt;FullName&gt;Out of State&lt;/FullName&gt; &lt;/ItemSalesTaxRef&gt; &lt;JobStatus&gt;None&lt;/JobStatus&gt; &lt;/CustomerRet&gt; &lt;/CustomerAddRs&gt; &lt;/QBXMLMsgsRs&gt; &lt;/QBXML&gt; </response><hresult /><message /></receiveResponseXML></soap:Body></soap:Envelope>
+2008-07-05 09:36:44
+61
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:44
+62
+92
+receiveResponseXML()
+2008-07-05 09:36:44
+63
+92
+Incoming XML response: <?xml version="1.0" ?> <QBXML> <QBXMLMsgsRs> <CustomerAddRs requestID="Q3VzdG9tZXJBZGR8MTU=" statusCode="0" statusSeverity="Info" statusMessage="Status OK"> <CustomerRet> <ListID>F0000-1215265593</ListID> <TimeCreated>2008-07-05T09:46:33-05:00</TimeCreated> <TimeModified>2008-07-05T09:46:33-05:00</TimeModified> <EditSequence>1215265593</EditSequence> <Name>Shannon 171 Daniels</Name> <FullName>Shannon 171 Daniels</FullName> <IsActive>true</IsActive> <Sublevel>0</Sublevel> <Salutation>Mr.</Salutation> <FirstName>Shannon 171</FirstName> <MiddleName>R</MiddleName> <LastName>Daniels</LastName> <ShipAddress> <Addr1>56 Cowles Road</Addr1> <City>Willington</City> <State>CT</State> </ShipAddress> <Phone>1.860.634.1602</Phone> <Balance>0.00</Balance> <TotalBalance>0.00</TotalBalance> <SalesTaxCodeRef> <ListID>10000-1211065841</ListID> <FullName>Tax</FullName> </SalesTaxCodeRef> <ItemSalesTaxRef> <ListID>10000-1211066051</ListID> <FullName>Out of State</FullName> </ItemSalesTaxRef> <JobStatus>None</JobStatus> </CustomerRet> </CustomerAddRs> </QBXMLMsgsRs> </QBXML> 
+2008-07-05 09:36:44
+64
+92
+0% complete... 
+2008-07-05 09:36:44
+65
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:receiveResponseXMLResponse><ns1:receiveResponseXMLResult>0</ns1:receiveResponseXMLResult></ns1:receiveResponseXMLResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:44
+66
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/sendRequestXML" Host: k9.academickeys.com Content-Length: 554 Expect: 100-continue 
+2008-07-05 09:36:44
+67
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><sendRequestXML xmlns="http://developer.intuit.com/"><ticket>ea0bf596246b623664adb465cc8662a2</ticket><strHCPResponse /><strCompanyFileName>C:\KPALMER\QBW\Test Company.QBW</strCompanyFileName><qbXMLCountry>US</qbXMLCountry><qbXMLMajorVers>5</qbXMLMajorVers><qbXMLMinorVers>0</qbXMLMinorVers></sendRequestXML></soap:Body></soap:Envelope>
+2008-07-05 09:36:44
+68
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:44
+69
+92
+sendRequestXML()
+2008-07-05 09:36:44
+70
+92
+Dequeued: ( ItemServiceAdd, 580fdbf91d86b68e9a011f112cd65c76 ) 
+2008-07-05 09:36:44
+71
+NULL
+Attempting to handle error: -2, No registered functions for action: ItemServiceAdd
+2008-07-05 09:36:44
+72
+92
+Static method error handler: QuickBooks_Server_API_Errors::catchall
+2008-07-05 09:36:44
+73
+92
+Handled error: -2: No registered functions for action: ItemServiceAdd (handler returned: )
+2008-07-05 09:36:44
+74
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:sendRequestXMLResponse><ns1:sendRequestXMLResult></ns1:sendRequestXMLResult></ns1:sendRequestXMLResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:44
+75
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/getLastError" Host: k9.academickeys.com Content-Length: 361 Expect: 100-continue 
+2008-07-05 09:36:44
+76
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><getLastError xmlns="http://developer.intuit.com/"><ticket>ea0bf596246b623664adb465cc8662a2</ticket></getLastError></soap:Body></soap:Envelope>
+2008-07-05 09:36:44
+77
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:44
+78
+92
+getLastError()
+2008-07-05 09:36:44
+79
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:getLastErrorResponse><ns1:getLastErrorResult>No registered functions for action: ItemServiceAdd</ns1:getLastErrorResult></ns1:getLastErrorResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:44
+80
+NULL
+Incoming HTTP Headers: User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; MS Web Services Client Protocol 2.0.50727.1433) Content-Type: text/xml; charset=utf-8 SOAPAction: "http://developer.intuit.com/closeConnection" Host: k9.academickeys.com Content-Length: 367 Expect: 100-continue 
+2008-07-05 09:36:45
+81
+NULL
+Incoming SOAP Request: <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><closeConnection xmlns="http://developer.intuit.com/"><ticket>ea0bf596246b623664adb465cc8662a2</ticket></closeConnection></soap:Body></soap:Envelope>
+2008-07-05 09:36:45
+82
+NULL
+Handler is starting up...: array ( 'qb_company_file' => NULL, 'qbwc_min_version' => NULL, 'qbwc_wait_before_next_update' => NULL, 'qbwc_min_run_every_n_seconds' => NULL, 'qbwc_version_warning_message' => NULL, 'qbwc_version_error_message' => NULL, 'qbwc_interactive_url' => NULL, 'autoadd_missing_requestid' => true, 'server_version' => 'PHP QuickBooks SOAP Server v1.5.0 at /~kpalmer/QuickBooks/server_api.php', 'authenticate_dsn' => NULL, 'map_application_identifiers' => true, 'allow_remote_addr' => array ( ), 'deny_remote_addr' => array ( ), 'convert_unix_newlines' => true, )
+2008-07-05 09:36:45
+83
+92
+closeConnection()
+2008-07-05 09:36:45
+84
+NULL
+Outgoing SOAP Response: <?xml version="1.0" encoding="UTF-8"?> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://developer.intuit.com/"><SOAP-ENV:Body><ns1:closeConnectionResponse><ns1:closeConnectionResult>Complete!</ns1:closeConnectionResult></ns1:closeConnectionResponse></SOAP-ENV:Body></SOAP-ENV:Envelope> 
+2008-07-05 09:36:45
+

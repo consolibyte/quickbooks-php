@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="2.1"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<BillToPayQueryRq metaData="ENUMTYPE">
+<PayeeEntityRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PayeeEntityRef>
+<APAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</APAccountRef>
+<DueDate >DATETYPE</DueDate> <!-- optional -->
+</BillToPayQueryRq>
+<BillToPayQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+<BillToPayRet> <!-- optional, may repeat -->
+<!-- BEGIN OR -->
+<BillToPay> <!-- optional -->
+<TxnID >IDTYPE</TxnID> <!-- required -->
+<!-- TxnType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+<TxnType >ENUMTYPE</TxnType> <!-- required -->
+<APAccountRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</APAccountRef>
+<TxnDate >DATETYPE</TxnDate> <!-- required -->
+<RefNumber >STRTYPE</RefNumber> <!-- optional -->
+<DueDate >DATETYPE</DueDate> <!-- optional -->
+<AmountDue >AMTTYPE</AmountDue> <!-- required -->
+</BillToPay>
+<!-- OR -->
+<CreditToApply> <!-- optional -->
+<TxnID >IDTYPE</TxnID> <!-- required -->
+<!-- TxnType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+<TxnType >ENUMTYPE</TxnType> <!-- required -->
+<APAccountRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</APAccountRef>
+<TxnDate >DATETYPE</TxnDate> <!-- required -->
+<RefNumber >STRTYPE</RefNumber> <!-- optional -->
+<CreditRemaining >AMTTYPE</CreditRemaining> <!-- required -->
+</CreditToApply>
+<!-- END OR -->
+</BillToPayRet>
+</BillToPayQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

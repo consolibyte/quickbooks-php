@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * 
+ * 
+ * @package QuickBooks
+ * @subpackage Adapter
+ */
+
+/**
+ * 
+ */
+require_once 'QuickBooks/Adapter/Server.php';
+
+/**
+ * 
+ */
+require_once 'QuickBooks/SOAP/Server.php';
+
+/**
+ * 
+ */
+class QuickBooks_Adapter_Server_Builtin implements QuickBooks_Adapter_Server
+{
+	protected $_server;
+	
+	public function __construct($wsdl, $soap_options)
+	{
+		$dispatch = array(
+			'authenticate' => array(
+				array( 'strUserName', 'strPassword' ), 
+				array( 'authenticateResult' ), 
+				),
+			'sendRequestXML' => array(
+				array( 'ticket', 'strHCPResponse', 'strCompanyFileName', 'qbXMLCountry', 'qbXMLMajorVers', 'qbXMLMinorVers' ), 
+				array( 'sendRequestXMLResult' ), 
+				), 
+			'closeConnection' => array(
+				array( 'ticket' ), 
+				array( 'closeConnectionResult' ), 
+				), 
+			);
+		
+		$this->_server = new QuickBooks_SOAP_Server($dispatch, $soap_options);
+	}
+	
+	public function handle($raw_http_input)
+	{
+		return $this->_server->handle($raw_http_input);
+	}
+	
+	public function setClass($class, $dsn_or_conn, $map, $onerror, $hooks, $log_level, $raw_http_input, $handler_options, $driver_options)
+	{
+		// $dsn_or_conn, $map, $onerror, $hooks, $log_level, $input, $handler_config = array(), $driver_config = array()
+		return $this->_server->setClass($class, $dsn_or_conn, $map, $onerror, $hooks, $log_level, $raw_http_input, $handler_options, $driver_options);
+	}
+	
+	public function getFunctions()
+	{
+		return $this->_server->getFunctions();
+	}
+}
+
+?>

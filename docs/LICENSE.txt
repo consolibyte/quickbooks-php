@@ -1,0 +1,51 @@
+
+
+All code for the QuickBooks PHP Framework is released under a 4-clause 
+BSD-style license. The license essentially says that you are free to use this 
+code/package in any project *however* you must keep the copyright messages for 
+the code intact *and* if you use this project in a commercial project, you need 
+to mention that your project uses mine. 
+
+* IF YOU ARE AN OPEN-SOURCE PROJECT * and want to use this code, but the BSD 
+license is causing you problems... please get it touch with me and I'll see 
+what I can do! 
+
+If the license issues cause problems for you and you would like to be able to 
+use the code under a different license, contact me and I'm sure we can work 
+something out. 
+
+ - Keith Palmer
+   keith@UglySlug.com
+   
+
+--------------------------------------------------------------------------------
+Copyright (c) 2008 Keith Palmer <keith@UglySlug.com>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+	
+	1. Redistributions of source code must retain the above copyright
+		notice, this list of conditions and the following disclaimer.
+ 	
+ 	2. Redistributions in binary form must reproduce the above copyright
+ 		notice, this list of conditions and the following disclaimer in the
+ 		documentation and/or other materials provided with the distribution.
+	
+	3. All advertising materials mentioning features or use of this software
+ 		must display the following acknowledgement:
+ 			This product includes software developed by Keith Palmer <keith@UglySlug.com>
+
+THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+--------------------------------------------------------------------------------

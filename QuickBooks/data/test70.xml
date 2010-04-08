@@ -1,0 +1,1338 @@
+<?xml version="1.0" ?>
+
+<!--                                                                         -->
+<!-- ======================================================================= -->
+<!-- (c) 2007 Intuit Inc. All rights reserved.                               -->
+<!-- Use is subject to a qbXML Developer Agreement available at:                   -->
+<!--          http://developer.intuit.com/legal/                             -->
+<!--                                                                         -->
+<!-- ======================================================================= -->
+<!--                                                                         -->
+<!-- Sample data for dtd: qbxmlops70.dtd                                     -->
+<!--                                                                         -->
+<!--  This dtd contains requests/responses for:                              -->
+<!-- QBXML                                                                   -->
+<!-- QBXMLSubscription                                                       -->
+<!-- QBXMLEvents                                                             -->
+<!--                                                                         -->
+<!-- Comments use the following abbreviations:                               -->
+<!--   QBD stands for the QuickBooks Desktop SDK                             -->
+<!--   QBOE stands for the QuickBooks Online Edition SDK                     -->
+<!--   QBCA stands for the QuickBooks Canadian Edition SDK                   -->
+<!--   QBUK stands for the QuickBooks United Kingdom Edition SDK             -->
+<!--   QBAU stands for the QuickBooks Australian Edition SDK                 -->
+<!--                                                                         -->
+<!-- Message set QBXML contains the following requests and responses:        -->
+<!--                                                                         -->
+<!--    Host (Query)                                                         -->
+<!--                                                                         -->
+<!--    Company (Query)                                                      -->
+<!--                                                                         -->
+<!--    CompanyActivity (Query)                                              -->
+<!--                                                                         -->
+<!--    Preferences (Query)                                                  -->
+<!--                                                                         -->
+<!--    Account (Add, Mod, Query)                                            -->
+<!--                                                                         -->
+<!--    SpecialAccount (Add)                                                 -->
+<!--                                                                         -->
+<!--    AccountTaxLineInfo (Query)                                           -->
+<!--                                                                         -->
+<!--    Customer (Add, Mod, Query)                                           -->
+<!--                                                                         -->
+<!--    Employee (Add, Mod, Query)                                           -->
+<!--                                                                         -->
+<!--    OtherName (Add, Mod, Query)                                          -->
+<!--                                                                         -->
+<!--    Vendor (Add, Mod, Query)                                             -->
+<!--                                                                         -->
+<!--    Entity (Query)                                                       -->
+<!--                                                                         -->
+<!--    StandardTerms (Add, Query)                                           -->
+<!--                                                                         -->
+<!--    DateDrivenTerms (Add, Query)                                         -->
+<!--                                                                         -->
+<!--    Terms (Query)                                                        -->
+<!--                                                                         -->
+<!--    Class (Add, Query)                                                   -->
+<!--                                                                         -->
+<!--    SalesRep (Add, Mod, Query)                                           -->
+<!--                                                                         -->
+<!--    CustomerType (Add, Query)                                            -->
+<!--                                                                         -->
+<!--    VendorType (Add, Query)                                              -->
+<!--                                                                         -->
+<!--    JobType (Add, Query)                                                 -->
+<!--                                                                         -->
+<!--    CustomerMsg (Add, Query)                                             -->
+<!--                                                                         -->
+<!--    PaymentMethod (Add, Query)                                           -->
+<!--                                                                         -->
+<!--    ShipMethod (Add, Query)                                              -->
+<!--                                                                         -->
+<!--    SalesTaxCode (Add, Query)                                            -->
+<!--                                                                         -->
+<!--    ToDo (Add, Query)                                                    -->
+<!--                                                                         -->
+<!--    ItemService (Add, Mod, Query)                                        -->
+<!--                                                                         -->
+<!--    ItemNonInventory (Add, Mod, Query)                                   -->
+<!--                                                                         -->
+<!--    ItemOtherCharge (Add, Mod, Query)                                    -->
+<!--                                                                         -->
+<!--    ItemInventory (Add, Mod, Query)                                      -->
+<!--                                                                         -->
+<!--    ItemInventoryAssembly (Add, Mod, Query)                              -->
+<!--                                                                         -->
+<!--    ItemFixedAsset (Add, Mod, Query)                                     -->
+<!--                                                                         -->
+<!--    ItemSubtotal (Add, Mod, Query)                                       -->
+<!--                                                                         -->
+<!--    ItemDiscount (Add, Mod, Query)                                       -->
+<!--                                                                         -->
+<!--    ItemPayment (Add, Mod, Query)                                        -->
+<!--                                                                         -->
+<!--    ItemSalesTax (Add, Mod, Query)                                       -->
+<!--                                                                         -->
+<!--    ItemSalesTaxGroup (Add, Mod, Query)                                  -->
+<!--                                                                         -->
+<!--    ItemGroup (Add, Mod, Query)                                          -->
+<!--                                                                         -->
+<!--    SpecialItem (Add)                                                    -->
+<!--                                                                         -->
+<!--    Item (Query)                                                         -->
+<!--                                                                         -->
+<!--    PayrollItemWage (Add, Query)                                         -->
+<!--                                                                         -->
+<!--    PayrollItemNonWage (Query)                                           -->
+<!--                                                                         -->
+<!--    Template (Query)                                                     -->
+<!--                                                                         -->
+<!--    PriceLevel (Add, Mod, Query)                                         -->
+<!--                                                                         -->
+<!--    BillingRate (Add, Query)                                             -->
+<!--                                                                         -->
+<!--    Vehicle (Add, Mod, Query)                                            -->
+<!--                                                                         -->
+<!--    UnitOfMeasureSet (Add, Query)                                        -->
+<!--                                                                         -->
+<!--    WorkersCompCode (Add, Mod, Query)                                    -->
+<!--                                                                         -->
+<!--    Invoice (Add, Mod, Query)                                            -->
+<!--                                                                         -->
+<!--    Estimate (Add, Mod, Query)                                           -->
+<!--                                                                         -->
+<!--    SalesOrder (Add, Mod, Query)                                         -->
+<!--                                                                         -->
+<!--    SalesReceipt (Add, Mod, Query)                                       -->
+<!--                                                                         -->
+<!--    CreditMemo (Add, Mod, Query)                                         -->
+<!--                                                                         -->
+<!--    ReceivePayment (Add, Mod, Query)                                     -->
+<!--                                                                         -->
+<!--    ReceivePaymentToDeposit (Query)                                      -->
+<!--                                                                         -->
+<!--    Charge (Add, Mod, Query)                                             -->
+<!--                                                                         -->
+<!--    PurchaseOrder (Add, Mod, Query)                                      -->
+<!--                                                                         -->
+<!--    Bill (Add, Mod, Query)                                               -->
+<!--                                                                         -->
+<!--    ItemReceipt (Add, Mod, Query)                                        -->
+<!--                                                                         -->
+<!--    VendorCredit (Add, Query)                                            -->
+<!--                                                                         -->
+<!--    BillPaymentCheck (Add, Mod, Query)                                   -->
+<!--                                                                         -->
+<!--    BillPaymentCreditCard (Add, Query)                                   -->
+<!--                                                                         -->
+<!--    BillToPay (Query)                                                    -->
+<!--                                                                         -->
+<!--    SalesTaxPaymentCheck (Query)                                         -->
+<!--                                                                         -->
+<!--    InventoryAdjustment (Add, Query)                                     -->
+<!--                                                                         -->
+<!--    TimeTracking (Add, Mod, Query)                                       -->
+<!--                                                                         -->
+<!--    Check (Add, Mod, Query)                                              -->
+<!--                                                                         -->
+<!--    CreditCardCharge (Add, Mod, Query)                                   -->
+<!--                                                                         -->
+<!--    CreditCardCredit (Add, Mod, Query)                                   -->
+<!--                                                                         -->
+<!--    JournalEntry (Add, Mod, Query)                                       -->
+<!--                                                                         -->
+<!--    Deposit (Add, Mod, Query)                                            -->
+<!--                                                                         -->
+<!--    List (Del, Merge)                                                    -->
+<!--                                                                         -->
+<!--    ListDeleted (Query)                                                  -->
+<!--                                                                         -->
+<!--    Txn (Del, Void)                                                      -->
+<!--                                                                         -->
+<!--    TxnDeleted (Query)                                                   -->
+<!--                                                                         -->
+<!--    ClearedStatus (Mod)                                                  -->
+<!--                                                                         -->
+<!--    ListDisplay (Add, Mod)                                               -->
+<!--                                                                         -->
+<!--    TxnDisplay (Add, Mod)                                                -->
+<!--                                                                         -->
+<!--    DataEventRecoveryInfo (Del, Query)                                   -->
+<!--                                                                         -->
+<!--    Transaction (Query)                                                  -->
+<!--                                                                         -->
+<!--    BuildAssembly (Add, Mod, Query)                                      -->
+<!--                                                                         -->
+<!--    ItemAssembliesCanBuild (Query)                                       -->
+<!--                                                                         -->
+<!--    ARRefundCreditCard (Add, Query)                                      -->
+<!--                                                                         -->
+<!--    VehicleMileage (Add, Query)                                          -->
+<!--                                                                         -->
+<!--    GeneralSummaryReport (Query)                                         -->
+<!--                                                                         -->
+<!--    JobReport (Query)                                                    -->
+<!--                                                                         -->
+<!--    TimeReport (Query)                                                   -->
+<!--                                                                         -->
+<!--    AgingReport (Query)                                                  -->
+<!--                                                                         -->
+<!--    BudgetSummaryReport (Query)                                          -->
+<!--                                                                         -->
+<!--    GeneralDetailReport (Query)                                          -->
+<!--                                                                         -->
+<!--    CustomDetailReport (Query)                                           -->
+<!--                                                                         -->
+<!--    CustomSummaryReport (Query)                                          -->
+<!--                                                                         -->
+<!--    PayrollDetailReport (Query)                                          -->
+<!--                                                                         -->
+<!--    PayrollSummaryReport (Query)                                         -->
+<!--                                                                         -->
+<!--    DataExtDef (Add, Mod, Del, Query)                                    -->
+<!--                                                                         -->
+<!--    DataExt (Add, Mod, Del)                                              -->
+<!--                                                                         -->
+<!-- This means that DataExt has, for example, 3 separate requests.          -->
+<!-- They are: DataExtAdd, DataExtMod and DataExtDel                         -->
+<!--                                                                         -->
+<!-- Message set QBXMLSubscription contains the following requests and responses: -->
+<!--                                                                         -->
+<!--    DataEventSubscription (Add, Query)                                   -->
+<!--                                                                         -->
+<!--    UIEventSubscription (Add, Query)                                     -->
+<!--                                                                         -->
+<!--    UIExtensionSubscription (Add, Query)                                 -->
+<!--                                                                         -->
+<!--    Subscription (Del)                                                   -->
+<!--                                                                         -->
+<!-- Message set QBXMLEvents contains the following requests and responses:  -->
+<!--                                                                         -->
+<!--    QBXML (Events)                                                       -->
+<!--                                                                         -->
+
+<!-- The value for the 'qbxml version' processing instruction is the version -->
+<!-- of the qbXML spec to be used for validation purposes.                   -->
+
+<?qbxml version="7.0"?>
+<QBXML>
+  <!-- QBXMLMsgsRq contains 4 attributes -->
+  <!--    'oldMessageSetID' is optional -->
+  <!--    'newMessageSetID' is optional -->
+  <!--    'responseData' is optional and may have one of the following values: includeAll[DEFAULT], includeNone -->
+  <!--    'onError' is required and must have one of the following values: continueOnError, rollbackOnError, stopOnError -->
+  <QBXMLMsgsRq oldMessageSetID = "STRTYPE" newMessageSetID = "STRTYPE" responseData = "ENUMTYPE" onError = "ENUMTYPE">
+    <!-- HostQueryRq contains 1 optional attribute: 'requestID' -->
+    <HostQueryRq requestID = "UUIDTYPE">
+      <IncludeListMetaData>                                 <!-- opt, not in QBOE, v6.0 -->
+        <IncludeMaxCapacity>BOOLTYPE</IncludeMaxCapacity>
+      </IncludeListMetaData>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </HostQueryRq>
+    <!-- CompanyQueryRq contains 1 optional attribute: 'requestID' -->
+    <CompanyQueryRq requestID = "UUIDTYPE">
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+      <OwnerID>GUIDTYPE</OwnerID>                           <!-- opt, may rep, v2.0 -->
+    </CompanyQueryRq>
+    <!-- CompanyActivityQueryRq contains 1 optional attribute: 'requestID' -->
+    <CompanyActivityQueryRq requestID = "UUIDTYPE">         <!-- not in QBOE, v2.0 -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </CompanyActivityQueryRq>
+    <!-- PreferencesQueryRq contains 1 optional attribute: 'requestID' -->
+    <PreferencesQueryRq requestID = "UUIDTYPE">             <!-- not in QBOE, v1.1 -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </PreferencesQueryRq>
+    <!-- AccountAddRq contains 1 optional attribute: 'requestID' -->
+    <AccountAddRq requestID = "UUIDTYPE">
+      <AccountAdd>
+        <Name>STRTYPE</Name>                                <!-- max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE -->
+        <ParentRef>                                         <!-- opt -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt -->
+        </ParentRef>
+        <!-- AccountType may have one of the following values: AccountsPayable, AccountsReceivable, Bank, CostOfGoodsSold, CreditCard, Equity, Expense, FixedAsset, Income, LongTermLiability, NonPosting, OtherAsset, OtherCurrentAsset, OtherCurrentLiability, OtherExpense, OtherIncome -->
+        <AccountType>ENUMTYPE</AccountType>
+        <!-- DetailAccountType may have one of the following values: AP, AR, AccumulatedAdjustment, AccumulatedAmortization, AccumulatedAmortizationOfOtherAssets, AccumulatedDepletion, AccumulatedDepreciation, AdvertisingOrPromotional, AllowanceForBadDebts, Amortization, Auto, BadDebts, BankCharges, Buildings, CashOnHand, CharitableContributions, Checking, CommonStock, CostOfLabor, CostOfLaborCOS, CreditCard, DepletableAssets, Depreciation, DevelopmentCosts, DiscountsOrRefundsGiven, DividendIncome, DuesAndSubscriptions, EmployeeCashAdvances, Entertainment, EntertainmentMeals, EquipmentRental, EquipmentRentalCOS, FederalIncomeTaxPayable, FurnitureAndFixtures, Goodwill, Insurance, InsurancePayable, IntangibleAssets, InterestEarned, InterestPaid, Inventory, InvestmentMortgageOrRealEstateLoans, InvestmentOther, InvestmentTaxExemptSecurities, InvestmentUSGovObligations, Land, LeaseBuyout, LeaseholdImprovements, LegalAndProfessionalFees, Licenses, LineOfCredit, LoanPayable, LoansToOfficers, LoansToOthers, LoansToStockholders, MachineryAndEquipment, MoneyMarket, NonProfitIncome, NotesPayable, OfficeOrGeneralAdministrativeExpenses, OpeningBalanceEquity, OrganizationalCosts, OtherCostsOfServiceCOS, OtherCurrentAssets, OtherCurrentLiab, OtherFixedAssets, OtherInvestmentIncome, OtherLongTermAssets, OtherLongTermLiab, OtherMiscExpense, OtherMiscIncome, OtherMiscServiceCost, OtherPrimaryIncome, OwnersEquity, PaidInCapitalOrSurplus, PartnerContributions, PartnerDistributions, PartnersEquity, PayrollClearing, PayrollExpenses, PayrollTaxPayable, PenaltiesAndSettlements, PreferredStock, PrepaidExpenses, PrepaidExpensesPayable, PromotionalMeals, RentOrLeaseOfBuildings, RentsHeldInTrust, RentsInTrustLiab, RepairAndMaintenance, Retainage, RetainedEarnings, SalesOfProductIncome, SalesTaxPayable, Savings, SecurityDeposits, ServiceOrFeeIncome, ShareholderNotesPayable, ShippingFreightAndDelivery, ShippingFreightAndDeliveryCOS, StateOrLocalIncomeTaxPayable, SuppliesAndMaterials, SuppliesAndMaterialsCOGS, TaxExemptInterest, TaxesPaid, Travel, TravelMeals, TreasuryStock, TrustAccounts, TrustAccountsLiab, UndepositedFunds, Utilities, Vehicles -->
+        <DetailAccountType>ENUMTYPE</DetailAccountType>     <!-- opt, not in QBD|QBCA|QBUK|QBAU -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 7 -->
+        <BankNumber>STRTYPE</BankNumber>                    <!-- opt, max length = 25 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <Desc>STRTYPE</Desc>                                <!-- opt, max length = 200 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <OpenBalance>AMTTYPE</OpenBalance>                  <!-- opt -->
+        <OpenBalanceDate>DATETYPE</OpenBalanceDate>         <!-- opt -->
+        <SalesTaxCodeRef>                                   <!-- opt, not in QBD|QBOE, v6.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 3 for QBCA|QBUK, max length = 6 for QBAU -->
+        </SalesTaxCodeRef>
+        <TaxLineID>INTTYPE</TaxLineID>                      <!-- opt, not in QBOE, v7.0 -->
+      </AccountAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </AccountAddRq>
+    <!-- AccountModRq contains 1 optional attribute: 'requestID' -->
+    <AccountModRq requestID = "UUIDTYPE">                   <!-- not in QBOE, v6.0 -->
+      <AccountMod>
+        <ListID>IDTYPE</ListID>
+        <EditSequence>STRTYPE</EditSequence>                <!-- max length = 16 for QBD|QBCA|QBUK|QBAU -->
+        <Name>STRTYPE</Name>                                <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt -->
+        <ParentRef>                                         <!-- opt -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt -->
+        </ParentRef>
+        <!-- AccountType may have one of the following values: AccountsPayable, AccountsReceivable, Bank, CostOfGoodsSold, CreditCard, Equity, Expense, FixedAsset, Income, LongTermLiability, NonPosting, OtherAsset, OtherCurrentAsset, OtherCurrentLiability, OtherExpense, OtherIncome -->
+        <AccountType>ENUMTYPE</AccountType>                 <!-- opt -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 7 for QBD|QBCA|QBUK|QBAU -->
+        <BankNumber>STRTYPE</BankNumber>                    <!-- opt, max length = 25 for QBD|QBCA|QBUK|QBAU -->
+        <Desc>STRTYPE</Desc>                                <!-- opt, max length = 200 for QBD|QBCA|QBUK|QBAU -->
+        <OpenBalance>AMTTYPE</OpenBalance>                  <!-- opt -->
+        <OpenBalanceDate>DATETYPE</OpenBalanceDate>         <!-- opt -->
+        <SalesTaxCodeRef>                                   <!-- opt, not in QBD, v6.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 3 for QBCA|QBUK, max length = 6 for QBAU -->
+        </SalesTaxCodeRef>
+        <TaxLineID>INTTYPE</TaxLineID>                      <!-- opt, v7.0 -->
+      </AccountMod>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </AccountModRq>
+    <!-- AccountQueryRq contains 2 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <AccountQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE">
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) AND AccountType )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt, not in QBOE -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- AccountType may have one of the following values: AccountsPayable, AccountsReceivable, Bank, CostOfGoodsSold, CreditCard, Equity, Expense, FixedAsset, Income, LongTermLiability, NonPosting, OtherAsset, OtherCurrentAsset, OtherCurrentLiability, OtherExpense, OtherIncome -->
+      <AccountType>ENUMTYPE</AccountType>                   <!-- opt, may rep -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+      <OwnerID>GUIDTYPE</OwnerID>                           <!-- opt, may rep, not in QBOE, v2.0 -->
+    </AccountQueryRq>
+    <!-- SpecialAccountAddRq contains 1 optional attribute: 'requestID' -->
+    <SpecialAccountAddRq requestID = "UUIDTYPE">            <!-- not in QBOE, v6.0 -->
+      <SpecialAccountAdd>
+        <!-- SpecialAccountType may have one of the following values: AccountsPayable, AccountsReceivable, CondenseItemAdjustmentExpenses, CostOfGoodsSold, DirectDepositLiabilities, Estimates, InventoryAssets, OpeningBalanceEquity, PayrollExpenses, PayrollLiabilities, PettyCash, PurchaseOrders, ReconciliationDifferences, RetainedEarnings, SalesOrders, SalesTaxPayable, UncategorizedExpenses, UncategorizedIncome, UndepositedFunds -->
+        <SpecialAccountType>ENUMTYPE</SpecialAccountType>
+      </SpecialAccountAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU -->
+    </SpecialAccountAddRq>
+    <!-- AccountTaxLineInfoQueryRq contains 1 optional attribute: 'requestID' -->
+    <AccountTaxLineInfoQueryRq requestID = "UUIDTYPE"/>     <!-- not in QBOE, v7.0 -->
+    <!-- CustomerAddRq contains 1 optional attribute: 'requestID' -->
+    <CustomerAddRq requestID = "UUIDTYPE">
+      <CustomerAdd>
+        <Name>STRTYPE</Name>                                <!-- max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE -->
+        <ParentRef>                                         <!-- opt -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt -->
+        </ParentRef>
+        <CompanyName>STRTYPE</CompanyName>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 50 for QBOE -->
+        <Salutation>STRTYPE</Salutation>                    <!-- opt, max length = 15 -->
+        <FirstName>STRTYPE</FirstName>                      <!-- opt, max length = 25 -->
+        <MiddleName>STRTYPE</MiddleName>                    <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU, max length = 25 for QBOE -->
+        <LastName>STRTYPE</LastName>                        <!-- opt, max length = 25 -->
+        <Suffix>STRTYPE</Suffix>                            <!-- opt, max length = 10 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <BillAddress>                                       <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE, v2.0 -->
+          <Addr5>STRTYPE</Addr5>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU, max length = 30 for QBOE -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <Note>STRTYPE</Note>                              <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+        </BillAddress>
+        <ShipAddress>                                       <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE, v2.0 -->
+          <Addr5>STRTYPE</Addr5>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU, max length = 30 for QBOE -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <Note>STRTYPE</Note>                              <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+        </ShipAddress>
+        <PrintAs>STRTYPE</PrintAs>                          <!-- opt, max length = 110 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <Phone>STRTYPE</Phone>                              <!-- opt, max length = 21 -->
+        <Mobile>STRTYPE</Mobile>                            <!-- opt, max length = 21 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <Pager>STRTYPE</Pager>                              <!-- opt, max length = 21 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <AltPhone>STRTYPE</AltPhone>                        <!-- opt, max length = 21 -->
+        <Fax>STRTYPE</Fax>                                  <!-- opt, max length = 21 -->
+        <Email>STRTYPE</Email>                              <!-- opt, max length = 1023 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <Contact>STRTYPE</Contact>                          <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <AltContact>STRTYPE</AltContact>                    <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <CustomerTypeRef>                                   <!-- opt, not in QBOE -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 159 for QBD|QBCA|QBUK|QBAU -->
+        </CustomerTypeRef>
+        <TermsRef>                                          <!-- opt -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        </TermsRef>
+        <SalesRepRef>                                       <!-- opt, not in QBOE -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU -->
+        </SalesRepRef>
+        <OpenBalance>AMTTYPE</OpenBalance>                  <!-- opt -->
+        <OpenBalanceDate>DATETYPE</OpenBalanceDate>         <!-- opt -->
+        <SalesTaxCodeRef>                                   <!-- opt, not in QBOE -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 3 for QBD|QBCA|QBUK, max length = 6 for QBAU -->
+        </SalesTaxCodeRef>
+        <ItemSalesTaxRef>                                   <!-- opt, not in QBOE -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </ItemSalesTaxRef>
+        <SalesTaxCountry>STRTYPE</SalesTaxCountry>          <!-- opt, max length = 31 for QBCA|QBUK|QBAU, not in QBD|QBOE, v6.0 -->
+        <ResaleNumber>STRTYPE</ResaleNumber>                <!-- opt, max length = 15 for QBD, max length = 21 for QBCA|QBUK|QBAU, max length = 16 for QBOE -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <CreditLimit>AMTTYPE</CreditLimit>                  <!-- opt, not in QBOE -->
+        <PreferredPaymentMethodRef>                         <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </PreferredPaymentMethodRef>
+        <CreditCardInfo>                                    <!-- opt, not in QBOE, v3.0 -->
+          <CreditCardNumber>STRTYPE</CreditCardNumber>      <!-- opt, max length = 25 for QBD|QBCA|QBUK|QBAU -->
+          <ExpirationMonth>INTTYPE</ExpirationMonth>        <!-- opt, min value = 1, max value = 12 -->
+          <ExpirationYear>INTTYPE</ExpirationYear>          <!-- opt -->
+          <NameOnCard>STRTYPE</NameOnCard>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <CreditCardAddress>STRTYPE</CreditCardAddress>    <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <CreditCardPostalCode>STRTYPE</CreditCardPostalCode> <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        </CreditCardInfo>
+        <!-- JobStatus may have one of the following values: Awarded, Closed, InProgress, None [DEFAULT], NotAwarded, Pending -->
+        <JobStatus>ENUMTYPE</JobStatus>                     <!-- opt, not in QBOE -->
+        <JobStartDate>DATETYPE</JobStartDate>               <!-- opt, not in QBOE -->
+        <JobProjectedEndDate>DATETYPE</JobProjectedEndDate> <!-- opt, not in QBOE -->
+        <JobEndDate>DATETYPE</JobEndDate>                   <!-- opt, not in QBOE -->
+        <JobDesc>STRTYPE</JobDesc>                          <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <JobTypeRef>                                        <!-- opt, not in QBOE -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 159 for QBD|QBCA|QBUK|QBAU -->
+        </JobTypeRef>
+        <Notes>STRTYPE</Notes>                              <!-- opt, max length = 4095 for QBD|QBCA|QBUK|QBAU, not in QBOE, v3.0 -->
+        <IsStatementWithParent>BOOLTYPE</IsStatementWithParent> <!-- opt, not in QBD|QBCA|QBUK|QBAU -->
+        <!-- DeliveryMethod may have one of the following values: Email, Fax, Print [DEFAULT] -->
+        <DeliveryMethod>ENUMTYPE</DeliveryMethod>           <!-- opt, not in QBD|QBCA|QBUK|QBAU -->
+        <PriceLevelRef>                                     <!-- opt, not in QBOE, v4.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </PriceLevelRef>
+      </CustomerAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </CustomerAddRq>
+    <!-- CustomerModRq contains 1 optional attribute: 'requestID' -->
+    <CustomerModRq requestID = "UUIDTYPE">
+      <CustomerMod>
+        <ListID>IDTYPE</ListID>
+        <EditSequence>STRTYPE</EditSequence>                <!-- max length = 16 for QBD|QBCA|QBUK|QBAU, max length = 10 for QBOE -->
+        <Name>STRTYPE</Name>                                <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE, v3.0 -->
+        <ParentRef>                                         <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt -->
+        </ParentRef>
+        <CompanyName>STRTYPE</CompanyName>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 50 for QBOE -->
+        <Salutation>STRTYPE</Salutation>                    <!-- opt, max length = 15 -->
+        <FirstName>STRTYPE</FirstName>                      <!-- opt, max length = 25 -->
+        <MiddleName>STRTYPE</MiddleName>                    <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU, max length = 25 for QBOE -->
+        <LastName>STRTYPE</LastName>                        <!-- opt, max length = 25 -->
+        <Suffix>STRTYPE</Suffix>                            <!-- opt, max length = 10 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <BillAddress>                                       <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE, v2.0 -->
+          <Addr5>STRTYPE</Addr5>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU, max length = 30 for QBOE -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <Note>STRTYPE</Note>                              <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+        </BillAddress>
+        <ShipAddress>                                       <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE, v2.0 -->
+          <Addr5>STRTYPE</Addr5>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU, max length = 30 for QBOE -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <Note>STRTYPE</Note>                              <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+        </ShipAddress>
+        <PrintAs>STRTYPE</PrintAs>                          <!-- opt, max length = 110 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <Phone>STRTYPE</Phone>                              <!-- opt, max length = 21 -->
+        <Mobile>STRTYPE</Mobile>                            <!-- opt, max length = 21 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <Pager>STRTYPE</Pager>                              <!-- opt, max length = 21 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <AltPhone>STRTYPE</AltPhone>                        <!-- opt, max length = 21 -->
+        <Fax>STRTYPE</Fax>                                  <!-- opt, max length = 21 -->
+        <Email>STRTYPE</Email>                              <!-- opt, max length = 1023 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <Contact>STRTYPE</Contact>                          <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <AltContact>STRTYPE</AltContact>                    <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <CustomerTypeRef>                                   <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 159 for QBD|QBCA|QBUK|QBAU -->
+        </CustomerTypeRef>
+        <TermsRef>                                          <!-- opt, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        </TermsRef>
+        <SalesRepRef>                                       <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU -->
+        </SalesRepRef>
+        <SalesTaxCodeRef>                                   <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 3 for QBD|QBCA|QBUK, max length = 6 for QBAU -->
+        </SalesTaxCodeRef>
+        <ItemSalesTaxRef>                                   <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </ItemSalesTaxRef>
+        <SalesTaxCountry>STRTYPE</SalesTaxCountry>          <!-- opt, max length = 31 for QBCA|QBUK|QBAU, not in QBD|QBOE, v6.0 -->
+        <ResaleNumber>STRTYPE</ResaleNumber>                <!-- opt, max length = 15 for QBD, max length = 21 for QBCA|QBUK|QBAU, max length = 16 for QBOE, v3.0 -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <CreditLimit>AMTTYPE</CreditLimit>                  <!-- opt, not in QBOE, v3.0 -->
+        <PreferredPaymentMethodRef>                         <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </PreferredPaymentMethodRef>
+        <CreditCardInfo>                                    <!-- opt, not in QBOE, v3.0 -->
+          <CreditCardNumber>STRTYPE</CreditCardNumber>      <!-- opt, max length = 25 for QBD|QBCA|QBUK|QBAU -->
+          <ExpirationMonth>INTTYPE</ExpirationMonth>        <!-- opt, min value = 1, max value = 12 -->
+          <ExpirationYear>INTTYPE</ExpirationYear>          <!-- opt -->
+          <NameOnCard>STRTYPE</NameOnCard>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <CreditCardAddress>STRTYPE</CreditCardAddress>    <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <CreditCardPostalCode>STRTYPE</CreditCardPostalCode> <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        </CreditCardInfo>
+        <!-- JobStatus may have one of the following values: Awarded, Closed, InProgress, None [DEFAULT], NotAwarded, Pending -->
+        <JobStatus>ENUMTYPE</JobStatus>                     <!-- opt, not in QBOE, v3.0 -->
+        <JobStartDate>DATETYPE</JobStartDate>               <!-- opt, not in QBOE, v3.0 -->
+        <JobProjectedEndDate>DATETYPE</JobProjectedEndDate> <!-- opt, not in QBOE, v3.0 -->
+        <JobEndDate>DATETYPE</JobEndDate>                   <!-- opt, not in QBOE, v3.0 -->
+        <JobDesc>STRTYPE</JobDesc>                          <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU, not in QBOE, v3.0 -->
+        <JobTypeRef>                                        <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 159 for QBD|QBCA|QBUK|QBAU -->
+        </JobTypeRef>
+        <Notes>STRTYPE</Notes>                              <!-- opt, max length = 4095 for QBD|QBCA|QBUK|QBAU, not in QBOE, v3.0 -->
+        <IsStatementWithParent>BOOLTYPE</IsStatementWithParent> <!-- opt, not in QBD|QBCA|QBUK|QBAU, v3.0 -->
+        <!-- DeliveryMethod may have one of the following values: Email, Fax, Print [DEFAULT] -->
+        <DeliveryMethod>ENUMTYPE</DeliveryMethod>           <!-- opt, not in QBD|QBCA|QBUK|QBAU, v3.0 -->
+        <PriceLevelRef>                                     <!-- opt, not in QBOE, v4.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </PriceLevelRef>
+      </CustomerMod>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </CustomerModRq>
+    <!-- CustomerQueryRq contains 4 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <!--    'iterator' is optional and may have one of the following values: Start, Continue, Stop -->
+    <!--    'iteratorID' is optional -->
+    <CustomerQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE" iterator = "ENUMTYPE" iteratorID = "UUIDTYPE">
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) AND TotalBalanceFilter )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt, not in QBOE -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <TotalBalanceFilter>                                  <!-- opt, not in QBOE -->
+        <!-- Operator may have one of the following values: LessThan, LessThanEqual, Equal, GreaterThan, GreaterThanEqual -->
+        <Operator>ENUMTYPE</Operator>
+        <Amount>AMTTYPE</Amount>
+      </TotalBalanceFilter>
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+      <OwnerID>GUIDTYPE</OwnerID>                           <!-- opt, may rep, not in QBOE, v2.0 -->
+    </CustomerQueryRq>
+    <!-- EmployeeAddRq contains 1 optional attribute: 'requestID' -->
+    <EmployeeAddRq requestID = "UUIDTYPE">
+      <EmployeeAdd>
+        <Name>STRTYPE</Name>                                <!-- opt, max length = 100 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE -->
+        <Salutation>STRTYPE</Salutation>                    <!-- opt, max length = 15 -->
+        <FirstName>STRTYPE</FirstName>                      <!-- opt, max length = 25 -->
+        <MiddleName>STRTYPE</MiddleName>                    <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU, max length = 25 for QBOE -->
+        <LastName>STRTYPE</LastName>                        <!-- opt, max length = 25 -->
+        <Suffix>STRTYPE</Suffix>                            <!-- opt, max length = 10 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <EmployeeAddress>                                   <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 500 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 500 for QBOE, not in QBD|QBCA|QBUK|QBAU, v2.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU, max length = 30 for QBOE -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 255 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        </EmployeeAddress>
+        <PrintAs>STRTYPE</PrintAs>                          <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 110 for QBOE -->
+        <Phone>STRTYPE</Phone>                              <!-- opt, max length = 21 -->
+        <Mobile>STRTYPE</Mobile>                            <!-- opt, max length = 21, v2.1 -->
+        <Pager>STRTYPE</Pager>                              <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, not in QBOE, v2.1 -->
+        <PagerPIN>STRTYPE</PagerPIN>                        <!-- opt, max length = 10 for QBD|QBCA|QBUK|QBAU, not in QBOE, v2.1 -->
+        <AltPhone>STRTYPE</AltPhone>                        <!-- opt, max length = 21 -->
+        <Fax>STRTYPE</Fax>                                  <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, not in QBOE, v2.1 -->
+        <SSN>STRTYPE</SSN>                                  <!-- opt, max length = 15 for QBD|QBCA|QBUK|QBAU, max length = 20 for QBOE -->
+        <Email>STRTYPE</Email>                              <!-- opt, max length = 1023 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <!-- EmployeeType may have one of the following values: Officer, Owner, Regular [DEFAULT], Statutory -->
+        <EmployeeType>ENUMTYPE</EmployeeType>               <!-- opt, not in QBOE -->
+        <!-- Gender may have one of the following values: Male, Female -->
+        <Gender>ENUMTYPE</Gender>                           <!-- opt, not in QBOE -->
+        <HiredDate>DATETYPE</HiredDate>                     <!-- opt -->
+        <ReleasedDate>DATETYPE</ReleasedDate>               <!-- opt -->
+        <BirthDate>DATETYPE</BirthDate>                     <!-- opt, not in QBOE, v2.0 -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <Notes>STRTYPE</Notes>                              <!-- opt, max length = 4095 for QBD|QBCA|QBUK|QBAU, not in QBOE, v3.0 -->
+        <BillingRateRef>                                    <!-- opt, not in QBOE, v6.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </BillingRateRef>
+        <EmployeePayrollInfo>                               <!-- opt, not in QBOE, v2.0 -->
+          <!-- PayPeriod may have one of the following values: Daily, Weekly, Biweekly, Semimonthly, Monthly, Quarterly, Yearly -->
+          <PayPeriod>ENUMTYPE</PayPeriod>                   <!-- opt -->
+          <ClassRef>                                        <!-- opt -->
+            <ListID>IDTYPE</ListID>                         <!-- opt -->
+            <FullName>STRTYPE</FullName>                    <!-- opt, max length = 159 for QBD|QBCA|QBUK|QBAU -->
+          </ClassRef>
+          <!-- BEGIN OR: You may optionally have ClearEarnings OR Earnings -->
+          <ClearEarnings>BOOLTYPE</ClearEarnings>
+          <!-- OR -->
+          <Earnings>                                        <!-- rep (1 or more) -->
+            <PayrollItemWageRef>
+              <ListID>IDTYPE</ListID>                       <!-- opt -->
+              <FullName>STRTYPE</FullName>                  <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+            </PayrollItemWageRef>
+            <!-- BEGIN OR: You may optionally have Rate OR RatePercent -->
+            <Rate>PRICETYPE</Rate>
+            <!-- OR -->
+            <RatePercent>PERCENTTYPE</RatePercent>
+            <!-- END OR -->
+          </Earnings>
+          <!-- END OR -->
+          <!-- UseTimeDataToCreatePaychecks may have one of the following values: NotSet, UseTimeData, DoNotUseTimeData -->
+          <UseTimeDataToCreatePaychecks>ENUMTYPE</UseTimeDataToCreatePaychecks> <!-- opt, v3.0 -->
+          <SickHours>                                       <!-- opt -->
+            <HoursAvailable>TIMEINTERVALTYPE</HoursAvailable> <!-- opt -->
+            <!-- AccrualPeriod may have one of the following values: BeginningOfYear, EveryHourOnPaycheck, EveryPaycheck -->
+            <AccrualPeriod>ENUMTYPE</AccrualPeriod>         <!-- opt -->
+            <HoursAccrued>TIMEINTERVALTYPE</HoursAccrued>   <!-- opt -->
+            <MaximumHours>TIMEINTERVALTYPE</MaximumHours>   <!-- opt -->
+            <IsResettingHoursEachNewYear>BOOLTYPE</IsResettingHoursEachNewYear> <!-- opt -->
+            <HoursUsed>TIMEINTERVALTYPE</HoursUsed>         <!-- opt, v5.0 -->
+            <AccrualStartDate>DATETYPE</AccrualStartDate>   <!-- opt, v5.0 -->
+          </SickHours>
+          <VacationHours>                                   <!-- opt -->
+            <HoursAvailable>TIMEINTERVALTYPE</HoursAvailable> <!-- opt -->
+            <!-- AccrualPeriod may have one of the following values: BeginningOfYear, EveryHourOnPaycheck, EveryPaycheck -->
+            <AccrualPeriod>ENUMTYPE</AccrualPeriod>         <!-- opt -->
+            <HoursAccrued>TIMEINTERVALTYPE</HoursAccrued>   <!-- opt -->
+            <MaximumHours>TIMEINTERVALTYPE</MaximumHours>   <!-- opt -->
+            <IsResettingHoursEachNewYear>BOOLTYPE</IsResettingHoursEachNewYear> <!-- opt -->
+            <HoursUsed>TIMEINTERVALTYPE</HoursUsed>         <!-- opt, v5.0 -->
+            <AccrualStartDate>DATETYPE</AccrualStartDate>   <!-- opt, v5.0 -->
+          </VacationHours>
+        </EmployeePayrollInfo>
+      </EmployeeAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </EmployeeAddRq>
+    <!-- EmployeeModRq contains 1 optional attribute: 'requestID' -->
+    <EmployeeModRq requestID = "UUIDTYPE">
+      <EmployeeMod>
+        <ListID>IDTYPE</ListID>
+        <EditSequence>STRTYPE</EditSequence>                <!-- max length = 16 for QBD|QBCA|QBUK|QBAU, max length = 10 for QBOE -->
+        <Name>STRTYPE</Name>                                <!-- opt, max length = 100 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE, v3.0 -->
+        <Salutation>STRTYPE</Salutation>                    <!-- opt, max length = 15 -->
+        <FirstName>STRTYPE</FirstName>                      <!-- opt, max length = 25 -->
+        <MiddleName>STRTYPE</MiddleName>                    <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU, max length = 25 for QBOE -->
+        <LastName>STRTYPE</LastName>                        <!-- opt, max length = 25 -->
+        <Suffix>STRTYPE</Suffix>                            <!-- opt, max length = 10 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <EmployeeAddress>                                   <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 500 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 500 for QBOE, not in QBD|QBCA|QBUK|QBAU, v2.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU, max length = 30 for QBOE -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 255 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        </EmployeeAddress>
+        <PrintAs>STRTYPE</PrintAs>                          <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 110 for QBOE -->
+        <Phone>STRTYPE</Phone>                              <!-- opt, max length = 21 -->
+        <Mobile>STRTYPE</Mobile>                            <!-- opt, max length = 21, v2.1 -->
+        <Pager>STRTYPE</Pager>                              <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, not in QBOE, v2.1 -->
+        <PagerPIN>STRTYPE</PagerPIN>                        <!-- opt, max length = 10 for QBD|QBCA|QBUK|QBAU, not in QBOE, v2.1 -->
+        <AltPhone>STRTYPE</AltPhone>                        <!-- opt, max length = 21 -->
+        <Fax>STRTYPE</Fax>                                  <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, not in QBOE, v2.1 -->
+        <Email>STRTYPE</Email>                              <!-- opt, max length = 1023 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <BirthDate>DATETYPE</BirthDate>                     <!-- opt, not in QBOE, v2.0 -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <Notes>STRTYPE</Notes>                              <!-- opt, max length = 4095 for QBD|QBCA|QBUK|QBAU, not in QBOE, v3.0 -->
+        <BillingRateRef>                                    <!-- opt, not in QBOE, v6.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </BillingRateRef>
+        <EmployeePayrollInfoMod>                            <!-- opt, not in QBOE, v2.0 -->
+          <!-- PayPeriod may have one of the following values: Daily, Weekly, Biweekly, Semimonthly, Monthly, Quarterly, Yearly -->
+          <PayPeriod>ENUMTYPE</PayPeriod>                   <!-- opt -->
+          <ClassRef>                                        <!-- opt -->
+            <ListID>IDTYPE</ListID>                         <!-- opt -->
+            <FullName>STRTYPE</FullName>                    <!-- opt, max length = 159 for QBD|QBCA|QBUK|QBAU -->
+          </ClassRef>
+          <!-- BEGIN OR: You may optionally have ClearEarnings OR Earnings -->
+          <ClearEarnings>BOOLTYPE</ClearEarnings>
+          <!-- OR -->
+          <Earnings>                                        <!-- rep (1 or more) -->
+            <PayrollItemWageRef>
+              <ListID>IDTYPE</ListID>                       <!-- opt -->
+              <FullName>STRTYPE</FullName>                  <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+            </PayrollItemWageRef>
+            <!-- BEGIN OR: You may optionally have Rate OR RatePercent -->
+            <Rate>PRICETYPE</Rate>
+            <!-- OR -->
+            <RatePercent>PERCENTTYPE</RatePercent>
+            <!-- END OR -->
+          </Earnings>
+          <!-- END OR -->
+          <!-- UseTimeDataToCreatePaychecks may have one of the following values: NotSet, UseTimeData, DoNotUseTimeData -->
+          <UseTimeDataToCreatePaychecks>ENUMTYPE</UseTimeDataToCreatePaychecks> <!-- opt, v3.0 -->
+          <SickHours>                                       <!-- opt -->
+            <HoursAvailable>TIMEINTERVALTYPE</HoursAvailable> <!-- opt -->
+            <!-- AccrualPeriod may have one of the following values: BeginningOfYear, EveryHourOnPaycheck, EveryPaycheck -->
+            <AccrualPeriod>ENUMTYPE</AccrualPeriod>         <!-- opt -->
+            <HoursAccrued>TIMEINTERVALTYPE</HoursAccrued>   <!-- opt -->
+            <MaximumHours>TIMEINTERVALTYPE</MaximumHours>   <!-- opt -->
+            <IsResettingHoursEachNewYear>BOOLTYPE</IsResettingHoursEachNewYear> <!-- opt -->
+            <HoursUsed>TIMEINTERVALTYPE</HoursUsed>         <!-- opt, v5.0 -->
+            <AccrualStartDate>DATETYPE</AccrualStartDate>   <!-- opt, v5.0 -->
+          </SickHours>
+          <VacationHours>                                   <!-- opt -->
+            <HoursAvailable>TIMEINTERVALTYPE</HoursAvailable> <!-- opt -->
+            <!-- AccrualPeriod may have one of the following values: BeginningOfYear, EveryHourOnPaycheck, EveryPaycheck -->
+            <AccrualPeriod>ENUMTYPE</AccrualPeriod>         <!-- opt -->
+            <HoursAccrued>TIMEINTERVALTYPE</HoursAccrued>   <!-- opt -->
+            <MaximumHours>TIMEINTERVALTYPE</MaximumHours>   <!-- opt -->
+            <IsResettingHoursEachNewYear>BOOLTYPE</IsResettingHoursEachNewYear> <!-- opt -->
+            <HoursUsed>TIMEINTERVALTYPE</HoursUsed>         <!-- opt, v5.0 -->
+            <AccrualStartDate>DATETYPE</AccrualStartDate>   <!-- opt, v5.0 -->
+          </VacationHours>
+        </EmployeePayrollInfoMod>
+      </EmployeeMod>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </EmployeeModRq>
+    <!-- EmployeeQueryRq contains 2 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <EmployeeQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE">
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt, not in QBOE -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+      <OwnerID>GUIDTYPE</OwnerID>                           <!-- opt, may rep, not in QBOE, v2.0 -->
+    </EmployeeQueryRq>
+    <!-- OtherNameAddRq contains 1 optional attribute: 'requestID' -->
+    <OtherNameAddRq requestID = "UUIDTYPE">                 <!-- not in QBOE -->
+      <OtherNameAdd>
+        <Name>STRTYPE</Name>                                <!-- max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt -->
+        <CompanyName>STRTYPE</CompanyName>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        <Salutation>STRTYPE</Salutation>                    <!-- opt, max length = 15 for QBD|QBCA|QBUK|QBAU -->
+        <FirstName>STRTYPE</FirstName>                      <!-- opt, max length = 25 for QBD|QBCA|QBUK|QBAU -->
+        <MiddleName>STRTYPE</MiddleName>                    <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU -->
+        <LastName>STRTYPE</LastName>                        <!-- opt, max length = 25 for QBD|QBCA|QBUK|QBAU -->
+        <OtherNameAddress>                                  <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, v2.0 -->
+          <Addr5>STRTYPE</Addr5>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, v6.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+          <Note>STRTYPE</Note>                              <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, v6.0 -->
+        </OtherNameAddress>
+        <Phone>STRTYPE</Phone>                              <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU -->
+        <AltPhone>STRTYPE</AltPhone>                        <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU -->
+        <Fax>STRTYPE</Fax>                                  <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU -->
+        <Email>STRTYPE</Email>                              <!-- opt, max length = 1023 for QBD|QBCA|QBUK|QBAU -->
+        <Contact>STRTYPE</Contact>                          <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        <AltContact>STRTYPE</AltContact>                    <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU -->
+        <Notes>STRTYPE</Notes>                              <!-- opt, max length = 4095 for QBD|QBCA|QBUK|QBAU, v3.0 -->
+      </OtherNameAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </OtherNameAddRq>
+    <!-- OtherNameModRq contains 1 optional attribute: 'requestID' -->
+    <OtherNameModRq requestID = "UUIDTYPE">                 <!-- not in QBOE -->
+      <OtherNameMod>
+        <ListID>IDTYPE</ListID>
+        <EditSequence>STRTYPE</EditSequence>                <!-- max length = 16 for QBD|QBCA|QBUK|QBAU -->
+        <Name>STRTYPE</Name>                                <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt -->
+        <CompanyName>STRTYPE</CompanyName>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        <Salutation>STRTYPE</Salutation>                    <!-- opt, max length = 15 for QBD|QBCA|QBUK|QBAU -->
+        <FirstName>STRTYPE</FirstName>                      <!-- opt, max length = 25 for QBD|QBCA|QBUK|QBAU -->
+        <MiddleName>STRTYPE</MiddleName>                    <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU -->
+        <LastName>STRTYPE</LastName>                        <!-- opt, max length = 25 for QBD|QBCA|QBUK|QBAU -->
+        <OtherNameAddress>                                  <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, v2.0 -->
+          <Addr5>STRTYPE</Addr5>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, v6.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+          <Note>STRTYPE</Note>                              <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, v6.0 -->
+        </OtherNameAddress>
+        <Phone>STRTYPE</Phone>                              <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU -->
+        <AltPhone>STRTYPE</AltPhone>                        <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU -->
+        <Fax>STRTYPE</Fax>                                  <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU -->
+        <Email>STRTYPE</Email>                              <!-- opt, max length = 1023 for QBD|QBCA|QBUK|QBAU -->
+        <Contact>STRTYPE</Contact>                          <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        <AltContact>STRTYPE</AltContact>                    <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU -->
+        <Notes>STRTYPE</Notes>                              <!-- opt, max length = 4095 for QBD|QBCA|QBUK|QBAU, v3.0 -->
+      </OtherNameMod>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </OtherNameModRq>
+    <!-- OtherNameQueryRq contains 2 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <OtherNameQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE"> <!-- not in QBOE -->
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+      <OwnerID>GUIDTYPE</OwnerID>                           <!-- opt, may rep, v2.0 -->
+    </OtherNameQueryRq>
+    <!-- VendorAddRq contains 1 optional attribute: 'requestID' -->
+    <VendorAddRq requestID = "UUIDTYPE">
+      <VendorAdd>
+        <Name>STRTYPE</Name>                                <!-- max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE -->
+        <CompanyName>STRTYPE</CompanyName>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 50 for QBOE -->
+        <Salutation>STRTYPE</Salutation>                    <!-- opt, max length = 15 -->
+        <FirstName>STRTYPE</FirstName>                      <!-- opt, max length = 25 -->
+        <MiddleName>STRTYPE</MiddleName>                    <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU, max length = 25 for QBOE -->
+        <LastName>STRTYPE</LastName>                        <!-- opt, max length = 25 -->
+        <Suffix>STRTYPE</Suffix>                            <!-- opt, max length = 10 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <VendorAddress>                                     <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE, v2.0 -->
+          <Addr5>STRTYPE</Addr5>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU, max length = 30 for QBOE -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <Note>STRTYPE</Note>                              <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+        </VendorAddress>
+        <Phone>STRTYPE</Phone>                              <!-- opt, max length = 21 -->
+        <Mobile>STRTYPE</Mobile>                            <!-- opt, max length = 21 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <Pager>STRTYPE</Pager>                              <!-- opt, max length = 21 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <AltPhone>STRTYPE</AltPhone>                        <!-- opt, max length = 21 -->
+        <Fax>STRTYPE</Fax>                                  <!-- opt, max length = 21 -->
+        <Email>STRTYPE</Email>                              <!-- opt, max length = 1023 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <Contact>STRTYPE</Contact>                          <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <AltContact>STRTYPE</AltContact>                    <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <NameOnCheck>STRTYPE</NameOnCheck>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 110 for QBOE -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <Notes>STRTYPE</Notes>                              <!-- opt, max length = 4095 for QBD|QBCA|QBUK|QBAU, not in QBOE, v3.0 -->
+        <VendorTypeRef>                                     <!-- opt, not in QBOE -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 159 for QBD|QBCA|QBUK|QBAU -->
+        </VendorTypeRef>
+        <TermsRef>                                          <!-- opt -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        </TermsRef>
+        <CreditLimit>AMTTYPE</CreditLimit>                  <!-- opt, not in QBOE -->
+        <VendorTaxIdent>STRTYPE</VendorTaxIdent>            <!-- opt, max length = 15 for QBD|QBCA|QBUK|QBAU, max length = 20 for QBOE -->
+        <IsVendorEligibleFor1099>BOOLTYPE</IsVendorEligibleFor1099> <!-- opt -->
+        <OpenBalance>AMTTYPE</OpenBalance>                  <!-- opt -->
+        <OpenBalanceDate>DATETYPE</OpenBalanceDate>         <!-- opt -->
+        <BillingRateRef>                                    <!-- opt, not in QBOE, v6.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </BillingRateRef>
+      </VendorAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </VendorAddRq>
+    <!-- VendorModRq contains 1 optional attribute: 'requestID' -->
+    <VendorModRq requestID = "UUIDTYPE">
+      <VendorMod>
+        <ListID>IDTYPE</ListID>
+        <EditSequence>STRTYPE</EditSequence>                <!-- max length = 16 for QBD|QBCA|QBUK|QBAU, max length = 10 for QBOE -->
+        <Name>STRTYPE</Name>                                <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE, v3.0 -->
+        <CompanyName>STRTYPE</CompanyName>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 50 for QBOE -->
+        <Salutation>STRTYPE</Salutation>                    <!-- opt, max length = 15 -->
+        <FirstName>STRTYPE</FirstName>                      <!-- opt, max length = 25 -->
+        <MiddleName>STRTYPE</MiddleName>                    <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU, max length = 25 for QBOE -->
+        <LastName>STRTYPE</LastName>                        <!-- opt, max length = 25 -->
+        <Suffix>STRTYPE</Suffix>                            <!-- opt, max length = 10 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <VendorAddress>                                     <!-- opt -->
+          <Addr1>STRTYPE</Addr1>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr2>STRTYPE</Addr2>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr3>STRTYPE</Addr3>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE -->
+          <Addr4>STRTYPE</Addr4>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 500 for QBOE, v2.0 -->
+          <Addr5>STRTYPE</Addr5>                            <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+          <City>STRTYPE</City>                              <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <State>STRTYPE</State>                            <!-- opt, max length = 21 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <PostalCode>STRTYPE</PostalCode>                  <!-- opt, max length = 13 for QBD|QBCA|QBUK|QBAU, max length = 30 for QBOE -->
+          <Country>STRTYPE</Country>                        <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 255 for QBOE -->
+          <Note>STRTYPE</Note>                              <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE, v6.0 -->
+        </VendorAddress>
+        <Phone>STRTYPE</Phone>                              <!-- opt, max length = 21 -->
+        <Mobile>STRTYPE</Mobile>                            <!-- opt, max length = 21 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <Pager>STRTYPE</Pager>                              <!-- opt, max length = 21 for QBOE, not in QBD|QBCA|QBUK|QBAU -->
+        <AltPhone>STRTYPE</AltPhone>                        <!-- opt, max length = 21 -->
+        <Fax>STRTYPE</Fax>                                  <!-- opt, max length = 21 -->
+        <Email>STRTYPE</Email>                              <!-- opt, max length = 1023 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <Contact>STRTYPE</Contact>                          <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <AltContact>STRTYPE</AltContact>                    <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, not in QBOE -->
+        <NameOnCheck>STRTYPE</NameOnCheck>                  <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU, max length = 110 for QBOE -->
+        <AccountNumber>STRTYPE</AccountNumber>              <!-- opt, max length = 99 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <Notes>STRTYPE</Notes>                              <!-- opt, max length = 4095 for QBD|QBCA|QBUK|QBAU, not in QBOE, v3.0 -->
+        <VendorTypeRef>                                     <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 159 for QBD|QBCA|QBUK|QBAU -->
+        </VendorTypeRef>
+        <TermsRef>                                          <!-- opt, not in QBOE, v3.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </TermsRef>
+        <CreditLimit>AMTTYPE</CreditLimit>                  <!-- opt, not in QBOE, v3.0 -->
+        <VendorTaxIdent>STRTYPE</VendorTaxIdent>            <!-- opt, max length = 15 for QBD|QBCA|QBUK|QBAU, not in QBOE, v3.0 -->
+        <IsVendorEligibleFor1099>BOOLTYPE</IsVendorEligibleFor1099> <!-- opt, not in QBOE, v3.0 -->
+        <BillingRateRef>                                    <!-- opt, not in QBOE, v6.0 -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        </BillingRateRef>
+      </VendorMod>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </VendorModRq>
+    <!-- VendorQueryRq contains 4 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <!--    'iterator' is optional and may have one of the following values: Start, Continue, Stop -->
+    <!--    'iteratorID' is optional -->
+    <VendorQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE" iterator = "ENUMTYPE" iteratorID = "UUIDTYPE">
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) AND TotalBalanceFilter )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt, not in QBOE -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <TotalBalanceFilter>                                  <!-- opt, not in QBOE -->
+        <!-- Operator may have one of the following values: LessThan, LessThanEqual, Equal, GreaterThan, GreaterThanEqual -->
+        <Operator>ENUMTYPE</Operator>
+        <Amount>AMTTYPE</Amount>
+      </TotalBalanceFilter>
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+      <OwnerID>GUIDTYPE</OwnerID>                           <!-- opt, may rep, not in QBOE, v2.0 -->
+    </VendorQueryRq>
+    <!-- EntityQueryRq contains 4 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <!--    'iterator' is optional and may have one of the following values: Start, Continue, Stop -->
+    <!--    'iteratorID' is optional -->
+    <EntityQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE" iterator = "ENUMTYPE" iteratorID = "UUIDTYPE">
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt, not in QBOE -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </EntityQueryRq>
+    <!-- StandardTermsAddRq contains 1 optional attribute: 'requestID' -->
+    <StandardTermsAddRq requestID = "UUIDTYPE">
+      <StandardTermsAdd>
+        <Name>STRTYPE</Name>                                <!-- max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE -->
+        <StdDueDays>INTTYPE</StdDueDays>                    <!-- opt -->
+        <StdDiscountDays>INTTYPE</StdDiscountDays>          <!-- opt -->
+        <DiscountPct>PERCENTTYPE</DiscountPct>              <!-- opt -->
+      </StandardTermsAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </StandardTermsAddRq>
+    <!-- StandardTermsQueryRq contains 2 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <StandardTermsQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE">
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt, not in QBOE -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </StandardTermsQueryRq>
+    <!-- DateDrivenTermsAddRq contains 1 optional attribute: 'requestID' -->
+    <DateDrivenTermsAddRq requestID = "UUIDTYPE">
+      <DateDrivenTermsAdd>
+        <Name>STRTYPE</Name>                                <!-- max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE -->
+        <DayOfMonthDue>INTTYPE</DayOfMonthDue>              <!-- min value = 1, max value = 31 -->
+        <DueNextMonthDays>INTTYPE</DueNextMonthDays>        <!-- opt -->
+        <DiscountDayOfMonth>INTTYPE</DiscountDayOfMonth>    <!-- opt, min value = 1, max value = 31 -->
+        <DiscountPct>PERCENTTYPE</DiscountPct>              <!-- opt -->
+      </DateDrivenTermsAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </DateDrivenTermsAddRq>
+    <!-- DateDrivenTermsQueryRq contains 2 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <DateDrivenTermsQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE">
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt, not in QBOE -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </DateDrivenTermsQueryRq>
+    <!-- TermsQueryRq contains 2 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <TermsQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE"> <!-- not in QBOE -->
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </TermsQueryRq>
+    <!-- ClassAddRq contains 1 optional attribute: 'requestID' -->
+    <ClassAddRq requestID = "UUIDTYPE">
+      <ClassAdd>
+        <Name>STRTYPE</Name>                                <!-- max length = 31 for QBD|QBCA|QBUK|QBAU, max length = 100 for QBOE -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt, not in QBOE -->
+        <ParentRef>                                         <!-- opt -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt -->
+        </ParentRef>
+      </ClassAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </ClassAddRq>
+    <!-- ClassQueryRq contains 2 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <ClassQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE">
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt, not in QBOE -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, not in QBOE, v4.0 -->
+    </ClassQueryRq>
+    <!-- SalesRepAddRq contains 1 optional attribute: 'requestID' -->
+    <SalesRepAddRq requestID = "UUIDTYPE">                  <!-- not in QBOE -->
+      <SalesRepAdd>
+        <Initial>STRTYPE</Initial>                          <!-- max length = 5 for QBD|QBCA|QBUK|QBAU -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt -->
+        <SalesRepEntityRef>
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        </SalesRepEntityRef>
+      </SalesRepAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </SalesRepAddRq>
+    <!-- SalesRepModRq contains 1 optional attribute: 'requestID' -->
+    <SalesRepModRq requestID = "UUIDTYPE">                  <!-- not in QBOE, v3.0 -->
+      <SalesRepMod>
+        <ListID>IDTYPE</ListID>
+        <EditSequence>STRTYPE</EditSequence>                <!-- max length = 16 for QBD|QBCA|QBUK|QBAU -->
+        <Initial>STRTYPE</Initial>                          <!-- opt, max length = 5 for QBD|QBCA|QBUK|QBAU -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt -->
+        <SalesRepEntityRef>                                 <!-- opt -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt, max length = 41 for QBD|QBCA|QBUK|QBAU -->
+        </SalesRepEntityRef>
+      </SalesRepMod>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </SalesRepModRq>
+    <!-- SalesRepQueryRq contains 2 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <SalesRepQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE"> <!-- not in QBOE -->
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </SalesRepQueryRq>
+    <!-- CustomerTypeAddRq contains 1 optional attribute: 'requestID' -->
+    <CustomerTypeAddRq requestID = "UUIDTYPE">              <!-- not in QBOE -->
+      <CustomerTypeAdd>
+        <Name>STRTYPE</Name>                                <!-- max length = 31 for QBD|QBCA|QBUK|QBAU -->
+        <IsActive>BOOLTYPE</IsActive>                       <!-- opt -->
+        <ParentRef>                                         <!-- opt -->
+          <ListID>IDTYPE</ListID>                           <!-- opt -->
+          <FullName>STRTYPE</FullName>                      <!-- opt -->
+        </ParentRef>
+      </CustomerTypeAdd>
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </CustomerTypeAddRq>
+    <!-- CustomerTypeQueryRq contains 2 attributes -->
+    <!--    'requestID' is optional -->
+    <!--    'metaData' is optional and may have one of the following values: NoMetaData[DEFAULT], MetaDataOnly, MetaDataAndResponseData -->
+    <CustomerTypeQueryRq requestID = "UUIDTYPE" metaData = "ENUMTYPE"> <!-- not in QBOE -->
+      <!-- BEGIN OR: You may optionally have ListID OR FullName OR ( MaxReturned AND ActiveStatus AND FromModifiedDate AND ToModifiedDate AND ( NameFilter OR NameRangeFilter ) )  -->
+      <ListID>IDTYPE</ListID>                               <!-- rep (1 or more) -->
+      <!-- OR -->
+      <FullName>STRTYPE</FullName>                          <!-- rep (1 or more) -->
+      <!-- OR -->
+      <MaxReturned>INTTYPE</MaxReturned>                    <!-- opt, min value = 1 -->
+      <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+      <ActiveStatus>ENUMTYPE</ActiveStatus>                 <!-- opt -->
+      <FromModifiedDate>DATETIMETYPE</FromModifiedDate>     <!-- opt -->
+      <ToModifiedDate>DATETIMETYPE</ToModifiedDate>         <!-- opt -->
+      <!-- BEGIN OR: You may optionally have NameFilter OR NameRangeFilter -->
+      <NameFilter>
+        <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+        <MatchCriterion>ENUMTYPE</MatchCriterion>
+        <Name>STRTYPE</Name>
+      </NameFilter>
+      <!-- OR -->
+      <NameRangeFilter>
+        <FromName>STRTYPE</FromName>                        <!-- opt -->
+        <ToName>STRTYPE</ToName>                            <!-- opt -->
+      </NameRangeFilter>
+      <!-- END OR -->
+      <!-- END OR -->
+      <IncludeRetElement>STRTYPE</IncludeRetElement>        <!-- opt, may rep, max length = 50 for QBD|QBCA|QBUK|QBAU, v4.0 -->
+    </CustomerTypeQueryRq>
+  </QBXMLMsgsRq>
+</QBXML>

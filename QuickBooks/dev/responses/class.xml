@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><?qbxml version="7.0"?><QBXML><QBXMLMsgsRs onError="stopOnErrror">
+
+<ClassQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">	
+	<ClassRet> <!-- optional, may repeat -->	<ListID >IDTYPE</ListID> <!-- required -->	<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->	<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->	<EditSequence >STRTYPE</EditSequence> <!-- required -->	<Name >STRTYPE</Name> <!-- required -->	<FullName >STRTYPE</FullName> <!-- required -->	<IsActive >BOOLTYPE</IsActive> <!-- optional -->	<ParentRef> <!-- optional -->	<ListID >IDTYPE</ListID> <!-- optional -->	<FullName >STRTYPE</FullName> <!-- optional -->	</ParentRef>	<Sublevel >INTTYPE</Sublevel> <!-- required -->	</ClassRet>
+	
+	<ClassRet> <!-- optional, may repeat -->	<ListID >IDTYPE 2</ListID> <!-- required -->	<TimeCreated >DATETIMETYPE 2</TimeCreated> <!-- required -->	<TimeModified >DATETIMETYPE 2</TimeModified> <!-- required -->	<EditSequence >STRTYPE 2</EditSequence> <!-- required -->	<Name >STRTYPE 2</Name> <!-- required -->	<FullName >STRTYPE 2</FullName> <!-- required -->	<IsActive >BOOLTYPE 2</IsActive> <!-- optional -->	<ParentRef> <!-- optional -->	<ListID >IDTYPE</ListID> <!-- optional -->	<FullName >STRTYPE</FullName> <!-- optional -->	</ParentRef>	<Sublevel >INTTYPE</Sublevel> <!-- required -->	</ClassRet>
+	</ClassQueryRs>
+</QBXMLMsgsRs></QBXML>

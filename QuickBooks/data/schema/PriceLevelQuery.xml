@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<PriceLevelQueryRq metaData="ENUMTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+<ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<ItemRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemRef>
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+</PriceLevelQueryRq>
+<PriceLevelQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+<PriceLevelRet> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- optional -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- optional -->
+<EditSequence >STRTYPE</EditSequence> <!-- optional -->
+<Name >STRTYPE</Name> <!-- optional -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<!-- PriceLevelType may have one of the following values: FixedPercentage, PerItem -->
+<PriceLevelType >ENUMTYPE</PriceLevelType> <!-- optional -->
+<!-- BEGIN OR -->
+<PriceLevelFixedPercentage >PERCENTTYPE</PriceLevelFixedPercentage> <!-- optional -->
+<!-- OR -->
+<PriceLevelPerItemRet> <!-- optional, may repeat -->
+<ItemRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemRef>
+<!-- BEGIN OR -->
+<CustomPrice >PRICETYPE</CustomPrice> <!-- optional -->
+<!-- OR -->
+<CustomPricePercent >PERCENTTYPE</CustomPricePercent> <!-- optional -->
+<!-- END OR -->
+</PriceLevelPerItemRet>
+<!-- END OR -->
+</PriceLevelRet>
+</PriceLevelQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

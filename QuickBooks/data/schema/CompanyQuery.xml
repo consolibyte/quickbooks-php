@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<CompanyQueryRq>
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</CompanyQueryRq>
+<CompanyQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+<CompanyRet> <!-- optional -->
+<IsSampleCompany >BOOLTYPE</IsSampleCompany> <!-- required -->
+<CompanyName >STRTYPE</CompanyName> <!-- optional -->
+<LegalCompanyName >STRTYPE</LegalCompanyName> <!-- optional -->
+<Address> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+<City >STRTYPE</City> <!-- optional -->
+<State >STRTYPE</State> <!-- optional -->
+<PostalCode >STRTYPE</PostalCode> <!-- optional -->
+<Country >STRTYPE</Country> <!-- optional -->
+<Note >STRTYPE</Note> <!-- optional -->
+</Address>
+<AddressBlock> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+</AddressBlock>
+<LegalAddress> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+<City >STRTYPE</City> <!-- optional -->
+<State >STRTYPE</State> <!-- optional -->
+<PostalCode >STRTYPE</PostalCode> <!-- optional -->
+<Country >STRTYPE</Country> <!-- optional -->
+<Note >STRTYPE</Note> <!-- optional -->
+</LegalAddress>
+<CompanyAddressForCustomer> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+<City >STRTYPE</City> <!-- optional -->
+<State >STRTYPE</State> <!-- optional -->
+<PostalCode >STRTYPE</PostalCode> <!-- optional -->
+<Country >STRTYPE</Country> <!-- optional -->
+<Note >STRTYPE</Note> <!-- optional -->
+</CompanyAddressForCustomer>
+<CompanyAddressBlockForCustomer> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+</CompanyAddressBlockForCustomer>
+<Phone >STRTYPE</Phone> <!-- optional -->
+<Fax >STRTYPE</Fax> <!-- optional -->
+<Email >STRTYPE</Email> <!-- optional -->
+<CompanyWebSite >STRTYPE</CompanyWebSite> <!-- optional -->
+<!-- FirstMonthFiscalYear may have one of the following values: January, February, March, April, May, June, July, August, September, October, November, December -->
+<FirstMonthFiscalYear >ENUMTYPE</FirstMonthFiscalYear> <!-- optional -->
+<!-- FirstMonthIncomeTaxYear may have one of the following values: January, February, March, April, May, June, July, August, September, October, November, December -->
+<FirstMonthIncomeTaxYear >ENUMTYPE</FirstMonthIncomeTaxYear> <!-- optional -->
+<CompanyType >STRTYPE</CompanyType> <!-- optional -->
+<EIN >STRTYPE</EIN> <!-- optional -->
+<SSN >STRTYPE</SSN> <!-- optional -->
+<!-- TaxForm may have one of the following values: Form1040, Form1065, Form1120, Form1120S, Form990, Form990PF, Form990T, OtherOrNone -->
+<TaxForm >ENUMTYPE</TaxForm> <!-- optional -->
+<SubscribedServices> <!-- optional -->
+<Service> <!-- optional, may repeat -->
+<Name >STRTYPE</Name> <!-- required -->
+<Domain >STRTYPE</Domain> <!-- required -->
+<!-- ServiceStatus may have one of the following values: Active, Expired, Never, Pending, Suspended, Terminated, Trial -->
+<ServiceStatus >ENUMTYPE</ServiceStatus> <!-- required -->
+</Service>
+</SubscribedServices>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</CompanyRet>
+</CompanyQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

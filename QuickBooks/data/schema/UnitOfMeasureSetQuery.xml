@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<UnitOfMeasureSetQueryRq metaData="ENUMTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+<ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+</UnitOfMeasureSetQueryRq>
+<UnitOfMeasureSetQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+<UnitOfMeasureSetRet> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- optional -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- optional -->
+<EditSequence >STRTYPE</EditSequence> <!-- optional -->
+<Name >STRTYPE</Name> <!-- optional -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<!-- UnitOfMeasureType may have one of the following values: Area, Count, Length, Other, Time, Volume, Weight -->
+<UnitOfMeasureType >ENUMTYPE</UnitOfMeasureType> <!-- optional -->
+<BaseUnit> <!-- optional -->
+<Name >STRTYPE</Name> <!-- required -->
+<Abbreviation >STRTYPE</Abbreviation> <!-- required -->
+</BaseUnit>
+<RelatedUnit> <!-- optional, may repeat -->
+<Name >STRTYPE</Name> <!-- required -->
+<Abbreviation >STRTYPE</Abbreviation> <!-- required -->
+<ConversionRatio >PRICETYPE</ConversionRatio> <!-- required -->
+</RelatedUnit>
+<DefaultUnit> <!-- optional, may repeat -->
+<!-- UnitUsedFor may have one of the following values: Purchase, Sales, Shipping -->
+<UnitUsedFor >ENUMTYPE</UnitUsedFor> <!-- required -->
+<Unit >STRTYPE</Unit> <!-- required -->
+</DefaultUnit>
+</UnitOfMeasureSetRet>
+</UnitOfMeasureSetQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

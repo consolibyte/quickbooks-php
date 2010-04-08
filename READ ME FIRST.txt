@@ -1,0 +1,104 @@
+
+ ========================= * * * READ ME FIRST! * * * =========================
+
+ QuickBooks integration support for PHP 5.x+ 
+ 
+ The package you've downloaded contains code and documentation for connecting 
+ various versions and editions of QuickBooks to PHP, allowing your PHP 
+ applications to do fancy things like:
+ 
+  - Automatically send orders placed on your website to QuickBooks 
+  
+  - Charge credit cards using the QuickBooks Merchant Service
+  
+  - Connect to the Intuit Partner Platform and access IDS Services  
+  
+  - Get access to QuickBooks reports 
+  
+  - Pull information out of QuickBooks and display it online 
+  
+  - Connect to all Microsoft Windows versions of QuickBooks
+  
+  - Connect to QuickBooks Online Edition
+  
+  - etc. etc. etc.
+  
+  
+ Almost anything you can do in the QuickBooks GUI, in QuickBooks Online 
+ Edition, and with QuickBooks Merchant Service can be accomplished via this 
+ framework. 
+
+    If you have questions, suggestions, or find a bug, the absolute best way to 
+    get support, report bugs, or ask for help is to ask on the forums:
+     http://www.consolibyte.com/forum/
+     https://idnforums.intuit.com/
+     
+    You will find examples in the docs/ folder. There is additional 
+    documentation and additional examples on our wiki:
+     http://wiki.consolibyte.com/wiki/doku.php/quickbooks
+     http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte
+    
+    Please remember that this is an open-source project! Donations, 
+    contributions, and general thank-yous are all very appreciated! Monetary 
+    donations can be made at my website:
+     http://www.consolibyte.com/
+    
+   - Keith Palmer
+     keith@consolibyte.com
+     aim: consolibyte
+     msn: support@consolibyte.com
+     gtalk: consolibyte
+
+
+ DOCUMENTATION:   (look at these files for examples of how to do stuff)
+ 
+ Integration with the Intuit Partner Platform and IDS
+    docs/example_ipp_basics.php
+    docs/example_ipp_objects.php
+ 
+ Integration with QuickBooks Desktop Editions (Pro, Premier, Enterprise)
+ 	docs/example_server.php
+ 	docs/example_server_import.php
+ 	
+ Integration with QuickBooks Online Edition
+ 	docs/example_online_edition.php
+ 	
+ Integration with QuickBooks Merchant Services (charge credit cards)
+ 	docs/example_merchant_service.php
+ 
+ Mirroring the QuickBooks company file in an SQL database
+ 	docs/example_mysql_mirror.php
+ 	docs/example_pgsql_mirror.php
+ 	
+ Using the QuickBooks_API classes for a very OOP approach to talking to QuickBooks
+ 	docs/example_api_server.php
+ 	docs/example_api_client.php	
+ 	
+ Sending qbXML requests to QuickBooks via PHP from another programming language or a remote server (.NET, Python, etc.)
+ 	docs/example_bridge_server.php
+ 	docs/example_bridge_http-send.php
+ 	docs/example_bridge_http-receive.php
+ 
+ 
+ RECOMMENDATIONS: 
+ 
+ If you're developing a SaaS application that integrates with QuickBooks, you 
+ should be developing on the Intuit Partner Platform using IDS. 
+  
+ QuickBooks integration can be a *beast* to develop for and debug. You will 
+ save yourself *countless* hours if you configure PHP so that: 
+ 	- error_reporting = E_ALL | E_STRICT
+ 	- display_errors = On
+ 	- display_startup_errors = On
+ 	- log_errors = On
+ 	- error_log = /path/to/your/log/file.log
+ 
+ No, seriously. Go set up your PHP development server like that. I promise that 
+ it will make your life easier, at least as far as QuickBooks development goes.
+ 
+ I would *highly* encourage you to at least download and install the QuickBooks 
+ SDK. Most of the implementation details are hidden from you, but you *will* 
+ need the QuickBooks OSR to look up the qbXML request/response schema, and you 
+ will find that the QuickBooks XML Validator tool is very helpful for 
+ debugging.
+
