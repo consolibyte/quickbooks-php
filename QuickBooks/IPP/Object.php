@@ -36,10 +36,36 @@ class QuickBooks_IPP_Object
 			
 			if (isset($this->_data[$field]))
 			{
-				return $this->_data[$field];
+				if (isset($args[0]) and 
+					is_numeric($args[0]))
+				{
+					// Trying to fetch a repeating element
+					if (isset($this->_data[$field][$args[0]]))
+					{
+						return $this->_data[$field][$args[0]];
+					}
+					
+					return null;
+				}
+				else
+				{
+					// Normal data
+					return $this->_data[$field];
+				}
 			}
 			
 			return null;
+		}
+		else if (substr($name, 0, 3) == 'add')
+		{
+			$field = substr($name, 3);
+			
+			if (!isset($this->_data[$field]))
+			{
+				$this->_data[$field] = array();
+			}
+			
+			$this->_data[$field][] = current($args);
 		}
 	}
 }

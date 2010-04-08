@@ -15,7 +15,15 @@ class QuickBooks_IPP_Parser
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
+		$adds = array(
+			'Address', 
+			'Phone', 
+			//'Fax', 
+			//'Email', 
+			);
+		
 		$list = array();
+		
 		
 		$errnum = QuickBooks_XML::ERROR_OK;
 		$errmsg = null;
@@ -30,10 +38,7 @@ class QuickBooks_IPP_Parser
 				
 				foreach ($Child->children() as $Data)
 				{
-					$name = $Data->name();
-					$data = $Data->data();
-					
-					$Object->{'set' . $name}($data);
+					$this->_push($Data, $Object);
 				}
 				
 				$list[] = $Object;
@@ -41,5 +46,37 @@ class QuickBooks_IPP_Parser
 		}
 		
 		return $list;
+	}
+	
+	protected function _push($Node, $Object)
+	{
+		$name = $Node->name();
+		$data = $Node->data();
+		
+		$adds = array();
+		
+		if ($Node->hasChildren())
+		{
+			$class = 'QuickBooks_IPP_Object_' . $name;
+			$Subobject = new $class();
+			
+			foreach ($Node->children() as $Subnode)
+			{
+				$this->_push($Subnode, $Subobject);
+			}
+			
+			$Object->{'add' . $name}($Subobject);
+		}
+		else
+		{
+			if (isset($adds[$name]))
+			{
+				$Object->{'add' . $name}($data);
+			}
+			else
+			{
+				$Object->{'set' . $name}($data);
+			}		
+		}
 	}
 }
