@@ -13,4 +13,14 @@ class QuickBooks_IPP_Context
 	{
 		return $this->_IPP;
 	}
+	
+	public function lastRequest()
+	{
+		return $this->_IPP->lastRequest();
+	}
+	
+	public function lastResponse()
+	{
+		return $this->_IPP->lastResponse();
+	}
 }
