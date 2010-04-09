@@ -357,7 +357,7 @@ class QuickBooks_IPP
 	public function IDS($Context, $realmID, $resource, $xml = '')
 	{
 		
-		$url = 'https://services.intuit.com/sb/' . $resource . '/v2/' . $realmID;
+		$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/v2/' . $realmID;
 		//$url = 'https://services.intuit.com/sb/invoice/v2/173642438';
 		
 		//$url = '';
