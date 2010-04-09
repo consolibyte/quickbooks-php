@@ -26,9 +26,49 @@ $list = $Service->findAll($Context, $realmID);
 //print($Service->lastResponse($Context));
 
 
-$Service = new QuickBooks_IPP_Service_Payment();
+$Service = new QuickBooks_IPP_Service_SalesRep();
 
 $list = $Service->findAll($Context, $realmID);
 
+foreach ($list as $SalesRep)
+{
+	print('Sales Rep: ' . $SalesRep->getInitials() . ' last modified on ' . $SalesRep->getMetaData()->getLastUpdatedTime('H:i:s d/m/Y') . "\n");
+}
 
 print_r($list);
+
+/*
+foreach ($list as $Estimate)
+{
+	print('Estimate #' . $Estimate->getHeader()->getDocNumber() . ' is to be emailed: ' . $Estimate->getHeader()->getToBeEmailed() . "\n");
+	print('	Should we email it? ');
+	
+	if ($Estimate->getHeader()->getToBeEmailed())
+	{
+		print('YES');
+	}
+	else
+	{
+		print('NO');
+	}
+	
+	print("\n");
+	
+	for ($i = 0; $i < 10; $i++)
+	{
+		$Line = $Estimate->getLine($i);
+		
+		if ($Line)
+		{
+			print_r($Line);
+		}
+	}
+	
+	print("\n");
+	print("\n");
+}
+*/
+
+//print_r($list);
+
+//print($Service->lastResponse());

@@ -1,7 +1,19 @@
 <?php
 
+/**
+ * 
+ */
+
+/**
+ * 
+ * 
+ *
+ */
 class QuickBooks_IPP_Service
 {
+	protected $_last_request;
+	protected $_last_response;
+	
 	public function __construct()
 	{
 		
@@ -16,18 +28,35 @@ class QuickBooks_IPP_Service
 			$xml = '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/v2"></' . $resource . 'Query>';
 		}
 		
-		return $IPP->IDS($Context, $realmID, $resource, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		
+		return $return;
 	}
 	
-	public function lastRequest($Context)
+	protected function _setLastRequestResponse($request, $response)
 	{
-		$IPP = $Context->IPP();
-		return $IPP->lastRequest();
+		$this->_last_request = $request;
+		$this->_last_response = $response;
 	}
 	
-	public function lastResponse($Context)
+	public function lastRequest($Context = null)
 	{
-		$IPP = $Context->IPP();
-		return $IPP->lastResponse();
+		if ($Context)
+		{
+			return $Context->lastRequest();
+		}
+		
+		return $this->_last_request;
+	}
+	
+	public function lastResponse($Context = null)
+	{
+		if ($Context)
+		{
+			return $Context->lastResponse();
+		}
+		
+		return $this->_last_response;
 	}
 }

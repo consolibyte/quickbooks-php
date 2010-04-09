@@ -9,6 +9,21 @@ class QuickBooks_IPP_Object
 		$this->_data = array();
 	}
 	
+	public function get($field)
+	{
+		if (isset($this->_data[$field]))
+		{
+			return $this->_data[$field];
+		}
+		
+		return null;
+	}
+	
+	public function set($field, $value)
+	{
+		$this->_data[$field] = $value;
+	}
+	
 	public function __call($name, $args)
 	{
 		if (substr($name, 0, 3) == 'set')

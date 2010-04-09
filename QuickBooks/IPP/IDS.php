@@ -48,5 +48,7 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_SALESRECEIPT = 'SalesReceipt';
 	
+	const RESOURCE_SALESREP = 'SalesRep';
+	
 	const RESOURCE_VENDOR = 'Vendor';
 }

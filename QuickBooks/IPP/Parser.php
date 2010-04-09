@@ -1,9 +1,27 @@
 <?php
 
+/**
+ * 
+ * 
+ * @author Keith Palmer <keith@ConsoliBYTE.com>
+ * 
+ * @package QuickBooks
+ * @subpackage IPP
+ */
+
+// 
 QuickBooks_Loader::load('/QuickBooks/IPP/Object.php');
 
+// 
 QuickBooks_Loader::load('/QuickBooks/XML.php');
 
+// 
+QuickBooks_Loader::load('/QuickBooks/XML/Parser.php');
+
+/**
+ * 
+ * 
+ */
 class QuickBooks_IPP_Parser
 {
 	public function __construct()
@@ -11,19 +29,11 @@ class QuickBooks_IPP_Parser
 		
 	}
 	
-	public function parse($xml)
+	public function parseIDS($xml)
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
-		$adds = array(
-			'Address', 
-			'Phone', 
-			//'Fax', 
-			//'Email', 
-			);
-		
 		$list = array();
-		
 		
 		$errnum = QuickBooks_XML::ERROR_OK;
 		$errmsg = null;
@@ -76,7 +86,18 @@ class QuickBooks_IPP_Parser
 			}
 			else
 			{
-				$Object->{'set' . $name}($data);
+				if ($data == 'false')
+				{
+					$Object->{'set' . $name}(false);
+				}
+				else if ($data == 'true')
+				{
+					$Object->{'set' . $name}(true);
+				}
+				else
+				{
+					$Object->{'set' . $name}($data);
+				}
 			}		
 		}
 	}

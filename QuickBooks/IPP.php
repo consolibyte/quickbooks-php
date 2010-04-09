@@ -1,56 +1,10 @@
 <?php
 
-define('QUICKBOOKS_IPP_REQUEST_IPP', 'ipp');
-
-define('QUICKBOOKS_IPP_REQUEST_IDS', 'ids');
-
-/**
- * No error occurred
- * @var integer
- */
-define('QUICKBOOKS_IPP_OK', QUICKBOOKS_ERROR_OK);
-
-/**
- * No error occurred
- * @var integer
- */
-define('QUICKBOOKS_IPP_ERROR_OK', QUICKBOOKS_IPP_OK);
-
-/**
- * Indicates a generic internal error
- * @param integer
- */
-define('QUICKBOOKS_IPP_ERROR_INTERNAL', -1091);
-
-/**
- * Indicates an error when parsing an XML stream
- * @param integer
- */
-define('QUICKBOOKS_IPP_ERROR_XML', -1092);
-
-/**
- * Indicates an error establishing a socket connection to QBMS
- * @param integer
- */
-define('QUICKBOOKS_IPP_ERROR_SOCKET', -1093);
-
-/**
- * Indicates an error with a parameter passed to QBMS
- * @param integer
- */
-define('QUICKBOOKS_IPP_ERROR_PARAM', -1094);
-
-/**
- * Indicates an internal SSL-related error
- * @param integer
- */
-define('QUICKBOOKS_IPP_ERROR_SSL', -1095);
-
 /**
  * 
- * 
+ * @package QuickBooks
+ * @subpackage IPP
  */
-define('QUICKBOOKS_IPP_ERROR_HTTP', -1096);
 
 // 
 QuickBooks_Loader::load('/QuickBooks/HTTP.php');
@@ -64,8 +18,73 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Context.php');
 // 
 QuickBooks_Loader::load('/QuickBooks/IPP/Parser.php');
 
+/**
+ * 
+ * 
+ *
+ */
 class QuickBooks_IPP
 {
+	/**
+	 * 
+	 * @var string
+	 */
+	const REQUEST_IPP = 'ipp';
+	
+	/**
+	 * 
+	 * @var string
+	 */
+	const REQUEST_IDS = 'ids';
+	
+	/**
+	 * No error occurred
+	 * @var integer
+	 */
+	const OK = QUICKBOOKS_ERROR_OK;
+	
+	/**
+	 * No error occurred
+	 * @var integer
+	 */
+	const ERROR_OK = QUICKBOOKS_ERROR_OK;
+	
+	/**
+	 * Indicates a generic internal error
+	 * @param integer
+	 */
+	const ERROR_INTERNAL = -1091;
+	
+	/**
+	 * Indicates an error when parsing an XML stream
+	 * @param integer
+	 */
+	const ERROR_XML = -1092;
+	
+	/**
+	 * Indicates an error establishing a socket connection to QBMS
+	 * @param integer
+	 */
+	const ERROR_SOCKET = -1093;
+	
+	/**
+	 * Indicates an error with a parameter passed to QBMS
+	 * @param integer
+	 */
+	const ERROR_PARAM = -1094;
+	
+	/**
+	 * Indicates an internal SSL-related error
+	 * @param integer
+	 */
+	const ERROR_SSL = -1095;
+	
+	/**
+	 * 
+	 * 
+	 */
+	const ERROR_HTTP = -1096;
+	
 	protected $_test;
 	
 	protected $_username;
@@ -101,7 +120,7 @@ class QuickBooks_IPP
 		
 		$this->_certificate = null;
 		
-		$this->_errcode = QUICKBOOKS_IPP_OK;
+		$this->_errcode = QuickBooks_IPP::OK;
 		$this->_errtext = '';
 		$this->_errdetail = '';
 		
@@ -124,7 +143,7 @@ class QuickBooks_IPP
 				<apptoken>' . $token . '</apptoken>
 			</qdbapi>';
 		
-		$response = $this->_request(QUICKBOOKS_IPP_REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if (!$this->_hasErrors($response) and 
 			$ticket = QuickBooks_XML::extractTagContents('ticket', $response))
@@ -218,7 +237,7 @@ class QuickBooks_IPP
 				<apptoken>' . $this->_token . '</apptoken>
 			</qdbapi>';
 		
-		$response = $this->_request(QUICKBOOKS_IPP_REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		print($response);
 	}
@@ -230,7 +249,7 @@ class QuickBooks_IPP
 		$action = null;
 		$xml = null;
 		
-		$response = $this->_request(QUICKBOOKS_IPP_REQUEST_IDS, $url, $action, $xml);
+		$response = $this->_request(QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -268,7 +287,7 @@ class QuickBooks_IPP
 		$xml .= '
 			</qdbapi>';
 			
-		$response = $this->_request(QUICKBOOKS_IPP_REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -296,7 +315,7 @@ class QuickBooks_IPP
 		$xml .= '
 			</qdbapi>';
 			
-		$response = $this->_request(QUICKBOOKS_IPP_REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -324,7 +343,7 @@ class QuickBooks_IPP
 		$xml .= '
 			</qdbapi>';
 			
-		$response = $this->_request(QUICKBOOKS_IPP_REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -344,7 +363,7 @@ class QuickBooks_IPP
 				<apptoken>' . $this->_token . '</apptoken>
 			</qdbapi>';
 			
-		$response = $this->_request(QUICKBOOKS_IPP_REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -365,7 +384,7 @@ class QuickBooks_IPP
 		$action = null;
 		//$xml = '';
 		
-		$response = $this->_request(QUICKBOOKS_IPP_REQUEST_IDS, $url, $action, $xml);
+		$response = $this->_request(QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -375,7 +394,7 @@ class QuickBooks_IPP
 		$data = $this->_stripHTTPHeaders($response);
 		
 		$Parser = new QuickBooks_IPP_Parser();
-		$parsed = $Parser->parse($data);
+		$parsed = $Parser->parseIDS($data);
 		
 		// @todo Parse and return an object? 
 		return $parsed;		
@@ -414,7 +433,7 @@ class QuickBooks_IPP
 		$errtext = QuickBooks_XML::extractTagContents('errtext', $response);
 		$errdetail = QuickBooks_XML::extractTagContents('errdetail', $response);
 		
-		if ($errcode != QUICKBOOKS_IPP_OK)
+		if ($errcode != QuickBooks_IPP::OK)
 		{
 			// Has errors!
 			$this->_setError($errcode, $errtext, $errdetail);
@@ -498,12 +517,12 @@ class QuickBooks_IPP
 		$headers = array(
 			);
 			
-		if ($type == QUICKBOOKS_IPP_REQUEST_IPP)
+		if ($type == QuickBooks_IPP::REQUEST_IPP)
 		{
 			$headers['Content-Type'] = 'application/xml';
 			$headers['QUICKBASE-ACTION'] = $action;
 		}
-		else if ($type == QUICKBOOKS_IPP_REQUEST_IDS) 
+		else if ($type == QuickBooks_IPP::REQUEST_IDS) 
 		{
 			$headers['Content-Type'] = 'text/xml';
 			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $this->_token . '",intuit-token="' . $this->_ticket . '"';
@@ -551,12 +570,12 @@ class QuickBooks_IPP
 		if ($errnum)
 		{
 			// An error occurred!
-			$this->_setError(QUICKBOOKS_IPP_ERROR_HTTP, $errnum . ': ' . $errmsg);
+			$this->_setError(QuickBooks_IPP::ERROR_HTTP, $errnum . ': ' . $errmsg);
 			return false;
 		}
 		
 		// Everything is good, return the data!
-		$this->_setError(QUICKBOOKS_IPP_ERROR_OK, '');
+		$this->_setError(QuickBooks_IPP::ERROR_OK, '');
 		return $return;		
 	}
 	
