@@ -30,6 +30,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_INVOICE = 'Invoice';
 	
+	const RESOURCE_INVENTORYADJUSTMENT = 'InventoryAdjustment';
+	
 	const RESOURCE_ITEM = 'Item';
 	
 	const RESOURCE_ITEMRECEIPT = 'ItemReceipt';

@@ -26,7 +26,7 @@ $list = $Service->findAll($Context, $realmID);
 //print($Service->lastResponse($Context));
 
 
-$Service = new QuickBooks_IPP_Service_Job();
+$Service = new QuickBooks_IPP_Service_Payment();
 
 $list = $Service->findAll($Context, $realmID);
 
