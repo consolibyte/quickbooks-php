@@ -38,12 +38,17 @@ class QuickBooks_IPP
 	const REQUEST_IDS = 'ids';
 	
 	/**
-	 * 
+	 * An IDS request to add an object
 	 */
 	const IDS_ADD = 'ids-add';
 	
 	/**
-	 * 
+	 * An IDS request to modify an object
+	 */
+	const IDS_MOD = 'ids-mod';
+	
+	/**
+	 * An IDS request to search/query for an object
 	 */
 	const IDS_QUERY = 'ids-query';
 	

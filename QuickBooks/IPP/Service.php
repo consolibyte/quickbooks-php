@@ -42,13 +42,42 @@ class QuickBooks_IPP_Service
 	{
 		$IPP = $Context->IPP();
 		
-		$xml = '<?xml version="1.0" encoding="UTF-8"?>
-			<Add xmlns="http://www.intuit.com/sb/cdm/v2" 
-				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-				RequestId="' . md5(mt_rand() . microtime()) . '" 
-				xsi:schemaLocation="http://www.intuit.com/sb/cdm/v2 ./RestDataFilter.xsd ">
-				<OfferingId>ipp</OfferingId>
-				<ExternalRealmId>' . $realmID . '</ExternalRealmId>
+		// 
+		
+		//$Object->unsetAddress();
+		//$Object->unsetPhone();
+		//$Object->unsetDBAName();
+		
+		$unsets = array(
+			'Id', 
+			'PartyReferenceId', 
+			'Synchronized', 
+			'ExternalKey', 
+			'SyncToken', 
+			'MetaData', 
+			'SalesTaxCodeId', 
+			'SalesTaxCodeName',
+			'OpenBalanceDate', 
+			'OpenBalance', 
+			);
+		
+		foreach ($unsets as $unset)
+		{
+			$Object->remove($unset);
+		}
+		
+		$xml = '';
+		$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<Add xmlns="http://www.intuit.com/sb/cdm/v2" ' . QUICKBOOKS_CRLF;
+		$xml .= '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' . QUICKBOOKS_CRLF;
+		$xml .= '	RequestId="' . md5(mt_rand() . microtime()) . '" ' . QUICKBOOKS_CRLF;
+		$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/v2 ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
+		$xml .= '	<OfferingId>ipp</OfferingId>' . QUICKBOOKS_CRLF;
+		$xml .= '	<ExternalRealmId>' . $realmID . '</ExternalRealmId>' . QUICKBOOKS_CRLF;
+		$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP::IDS_ADD);
+		$xml .= '</Add>';
+		
+		/*
 				<!--<Object xsi:type="Customer">
 					<TypeOf>Person</TypeOf>
 					<Name>Jack Thompson</Name>
@@ -58,9 +87,7 @@ class QuickBooks_IPP_Service
 					<FamilyName>Thompson</FamilyName>
 					<Suffix>Sr</Suffix>
 					<Gender>Male</Gender>-->
-					' . $Object->asIDSXML(0, null, QuickBooks_IPP::IDS_ADD) . '
-				<!--</Object>-->
-			</Add>';
+		*/
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_ADD, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());

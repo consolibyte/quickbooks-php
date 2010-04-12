@@ -15,13 +15,19 @@ class QuickBooks_IPP_Object
 		{
 			return $this->_data[$field];
 		}
-		
-		return null;
 	}
 	
 	public function set($field, $value)
 	{
 		$this->_data[$field] = $value;
+	}
+	
+	public function remove($field)
+	{
+		if (isset($this->_data[$field]))
+		{
+			unset($this->_data[$field]);
+		}
 	}
 	
 	public function __call($name, $args)
@@ -88,6 +94,15 @@ class QuickBooks_IPP_Object
 			
 			$this->_data[$field][] = current($args);
 		}
+		else if (substr($name, 0, 5) == 'unset')
+		{
+			$field = substr($name, 5);
+			
+			if (isset($this->_data[$field]))
+			{
+				unset($this->_data[$field]);
+			}
+		}
 	}
 	
 	public function resource()
@@ -105,7 +120,7 @@ class QuickBooks_IPP_Object
 		
 		if ($optype == QuickBooks_IPP::IDS_ADD)
 		{
-			$xml = '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
+			$xml = str_repeat("\t", $indent) . '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
 		}
 		else
 		{
@@ -135,7 +150,7 @@ class QuickBooks_IPP_Object
 		
 		if ($optype == QuickBooks_IPP::IDS_ADD)
 		{
-			$xml .= '</Object>' . QUICKBOOKS_CRLF;
+			$xml .= str_repeat("\t", $indent) . '</Object>' . QUICKBOOKS_CRLF;
 		}
 		else
 		{
