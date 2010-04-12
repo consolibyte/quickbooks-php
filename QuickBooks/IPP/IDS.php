@@ -24,6 +24,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_CLASS = 'Class';
 	
+	const RESOURCE_CREDITMEMO = 'CreditMemo';
+	
 	const RESOURCE_CUSTOMER = 'Customer';
 	
 	const RESOURCE_EMPLOYEE = 'Employee';
@@ -56,5 +58,12 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_SHIPMETHOD = 'ShipMethod';
 	
+	const RESOURCE_TERM = 'Term';
+	
+	const RESOURCE_UOM = 'UOM';
+	const RESOURCE_UNITOFMEASURE = 'UOM';
+	
 	const RESOURCE_VENDOR = 'Vendor';
+	
+	const RESOURCE_VENDORCREDIT = 'VendorCredit';
 }

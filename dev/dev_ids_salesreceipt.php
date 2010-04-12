@@ -29,6 +29,19 @@ $IPP->application($Context, 'be9mh7qd5');
 
 //exit;
 
+$Service = new QuickBooks_IPP_Service_CreditMemo();
+$list = $Service->findAll($Context, $realmID);
+
+print_r($list);
+
+$Service = new QuickBooks_IPP_Service_VendorCredit();
+$list = $Service->findAll($Context, $realmID);
+
+print_r($list);
+
+
+exit;
+
 $Service = new QuickBooks_IPP_Service_Customer();
 
 $list = $Service->findAll($Context, $realmID);
