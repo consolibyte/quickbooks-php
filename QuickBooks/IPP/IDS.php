@@ -22,6 +22,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_CHECK = 'Check';
 	
+	const RESOURCE_CLASS = 'Class';
+	
 	const RESOURCE_CUSTOMER = 'Customer';
 	
 	const RESOURCE_EMPLOYEE = 'Employee';
@@ -42,6 +44,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_PAYMENT = 'Payment';
 	
+	const RESOURCE_PAYMENTMETHOD = 'PaymentMethod';
+	
 	const RESOURCE_PURCHASEORDER = 'PurchaseOrder';
 	
 	const RESOURCE_SALESORDER = 'SalesOrder';
@@ -49,6 +53,8 @@ class QuickBooks_IPP_IDS
 	const RESOURCE_SALESRECEIPT = 'SalesReceipt';
 	
 	const RESOURCE_SALESREP = 'SalesRep';
+	
+	const RESOURCE_SHIPMETHOD = 'ShipMethod';
 	
 	const RESOURCE_VENDOR = 'Vendor';
 }

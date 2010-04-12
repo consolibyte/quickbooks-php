@@ -29,12 +29,15 @@ class QuickBooks_IPP_Parser
 		
 	}
 	
-	public function parseIDS($xml)
+	public function parseIDS($xml, $optype, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
-		$list = array();
+		// Initial to success
+		$xml_errnum = QuickBooks_XML::ERROR_OK;
+		$err_code = QuickBooks_IPP::ERROR_OK;
 		
+		// Try to parse the XML IDS response
 		$errnum = QuickBooks_XML::ERROR_OK;
 		$errmsg = null;
 		if ($Doc = $Parser->parse($errnum, $errmsg))
@@ -42,21 +45,55 @@ class QuickBooks_IPP_Parser
 			$Root = $Doc->getRoot();
 			$List = current($Root->children());
 			
-			foreach ($List->children() as $Child)
+			switch ($optype)
 			{
-				$class = 'QuickBooks_IPP_Object_' . $Child->name();
-				$Object = new $class();
+				case QuickBooks_IPP::IDS_QUERY:			// Parse a QUERY type response
 				
-				foreach ($Child->children() as $Data)
-				{
-					$this->_push($Data, $Object);
-				}
-				
-				$list[] = $Object;
+					$list = array();
+					foreach ($List->children() as $Child)
+					{
+						$class = 'QuickBooks_IPP_Object_' . $Child->name();
+						$Object = new $class();
+						
+						foreach ($Child->children() as $Data)
+						{
+							$this->_push($Data, $Object);
+						}
+						
+						$list[] = $Object;
+					}
+					return $list;
+					
+					break;
+				case QuickBooks_IPP::IDS_ADD:			// Parse an ADD type response
+					
+					//print("\n\n\n" . 'response was: ' . $List->name() . "\n\n\n");
+					
+					switch ($List->name())
+					{
+						case 'Error':
+							
+							$err_code = $List->getChildDataAt('Error ErrorCode');
+							$err_desc = $List->getChildDataAt('Error ErrorDesc');
+							$err_db = $List->getChildDataAt('Error DBErrorCode');
+							
+							return false;
+						case 'Success':
+							return true;
+					}
+					
+					break;
+				default:
+					return false;
 			}
 		}
-		
-		return $list;
+		else
+		{
+			$xml_errnum = $errnum;
+			$xml_errmsg = $errmsg;
+			
+			return false;
+		}
 	}
 	
 	protected function _push($Node, $Object)

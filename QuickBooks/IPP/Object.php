@@ -93,17 +93,24 @@ class QuickBooks_IPP_Object
 	public function resource()
 	{
 		$split = explode('_', get_class($this));
-		return strtolower(end($split));
+		return end($split);
 	}
 	
-	public function asIDSXML($indent = 0, $parent = null)
+	public function asIDSXML($indent = 0, $parent = null, $optype = null)
 	{
 		if (!$parent)
 		{
 			$parent = $this->resource();
 		}
 		
-		$xml = str_repeat("\t", $indent) . '<' . $parent . '>' . QUICKBOOKS_CRLF;
+		if ($optype == QuickBooks_IPP::IDS_ADD)
+		{
+			$xml = '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
+		}
+		else
+		{
+			$xml = str_repeat("\t", $indent) . '<' . $parent . '>' . QUICKBOOKS_CRLF;
+		}
 		
 		foreach ($this->_data as $key => $value)
 		{
@@ -126,7 +133,14 @@ class QuickBooks_IPP_Object
 			}
 		}
 		
-		$xml .= str_repeat("\t", $indent) . '</' . $parent . '>' . QUICKBOOKS_CRLF;
+		if ($optype == QuickBooks_IPP::IDS_ADD)
+		{
+			$xml .= '</Object>' . QUICKBOOKS_CRLF;
+		}
+		else
+		{
+			$xml .= str_repeat("\t", $indent) . '</' . $parent . '>' . QUICKBOOKS_CRLF;
+		}
 		
 		return $xml;
 	}

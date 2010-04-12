@@ -38,6 +38,16 @@ class QuickBooks_IPP
 	const REQUEST_IDS = 'ids';
 	
 	/**
+	 * 
+	 */
+	const IDS_ADD = 'ids-add';
+	
+	/**
+	 * 
+	 */
+	const IDS_QUERY = 'ids-query';
+	
+	/**
 	 * No error occurred
 	 * @var integer
 	 */
@@ -373,7 +383,7 @@ class QuickBooks_IPP
 		return true;
 	}
 	
-	public function IDS($Context, $realmID, $resource, $xml = '')
+	public function IDS($Context, $realmID, $resource, $optype, $xml = '')
 	{
 		
 		$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/v2/' . $realmID;
@@ -386,6 +396,7 @@ class QuickBooks_IPP
 		
 		$response = $this->_request(QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml);
 		
+		// Check for generic IPP errors and HTTP errors
 		if ($this->_hasErrors($response))
 		{
 			return false;
@@ -394,18 +405,54 @@ class QuickBooks_IPP
 		$data = $this->_stripHTTPHeaders($response);
 		
 		$Parser = new QuickBooks_IPP_Parser();
-		$parsed = $Parser->parseIDS($data);
 		
-		// @todo Parse and return an object? 
+		$xml_errnum = null;
+		$xml_errmsg = null;
+		$err_code = null;
+		$err_desc = null;
+		$err_db = null;
+		
+		$parsed = $Parser->parseIDS($data, $optype, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+		
+		if ($xml_errnum != QuickBooks_XML::ERROR_OK)
+		{
+			// Error parsing the returned XML?
+			$this->_setError(QuickBooks_IPP::ERROR_XML, 'XML parser said: ' . $xml_errnum . ': ' . $xml_errmsg);
+			
+			return false;
+		}
+		else if ($err_code != QuickBooks_IPP::ERROR_OK)
+		{
+			// Some other IPP error
+			$this->_setError($err_code, $err_desc, 'Database error code: ' . $err_db);
+			
+			return false;
+		}
+		
+		// Return the parsed response
 		return $parsed;		
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param string $response
+	 * @return string
+	 */
 	protected function _stripHTTPHeaders($response)
 	{
 		$pos = strpos($response, "\r\n\r\n");
 		
 		// @todo Error checking, what if \r\n\r\n isn't present?
-		return substr($response, $pos + 4);
+		$stripped = substr($response, $pos + 4);
+		
+		// To handle "HTTP/1.1 100 Continue\r\n\r\nHTTP/1.1 200 OK\r\n .... " responses
+		if (substr($stripped, 0, 8) == 'HTTP/1.1')
+		{
+			return $this->_stripHTTPHeaders($stripped);
+		}
+		
+		return $stripped;
 	}
 	
 	protected function _extractCookie($name, $response)
@@ -427,8 +474,15 @@ class QuickBooks_IPP
 		return null;
 	}
 	
+	/**
+	 * 
+	 */
 	protected function _hasErrors($response)
 	{
+		// @todo This should first check for HTTP errors
+		// ... 
+		
+		// Check for generic IPP XML node errors
 		$errcode = QuickBooks_XML::extractTagContents('errcode', $response);
 		$errtext = QuickBooks_XML::extractTagContents('errtext', $response);
 		$errdetail = QuickBooks_XML::extractTagContents('errdetail', $response);
@@ -597,6 +651,59 @@ class QuickBooks_IPP
 	public function lastRequest()
 	{
 		return $this->_last_request;
+	}
+
+	/**
+	 * Get the error number of the last error that occured
+	 * 
+	 * @return mixed		The error number (or error code, some QuickBooks error codes are hex strings)
+	 */
+	public function errorCode()
+	{
+		return $this->_errcode;
+	}
+	
+	/**
+	 * Alias if ->errorCode()   (here for consistency with rest of framework)
+	 */
+	public function errorNumber()
+	{
+		return $this->errorCode();
+	}
+	
+	/**
+	 * Get the last error message that was reported
+	 * 
+	 * Remember that issuing new commands may cause previous unchecked errors 
+	 * to be *cleared*, so make sure you check for errors if you expect an 
+	 * error might occur!
+	 * 
+	 * @return string
+	 */
+	public function errorText()
+	{
+		return $this->_errtext;
+	}
+	
+	/**
+	 * Alias of ->errorText()   (here for consistency with rest of framework)
+	 */
+	public function errorMessage()
+	{
+		return $this->errorText();
+	}
+	
+	/**
+	 *  
+	 */
+	public function errorDetail()
+	{
+		return $this->_errdetail;
+	}	
+	
+	public function hasErrors()
+	{
+		return $this->_errcode != QuickBooks_IPP::ERROR_OK;
 	}
 	
 	/**
