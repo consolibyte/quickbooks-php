@@ -394,8 +394,6 @@ class QuickBooks_IPP
 		$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/v2/' . $realmID;
 		//$url = 'https://services.intuit.com/sb/invoice/v2/173642438';
 		
-		//$url = '';
-		
 		$action = null;
 		//$xml = '';
 		

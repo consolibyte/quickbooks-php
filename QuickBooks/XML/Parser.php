@@ -226,7 +226,7 @@ class QuickBooks_XML_Parser
 				
 				if ($pop != $tag)
 				{
-					$errnum = QUICKBOOKS_XML_ERROR_MISMATCH;
+					$errnum = QuickBooks_XML::ERROR_MISMATCH;
 					$errmsg = 'Mismatched tags, found: ' . $tag . ', expected: ' . $pop;
 					
 					return false;

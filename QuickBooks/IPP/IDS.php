@@ -20,6 +20,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_BILL = 'Bill';
 	
+	const RESOURCE_BILLPAYMENT = 'BillPayment';
+	
 	const RESOURCE_CHECK = 'Check';
 	
 	const RESOURCE_CLASS = 'Class';
@@ -48,6 +50,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_PAYMENTMETHOD = 'PaymentMethod';
 	
+	const RESOURCE_PREFERENCES = 'Preferences';
+	
 	const RESOURCE_PURCHASEORDER = 'PurchaseOrder';
 	
 	const RESOURCE_SALESORDER = 'SalesOrder';
@@ -55,6 +59,10 @@ class QuickBooks_IPP_IDS
 	const RESOURCE_SALESRECEIPT = 'SalesReceipt';
 	
 	const RESOURCE_SALESREP = 'SalesRep';
+	
+	const RESOURCE_SALESTAX = 'SalesTax';
+	
+	const RESOURCE_SALESTAXCODE = 'SalesTaxCode';
 	
 	const RESOURCE_SHIPMETHOD = 'ShipMethod';
 	

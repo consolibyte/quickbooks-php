@@ -29,10 +29,18 @@ $IPP->application($Context, 'be9mh7qd5');
 
 //exit;
 
-$Service = new QuickBooks_IPP_Service_CreditMemo();
+$Service = new QuickBooks_IPP_Service_SalesTaxCode();
 $list = $Service->findAll($Context, $realmID);
 
+print($Service->lastRequest($Context));
+print("\n\n");
+print($Service->lastResponse($Context));
+print("\n\n");
+
 print_r($list);
+
+
+exit;
 
 $Service = new QuickBooks_IPP_Service_VendorCredit();
 $list = $Service->findAll($Context, $realmID);
