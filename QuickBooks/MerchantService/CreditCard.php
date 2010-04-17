@@ -3,8 +3,16 @@
 /**
  * 
  * 
+ * Copyright (c) {2010-04-16} {Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * Contributors:
  * 
- * 
+ *
+ * @author Keith Palmer Jr. <keith@ConsoliBYTE.com>
+ *
  * @package QuickBooks
  * @subpackage MerchantService 
  */
@@ -73,19 +81,34 @@ class QuickBooks_MerchantService_CreditCard
 		
 	}
 	
+	public function setName($name)
+	{
+		$this->_name = $name;
+	}
+	
 	public function getName()
 	{
 		return $this->_name;
+	}
+	
+	public function setNumber($number)
+	{
+		$this->_number = $number;
 	}
 	
 	public function getNumber($mask = false)
 	{
 		if ($mask)
 		{
-			return str_repeat('x', strlen($this->_number) - 4) . substr($this->_number, -4, 4);
+			return str_repeat('x', min(strlen($this->_number), 12)) . substr($this->_number, 12);
 		}
 		
 		return $this->_number;
+	}
+	
+	public function setExpirationYear($year)
+	{
+		$this->_expyear = $year;
 	}
 	
 	public function getExpirationYear()
@@ -93,9 +116,19 @@ class QuickBooks_MerchantService_CreditCard
 		return $this->_expyear;
 	}
 	
+	public function setExpirationMonth($month)
+	{
+		$this->_expmonth = $month;
+	}
+	
 	public function getExpirationMonth()
 	{
 		return $this->_expmonth;
+	}
+	
+	public function setAddress($addr)
+	{
+		$this->_address = $addr;
 	}
 	
 	public function getAddress()
@@ -103,9 +136,19 @@ class QuickBooks_MerchantService_CreditCard
 		return $this->_address;
 	}
 	
+	public function setPostalCode($postalcode)
+	{
+		$this->_postalcode = $postalcode;
+	}
+	
 	public function getPostalCode()
 	{
 		return $this->_postalcode;
+	}
+	
+	public function setCVVCode($cvv)
+	{
+		$this->_cvv = $cvv;
 	}
 	
 	public function getCVVCode()

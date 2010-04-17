@@ -16,163 +16,6 @@
  */
 
 /**
- * No error occurred
- * @var integer
- */
-define('QUICKBOOKS_MERCHANTSERVICE_OK', QUICKBOOKS_ERROR_OK);
-
-/**
- * No error occurred
- * @var integer
- */
-define('QUICKBOOKS_MERCHANTSERVICE_ERROR_OK', QUICKBOOKS_MERCHANTSERVICE_OK);
-
-/**
- * Indicates a generic internal error
- * @param integer
- */
-define('QUICKBOOKS_MERCHANTSERVICE_ERROR_INTERNAL', -1091);
-
-/**
- * Indicates an error when parsing an XML stream
- * @param integer
- */
-define('QUICKBOOKS_MERCHANTSERVICE_ERROR_XML', -1092);
-
-/**
- * Indicates an error establishing a socket connection to QBMS
- * @param integer
- */
-define('QUICKBOOKS_MERCHANTSERVICE_ERROR_SOCKET', -1093);
-
-/**
- * Indicates an error with a parameter passed to QBMS
- * @param integer
- */
-define('QUICKBOOKS_MERCHANTSERVICE_ERROR_PARAM', -1094);
-
-/**
- * Indicates an internal SSL-related error
- * @param integer
- */
-define('QUICKBOOKS_MERCHANTSERVICE_ERROR_SSL', -1095);
-
-/**
- * 
- * 
- */
-define('QUICKBOOKS_MERCHANTSERVICE_ERROR_HTTP', -1096);
-
-/**
- * Indicates that this transaction type is a 'Charge' (actually capture funds on a credit/debit card)
- * @var string
- */
-define('QUICKBOOKS_MERCHANTSERVICE_TYPE_CHARGE', 'Charge');
-
-/**
- * Indicates that this transaction type is an 'Authorization' (hold funds, but don't actually charge the card)
- * @var string
- */
-define('QUICKBOOKS_MERCHANTSERVICE_TYPE_AUTHORIZE', 'Authorize');
-
-/**
- * Capture the authorized funds on a credit card
- * @var string
- */
-define('QUICKBOOKS_MERCHANTSERVICE_TYPE_CAPTURE', 'Capture');
-
-/**
- * Void a pending credit card authorization
- * @var string
- */
-define('QUICKBOOKS_MERCHANTSERVICE_TYPE_VOID', 'Void');
-
-/**
- * Refund a credit card payment
- * @var string
- */
-define('QUICKBOOKS_MERCHANTSERVICE_TYPE_REFUND', 'Refund');
-
-/**
- * Void or refund, depending on the transaction type/status
- * @var string
- */
-define('QUICKBOOKS_MERCHANTSERVICE_TYPE_VOIDORREFUND', 'VoidOrRefund');
-
-/**
- * Constant for the NotAvailable response some fields return 
- * @var string
- */
-define('QUICKBOOKS_MERCHANTSERVICE_NOTAVAILABLE', 'NotAvailable');
-
-/**
- * Constant to indicate success
- * @var string
- */
-define('QUICKBOOKS_MERCHANTSERVICE_PASS', 'Pass');
-
-define('QUICKBOOKS_MERCHANTSERVICE_FAIL', 'Fail');
-
-define('QUICKBOOKS_MERCHANTSERVICE_SEVERITY_INFO', 'INFO');
-
-define('QUICKBOOKS_MERCHANTSERVICE_SEVERITY_WARN', 'WARN');
-
-define('QUICKBOOKS_MERCHANTSERVICE_SEVERITY_ERROR', 'ERROR');
-
-/*
-2000
-Authentication failed -- Invalid login name or password / certificate / ticket
-2010
-Unauthorized
-2020
-Session Authentication required
-2030
-Unsupported signon version
-2040
-Internal err
-
-*/
-
-/**
- * 
- * Status OK, AVS Street and Zip fail, card security code fail
- * 
- * IMPORTANT NOTE: This 
- */
-define('QUICKBOOKS_MERCHANTSERVICE_TEST_AVSZIPCVVFAIL', 'configid=10000_avscvdfail');
-
-define('QUICKBOOKS_MERCHANTSERVICE_TEST_COMMUNICATIONERROR', 'configid=10200_comm');
-
-/*
-<NameOnCard>configid=value </NameOnCard>
-Simply replace “value in the above line with one of the ConfigID values listeds in Table 6-2 
-on page 44. 
-Table 6-2 ConfigID values and the errors they generate:
-Error to be 
-Returned ConfigID value to insert Error Emulated
-10200 10200_comm An error occurred while communicating with the credit 
-card processing gateway.
-10201 10201_login An error occurred during login to the processing 
-gateway.
-10301 10301_ccinvalid This credit card account number is invalid.
-10400 10400_insufffunds This account does not have sufficient funds to process 
-this transaction.
-10401 10401_decline The request to process this transaction has been 
-declined. 
-10403 10403_acctinvalid The merchant account information submitted is not 
-recognized.
-10404 10404_referral This transaction has been declined, but can be 
-approved by obtaining a Voice Authorization code from 
-the card issuer.
-10405 10405_void An error occurred while attempting to void this 
-transaction.
-10406 10406_capture An error occurred while processing the capture 
-transaction.
-10500 10500_general A general error occurred at the credit card processing 
-gateway.
-*/
-
-/**
  * Utilities class (for masking and some other misc things)
  */
 QuickBooks_Loader::load('/QuickBooks/Utilities.php');
@@ -202,6 +45,175 @@ QuickBooks_Loader::load('/QuickBooks/MerchantService/Transaction.php');
  */
 class Quickbooks_MerchantService
 {
+	/**
+	 * No error occurred
+	 * @var integer
+	 */
+	const OK = QUICKBOOKS_ERROR_OK;
+	
+	/**
+	 * No error occurred
+	 * @var integer
+	 */
+	const ERROR_OK = QUICKBOOKS_ERROR_OK;
+	
+	/**
+	 * Indicates a generic internal error
+	 * @param integer
+	 */
+	const ERROR_INTERNAL = -1091;
+	
+	/**
+	 * Indicates an error when parsing an XML stream
+	 * @param integer
+	 */
+	const ERROR_XML = -1092;
+	
+	/**
+	 * Indicates an error establishing a socket connection to QBMS
+	 * @param integer
+	 */
+	const ERROR_SOCKET = -1093;
+	
+	/**
+	 * Indicates an error with a parameter passed to QBMS
+	 * @param integer
+	 */
+	const ERROR_PARAM = -1094;
+	
+	/**
+	 * Indicates an internal SSL-related error
+	 * @param integer
+	 */
+	const ERROR_SSL = -1095;
+	
+	/**
+	 * 
+	 * 
+	 */
+	const ERROR_HTTP = -1096;
+	
+	/**
+	 * Indicates that this transaction type is a 'Charge' (actually capture funds on a credit/debit card)
+	 * @var string
+	 */
+	const TYPE_CHARGE = 'Charge';
+	
+	/**
+	 * Indicates that this transaction type is an 'Authorization' (hold funds, but don't actually charge the card)
+	 * @var string
+	 */
+	const TYPE_AUTHORIZE = 'Authorize';
+	
+	/**
+	 * Capture the authorized funds on a credit card
+	 * @var string
+	 */
+	const TYPE_CAPTURE = 'Capture';
+	
+	/**
+	 * Void a pending credit card authorization
+	 * @var string
+	 */
+	const TYPE_VOID = 'Void';
+	
+	/**
+	 * Refund a credit card payment
+	 * @var string
+	 */
+	const TYPE_REFUND = 'Refund';
+	
+	/**
+	 * Void or refund, depending on the transaction type/status
+	 * @var string
+	 */
+	const TYPE_VOIDORREFUND = 'VoidOrRefund';
+	
+	const TYPE_WALLETADD = 'WalletAdd';
+	
+	const TYPE_WALLETMOD = 'WalletMod';
+	
+	const TYPE_WALLETDEL = 'WalletDelete';
+	
+	const TYPE_WALLETQUERY = 'WalletQuery';
+	
+	const TYPE_WALLETAUTHORIZE = 'WalletAuthorize';
+	
+	const TYPE_WALLETCHARGE = 'WalletCharge';
+	
+	/**
+	 * Constant for the NotAvailable response some fields return 
+	 * @var string
+	 */
+	const NOTAVAILABLE = 'NotAvailable';
+	
+	/**
+	 * Constant to indicate success
+	 * @var string
+	 */
+	const PASS = 'Pass';
+	
+	const FAIL = 'Fail';
+	
+	const SEVERITY_INFO = 'INFO';
+	
+	const SEVERITY_WARN = 'WARN';
+	
+	const SEVERITY_ERROR = 'ERROR';
+	
+	/*
+	2000
+	Authentication failed -- Invalid login name or password / certificate / ticket
+	2010
+	Unauthorized
+	2020
+	Session Authentication required
+	2030
+	Unsupported signon version
+	2040
+	Internal err
+	
+	*/
+	
+	/**
+	 * 
+	 * Status OK, AVS Street and Zip fail, card security code fail
+	 * 
+	 * IMPORTANT NOTE: This 
+	 */
+	const TEST_AVSZIPCVVFAIL = 'configid=10000_avscvdfail';
+	
+	const TEST_COMMUNICATIONERROR = 'configid=10200_comm';
+	
+	/*
+	<NameOnCard>configid=value </NameOnCard>
+	Simply replace “value in the above line with one of the ConfigID values listeds in Table 6-2 
+	on page 44. 
+	Table 6-2 ConfigID values and the errors they generate:
+	Error to be 
+	Returned ConfigID value to insert Error Emulated
+	10200 10200_comm An error occurred while communicating with the credit 
+	card processing gateway.
+	10201 10201_login An error occurred during login to the processing 
+	gateway.
+	10301 10301_ccinvalid This credit card account number is invalid.
+	10400 10400_insufffunds This account does not have sufficient funds to process 
+	this transaction.
+	10401 10401_decline The request to process this transaction has been 
+	declined. 
+	10403 10403_acctinvalid The merchant account information submitted is not 
+	recognized.
+	10404 10404_referral This transaction has been declined, but can be 
+	approved by obtaining a Voice Authorization code from 
+	the card issuer.
+	10405 10405_void An error occurred while attempting to void this 
+	transaction.
+	10406 10406_capture An error occurred while processing the capture 
+	transaction.
+	10500 10500_general A general error occurred at the credit card processing 
+	gateway.
+	*/
+
 	/**
 	 * The connection ticket used to connect to QuickBooks Merchant Service
 	 * @var string
@@ -294,10 +306,10 @@ class Quickbooks_MerchantService
 		
 		$this->_certificate = $certificate;		
 		
-		$this->_errnum = QUICKBOOKS_MERCHANTSERVICE_OK;
+		$this->_errnum = QuickBooks_MerchantService::ERROR_OK;
 		$this->_errmsg = '';
 		
-		$this->_warnnum = QUICKBOOKS_MERCHANTSERVICE_OK;
+		$this->_warnnum = QuickBooks_MerchantService::ERROR_OK;
 		$this->_warnmsg = '';		
 	}
 	
@@ -476,13 +488,18 @@ class Quickbooks_MerchantService
 		return '';
 	}
 	
+	/**
+	 * Sign on to the QBMS service to fetch a session ticket
+	 *
+	 * @return boolean
+	 */
 	public function signOn()
 	{
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_OK);
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		
 		$xml = '';
 		$xml .= '<?xml version="1.0" ?>' . QUICKBOOKS_CRLF;
-		$xml .= '<?qbmsxml version="3.0"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
 		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
 		$xml .= '	<SignonMsgsRq>' . QUICKBOOKS_CRLF;
 		
@@ -510,14 +527,14 @@ class Quickbooks_MerchantService
 		$xml .= '	</SignonMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
 		
-		$errnum = QUICKBOOKS_MERCHANTSERVICE_OK;
+		$errnum = QuickBooks_MerchantService::ERROR_OK;
 		$errmsg = '';
 		
 		$response = $this->_request($xml, $errnum, $errmsg);
 		
 		if ($errnum)
 		{
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_SOCKET, $errnum . ': ' . $errmsg);
+			$this->_setError(QuickBooks_MerchantService::ERROR_SOCKET, $errnum . ': ' . $errmsg);
 			return false;
 		}
 		
@@ -527,7 +544,7 @@ class Quickbooks_MerchantService
 		
 		$this->_log('SignOn (initial) response: ' . $severity . '/' . $code . ': ' . $message, QUICKBOOKS_LOG_DEBUG);
 		
-		if ($code != QUICKBOOKS_MERCHANTSERVICE_OK)
+		if ($code != QuickBooks_MerchantService::ERROR_OK)
 		{
 			$this->_setError($code, $message);
 			return false;
@@ -540,22 +557,30 @@ class Quickbooks_MerchantService
 			return true;
 		}
 		
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_INTERNAL, 'Could not locate SessionTicket in response.');
+		$this->_setError(QuickBooks_MerchantService::ERROR_INTERNAL, 'Could not locate SessionTicket in response.');
 		
 		return false;
 	}
 	
 	/**
+	 * Tell whether or not you have fetched a session ticket and signed on
 	 * 
-	 * 
-	 * 
-	 * 
+	 * @return boolean
 	 */
 	public function isSignedOn()
 	{
 		return strlen($this->_ticket_session) > 0;
 	}
 	
+	/**
+	 * Create a unique transaction requestID from a set of parameters
+	 * 
+	 * @param string $type
+	 * @param object $Obj
+	 * @param float $amount
+	 * @param boolean $force_new_transaction
+	 * @return string
+	 */
 	protected function _transRequestID($type, $Obj, $amount, $force_new_transaction = true)
 	{
 		$rand = '';
@@ -568,19 +593,23 @@ class Quickbooks_MerchantService
 	}
 	
 	/**
+	 * Do a QuickBooks Merchant Service request and fetch the response
 	 * 
-	 * 
-	 * 
+	 * @param string $type
+	 * @param string $path
+	 * @param string $xml
+	 * @param object $Creditcard
+	 * @return QuickBooks_MerchantService_Transaction
 	 */
 	protected function _doQBMS($type, $path, $xml, $CreditCard = null)
 	{
-		$errnum = QUICKBOOKS_MERCHANTSERVICE_OK;
+		$errnum = QuickBooks_MerchantService::ERROR_OK;
 		$errmsg = '';
 		$response = $this->_request($xml, $errnum, $errmsg);
 		
 		if ($errnum)
 		{
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_SOCKET, $errnum . ': ' . $errmsg);
+			$this->_setError(QuickBooks_MerchantService::ERROR_SOCKET, $errnum . ': ' . $errmsg);
 			return false;
 		}
 		
@@ -588,14 +617,14 @@ class Quickbooks_MerchantService
 		$signon_message = '';
 		$signon_severity = $this->_extractAttribute('statusSeverity', $response, 0);
 		
-		if ($signon_code != QUICKBOOKS_MERCHANTSERVICE_OK)
+		if ($signon_code != QuickBooks_MerchantService::ERROR_OK)
 		{
 			$signon_message = $this->_extractAttribute('statusMessage', $response, 0);
 		}
 		
 		$this->_log('SignOn (with session) response: ' . $signon_severity . '/' . $signon_code . ': ' . $signon_message, QUICKBOOKS_LOG_DEBUG);
 		
-		if ($signon_code != QUICKBOOKS_MERCHANTSERVICE_OK)
+		if ($signon_code != QuickBooks_MerchantService::ERROR_OK)
 		{
 			$this->_setError($signon_code, $signon_message);
 			return false;
@@ -607,30 +636,29 @@ class Quickbooks_MerchantService
 		
 		$this->_log('QBMS Response: ' . $qbms_severity . '/' . $qbms_code . ': ' . $qbms_message, QUICKBOOKS_LOG_DEBUG);
 		
-		//if ($qbms_code != QUICKBOOKS_MERCHANTSERVICE_OK)
-		if (!$qbms_severity or $qbms_severity == QUICKBOOKS_MERCHANTSERVICE_SEVERITY_ERROR)
+		//if ($qbms_code != QuickBooks_MerchantService::ERROR_OK)
+		if (!$qbms_severity or $qbms_severity == QuickBooks_MerchantService::SEVERITY_ERROR)
 		{
 			$this->_setError($qbms_code, $qbms_message);
 			return false;
 		}
-		else if ($qbms_severity == QUICKBOOKS_MERCHANTSERVICE_SEVERITY_WARN)
+		else if ($qbms_severity == QuickBooks_MerchantService::SEVERITY_WARN)
 		{
 			$this->_setWarning($qbms_code, $qbms_message);
 			// return false;		// DO NOT RETURN HERE (it's just a warning)
 		}
-		else if ($qbms_severity == QUICKBOOKS_MERCHANTSERVICE_SEVERITY_INFO)
+		else if ($qbms_severity == QuickBooks_MerchantService::SEVERITY_INFO)
 		{
 			; // Do nothing...
 		}
 		else
 		{
 			// If we get here, something has gone really wrong... no statusSeverity code indicating pass/fail/warn was returned???
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_INTERNAL, 'Could not locate a statusSeverity="..." attribute in returned stream: ' . $response);
+			$this->_setError(QuickBooks_MerchantService::ERROR_INTERNAL, 'Could not locate a statusSeverity="..." attribute in returned stream: ' . $response);
 			return false;
 		}
 		
 		// Create a transaction result 
-		
 		$xml_errnum = 0;
 		$xml_errmsg = '';
 		if ($Transaction = $this->_parseResponse($type, $path, $response, $xml_errnum, $xml_errmsg))
@@ -651,18 +679,14 @@ class Quickbooks_MerchantService
 			return $Transaction;
 		}
 		
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_XML, $xml_errnum . ': ' . $xml_errmsg);
+		$this->_setError(QuickBooks_MerchantService::ERROR_XML, $xml_errnum . ': ' . $xml_errmsg);
 		return false;		
 	}
 	
-	/**
-	 * 
-	 * 
-	 */
-	public function authorize($Card, $amount, $is_card_present = false, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true)
+	public function addWallet($customerID, $Card)
 	{
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_OK);
-		$this->_log('authorize()', QUICKBOOKS_LOG_VERBOSE);
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
+		$this->_log('addWallet()', QUICKBOOKS_LOG_VERBOSE);
 		
 		if (!$this->isSignedOn())
 		{
@@ -674,21 +698,329 @@ class Quickbooks_MerchantService
 			}
 		}
 		
-		$transRequestID = $this->_transRequestID(QUICKBOOKS_MERCHANTSERVICE_TYPE_AUTHORIZE, $Card, $amount, $force_new_transaction);
+		/*
+		<CustomerCreditCardWalletAddRq>
+			<CustomerID >STRTYPE</CustomerID> <!-- required -->
+			<CreditCardNumber >STRTYPE</CreditCardNumber> <!-- required -->
+			<ExpirationMonth >INTTYPE</ExpirationMonth> <!-- required -->
+			<ExpirationYear >INTTYPE</ExpirationYear> <!-- required -->
+			<NameOnCard >STRTYPE</NameOnCard> <!-- optional -->
+			<CreditCardAddress >STRTYPE</CreditCardAddress> <!-- optional -->
+			<CreditCardPostalCode >STRTYPE</CreditCardPostalCode> <!-- optional -->
+		</CustomerCreditCardWalletAddRq>
+		
+		<CustomerCreditCardWalletAddRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+			<WalletEntryID >STRTYPE</WalletEntryID> <!-- optional -->
+			<IsDuplicate >BOOLTYPE</IsDuplicate> <!-- optional -->
+			<StatusDetail >STRTYPE</StatusDetail> <!-- optional -->
+		</CustomerCreditCardWalletAddRs>
+		*/		
+		
+		$include_address_data = true;
+		$include_amounts = false;
+		$include_card_number = true;
+		$include_card_cvv = false;
 		
 		$xml = '<?xml version="1.0" ?>' . QUICKBOOKS_CRLF;
-		$xml .= '<?qbmsxml version="3.0"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
+		$xml .= $this->_createSessionXML();
+		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '		<CustomerCreditCardWalletAddRq>' . QUICKBOOKS_CRLF;
+		$xml .= '			<CustomerID>' . QuickBooks_XML::encode($customerID) . '</CustomerID>' . QUICKBOOKS_CRLF;
+		$xml .= $this->_createCreditCardXML($Card, null, null, false, false, false, $include_address_data, $include_amounts, $include_card_number, $include_card_cvv);
+		$xml .= '		</CustomerCreditCardWalletAddRq>' . QUICKBOOKS_CRLF;
+		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
+		
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_WALLETADD, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardWalletAddRs', $xml);
+	}
+	
+	/**
+	 * Update a wallet entry
+	 * 
+	 * Note: This method *does not* allow you to update the *credit card 
+	 *  number*. This is used only for updating the data associated with that 
+	 * 	particular credit card (address, expiration date, etc.)
+	 * 
+	 * @param string $walletID
+	 * @param mixed $customerID
+	 * @param QuickBooks_MerchantService_CreditCard $Card
+	 * @return boolean
+	 */
+	public function updateWallet($customerID, $walletID, $Card)
+	{
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
+		$this->_log('updateWallet()', QUICKBOOKS_LOG_VERBOSE);
+		
+		if (!$this->isSignedOn())
+		{
+			$this->signOn();
+			
+			if ($this->errorNumber())
+			{
+				return false;
+			}
+		}
+				
+		$include_address_data = true;
+		$include_amounts = false;
+		$include_card_number = false;
+		$include_card_cvv = false;
+		
+		$xml = '<?xml version="1.0" ?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
+		$xml .= $this->_createSessionXML();
+		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '		<CustomerCreditCardWalletModRq>' . QUICKBOOKS_CRLF;
+		$xml .= '			<WalletEntryID>' . $walletID . '</WalletEntryID>' . QUICKBOOKS_CRLF;
+		$xml .= '			<CustomerID>' . QuickBooks_XML::encode($customerID) . '</CustomerID>' . QUICKBOOKS_CRLF;
+		$xml .= $this->_createCreditCardXML($Card, null, null, false, false, false, $include_address_data, $include_amounts, $include_card_number, $include_card_cvv);
+		$xml .= '		</CustomerCreditCardWalletModRq>' . QUICKBOOKS_CRLF;
+		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
+		
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_WALLETMOD, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardWalletModRs', $xml);
+	}
+	
+	public function deleteWallet($customerID, $walletID)
+	{
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
+		$this->_log('deleteWallet()', QUICKBOOKS_LOG_VERBOSE);
+		
+		if (!$this->isSignedOn())
+		{
+			$this->signOn();
+			
+			if ($this->errorNumber())
+			{
+				return false;
+			}
+		}
+		
+		$xml = '<?xml version="1.0" ?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
+		$xml .= $this->_createSessionXML();
+		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '		<CustomerCreditCardWalletDelRq>' . QUICKBOOKS_CRLF;
+		$xml .= '			<WalletEntryID>' . $walletID . '</WalletEntryID>' . QUICKBOOKS_CRLF;
+		$xml .= '			<CustomerID>' . QuickBooks_XML::encode($customerID) . '</CustomerID>' . QUICKBOOKS_CRLF;
+		$xml .= '		</CustomerCreditCardWalletDelRq>' . QUICKBOOKS_CRLF;
+		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
+		
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_WALLETDEL, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardWalletDelRs', $xml);
+	}
+	
+	public function authorizeWallet($customerID, $walletID, $amount, $salestax = null, $comment = null, $cvv = null, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true)
+	{
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
+		$this->_log('authorizeWallet()', QUICKBOOKS_LOG_VERBOSE);
+		
+		if (!$this->isSignedOn())
+		{
+			$this->signOn();
+			
+			if ($this->errorNumber())
+			{
+				return false;
+			}
+		}
+		
+		// Error checking		
+		if (!is_numeric($amount))
+		{
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'authorizeWallet() expects second parameter to be a float, got: ' . print_r($amount, true));
+			return false;
+		}
+		
+		// Get the Card from the wallet so we can send the data to QuickBooks
+		$Card = $this->getWallet($customerID, $walletID);
+		
+		$transRequestID = $this->_transRequestID(QuickBooks_MerchantService::TYPE_WALLETAUTHORIZE, null, $amount, $force_new_transaction);
+		
+		$xml = '';
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
+		$xml .= $this->_createSessionXML();
+		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '		<CustomerCreditCardWalletAuthRq>' . QUICKBOOKS_CRLF;
+		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
+		$xml .= '			<WalletEntryID>' . $walletID . '</WalletEntryID>' . QUICKBOOKS_CRLF;
+		$xml .= '			<CustomerID>' . QuickBooks_XML::encode($customerID) . '</CustomerID>' . QUICKBOOKS_CRLF;
+		
+		// 				_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true
+		$xml .= $this->_createCreditCardXML(null, $amount, $salestax, false, $is_ecommerce, $is_recurring, false, true, false, true, false);
+		
+		if ($cvv)
+		{
+			$xml .= '			<CardSecurityCode>' . $cvv . '</CardSecurityCode>' . QUICKBOOKS_CRLF;
+		}
+		
+		//<BatchID >STRTYPE</BatchID> <!-- optional -->
+		
+		if ($comment)
+		{
+			$xml .= '			<Comment>' . substr(QuickBooks_XML::encode($comment), 0, 500) . '</Comment>' . QUICKBOOKS_CRLF;
+		}
+		
+		$xml .= '		</CustomerCreditCardWalletAuthRq>' . QUICKBOOKS_CRLF;
+		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;		
+		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
+
+		// We set $type to AUTHORIZE because this really is an authorization, 
+		//	and this $type gets output to the Transaction object and is view
+		//	and checkable by the end-user, and possibly sent to QuickBooks.
+		$type = QuickBooks_MerchantService::TYPE_AUTHORIZE;
+		
+		return $this->_doQBMS($type, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardWalletAuthRs', $xml, $Card);
+	}
+	
+	public function chargeWallet($customerID, $walletID, $amount, $salestax = null, $comment = null, $cvv = null, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true)
+	{
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
+		$this->_log('chargeWallet()', QUICKBOOKS_LOG_VERBOSE);
+		
+		if (!$this->isSignedOn())
+		{
+			$this->signOn();
+			
+			if ($this->errorNumber())
+			{
+				return false;
+			}
+		}
+		
+		// Error checking		
+		if (!is_numeric($amount))
+		{
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'authorizeCharge() expects second parameter to be a float, got: ' . print_r($amount, true));
+			return false;
+		}
+
+		// Get the Card from the wallet so we can send the data to QuickBooks
+		$Card = $this->getWallet($customerID, $walletID);
+		
+		$transRequestID = $this->_transRequestID(QuickBooks_MerchantService::TYPE_WALLETCHARGE, $Card, $amount, $force_new_transaction);
+		
+		$xml = '';
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
+		$xml .= $this->_createSessionXML();
+		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '		<CustomerCreditCardWalletChargeRq>' . QUICKBOOKS_CRLF;
+		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
+		$xml .= '			<WalletEntryID>' . $walletID . '</WalletEntryID>' . QUICKBOOKS_CRLF;
+		$xml .= '			<CustomerID>' . QuickBooks_XML::encode($customerID) . '</CustomerID>' . QUICKBOOKS_CRLF;
+		
+		// 				_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true
+		$xml .= $this->_createCreditCardXML(null, $amount, $salestax, false, $is_ecommerce, $is_recurring, false, true, false, true, false);
+		
+		if ($cvv)
+		{
+			$xml .= '			<CardSecurityCode>' . $cvv . '</CardSecurityCode>' . QUICKBOOKS_CRLF;
+		}		
+		
+		//<BatchID >STRTYPE</BatchID> <!-- optional -->
+		
+		if ($comment)
+		{
+			$xml .= '			<Comment>' . substr(QuickBooks_XML::encode($comment), 0, 500) . '</Comment>' . QUICKBOOKS_CRLF;
+		}
+		
+		$xml .= '		</CustomerCreditCardWalletChargeRq>' . QUICKBOOKS_CRLF;
+		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;		
+		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;	
+		
+		// We set $type to CHARGE because this really is an authorization, and 
+		//	this $type gets output to the Transaction object and is view and 
+		//	checkable by the end-user, and possibly sent to QuickBooks. 
+		$type = QuickBooks_MerchantService::TYPE_CHARGE;
+		
+		return $this->_doQBMS($type, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardWalletChargeRs', $xml, $Card);
+	}
+	
+	public function getWallet($customerID, $walletID)
+	{
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
+		$this->_log('getWallet()', QUICKBOOKS_LOG_VERBOSE);
+		
+		if (!$this->isSignedOn())
+		{
+			$this->signOn();
+			
+			if ($this->errorNumber())
+			{
+				return false;
+			}
+		}
+		
+		$xml = '<?xml version="1.0" ?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
+		$xml .= $this->_createSessionXML();
+		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '		<CustomerWalletQueryRq>' . QUICKBOOKS_CRLF;
+		$xml .= '			<WalletEntryID>' . $walletID . '</WalletEntryID>' . QUICKBOOKS_CRLF;
+		$xml .= '			<CustomerID>' . QuickBooks_XML::encode($customerID) . '</CustomerID>' . QUICKBOOKS_CRLF;
+		$xml .= '		</CustomerWalletQueryRq>' . QUICKBOOKS_CRLF;
+		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
+		
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_WALLETQUERY, 'QBMSXML/QBMSXMLMsgsRs/CustomerWalletQueryRs', $xml);
+	}
+	
+	/**
+	 * 
+	 * 
+	 */
+	public function authorize($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true)
+	{
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
+		$this->_log('authorize()', QUICKBOOKS_LOG_VERBOSE);
+		
+		if (!$this->isSignedOn())
+		{
+			$this->signOn();
+			
+			if ($this->errorNumber())
+			{
+				return false;
+			}
+		}
+
+		// Error checking
+		if (!($Card instanceof QuickBooks_MerchantService_CreditCard))
+		{
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'authorize() expects first parameter to be a Card object, got: ' . print_r($Card, true));
+			return false;
+		}
+		
+		if (!is_numeric($amount))
+		{
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'authorize() expects second parameter to be a float, got: ' . print_r($amount, true));
+			return false;
+		}
+		
+		$transRequestID = $this->_transRequestID(QuickBooks_MerchantService::TYPE_AUTHORIZE, $Card, $amount, $force_new_transaction);
+		
+		$xml = '<?xml version="1.0" ?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
 		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
 		$xml .= $this->_createSessionXML();
 		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '		<CustomerCreditCardAuthRq>' . QUICKBOOKS_CRLF;
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
-		$xml .= $this->_createCreditCardXML($Card, $amount, $is_card_present, $is_ecommerce, $is_recurring);
+		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring);
 		$xml .= '		</CustomerCreditCardAuthRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
 		
-		return $this->_doQBMS(QUICKBOOKS_MERCHANTSERVICE_TYPE_AUTHORIZE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardAuthRs', $xml, $Card);
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_AUTHORIZE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardAuthRs', $xml, $Card);
 	}
 	
 	protected function _createSessionXML()
@@ -707,7 +1039,7 @@ class Quickbooks_MerchantService
 		
 	protected function _parseResponse($type, $path, $xml, &$errnum, &$errmsg)
 	{
-		static $look = array(
+		static $look_trans = array(
 			'CreditCardTransID' => null, 
 			'AuthorizationCode' => null, 
 			'AVSStreet' => null,
@@ -725,45 +1057,91 @@ class Quickbooks_MerchantService
 			'DebitCardTransID' => null, 
 			);
 		
-		$Parser = new QuickBooks_XML_Parser($xml);
-		if ($Doc = $Parser->parse($errnum, $errmsg))
+		static $look_card = array(
+			'MaskedCreditCardNumber' => null,
+			'ExpirationMonth' => null,
+			'ExpirationYear' => null,
+			'NameOnCard' => null,
+			'CreditCardAddress' => null,
+			'CreditCardPostalCode' => null,
+			);
+		
+		if ($type == QuickBooks_MerchantService::TYPE_WALLETADD)
 		{
-			$Node = $Doc->getRoot();
-			
-			$trans = array();
-			foreach ($look as $node => $null)
+			// This was a wallet add, return the wallet ID
+			return QuickBooks_XML::extractTagContents('WalletEntryID', $xml);
+		}
+		else if ($type == QuickBooks_MerchantService::TYPE_WALLETMOD or 
+			$type == QuickBooks_MerchantService::TYPE_WALLETDEL)
+		{
+			// These just return TRUE or FALSE based on error code
+			return true;
+		}
+		else if ($type == QuickBooks_MerchantService::TYPE_WALLETQUERY)
+		{
+			// This returns a single credit card object
+			$Parser = new QuickBooks_XML_Parser($xml);
+			if ($Doc = $Parser->parse($errnum, $errmsg))
 			{
-				$trans[$node] = $Node->getChildDataAt($path . '/' . $node);
+				$Node = $Doc->getRoot();
+				
+				$card = array();
+				foreach ($look_card as $node => $null)
+				{
+					$card[$node] = $Node->getChildDataAt($path . '/' . $node);
+				}
+				
+				return new QuickBooks_MerchantService_CreditCard(
+					$card['NameOnCard'], 
+					str_replace('*', 'x', $card['MaskedCreditCardNumber']), 
+					$card['ExpirationYear'], 
+					$card['ExpirationMonth'], 
+					$card['CreditCardAddress'], 
+					$card['CreditCardPostalCode']);
 			}
-			
-			// 
-			if ($trans['DebitCardTransID'])
+		}
+		else
+		{
+			$Parser = new QuickBooks_XML_Parser($xml);
+			if ($Doc = $Parser->parse($errnum, $errmsg))
 			{
-				$trans['CreditCardTransID'] = $trans['DebitCardTransID'];
+				$Node = $Doc->getRoot();
+				
+				$trans = array();
+				foreach ($look_trans as $node => $null)
+				{
+					$trans[$node] = $Node->getChildDataAt($path . '/' . $node);
+				}
+				
+				// 
+				if ($trans['DebitCardTransID'])
+				{
+					$trans['CreditCardTransID'] = $trans['DebitCardTransID'];
+				}
+				
+				return new QuickBooks_MerchantService_Transaction(
+					$type, 
+					$trans['CreditCardTransID'], 
+					$trans['ClientTransID'], 
+					$trans['AuthorizationCode'], 
+					$trans['MerchantAccountNumber'], 
+					$trans['ReconBatchID'], 
+					$trans['PaymentGroupingCode'], 
+					$trans['PaymentStatus'], 
+					$trans['TxnAuthorizationTime'], 
+					$trans['TxnAuthorizationStamp'], 
+					$trans['AVSStreet'], 
+					$trans['AVSZip'], 
+					$trans['CardSecurityCodeMatch'], 
+					$trans['NetworkName'], 
+					$trans['NetworkNumber']);
 			}
-			
-			return new QuickBooks_MerchantService_Transaction(
-				$type, 
-				$trans['CreditCardTransID'], 
-				$trans['ClientTransID'], 
-				$trans['AuthorizationCode'], 
-				$trans['MerchantAccountNumber'], 
-				$trans['ReconBatchID'], 
-				$trans['PaymentGroupingCode'], 
-				$trans['PaymentStatus'], 
-				$trans['TxnAuthorizationTime'], 
-				$trans['TxnAuthorizationStamp'], 
-				$trans['AVSStreet'], 
-				$trans['AVSZip'], 
-				$trans['CardSecurityCodeMatch'], 
-				$trans['NetworkName'], 
-				$trans['NetworkNumber']);
 		}
 		
 		return false;
 	}
 	
-	protected function _createCreditCardXML($Card, $amount, $is_card_present, $is_ecommerce, $is_recurring, $include_address_data = true)
+	protected function _createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true)
 	{
 		$xml = '';
 		
@@ -775,16 +1153,33 @@ class Quickbooks_MerchantService
 		}
 		else
 		{
-			$xml .= '			<CreditCardNumber>' . $Card->getNumber() . '</CreditCardNumber>' . QUICKBOOKS_CRLF;
-			$xml .= '			<ExpirationMonth>' . $Card->getExpirationMonth() . '</ExpirationMonth>' . QUICKBOOKS_CRLF;
-			$xml .= '			<ExpirationYear>' . $Card->getExpirationYear() . '</ExpirationYear>' . QUICKBOOKS_CRLF;
+			if ($Card and 
+				$include_card_number)
+			{
+				$xml .= '			<CreditCardNumber>' . $Card->getNumber() . '</CreditCardNumber>' . QUICKBOOKS_CRLF;
+			}
+			
+			if ($Card and 
+				$include_card_dates)
+			{
+				$xml .= '			<ExpirationMonth>' . $Card->getExpirationMonth() . '</ExpirationMonth>' . QUICKBOOKS_CRLF;
+				$xml .= '			<ExpirationYear>' . $Card->getExpirationYear() . '</ExpirationYear>' . QUICKBOOKS_CRLF;
+			}
+			
 			//$xml .= '			<IsCardPresent>BOOLTYPE</IsCardPresent>' . QUICKBOOKS_CRLF;
 			//$xml .= '			<IsECommerce >BOOLTYPE</IsECommerce>' . QUICKBOOKS_CRLF;
 			//$xml .= '			<IsRecurring >BOOLTYPE</IsRecurring>' . QUICKBOOKS_CRLF;
 		}
 		
-		$xml .= '			<Amount>' . sprintf('%01.2f', (float) $amount) . '</Amount>' . QUICKBOOKS_CRLF;
-		$xml .= '			<NameOnCard>' . substr(htmlspecialchars($Card->getName()), 0, 30) . '</NameOnCard>' . QUICKBOOKS_CRLF;
+		if ($include_amounts)
+		{
+			$xml .= '			<Amount>' . sprintf('%01.2f', (float) $amount) . '</Amount>' . QUICKBOOKS_CRLF;
+		}
+		
+		if ($Card)
+		{
+			$xml .= '			<NameOnCard>' . substr(htmlspecialchars($Card->getName()), 0, 30) . '</NameOnCard>' . QUICKBOOKS_CRLF;
+		}
 		
 		if ($include_address_data)
 		{
@@ -793,9 +1188,16 @@ class Quickbooks_MerchantService
 		}
 		
 		//$xml .= '			<CommercialCardCode >STRTYPE</CommercialCardCode>' . QUICKBOOKS_CRLF;
-		//$xml .= '			<SalesTaxAmount >AMTTYPE</SalesTaxAmount>' . QUICKBOOKS_CRLF;
-
-		if ($Card->getCVVCode())
+		
+		if ($include_amounts and 
+			!is_null($salestax))
+		{
+			$xml .= '			<SalesTaxAmount>' . sprintf('%01.2f', (float) $salestax) . '</SalesTaxAmount>' . QUICKBOOKS_CRLF;
+		}
+		
+		if ($Card and 
+			$Card->getCVVCode() and 
+			$include_card_cvv)
 		{
 			$xml .= '			<CardSecurityCode>' . $Card->getCVVCode() . '</CardSecurityCode>' . QUICKBOOKS_CRLF;
 		}
@@ -833,9 +1235,9 @@ class Quickbooks_MerchantService
 	 * 
 	 * 
 	 */
-	public function charge($Card, $amount, $is_card_present = false, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true)
+	public function charge($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true)
 	{
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_OK);
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('charge()', QUICKBOOKS_LOG_VERBOSE);
 		
 		if (!$this->isSignedOn())
@@ -848,25 +1250,25 @@ class Quickbooks_MerchantService
 			}
 		}
 		
-		$transRequestID = $this->_transRequestID(QUICKBOOKS_MERCHANTSERVICE_TYPE_CHARGE, $Card, $amount, $force_new_transaction);
+		$transRequestID = $this->_transRequestID(QuickBooks_MerchantService::TYPE_CHARGE, $Card, $amount, $force_new_transaction);
 		
 		$xml = '';
 		$xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
-		$xml .= '<?qbmsxml version="3.0"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
 		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
 		$xml .= $this->_createSessionXML();
 		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '		<CustomerCreditCardChargeRq>' . QUICKBOOKS_CRLF;
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
 		
-		$xml .= $this->_createCreditCardXML($Card, $amount, $is_card_present, $is_ecommerce, $is_recurring);
+		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring);
 		
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
 		$xml .= '		</CustomerCreditCardChargeRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;		
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
 		
-		return $this->_doQBMS(QUICKBOOKS_MERCHANTSERVICE_TYPE_CHARGE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardChargeRs', $xml, $Card);
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_CHARGE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardChargeRs', $xml, $Card);
 	}
 	
 	/**
@@ -876,9 +1278,9 @@ class Quickbooks_MerchantService
 	 * @param float $amount
 	 * @return QuickBooks_MerchantService_Transaction
 	 */
-	public function capture($Transaction, $amount = null, $force_new_transaction = true)
+	public function capture($Transaction, $amount = null, $comment = null, $force_new_transaction = true)
 	{
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_OK);
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('capture()', QUICKBOOKS_LOG_VERBOSE);
 		
 		// Fetch a session ticket if we havn't already
@@ -895,21 +1297,21 @@ class Quickbooks_MerchantService
 		// Error checking
 		if (!($Transaction instanceof QuickBooks_MerchantService_Transaction))
 		{
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_PARAM, 'capture() expects first parameter to be a Transaction object, got: ' . print_r($Transaction, true));
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'capture() expects first parameter to be a Transaction object, got: ' . print_r($Transaction, true));
 			return false;
 		}
 		
 		if (!is_numeric($amount))
 		{
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_PARAM, 'capture() expects second parameter to be a float, got: ' . print_r($amount, true));
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'capture() expects second parameter to be a float, got: ' . print_r($amount, true));
 			return false;
 		}
 		
-		$transRequestID = $this->_transRequestID(QUICKBOOKS_MERCHANTSERVICE_TYPE_CHARGE, $Transaction, $amount, $force_new_transaction);
+		$transRequestID = $this->_transRequestID(QuickBooks_MerchantService::TYPE_CHARGE, $Transaction, $amount, $force_new_transaction);
 		
 		$xml = '';
 		$xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
-		$xml .= '<?qbmsxml version="3.0"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
 		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
 		$xml .= $this->_createSessionXML();
 		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
@@ -928,7 +1330,7 @@ class Quickbooks_MerchantService
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
 		
-		return $this->_doQBMS(QUICKBOOKS_MERCHANTSERVICE_TYPE_CAPTURE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardCaptureRs', $xml);
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_CAPTURE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardCaptureRs', $xml);
 	}
 	
 	/**
@@ -936,9 +1338,9 @@ class Quickbooks_MerchantService
 	 * 
 	 * 
 	 */
-	public function refund($Card, $amount, $is_card_present = false, $is_ecommerce = true, $force_new_transaction = true)
+	public function refund($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $force_new_transaction = true)
 	{
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_OK);
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('refund()', QUICKBOOKS_LOG_VERBOSE);
 		
 		if (!$this->isSignedOn())
@@ -954,35 +1356,35 @@ class Quickbooks_MerchantService
 		// Error checking
 		if (!($Card instanceof QuickBooks_MerchantService_CreditCard))
 		{
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_PARAM, 'refund() expects first parameter to be a Card object, got: ' . print_r($Card, true));
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'refund() expects first parameter to be a Card object, got: ' . print_r($Card, true));
 			return false;
 		}
 		
 		if (!is_numeric($amount))
 		{
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_PARAM, 'refund() expects second parameter to be a float, got: ' . print_r($amount, true));
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'refund() expects second parameter to be a float, got: ' . print_r($amount, true));
 			return false;
 		}
 		
-		$transRequestID = $this->_transRequestID(QUICKBOOKS_MERCHANTSERVICE_TYPE_REFUND, $Card, $amount, $force_new_transaction);
+		$transRequestID = $this->_transRequestID(QuickBooks_MerchantService::TYPE_REFUND, $Card, $amount, $force_new_transaction);
 		
 		$xml = '';
 		$xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
-		$xml .= '<?qbmsxml version="3.0"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
 		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
 		$xml .= $this->_createSessionXML();
 		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '		<CustomerCreditCardRefundRq>' . QUICKBOOKS_CRLF;
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
 		
-		$xml .= $this->_createCreditCardXML($Card, $amount, $is_card_present, $is_ecommerce, false, false);
+		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, false, false);
 		
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
 		$xml .= '		</CustomerCreditCardRefundRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;		
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
 		
-		return $this->_doQBMS(QUICKBOOKS_MERCHANTSERVICE_TYPE_CAPTURE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardRefundRs', $xml, $Card);
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_CAPTURE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardRefundRs', $xml, $Card);
 	}
 	
 	/**
@@ -990,9 +1392,9 @@ class Quickbooks_MerchantService
 	 * 
 	 * 
 	 */
-	public function void($Transaction, $force_new_transaction = true)
+	public function void($Transaction, $comment = null, $force_new_transaction = true)
 	{
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_OK);
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('void()', QUICKBOOKS_LOG_VERBOSE);
 		
 		if (!$this->isSignedOn())
@@ -1008,15 +1410,15 @@ class Quickbooks_MerchantService
 		// Error checking
 		if (!($Transaction instanceof QuickBooks_MerchantService_Transaction))
 		{
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_PARAM, 'void() expects first parameter to be a Transaction object, got: ' . print_r($Transaction, true));
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'void() expects first parameter to be a Transaction object, got: ' . print_r($Transaction, true));
 			return false;
 		}
 		
-		$transRequestID = $this->_transRequestID(QUICKBOOKS_MERCHANTSERVICE_TYPE_VOID, $Transaction, null, $force_new_transaction);
+		$transRequestID = $this->_transRequestID(QuickBooks_MerchantService::TYPE_VOID, $Transaction, null, $force_new_transaction);
 		
 		$xml = '';
 		$xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
-		$xml .= '<?qbmsxml version="3.0"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
 		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
 		$xml .= $this->_createSessionXML();
 		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
@@ -1028,7 +1430,7 @@ class Quickbooks_MerchantService
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
 			
-		return $this->_doQBMS(QUICKBOOKS_MERCHANTSERVICE_TYPE_VOID, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardTxnVoidRs', $xml);
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_VOID, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardTxnVoidRs', $xml);
 	}
 		
 	/**
@@ -1036,9 +1438,9 @@ class Quickbooks_MerchantService
 	 * 
 	 * 
 	 */
-	public function voidOrRefund($Transaction, $amount = null, $force_new_transaction = true)
+	public function voidOrRefund($Transaction, $amount = null, $salestax = null, $comment = null, $force_new_transaction = true)
 	{
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_OK);
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('voidOrRefund()', QUICKBOOKS_LOG_VERBOSE);
 		
 		if (!$this->isSignedOn())
@@ -1054,21 +1456,21 @@ class Quickbooks_MerchantService
 		// Error checking
 		if (!($Transaction instanceof QuickBooks_MerchantService_Transaction))
 		{
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_PARAM, 'voidOrRefund() expects first parameter to be a Transaction object, got: ' . print_r($Transaction, true));
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'voidOrRefund() expects first parameter to be a Transaction object, got: ' . print_r($Transaction, true));
 			return false;
 		}
 		
 		if (!is_numeric($amount))
 		{
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_PARAM, 'voidOrRefund() expects second parameter to be a float, got: ' . print_r($amount, true));
+			$this->_setError(QuickBooks_MerchantService::ERROR_PARAM, 'voidOrRefund() expects second parameter to be a float, got: ' . print_r($amount, true));
 			return false;
 		}
 		
-		$transRequestID = $this->_transRequestID(QUICKBOOKS_MERCHANTSERVICE_TYPE_VOIDORREFUND, $Transaction, $amount, $force_new_transaction);
+		$transRequestID = $this->_transRequestID(QuickBooks_MerchantService::TYPE_VOIDORREFUND, $Transaction, $amount, $force_new_transaction);
 		
 		$xml = '';
 		$xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
-		$xml .= '<?qbmsxml version="3.0"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
 		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
 		$xml .= $this->_createSessionXML();
 		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
@@ -1087,7 +1489,7 @@ class Quickbooks_MerchantService
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
 		
-		return $this->_doQBMS(QUICKBOOKS_MERCHANTSERVICE_TYPE_VOIDORREFUND, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardTxnVoidOrRefundRs', $xml);
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_VOIDORREFUND, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardTxnVoidOrRefundRs', $xml);
 	}	
 	
 	protected function _getBatch($BatchID, $for_close = false)
@@ -1114,7 +1516,7 @@ class Quickbooks_MerchantService
 	
 	public function batchClose($BatchID = null)
 	{
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_OK);
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		
 		if (!$this->isSignedOn())
 		{
@@ -1234,12 +1636,12 @@ class Quickbooks_MerchantService
 		if ($errnum)
 		{
 			// An error occurred!
-			$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_HTTP, $errnum . ': ' . $errmsg);
+			$this->_setError(QuickBooks_MerchantService::ERROR_HTTP, $errnum . ': ' . $errmsg);
 			return false;
 		}
 		
 		// Everything is good, return the data!
-		$this->_setError(QUICKBOOKS_MERCHANTSERVICE_ERROR_OK, '');
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK, '');
 		return $return;
 	}
 }

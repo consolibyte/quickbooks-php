@@ -454,7 +454,7 @@ class QuickBooks_MerchantService_Transaction
 		{
 			$Root = $Doc->getRoot();
 			
-			foreach ($Root->asArray(QUICKBOOKS_XML_ARRAY_PATHS) as $path => $value)
+			foreach ($Root->asArray(QuickBooks_XML::ARRAY_PATHS) as $path => $value)
 			{
 				$tmp = explode(' ', $path);
 				$key = trim(end($tmp));

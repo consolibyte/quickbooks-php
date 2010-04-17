@@ -20,7 +20,7 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', true);
 
 // Include the QuickBooks files
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 // If you want to log requests/responses to a database, you can provide a 
 //	database DSN-style connection string here
@@ -83,7 +83,7 @@ $MS = new QuickBooks_MerchantService(
 $MS->useTestEnvironment(true);
 
 // If you want to see the full XML input/output, you can turn on debug mode
-$MS->useDebugMode(true);
+//$MS->useDebugMode(true);
 
 /*
 There are several methods available in the QuickBooks_MerchantService class. 
@@ -238,8 +238,6 @@ else
 }
 
 
-exit;
-
 // If you didn't want to 
 if ($Transaction = $MS->charge($Card, $amount))
 {
@@ -256,7 +254,7 @@ else
 	print('An error occured during charge: ' . $MS->errorNumber() . ': ' . $MS->errorMessage() . "\n");
 }
 
-exit;
+
 
 // We can issue refunds too... 
 if ($Transaction = $MS->refund($Card, $amount))

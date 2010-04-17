@@ -686,17 +686,17 @@ class QuickBooks_XML_Node
 			}
 			else
 			{
-				if ($node->hasData() or $empty == QUICKBOOKS_XML_XML_PRESERVE)
+				if ($node->hasData() or $empty == QuickBooks_XML::XML_PRESERVE)
 				{
 					// Double-encode is *off*
 					//$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '>' . QuickBooks_XML::encode($node->data(), true, false) . '</' . $node->name() . '>' . "\n";
 					$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '>' . QuickBooks_XML::encode($node->data()) . '</' . $node->name() . '>' . "\n";
 				}
-				else if ($empty == QUICKBOOKS_XML_XML_COMPRESS)
+				else if ($empty == QuickBooks_XML::XML_COMPRESS)
 				{
 					$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . ' />' . "\n";
 				}
-				else if ($empty == QUICKBOOKS_XML_XML_DROP)
+				else if ($empty == QuickBooks_XML::XML_DROP)
 				{
 					; // do nothing, drop the empty element
 				}
@@ -788,22 +788,22 @@ class QuickBooks_XML_Node
 	 * @param string $mode
 	 * @return array 
 	 */
-	public function asArray($mode = QUICKBOOKS_XML_ARRAY_NOATTRIBUTES)
+	public function asArray($mode = QuickBooks_XML::ARRAY_NOATTRIBUTES)
 	{
 		switch ($mode)
 		{
-			case QUICKBOOKS_XML_ARRAY_EXPANDATTRIBUTES:
+			case QuickBooks_XML::ARRAY_EXPANDATTRIBUTES:
 				return $this->_asArrayExpandAttributesHelper($this);
-			case QUICKBOOKS_XML_ARRAY_BRANCHED:
+			case QuickBooks_XML::ARRAY_BRANCHED:
 				return $this->_asArrayBranchedHelper($this);
-			case QUICKBOOKS_XML_ARRAY_PATHS:
+			case QuickBooks_XML::ARRAY_PATHS:
 				
 				$current = '';
 				$paths = array();
 				$this->_asArrayPathsHelper($this, $current, $paths);
 				
 				return $paths;
-			case QUICKBOOKS_XML_ARRAY_NOATTRIBUTES:
+			case QuickBooks_XML::ARRAY_NOATTRIBUTES:
 			default:
 				return $this->_asArrayNoAttributesHelper($this);
 		}
@@ -840,7 +840,7 @@ class QuickBooks_XML_Node
 	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE 
 	 * @return integer							The number of bytes written to the file
 	 */
-	public function saveXML($path_or_resource, $mode = 'wb', $todo_for_empty_elements = QUICKBOOKS_XML_XML_COMPRESS)
+	public function saveXML($path_or_resource, $mode = 'wb', $todo_for_empty_elements = QuickBooks_XML::XML_COMPRESS)
 	{
 		$xml = $this->asXML($todo_for_empty_elements);
 		
