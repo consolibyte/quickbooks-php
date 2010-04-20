@@ -307,6 +307,7 @@ define('QUICKBOOKS_MOD', 'Mod');
 define('QUICKBOOKS_QUERY', 'Query');
 define('QUICKBOOKS_DELETE', 'Delete');
 define('QUICKBOOKS_IMPORT', 'Import');
+define('QUICKBOOKS_AUDIT', 'Audit');
 
 define('QUICKBOOKS_OBJECT_ACCOUNT', 'Account');
 define('QUICKBOOKS_ADD_ACCOUNT', 'AccountAdd');
@@ -314,6 +315,7 @@ define('QUICKBOOKS_MOD_ACCOUNT', 'AccountMod');
 define('QUICKBOOKS_QUERY_ACCOUNT', 'AccountQuery');
 define('QUICKBOOKS_IMPORT_ACCOUNT', 'AccountImport');
 define('QUICKBOOKS_DERIVE_ACCOUNT', 'AccountDerive');
+define('QUICKBOOKS_AUDIT_ACCOUNT', 'AccountAudit');
 
 define('QUICKBOOKS_OBJECT_BILL', 'Bill');
 define('QUICKBOOKS_ADD_BILL', 'BillAdd');
@@ -321,6 +323,7 @@ define('QUICKBOOKS_MOD_BILL', 'BillMod');
 define('QUICKBOOKS_QUERY_BILL', 'BillQuery');
 define('QUICKBOOKS_IMPORT_BILL', 'BillImport');
 define('QUICKBOOKS_DERIVE_BILL', 'BillDerive');
+define('QUICKBOOKS_AUDIT_BILL', 'BillAudit');
 
 define('QUICKBOOKS_OBJECT_BILLINGRATE', 'BillingRate');
 define('QUICKBOOKS_ADD_BILLINGRATE', 'BillingRateAdd');
@@ -483,6 +486,7 @@ define('QUICKBOOKS_ADD_ESTIMATE', 'EstimateAdd');
 define('QUICKBOOKS_MOD_ESTIMATE', 'EstimateMod');
 define('QUICKBOOKS_QUERY_ESTIMATE', 'EstimateQuery');
 define('QUICKBOOKS_IMPORT_ESTIMATE', 'EstimateImport');
+define('QUICKBOOKS_AUDIT_ESTIMATE', 'EstimateAudit');
 
 define('QUICKBOOKS_OBJECT_INVENTORYADJUSTMENT', 'InventoryAdjustment');
 define('QUICKBOOKS_ADD_INVENTORYADJUSTMENT', 'InventoryAdjustmentAdd');
@@ -630,6 +634,7 @@ define('QUICKBOOKS_MOD_INVOICE', 'InvoiceMod');
 define('QUICKBOOKS_QUERY_INVOICE', 'InvoiceQuery');
 define('QUICKBOOKS_IMPORT_INVOICE', 'InvoiceImport');
 define('QUICKBOOKS_DERIVE_INVOICE', 'InvoiceDerive');
+define('QUICKBOOKS_AUDIT_INVOICE', 'InvoiceAudit');
 
 define('QUICKBOOKS_OBJECT_RECEIVEPAYMENT', 'ReceivePayment');
 
@@ -641,6 +646,7 @@ define('QUICKBOOKS_ADD_RECEIVEPAYMENT', 'ReceivePaymentAdd');
 define('QUICKBOOKS_MOD_RECEIVEPAYMENT', 'ReceivePaymentMod');
 define('QUICKBOOKS_QUERY_RECEIVEPAYMENT', 'ReceivePaymentQuery');
 define('QUICKBOOKS_IMPORT_RECEIVEPAYMENT', 'ReceivePaymentImport');
+define('QUICKBOOKS_AUDIT_RECEIVEPAYMENT', 'ReceivePaymentAudit');
 
 define('QUICKBOOKS_ADD_RECEIVE_PAYMENT', QUICKBOOKS_ADD_RECEIVEPAYMENT);
 define('QUICKBOOKS_MOD_RECEIVE_PAYMENT', QUICKBOOKS_MOD_RECEIVEPAYMENT);
@@ -664,6 +670,7 @@ define('QUICKBOOKS_MOD_PURCHASEORDER', 'PurchaseOrderMod');
 define('QUICKBOOKS_QUERY_PURCHASEORDER', 'PurchaseOrderQuery');
 define('QUICKBOOKS_IMPORT_PURCHASEORDER', 'PurchaseOrderImport');
 define('QUICKBOOKS_DERIVE_PURCHASEORDER', 'PurchaseOrderDerive');
+define('QUICKBOOKS_AUDIT_PURCHASEORDER', 'PurchaseOrderAudit');
 
 define('QUICKBOOKS_ADD_PURCHASE_ORDER', QUICKBOOKS_ADD_PURCHASEORDER);
 define('QUICKBOOKS_MOD_PURCHASE_ORDER', QUICKBOOKS_MOD_PURCHASEORDER);
@@ -682,6 +689,7 @@ define('QUICKBOOKS_ADD_SALESRECEIPT', 'SalesReceiptAdd');
 define('QUICKBOOKS_MOD_SALESRECEIPT', 'SalesReceiptMod');
 define('QUICKBOOKS_QUERY_SALESRECEIPT', 'SalesReceiptQuery');
 define('QUICKBOOKS_IMPORT_SALESRECEIPT', 'SalesReceiptImport');
+define('QUICKBOOKS_AUDIT_SALESRECEIPT', 'SalesReceiptAudit');
 
 define('QUICKBOOKS_OBJECT_SALESREP', 'SalesRep');
 define('QUICKBOOKS_ADD_SALESREP', 'SalesRepAdd');

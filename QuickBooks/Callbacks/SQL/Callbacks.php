@@ -100,6 +100,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		// Which things you want to *add* to QuickBooks (SQL => QuickBooks (adds only!))
 		//	@todo These should be changed to use QuickBooks_Utilities::listActions('*ADD*')
+		$sql_add = array();
 		foreach (QuickBooks_Utilities::listActions('*ADD*') as $action)
 		{
 			$sql_add[$action] = QuickBooks_Utilities::priorityForAction($action);	
@@ -109,13 +110,21 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			
 		// Which things you want to *modify* in QuickBooks (SQL => QuickBooks (modifys only!))
 		//	@todo These should be changed to use QuickBooks_Utilities::listActions('*MOD*')
+		$sql_mod = array();
 		foreach (QuickBooks_Utilities::listActions('*MOD*') as $action)
 		{
 			$sql_mod[$action] = QuickBooks_Utilities::priorityForAction($action);	
 		}
 		
 		$sql_mod = QuickBooks_Callbacks_SQL_Callbacks::_filterActions($sql_mod, $callback_config['_only_modify'], $callback_config['_dont_modify'], QUICKBOOKS_MOD);
-				
+		
+		// Which things you want to *audit* in QuickBooks (QuickBooks => SQL)
+		$sql_audit = array();
+		foreach (QuickBooks_Utilities::listActions('*AUDIT*') as $action)
+		{
+			$sql_audit[$action] = QuickBooks_Utilities::priorityForAction($action);
+		}
+		
 		// Queueing class
 		//$Queue = new QuickBooks_Queue($dsn_or_conn);
 		
@@ -146,6 +155,22 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				
 				$actions[] = $action;
 			}
+		}
+		
+		// Queue up the audit requests
+		//	Audit requests pull in just the calculated TotalAmount and the 
+		//	TimeModified timestamp from transactions, and store these in 
+		//	the qbsql_audit_* fields so we can tell if there are transactions 
+		//	in QuickBooks that don't match up correctly to what's in the SQL 
+		//	database.
+		foreach ($sql_audit as $action => $priority)
+		{
+			if (!isset($sql_map[$action]))
+			{
+				continue;
+			}
+			
+			$Driver->queueEnqueue($user, $action, 1, true, $priority);
 		}
 		
 		// Searching the tables can take a long time, you could potentially 

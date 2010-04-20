@@ -43,6 +43,10 @@ $url = 'https://qbwc.optivation.com/todo/example_server.php';
 $username = '1';
 $password = 'password';
 
+$url = 'http://localhost:8080/OnDeckCapital/quickbooks/webconnector';
+$username = 'quickbooks';
+$password = 'adams42';
+
 if (function_exists('date_default_timezone_set'))
 {
 	date_default_timezone_set('America/New_York');
@@ -64,7 +68,7 @@ $ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
 
 print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n");
 
-$max = 1;
+$max = 25;
 for ($i = 0; $i < $max; $i++)
 {
 	print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));

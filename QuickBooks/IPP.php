@@ -583,7 +583,7 @@ class QuickBooks_IPP
 		{
 			$headers['Content-Type'] = 'text/xml';
 			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $this->_token . '",intuit-token="' . $this->_ticket . '"';
-			$headers['Cookie'] = $this->cookies(true);
+			//$headers['Cookie'] = $this->cookies(true);
 		}
 		
 		$HTTP->setHeaders($headers);

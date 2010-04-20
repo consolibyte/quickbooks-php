@@ -234,6 +234,16 @@ define('QUICKBOOKS_DRIVER_SQL_FIELD_HASH', 'qbsql_last_hash');
 define('QUICKBOOKS_DRIVER_SQL_FIELD_QBXML', 'qbsql_last_qbxml');
 
 /**
+ *
+ */
+define('QUICKBOOKS_DRIVER_SQL_FIELD_AUDIT_AMOUNT', 'qbsql_audit_amount');
+
+/**
+ * 
+ */
+define('QUICKBOOKS_DRIVER_SQL_FIELD_AUDIT_MODIFIED', 'qbsql_audit_modified');
+
+/**
  * Default SQL field to keep track of records that should be deleted
  * 
  * 
@@ -2910,10 +2920,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				//$mfield = array( QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT_OR_UPDATE, null, 'NOW()' );
 				
 				// This should be an VARCHAR, QuickBooks errors are sometimes in the format "0x12341234" 
-				$enfield = array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 32, 'null' );			// Add/Mod error number
-				$emfield = array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' );			// Add/Mod error message
-				$enqfield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Add/Mod enqueue date/time
-				$deqfield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Add/Mod dequeue date/time
+				$enfield = array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 32, 'null' );			// Add/mod error number
+				$emfield = array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' );			// Add/mod error message
+				$enqfield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Add/mod enqueue date/time
+				$deqfield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Add/mod dequeue date/time
+				
+				$audit_modified_field = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );
+				$audit_amount_field = array( QUICKBOOKS_DRIVER_SQL_DECIMAL, null, 'null' );
 				
 				$to_delete_field = array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 );		// Flag it for deletion
 				$to_void_field = array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 ); 
@@ -2941,6 +2954,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_DEQUEUE_TIME] = $deqfield;
 				
 				//$fields[QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG] = $delflagfield;
+				
+				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_AUDIT_AMOUNT] = $audit_amount_field;
+				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_AUDIT_MODIFIED] = $audit_modified_field;
 				
 				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_TO_SYNC] = $to_sync_field;
 				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_TO_DELETE] = $to_delete_field;

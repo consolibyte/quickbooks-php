@@ -21,13 +21,27 @@ $IPP->application($Context, 'be9mh7qd5');
 
 //$list = $Service->findAll($Context, $realmID);
 
-//print($Service->lastRequest($Context));
 
-//print($Service->lastResponse($Context));
+$IPP->createTable('cars' . mt_rand(), 'Cars');
+print($IPP->lastRequest($Context));
+print($IPP->lastResponse($Context));
 
-//print($IPP->getAvailableCompanies());
 
-//exit;
+
+print($IPP->getAvailableCompanies());
+print($IPP->lastRequest($Context));
+print($IPP->lastResponse($Context));
+
+
+
+$Service = new QuickBooks_IPP_Service_Customer();
+$list = $Service->findAll($Context, $realmID);
+//print_r($list);
+print($IPP->lastRequest($Context));
+print($IPP->lastResponse($Context));
+
+
+exit;
 
 $Service = new QuickBooks_IPP_Service_SalesTaxCode();
 $list = $Service->findAll($Context, $realmID);
