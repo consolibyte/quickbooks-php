@@ -222,13 +222,23 @@ class QuickBooks_IPP
 		return $this->_password;
 	}
 	
-	public function ticket()
+	public function ticket($ticket = null)
 	{
+		if ($ticket)
+		{
+			$this->_ticket = $ticket;
+		}
+
 		return $this->_ticket;
 	}
 	
-	public function token()
+	public function token($token = null)
 	{
+		if ($token)
+		{
+			$this->_token = $token;
+		}
+
 		return $this->_token;
 	}
 	
