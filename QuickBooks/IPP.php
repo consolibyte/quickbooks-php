@@ -25,6 +25,8 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Parser.php');
  */
 class QuickBooks_IPP
 {
+	const COOKIE = 'ippfedcookie';
+	
 	/**
 	 * 
 	 * @var string
@@ -125,7 +127,7 @@ class QuickBooks_IPP
 	
 	protected $_cookies;
 	
-	public function __construct()
+	public function __construct($dsn = null)
 	{
 		$this->_test = false;
 		$this->_debug = false;
@@ -188,12 +190,32 @@ class QuickBooks_IPP
 			}
 			
 			// @todo Fix this so the context is correct
-			$Context = new QuickBooks_IPP_Context($this);
+			$Context = new QuickBooks_IPP_Context($this, $ticket, $token);
 			
 			return $Context;
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Create a Context object (used for session management) for a given ticket and token 
+	 * 
+	 * 
+	 */
+	public function context($ticket = null, $token = null)
+	{
+		if (is_null($ticket))
+		{
+			
+		}
+
+		if (is_null($token))
+		{
+			
+		}
+
+		return new QuickBooks_IPP_Context($this, $ticket, $token);
 	}
 	
 	public function cookies($glob_them_together = false)
@@ -222,6 +244,7 @@ class QuickBooks_IPP
 		return $this->_password;
 	}
 	
+	/*
 	public function ticket($ticket = null)
 	{
 		if ($ticket)
@@ -241,6 +264,7 @@ class QuickBooks_IPP
 
 		return $this->_token;
 	}
+	*/
 	
 	public function application($Context, $application = null)
 	{

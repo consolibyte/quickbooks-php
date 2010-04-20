@@ -4,7 +4,7 @@ class QuickBooks_IPP_Context
 {
 	protected $_IPP;
 	
-	public function __construct($IPP)
+	public function __construct($IPP, $ticket, $token)
 	{
 		$this->_IPP = $IPP;
 	}
