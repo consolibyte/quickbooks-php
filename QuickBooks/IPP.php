@@ -18,6 +18,9 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Context.php');
 // 
 QuickBooks_Loader::load('/QuickBooks/IPP/Parser.php');
 
+// 
+QuickBooks_Loader::load('/QuickBooks/IPP/Federator.php');
+
 /**
  * 
  * 
@@ -160,7 +163,8 @@ class QuickBooks_IPP
 				<apptoken>' . $token . '</apptoken>
 			</qdbapi>';
 		
-		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
+		$Context = null;
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if (!$this->_hasErrors($response) and 
 			$ticket = QuickBooks_XML::extractTagContents('ticket', $response))
@@ -189,10 +193,7 @@ class QuickBooks_IPP
 				}
 			}
 			
-			// @todo Fix this so the context is correct
-			$Context = new QuickBooks_IPP_Context($this, $ticket, $token);
-			
-			return $Context;
+			return new QuickBooks_IPP_Context($ticket, $token);
 		}
 		
 		return false;
@@ -203,19 +204,23 @@ class QuickBooks_IPP
 	 * 
 	 * 
 	 */
-	public function context($ticket = null, $token = null)
+	public function context($ticket = null, $token = null, $check_if_valid = true)
 	{
 		if (is_null($ticket))
 		{
-			
+			$ticket = QuickBooks_IPP_Federator::getCookie();
 		}
-
-		if (is_null($token))
+		
+		$Context = new QuickBooks_IPP_Context($this, $ticket, $token);
+		
+		if ($check_if_valid)
 		{
+			// Now, let's check to make sure the context is valid
 			
+			// @todo Implement this
 		}
-
-		return new QuickBooks_IPP_Context($this, $ticket, $token);
+		
+		return $Context;
 	}
 	
 	public function cookies($glob_them_together = false)
@@ -266,7 +271,7 @@ class QuickBooks_IPP
 	}
 	*/
 	
-	public function application($Context, $application = null)
+	public function application($application = null)
 	{
 		if ($application)
 		{
@@ -276,29 +281,28 @@ class QuickBooks_IPP
 		return $this->_application;
 	}
 		
-	public function getIDSRealm()
+	public function getIDSRealm($Context)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
 		$action = 'API_GetIDSRealm';
 		
 		$xml = '<qdbapi>
-   				<ticket>' . $this->_ticket . '</ticket>
-				<apptoken>' . $this->_token . '</apptoken>
+   				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>
 			</qdbapi>';
 		
-		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		print($response);
 	}
 	
-	public function getAvailableCompanies()
+	public function getAvailableCompanies($Context)
 	{
 		$url = 'https://services.intuit.com/sb/company/v2/available';
-		//$url = 'https://services.intuit.com/sb/invoice/v2/133828393';
 		$action = null;
 		$xml = null;
 		
-		$response = $this->_request(QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml);
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -309,14 +313,14 @@ class QuickBooks_IPP
 		return $response;
 	}
 	
-	public function provisionUser($email, $fname, $lname, $roleid = null, $udata = null)
+	public function provisionUser($Context, $email, $fname, $lname, $roleid = null, $udata = null)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
 		$action = 'API_ProvisionUser';
 		
 		$xml = '<qdbapi>
-				<ticket>' . $this->_ticket . '</ticket>
-				<apptoken>' . $this->_token . '</apptoken>';
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>';
 		
 		if ($roleid)
 		{
@@ -336,7 +340,7 @@ class QuickBooks_IPP
 		$xml .= '
 			</qdbapi>';
 			
-		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -346,13 +350,13 @@ class QuickBooks_IPP
 		return true;
 	}
 	
-	public function sendInvitation($userid, $usertext, $udata = null)
+	public function sendInvitation($Context, $userid, $usertext, $udata = null)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
 		$action = 'API_SendInvitation';
 		$xml = '<qdbapi>
-				<ticket>' . $this->_ticket . '</ticket>
-				<apptoken>' . $this->_token . '</apptoken>
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>
 				<userid>' . $userid . '</userid>
 				<usertext>' . $usertext . '</usertext>';
 		
@@ -364,7 +368,7 @@ class QuickBooks_IPP
 		$xml .= '
 			</qdbapi>';
 			
-		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -374,13 +378,13 @@ class QuickBooks_IPP
 		return true;
 	}
 	
-	public function createTable($tname, $pnoun, $udata = null)
+	public function createTable($Context, $tname, $pnoun, $udata = null)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
 		$action = 'API_CreateTable';		
 		$xml = '<qdbapi>
-				<ticket>' . $this->_ticket . '</ticket>
-				<apptoken>' . $this->_token . '</apptoken>
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>
 				<tname>' . $tname . '</tname>
 				<pnoun>' . $pnoun . '</pnoun>';
 		
@@ -392,7 +396,7 @@ class QuickBooks_IPP
 		$xml .= '
 			</qdbapi>';
 			
-		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -402,17 +406,17 @@ class QuickBooks_IPP
 		return true;
 	}
 	
-	public function attachIDSRealm($realm)
+	public function attachIDSRealm($Context, $realm)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
 		$action = 'API_AttachIDSRealm';
 		$xml = '<qdbapi>
 				<realm>' . $realm . '</realm>
-				<ticket>' . $this->_ticket . '</ticket>
-				<apptoken>' . $this->_token . '</apptoken>
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>
 			</qdbapi>';
 			
-		$response = $this->_request(QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -431,7 +435,7 @@ class QuickBooks_IPP
 		$action = null;
 		//$xml = '';
 		
-		$response = $this->_request(QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml);
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml);
 		
 		// Check for generic IPP errors and HTTP errors
 		if ($this->_hasErrors($response))
@@ -600,7 +604,7 @@ class QuickBooks_IPP
 		return $this->_log($message, $level);
 	}
 	
-	protected function _request($type, $url, $action, $xml)
+	protected function _request($Context, $type, $url, $action, $xml)
 	{
 		$HTTP = new QuickBooks_HTTP($url);
 		$post = true;
@@ -616,7 +620,7 @@ class QuickBooks_IPP
 		else if ($type == QuickBooks_IPP::REQUEST_IDS) 
 		{
 			$headers['Content-Type'] = 'text/xml';
-			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $this->_token . '",intuit-token="' . $this->_ticket . '"';
+			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $Context->token() . '",intuit-token="' . $Context->ticket() . '"';
 			//$headers['Cookie'] = $this->cookies(true);
 		}
 		
