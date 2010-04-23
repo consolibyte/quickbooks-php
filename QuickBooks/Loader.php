@@ -103,7 +103,7 @@ class QuickBooks_Loader
 				if (end($tmp) == 'php' and 
 					!is_dir(QUICKBOOKS_BASEDIR . $dir . DIRECTORY_SEPARATOR . $file))
 				{
-					QuickBooks_Loader::load($dir . DIRECTORY_SEPARATOR . $file);
+					QuickBooks_Loader::load($dir . DIRECTORY_SEPARATOR . $file, $autoload);
 					//require_once $dir . '/' . $file;
 				}
 			}

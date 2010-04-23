@@ -21,6 +21,9 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Parser.php');
 // 
 QuickBooks_Loader::load('/QuickBooks/IPP/Federator.php');
 
+// 
+QuickBooks_Loader::import('/QuickBooks/IPP/Service');
+
 /**
  * 
  * 
@@ -56,6 +59,12 @@ class QuickBooks_IPP
 	 * An IDS request to search/query for an object
 	 */
 	const IDS_QUERY = 'ids-query';
+	
+	/**
+	 * An IDS request to get a report
+	 * @var unknown_type
+	 */
+	const IDS_REPORT = 'ids-report';
 	
 	/**
 	 * No error occurred
@@ -130,12 +139,23 @@ class QuickBooks_IPP
 	
 	protected $_cookies;
 	
+	protected $_ids_parser;
+	
 	public function __construct($dsn = null)
 	{
+		// Use a test gateway?
 		$this->_test = false;
+		
+		// Use debug mode?
 		$this->_debug = false;
+		
+		// Mask sensitive data in the logs (tickets, credit card numbers, etc.)
 		$this->_masking = true;
 		
+		// Parse returned IDS responses into objects?
+		$this->_ids_parser = true;
+		
+		// 
 		$this->_driver = null;
 		
 		$this->_certificate = null;
@@ -193,7 +213,7 @@ class QuickBooks_IPP
 				}
 			}
 			
-			return new QuickBooks_IPP_Context($ticket, $token);
+			return new QuickBooks_IPP_Context($this, $ticket, $token);
 		}
 		
 		return false;
@@ -426,8 +446,35 @@ class QuickBooks_IPP
 		return true;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param boolean $true_or_false
+	 * @return boolean
+	 */
+	public function useIDSParser($true_or_false)
+	{
+		$this->_ids_parser = (boolean) $true_or_false;
+		return $this->_ids_parser;
+	}
+	
+	/**
+	 * Make an IDS request (Intuit Data Services) to the remote server
+	 *
+	 * @param QuickBooks_IPP_Context $Context		The context (token and ticket) to use
+	 * @param integer $realmID						The realm to query against
+	 * @param string $resource						A QuickBooks_IDS::RESOURCE_* constant
+	 * @param string $optype
+	 * @param string $xml	
+	 * @return QuickBooks_IPP_Object										
+	 */
 	public function IDS($Context, $realmID, $resource, $optype, $xml = '')
 	{
+		if (substr($resource, 0, 6) == 'Report')
+		{
+			$resource = substr($resource, 6);
+		}
 		
 		$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/v2/' . $realmID;
 		//$url = 'https://services.intuit.com/sb/invoice/v2/173642438';
@@ -444,6 +491,12 @@ class QuickBooks_IPP
 		}
 		
 		$data = $this->_stripHTTPHeaders($response);
+
+		if (!$this->_ids_parser)
+		{
+			// If they don't want the responses parsed into objects, then just return the raw XML data
+			return $data;
+		}
 		
 		$Parser = new QuickBooks_IPP_Parser();
 		
@@ -453,6 +506,7 @@ class QuickBooks_IPP
 		$err_desc = null;
 		$err_db = null;
 		
+		// Try to parse the responses into QuickBooks_IPP_Object_* classes
 		$parsed = $Parser->parseIDS($data, $optype, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
 		
 		if ($xml_errnum != QuickBooks_XML::ERROR_OK)

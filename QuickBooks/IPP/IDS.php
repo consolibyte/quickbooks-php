@@ -16,6 +16,8 @@
  */
 class QuickBooks_IPP_IDS
 {
+	const RESOURCE_REPORT_PROFITANDLOSS = 'ReportProfitAndLoss';
+	
 	const RESOURCE_ACCOUNT = 'Account';
 	
 	const RESOURCE_BILL = 'Bill';

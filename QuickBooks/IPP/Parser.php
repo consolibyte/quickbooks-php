@@ -47,6 +47,27 @@ class QuickBooks_IPP_Parser
 			
 			switch ($optype)
 			{
+				case QuickBooks_IPP::IDS_REPORT:
+					
+					$Report = new QuickBooks_IPP_Object_Report('@todo Make sure we show the title of the report!');
+					
+					foreach ($List->children() as $Child)
+					{
+						$class = 'QuickBooks_IPP_Object_' . $Child->name();
+						$Object = new $class();
+						
+						foreach ($Child->children() as $Data)
+						{
+							$this->_push($Data, $Object);
+						}
+						
+						$method = 'add' . $Child->name();
+						$Report->$method($Object);
+					}
+					
+					return $Report;
+					
+					break;
 				case QuickBooks_IPP::IDS_QUERY:			// Parse a QUERY type response
 				
 					$list = array();
@@ -101,7 +122,8 @@ class QuickBooks_IPP_Parser
 		$name = $Node->name();
 		$data = $Node->data();
 		
-		$adds = array();
+		$adds = array(
+			);
 		
 		if ($Node->hasChildren())
 		{
@@ -117,11 +139,12 @@ class QuickBooks_IPP_Parser
 		}
 		else
 		{
-			if (isset($adds[$name]))
+			if (true or isset($adds[$name]))
 			{
 				$Object->{'add' . $name}($data);
 			}
-			else
+			
+			/*else
 			{
 				if ($data == 'false')
 				{
@@ -135,7 +158,7 @@ class QuickBooks_IPP_Parser
 				{
 					$Object->{'set' . $name}($data);
 				}
-			}		
+			}*/		
 		}
 	}
 }

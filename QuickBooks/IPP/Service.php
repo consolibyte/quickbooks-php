@@ -23,6 +23,21 @@ class QuickBooks_IPP_Service
 		$this->_errcode = QuickBooks_IPP::ERROR_OK;
 	}
 	
+	protected function _report($Context, $realmID, $resource, $xml = '')
+	{
+		$IPP = $Context->IPP();
+		
+		if (!$xml)
+		{
+			$xml = '<' . $resource . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/v2"></' . $resource . '>';
+		}
+		
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_REPORT, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		
+		return $return;
+	}
+	
 	protected function _findAll($Context, $realmID, $resource, $xml = '')
 	{
 		$IPP = $Context->IPP();
