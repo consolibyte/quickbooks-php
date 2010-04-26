@@ -1262,8 +1262,14 @@ class Quickbooks_MerchantService
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
 		
 		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring);
-		
+
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
+
+		if ($comment)
+		{
+			$xml .= '			<Comment>' . substr(QuickBooks_XML::encode($comment), 0, 500) . '</Comment>' . QUICKBOOKS_CRLF;
+		}
+
 		$xml .= '		</CustomerCreditCardChargeRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;		
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
@@ -1325,6 +1331,11 @@ class Quickbooks_MerchantService
 		}
 		
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
+
+		if ($comment)
+		{
+			$xml .= '			<Comment>' . substr(QuickBooks_XML::encode($comment), 0, 500) . '</Comment>' . QUICKBOOKS_CRLF;
+		}
 		
 		$xml .= '		</CustomerCreditCardCaptureRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
@@ -1380,6 +1391,12 @@ class Quickbooks_MerchantService
 		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, false, false);
 		
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
+
+		if ($comment)
+		{
+			$xml .= '			<Comment>' . substr(QuickBooks_XML::encode($comment), 0, 500) . '</Comment>' . QUICKBOOKS_CRLF;
+		}
+
 		$xml .= '		</CustomerCreditCardRefundRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;		
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
@@ -1425,6 +1442,11 @@ class Quickbooks_MerchantService
 		$xml .= '		<CustomerCreditCardTxnVoidRq>' . QUICKBOOKS_CRLF;
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
 		$xml .= '			<CreditCardTransID>' . $Transaction->getTransactionID() . '</CreditCardTransID>' . QUICKBOOKS_CRLF;
+
+		if ($comment)
+		{
+			$xml .= '			<Comment>' . substr(QuickBooks_XML::encode($comment), 0, 500) . '</Comment>' . QUICKBOOKS_CRLF;
+		}
 		
 		$xml .= '		</CustomerCreditCardTxnVoidRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
@@ -1483,7 +1505,18 @@ class Quickbooks_MerchantService
 			$xml .= '			<Amount>' . sprintf('%01.2f', (float) $amount) . '</Amount>' . QUICKBOOKS_CRLF;
 		}
 		
+		if (!is_null($salestax) and 
+			(float) $salestax)
+		{
+			$xml .= '			<SalesTaxAmount>' . sprintf('%01.2f', (float) $salestax) . '</SalesTaxAmount>' . QUICKBOOKS_CRLF;
+		}
+		
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
+
+		if ($comment)
+		{
+			$xml .= '			<Comment>' . substr(QuickBooks_XML::encode($comment), 0, 500) . '</Comment>' . QUICKBOOKS_CRLF;
+		}
 		
 		$xml .= '		</CustomerCreditCardTxnVoidOrRefundRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
