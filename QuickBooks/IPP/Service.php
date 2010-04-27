@@ -65,11 +65,11 @@ class QuickBooks_IPP_Service
 		
 		$unsets = array(
 			'Id', 
-			'PartyReferenceId', 
-			'Synchronized', 
-			'ExternalKey', 
 			'SyncToken', 
 			'MetaData', 
+			'ExternalKey', 
+			'Synchronized', 
+			'PartyReferenceId', 
 			'SalesTaxCodeId', 
 			'SalesTaxCodeName',
 			'OpenBalanceDate', 
@@ -81,6 +81,7 @@ class QuickBooks_IPP_Service
 			$Object->remove($unset);
 		}
 		
+		// Build the XML request
 		$xml = '';
 		$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
 		$xml .= '<Add xmlns="http://www.intuit.com/sb/cdm/v2" ' . QUICKBOOKS_CRLF;
@@ -92,18 +93,7 @@ class QuickBooks_IPP_Service
 		$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP::IDS_ADD);
 		$xml .= '</Add>';
 		
-		/*
-				<!--<Object xsi:type="Customer">
-					<TypeOf>Person</TypeOf>
-					<Name>Jack Thompson</Name>
-					<Title>Mr</Title>
-					<GivenName>Jack</GivenName>
-					<MiddleName>NMI</MiddleName>
-					<FamilyName>Thompson</FamilyName>
-					<Suffix>Sr</Suffix>
-					<Gender>Male</Gender>-->
-		*/
-		
+		// Send the data to IPP 
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_ADD, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		

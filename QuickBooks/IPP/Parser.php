@@ -100,7 +100,18 @@ class QuickBooks_IPP_Parser
 							
 							return false;
 						case 'Success':
-							return true;
+							
+							$id = $List->getChildDataAt('Success PartyRoleRef PartyReferenceId');
+							
+							return $id;
+						default:
+							
+							// @todo Fix this
+							$err_code = -1;
+							$err_desc = '';
+							$err_db = null;
+							
+							return false;
 					}
 					
 					break;

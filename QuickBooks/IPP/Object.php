@@ -111,6 +111,11 @@ class QuickBooks_IPP_Object
 		return end($split);
 	}
 	
+	protected function _defaults()
+	{
+		return array();
+	}
+	
 	public function asIDSXML($indent = 0, $parent = null, $optype = null)
 	{
 		if (!$parent)
@@ -121,6 +126,9 @@ class QuickBooks_IPP_Object
 		if ($optype == QuickBooks_IPP::IDS_ADD)
 		{
 			$xml = str_repeat("\t", $indent) . '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
+			
+			// Merge in the defaults for this object type
+			$this->_data = array_merge($this->_defaults(), $this->_data);
 		}
 		else
 		{
