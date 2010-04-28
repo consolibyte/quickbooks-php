@@ -22,6 +22,9 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Parser.php');
 QuickBooks_Loader::load('/QuickBooks/IPP/Federator.php');
 
 // 
+QuickBooks_Loader::load('/QuickBooks/IPP/IDS.php');
+
+// 
 QuickBooks_Loader::import('/QuickBooks/IPP/Service');
 
 /**
@@ -137,9 +140,23 @@ class QuickBooks_IPP
 	protected $_errtext;
 	protected $_errdetail;
 	
+	/**
+	 * An array of cookies returned by the deprecated ->authenticate() method
+	 * @var array
+	 */
 	protected $_cookies;
 	
+	/**
+	 * Whether or not to use the IDS parser and parse XML responses into objects
+	 * @var boolean
+	 */
 	protected $_ids_parser;
+	
+	/**
+	 * The version of IDS to use
+	 * @var string
+	 */
+	protected $_ids_version;
 	
 	public function __construct($dsn = null)
 	{
@@ -155,8 +172,16 @@ class QuickBooks_IPP
 		// Parse returned IDS responses into objects?
 		$this->_ids_parser = true;
 		
-		// 
+		// What version of IDS to use
+		$this->_ids_version = QuickBooks_IPP_IDS::VERSION_2;
+		
+		// Driver class for logging
 		$this->_driver = null;
+		
+		if ($dsn)
+		{
+			
+		}
 		
 		$this->_certificate = null;
 		
@@ -318,7 +343,7 @@ class QuickBooks_IPP
 	
 	public function getAvailableCompanies($Context)
 	{
-		$url = 'https://services.intuit.com/sb/company/v2/available';
+		$url = 'https://services.intuit.com/sb/company/' . $this->_ids_version . '/available';
 		$action = null;
 		$xml = null;
 		
@@ -460,6 +485,22 @@ class QuickBooks_IPP
 	}
 	
 	/**
+	 * Get or set the IDS version to use 
+	 * 
+	 * @param string $version		One of QuickBooks_IPP_IDS::VERSION_1, QuickBooks_IPP_IDS::VERSION_2, QuickBooks_IPP_IDS::VERSION_LATEST
+	 * @return string				The IDS version currently being used
+	 */
+	public function version($version = null)
+	{
+		if ($version)
+		{
+			$this->_ids_version = $version;
+		}
+		
+		return $this->_ids_version;
+	}
+	
+	/**
 	 * Make an IDS request (Intuit Data Services) to the remote server
 	 *
 	 * @param QuickBooks_IPP_Context $Context		The context (token and ticket) to use
@@ -476,8 +517,7 @@ class QuickBooks_IPP
 			$resource = substr($resource, 6);
 		}
 		
-		$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/v2/' . $realmID;
-		//$url = 'https://services.intuit.com/sb/invoice/v2/173642438';
+		$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
 		
 		$action = null;
 		//$xml = '';

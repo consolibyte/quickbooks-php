@@ -16,6 +16,12 @@
  */
 class QuickBooks_IPP_IDS
 {
+	const VERSION_1 = 'v1';
+	
+	const VERSION_2 = 'v2';
+	
+	const VERSION_LATEST = 'v2';
+	
 	const RESOURCE_REPORT_PROFITANDLOSS = 'ReportProfitAndLoss';
 	
 	const RESOURCE_ACCOUNT = 'Account';

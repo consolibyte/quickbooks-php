@@ -54,12 +54,12 @@ else
 }
 */
 
-/*
+
 $Service = new QuickBooks_IPP_Service_Vendor();
 
 $Vendor = new QuickBooks_IPP_Object_Vendor();
 
-$Vendor->setName('Brand New Vendor #' . mt_rand(0, 100) . ' with a really really freaking long name.');
+$Vendor->setName('Brand New Vendor #' . mt_rand(0, 100) . '');
 $Vendor->setGivenName('Keith');
 $Vendor->setFamilyName('Palmer');
 
@@ -71,7 +71,7 @@ else
 {
 	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
 }
-*/
+
 
 /*
 print("\n\n");

@@ -2,6 +2,10 @@
 
 /**
  * 
+ * 
+ * 
+ * @package QuickBooks
+ * @subpackage IPP
  */
 
 /**
@@ -9,15 +13,42 @@
  * 
  *
  */
-class QuickBooks_IPP_Service
+abstract class QuickBooks_IPP_Service
 {
+	/**
+	 * The last raw XML request
+	 * @var string
+	 */
 	protected $_last_request;
+	
+	/**
+	 * The last raw XML response
+	 * @var string
+	 */
 	protected $_last_response;
 	
+	/**
+	 * The last error code
+	 * @var string
+	 */
 	protected $_errcode;
+	
+	/**
+	 * The last error message
+	 * @var string
+	 */
 	protected $_errtext;
+	
+	/**
+	 * The last error detail
+	 * @var string
+	 */
 	protected $_errdetail;
 	
+	/**
+	 * 
+	 * 
+	 */
 	public function __construct()
 	{
 		$this->_errcode = QuickBooks_IPP::ERROR_OK;
@@ -29,7 +60,7 @@ class QuickBooks_IPP_Service
 		
 		if (!$xml)
 		{
-			$xml = '<' . $resource . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/v2"></' . $resource . '>';
+			$xml = '<' . $resource . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '"></' . $resource . '>';
 		}
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_REPORT, $xml);
@@ -44,7 +75,7 @@ class QuickBooks_IPP_Service
 		
 		if (!$xml)
 		{
-			$xml = '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/v2"></' . $resource . 'Query>';
+			$xml = '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '"></' . $resource . 'Query>';
 		}
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
@@ -53,6 +84,15 @@ class QuickBooks_IPP_Service
 		return $return;
 	}
 	
+	/** 
+	 * Add an IDS object via IPP
+	 * 
+	 * @param QuickBooks_IPP_Context $Context
+	 * @param integer $realmID
+	 * @param string $resource
+	 * @param object $Object
+	 * @return integer
+	 */
 	protected function _add($Context, $realmID, $resource, $Object)
 	{
 		$IPP = $Context->IPP();
@@ -70,7 +110,7 @@ class QuickBooks_IPP_Service
 			'ExternalKey', 
 			'Synchronized', 
 			'PartyReferenceId', 
-			'SalesTaxCodeId', 
+			'SalesTaxCodeId', 		// @todo These are customer/vendor specific and probably shouldn't be here
 			'SalesTaxCodeName',
 			'OpenBalanceDate', 
 			'OpenBalance', 
@@ -84,10 +124,10 @@ class QuickBooks_IPP_Service
 		// Build the XML request
 		$xml = '';
 		$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-		$xml .= '<Add xmlns="http://www.intuit.com/sb/cdm/v2" ' . QUICKBOOKS_CRLF;
+		$xml .= '<Add xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '" ' . QUICKBOOKS_CRLF;
 		$xml .= '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' . QUICKBOOKS_CRLF;
 		$xml .= '	RequestId="' . md5(mt_rand() . microtime()) . '" ' . QUICKBOOKS_CRLF;
-		$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/v2 ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
+		$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/' . $IPP->version() . ' ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
 		$xml .= '	<OfferingId>ipp</OfferingId>' . QUICKBOOKS_CRLF;
 		$xml .= '	<ExternalRealmId>' . $realmID . '</ExternalRealmId>' . QUICKBOOKS_CRLF;
 		$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP::IDS_ADD);
@@ -126,6 +166,12 @@ class QuickBooks_IPP_Service
 		return $this->_last_request;
 	}
 	
+	/**
+	 * Get the last raw XML response that was returned
+	 *
+	 * @param object $Context		If you provide a specific context, this will return the last response using that particular context, otherwise it will return the last response from this service
+	 * @return string				The last raw XML response
+	 */
 	public function lastResponse($Context = null)
 	{
 		if ($Context)
@@ -177,13 +223,24 @@ class QuickBooks_IPP_Service
 	}
 	
 	/**
-	 *  
+	 *  Get the error detail message from the response
+	 * 
+	 * The error detail node sometimes contains additional information about 
+	 * the error that occurred. You should make sure to also check the result 
+	 * of ->errorCode() and ->errorMessage() too. 
+	 * 
+	 * @return string
 	 */
 	public function errorDetail()
 	{
 		return $this->_errdetail;
 	}	
 	
+	/** 
+	 * Tell whether or not an error occurred
+	 * 
+	 * @return boolean
+	 */
 	public function hasErrors()
 	{
 		return $this->_errcode != QuickBooks_IPP::ERROR_OK;

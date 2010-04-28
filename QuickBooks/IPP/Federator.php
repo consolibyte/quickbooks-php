@@ -56,6 +56,8 @@ class QuickBooks_IPP_Federator
 	
 	const ERROR_SAML = 3;
 	
+	const ERROR_INTERNAL = 4;
+	
 	protected $_type;
 	
 	protected $_key;
