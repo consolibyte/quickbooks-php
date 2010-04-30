@@ -18,6 +18,110 @@ $IPP->application($Context, 'be9mh7qd5');
 
 //$IPP->useIDSParser(false);
 
+
+
+
+$Service = new QuickBooks_IPP_Service_Invoice();
+
+/*
+$list = $Service->findAll($Context, $realmID);
+print_r($list[0]);
+exit;
+*/
+
+//$Service = new QuickBooks_IPP_Service_Check();
+
+/*
+$list = $Service->findAll($Context, $realmID);
+print_r($list[0]);
+exit;
+*/
+
+/*
+$Check = new QuickBooks_IPP_Object_Check();
+
+$Header = new QuickBooks_IPP_Object_Header();
+$Header->setDocNumber('TEST-' . mt_rand(0, 100));
+$Header->setTxnDate('2010-03-05');
+$Header->setStatus('Payable');
+$Header->setBankAccountName('Liberty Bank');
+$Header->setEntityName('Test Vendor 1, LLC');
+$Header->setEntityType('Vendor');
+
+$Check->addHeader($Header);
+
+$Line = new QuickBooks_IPP_Object_Line();
+$Line->setDesc('Test line');
+$Line->setAmount(50);
+$Line->setAccountName('Rent Expense');
+
+$Check->addLine($Line);
+
+if ($ID = $Service->add($Context, $realmID, $Check))
+{
+	print('Check added with ID #' . $ID . "\n");
+}
+else
+{
+	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
+}*/
+/*
+
+ */
+
+
+$Invoice = new QuickBooks_IPP_Object_Invoice();
+
+$Header = new QuickBooks_IPP_Object_Header();
+$Header->setDocNumber('TEST-' . mt_rand(0, 100));
+$Header->setTxnDate('2010-03-05');
+$Header->setCustomerName('ConsoliBYTE, LLC');
+
+$Invoice->addHeader($Header);
+
+$Line = new QuickBooks_IPP_Object_Line();
+
+//$Line->setTxnLineId(1);
+
+$Line->setDesc('Test desc goes here.');
+$Line->setItemName('Test Item 2');
+$Line->setItemType('Service');
+//$Line->setDesc('Test desc');
+$Line->setUnitPrice(10.95);
+$Line->setQty(2);
+$Line->setSalesTaxCodeName('NON');
+
+
+
+$Invoice->addLine($Line);
+
+print_r($Invoice);
+
+if ($ID = $Service->add($Context, $realmID, $Invoice))
+{
+	print('Invoice added with ID #' . $ID . "\n");
+}
+else
+{
+	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
+}
+
+print("\n\n");
+print("\n\n");
+print("\n\n");
+print("\n\n");
+print("\n\n");
+print($Service->lastRequest($Context));
+print("\n\n");
+print($Service->lastResponse($Context));
+print("\n\n");
+
+// svn commit --message "Support for adding invoices. Partial support for adding checks."
+
+
+
+
+
 /*
 $Service = new QuickBooks_IPP_Service_Customer();
 
@@ -54,7 +158,7 @@ else
 }
 */
 
-
+/*
 $Service = new QuickBooks_IPP_Service_Vendor();
 
 $Vendor = new QuickBooks_IPP_Object_Vendor();
@@ -71,6 +175,7 @@ else
 {
 	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
 }
+*/
 
 
 /*

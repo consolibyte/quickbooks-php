@@ -101,14 +101,32 @@ class QuickBooks_IPP_Parser
 							return false;
 						case 'Success':
 							
-							$id = $List->getChildDataAt('Success PartyRoleRef PartyReferenceId');
+							$checks = array(
+								'Success PartyRoleRef PartyReferenceId',
+								'Success ObjectRef Id',  
+								);
+								
+							foreach ($checks as $xpath)
+							{	
+								$id = $List->getChildDataAt($xpath);
+								
+								if ($id)
+								{
+									return $id;
+								}
+							}
 							
-							return $id;
+							$err_code = QuickBooks_IPP::ERROR_INTERNAL;
+							$err_desc = 'Could not locate unique ID in response: ' . $xml;
+							$err_db = '';
+							
+							return false;
 						default:
 							
-							// @todo Fix this
-							$err_code = -1;
-							$err_desc = '';
+							// This should never happen unless Keith neglected 
+							//	to implement some part of the IPP/IDS spec
+							$err_code = QuickBooks_IPP::ERROR_INTERNAL;
+							$err_desc = 'The parseIDS() method could not understand node [' . $List->name() . '] in response: ' . $xml;
 							$err_db = null;
 							
 							return false;
@@ -116,6 +134,11 @@ class QuickBooks_IPP_Parser
 					
 					break;
 				default:
+					
+					$err_code = QuickBooks_IPP::ERROR_INTERNAL;
+					$err_desc = 'The parseIDS() method could not understand the specified optype: [' . $optype . ']';
+					$err_db = null;
+					
 					return false;
 			}
 		}
