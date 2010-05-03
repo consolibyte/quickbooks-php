@@ -60,7 +60,9 @@ abstract class QuickBooks_IPP_Service
 		
 		if (!$xml)
 		{
-			$xml = '<' . $resource . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '"></' . $resource . '>';
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+			$xml .= '<' . $resource . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '"></' . $resource . '>';
 		}
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_REPORT, $xml);
@@ -75,7 +77,9 @@ abstract class QuickBooks_IPP_Service
 		
 		if (!$xml)
 		{
-			$xml = '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '"></' . $resource . 'Query>';
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '"></' . $resource . 'Query>';
 		}
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
@@ -150,12 +154,61 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 	
+	/**
+	 * Find a record by ID number 
+	 * 
+	 * 
+	 */
+	protected function _findById($Context, $realmID, $resource, $ID, $domain, $xml = '')
+	{
+		$IPP = $Context->IPP();
+		
+		if (!$domain)
+		{
+			$domain = QuickBooks_IPP_IDS::DOMAIN_QB;
+		}
+		
+		if (!$xml)
+		{
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+			$xml .= '	<TransactionIdSet>' . QUICKBOOKS_CRLF;
+			$xml .= '		<Id idDomain="' . $domain . '">' . $ID . '</Id>' . QUICKBOOKS_CRLF;
+			$xml .= '	</TransactionIdSet>' . QUICKBOOKS_CRLF;
+			$xml .= '</' . $resource . 'Query>';
+		}
+		
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		
+		if (count($return))
+		{
+			return $return[0];
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Set the last XML request and XML response that was made by this service
+	 *
+	 * @param string $request		The last XML request that was made
+	 * @param string $response		The last XML response that was made
+	 * @return void
+	 */
 	protected function _setLastRequestResponse($request, $response)
 	{
 		$this->_last_request = $request;
 		$this->_last_response = $response;
 	}
 	
+	/**
+	 * Get the last XML request that was made 
+	 * 
+	 * @param object $Context		
+	 * @return string
+	 */
 	public function lastRequest($Context = null)
 	{
 		if ($Context)

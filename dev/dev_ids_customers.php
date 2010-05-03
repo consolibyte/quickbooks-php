@@ -18,10 +18,34 @@ $IPP->application($Context, 'be9mh7qd5');
 
 //$IPP->useIDSParser(false);
 
-
-
-
 $Service = new QuickBooks_IPP_Service_Invoice();
+
+//$list = $Service->findAll($Context, $realmID);
+//print_r($list[0]);
+//exit;
+
+
+
+
+
+$ID = 4792537;
+$Invoice = $Service->findById($Context, $realmID, $ID);
+
+print_r($Invoice);
+
+/*
+print("\n\n");
+print("\n\n");
+print("\n\n");
+print("\n\n");
+print("\n\n");
+print($Service->lastRequest($Context));
+print("\n\n");
+print($Service->lastResponse($Context));
+print("\n\n");
+*/
+
+exit;
 
 /*
 $list = $Service->findAll($Context, $realmID);
@@ -70,7 +94,7 @@ else
  */
 
 
-$Invoice = new QuickBooks_IPP_Object_Invoice();
+$Invoice = new QuickBooks_IPP_Object_Estimate();
 
 $Header = new QuickBooks_IPP_Object_Header();
 $Header->setDocNumber('TEST-' . mt_rand(0, 100));
@@ -134,7 +158,7 @@ foreach ($list as $Customer)
 }
 */
 
-/*
+
 $Service = new QuickBooks_IPP_Service_Customer(); 
  
 $Customer = new QuickBooks_IPP_Object_Customer();
@@ -142,7 +166,7 @@ $Customer = new QuickBooks_IPP_Object_Customer();
 //$Customer->setTypeOf('Person');
 //$Customer->setTypeOf('Something Else');
 
-$Customer->setName('Brand New Customer #' . mt_rand(0, 100));
+$Customer->setName('Does it work #' . mt_rand(0, 100));
 $Customer->setGivenName('Keith');
 $Customer->setFamilyName('Palmer');
 
@@ -156,7 +180,7 @@ else
 {
 	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
 }
-*/
+
 
 /*
 $Service = new QuickBooks_IPP_Service_Vendor();

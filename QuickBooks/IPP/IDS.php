@@ -16,6 +16,10 @@
  */
 class QuickBooks_IPP_IDS
 {
+	const DOMAIN_NG = 'ng';
+	
+	const DOMAIN_QB = 'qb';
+	
 	const VERSION_1 = 'v1';
 	
 	const VERSION_2 = 'v2';
