@@ -9,6 +9,16 @@ class QuickBooks_IPP_Object
 		$this->_data = array();
 	}
 	
+	public function getID()
+	{
+		return $this->__call('getId', array());
+	}
+	
+	public function setID($ID)
+	{
+		return $this->__call('setId', $ID);
+	}
+	
 	public function get($field)
 	{
 		if (isset($this->_data[$field]))

@@ -16,6 +16,16 @@
  */
 class QuickBooks_IPP_IDS
 {
+	const OPTYPE_ADD = 'Add';
+	
+	const OPTYPE_MOD = 'Mod';
+	
+	const OPTYPE_DELETE = 'Delete';
+	
+	const OPTYPE_QUERY = 'Query';
+	
+	const OPTYPE_REPORT = 'Report';
+	
 	const DOMAIN_NG = 'ng';
 	
 	const DOMAIN_QB = 'qb';
@@ -86,4 +96,20 @@ class QuickBooks_IPP_IDS
 	const RESOURCE_VENDOR = 'Vendor';
 	
 	const RESOURCE_VENDORCREDIT = 'VendorCredit';
+	
+	static public function parseIDType($str)
+	{
+		// @todo Add validation here so that it always returns the correct types (string/integer)
+		$arr = explode('-', trim($str, '{}'));
+		
+		$arr['domain'] = $arr[0];
+		$arr['ID'] = $arr[1];
+		
+		return $arr;
+	}
+	
+	static public function buildIDType($domain, $ID)
+	{
+		return '{' . $domain . '-' . $ID . '}';
+	}
 }

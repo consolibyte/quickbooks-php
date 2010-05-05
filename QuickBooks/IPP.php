@@ -50,21 +50,25 @@ class QuickBooks_IPP
 	
 	/**
 	 * An IDS request to add an object
+	 * @deprecated
 	 */
 	const IDS_ADD = 'ids-add';
 	
 	/**
 	 * An IDS request to modify an object
+	 * @deprecated
 	 */
 	const IDS_MOD = 'ids-mod';
 	
 	/**
 	 * An IDS request to search/query for an object
+	 * @deprecated
 	 */
 	const IDS_QUERY = 'ids-query';
 	
 	/**
 	 * An IDS request to get a report
+	 * @deprecated
 	 * @var unknown_type
 	 */
 	const IDS_REPORT = 'ids-report';

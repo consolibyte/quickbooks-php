@@ -71,6 +71,65 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 	
+	protected function _delete($Context, $realmID, $resource, $IDType, $xml = '')
+	{
+		$IPP = $Context->IPP();
+		
+		if (!$xml)
+		{
+			$parse = QuickBooks_IPP_IDS::parseIDType($IDType);
+			
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+			$xml .= '	<TransactionIdSet>' . QUICKBOOKS_CRLF;
+			$xml .= '		<Id idDomain="' . $parse[0] . '">' . $parse[1] . '</Id>' . QUICKBOOKS_CRLF;
+			$xml .= '	</TransactionIdSet>' . QUICKBOOKS_CRLF;
+			$xml .= '</' . $resource . 'Query>';
+		}
+		
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		
+		if (count($return))
+		{
+			return $return[0];
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 
+	 * 
+	 */
+	protected function _guessResource($xml, $optype)
+	{
+		$tmp = explode('_', get_class($this));
+		return end($tmp);
+	}
+	
+	/**
+	 * 
+	 * 
+	 */
+	public function rawQuery($Context, $realmID, $xml, $resource = null)
+	{
+		$IPP = $Context->IPP();
+		
+		if (!$resource)
+		{
+			$resource = $this->_guessResource($xml, QuickBooks_IPP::IDS_QUERY);
+		}
+		
+		return $this->_findAll($Context, $realmID, $resource, $xml);
+	}
+	
+	public function rawAdd()
+	{
+		
+	}
+	
 	protected function _findAll($Context, $realmID, $resource, $xml = '')
 	{
 		$IPP = $Context->IPP();
@@ -159,7 +218,7 @@ abstract class QuickBooks_IPP_Service
 	 * 
 	 * 
 	 */
-	protected function _findById($Context, $realmID, $resource, $ID, $domain, $xml = '')
+	protected function _findById($Context, $realmID, $resource, $IDType, $domain, $xml = '')
 	{
 		$IPP = $Context->IPP();
 		
@@ -170,11 +229,13 @@ abstract class QuickBooks_IPP_Service
 		
 		if (!$xml)
 		{
+			$parse = QuickBooks_IPP_IDS::parseIDType($IDType);
+			
 			$xml = '';
 			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
 			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
 			$xml .= '	<TransactionIdSet>' . QUICKBOOKS_CRLF;
-			$xml .= '		<Id idDomain="' . $domain . '">' . $ID . '</Id>' . QUICKBOOKS_CRLF;
+			$xml .= '		<Id idDomain="' . $parse['domain'] . '">' . $parse['ID'] . '</Id>' . QUICKBOOKS_CRLF;
 			$xml .= '	</TransactionIdSet>' . QUICKBOOKS_CRLF;
 			$xml .= '</' . $resource . 'Query>';
 		}

@@ -48,6 +48,7 @@ class QuickBooks_IPP_Parser
 			switch ($optype)
 			{
 				case QuickBooks_IPP::IDS_REPORT:
+				case QuickBooks_IPP_IDS::OPTYPE_REPORT:
 					
 					$Report = new QuickBooks_IPP_Object_Report('@todo Make sure we show the title of the report!');
 					
@@ -69,6 +70,7 @@ class QuickBooks_IPP_Parser
 					
 					break;
 				case QuickBooks_IPP::IDS_QUERY:			// Parse a QUERY type response
+				case QuickBooks_IPP_IDS::OPTYPE_QUERY:
 				
 					$list = array();
 					foreach ($List->children() as $Child)
@@ -87,6 +89,7 @@ class QuickBooks_IPP_Parser
 					
 					break;
 				case QuickBooks_IPP::IDS_ADD:			// Parse an ADD type response
+				case QuickBooks_IPP_IDS::OPTYPE_ADD:
 					
 					//print("\n\n\n" . 'response was: ' . $List->name() . "\n\n\n");
 					
@@ -108,11 +111,11 @@ class QuickBooks_IPP_Parser
 								
 							foreach ($checks as $xpath)
 							{	
-								$id = $List->getChildDataAt($xpath);
+								$IDNode = $List->getChildAt($xpath);
 								
-								if ($id)
+								if ($IDNode)
 								{
-									return $id;
+									return QuickBooks_IPP_IDS::buildIDType($IDNode->getAttribute('idDomain'), $IDNode->data());
 								}
 							}
 							
@@ -155,6 +158,11 @@ class QuickBooks_IPP_Parser
 	{
 		$name = $Node->name();
 		$data = $Node->data();
+		
+		if (substr($name, -2, 2) == 'Id' or $name == 'ExternalKey')
+		{
+			$data = QuickBooks_IPP_IDS::buildIDType($Node->getAttribute('idDomain'), $data);
+		}
 		
 		$adds = array(
 			);

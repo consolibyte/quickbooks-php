@@ -18,11 +18,63 @@ $IPP->application($Context, 'be9mh7qd5');
 
 //$IPP->useIDSParser(false);
 
-$Service = new QuickBooks_IPP_Service_Invoice();
 
-//$list = $Service->findAll($Context, $realmID);
-//print_r($list[0]);
-//exit;
+
+
+$Service = new QuickBooks_IPP_Service_Customer(); 
+$Customer = new QuickBooks_IPP_Object_Customer();
+$Customer->setName('DID IT REPRODUCE #' . mt_rand(0, 100));
+$Customer->setGivenName('Keith');
+$Customer->setFamilyName('Palmer');
+if ($ID = $Service->add($Context, $realmID, $Customer))
+{
+	print('Customer added with ID #' . $ID . "\n");
+}
+else
+{
+	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
+}
+
+exit;
+
+
+
+
+
+$Service = new QuickBooks_IPP_Service_Check();
+$Check = new QuickBooks_IPP_Object_Check();
+
+$Header = new QuickBooks_IPP_Object_Header();
+$Header->setDocNumber('TEST-' . mt_rand(0, 100));
+$Header->setTxnDate('2010-03-05');
+//$Header->setStatus('Payable');
+//$Header->setBankAccountName('Liberty Bank');
+$Header->setEntityName('Test Vendor 1, LLC');
+$Header->setEntityType('Vendor');
+
+$Check->addHeader($Header);
+
+$Line = new QuickBooks_IPP_Object_Line();
+$Line->setDesc('Test line');
+$Line->setAmount(50);
+//$Line->setAccountName('Rent Expense');
+
+$Check->addLine($Line);
+
+if ($ID = $Service->add($Context, $realmID, $Check))
+{
+	print('Check added with ID #' . $ID . "\n");
+}
+else
+{
+	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
+}
+
+exit;
+
+
+
+
 
 
 
