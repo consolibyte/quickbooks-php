@@ -667,6 +667,37 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	}
 	
 	/**
+	 * Get the last date/time a particular user logged in
+	 *
+	 * @param string $username
+	 * @return array
+	 */
+	protected function _authLast($username)
+	{
+		$errnum = 0;
+		$errmsg = '';
+		
+		if ($arr = $this->_fetch($this->_query("
+			SELECT	
+				write_datetime, 
+				touch_datetime
+			FROM
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) . "
+			WHERE
+				qb_username = '" . $this->_escape($username) . "'
+			ORDER BY
+				touch_datetime DESC ", $errnum, $errmsg, 0, 1)))
+		{
+			return array(
+				$arr['write_datetime'], 
+				$arr['touch_datetime'], 
+				);
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Search for QuickBooks users
 	 * 
 	 * @param integer $offset
@@ -674,7 +705,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $match
 	 * @return QuickBooks_Iterator
 	 */
-	protected function _authView($offset, $limit, $match = '')
+	/*protected function _authView($offset, $limit, $match = '')
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -705,7 +736,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 		
 		return new QuickBooks_Iterator($list);
-	}
+	}*/
 	
 	/**
 	 * Get a count of how many results a search would return
@@ -713,7 +744,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $match
 	 * @return integer
 	 */
-	protected function _authSize($match = '')
+	/*protected function _authSize($match = '')
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -731,7 +762,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		$arr = $this->_fetch($this->_query($sql, $errnum, $errmsg));
 		return $arr['total'];
-	}
+	}*/
 	
 	/**
 	 * Log a user in
@@ -1043,11 +1074,11 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * 
 	 * 
 	 */
-	protected function _recurView($offset, $limit, $match)
+	/*protected function _recurView($offset, $limit, $match)
 	{
 		
 		return new QuickBooks_Iterator();
-	}
+	}*/
 	
 	/**
 	 * Forcibly remove an item from the queue
@@ -1336,7 +1367,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $match
 	 * @return integer
 	 */
-	protected function _queueSize($match = '')
+	/*protected function _queueSize($match = '')
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -1354,7 +1385,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		$arr = $this->_fetch($this->_query($sql, $errnum, $errmsg));
 		return $arr['total'];
-	}
+	}*/
 	
 	/**
 	 * Search for items in the queue
@@ -1364,7 +1395,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $match
 	 * @return QuickBooks_Iterator
 	 */
-	protected function _queueView($offset, $limit, $match)
+	/*protected function _queueView($offset, $limit, $match)
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -1395,6 +1426,61 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 		
 		return new QuickBooks_Iterator($list);
+	}*/
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	protected function _queueReport($user, $date_from, $date_to, $offset, $limit)
+	{
+		$where = "";
+		if ($date_from or $date_to)
+		{
+			if ($date_from and $date_to)
+			{
+				$where = "
+					AND
+						enqueue_datetime >= '" . date('Y-m-d H:i:s', strtotime($date_from)) . "' AND 
+						enqueue_datetime <= '" . date('Y-m-d H:i:s', strtotime($date_to)) . "' ";
+			}
+			else if ($date_from)
+			{
+				$where = "
+					AND  
+						enqueue_datetime >= '" . date('Y-m-d H:i:s', strtotime($date_from)) . "' ";
+			}
+			else if ($date_to)
+			{
+				$where = "
+					AND 
+						enqueue_datetime <= '" . date('Y-m-d H:i:s', strtotime($date_to)) . "' ";
+			}
+		}
+		
+		$sql = "
+			SELECT 
+				* 
+			FROM
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . "
+			WHERE
+				qb_username = '" . $this->_escape($user) . "'  
+				" . $where . " 
+			ORDER BY 
+				enqueue_datetime DESC ";
+		
+		//print($sql);
+		
+		$res = $this->_query($sql, $errnum, $errmsg, $offset, $limit);
+		
+		$list = array();
+		while ($arr = $this->_fetch($res))
+		{
+			$list[] = $arr;
+		}
+		
+		return $list;
 	}
 	
 	/**
@@ -1728,7 +1814,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $match
 	 * @return QuickBooks_Iterator
 	 */
-	protected function _identView($offset, $limit, $match)
+	/*protected function _identView($offset, $limit, $match)
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -1759,14 +1845,14 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 		
 		return new QuickBooks_Iterator($list);
-	}
+	}*/
 	
 	/**
 	 * 
 	 * 
 	 * @return integer
 	 */
-	protected function _identSize($match)
+	/*protected function _identSize($match)
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -1784,7 +1870,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			$arr = $this->_fetch($this->_query("SELECT COUNT(*) AS total FROM " . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_IDENTTABLE) . " ", $errnum, $errmsg));
 			return $arr['total'];
 		}
-	}
+	}*/
 	
 	/**
 	 * Truncate (if neccessary) the log and queue tables if they grow too large
@@ -1952,7 +2038,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $match
 	 * @return QuickBooks_Iterator
 	 */
-	protected function _logView($offset, $limit, $match)
+	/*protected function _logView($offset, $limit, $match)
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -1983,9 +2069,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 		
 		return new QuickBooks_Iterator($list);
-	}
+	}*/
 	
-	protected function _logSize($match)
+	/*protected function _logSize($match)
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -2005,7 +2091,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_LOGTABLE) . " ", $errnum, $errmsg));
 			return $arr['total'];
 		}
-	}
+	}*/
 	
 	/**
 	 * 
