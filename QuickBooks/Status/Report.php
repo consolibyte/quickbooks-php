@@ -105,14 +105,14 @@ class QuickBooks_Status_Report
 			$levels = array(
 				60 * 60 * 12 => array( QuickBooks_Status_Report::STATUS_NOTICE, 'Notice: A connection has not been made in %d days, %d hours and %d minutes.' ),  
 				60 * 60 * 24 => array( QuickBooks_Status_Report::STATUS_CAUTION, 'Caution: A connection has not been made in %d days, %d hours and %d minutes.' ),
-				60 * 60 * 36 => array( QuickBooks_Status_Report::STATUS_WARNING, 'Warning: A connection has not been made in %d days, %d hours and %d minutes.' ),
-				60 * 60 * 48 => array( QuickBooks_Status_Report::STATUS_DANGER, 'ERROR: A connection has not been made in %d days, %d hours and %d minutes! Contact support to get this issue resolved!' ),  
+				60 * 60 * 36 => array( QuickBooks_Status_Report::STATUS_WARNING, 'Warning! A connection has not been made in %d days, %d hours and %d minutes.' ),
+				60 * 60 * 48 => array( QuickBooks_Status_Report::STATUS_DANGER, 'DANGER! A connection has not been made in %d days, %d hours and %d minutes! Contact support to get this issue resolved!' ),  
 				);
 		}
 		
 		if (!isset($levels[0]))
 		{
-			$levels[0] = array( QuickBooks_Status_Report::STATUS_OK, 'Status is OK!' );
+			$levels[0] = array( QuickBooks_Status_Report::STATUS_OK, 'Status is OK. Last connection made %d days, %d hours, and %d minutes ago.' );
 		}
 		
 		if (!isset($levels[-1]))
@@ -120,47 +120,47 @@ class QuickBooks_Status_Report
 			$levels[-1] = array( QuickBooks_Status_Report::STATUS_UNKNOWN, 'Status is unknown.');
 		}
 		
+		//print_r($levels);
+		
 		// Find the status from the ticket table
 		$last = $Driver->authLast($user);
 		if (is_array($last))
 		{
 			krsort($levels);
 			
+			$ago = time() - strtotime($last[1]);
+					
+			$days = floor($ago / (60 * 60 * 24));
+			$hours = floor(($ago - ($days * 60 * 60 * 24)) / 60.0 / 60.0);
+			$minutes = floor(($ago - ($days * 60 * 60 * 24) - ($hours * 60 * 60)) / 60.0);
+			
+			$retr = null;
+			
 			foreach ($levels as $level => $tuple)
 			{
-				if ($level < 0)
+				if ($level <= 0)
 				{
 					continue;
 				}
 				
-				if ($level > $last[1])
+				if ($ago > $level)
 				{
-					$ago = time() - strtotime($last[1]);
-					
-					//print('last {');
-					//print_r($last);
-					//print('}');
-					
-					//print('seconds ago: ' . $last[1] . ', ' . $ago);
-					
-					$days = floor($ago / (60 * 60 * 24));
-					$hours = floor(($ago - ($days * 60 * 60 * 24)) / 60.0 / 60.0);
-					$minutes = floor(($ago - ($days * 60 * 60 * 24) - ($hours * 60 * 60)) / 60.0);
-					
-					//print('days: ' . $days . '<br />');
-					//print('hours: ' . $hours . '<br />');
-					//print('minutes: ' . $minutes . '<br />');
-					
-					$tuple[1] = sprintf($tuple[1], $days, $hours, $minutes);
-					
-					$tuple[] = $last[0];
-					$tuple[] = $last[1];
-					
-					return $tuple;
+					$retr = $tuple;
+					break;
 				}
 			}
 			
-			return $levels[0];
+			if (!$retr)
+			{
+				$retr = $levels[0];
+			}
+			
+			$retr[1] = sprintf($retr[1], $days, $hours, $minutes);
+			
+			$retr[] = $last[0];
+			$retr[] = $last[1];
+			
+			return $retr;
 		}
 		
 		return $levels[-1];
