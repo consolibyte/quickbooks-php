@@ -650,7 +650,7 @@ class QuickBooks_API
 			// Real-time support
 			if ($this->usingRealtime())
 			{
-				return $this->_realtime_return;
+				return $this->_realtime_return['qbxml'];
 			}
 			
 			return $tmp;
@@ -1048,6 +1048,19 @@ class QuickBooks_API
 		return null;
 	}
 	
+	protected function _doGet($method, $action, $type, $obj, $callbacks, $webapp_ID, $priority, &$err, $recur)
+	{
+		$retr = $this->_doQuery($method, $action, $type, $obj, $callbacks, $webapp_ID, $priority, $err, $recur);
+		
+		if ($this->usingRealtime() and 
+			is_object($retr))
+		{
+			return $retr->next();
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * 
 	 * 
@@ -1072,21 +1085,18 @@ class QuickBooks_API
 			{
 				$callbacks = array( $callbacks );
 			}
-			
-			//	We *can't* always map them, because they might change between 
-			//	when we queue the request up, and when we actually send the 
-			//	request to be processed. 
-			//	
-			//$err = '';
-			//$this->_mapApplicationIDs($request, $obj, $this->_source->supportsApplicationIDs(), $err);
+
+			// 
+			if ($this->usingRealtime())
+			{
+				//$callbacks = array_merge($callbacks, array( array( $this, '__realtimeCallback' ) ));
+				$callbacks = array( array( $this, '__realtimeCallback' ) );
+			}
 			
 			if (is_null($priority))
 			{
 				$priority = $this->_guessPriority($action);
 			}
-			
-			// bla?
-			//$webapp_ID = '';
 			
 			if ($this->_source->understandsObjects())
 			{
@@ -1109,6 +1119,13 @@ class QuickBooks_API
 				//exit;
 				
 				$tmp = $this->_source->handleQBXML($method, $action, $type, $qbxml, $callbacks, $webapp_ID, $priority, $err, $recur);
+				
+				// Real-time support
+				if ($this->usingRealtime())
+				{
+					return $this->_realtime_return['object'];
+				}
+				
 				return $tmp;
 			}
 			else if ($this->_source->understandsArrays())
@@ -1152,13 +1169,12 @@ class QuickBooks_API
 				$callbacks = array( $callbacks );
 			}
 			
-			// Handle the mapped ApplicationID (QUICKBOOKS_OBJECT_APPLICATIONID) fields
-			//	We can *always* map IDs at this point, as this happens within the API, not the Source
-			//$err = '';
-			//$this->_mapApplicationIDs($request, $obj, $this->_source->supportsApplicationIDs(), $err);
-			
-			//print($obj->asQBXML($request));
-			//exit;
+			// 
+			if ($this->usingRealtime())
+			{
+				//$callbacks = array_merge($callbacks, array( array( $this, '__realtimeCallback' ) ));
+				$callbacks = array( array( $this, '__realtimeCallback' ) );
+			}
 			
 			if (!strlen($webapp_ID))
 			{
@@ -1196,6 +1212,12 @@ class QuickBooks_API
 				$err = 'Source does not understand any available input method!';
 				return false;
 			}
+			
+			// Real-time support
+			if ($this->usingRealtime())
+			{
+				return $this->_realtime_return['object'];
+			}			
 			
 			// @TODO support real-time and callback checking...? 
 			return $tmp;
@@ -1423,7 +1445,7 @@ class QuickBooks_API
 		$obj = new QuickBooks_Object_Customer( array( 'FullName' => $name ) );
 		
 		$err = '';
-		return $this->_doQuery(__METHOD__, QUICKBOOKS_QUERY_CUSTOMER, QUICKBOOKS_OBJECT_CUSTOMER, $obj, $callback, $webapp_ID, $priority, $err, $recur);
+		return $this->_doGet(__METHOD__, QUICKBOOKS_QUERY_CUSTOMER, QUICKBOOKS_OBJECT_CUSTOMER, $obj, $callback, $webapp_ID, $priority, $err, $recur);
 	}
 	
 	/**

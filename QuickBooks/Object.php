@@ -33,17 +33,17 @@ QuickBooks_Loader::load('/QuickBooks/Cast.php');
 /**
  * QuickBooks XML parser option - preserve empty XML elements
  */
-define('QUICKBOOKS_OBJECT_XML_PRESERVE', QUICKBOOKS_XML_XML_PRESERVE);
+define('QUICKBOOKS_OBJECT_XML_PRESERVE', QuickBooks_XML::XML_PRESERVE);
 
 /**
  * QuickBooks XML parser option - drop empty XML elements
  */
-define('QUICKBOOKS_OBJECT_XML_DROP', QUICKBOOKS_XML_XML_DROP);
+define('QUICKBOOKS_OBJECT_XML_DROP', QuickBooks_XML::XML_DROP);
 
 /**
  * QuickBooks XML parser option - compress /> empty XML elements
  */
-define('QUICKBOOKS_OBJECT_XML_COMPRESS', QUICKBOOKS_XML_XML_COMPRESS);
+define('QUICKBOOKS_OBJECT_XML_COMPRESS', QuickBooks_XML::XML_COMPRESS);
 
 /**
  * Base class for QuickBooks objects
@@ -640,7 +640,7 @@ abstract class QuickBooks_Object
 	//public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_XML_XML_DROP, $indent = "\t", $root = null)
 	public function asQBXML($request, $version = null, $locale = null, $root = null)
 	{
-		$todo_for_empty_elements = QUICKBOOKS_XML_XML_DROP;
+		$todo_for_empty_elements = QuickBooks_XML::XML_DROP;
 		$indent = "\t";
 		
 		// Call any cleanup routines
@@ -783,7 +783,7 @@ abstract class QuickBooks_Object
 				
 				$Node = $this->asXML($request, null, $tmp);
 				
-				return $Node->asXML(QUICKBOOKS_XML_XML_PRESERVE, $indent);
+				return $Node->asXML(QuickBooks_XML::XML_PRESERVE, $indent);
 			}
 			else
 			{
@@ -824,7 +824,7 @@ abstract class QuickBooks_Object
 	{
 		if (is_object($XML))
 		{
-			$paths = $XML->asArray(QUICKBOOKS_XML_ARRAY_PATHS);
+			$paths = $XML->asArray(QuickBooks_XML::ARRAY_PATHS);
 			foreach ($paths as $path => $value)
 			{
 				$newpath = implode(' ', array_slice(explode(' ', $path), 1));

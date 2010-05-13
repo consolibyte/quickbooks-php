@@ -618,10 +618,6 @@ class QuickBooks_API_Source_OE extends QuickBooks_API_Source
 			'*' => array( '', 'QuickBooks_Callbacks_API_Callbacks::RawQBXMLResponse' ), 
 			);
 		
-		//print($qbxml);
-		//print('CALL THIS: QuickBooks_Server_API_Callbacks::' . $action . 'Response');
-		//print($response);
-		
 		// Parse the response and check for errors so we can update the queue
 		
 		// First, check for protocol level errors (bad login, bad session ticket, etc.)
@@ -680,21 +676,11 @@ class QuickBooks_API_Source_OE extends QuickBooks_API_Source
 			//return false;
 		}
 		
+		//print('calling: '); print_r($map[$action]);
+		
 		// Call the response handler  
 		// @todo What if an error occurs? Are we still calling the handler?
 		return QuickBooks_Callbacks::callResponseHandler($this->_driver, $map, $action, $this->_user, $action, $uniqueid, $extra, $err, $last_action_time, $last_actionident_time, $response, $qb_identifiers);
-		
-		//exit;
-		/*
-		if ($recur)
-		{
-			return false;
-		}
-		else
-		{
-			return $this->_driver->queueEnqueue($this->_user, $action, $uniqueid, true, $priority, $extra, $qbxml);
-		}
-		*/
 	}
 	
 	/**

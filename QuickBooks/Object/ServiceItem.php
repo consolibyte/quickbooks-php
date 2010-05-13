@@ -303,6 +303,11 @@ class QuickBooks_Object_ServiceItem extends QuickBooks_Object
 		return $this->set('SalesOrPurchase AccountRef FullName', $name);
 	}
 	
+	public function setAccountFullName($name)
+	{
+		return $this->set('SalesOrPurchase AccountRef FullName', $name);
+	}
+	
 	/**
 	 * (Sales OR Purchase)
 	 */

@@ -445,7 +445,7 @@ class QuickBooks_Callbacks_API_Callbacks
 	 * @param array $idents
 	 * @return boolean
 	 */
-	public static function _doQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_options = array())
+	protected static function _doQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_options = array())
 	{
 		// This is stuff we'll be passing to the callback handler functions/methods
 		// $action

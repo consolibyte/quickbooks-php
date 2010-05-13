@@ -165,6 +165,16 @@ class QuickBooks_Object_Invoice_InvoiceLine extends QuickBooks_Object
 		return $this->get('Rate');
 	}
 	
+	public function getAmount()
+	{
+		if ($amount = $this->get('Amount'))
+		{
+			return $this->get('Amount');
+		}
+		
+		return $this->get('Rate') * $this->get('Quantity');
+	}
+	
 	public function setRatePercent($percent)
 	{
 		return $this->set('RatePercent', (float) $percent);
