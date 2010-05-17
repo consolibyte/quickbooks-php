@@ -704,7 +704,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			$table = $sqlObject->table();
 			$multipart = array( "ListID" => $Node->getChildDataAt("ListDeletedRet ListID") );
 			
-			//Check the delete mode and if desired, just flag them rather than remove the rows.
+			// Check the delete mode and if desired, just flag them rather than remove the rows.
 			// @todo Fix this wrong delete flag field
 			if (isset($config['delete']) and 
 				$config['delete'] == QuickBooks_Server_SQL::DELETE_FLAG)
@@ -717,19 +717,22 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL_SQL . $table, $sqlObject, array( $multipart ));
 				
 				// Now Delete/Flag all the children.
-				QuickBooks_Callbacks_SQL_Callbacks::_DeleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $config, true, true);
+				$deleted = array();
+				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $deleted, $config, true, true);
 			}
 			else
 			{
-				//Otherwise we actually remove the rows.
+				// Otherwise we actually remove the rows.
 				$Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, array( $multipart ));
 				$sqlObject->set("ListID", $Node->getChildDataAt("ListDeletedRet ListID"));
 				
-				//Now Delete/Flag all the children.
-				QuickBooks_Callbacks_SQL_Callbacks::_DeleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $config, true, true);
+				// Now Delete/Flag all the children.
+				$deleted = array();
+				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $deleted, $config, true, true);
 			}
 			
 		}
+		
 		return true;
 	}
 	
@@ -824,16 +827,20 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$sqlObject->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
 				$sqlObject->set("TxnID", $Node->getChildDataAt("TxnDeletedRet TxnID"));
 				$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $sqlObject, array( $multipart ));
-				//Now Delete/Flag all the children.
-				QuickBooks_Callbacks_SQL_Callbacks::_DeleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $config, true, true);
+				
+				// Now Delete/Flag all the children.
+				$deleted = array();
+				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $deleted, $config, true, true);
 			}
 			else
 			{
 				//Otherwise we actually remove the rows.
 				$Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, array( $multipart ));
 				$sqlObject->set("TxnID", $Node->getChildDataAt("TxnDeletedRet TxnID"));
-				//Now Delete/Flag all the children.
-				QuickBooks_Callbacks_SQL_Callbacks::_DeleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $config, true, true);
+				
+				// Now Delete/Flag all the children.
+				$deleted = array();
+				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $deleted, $config, true, true);
 			}
 			
 		}
@@ -846,7 +853,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	public static function ListDelRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-		$ID = str_replace($extra['objectType'], "", $ID);
+		$ID = str_replace($extra['objectType'], '', $ID);
+		
 		if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . strtolower($extra['objectType']), array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
 		{
 			$Object = new QuickBooks_SQL_Object(null, null, $arr);
@@ -861,10 +869,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					</ListDelRq>
 				</QBXMLMsgsRq>
 			</QBXML>';
-			//mail("grgisme@gmail.com", "April15ListDelSuccess", $extra['objectType']."\n\n".$ID."\n\n".$xml);
+			
 			return $xml;
 		}
-		//mail("grgisme@gmail.com", "April15ListDelFailure", $extra['objectType']."\n\n".$ID."\n\n".QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . strtolower($extra['objectType']));
 		
 		return ''; 
 	}
@@ -913,7 +920,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
 				
 				// Now Delete/Flag all the children
-				QuickBooks_Callbacks_SQL_Callbacks::_DeleteChildren($table, $user, $action, $ID, $object, $extra, $config, true, true);
+				$deleted = array();
+				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $object, $extra, $deleted, $config, true, true);
 			}
 			else
 			{
@@ -922,7 +930,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$object->set('ListID', $Node->getChildDataAt('ListDelRs ListID'));
 				
 				// Now Delete/Flag all the children
-				QuickBooks_Callbacks_SQL_Callbacks::_DeleteChildren($table, $user, $action, $ID, $object, $extra, $config, true, true);
+				$deleted = array();
+				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $object, $extra, $deleted, $config, true, true);
 			}
 		}
 		
@@ -1004,15 +1013,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			
 			$xml = '';
 			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<TxnDelRq requestID="' . $requestID . '">
-						<TxnDelType>' . $extra['objectType'] . '</TxnDelType>
-						<TxnID>' . $Object->get('TxnID') . '</TxnID>
-					</TxnDelRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+				<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
+				<QBXML>
+					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+						<TxnDelRq requestID="' . $requestID . '">
+							<TxnDelType>' . $extra['objectType'] . '</TxnDelType>
+							<TxnID>' . $Object->get('TxnID') . '</TxnID>
+						</TxnDelRq>
+					</QBXMLMsgsRq>
+				</QBXML>';
+				
 			return $xml;
 		}
 		
@@ -1051,7 +1061,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			//Check the delete mode and if desired, just flag them rather than remove the rows.
 			// @todo Fix this wrong delete flag field
 			
-			mysql_query("UPDATE qb_bill SET qbsql_to_delete = 0, qbsql_flag_deleted = 1 WHERE TxnID = '" . $Node->getChildDataAt('TxnDelRs TxnID') . "' LIMIT 1");
+			//mysql_query("UPDATE qb_bill SET qbsql_to_delete = 0, qbsql_flag_deleted = 1 WHERE TxnID = '" . $Node->getChildDataAt('TxnDelRs TxnID') . "' LIMIT 1");
 			
 			/*
 			if (isset($config['delete']) and
@@ -4059,11 +4069,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					
 				$map = preg_replace("/.*".$Node->name()." /", "", $map);
 				
+				/*
 				if (strtolower($Node->name()) == "estimatelinemod" and 
 					strpos($map, 'TxnLineID') !== false )
 				{
 					$value = -1;
 				}
+				*/
 				
 				if (false === strpos($map, ' '))
 				{
@@ -5637,6 +5649,43 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		}		
 		
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_NONINVENTORYITEM, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
+
+	public static function ItemInventoryImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$xml = '';
+		
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="' . $version . '"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+					<ItemInventoryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
+						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
+					</ItemInventoryQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>';
+			
+		return $xml;
+	}
+	
+	public static function ItemInventoryImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		
+		$Root = $Doc->getRoot();
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryQueryRs');
+
+		if (!isset($extra['is_query_response']))
+		{
+			$extra['is_import_response'] = true;
+		}		
+		
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_INVENTORYITEM, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
 	public static function ItemSalesTaxImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
@@ -7438,7 +7487,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	protected static function _updateRelatives($table, $user, $action, $ID, $object, $extra, $callback_config = array(), $deleteDataExt = false, $fullDelete = false)
 	{
 		$update_relatives_map = array(
-		
 			'account' => array(
 				'id_field' => 'ListID',
 				'relatives' => array(
@@ -7938,7 +7986,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * @todo Make the Boolean TRUE value used in the QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG field a constant, in case the sql driver used uses something other than 1 and 0.
 	 * @todo Change all ListID and TxnID instances to use the QuickBooks_Utilities::actionToKey function.
 	 */
-	protected static function _DeleteChildren($table, $user, $action, $ID, $object, $extra, $callback_config = array(), $deleteDataExt = false, $fullDelete = false)
+	protected static function _deleteChildren($table, $user, $action, $ID, $object, $extra, &$deleted, $callback_config = array(), $deleteDataExt = false, $fullDelete = false)
 	{
 		$delete_children_map = array(
 			'account' => array(
@@ -8046,11 +8094,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 												)
 											),
 											
-					"customer" => array( "id_field" => "ListID",
-												"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-											),
+			'customer' => array( 
+				'id_field' => 'ListID',
+				'children' => array(
+					'dataext' => 'Entity_ListID'
+					)
+				),
 											
 					"deposit" => array( "id_field" => "TxnID",
 												 "children" => array(
@@ -8066,15 +8115,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 													)
 												),
 												
-					"estimate" => array( "id_field" => "TxnID",
-										"children" => array(
-												"estimate_estimateline" => "Estimate_TxnID", 
-												"estimate_estimatelinegroup" => "Estimate_TxnID", 
-												"estimate_estimatelinegroup_estimateline" => "Estimate_TxnID",
-												"invoice_linkedtxn" => "FromTxnID",
-													"dataext" => "Entity_ListID"
-												)
-									),
+			'estimate' => array(
+				'id_field' => 'TxnID',
+				'children' => array(
+					'estimate_estimateline' => 'Estimate_TxnID', 
+					'estimate_estimatelinegroup' => 'Estimate_TxnID', 
+					'estimate_estimatelinegroup_estimateline' => 'Estimate_TxnID',
+					//'invoice_linkedtxn" => "FromTxnID",
+					'dataext' => 'Entity_ListID'
+				)
+			),
 									
 					"estimate_estimatelinegroup" => array( "id_field" => "TxnLineID",
 												"children" => array(
@@ -8352,56 +8402,91 @@ class QuickBooks_Callbacks_SQL_Callbacks
 									)
 					
 				);
-				
+		
+		// This stores a list of TxnLineID => qbsql_id mappings that were deleted
+		$deleted = array();
+		
+		// 	
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 				
-			if (!isset($delete_children_map[$table]))
+		if (!isset($delete_children_map[$table]))
+		{
+			return false;
+		}
+		else
+		{
+			$recordIdentifier = $object->get($delete_children_map[$table]['id_field']);
+			foreach ($delete_children_map[$table]['children'] as $key => $value)
 			{
-				return false;
-			}
-			else
-			{
-				$recordIdentifier = $object->get($delete_children_map[$table]['id_field']);
-				foreach($delete_children_map[$table]['children'] as $key => $value)
+				//print('key: '); print_r($key); print("\n");
+				//print('value: '); print_r($value); print("\n");
+				
+				// @todo Fix this wrong delete flag field
+				// If we are actually deleting an entire element, then we need to check the delete mode and if desired, just flag them rather than remove the rows.
+				if ($fullDelete and
+					isset($callback_config['delete']) and 
+					$callback_config['delete'] == QuickBooks_Server_SQL::DELETE_FLAG)
 				{
-					// @todo Fix this wrong delete flag field
-					//If we are actually deleting an entire element, then we need to check the delete mode and if desired, just flag them rather than remove the rows.
-					if ($fullDelete and
-						isset($callback_config['delete']) and 
-						$callback_config['delete'] == QuickBooks_Server_SQL::DELETE_FLAG)
+					if ($key == 'dataext' and !$deleteDataExt)
 					{
-						if ($key == 'dataext' and !$deleteDataExt)
-						{
-							continue;
-						}
-						
-						$multipart = array( $value => $recordIdentifier );
-						$tmpSQLObject = new QuickBooks_SQL_Object($table, null);
-						
-						//@todo Make the Boolean TRUE value used in the QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG field a constant,
-						//      in case the sql driver used uses something other than 1 and 0.
-						$tmpSQLObject->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
-						$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $tmpSQLObject, array( $multipart ));
+						continue;
 					}
-					else
+					
+					$multipart = array( $value => $recordIdentifier );
+					$tmpSQLObject = new QuickBooks_SQL_Object($table, null);
+					
+					// Get a list of stuff that's going to be deleted
+					$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart );
+					foreach ($list as $arr)
 					{
-						//Otherwise we actually remove the rows.
-						if ($key == 'dataext' and
-							!$deleteDataExt)
+						if (isset($arr[QUICKBOOKS_TXNLINEID]))
 						{
-							continue;
+							$deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID];
 						}
-						
-						$multipart = array( $value => $recordIdentifier );
+					}
+					
+					// @todo Make the Boolean TRUE value used in the QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG field a constant,
+					//      in case the sql driver used uses something other than 1 and 0.
+					$tmpSQLObject->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
+					$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $tmpSQLObject, array( $multipart ));
+				}
+				else
+				{
+					// Otherwise we actually remove the rows.
+					if ($key == 'dataext' and
+						!$deleteDataExt)
+					{
+						continue;
+					}
+					
+					$multipart = array( $value => $recordIdentifier );
+					
+					//print_r($multipart);
+					
+					// Get a list of stuff that's going to be deleted
+					$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart );
+					foreach ($list as $arr)
+					{
+						if (isset($arr[QUICKBOOKS_TXNLINEID]))
+						{
+							$deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID];
+						}
+					}
+					
+					//print_r($list);
+					//print("\n\n\n");
+					
+					$Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, array( $multipart ));
+					if (isset($extra['IsAddResponse']) or isset($extra['is_add_response']))
+					{
+						$multipart = array( $value => $extra['AddResponse_OldKey'] );
 						$Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, array( $multipart ));
-						if (isset($extra['IsAddResponse']) or isset($extra['is_add_response']))
-						{
-							$multipart = array( $value => $extra['AddResponse_OldKey'] );
-							$Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, array( $multipart ));
-						}
 					}
 				}
 			}
+		}
+		
+		//print_r($deleted);
 	}
 	
 	/**
@@ -8409,7 +8494,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
-	protected static function _QueryResponse($type, $List, $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = array())
+	protected static function _queryResponse($type, $List, $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = array())
 	{
 		$type = strtolower($type);
 			
@@ -8422,6 +8507,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			// If this object is a base-level object, we're going to keep track of it's TxnID or 
 			//	ListID so that we can use it to tie child elements back to this base-level 
 			//	element (about 20 or 30 lines below this is that code)
+			
+			// Child records get deleted, and then re-created with the same 
+			//	qbsql_id values so that we don't muck up people's associated 
+			//	records. This keeps track of deleted records so we can re-create 
+			//	the records with the same qbsql_id values. 
+			$deleted = array();
 			
 			// Convert the XML nodes to objects, based on the XML to SQL schema definitions in Schema.php
 			$objects = array();
@@ -8856,9 +8947,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							$actually_do_updaterelatives = false;
 						}
 						
+						$deleted = array();
 						if ($actually_do_deletechildren)
 						{
-							QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $object, $extra);
+							QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $object, $extra, $deleted);
 						}
 						
 						if ($actually_do_updaterelatives)
@@ -8870,6 +8962,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						{
 							// This handles setting certain special fields (SortOrder, booleans, etc.)
 							QuickBooks_Callbacks_SQL_Callbacks::_massageUpdateRecord($table, $object);
+							
+							//print('applying updates, and with these deletes: ');
+							//print_r($deleted);
 							
 							$Driver->log('Applying UPDATE: ' . $table . ': ' . print_r($object, true) . ', where: ' . print_r($multipart, true), null, QUICKBOOKS_LOG_DEVELOP);
 							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
@@ -8901,12 +8996,21 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					}
 					else
 					{
-						// The record *DOES NOT exist in the current table, so just INSERT it
+						// The record *DOES NOT* exist in the current table, so just INSERT it
 						
 						if ($callback_config['mode'] != QuickBooks_Server_SQL::MODE_WRITEONLY)
 						{
 							// This handles setting certain special fields (booleans, SortOrder, etc.)
 							QuickBooks_Callbacks_SQL_Callbacks::_massageInsertRecord($table, $object);
+							
+							// This makes sure that re-inserted child records are re-inserted with the 
+							//	same qbsql_id values
+							if (isset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)]))
+							{
+								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)]);
+							}
+							
+							//print_r($object);
 							
 							$Driver->log('Applying INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
 							$Driver->insert(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object);
@@ -10491,7 +10595,7 @@ $last_actionident_time = time();
 $version = '8.0';
 $locale = 'US';
 $callback_config = array(
-	'mode' => QUICKBOOKS_SERVER_SQL_MODE_READWRITE,
+	'mode' => QuickBooks_Server_SQL::MODE_READWRITE,
 	);
 
 $xml = '<?xml version="1.0" ?>
@@ -10502,7 +10606,7 @@ $xml = '<?xml version="1.0" ?>
 	<TxnID>27-1249916009</TxnID>
 	<TimeCreated>2009-08-10T10:53:29-05:00</TimeCreated>
 	<TimeModified>2009-08-10T12:30:39-05:00</TimeModified>
-	<EditSequence>1279920532</EditSequence>
+	<EditSequence>' . time() . '</EditSequence>
 	<TxnNumber>10</TxnNumber>
 	<CustomerRef>
 		<ListID>80000011-1249904409</ListID>
@@ -10646,9 +10750,10 @@ $xml = '<?xml version="1.0" ?>
 </QBXML>';
 $idents = array();
 
-$tmp = QuickBooks_Driver_Singleton::getInstance('pgsql://postgres:password@localhost/quickbooks', array(), array(), QUICKBOOKS_LOG_DEVELOP);
+$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
 print(QuickBooks_Callbacks_SQL_Callbacks::InvoiceImportResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config));
 */
+
 
 /*
 $xml = '<?xml version="1.0" ?>

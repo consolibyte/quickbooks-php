@@ -328,7 +328,15 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
 	 */
 	protected function _fetch($res)
 	{
-		return mssql_fetch_assoc($res);
+		$arr = mssql_fetch_assoc($res);
+		
+		// What's going on with this...? 
+		foreach ($arr as $key => $value)
+		{
+			$arr[$key] = trim($value);
+		}
+		
+		return $arr;
 	}
 	
 	/**
@@ -391,10 +399,10 @@ select * from (
 	 * @param string $errmsg
 	 * @return resource
 	 */
-	public function query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null)
+	/*public function query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null)
 	{
 		return $this->_query($sql, $errnum, $errmsg, $offset, $limit);
-	}
+	}*/
 	
 	/**
 	 * Tell the number of rows the last run query affected
@@ -716,43 +724,8 @@ select * from (
 		}
 	}
 	
-	/*protected function _generateCreateTable($name, $arr, $primary = array(), $keys = array())
+	protected function _fields($table)
 	{
-		$arr_sql = parent::_generateCreateTable($name, $arr, $primary, $keys);
-		
-		if (is_array($primary) and count($primary) == 1)
-		{
-			$primary = current($primary);
-		}
-		
-		if (is_array($primary))
-		{
-			//ALTER TABLE  `quickbooks_ident` ADD PRIMARY KEY (  `qb_action` ,  `unique_id` )
-			$arr_sql[] = 'ALTER TABLE ' . $name . ' ADD PRIMARY KEY ( ' . implode(', ', $primary) . ' ) ';
-		}
-		else if ($primary)
-		{
-			$arr_sql[] = 'ALTER TABLE ' . $name . ' ADD PRIMARY KEY(' . $primary . '); ';
-			
-			if ($arr[$primary][0] == QUICKBOOKS_DRIVER_SQL_SERIAL)
-			{
-				// add the auto-increment
-				$arr_sql[] = 'ALTER TABLE ' . $name . ' CHANGE ' . $primary . ' ' . $primary . ' INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;';
-			}
-		}
-		
-		foreach ($keys as $key)
-		{
-			if (is_array($key))		// compound key
-			{
-				$arr_sql[] = 'ALTER TABLE ' . $name . ' ADD INDEX(' . implode(', ', $key) . ');';
-			}
-			else
-			{
-				$arr_sql[] = 'ALTER TABLE ' . $name . ' ADD INDEX(' . $key . ');';
-			}
-		}
-		
-		return $arr_sql;
-	}*/
+		return array();
+	}
 }

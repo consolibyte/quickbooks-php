@@ -371,10 +371,10 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	 * @param string $errmsg
 	 * @return resource
 	 */
-	public function query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null)
+	/*public function query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null)
 	{
 		return $this->_query($sql, $errnum, $errmsg, $offset, $limit);
-	}
+	}*/
 	
 	/**
 	 * Tell the number of rows the last run query affected

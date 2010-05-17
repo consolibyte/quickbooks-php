@@ -199,6 +199,18 @@ define('QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE', 'connection');
 define('QUICKBOOKS_DRIVER_SQL_FIELD_ID', 'qbsql_id');
 
 /**
+ * 
+ * @var string
+ */
+define('QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID', 'qbsql_username_id');
+
+/**
+ * 
+ * @var string
+ */
+define('QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID', 'qbsql_external_id');
+
+/**
  * Default SQL field to keep track of when records were first pushed into the database
  * 
  * @var string
@@ -2141,7 +2153,27 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $errmsg
 	 * @return resource
 	 */
-	public abstract function query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null);
+	public function query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null, $vars = array())
+	{
+		if (is_array($vars) 
+			and count($vars))
+		{
+			foreach ($vars as $key => $value)
+			{
+				$vars[$key] = $this->escape($value);
+			}
+			
+			array_unshift($vars, $sql);
+			$sql = call_user_func_array('sprintf', $vars);
+		}
+		
+		return $this->_query($sql, $errnum, $errmsg, $offset, $limit);
+	}
+	 
+	/**
+	 * @see QuickBooks_Driver_Sql::query()
+	 */ 
+	protected abstract function _query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null);
 	
 	/**
 	 * Escape a string
@@ -2996,6 +3028,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				
 				$idfield = array( QUICKBOOKS_DRIVER_SQL_SERIAL, null, 0 );
 				
+				$username_field = array( QUICKBOOKS_DRIVER_SQL_INTEGER, null, 'null' );
+				$external_field = array( QUICKBOOKS_DRIVER_SQL_INTEGER, null, 'null' );
+				
 				$ifield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Date/time when first inserted
 				$ufield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Date/time when updated (re-sync from QuickBooks)
 				$mfield = array( QUICKBOOKS_DRIVER_SQL_TIMESTAMP, null, 'null' );		// Date/time when modified by a user (needs to be pushed to QB)
@@ -3025,7 +3060,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				
 				$fields = $table[1];
 				
-				$fields = array_merge( array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $idfield ), $fields );
+				$prepend = array(
+					QUICKBOOKS_DRIVER_SQL_FIELD_ID => $idfield,
+					QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID => $username_field, 
+					QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID => $external_field, 
+					);
+				
+				$fields = array_merge( $prepend, $fields );
 				
 				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_DISCOVER] = $ifield;
 				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC] = $ufield;

@@ -4,8 +4,8 @@
  * Schema mapping methods for mapping XML schemas to SQL schemas, and vice-versa
  * 
  * * THANKS! *
- * Extra special thanks go out to Garrett at Space Coast IC for putting gobs of time and effort 
- * into completing this schema for a project for his company.  
+ * Extra special thanks go out to Garrett at Space Coast IC for putting gobs of 
+ * time and effort into completing this schema for a project for his company.  
  * 
  * @author Keith Palmer <keith@consolibyte.com>, Garrett <grgisme@gmail.com>
  * @license LICENSE.txt 

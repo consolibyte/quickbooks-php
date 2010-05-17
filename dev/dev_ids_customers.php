@@ -21,26 +21,7 @@ $IPP->application($Context, 'be9mh7qd5');
 
 
 
-$Service = new QuickBooks_IPP_Service_Customer(); 
-$Customer = new QuickBooks_IPP_Object_Customer();
-$Customer->setName('DID IT REPRODUCE #' . mt_rand(0, 100));
-$Customer->setGivenName('Keith');
-$Customer->setFamilyName('Palmer');
-if ($ID = $Service->add($Context, $realmID, $Customer))
-{
-	print('Customer added with ID #' . $ID . "\n");
-}
-else
-{
-	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
-}
-
-exit;
-
-
-
-
-
+/*
 $Service = new QuickBooks_IPP_Service_Check();
 $Check = new QuickBooks_IPP_Object_Check();
 
@@ -63,6 +44,11 @@ $Check->addLine($Line);
 
 if ($ID = $Service->add($Context, $realmID, $Check))
 {
+	print($Service->lastRequest($Context));
+	print("\n\n\n\n\n");
+	print($Service->lastResponse($Context));
+	print("\n\n\n\n\n");
+	
 	print('Check added with ID #' . $ID . "\n");
 }
 else
@@ -71,6 +57,36 @@ else
 }
 
 exit;
+*/
+
+
+
+
+
+
+$Service = new QuickBooks_IPP_Service_Customer(); 
+$Customer = new QuickBooks_IPP_Object_Customer();
+$Customer->setName('LETS BREAK STUFF! #' . mt_rand(0, 100));
+$Customer->setGivenName('Keith');
+$Customer->setFamilyName('Palmer');
+if ($ID = $Service->add($Context, $realmID, $Customer))
+{
+	print($Service->lastRequest($Context));
+	print("\n\n\n\n\n");
+	print($Service->lastResponse($Context));
+	print("\n\n\n\n\n");
+	
+	print('Customer added with ID #' . $ID . "\n");
+}
+else
+{
+	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
+}
+
+exit;
+
+
+
 
 
 
