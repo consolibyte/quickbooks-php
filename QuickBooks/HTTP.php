@@ -54,6 +54,8 @@ class QuickBooks_HTTP
 	
 	protected $_last_request;
 	
+	protected $_last_duration;
+	
 	protected $_errnum;
 	
 	protected $_errmsg;
@@ -103,6 +105,10 @@ class QuickBooks_HTTP
 		
 		$this->_request_headers = array();
 		$this->_return_headers = false;
+		
+		$this->_last_request = null;
+		$this->_last_response = null;
+		$this->_last_duration = 0.0;
 	}
 	
 	/**
@@ -326,6 +332,15 @@ class QuickBooks_HTTP
 	{
 		return $this->_last_request;
 	}
+
+	/**
+	 * 
+	 *
+	 */
+	public function lastDuration()
+	{
+		return $this->_last_duration;
+	}
 	
 	/**
 	 * Set an error message
@@ -399,6 +414,8 @@ class QuickBooks_HTTP
 	 */
 	protected function _request($method)
 	{
+		$start = microtime(true);
+		
 		if (function_exists('curl_init'))
 		{
 			$this->_log('Using CURL to send request!', QUICKBOOKS_LOG_DEVELOP);
@@ -414,6 +431,9 @@ class QuickBooks_HTTP
 		{
 			$this->_setError($errnum, $errmsg);
 		}
+		
+		// Calculate and set how long the last HTTP request/response took to make
+		$this->_last_duration = microtime(true) - $start;
 		
 		return $return;
 	}

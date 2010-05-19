@@ -18,14 +18,28 @@ $IPP->application($Context, 'be9mh7qd5');
 
 //$IPP->useIDSParser(false);
 
-$Service = new QuickBooks_IPP_Service_Report_ProfitAndLoss();
+//$Service = new QuickBooks_IPP_Service_Report_ProfitAndLoss();
+$Service = new QuickBooks_IPP_Service_Report_TopCustomersBySales();
+
 $Report = $Service->report($Context, $realmID);
+
+print_r($Service->lastDebug($Context));
+
+//print_r($Report);
 
 //print_r($Report->getData());
 //print_r($Report->getData()->getDataRow(0));
 
-for ($i = 0; $i < 3; $i++)
+print("\n\n");
+print('report has [' . $Report->getColumnCount() . '] columns and [' . $Report->getRowCount() . '] rows' . "\n\n");
+
+for ($i = 0; $i < $Report->getRowCount(); $i++)
 {
-	print($Report->getData()->getDataRow($i)->getColData(0) . '   ' . $Report->getData()->getDataRow($i)->getColData(1) . "\n");
+	for ($j = 0; $j < $Report->getColumnCount(); $j++)
+	{
+		print(str_pad($Report->getData()->getDataRow($i)->getColumnData($j), 25));
+	}
+	
+	print("\r\n");
 }
 

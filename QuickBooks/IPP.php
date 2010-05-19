@@ -133,6 +133,7 @@ class QuickBooks_IPP
 	
 	protected $_last_request;
 	protected $_last_response;
+	protected $_last_debug;
 	
 	protected $_masking;
 	
@@ -193,7 +194,9 @@ class QuickBooks_IPP
 		$this->_errtext = '';
 		$this->_errdetail = '';
 		
-		
+		$this->_last_request = null;
+		$this->_last_response = null;
+		$this->_last_debug = array();
 	}
 	
 	public function authenticate($username, $password, $token)
@@ -542,6 +545,8 @@ class QuickBooks_IPP
 			return $data;
 		}
 		
+		$start = microtime(true);
+		
 		$Parser = new QuickBooks_IPP_Parser();
 		
 		$xml_errnum = null;
@@ -552,6 +557,8 @@ class QuickBooks_IPP
 		
 		// Try to parse the responses into QuickBooks_IPP_Object_* classes
 		$parsed = $Parser->parseIDS($data, $optype, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+		
+		$this->_setLastDebug(__CLASS__, array( 'ids_parser_duration' => microtime(true) - $start ));
 		
 		if ($xml_errnum != QuickBooks_XML::ERROR_OK)
 		{
@@ -751,8 +758,10 @@ class QuickBooks_IPP
 			$return = $HTTP->GET();
 		}
 		
-		$this->_last_request = $HTTP->lastRequest();
-		$this->_last_response = $HTTP->lastResponse();
+		$this->_setLastRequestResponse($HTTP->lastRequest(), $HTTP->lastResponse());
+		$this->_setLastDebug(__CLASS__, array( 'http_request_response_duration' => $HTTP->lastDuration() ));
+		//$this->_last_request = $HTTP->lastRequest();
+		//$this->_last_response = $HTTP->lastResponse();
 		
 		// 
 		$this->_log($HTTP->getLog(), QUICKBOOKS_LOG_DEBUG);
@@ -791,7 +800,12 @@ class QuickBooks_IPP
 	{
 		return $this->_last_request;
 	}
-
+	
+	public function lastDebug()
+	{
+		return $this->_last_debug;
+	}
+	
 	/**
 	 * Get the error number of the last error that occured
 	 * 
@@ -857,5 +871,22 @@ class QuickBooks_IPP
 		$this->_errcode = $errcode;
 		$this->_errtext = $errtext;
 		$this->_errdetail = $errdetail;
-	}	
+	}
+	
+	protected function _setLastRequestResponse($request, $response)
+	{
+		$this->_last_request = $request;
+		$this->_last_response = $response;
+	}
+	
+	protected function _setLastDebug($class, $arr)
+	{
+		$existing = array();
+		if (isset($this->_last_debug[$class]))
+		{
+			$existing = $this->_last_debug[$class];
+		}
+		
+		$this->_last_debug[$class] = array_merge($existing, $arr);
+	}
 }

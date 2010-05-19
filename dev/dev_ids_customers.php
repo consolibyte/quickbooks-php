@@ -19,7 +19,28 @@ $IPP->application($Context, 'be9mh7qd5');
 //$IPP->useIDSParser(false);
 
 
+$Service = new QuickBooks_IPP_Service_Report_ProfitAndLoss(); 
 
+//$str = $Service->findAll($Context, $realmID);
+$str = $Service->report($Context, $realmID);
+print_r($str);
+//print('{{{' . $str . '}}}');
+
+exit;
+
+
+
+
+
+
+
+foreach ($Service->findAll($Context, $realmID) as $Account)
+{
+	print_r($Account);
+	exit;
+}
+
+exit;
 
 /*
 $Service = new QuickBooks_IPP_Service_Check();

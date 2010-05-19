@@ -36,13 +36,29 @@ class QuickBooks_IPP_IDS
 	
 	const VERSION_LATEST = 'v2';
 	
+	
+	const RESOURCE_REPORT_ACCOUNTBALANCES = 'ReportAccountBalances';
+	
+	const RESOURCE_REPORT_BALANCESHEET = 'ReportBalanceSheet';
+	
+	const RESOURCE_REPORT_CUSTOMERSWHOOWEME = 'ReportCustomersWhoOweMe';
+	
+	const RESOURCE_REPORT_INCOMEBREAKDOWN = 'ReportIncomeBreakdown';
+	
 	const RESOURCE_REPORT_PROFITANDLOSS = 'ReportProfitAndLoss';
+	
+	const RESOURCE_REPORT_SALESSUMMARY = 'ReportSalesSummary';
+	
+	const RESOURCE_REPORT_TOPCUSTOMERSBYSALES = 'ReportTopCustomersBySales';
+	
 	
 	const RESOURCE_ACCOUNT = 'Account';
 	
 	const RESOURCE_BILL = 'Bill';
 	
 	const RESOURCE_BILLPAYMENT = 'BillPayment';
+	
+	const RESOURCE_BILLPAYMENTCREDITCARD = 'BillPaymentCreditCard';
 	
 	const RESOURCE_CHECK = 'Check';
 	

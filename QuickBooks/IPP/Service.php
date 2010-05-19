@@ -28,6 +28,12 @@ abstract class QuickBooks_IPP_Service
 	protected $_last_response;
 	
 	/**
+	 * 
+	 * @var unknown_type
+	 */
+	protected $_last_debug;
+	
+	/**
 	 * The last error code
 	 * @var string
 	 */
@@ -52,6 +58,10 @@ abstract class QuickBooks_IPP_Service
 	public function __construct()
 	{
 		$this->_errcode = QuickBooks_IPP::ERROR_OK;
+		
+		$this->_last_request = null;
+		$this->_last_response = null;
+		$this->_last_debug = array();
 	}
 	
 	protected function _report($Context, $realmID, $resource, $xml = '')
@@ -67,6 +77,7 @@ abstract class QuickBooks_IPP_Service
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_REPORT, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
 		
 		return $return;
 	}
@@ -90,6 +101,7 @@ abstract class QuickBooks_IPP_Service
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
 		
 		if (count($return))
 		{
@@ -143,6 +155,7 @@ abstract class QuickBooks_IPP_Service
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
 		
 		return $return;
 	}
@@ -199,6 +212,7 @@ abstract class QuickBooks_IPP_Service
 		// Send the data to IPP 
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_ADD, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
 		
 		if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
 		{
@@ -242,6 +256,7 @@ abstract class QuickBooks_IPP_Service
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
 		
 		if (count($return))
 		{
@@ -262,6 +277,11 @@ abstract class QuickBooks_IPP_Service
 	{
 		$this->_last_request = $request;
 		$this->_last_response = $response;
+	}
+	
+	protected function _setLastDebug($debug)
+	{
+		$this->_last_debug = $debug;
 	}
 	
 	/**
@@ -295,7 +315,17 @@ abstract class QuickBooks_IPP_Service
 		
 		return $this->_last_response;
 	}
-
+	
+	public function lastDebug($Context = null)
+	{
+		if ($Context)
+		{
+			return $Context->lastDebug();
+		}
+		
+		return $this->_last_debug;
+	}
+	
 	/**
 	 * Get the error number of the last error that occured
 	 * 

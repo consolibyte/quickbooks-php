@@ -9,6 +9,7 @@ class QuickBooks_IPP_Object
 		$this->_data = array();
 	}
 	
+	/*
 	public function getID()
 	{
 		return $this->__call('getId', array());
@@ -18,18 +19,28 @@ class QuickBooks_IPP_Object
 	{
 		return $this->__call('setId', $ID);
 	}
+	*/
 	
 	public function get($field)
 	{
+		/*
 		if (isset($this->_data[$field]))
 		{
 			return $this->_data[$field];
 		}
+		*/
+		
+		$args = func_get_args();
+		array_shift($args);
+		
+		return $this->__call('get' . $field, $args);
 	}
 	
 	public function set($field, $value)
 	{
-		$this->_data[$field] = $value;
+		//$this->_data[$field] = $value;
+		
+		return $this->__call('set' . $field, array( $value ));
 	}
 	
 	public function remove($field)
