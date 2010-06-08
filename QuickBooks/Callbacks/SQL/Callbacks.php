@@ -185,74 +185,17 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		//	things that are older than NOW()
 		$NOW = date('Y-m-d H:i:s');
 		
+		
+		
 		// Objects that need to be *ADDED* to QuickBooks
 		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
 			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
 		{
-			// Check if any objects need to be pushed back to QuickBooks 
-			foreach ($sql_add as $action => $priority)
-			{
-				$object = QuickBooks_Utilities::actionToObject($action);
-				
-				$table_and_field = array();
-				
-				// Convert to table and primary key, select qbsql id
-				QuickBooks_SQL_Schema::mapPrimaryKey($object, QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $table_and_field);  
-				
-				$Driver->log('Searching table: ' . print_r($table_and_field, true) . ' for ADDED records.', null, QUICKBOOKS_LOG_DEBUG);
-				
-				//print_r($table_and_field);
-				
-				if (!empty($table_and_field[0]) and 
-					!empty($table_and_field[1]))
-				{
-					// For ADDs
-					// 	- Do not sync if to_skip = 1
-					//	- Do not sync if to_delete = 1
-					//	- Do not sync if last_errnum is not empty		@TODO Implement this
-					
-					$sql = "
-						SELECT 
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . ", 
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER . "
-						FROM 
-							" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0] . " 
-						WHERE 
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY . " IS NOT NULL AND 
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC . " IS NULL AND 
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_TO_SKIP . " != 1 AND 
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_TO_DELETE . " != 1 AND 
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_DELETED . " != 1 AND 
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY . " <= '" . $NOW . "' ";
-					//		" . QUICKBOOKS_DRIVER_SQL_FLAG_TO_VOID . " != 1 ";
-							
-					$errnum = 0;
-					$errmsg = '';
-					$res = $Driver->query($sql, $errnum, $errmsg);
-					while ($arr = $Driver->fetch($res))
-					{
-						if (strlen($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER]))
-						{
-							continue;
-						}
-						
-						$Driver->queueEnqueue($user, $action, $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, $priority);
-						
-						$actions[] = $action;
-						
-						// Make the record as having been ->enqueue()d
-						$errnum = 0;
-						$errmsg = '';
-						$Driver->query("
-							UPDATE 
-								" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0] . " 
-							SET 
-								" . QUICKBOOKS_DRIVER_SQL_FIELD_ENQUEUE_TIME . " = '" . date('Y-m-d H:i:s') . "'
-							WHERE 
-								" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . " = " . $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], $errnum, $errmsg);
-					}
-				}
-			}
+			// $list = 
+			die('Keith, you need to fix this');
+			
+			
+			$Driver->queueEnqueue($user, $action, $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, $priority);
 		}
 		
 		// Objects that need to be *MODIFIED* within QuickBooks
