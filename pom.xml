@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion> 
+
+  <parent>
+    <groupId>com.intuit.code.build</groupId>
+    <artifactId>cic-parent-pom</artifactId>
+    <version>1.0.5</version>
+  </parent>
+
+  <groupId>com.intuit.code</groupId>
+  <artifactId>quickbooks-php-devkit</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>${project.artifactId} - ${project.version}</name>
+  <url>https://code.intuit.com/sf/projects/php_devkit</url>
+  <description>
+    QuickBooks integration support for PHP 5.x+
+  </description>
+
+  <scm>
+    <connection>scm:svn:https://code.intuit.com/svn/repos/php_devkit/trunk</connection>
+    <developerConnection>scm:svn:https://code.intuit.com/svn/repos/php_devkit/trunk</developerConnection>
+    <url>https://code.intuit.com/integration/viewvc/viewvc.cgi/?root=php_devkit&amp;system=exsy1003</url>
+  </scm>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-5</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>single</goal></goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/project.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
