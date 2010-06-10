@@ -1,21 +1,15 @@
 <?php
 
-		# Usage:
-		# # Grab the SAML Response from the post and decode it
-		# $response = $_POST["SAMLResponse"];
-		# $base64DecodedSaml = base64_decode($response);
-		# # Select and open the private key from the filesystem
-		# $keyFile = 'ipp.key';
-		# $fp=fopen($keyFile,"r");
-		# $privKey=fread($fp,8192);
-		# # Construct IppAuth and get values back
-		# $ipp = new ippAuth($base64DecodedSaml,$privKey);
-		# echo "<br />targetUrl: ".$ipp->targetUrl;
-		# echo "<br />ticket: ".$ipp->ticket;
-		# echo "<br />authId: ".$ipp->authId;
+/**
+ * SAML Gateway for Intuit Partner Platform integrations
+ * 
+ * @author Keith Palmer <keith@ConsoliBYTE.com>
+ * 
+ * @package QuickBooks
+ * @subpackage IPP
+ */
 
 /*
-
 function federator_callback($ticket, $target_url, $auth_id)
 {
 	
@@ -24,12 +18,19 @@ function federator_callback($ticket, $target_url, $auth_id)
 	return FALSE;		// return FALSE to handle whatever happens next yourself
 }
 
-
 if you don't provide a callback function, a default callback will be used 
 which stores the data in the database defined by $dsn, and then forwards 
 the user on to the target URL.
 
 */
+
+if (!defined('QUICKBOOKS_IPP_FEDERATOR_MAX_SAML_LENGTH'))
+{
+	/**
+	 * 
+	 */
+	define('QUICKBOOKS_IPP_FEDERATOR_MAX_SAML_LENGTH', 8200);
+}
 
 // 
 QuickBooks_Loader::load('/QuickBooks/XML/Parser.php');
@@ -39,17 +40,33 @@ QuickBooks_Loader::load('/QuickBooks/Callbacks.php');
 
 /**
  * 
- * @author kpalmer
+ * 
  *
  */
 class QuickBooks_IPP_Federator
 {
+	/**
+	 * SAML authorization
+	 * @var string
+	 */
 	const TYPE_SAML = 'saml';
 	
+	/**
+	 * OAuth authorization
+	 * @var string
+	 */
 	const TYPE_OAUTH = 'oauth';
 	
+	/**
+	 * No error, everything is OK
+	 * @var integer
+	 */
 	const ERROR_OK = QUICKBOOKS_ERROR_OK;
 	
+	/**
+	 * Error indicating there's a problem with the key file
+	 * @var integer
+	 */
 	const ERROR_KEY = 1;
 	
 	const ERROR_XML = 2;
@@ -154,6 +171,14 @@ class QuickBooks_IPP_Federator
 			{
 				return false;
 			}
+		}
+		
+		if (strlen($SAML) > QUICKBOOKS_IPP_FEDERATOR_MAX_SAML_LENGTH)
+		{
+			$msg = 'SAML request seems unusually large, at ' . strlen($SAML) . ' bytes.';
+			$this->_log($msg);
+			$this->_setError(QuickBooks_IPP_Federator::ERROR_SAML, $msg);
+			return false;
 		}
 		
 		if (false === strpos($SAML, '<'))

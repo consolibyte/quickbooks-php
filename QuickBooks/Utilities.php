@@ -157,6 +157,10 @@ class QuickBooks_Utilities
 	 */
 	static public function extractRequestID($xml)
 	{
+		$look = array(
+			
+			);
+		
 		if (false !== ($start = strpos($xml, ' requestID="')) and 
 			false !== ($end = strpos($xml, '"', $start + 12)))
 		{

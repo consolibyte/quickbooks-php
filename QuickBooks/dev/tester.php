@@ -1,8 +1,8 @@
 <?php
 
 //$url = 'http://localhost-nysmith/focus/qb/server.php';
-$url = 'https://www.mycsk.com/quickbooks/server.php';
-$username = 'vpbt';
+$url = 'https://staging.evente.com:9443/evente_v2_0/services/QuickBooksWebService';
+$username = 'quickbooks';
 $password = 'password';
 
 if (function_exists('date_default_timezone_set'))

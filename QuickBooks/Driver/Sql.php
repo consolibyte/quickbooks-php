@@ -2722,6 +2722,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		//print_r($arr_sql);
 		//exit;
 		
+		/*
 		// Support for specialized integrator stuff
 		if ($config['quickbooks_integrator_enabled'])
 		{
@@ -2995,6 +2996,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			
 			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
 		}
+		*/
 		
 		// Support for mirroring the QuickBooks database in an SQL database
 		if ($config['quickbooks_sql_enabled'])

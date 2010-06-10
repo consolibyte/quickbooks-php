@@ -5,7 +5,7 @@
  * 
  * IMPORTANT: This example works in conjunction with the 
  * 	docs/example_ipp_saml.php example. It *will not work* unless you have been 
- *	forward to this file by the QuickBooks_IPP_Federator class (because you 
+ *	forwarded to this file by the QuickBooks_IPP_Federator class (because you 
  * 	won't have the IPP ticket neccessary to connect to IPP)!
  *
  * @author Keith Palmer <keith@ConsoliBYTE.com>

@@ -98,6 +98,7 @@ class QuickBooks_SQL_Schema
 		// This is a list of field names that will *always* be assigned 
 		//	indexes, regardless of what table they are in
 		$always_index_fields = array(
+			'qbsql_external_id', 
 			'Name', 
 			'FullName', 
 			'EntityType', 
@@ -107,15 +108,15 @@ class QuickBooks_SQL_Schema
 			'IsActive', 
 			'RefNumber', 
 			//'Address_City', 
-			'Address_State', 
+			//'Address_State', 
 			'Address_Country', 
 			//'Address_PostalCode', 
 			//'BillAddress_City', 
-			'BillAddress_State', 
+			//'BillAddress_State', 
 			'BillAddress_Country', 
 			//'BillAddress_PostalCode', 
 			//'ShipAddress_City', 
-			'ShipAddress_State', 
+			//'ShipAddress_State', 
 			'ShipAddress_Country', 
 			//'ShipAddress_PostalCode', 
 			'CompanyName', 

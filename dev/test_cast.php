@@ -9,6 +9,7 @@ $arr = array(
 	'Test of some UTF8 chars- Á, Æ, Ë, ¾, Õ, ä, ß, ú, ñ',
 	'Test & Then Some',  
 	'Test of already encoded &amp; data.', 
+	'Tapio Törmänen',
 	);
 
 $fields = array(
@@ -43,7 +44,7 @@ foreach ($fields as $field)
 {	
 	foreach ($arr as $key => $value)
 	{
-		$cast = QuickBooks_Cast::cast(QUICKBOOKS_ADD_CUSTOMER, str_replace('_', ' ', $field), $value);
+		$cast = QuickBooks_Cast::cast(QUICKBOOKS_ADD_CUSTOMER, str_replace('_', ' ', $field), ucfirst($value));
 
 		print("\t" . $field . ': {' . $cast . '} (length: ' . strlen($cast) . ')' . "\n");
 	}

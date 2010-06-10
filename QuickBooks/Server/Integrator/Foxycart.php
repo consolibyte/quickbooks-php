@@ -483,8 +483,8 @@ class QuickBooks_Server_Integrator_FoxyCart extends QuickBooks_Server_Integrator
 					}
 				}
 				
-				print_r($tables);
-				exit;
+				//print_r($tables);
+				//exit;
 				
 				// Parenting is disabled... 
 				$fix_parentings = array(

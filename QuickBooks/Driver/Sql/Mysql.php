@@ -285,7 +285,12 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 			$this->_conn = mysql_connect($host, $user, $pass, $new_link, $client_flags) or die('host: ' . $host . ', user: ' . $user . ', pass: XXXX, mysql_error(): ' . mysql_error());
 		}
 			
+		// Select the correct database
 		$tmp = mysql_select_db($db, $this->_conn) or die(mysql_error());
+		
+		// Support UTF-8 chars
+		mysql_query("SET NAMES 'utf8'", $this->_conn);
+		
 		return $tmp;
 	}
 	
