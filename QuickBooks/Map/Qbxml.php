@@ -181,4 +181,19 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 
 		return $list;
 	}
+
+	public function mods($mods = array(), $mark_as_queued = true)
+	{
+		return array();
+	}
+	
+	public function imports($imports = array())
+	{
+		return array();
+	}
+	
+	public function queries($queries = array())
+	{
+		return array();
+	}
 }

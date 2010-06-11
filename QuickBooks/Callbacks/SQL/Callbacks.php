@@ -38,6 +38,11 @@
 //require_once '../../../QuickBooks.php';
 
 /**
+ * Mapper for qbXML schema
+ */
+QuickBooks_Loader::load('/QuickBooks/Map/Qbxml.php');
+
+/**
  * Schema class (provides mapping for XML schema to SQL schema)
  */
 QuickBooks_Loader::load('/QuickBooks/SQL/Schema.php');
@@ -69,6 +74,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		// Driver instance
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
+		
+		// Map instance 
+		$Map = new QuickBooks_Map_Qbxml($Driver);
 		
 		// Mode (read-onlyl, write-only, read/write)
 		$mode = $callback_config['mode'];
@@ -191,11 +199,19 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
 			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
 		{
-			// $list = 
-			die('Keith, you need to fix this');
+			$mark_as_queued = true;
+			$map = $Map->adds($sql_add, $mark_as_queued);
 			
-			
-			$Driver->queueEnqueue($user, $action, $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, $priority);
+			// Go through each action in the returned map
+			foreach ($map as $action => $list)
+			{
+				// Go through each ID for each action
+				foreach ($list as $ID)
+				{
+					// Queue it up to be added to QuickBooks
+					$Driver->queueEnqueue($user, $action, $ID, true, $priority);
+				}
+			}
 		}
 		
 		// Objects that need to be *MODIFIED* within QuickBooks

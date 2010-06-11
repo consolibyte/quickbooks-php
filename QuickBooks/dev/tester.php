@@ -1,7 +1,7 @@
 <?php
 
 //$url = 'http://localhost-nysmith/focus/qb/server.php';
-$url = 'https://staging.evente.com:9443/evente_v2_0/services/QuickBooksWebService';
+$url = 'http://localhost:8888/QuickBooks/example_mysql_mirror.php';
 $username = 'quickbooks';
 $password = 'password';
 
@@ -26,17 +26,17 @@ $ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
 
 print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n");
 
-/*
-exit;
 
-$max = 25;
+//exit;
+
+$max = 1;
 for ($i = 0; $i < $max; $i++)
 {
 	print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
 }
 
 exit;
-*/
+
 
 $response = '<?xml version="1.0" ?>
 <QBXML>
