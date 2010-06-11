@@ -202,11 +202,15 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			$mark_as_queued = true;
 			$map = $Map->adds($sql_add, $mark_as_queued);
 			
+			$Driver->log('ADDS: ' . print_r($map, true));
+			
 			// Go through each action in the returned map
 			foreach ($map as $action => $list)
 			{
+				$Driver->log('Now doing: ' . $action . ', ' . print_r($list, true));
+			
 				// Go through each ID for each action
-				foreach ($list as $ID)
+				foreach ($list as $ID => $priority)
 				{
 					// Queue it up to be added to QuickBooks
 					$Driver->queueEnqueue($user, $action, $ID, true, $priority);

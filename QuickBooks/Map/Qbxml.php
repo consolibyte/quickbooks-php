@@ -109,9 +109,11 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 		$list = array();
 		
 		// Check if any objects need to be pushed back to QuickBooks 
-		foreach ($sql_add as $action)
+		foreach ($sql_add as $action => $priority)
 		{
 			$object = QuickBooks_Utilities::actionToObject($action);
+			
+			$Driver->log('Action is: ' . $action . ', object is: ' . $object);
 			
 			$table_and_field = array();
 			
@@ -144,6 +146,8 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						" . QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_DELETED . " != 1 AND 
 						" . QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY . " <= '" . $NOW . "' ";
 				//		" . QUICKBOOKS_DRIVER_SQL_FLAG_TO_VOID . " != 1 ";
+				
+				$Driver->log($sql);
 						
 				$errnum = 0;
 				$errmsg = '';
@@ -155,12 +159,12 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						continue;
 					}
 					
-					if (empty($list[$action]))
+					if (!isset($list[$action]))
 					{
 						$list[$action] = array();
 					}
 					
-					$list[$action][] = $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID];
+					$list[$action][$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID]] = $priority;
 					
 					if ($mark_as_queued)
 					{
