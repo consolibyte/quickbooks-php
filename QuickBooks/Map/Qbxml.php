@@ -45,10 +45,17 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						$arr[$table_and_field[1]] = $TxnID_or_ListID;
 					}
 					
+					$resync = true;
+					$discov = true;
+					
 					if ($errnum)
 					{
 						$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER] = $errnum;
 						$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE] = $errmsg;
+						
+						// Don't mark it as synced/discovered if there was an error
+						$resync = false;
+						$discov = false;
 					}
 					
 					$where = array(
@@ -58,7 +65,9 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 					$Driver->update(
 						QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0], 
 						$arr, 
-						$where);
+						$where, 
+						$resync, 
+						$discov);
 					
 					break;
 			}
