@@ -402,6 +402,38 @@ class QuickBooks_IPP
 		return true;
 	}
 	
+	public function getUserInfo($Context, $email = null, $udata = null)
+	{
+		$url = 'https://workplace.intuit.com/db/main';
+		$action = 'API_GetUserInfo';
+		$xml = '<qdbapi>
+   				<ticket>' . $Context->ticket() . '</ticket>
+   				<apptoken>' . $Context->token() . '</apptoken>';
+		
+		if ($email)
+		{
+			$xml .= '<email>' . htmlspecialchars($email) . '</email>';
+		}
+		
+		if ($udata)
+		{
+			$xml .= '<udata>' . htmlspecialchars($udata) . '</udata>';
+		}		
+		
+		$xml .= '
+			</qdbapi>';
+		
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
+		
+		if ($this->_hasErrors($response))
+		{
+			return false;
+		}
+		
+		// @todo Finish this so we actually return something
+		return null;
+	}
+	
 	public function sendInvitation($Context, $userid, $usertext, $udata = null)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
@@ -409,8 +441,8 @@ class QuickBooks_IPP
 		$xml = '<qdbapi>
 				<ticket>' . $Context->ticket() . '</ticket>
 				<apptoken>' . $Context->token() . '</apptoken>
-				<userid>' . $userid . '</userid>
-				<usertext>' . $usertext . '</usertext>';
+				<userid>' . htmlspecialchars($userid) . '</userid>
+				<usertext>' . htmlspecialchars($usertext) . '</usertext>';
 		
 		if ($udata)
 		{
