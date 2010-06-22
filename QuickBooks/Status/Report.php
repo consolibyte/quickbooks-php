@@ -238,7 +238,10 @@ class QuickBooks_Status_Report
 		
 		$do_restrict = count($restrict) > 0;
 		
-		foreach (QuickBooks_Utilities::listActions('*IMPORT*') as $action)
+		$actions = QuickBooks_Utilities::listActions('*IMPORT*');
+		//print_r($actions);
+		
+		foreach ($actions as $action)
 		{
 			$object = QuickBooks_Utilities::actionToObject($action);
 			
