@@ -8404,7 +8404,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					{
 						if (isset($arr[QUICKBOOKS_TXNLINEID]))
 						{
-							$deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID];
+							$deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = array( 
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], 
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID],
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] );
 						}
 					}
 					
@@ -8432,7 +8435,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					{
 						if (isset($arr[QUICKBOOKS_TXNLINEID]))
 						{
-							$deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID];
+							$deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = array(
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], 
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID], 
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID] );
 						}
 					}
 					
@@ -8968,9 +8974,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							
 							// This makes sure that re-inserted child records are re-inserted with the 
 							//	same qbsql_id values
-							if (isset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)]))
+							if (isset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)][0]))
 							{
-								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)]);
+								$tmp = $deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)];
+								
+								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
+								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);
+								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, $tmp[2]);
 							}
 							
 							//print_r($object);
