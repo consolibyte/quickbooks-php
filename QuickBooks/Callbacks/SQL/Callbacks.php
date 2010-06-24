@@ -8371,14 +8371,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		// 	
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-				
+		
 		if (!isset($delete_children_map[$table]))
 		{
 			return false;
 		}
 		else
 		{
-			$recordIdentifier = $object->get($delete_children_map[$table]['id_field']);
+			$TxnID_or_ListID = $object->get($delete_children_map[$table]['id_field']);
 			foreach ($delete_children_map[$table]['children'] as $key => $value)
 			{
 				//print('key: '); print_r($key); print("\n");
@@ -8395,8 +8395,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						continue;
 					}
 					
-					$multipart = array( $value => $recordIdentifier );
-					$tmpSQLObject = new QuickBooks_SQL_Object($table, null);
+					$multipart = array( $value => $TxnID_or_ListID );
+					$obj = new QuickBooks_SQL_Object($table, null);
 					
 					// Get a list of stuff that's going to be deleted
 					$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart );
@@ -8413,8 +8413,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					
 					// @todo Make the Boolean TRUE value used in the QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG field a constant,
 					//      in case the sql driver used uses something other than 1 and 0.
-					$tmpSQLObject->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
-					$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $tmpSQLObject, array( $multipart ));
+					$obj->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
+					$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $obj, array( $multipart ));
 				}
 				else
 				{
@@ -8425,11 +8425,15 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						continue;
 					}
 					
-					$multipart = array( $value => $recordIdentifier );
+					$multipart = array( $value => $TxnID_or_ListID );
 					
 					//print_r($multipart);
 					
+					// 
 					// Get a list of stuff that's going to be deleted
+					// 
+					
+					// These are things that have a permenent TxnID (they've been synced to QB before)
 					$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart );
 					foreach ($list as $arr)
 					{
@@ -8437,19 +8441,42 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						{
 							$deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = array(
 								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], 
-								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID], 
-								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID] );
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID],
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] );
+						}
+					}
+					
+					// These are things that were using a temporary TxnID, and now have a perm TxnID (it just got synced to QuickBooks)
+					if (isset($extra['is_add_response']))
+					{
+						$multipart_tmp = array( $value => $extra['AddResponse_OldKey'] );
+						$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart_tmp);
+						
+						foreach ($list as $arr)
+						{
+							if (isset($arr[QUICKBOOKS_TXNLINEID]))
+							{
+								$deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = array(
+									$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], 
+									$arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID],
+									$arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] );
+							}
 						}
 					}
 					
 					//print_r($list);
 					//print("\n\n\n");
 					
+					// This query deletes anything with an existing TxnID (i.e. this was UPDATEing QuickBooks)
 					$Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, array( $multipart ));
+					
+					// This query deletes anything with a new TxnID (i.e. the TxnID was temporary, and 
+					//	now it's permenent because it's been ADDed to QuickBooks, so we need to delete 
+					//	the child records with the temporary TxnID)
 					if (isset($extra['IsAddResponse']) or isset($extra['is_add_response']))
 					{
-						$multipart = array( $value => $extra['AddResponse_OldKey'] );
-						$Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, array( $multipart ));
+						$multipart_tmp = array( $value => $extra['AddResponse_OldKey'] );
+						$Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, array( $multipart_tmp ));
 					}
 				}
 			}
@@ -8916,10 +8943,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							$actually_do_updaterelatives = false;
 						}
 						
-						$deleted = array();
+						//$deleted = array();
 						if ($actually_do_deletechildren)
 						{
 							QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $object, $extra, $deleted);
+							$Driver->log('Immediately after deleting: ' . print_r($deleted, true));
 						}
 						
 						if ($actually_do_updaterelatives)
@@ -8972,6 +9000,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							// This handles setting certain special fields (booleans, SortOrder, etc.)
 							QuickBooks_Callbacks_SQL_Callbacks::_massageInsertRecord($table, $object);
 							
+							$Driver->log('DELETED: ' . print_r($deleted, true) . ', table: [' . $table . ']');
+							
 							// This makes sure that re-inserted child records are re-inserted with the 
 							//	same qbsql_id values
 							if (isset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)][0]))
@@ -8981,6 +9011,21 @@ class QuickBooks_Callbacks_SQL_Callbacks
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, $tmp[2]);
+							}
+							else if (isset($deleted[$table][QUICKBOOKS_TXNLINEID]) and 
+								count($deleted[$table][QUICKBOOKS_TXNLINEID]) > 0)
+							{
+								// We deleted some child from this table, and what we deleted *should* 
+								//	have been sent to QuickBooks and received from QuickBooks in the 
+								//	same order... so we should be able to just fetch the next deleted 
+								//	thing, and re-use that qbsql_id value
+								
+								reset($deleted[$table][QUICKBOOKS_TXNLINEID]);
+								$tmp = current($deleted[$table][QUICKBOOKS_TXNLINEID]);
+								
+								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
+								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);
+								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, $tmp[2]);								
 							}
 							
 							//print_r($object);
