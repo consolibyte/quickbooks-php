@@ -1,30 +1,33 @@
 <?php
 
 /**
+ * QuickBooks IPP class for communicating with the Intuit Partner Platform
+ * 
+ * @author Keith Palmer <keith@ConsoliBYTE.com>
  * 
  * @package QuickBooks
  * @subpackage IPP
  */
 
-// 
+// Load the HTTP request class
 QuickBooks_Loader::load('/QuickBooks/HTTP.php');
 
-// 
+// XML parser
 QuickBooks_Loader::load('/QuickBooks/XML.php');
 
-// 
+// Context element (holds application information)
 QuickBooks_Loader::load('/QuickBooks/IPP/Context.php');
 
-// 
+// IPP XML parser
 QuickBooks_Loader::load('/QuickBooks/IPP/Parser.php');
 
-// 
+// SAML federation of applications
 QuickBooks_Loader::load('/QuickBooks/IPP/Federator.php');
 
-// 
+// IDS (Intuit Data Services) base class
 QuickBooks_Loader::load('/QuickBooks/IPP/IDS.php');
 
-// 
+// Import all IDS service classes
 QuickBooks_Loader::import('/QuickBooks/IPP/Service');
 
 /**
@@ -34,6 +37,22 @@ QuickBooks_Loader::import('/QuickBooks/IPP/Service');
  */
 class QuickBooks_IPP
 {
+	const API_ADDRECORD = 'API_AddRecord';
+	
+	const API_GETBILLINGSTATUS = 'API_GetBillingStatus';
+	
+	const API_GETDBINFO = 'API_GetDBInfo';
+	
+	const API_GETUSERINFO = 'API_GetUserInfo';
+	
+	const API_GETUSERROLE = 'API_GetUserRole';
+	
+	const API_GETSCHEMA = 'API_GetSchema';
+	
+	/**
+	 * 
+	 * @var unknown_type
+	 */
 	const COOKIE = 'ippfedcookie';
 	
 	/**
@@ -199,6 +218,20 @@ class QuickBooks_IPP
 		$this->_last_debug = array();
 	}
 	
+	/**
+	 * Authenticate to the IPP web service
+	 *
+	 * IMPORTANT NOTE: 
+	 * Intuit disallows this method within live applications! You can use it to 
+	 * test your application, but when you go live you'll need to instead use 
+	 * a SAML gateway for single-sign-on authentication. Take a look at the 
+	 * QuickBooks_IPP_Federator class for a working SAML gateway.
+	 * 
+	 * @param string $username
+	 * @param string $password
+	 * @param string $token
+	 * @return boolean
+	 */
 	public function authenticate($username, $password, $token)
 	{
 		$this->_username = $username;
@@ -275,6 +308,12 @@ class QuickBooks_IPP
 		return $Context;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @deprecated 
+	 *
+	 */
 	public function cookies($glob_them_together = false)
 	{
 		if ($glob_them_together)
@@ -332,7 +371,52 @@ class QuickBooks_IPP
 		
 		return $this->_application;
 	}
+
+	protected function _IPP($Context, $url, $action, $xml)
+	{
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 		
+		if ($this->_hasErrors($response))
+		{
+			return false;
+		}
+		
+		$data = $this->_stripHTTPHeaders($response);
+		
+		// @todo Finish this so we actually return something
+		//return null;		
+		
+		$xml_errnum = null;
+		$xml_errmsg = null;
+		$err_code = null;
+		$err_desc = null;
+		$err_db = null;
+
+		$Parser = $this->_parserInstance();
+		
+		// Try to parse the response from IPP
+		$parsed = $Parser->parseIPP($data, $action, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+		
+		//$this->_setLastDebug(__CLASS__, array( 'ipp_parser_duration' => microtime(true) - $start ));
+		
+		if ($xml_errnum != QuickBooks_XML::ERROR_OK)
+		{
+			// Error parsing the returned XML?
+			$this->_setError(QuickBooks_IPP::ERROR_XML, 'XML parser said: ' . $xml_errnum . ': ' . $xml_errmsg);
+			
+			return false;
+		}
+		else if ($err_code != QuickBooks_IPP::ERROR_OK)
+		{
+			// Some other IPP error
+			$this->_setError($err_code, $err_desc, 'Database error code: ' . $err_db);
+			
+			return false;
+		}
+
+		return $parsed;
+	}
+	
 	public function getIDSRealm($Context)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
@@ -402,10 +486,30 @@ class QuickBooks_IPP
 		return true;
 	}
 	
+	public function getUserRoles($Context, $userid, $udata = null)
+	{
+		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$action = QuickBooks_IPP::API_GETUSERROLE;
+		$xml = '<qdbapi>
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>
+				<userid>' . htmlspecialchars($userid) . '</userid>';
+		
+		if ($udata)
+		{
+			$xml .= '<udata>' . $udata . '</udata>';
+		}
+				
+		$xml .= '
+			</qdbapi>';
+			
+		return $this->_IPP($Context, $url, $action, $xml);
+	}
+	
 	public function getUserInfo($Context, $email = null, $udata = null)
 	{
 		$url = 'https://workplace.intuit.com/db/main';
-		$action = 'API_GetUserInfo';
+		$action = QuickBooks_IPP::API_GETUSERINFO;
 		$xml = '<qdbapi>
    				<ticket>' . $Context->ticket() . '</ticket>
    				<apptoken>' . $Context->token() . '</apptoken>';
@@ -423,15 +527,7 @@ class QuickBooks_IPP
 		$xml .= '
 			</qdbapi>';
 		
-		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
-		
-		if ($this->_hasErrors($response))
-		{
-			return false;
-		}
-		
-		// @todo Finish this so we actually return something
-		return null;
+		return $this->_IPP($Context, $url, $action, $xml);
 	}
 	
 	public function sendInvitation($Context, $userid, $usertext, $udata = null)
@@ -460,6 +556,25 @@ class QuickBooks_IPP
 		}
 		
 		return true;
+	}
+	
+	public function getDBInfo($Context, $udata = null)
+	{
+		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$action = QuickBooks_IPP::API_GETDBINFO;		
+		$xml = '<qdbapi>
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>';
+		
+		if ($udata)
+		{
+			$xml .= '<udata>' . $udata . '</udata>';
+		}
+				
+		$xml .= '
+			</qdbapi>';
+		
+		return $this->_IPP($Context, $url, $action, $xml);
 	}
 	
 	public function createTable($Context, $tname, $pnoun, $udata = null)
@@ -579,7 +694,8 @@ class QuickBooks_IPP
 		
 		$start = microtime(true);
 		
-		$Parser = new QuickBooks_IPP_Parser();
+		//$Parser = new QuickBooks_IPP_Parser();
+		$Parser = $this->_parserInstance();
 		
 		$xml_errnum = null;
 		$xml_errmsg = null;
@@ -650,6 +766,17 @@ class QuickBooks_IPP
 		}
 		
 		return null;
+	}
+	
+	protected function _parserInstance()
+	{
+		static $Parser = null;
+		if (is_null($Parser))
+		{
+			$Parser = new QuickBooks_IPP_Parser();
+		}
+		
+		return $Parser;
 	}
 	
 	/**
@@ -758,7 +885,7 @@ class QuickBooks_IPP
 		{
 			$headers['Content-Type'] = 'text/xml';
 			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $Context->token() . '",intuit-token="' . $Context->ticket() . '"';
-			//$headers['Cookie'] = $this->cookies(true);
+			$headers['Cookie'] = $this->cookies(true);
 		}
 		
 		$HTTP->setHeaders($headers);

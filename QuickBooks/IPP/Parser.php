@@ -29,6 +29,90 @@ class QuickBooks_IPP_Parser
 		
 	}
 	
+	public function parseIPP($xml, $method, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		// Initial to success
+		$xml_errnum = QuickBooks_XML::ERROR_OK;
+		$err_code = QuickBooks_IPP::ERROR_OK;
+		
+		// Try to parse the XML IDS response
+		$errnum = QuickBooks_XML::ERROR_OK;
+		$errmsg = null;
+		if ($Doc = $Parser->parse($errnum, $errmsg))
+		{
+			$Root = $Doc->getRoot();
+			
+			switch ($method)
+			{
+				case QuickBooks_IPP::API_GETUSERINFO:
+					return $this->_parseIPPGetUserInfo($Root);
+				case QuickBooks_IPP::API_GETUSERROLE:
+					return $this->_parseIPPGetUserRole($Root);
+				case QuickBooks_IPP::API_GETDBINFO:
+					return $this->_parseIPP_($Root);
+			}
+		}
+	}
+	
+	protected function _parseIPP_($Root)
+	{
+		$info = array();
+		
+		foreach ($Root->children() as $Node)
+		{
+			$name = $Node->name();
+			$data = $Node->data();
+			
+			if ($name == 'action' or
+				$name == 'errcode' or 
+				$name == 'errtext')
+			{
+				continue;
+			}
+			
+			$info[$name] = $data;
+		}
+		
+		return $info;
+	}
+	
+	protected function _parseIPPGetUserInfo($Root)
+	{
+		$Node = $Root->getChildAt('qdbapi/user');
+		
+		return new QuickBooks_IPP_User(
+			$Node->getAttribute('id'), 
+			$Node->getChildDataAt('user/email'),
+			$Node->getChildDataAt('user/firstName'), 
+			$Node->getChildDataAt('user/lastName'), 
+			$Node->getChildDataAt('user/login'), 
+			$Node->getChildDataAt('user/screenName'), 
+			$Node->getChildDataAt('user/isVerified'), 
+			$Node->getChildDataAt('user/externalAuth'), 
+			$Node->getChildDataAt('user/authid'));
+	}
+	
+	protected function _parseIPPGetUserRole($Root)
+	{
+		$Roles = $Root->getChildAt('qdbapi/user/roles');
+		$list = array();
+		
+		foreach ($Roles->children() as $Node)
+		{
+			$Node2 = $Node->getChildAt('role/access');
+			
+			$list[] = new QuickBooks_IPP_Role(
+				$Node->getAttribute('id'), 
+				$Node->getChildDataAt('role/name'), 
+				$Node2->getAttribute('id'), 
+				$Node2->data());
+		}
+		
+		return $list;
+	}
+	
 	public function parseIDS($xml, $optype, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);

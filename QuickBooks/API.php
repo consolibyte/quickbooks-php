@@ -1595,7 +1595,7 @@ class QuickBooks_API
 		return $this->_doAdd(__METHOD__, QUICKBOOKS_ADD_RECEIPTITEM, QUICKBOOKS_OBJECT_RECEIPTITEM, $obj, $callback, $webapp_ID, $priority, $err);
 	}
 
-	public function modReceiptItem($obj, $callback = null, $webapp_ID = null, $priority = null)
+	public function modifyReceiptItem($obj, $callback = null, $webapp_ID = null, $priority = null)
 	{
 		$err = '';
 		return $this->_doMod(__METHOD__, QUICKBOOKS_MOD_RECEIPTITEM, QUICKBOOKS_OBJECT_RECEIPTITEM, $obj, $callback, $webapp_ID, $priority, $err);

@@ -16,9 +16,17 @@ $IPP = new QuickBooks_IPP();
 $Context = $IPP->authenticate($username, $password, $token);
 $IPP->application('be9mh7qd5');
 
-$IPP->useDebugMode(true);
+//$IPP->useDebugMode(true);
 
 //print_r($IPP->sendInvitation($Context, 'keith@consolibyte.com'));
 
-print_r($IPP->getUserInfo($Context, 'keith@consolibyte.com'));
+//print_r($IPP->getAvailableCompanies($Context));
 
+$User = $IPP->getUserInfo($Context);
+print_r($User);
+
+$roles = $IPP->getUserRoles($Context, $User->getUserId());
+print_r($roles);
+
+$info = $IPP->getDBInfo($Context);
+print_r($info);
