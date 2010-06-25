@@ -283,6 +283,12 @@ class QuickBooks_Handlers
 	 */
 	protected function _defaults($config)
 	{
+		$url = '?';
+		if (isset($_SERVER['REQUEST_URI']))
+		{
+			$url = $_SERVER['REQUEST_URI'];
+		}
+		
 		$defaults = array(
 			'qb_company_file' => null,					// To force a specific company file to be used		
 			'qbwc_min_version' => null, 				// Minimum version of the QBWC that must be used to connect
@@ -292,7 +298,7 @@ class QuickBooks_Handlers
 			'qbwc_version_error_message' => null,  		// Not implemented...
 			'qbwc_interactive_url' => null, 			// Provide the URL for an interactive session to the QuickBooks Web Connector
 			'autoadd_missing_requestid' => true,  
-			'server_version' => 'PHP QuickBooks SOAP Server v' . QUICKBOOKS_PACKAGE_VERSION . ' at ' . $_SERVER['REQUEST_URI'],	// Server version string
+			'server_version' => 'PHP QuickBooks SOAP Server v' . QUICKBOOKS_PACKAGE_VERSION . ' at ' . $url,	// Server version string
 			'authenticate_dsn' => null, 				// If you want to use some custom authentication scheme (and not the quickbooks_user MySQL table) you can specify your own function here
 			'map_application_identifiers' => true, 		// Try to map web application IDs to QuickBooks ListIDs/TxnIDs
 			'allow_remote_addr' => array(), 

@@ -70,7 +70,7 @@ abstract class QuickBooks_API_Source
 		
 		if ($this->_debug)
 		{
-			print($message . QUICKBOOKS_CRLF);
+			print(date('Y-m-d H:i:s') . ': ' . $message . QUICKBOOKS_CRLF);
 		}
 		
 		if ($this->_driver)

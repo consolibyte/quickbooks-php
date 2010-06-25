@@ -8396,10 +8396,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					}
 					
 					$multipart = array( $value => $TxnID_or_ListID );
+					$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
 					$obj = new QuickBooks_SQL_Object($table, null);
 					
 					// Get a list of stuff that's going to be deleted
-					$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart );
+					$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart, $order );
 					foreach ($list as $arr)
 					{
 						if (isset($arr[QUICKBOOKS_TXNLINEID]))
@@ -9021,7 +9022,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 								//	thing, and re-use that qbsql_id value
 								
 								reset($deleted[$table][QUICKBOOKS_TXNLINEID]);
-								$tmp = current($deleted[$table][QUICKBOOKS_TXNLINEID]);
+								$tmp = array_shift($deleted[$table][QUICKBOOKS_TXNLINEID]); // current($deleted[$table][QUICKBOOKS_TXNLINEID]);
 								
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);

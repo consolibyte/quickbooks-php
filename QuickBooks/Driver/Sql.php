@@ -3245,7 +3245,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $table
 	 * @param array $restrict
 	 */
-	public function select($table, $restrict)
+	public function select($table, $restrict, $order = array())
 	{
 		$list = array();
 		
@@ -3264,9 +3264,23 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			$where = "";
 		}
 		
+		$orderby = "";
+		if (is_array($order) and 
+			count($order))
+		{
+			$orderby = array();
+			
+			foreach ($order as $field => $direction)
+			{
+				$orderby[] = " " . $field . " " . $direction;
+			}
+			
+			$orderby = implode(', ', $orderby);
+		}
+		
 		$errnum = 0;
 		$errmsg = '';
-		if ($res = $this->_query("SELECT * FROM " . $this->_escape($table) . " " . $where, $errnum, $errmsg))
+		if ($res = $this->_query("SELECT * FROM " . $this->_escape($table) . " " . $where . " " . $orderby, $errnum, $errmsg))
 		{
 			while ($arr = $this->_fetch($res))
 			{
