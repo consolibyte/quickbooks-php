@@ -51,12 +51,21 @@ class QuickBooks_IPP_Parser
 				case QuickBooks_IPP::API_GETUSERROLE:
 					return $this->_parseIPPGetUserRole($Root);
 				case QuickBooks_IPP::API_GETDBINFO:
-					return $this->_parseIPP_($Root);
+					return $this->_parseIPP_HashMap($Root);
+				case QuickBooks_IPP::API_GETDBVAR:
+					return $this->_parseIPP_NodeValue($Root, 'qdbapi/value');
 			}
 		}
+		
+		return false;
 	}
 	
-	protected function _parseIPP_($Root)
+	protected function _parseIPP_NodeValue($Root, $key)
+	{
+		return $Root->getChildDataAt($key);
+	}
+	
+	protected function _parseIPP_HashMap($Root)
 	{
 		$info = array();
 		

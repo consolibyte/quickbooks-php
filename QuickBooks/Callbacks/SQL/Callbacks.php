@@ -8427,6 +8427,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					}
 					
 					$multipart = array( $value => $TxnID_or_ListID );
+					$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
 					
 					//print_r($multipart);
 					
@@ -8435,7 +8436,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					// 
 					
 					// These are things that have a permenent TxnID (they've been synced to QB before)
-					$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart );
+					$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart, $order );
 					foreach ($list as $arr)
 					{
 						if (isset($arr[QUICKBOOKS_TXNLINEID]))
@@ -8451,7 +8452,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					if (isset($extra['is_add_response']))
 					{
 						$multipart_tmp = array( $value => $extra['AddResponse_OldKey'] );
-						$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart_tmp);
+						$list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart_tmp, $order);
 						
 						foreach ($list as $arr)
 						{

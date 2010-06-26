@@ -43,11 +43,15 @@ class QuickBooks_IPP
 	
 	const API_GETDBINFO = 'API_GetDBInfo';
 	
+	const API_GETDBVAR = 'API_GetDBVar';
+	
 	const API_GETUSERINFO = 'API_GetUserInfo';
 	
 	const API_GETUSERROLE = 'API_GetUserRole';
 	
 	const API_GETSCHEMA = 'API_GetSchema';
+	
+	const API_SETDBVAR = 'API_SetDBVar';
 	
 	/**
 	 * 
@@ -372,6 +376,11 @@ class QuickBooks_IPP
 		return $this->_application;
 	}
 
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	protected function _IPP($Context, $url, $action, $xml)
 	{
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
@@ -381,10 +390,18 @@ class QuickBooks_IPP
 			return false;
 		}
 		
-		$data = $this->_stripHTTPHeaders($response);
+		// These methods don't need a parsed response. If we've gotten this far, 
+		//	then we know there wasn't an API error, and we can just return TRUE 
+		//	because the request succeeded and there's no real meaningful data 
+		//	that we need to parse out and return in the response.
+		switch ($action)
+		{
+			case QuickBooks_IPP::API_SETDBVAR:
+				return true;
+		}
 		
-		// @todo Finish this so we actually return something
-		//return null;		
+		// Remove HTTP headers from response
+		$data = $this->_stripHTTPHeaders($response);
 		
 		$xml_errnum = null;
 		$xml_errmsg = null;
@@ -575,6 +592,47 @@ class QuickBooks_IPP
 			</qdbapi>';
 		
 		return $this->_IPP($Context, $url, $action, $xml);
+	}
+	
+	public function setDBVar($Context, $varname, $value, $udata = null)
+	{
+		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$action = QuickBooks_IPP::API_SETDBVAR;		
+		$xml = '<qdbapi>
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>
+				<varname>' . QuickBooks_XML::encode($varname) . '</varname>
+				<value>' . QuickBooks_XML::encode($value) . '</value>';
+		
+		if ($udata)
+		{
+			$xml .= '<udata>' . $udata . '</udata>';
+		}
+				
+		$xml .= '
+			</qdbapi>';
+		
+		return $this->_IPP($Context, $url, $action, $xml);
+	}
+	
+	public function getDBVar($Context, $varname, $udata = null)
+	{
+		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$action = QuickBooks_IPP::API_GETDBVAR;
+		$xml = '<qdbapi>
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>
+				<varname>' . QuickBooks_XML::encode($varname) . '</varname>';
+		
+		if ($udata)
+		{
+			$xml .= '<udata>' . $udata . '</udata>';
+		}
+				
+		$xml .= '
+			</qdbapi>';
+		
+		return $this->_IPP($Context, $url, $action, $xml);		
 	}
 	
 	public function createTable($Context, $tname, $pnoun, $udata = null)

@@ -23,9 +23,9 @@ QuickBooks_Loader::load('/QuickBooks/XML/Document.php');
 QuickBooks_Loader::load('/QuickBooks/XML/Parser.php');
 
 /**
- * This just extends the XML parser for compatability, use QuickBooks_XML_Parser instead!
+ * QuickBooks XML base class
  */
-class QuickBooks_XML extends QuickBooks_XML_Parser
+class QuickBooks_XML
 {
 	/**
 	 * Indicates an error *did not* occur
@@ -164,37 +164,6 @@ class QuickBooks_XML extends QuickBooks_XML_Parser
 	 * @var integer
 	 */
 	const XML_PRESERVE = 0;
-
-	/**
-	 * @deprecated		See QuickBooksXML::encode() instead
-	 */
-	static public function htmlspecialchars($string, $quote_style = ENT_COMPAT, $charset = 'ISO-8859-1', $double_encode = true)
-	{
-		/*
-		if (!$charset)
-		{
-			$charset = 'ISO-8859-1';
-		}
-		
-		if (version_compare(PHP_VERSION, '5.2.3', '>='))
-		{
-			return htmlspecialchars($string, $quote_style, $charset, $double_encode);
-		}
-		else
-		{
-			$string = htmlspecialchars($string, $quote_style, $charset);
-			
-			$fix = array(
-				'&amp;amp;' => '&amp;', 
-				'&amp;quot;' => '&quot;', 
-				);
-			
-			return str_replace(array_keys($fix), array_values($fix), $string);
-		}
-		*/
-		
-		return QuickBooks_XML::encode($str, true, $double_encode);
-	}
 	
 	/**
 	 * Extract the contents from a particular XML tag in an XML string
