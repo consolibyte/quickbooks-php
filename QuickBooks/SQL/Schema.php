@@ -61,7 +61,7 @@ class QuickBooks_SQL_Schema
 	 */
 	static public function mapSchemaToSQLDefinition($xml, &$tables)
 	{
-		$Parser = new QuickBooks_XML($xml);
+		$Parser = new QuickBooks_XML_Parser($xml);
 		
 		$errnum = 0;
 		$errmsg = '';
