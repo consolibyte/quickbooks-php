@@ -306,6 +306,19 @@ class QuickBooks_Status_Report
 						$record = $arr;
 					}
 					
+					if ($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER])
+					{
+						$details = QuickBooks_Status_Report::describe($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER], $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE]);
+					}
+					else if ($arr[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC] == $arr[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY])
+					{
+						$details = 'Synced successfully.';
+					}
+					else if ($arr[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY] > $arr[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC])
+					{
+						$details = 'Waiting to sync.';
+					}
+					
 					$report[$pretty][] = array(
 						$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], 
 						$this->_fetchSomeField($arr, array( 'ListID', 'TxnID' )),  
@@ -314,7 +327,7 @@ class QuickBooks_Status_Report
 						$this->_fetchSomeField($arr, array( 'Customer_FullName', 'Vendor_FullName' )),
 						$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER], 
 						$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE], 
-						QuickBooks_Status_Report::describe($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER], $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE]), 
+						$details, 
 						$arr[QUICKBOOKS_DRIVER_SQL_FIELD_DEQUEUE_TIME], 
 						$record,   
 						);
@@ -365,9 +378,11 @@ class QuickBooks_Status_Report
 		
 		switch ($mode)
 		{
-			case QuickBooks_Status_Report::MODE_MIRROR:
+			case QuickBooks_Status_Report::MODE_MIRROR_RECORDS:
+			case QuickBooks_Status_Report::MODE_MIRROR_ERRORS:	
 				return $this->_htmlForMirror($report, $skip_empties);
-			case QuickBooks_Status_Report::MODE_QUEUE:
+			case QuickBooks_Status_Report::MODE_QUEUE_RECORDS:
+			case QuickBooks_Status_Report::MODE_QUEUE_ERRORS:
 				return $this->_htmlForQueue($report);
 			default:
 				return '';
