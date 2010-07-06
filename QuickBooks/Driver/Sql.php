@@ -3275,7 +3275,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				$orderby[] = " " . $field . " " . $direction;
 			}
 			
-			$orderby = implode(', ', $orderby);
+			$orderby = " ORDER BY " . implode(', ', $orderby);
 		}
 		
 		$errnum = 0;
