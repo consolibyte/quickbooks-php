@@ -26,9 +26,13 @@ QuickBooks_Loader::load('/QuickBooks/SQL/Schema.php');
  */
 class QuickBooks_Status_Report
 {
-	const MODE_QUEUE = 'queue';
+	const MODE_QUEUE_ERRORS = 'queue-errors';
 	
-	const MODE_MIRROR = 'mirror';
+	const MODE_QUEUE_RECORDS = 'queue-records';
+	
+	const MODE_MIRROR_ERRORS = 'mirror-errors';
+	
+	const MODE_MIRROR_RECORDS = 'mirror-records';
 	
 	const STATUS_OK = 'OK';
 	
@@ -65,10 +69,12 @@ class QuickBooks_Status_Report
 		
 		switch ($mode)
 		{
-			case QuickBooks_Status_Report::MODE_QUEUE:
-				return $this->_createForQueue($user, $date_from, $date_to, $fetch_full_record, $restrict);
-			case QuickBooks_Status_Report::MODE_MIRROR:
-				return $this->_createForMirror($user, $date_from, $date_to, $fetch_full_record, $restrict);
+			case QuickBooks_Status_Report::MODE_QUEUE_ERRORS:
+			case QuickBooks_Status_Report::MODE_QUEUE_RECORDS:
+				return $this->_createForQueue($mode, $user, $date_from, $date_to, $fetch_full_record, $restrict);
+			case QuickBooks_Status_Report::MODE_MIRROR_ERRORS:
+			case QuickBooks_Status_Report::MODE_MIRROR_RECORDS:	
+				return $this->_createForMirror($mode, $user, $date_from, $date_to, $fetch_full_record, $restrict);
 			default:
 				return false;
 		}
@@ -171,7 +177,7 @@ class QuickBooks_Status_Report
 		
 	}
 	
-	protected function &_createForQueue($user, $date_from, $date_to, $fetch_full_record, $restrict)
+	protected function &_createForQueue($mode, $user, $date_from, $date_to, $fetch_full_record, $restrict)
 	{
 		$Driver = $this->_driver;
 		
@@ -230,7 +236,7 @@ class QuickBooks_Status_Report
 	 * 
 	 * 
 	 */
-	protected function &_createForMirror($user, $date_from, $date_to, $fetch_full_record, $restrict)
+	protected function &_createForMirror($mode, $user, $date_from, $date_to, $fetch_full_record, $restrict)
 	{
 		$Driver = $this->_driver;
 		
@@ -264,8 +270,16 @@ class QuickBooks_Status_Report
 						*
 					FROM 
 						" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0] . " 
-					WHERE 
-						LENGTH(" . QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER . ") > 0 ";
+					WHERE ";
+				
+				if ($mode == QuickBooks_Status_Report::MODE_MIRROR_ERRORS)
+				{
+					$sql .= " LENGTH(" . QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER . ") > 0 ";
+				}
+				else
+				{
+					$sql .= " 1 ";
+				}
 
 				if ($timestamp = strtotime($date_from) and 
 					$timestamp > 0)
@@ -278,6 +292,8 @@ class QuickBooks_Status_Report
 				{
 					$sql .= " AND TimeCreated <= '" . date('Y-m-d H:i:s', $timestamp) . "' ";
 				}
+				
+				$sql .= " ORDER BY qbsql_id DESC ";
 				
 				$errnum = 0;
 				$errmsg = '';
@@ -372,7 +388,7 @@ class QuickBooks_Status_Report
 		$html .= '			<td>Status</td>' . QUICKBOOKS_CRLF;
 		$html .= '			<td>Error Number</td>' . QUICKBOOKS_CRLF;
 		$html .= '			<td>Error Message</td>' . QUICKBOOKS_CRLF;
-		$html .= '			<td>Error Details</td>' . QUICKBOOKS_CRLF;
+		$html .= '			<td>Status Details</td>' . QUICKBOOKS_CRLF;
 		$html .= '			<td>Queued</td>' . QUICKBOOKS_CRLF;
 		$html .= '			<td>Processed</td>' . QUICKBOOKS_CRLF;
 		$html .= '		</tr>' . QUICKBOOKS_CRLF;
@@ -426,7 +442,7 @@ class QuickBooks_Status_Report
 			$html .= '			<td>Entity Name</td>' . QUICKBOOKS_CRLF;
 			$html .= '			<td>Error Number</td>' . QUICKBOOKS_CRLF;
 			$html .= '			<td>Error Message</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>Error Details</td>' . QUICKBOOKS_CRLF;
+			$html .= '			<td>Status Details</td>' . QUICKBOOKS_CRLF;
 			$html .= '			<td>Date/Time</td>' . QUICKBOOKS_CRLF;
 			$html .= '		</tr>' . QUICKBOOKS_CRLF;
 			$html .= '	</thead>' . QUICKBOOKS_CRLF;
