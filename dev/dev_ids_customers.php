@@ -18,91 +18,42 @@ $IPP->application($Context, 'be9mh7qd5');
 
 //$IPP->useIDSParser(false);
 
-
-$Service = new QuickBooks_IPP_Service_Report_ProfitAndLoss(); 
-
-//$str = $Service->findAll($Context, $realmID);
-$str = $Service->report($Context, $realmID);
-print_r($str);
-//print('{{{' . $str . '}}}');
-
-exit;
-
-
-
-
-
-
-
-foreach ($Service->findAll($Context, $realmID) as $Account)
-{
-	print_r($Account);
-	exit;
-}
-
-exit;
-
-/*
-$Service = new QuickBooks_IPP_Service_Check();
-$Check = new QuickBooks_IPP_Object_Check();
-
-$Header = new QuickBooks_IPP_Object_Header();
-$Header->setDocNumber('TEST-' . mt_rand(0, 100));
-$Header->setTxnDate('2010-03-05');
-//$Header->setStatus('Payable');
-//$Header->setBankAccountName('Liberty Bank');
-$Header->setEntityName('Test Vendor 1, LLC');
-$Header->setEntityType('Vendor');
-
-$Check->addHeader($Header);
-
-$Line = new QuickBooks_IPP_Object_Line();
-$Line->setDesc('Test line');
-$Line->setAmount(50);
-//$Line->setAccountName('Rent Expense');
-
-$Check->addLine($Line);
-
-if ($ID = $Service->add($Context, $realmID, $Check))
-{
-	print($Service->lastRequest($Context));
-	print("\n\n\n\n\n");
-	print($Service->lastResponse($Context));
-	print("\n\n\n\n\n");
-	
-	print('Check added with ID #' . $ID . "\n");
-}
-else
-{
-	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
-}
-
-exit;
-*/
-
-
-
-
-
+$name = 'LETS BREAK STUFF! #' . mt_rand(0, 1000);
 
 $Service = new QuickBooks_IPP_Service_Customer(); 
 $Customer = new QuickBooks_IPP_Object_Customer();
-$Customer->setName('LETS BREAK STUFF! #' . mt_rand(0, 100));
+$Customer->setName($name);
 $Customer->setGivenName('Keith');
 $Customer->setFamilyName('Palmer');
 if ($ID = $Service->add($Context, $realmID, $Customer))
 {
-	print($Service->lastRequest($Context));
-	print("\n\n\n\n\n");
-	print($Service->lastResponse($Context));
-	print("\n\n\n\n\n");
+	//print($Service->lastRequest($Context));
+	//print("\n\n\n\n\n");
+	//print($Service->lastResponse($Context));
+	//print("\n\n\n\n\n");
 	
-	print('Customer added with ID #' . $ID . "\n");
+	print('Customer added with Name: ' . $name . ', ID: ' . $ID . "\n");
 }
 else
 {
 	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
 }
+
+// Let's see if we can retrieve them by ID
+
+//$IPP->useIDSParser(false);
+
+//$ID = '{NG-23}';
+
+$Customer = $Service->findById($Context, $realmID, $ID);
+
+//print('----' . "\n");
+//print($Service->lastRequest() . "\n\n\n");
+//print('----' . "\n");
+//print($Service->lastResponse() . "\n\n\n");
+//print('----' . "\n");
+
+print('Retrieved customer: ' . $Customer->getName() . "\n");
 
 exit;
 

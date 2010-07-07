@@ -198,6 +198,7 @@ class QuickBooks_IPP_Parser
 						case 'Success':
 							
 							$checks = array(
+								'Success PartyRoleRef Id', 
 								'Success PartyRoleRef PartyReferenceId',
 								'Success ObjectRef Id',  
 								);

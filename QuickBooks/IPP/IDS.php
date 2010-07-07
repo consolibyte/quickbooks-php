@@ -113,6 +113,38 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_VENDORCREDIT = 'VendorCredit';
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	static public function resourceToKeyType($resource)
+	{
+		$txns = array(
+			QuickBooks_IPP_IDS::RESOURCE_BILL, 
+			QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENT,
+			QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENTCREDITCARD, 
+			QuickBooks_IPP_IDS::RESOURCE_CHECK,
+			QuickBooks_IPP_IDS::RESOURCE_CREDITMEMO,
+			QuickBooks_IPP_IDS::RESOURCE_ESTIMATE, 
+			QuickBooks_IPP_IDS::RESOURCE_INVOICE, 
+			QuickBooks_IPP_IDS::RESOURCE_ITEMRECEIPT,
+			QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY, 
+			QuickBooks_IPP_IDS::RESOURCE_PAYMENT, 
+			QuickBooks_IPP_IDS::RESOURCE_PURCHASEORDER, 
+			QuickBooks_IPP_IDS::RESOURCE_SALESORDER, 
+			QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, 
+			QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT,
+			);
+		
+		if (in_array($resource, $txns))
+		{
+			return 'TransactionId';
+		}
+		
+		return 'ListId';
+	}
+	
 	static public function parseIDType($str)
 	{
 		// @todo Add validation here so that it always returns the correct types (string/integer)

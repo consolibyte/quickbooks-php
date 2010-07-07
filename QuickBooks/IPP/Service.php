@@ -232,14 +232,9 @@ abstract class QuickBooks_IPP_Service
 	 * 
 	 * 
 	 */
-	protected function _findById($Context, $realmID, $resource, $IDType, $domain, $xml = '')
+	protected function _findById($Context, $realmID, $resource, $IDType, $xml = '')
 	{
 		$IPP = $Context->IPP();
-		
-		if (!$domain)
-		{
-			$domain = QuickBooks_IPP_IDS::DOMAIN_QB;
-		}
 		
 		if (!$xml)
 		{
@@ -248,9 +243,9 @@ abstract class QuickBooks_IPP_Service
 			$xml = '';
 			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
 			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
-			$xml .= '	<TransactionIdSet>' . QUICKBOOKS_CRLF;
+			$xml .= '	<' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
 			$xml .= '		<Id idDomain="' . $parse['domain'] . '">' . $parse['ID'] . '</Id>' . QUICKBOOKS_CRLF;
-			$xml .= '	</TransactionIdSet>' . QUICKBOOKS_CRLF;
+			$xml .= '	</' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
 			$xml .= '</' . $resource . 'Query>';
 		}
 		

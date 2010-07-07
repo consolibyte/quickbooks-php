@@ -464,7 +464,7 @@ class QuickBooks_Callbacks_API_Callbacks
 		$xml_errnum = 0;
 		$xml_errmsg = '';
 		
-		$Parser = new QuickBooks_XML($xml);
+		$Parser = new QuickBooks_XML_Parser($xml);
 		if ($Parser->validate($xml_errnum, $xml_errmsg) and 
 			$Doc = $Parser->parse($xml_errnum, $xml_errmsg))
 		{

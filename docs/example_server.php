@@ -277,9 +277,17 @@ if (!QuickBooks_Utilities::initialized($dsn))
 	//	// build the qbXML CustomerAddRq here
 	//	return $qbxml;
 	// 
-	// We're going to queue up a request to add a customer, just as a demo...
-	// 	NOTE: You would *never* want to do this in this file *unless* it's for 
-	// 	testing. See example_integration.php for more details!
+	// We're going to queue up a request to add a customer, just as a test...
+	// 
+	// NOTE: You would normally *never* want to do this in this file! This is 
+	//	meant as an initial test ONLY. See example_integration.php for more 
+	//	details!
+	// 
+	// IMPORTANT NOTE: This particular example of queueing something up will 
+	//	only ever happen *once* when these scripts are first run/used. After 
+	//	this initial test, you MUST do your queueing in another script. DO NOT 
+	//	DO YOUR OWN QUEUEING IN THIS FILE! See docs/example_integration.php for 
+	//	more details and examples of queueing things up.
 	
 	$primary_key_of_your_customer = 5;
 

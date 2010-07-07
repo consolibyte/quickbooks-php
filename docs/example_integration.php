@@ -3,6 +3,10 @@
 /**
  * Example integration with an application
  * 
+ * The idea behind the action queue is basically just that you want to add an 
+ * action/ID pair to the queue whenever something happens in your application 
+ * that you need to tell QuickBooks about. 
+ * 
  * @author Keith Palmer <keith@consolibyte.com>
  * 
  * @package QuickBooks
