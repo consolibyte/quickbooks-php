@@ -8396,7 +8396,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					}
 					
 					$multipart = array( $value => $TxnID_or_ListID );
-					$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
+					
+					$order = array();
+					if (substr($key, -4, 4) == 'line')
+					{
+						$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
+					}
+					
 					$obj = new QuickBooks_SQL_Object($table, null);
 					
 					// Get a list of stuff that's going to be deleted
@@ -8427,7 +8433,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					}
 					
 					$multipart = array( $value => $TxnID_or_ListID );
-					$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
+					
+					$order = array();
+					if (substr($key, -4, 4) == 'line')
+					{
+						$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
+					}
 					
 					//print_r($multipart);
 					

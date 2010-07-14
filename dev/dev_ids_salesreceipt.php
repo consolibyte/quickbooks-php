@@ -17,124 +17,37 @@ $Context = $IPP->authenticate($username, $password, $token);
 $IPP->application($Context, 'be9mh7qd5');
 
 // Create a new Service for IDS access
-//$Service = new QuickBooks_IPP_Service_SalesReceipt();
+$Service = new QuickBooks_IPP_Service_SalesReceipt();
 
 //$list = $Service->findAll($Context, $realmID);
 
 
-$IPP->createTable('cars' . mt_rand(), 'Cars');
-print($IPP->lastRequest($Context));
-print($IPP->lastResponse($Context));
+$SalesReceipt = new QuickBooks_IPP_Object_SalesReceipt();
+
+$Header = new QuickBooks_IPP_Object_Header();
+$Header->setDocNumber('TESTabcd');
+$Header->setTxnDate(date('Y-m-d'));
+$Header->setCustomerName('ConsoliBYTE, LLC');
+
+$SalesReceipt->addHeader($Header);
+
+$Line = new QuickBooks_IPP_Object_Line();
+$Line->setAmount(525);
+$Line->setItemName('Test Item 1');
+$Line->setQty(5);
 
 
-
-print($IPP->getAvailableCompanies());
-print($IPP->lastRequest($Context));
-print($IPP->lastResponse($Context));
+$SalesReceipt->addLine($Line);
 
 
+$ID = $Service->add($Context, $realmID, $SalesReceipt);
 
-$Service = new QuickBooks_IPP_Service_Customer();
-$list = $Service->findAll($Context, $realmID);
-//print_r($list);
-print($IPP->lastRequest($Context));
-print($IPP->lastResponse($Context));
-
-
-exit;
-
-$Service = new QuickBooks_IPP_Service_SalesTaxCode();
-$list = $Service->findAll($Context, $realmID);
-
-print($Service->lastRequest($Context));
-print("\n\n");
-print($Service->lastResponse($Context));
-print("\n\n");
-
-print_r($list);
-
-
-exit;
-
-$Service = new QuickBooks_IPP_Service_VendorCredit();
-$list = $Service->findAll($Context, $realmID);
-
-print_r($list);
-
-
-exit;
-
-$Service = new QuickBooks_IPP_Service_Customer();
-
-$list = $Service->findAll($Context, $realmID);
+print('new ID is: ' . $ID . "\n");
 
 /*
-foreach ($list as $SalesRep)
-{
-	print('Sales Rep: ' . $SalesRep->getInitials() . ' last modified on ' . $SalesRep->getMetaData()->getLastUpdatedTime('H:i:s d/m/Y') . "\n");
-}
+print("\n\n");
+print($Service->lastRequest() . "\n\n\n");
+print("\n\n");
+print($Service->lastResponse() . "\n\n\n");
+print("\n\n");
 */
-
-//print_r($list);
-
-foreach ($list as $Customer)
-{
-	if ($Customer->getDBAName() == 'Test Customer 1, LLC')
-	{
-		$Customer->setName('Test Customer from app #' . mt_rand(0, 1000));
-		
-		$resp = $Service->add($Context, $realmID, $Customer);
-		
-		print($Service->lastRequest());
-		print("\n\n\n");
-		print($Service->lastResponse());
-		print("\n\n\n");
-		
-		if ($resp)
-		{
-			print('Customer added!' . "\n");
-		}
-		else
-		{
-			print('Error adding customer: ' . $Service->errorCode() . ': ' . $Service->errorText());
-		}
-		
-		print("\n\n");
-	}
-}
-
-/*
-foreach ($list as $Estimate)
-{
-	print('Estimate #' . $Estimate->getHeader()->getDocNumber() . ' is to be emailed: ' . $Estimate->getHeader()->getToBeEmailed() . "\n");
-	print('	Should we email it? ');
-	
-	if ($Estimate->getHeader()->getToBeEmailed())
-	{
-		print('YES');
-	}
-	else
-	{
-		print('NO');
-	}
-	
-	print("\n");
-	
-	for ($i = 0; $i < 10; $i++)
-	{
-		$Line = $Estimate->getLine($i);
-		
-		if ($Line)
-		{
-			print_r($Line);
-		}
-	}
-	
-	print("\n");
-	print("\n");
-}
-*/
-
-//print_r($list);
-
-//print($Service->lastResponse());

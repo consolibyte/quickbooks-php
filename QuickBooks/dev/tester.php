@@ -1,9 +1,13 @@
 <?php
 
 //$url = 'http://localhost-nysmith/focus/qb/server.php';
-$url = 'http://localhost:8888/QuickBooks/example_mysql_mirror.php';
-$username = 'quickbooks';
-$password = 'password';
+//$url = 'http://localhost:8888/QuickBooks/example_mysql_mirror.php';
+//$username = 'quickbooks';
+//$password = 'password';
+
+$url = 'http://localhost:8888/saas/trunk/installs/16/whmcs/qboe/5/public/whmcs/qbwc.php';
+$username = 'user16';
+$password = 'dj7evy24';
 
 if (function_exists('date_default_timezone_set'))
 {

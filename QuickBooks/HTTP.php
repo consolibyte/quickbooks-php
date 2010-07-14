@@ -515,7 +515,7 @@ class QuickBooks_HTTP
 		{
 			$request .= 'GET ';
 		}
-		$request .= $params[CURLOPT_URL] . "\r\n";
+		$request .= $params[CURLOPT_URL] . ' HTTP/1.1' . "\r\n";
 		
 		foreach ($headers as $header)
 		{
