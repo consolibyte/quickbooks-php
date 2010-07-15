@@ -3529,6 +3529,20 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				}
 			}
 			
+			// Special handling for non-US versions of QuickBooks
+			
+			$begi = substr($field, 0, -5);
+			$last = substr($field, -5, 5);
+			if ($locale == QUICKBOOKS_LOCALE_UK and 
+				$last == 'State' and 
+				!strlen($Object->get($begi . 'County')))		// UK *County* support instead of states
+			{
+				$Object->set($begi . 'County', $value);
+				//print_r($map);
+				$map = substr($map, 0, -5) . 'County';
+				//die();
+			}
+			
 			/*
 			else if (stripos($type, 'dataext') !== false)
 			{

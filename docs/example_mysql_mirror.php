@@ -180,11 +180,16 @@ $ops = array(
 	QUICKBOOKS_OBJECT_VENDOR, 
 	);
 
+$ops = array(
+	//QUICKBOOKS_OBJECT_CUSTOMER, 
+	QUICKBOOKS_OBJECT_INVOICE, 
+	);
+
 // 
 $sql_options = array(
-	'only_import' => $ops,
+	'only_import' => array( 'dummy' ), //$ops,
 	'only_add' => $ops, 
-	'only_modify' => $ops, 
+	'only_modify' => array( 'dummy' ), //$ops, 
 	);
 
 // 
