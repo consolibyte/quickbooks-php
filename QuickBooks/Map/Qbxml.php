@@ -20,7 +20,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 		}
 	} 
 	
-	public function mark($mark_as, $object_or_action, $ID, $TxnID_or_ListID = null, $errnum = null, $errmsg = null)
+	public function mark($mark_as, $object_or_action, $ID, $TxnID_or_ListID = null, $errnum = null, $errmsg = null, $mark_as_dequeued = true)
 	{
 		$Driver = $this->_driver;
 		
@@ -40,9 +40,25 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 					
 					$arr = array();
 					
+					$where = array(
+						array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ),
+						);
+					
 					if ($TxnID_or_ListID)
 					{
 						$arr[$table_and_field[1]] = $TxnID_or_ListID;
+						
+						// Get the existing temporary ID
+						$errnum = null;
+						$errmsg = null;
+						$existing = $Driver->fetch($Driver->query("SELECT " . $table_and_field[1] . " FROM " . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0] . " WHERE " . QUICKBOOKS_DRIVER_SQL_FIELD_ID . " = " . $ID, $errnum, $errmsg));
+						
+						if (!$existing)
+						{
+							return false;
+						}
+						
+						$existing_TxnID_or_ListID = $existing[$table_and_field[1]];
 					}
 					
 					$resync = true;
@@ -58,9 +74,10 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						$discov = false;
 					}
 					
-					$where = array(
-						array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ),
-						);
+					if ($mark_as_dequeued)
+					{
+						$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ENQUEUE_TIME] = date('Y-m-d H:i:s');
+					}
 						
 					$Driver->update(
 						QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0], 
@@ -69,6 +86,14 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						$resync, 
 						$discov);
 					
+					if ($TxnID_or_ListID)
+					{
+						$Object = new QuickBooks_SQL_Object($table_and_field[0], '', array());
+						$Object->set($table_and_field[1], $TxnID_or_ListID);
+						
+						$this->_updateRelatives($table_and_field[0], $object_or_action, $Object, $existing_TxnID_or_ListID);
+					}
+						
 					break;
 			}
 		}
@@ -208,5 +233,85 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 	public function queries($queries = array())
 	{
 		return array();
+	}
+	
+	/**
+	 * 
+	 * @param unknown_type $table
+	 * @param unknown_type $Object
+	 * @param unknown_type $tmp_TxnID_or_ListID
+	 */
+	protected function _updateRelatives($table, $action, $Object, $tmp_TxnID_or_ListID)
+	{
+		$Driver = $this->_driver;
+		
+		// This should *ONLY* be used when we are ADDING records
+		//	If it's an update, any relatives *should already have* the permenent ListID
+		//	If it's an add, any relatives *have not yet been added* and thus can be marked modified without causing sync issues
+		if (substr($action, -3, 3) != 'Add')
+		{
+			return false;
+		}
+		
+		$map = array(
+			'invoice' => array( 
+				'key' => 'TxnID',
+				'relatives' => array(
+					//'estimate_linkedtxn' => 'ToTxnID:Type=Invoice',
+					//'salesorder_linkedtxn' => 'ToTxnID:Type=Invoice',
+					'receivepayment_appliedtotxn' => 'ToTxnID:TxnType=Invoice', // 'ToTxnID:Type=Invoice',
+					'invoice_invoiceline' => 'Invoice_TxnID', //  
+					)
+				),
+			);
+		
+		if (empty($map[$table]))
+		{
+			return 0;
+		}
+		
+		$TxnID_or_ListID = $Object->get($map[$table]['key']);
+		foreach ($map[$table]['relatives'] as $relative_table => $relative_field)
+		{
+			$Driver->log('Now updating [' . $relative_table . '] for field [' . $relative_field . '] with value [' . $TxnID_or_ListID . ']', null, QUICKBOOKS_LOG_DEBUG);
+			
+			//$multipart = array( $relative_field => $extra['AddResponse_OldKey'] );
+			//$tmp = new QuickBooks_SQL_Object($relative_table, null);
+			
+			//@todo Make the Boolean TRUE value used in the QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG field a constant,
+			//      in case the sql driver used uses something other than 1 and 0.
+			//$tmp->set($relative_field, $TxnID_or_ListID);
+			//$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $relative_table, $tmp, array( $multipart ), false);
+			
+			// First, if the record has already been modified, then we need to 
+			//	make sure that it stays marked modified. Otherwise, we need to 
+			//	not let this get modified. So, query for the existing record. 
+			
+			$pos = false;
+			$where = '';
+			if (false !== ($pos = strpos($relative_field, ':')))
+			{
+				$tmp = substr($relative_field, $pos + 1);
+				
+				$relative_field = substr($relative_field, 0, $pos);
+				
+				$where = " AND " . str_replace('=', "='", $tmp) . "'";
+				
+				//print('TMP IS: [' . $where . ']');
+				//exit;
+			}
+			
+			$errnum = null;
+			$errmsg = null;
+			$Driver->query("
+				UPDATE 
+					" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $relative_table . " 
+				SET
+					" . $relative_field . " = '%s' 
+				WHERE
+					" . $relative_field . " = '%s' " . $where, $errnum, $errmsg, null, null, array(
+					$TxnID_or_ListID, 
+					$tmp_TxnID_or_ListID));
+		}
 	}
 }
