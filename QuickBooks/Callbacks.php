@@ -319,6 +319,15 @@ class QuickBooks_Callbacks
 			}
 		}
 		
+		// Clean up the hook data
+		foreach (array( 'requestID' => $requestID, 'user' => $user, 'ticket' => $ticket ) as $key => $value)
+		{
+			if (empty($hook_data[$key]))
+			{
+				$hook_data[$key] = $value;
+			}
+		}		
+		
 		// Check if the hook is set, if so, call it!
 		if (isset($hooks[$hook]))
 		{

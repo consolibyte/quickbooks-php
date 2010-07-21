@@ -25,6 +25,7 @@ error_reporting(E_ALL | E_STRICT);
 // Require the QuickBooks libraries
 require_once 'QuickBooks.php';
 
+/*
 // Create a new SalesReceipt object
 $SalesReceipt = new Quickbooks_Object_SalesReceipt();
 
@@ -58,6 +59,10 @@ print($SalesReceipt->asQBXML(QUICKBOOKS_ADD_SALESRECEIPT, null, QUICKBOOKS_LOCAL
 
 
 exit;
+*/
+
+// 
+$API = new QuickBooks_API('mysql://root:root@localhost/quickbooks_api', 'test', QuickBooks_API::SOURCE_OE);
 
 // Create a new Customer object
 $Customer = new QuickBooks_Object_Customer();
@@ -79,3 +84,11 @@ print("\r\n\r\n");
 
 print('qbXML Customer for QuickBooks qbXML Online Edition: ' . "\r\n");
 print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER, null, QUICKBOOKS_LOCALE_ONLINE_EDITION));
+
+print("\r\n\r\n");
+
+$Customer->setListID('1234');
+$Customer->setEditSequence('5678');
+
+print('qbXML Customer (modification) for QuickBooks qbXML Online Edition: ' . "\r\n");
+print($Customer->asQBXML(QUICKBOOKS_MOD_CUSTOMER, null, QUICKBOOKS_LOCALE_ONLINE_EDITION));

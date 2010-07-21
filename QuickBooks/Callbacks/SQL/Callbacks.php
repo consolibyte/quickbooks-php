@@ -1268,6 +1268,42 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
+	public static function CustomerMsgAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$Driver = QuickBooks_Driver_Singleton::getInstance();
+		if ($CustomerMsg = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customermsg', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+		{
+			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CUSTOMERMSG, $CustomerMsg, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+		}
+		
+		return ''; 
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static function CustomerMsgAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();		
+		
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerMsgAddRs');
+		
+		$extra['is_add_response'] = true;
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_CUSTOMERMSG, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
+
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	public static function JournalEntryAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
@@ -4918,7 +4954,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		return QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('creditmemo', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 	
-	public static function CustomerMsgQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function CustomerMsgImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
 		
@@ -4941,7 +4977,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
-	public static function CustomerMsgQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function CustomerMsgImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
@@ -4952,10 +4988,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerMsgQueryRs');
 		
-		if (!isset($extra['is_query_response']))
-		{
-			$extra['is_import_response'] = true;
-		}		
+		$extra['is_import_response'] = true;
 		
 		return QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('customermsg', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}

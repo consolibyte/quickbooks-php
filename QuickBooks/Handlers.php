@@ -728,6 +728,9 @@ class QuickBooks_Handlers
 				// Call the mapped function that should generate an appropriate qbXML request
 				$xml = $this->_callMappedFunction(0, $user, $next['qb_action'], $next['ident'], $extra, $err, $last_action_time, $last_actionident_time, $obj->qbXMLMajorVers . '.' . $obj->qbXMLMinorVers, $obj->qbXMLCountry, $next['qbxml']);
 				
+				// Make sure there's no whitespace around it
+				$xml = trim($xml);
+				
 				// NoOp can be returned to skip this current operation. This will cause getLastError
 				//	to be called, at which point NoOp should be returned to tell the Web
 				//	Connector to then pause for 5 seconds before asking for another request. 
