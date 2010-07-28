@@ -54,6 +54,8 @@ class QuickBooks_IPP_Parser
 					return $this->_parseIPP_HashMap($Root);
 				case QuickBooks_IPP::API_GETDBVAR:
 					return $this->_parseIPP_NodeValue($Root, 'qdbapi/value');
+				case QuickBooks_IPP::API_GETIDSREALM:
+					return $this->_parseIPP_NodeValue($Root, 'qdbapi/realm');
 			}
 		}
 		

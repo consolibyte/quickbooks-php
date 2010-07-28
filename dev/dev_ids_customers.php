@@ -14,9 +14,38 @@ $realmID = 173642438;
 // 
 $IPP = new QuickBooks_IPP();
 $Context = $IPP->authenticate($username, $password, $token);
+
+print("\n\n");
+print($IPP->lastRequest());
+print("\n\n");
+print($IPP->lastResponse());
+print("\n\n");
+
+//exit;
+
 $IPP->application($Context, 'be9mh7qd5');
 
-//$IPP->useIDSParser(false);
+$IPP->useIDSParser(false);
+
+
+$Service = new QuickBooks_IPP_Service_Customer();
+
+$list = $Service->findAll($Context, $realmID);
+
+file_put_contents('output.txt', $list);
+
+//print_r($list);
+exit;
+
+foreach ($list as $Customer)
+{
+	print_r($Customer);
+	exit;
+}
+
+exit;
+
+
 
 $name = 'LETS BREAK STUFF! #' . mt_rand(0, 1000);
 
@@ -186,17 +215,6 @@ print("\n\n");
 
 
 
-/*
-$Service = new QuickBooks_IPP_Service_Customer();
-
-$list = $Service->findAll($Context, $realmID);
-
-foreach ($list as $Customer)
-{
-	print_r($Customer);
-	exit;
-}
-*/
 
 
 $Service = new QuickBooks_IPP_Service_Customer(); 

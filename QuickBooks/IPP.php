@@ -53,6 +53,14 @@ class QuickBooks_IPP
 	
 	const API_SETDBVAR = 'API_SetDBVar';
 	
+	const API_GETIDSREALM = 'API_GetIDSRealm';
+	
+	const API_ATTACHIDSREALM = 'API_AttachIDSRealm';
+	
+	const API_DETACHIDSREALM = 'API_DetachIDSRealm';
+	
+	const API_RENAMEAPP = 'API_RenameApp';
+	
 	/**
 	 * 
 	 * @var unknown_type
@@ -397,6 +405,9 @@ class QuickBooks_IPP
 		switch ($action)
 		{
 			case QuickBooks_IPP::API_SETDBVAR:
+			case QuickBooks_IPP::API_ATTACHIDSREALM:
+			case QuickBooks_IPP::API_DETACHIDSREALM:
+			case QuickBooks_IPP::API_RENAMEAPP:
 				return true;
 		}
 		
@@ -433,20 +444,32 @@ class QuickBooks_IPP
 
 		return $parsed;
 	}
+
+	public function renameApp($Context, $name)
+	{
+		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$action = QuickBooks_IPP::API_RENAMEAPP;
+		
+		$xml = '<qdbapi>
+				<ticket>' . $Context->ticket() . '</ticket>
+   				<apptoken>' . $Context->token() . '</apptoken>
+   				<newappname>' . htmlspecialchars($name) . '</newappname>
+			</qdbapi>';
+		
+		return $this->_IPP($Context, $url, $action, $xml);
+	}
 	
 	public function getIDSRealm($Context)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
-		$action = 'API_GetIDSRealm';
+		$action = QuickBooks_IPP::API_GETIDSREALM;
 		
 		$xml = '<qdbapi>
    				<ticket>' . $Context->ticket() . '</ticket>
 				<apptoken>' . $Context->token() . '</apptoken>
 			</qdbapi>';
 		
-		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
-		
-		print($response);
+		return $this->_IPP($Context, $url, $action, $xml);
 	}
 	
 	public function getAvailableCompanies($Context)
@@ -666,21 +689,27 @@ class QuickBooks_IPP
 	public function attachIDSRealm($Context, $realm)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
-		$action = 'API_AttachIDSRealm';
+		$action = QuickBooks_IPP::API_ATTACHIDSREALM;
 		$xml = '<qdbapi>
 				<realm>' . $realm . '</realm>
 				<ticket>' . $Context->ticket() . '</ticket>
 				<apptoken>' . $Context->token() . '</apptoken>
 			</qdbapi>';
 			
-		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
-		
-		if ($this->_hasErrors($response))
-		{
-			return false;
-		}
-		
-		return true;
+		return $this->_IPP($Context, $url, $action, $xml);
+	}
+	
+	public function detachIDSRealm($Context, $realm)
+	{
+		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$action = QuickBooks_IPP::API_DETACHIDSREALM;
+		$xml = '<qdbapi>
+				<realm>' . $realm . '</realm>
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>
+			</qdbapi>';
+			
+		return $this->_IPP($Context, $url, $action, $xml);
 	}
 	
 	/**
