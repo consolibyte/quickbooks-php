@@ -20,7 +20,7 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
 // Set the include path
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keithpalmerjr/Projects/QuickBooks');
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks');
 require_once 'QuickBooks.php';
 
 // You should make sure this matches the time-zone QuickBooks is running in
@@ -153,8 +153,12 @@ $handler_options = array();
 $driver_options = array();
 
 $ops = array(
-	QUICKBOOKS_OBJECT_CUSTOMER, 
-	QUICKBOOKS_OBJECT_CUSTOMERMSG, 
+	QUICKBOOKS_OBJECT_SALESRECEIPT, 
+	QUICKBOOKS_OBJECT_CREDITMEMO, 
+	QUICKBOOKS_OBJECT_SALESORDER, 
+	QUICKBOOKS_OBJECT_PAYROLLITEMWAGE, 
+	QUICKBOOKS_OBJECT_PAYROLLITEMNONWAGE, 
+	QUICKBOOKS_OBJECT_TIMETRACKING, 
 	);
 
 // 

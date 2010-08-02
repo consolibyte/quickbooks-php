@@ -554,18 +554,6 @@ define('QUICKBOOKS_MOD_PAYMENTITEM', 'ItemPaymentMod');
 define('QUICKBOOKS_QUERY_PAYMENTITEM', 'ItemPaymentQuery');
 define('QUICKBOOKS_IMPORT_PAYMENTITEM', 'ItemPaymentImport');
 
-define('QUICKBOOKS_OBJECT_PAYROLLITEMWAGE', 'ItemPayrollWage');
-define('QUICKBOOKS_ADD_PAYROLLITEMWAGE', 'ItemPayrollWageAdd');
-define('QUICKBOOKS_MOD_PAYROLLITEMWAGE', 'ItemPayrollWageMod');
-define('QUICKBOOKS_QUERY_PAYROLLITEMWAGE', 'ItemPayrollWageQuery');
-define('QUICKBOOKS_IMPORT_PAYROLLITEMWAGE', 'ItemPayrollWageImport');
-
-define('QUICKBOOKS_OBJECT_PAYROLLITEMNONWAGE', 'ItemPayrollNonWage');
-define('QUICKBOOKS_ADD_PAYROLLITEMNONWAGE', 'ItemPayrollNonWageAdd');
-define('QUICKBOOKS_MOD_PAYROLLITEMNONWAGE', 'ItemPayrollNonWageMod');
-define('QUICKBOOKS_QUERY_PAYROLLITEMNONWAGE', 'ItemPayrollNonWageQuery');
-define('QUICKBOOKS_IMPORT_PAYROLLITEMNONWAGE', 'ItemPayrollNonWageImport');
-
 define('QUICKBOOKS_OBJECT_SERVICEITEM', 'ItemService');
 define('QUICKBOOKS_ADD_SERVICEITEM', 'ItemServiceAdd');
 define('QUICKBOOKS_MOD_SERVICEITEM', 'ItemServiceMod');
@@ -589,6 +577,18 @@ define('QUICKBOOKS_ADD_OTHERCHARGEITEM', 'ItemOtherChargeAdd');
 define('QUICKBOOKS_MOD_OTHERCHARGEITEM', 'ItemOtherChargeMod');
 define('QUICKBOOKS_QUERY_OTHERCHARGEITEM', 'ItemOtherChargeQuery');
 define('QUICKBOOKS_IMPORT_OTHERCHARGEITEM', 'ItemOtherChargeImport');
+
+define('QUICKBOOKS_OBJECT_PAYROLLITEMWAGE', 'PayrollItemWage');
+define('QUICKBOOKS_ADD_PAYROLLITEMWAGE', 'PayrollItemWageAdd');
+define('QUICKBOOKS_MOD_PAYROLLITEMWAGE', 'PayrollItemWageMod');
+define('QUICKBOOKS_QUERY_PAYROLLITEMWAGE', 'PayrollItemWageQuery');
+define('QUICKBOOKS_IMPORT_PAYROLLITEMWAGE', 'PayrollItemWageImport');
+
+define('QUICKBOOKS_OBJECT_PAYROLLITEMNONWAGE', 'PayrollItemNonWage');
+define('QUICKBOOKS_ADD_PAYROLLITEMNONWAGE', 'PayrollItemNonWageAdd');
+define('QUICKBOOKS_MOD_PAYROLLITEMNONWAGE', 'PayrollItemNonWageMod');
+define('QUICKBOOKS_QUERY_PAYROLLITEMNONWAGE', 'PayrollItemNonWageQuery');
+define('QUICKBOOKS_IMPORT_PAYROLLITEMNONWAGE', 'PayrollItemNonWageImport');
 
 define('QUICKBOOKS_OBJECT_ITEMRECEIPT', 'ItemReceipt');
 define('QUICKBOOKS_ADD_ITEMRECEIPT', 'ItemReceiptAdd');

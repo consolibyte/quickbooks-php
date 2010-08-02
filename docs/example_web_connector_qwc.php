@@ -45,5 +45,3 @@ header('Content-type: text/xml');
 header('Content-Disposition: attachment; filename="my-quickbooks-wc-file.qwc"');
 print($xml);
 exit;
-
-?>

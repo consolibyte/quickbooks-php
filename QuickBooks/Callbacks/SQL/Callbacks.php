@@ -5597,6 +5597,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<ItemServiceQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
+						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemServiceQueryRq>
 				</QBXMLMsgsRq>
@@ -5634,6 +5635,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<ItemNonInventoryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
+						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemNonInventoryQueryRq>
 				</QBXMLMsgsRq>
@@ -5671,6 +5673,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<ItemInventoryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
+						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemInventoryQueryRq>
 				</QBXMLMsgsRq>
@@ -5708,6 +5711,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<ItemSalesTaxQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
+						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemSalesTaxQueryRq>
 				</QBXMLMsgsRq>
@@ -5902,7 +5906,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('paymentmethod', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 	
-	public static function PayrollItemWageQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function PayrollItemWageImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
 		
@@ -5912,7 +5916,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<PayrollItemWageQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</PayrollItemWageQueryRq>
 				</QBXMLMsgsRq>
 			</QBXML>';
@@ -5924,7 +5927,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
-	public static function PayrollItemWageQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function PayrollItemWageImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
@@ -5935,12 +5938,46 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PayrollItemWageQueryRs');
 
-		if (!isset($extra['is_query_response']))
-		{
-			$extra['is_import_response'] = true;
-		}
+		$extra['is_import_response'] = true;
 		
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('payrollitemwage', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
+
+	public static function PayrollItemNonWageImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$xml = '';
+		
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="' . $version . '"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+					<PayrollItemNonWageQueryRq requestID="' . $requestID . '">
+						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
+					</PayrollItemNonWageQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>';
+			
+		return $xml;
+	}
+	
+	/**
+	 * 
+	 * 
+	 */
+	public static function PayrollItemNonWageImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();		
+		
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PayrollItemNonWageQueryRs');
+
+		$extra['is_import_response'] = true;
+		
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('payrollitemnonwage', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 	
 	/**
