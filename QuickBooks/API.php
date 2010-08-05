@@ -592,7 +592,7 @@ class QuickBooks_API
 	 * 
 	 * 
 	 */
-	public function __realtimeCallback($method, $action, $ID, &$err, $qbxml, $Object, $qbres)
+	public function __realtimeCallback($method, $action, $ID, $err, $qbxml, $Object, $qbres)
 	{
 		//print('realtime callback got called!');
 		
