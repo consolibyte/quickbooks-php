@@ -5710,8 +5710,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<ItemSalesTaxQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
-						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						<ActiveStatus>All</ActiveStatus>
+						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemSalesTaxQueryRq>
 				</QBXMLMsgsRq>
