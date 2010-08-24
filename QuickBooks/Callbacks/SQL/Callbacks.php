@@ -6528,7 +6528,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	
 	
 	
-	public static function TimeTrackingQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function TimeTrackingImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
 		
@@ -6549,7 +6549,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
-	public static function TimeTrackingQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function TimeTrackingImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
@@ -6560,10 +6560,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		$List = $Root->getChildAt('QBXML QBXMLMsgsRs TimeTrackingQueryRs');
 		
-		if (!isset($extra['is_query_response']))
-		{
-			$extra['is_import_response'] = true;
-		}		
+		$extra['is_import_response'] = true;
 		
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('timetracking', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
@@ -9104,6 +9101,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							if (isset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)][0]))
 							{
 								$tmp = $deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)];
+								unset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)]);		// Can't use this anymore after it's been used for an INSERT
 								
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);
@@ -9118,11 +9116,21 @@ class QuickBooks_Callbacks_SQL_Callbacks
 								//	thing, and re-use that qbsql_id value
 								
 								reset($deleted[$table][QUICKBOOKS_TXNLINEID]);
-								$tmp = array_shift($deleted[$table][QUICKBOOKS_TXNLINEID]); // current($deleted[$table][QUICKBOOKS_TXNLINEID]);
+								$tmp = array_shift($deleted[$table][QUICKBOOKS_TXNLINEID]); 	// Remove it from the list so it can't be used anymore
 								
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);
 								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, $tmp[2]);								
+							}
+							
+							if ('' == $object->get(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID))
+							{
+								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, null);
+							}
+							
+							if ('' == $object->get(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID))
+							{
+								$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, null);
 							}
 							
 							//print_r($object);

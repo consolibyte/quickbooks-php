@@ -5,10 +5,9 @@
 //$username = 'quickbooks';
 //$password = 'password';
 
-$url = 'http://localhost:8888/QuickBooks/example_mysql_mirror.php';
 $username = 'quickbooks';
 $password = 'password';
-$url = 'http://localhost:8888/FiltaGroup/trunk/public/server.php';
+$url = 'http://localhost:8888/QuickBooks/example_mysql_mirror.php';
 
 if (function_exists('date_default_timezone_set'))
 {
