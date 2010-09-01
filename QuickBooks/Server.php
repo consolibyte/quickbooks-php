@@ -104,6 +104,12 @@ class QuickBooks_Server
 	protected $_callback_config;
 	
 	/**
+	 * The raw input to the script
+	 * @var string
+	 */
+	protected $_input;
+	
+	/**
 	 * Create a new QuickBooks SOAP server
 	 * 
 	 * @param mixed $dsn_or_conn		Either a DSN-style connection string *or* a database resource (if reusing an existing connection)
@@ -180,9 +186,22 @@ class QuickBooks_Server
 		// Assign callback configuration info
 		$this->_callback_config = $callback_options;
 		
+		// Raw input
+		$input = '';
+		if (isset($HTTP_RAW_POST_DATA) and strlen($HTTP_RAW_POST_DATA))
+		{
+			$input = $HTTP_RAW_POST_DATA;	
+		}
+		else
+		{
+			$input = file_get_contents('php://input');
+		}
+		
+		$this->_input = $input;
+				
 		// Base handlers
 		// $dsn_or_conn, $map, $onerror, $hooks, $log_level, $input, $handler_config = array(), $driver_config = array()
-		$this->_server->setClass('QuickBooks_Handlers', $dsn_or_conn, $map, $onerror, $hooks, $log_level, file_get_contents('php://input'), $handler_options, $driver_options, $callback_options);
+		$this->_server->setClass('QuickBooks_Handlers', $dsn_or_conn, $map, $onerror, $hooks, $log_level, $input, $handler_options, $driver_options, $callback_options);
 	}
 	
 	/**
@@ -342,16 +361,10 @@ class QuickBooks_Server
 	 */
 	public function handle($return = false, $debug = false)
 	{
-		$input = '';
-		if (isset($HTTP_RAW_POST_DATA) and strlen($HTTP_RAW_POST_DATA))
-		{
-			$input = $HTTP_RAW_POST_DATA;	
-		}
-		else
-		{
-			$input = file_get_contents('php://input');
-		}
+		// Get the raw input
+		$input = $this->_input;
 		
+		// 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			$this->_headers();
@@ -516,7 +529,7 @@ class QuickBooks_Server
 				
 				print("\n");
 				print('Detected input: ' . "\n");
-				print(file_get_contents('php://input'));
+				print($input);
 				print("\n");
 				print("\n");
 				print('Timestamp: ' . "\n");
