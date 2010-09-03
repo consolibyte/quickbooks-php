@@ -138,7 +138,7 @@ class QuickBooks_Status_Report
 					
 			$days = floor($ago / (60 * 60 * 24));
 			$hours = floor(($ago - ($days * 60 * 60 * 24)) / 60.0 / 60.0);
-			$minutes = min(1, floor(($ago - ($days * 60 * 60 * 24) - ($hours * 60 * 60)) / 60.0));
+			$minutes = max(1, floor(($ago - ($days * 60 * 60 * 24) - ($hours * 60 * 60)) / 60.0));
 			
 			$retr = null;
 			
