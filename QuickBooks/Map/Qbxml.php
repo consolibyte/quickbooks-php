@@ -91,7 +91,9 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						$Object = new QuickBooks_SQL_Object($table_and_field[0], '', array());
 						$Object->set($table_and_field[1], $TxnID_or_ListID);
 						
-						$this->_updateRelatives($table_and_field[0], $object_or_action, $Object, $existing_TxnID_or_ListID);
+						$action = QuickBooks_Utilities::objectToAdd($object_or_action);
+
+						$this->_updateRelatives($table_and_field[0], $action, $Object, $existing_TxnID_or_ListID);
 					}
 						
 					break;
@@ -245,11 +247,14 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 	{
 		$Driver = $this->_driver;
 		
+		//print('updating relatives' . "\n");
+
 		// This should *ONLY* be used when we are ADDING records
 		//	If it's an update, any relatives *should already have* the permenent ListID
 		//	If it's an add, any relatives *have not yet been added* and thus can be marked modified without causing sync issues
 		if (substr($action, -3, 3) != 'Add')
 		{
+			//print('returning false because of action: ' . $action . "\n");
 			return false;
 		}
 		
@@ -267,6 +272,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 		
 		if (empty($map[$table]))
 		{
+			//print('returning false because of missing map: ' . $table . "\n");
 			return 0;
 		}
 		
@@ -274,7 +280,8 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 		foreach ($map[$table]['relatives'] as $relative_table => $relative_field)
 		{
 			$Driver->log('Now updating [' . $relative_table . '] for field [' . $relative_field . '] with value [' . $TxnID_or_ListID . ']', null, QUICKBOOKS_LOG_DEBUG);
-			
+			//print('updating realtive: ' . $relative_table . "\n");			
+
 			//$multipart = array( $relative_field => $extra['AddResponse_OldKey'] );
 			//$tmp = new QuickBooks_SQL_Object($relative_table, null);
 			
@@ -303,13 +310,17 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 			
 			$errnum = null;
 			$errmsg = null;
-			$Driver->query("
+			$sql = "
 				UPDATE 
 					" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $relative_table . " 
 				SET
 					" . $relative_field . " = '%s' 
 				WHERE
-					" . $relative_field . " = '%s' " . $where, $errnum, $errmsg, null, null, array(
+					" . $relative_field . " = '%s' " . $where;
+
+			//print($sql . "\n\n");
+
+			$Driver->query($sql, $errnum, $errmsg, null, null, array(
 					$TxnID_or_ListID, 
 					$tmp_TxnID_or_ListID));
 		}
