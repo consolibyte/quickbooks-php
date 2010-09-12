@@ -3,6 +3,12 @@
 /**
  * 
  * 
+ * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * @author Keith Palmer <keith@consolibyte.com>
  * @license LICENSE.txt 
  * 
@@ -54,6 +60,16 @@ class QuickBooks_Callbacks_SQL_Errors
 				// @todo Hopefully at some point we'll have a better idea of how to handle this error...
 				
 				return true;
+			case 3180:
+				
+				// This error can occur in several different situations, so we test per situation
+				if (false !== strpos($errmsg, 'list has been modified by another user'))
+				{
+					// This is *not* an error, we can just send the request again, and it'll go through just fine
+					return true;
+				}
+				
+				break;
 			case 3200:
 				// Ignore EditSequence errors (the record will be picked up and a conflict reported next time it runs... maybe?)
 				
@@ -183,31 +199,33 @@ class QuickBooks_Callbacks_SQL_Errors
 				break;
 			*/
 			case 3100: // Name of List Element is already in use.
-			default:
 				
-				if (strstr($xml, 'statusSeverity="Info"') === false) // If it's NOT just an Info message.
-				{	
-					$multipart = array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident );
-					$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER, $errnum);
-					$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE, $errmsg);
-					
-					// Do not set the resync field, we want resync and modified timestamps to be different
-					$update_resync_field = false;
-					$update_discov_field = false;
-					$update_derive_field = false;
-					
-					if ($table and 
-						is_numeric($ident))		// This catches cases where errors occur on IMPORT requests with ap9y8ag random idents
-					{
-						// Set the error message
-						$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ), 
-							$update_resync_field,
-							$update_discov_field, 
-							$update_derive_field);
-					}
-				}
+				
 				
 				break;
+		}
+		
+		// This is our catch-all which marks the item as errored out
+		if (strstr($xml, 'statusSeverity="Info"') === false) // If it's NOT just an Info message.
+		{	
+			$multipart = array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident );
+			$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER, $errnum);
+			$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE, $errmsg);
+			
+			// Do not set the resync field, we want resync and modified timestamps to be different
+			$update_resync_field = false;
+			$update_discov_field = false;
+			$update_derive_field = false;
+			
+			if ($table and 
+				is_numeric($ident))		// This catches cases where errors occur on IMPORT requests with ap9y8ag random idents
+			{
+				// Set the error message
+				$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ), 
+					$update_resync_field,
+					$update_discov_field, 
+					$update_derive_field);
+			}
 		}
 		
 		// Please don't change this, it stops us from knowing what's actually 

@@ -3,6 +3,12 @@
 /**
  * MySQL backend for the QuickBooks SOAP server
  * 
+ * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * You need to use some sort of backend to facilitate communication between the 
  * SOAP server and your application. The SOAP server stores queue requests 
  * using the backend. 

@@ -3,6 +3,12 @@
 /**
  * MySQLi backend for the QuickBooks SOAP server
  * 
+ * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * This backend driver is for a MySQL database, using the PHP MySQLi extension. 
  * You can use the {@see QuickBooks_Utilities} class to initalize the tables in 
  * the MySQL database. 

@@ -3,6 +3,12 @@
 /**
  * Static callback methods for the SQL mirror server
  *
+ * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  *	We dont' register the following callback handlers because the response is
  *	already included in other responses from other queries: 
  * 	No registered handler for: ItemDiscountQuery
@@ -35,7 +41,7 @@
  */
 
 // For debugging... 
-//require_once '../../../QuickBooks.php';
+//require_once '/Users/kpalmer/Projects/QuickBooks/QuickBooks.php';
 
 /**
  * Mapper for qbXML schema
@@ -10605,10 +10611,10 @@ $xml = '<?xml version="1.0" ?>
 */
 
 /*
-$requestID = null;
+$requestID = 'Q3VzdG9tZXJBZGR8Mw==';
 $user = 'quickbooks';
-$action = 'AccountQuery';
-$ID = '1234';
+$action = QUICKBOOKS_ADD_CUSTOMER;
+$ID = 3;
 $extra = array();
 $err = '';
 $last_action_time = time();
@@ -10616,439 +10622,21 @@ $last_actionident_time = time();
 //$xml = file_get_contents('/Users/kpalmer/Projects/QuickBooks/docs/responses/CustomerQuery.xml');
 $xml = '<?xml version="1.0" ?>
 <QBXML>
-<QBXMLMsgsRs>
-<AccountQueryRs requestID="SW52b2ljZVF1ZXJ5fGJlZmUwNWJlYjg0NDEyZWU1NjE0MGRhMzMwZjE0ZTdj" statusCode="0" statusSeverity="Info" statusMessage="Status OK" iteratorRemainingCount="0" iteratorID="{6fcbb18b-68cf-4adb-bf40-164ac0bb4ec0}">
-<AccountRet>
-<ListID>1234</ListID>
-<Name>Liberty Bank</Name>
-</AccountRet>
-</AccountQueryRs>
-</QBXMLMsgsRs>
-</QBXML>';
-$idents = array();
-
-$tmp = QuickBooks_Driver_Singleton::getInstance('pgsql://postgres:password@localhost/quickbooks', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-
-//QuickBooks_Callbacks_SQL_Callbacks::AccountImportRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() );
-QuickBooks_Callbacks_SQL_Callbacks::AccountImportResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() );
-*/
-
-/*
-$xml = '<?xml version="1.0" ?>
-<QBXML>
-<QBXMLMsgsRs>
-<DataExtDefQueryRs requestID="RGF0YUV4dERlZlF1ZXJ5fGE0NWY1OWI4NGVkZjhmZWUxZTkxMmZlZWRiMjQwODEz" statusCode="0" statusSeverity="Info" statusMessage="Status OK">
-<DataExtDefRet>
-<OwnerID>0</OwnerID>
-<DataExtName>Carrier</DataExtName>
-<DataExtType>STR255TYPE</DataExtType>
-<AssignToObject>Customer</AssignToObject>
-<AssignToObject>Vendor</AssignToObject>
-</DataExtDefRet>
-<DataExtDefRet>
-<OwnerID>0</OwnerID>
-<DataExtName>Company Type</DataExtName>
-<DataExtType>STR255TYPE</DataExtType>
-<AssignToObject>Customer</AssignToObject>
-<AssignToObject>Vendor</AssignToObject>
-</DataExtDefRet>
-<DataExtDefRet>
-<OwnerID>0</OwnerID>
-<DataExtName>Jobarea</DataExtName>
-<DataExtType>STR255TYPE</DataExtType>
-<AssignToObject>Customer</AssignToObject>
-<AssignToObject>Vendor</AssignToObject>
-</DataExtDefRet>
-<DataExtDefRet>
-<OwnerID>0</OwnerID>
-<DataExtName>PP good not recd</DataExtName>
-<DataExtType>STR255TYPE</DataExtType>
-<AssignToObject>Item</AssignToObject>
-</DataExtDefRet>
-<DataExtDefRet>
-<OwnerID>0</OwnerID>
-<DataExtName>Shipping Account</DataExtName>
-<DataExtType>STR255TYPE</DataExtType>
-<AssignToObject>Customer</AssignToObject>
-<AssignToObject>Vendor</AssignToObject>
-</DataExtDefRet>
-<DataExtDefRet>
-<OwnerID>0</OwnerID>
-<DataExtName>Shipping Method</DataExtName>
-<DataExtType>STR255TYPE</DataExtType>
-<AssignToObject>Customer</AssignToObject>
-<AssignToObject>Vendor</AssignToObject>
-</DataExtDefRet>
-<DataExtDefRet>
-<OwnerID>0</OwnerID>
-<DataExtName>website</DataExtName>
-<DataExtType>STR255TYPE</DataExtType>
-<AssignToObject>Customer</AssignToObject>
-<AssignToObject>Vendor</AssignToObject>
-</DataExtDefRet>
-</DataExtDefQueryRs>
-</QBXMLMsgsRs>
-</QBXML>
-';
-
-$requestID = null;
-$user = 'quickbooks';
-$action = 'DataExtDefQuery';
-$ID = '1234';
-$extra = array();
-$err = '';
-$last_action_time = time();
-$last_actionident_time = time();
-//$xml = file_get_contents('/Users/kpalmer/Projects/QuickBooks/docs/responses/CustomerQuery.xml');
-$idents = array();
-
-QuickBooks_Callbacks_SQL_Callbacks::DataExtDefQueryResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $config = array())
-*/
-
-/*
-$requestID = 'SW52b2ljZU1vZHwyODU3Mg==';
-$user = 'quickbooks';
-$action = 'InvoiceImport';
-$ID = '24897';
-//$extra = array( 'TxnID' => '27-1249916009' );
-$extra = array();
-$err = '';
-$last_action_time = time();
-$last_actionident_time = time();
-$version = '8.0';
-$locale = 'US';
-$callback_config = array(
-	'mode' => QuickBooks_Server_SQL::MODE_READWRITE,
-	);
-
-$xml = '<?xml version="1.0" ?>
-<QBXML>
-<QBXMLMsgsRs>
-<InvoiceQueryRs requestID="SW52b2ljZVF1ZXJ5fDY3MzUzZWM0NDkwODc2NzU0MGMwNjVmZjcwYTBiMmJk" statusCode="0" statusSeverity="Info" statusMessage="Status OK" iteratorRemainingCount="0" iteratorID="{256d2c2b-c6a5-4de0-a287-34c0bfeb0a04}">
-<InvoiceRet>
-	<TxnID>27-1249916009</TxnID>
-	<TimeCreated>2009-08-10T10:53:29-05:00</TimeCreated>
-	<TimeModified>2009-08-10T12:30:39-05:00</TimeModified>
-	<EditSequence>' . time() . '</EditSequence>
-	<TxnNumber>10</TxnNumber>
-	<CustomerRef>
-		<ListID>80000011-1249904409</ListID>
-		<FullName>Test Customer 7</FullName>
-	</CustomerRef>
-	<ARAccountRef>
-		<ListID>80000025-1244033027</ListID>
-		<FullName>Accounts Receivable</FullName>
-	</ARAccountRef>
-	<TemplateRef>
-		<ListID>80000001-1244024365</ListID>
-		<FullName>Intuit Product Invoice</FullName>
-	</TemplateRef>
-	<TxnDate>2009-08-10</TxnDate>
-	<RefNumber>98687</RefNumber>
-	<BillAddress>
-		<Addr1>Attn: Keith Palmer</Addr1>
-		<Addr2>56 Cowles Road</Addr2>
-		<Addr3>Willington, CT 06279</Addr3>
-		<Addr4>Unites States</Addr4>
-		<City>Unites States, CT 06279 Unites </City>
-		<State>CT 06279</State>
-	</BillAddress>
-	<BillAddressBlock>
-		<Addr1>Attn: Keith Palmer</Addr1>
-		<Addr2>56 Cowles Road</Addr2>
-		<Addr3>Willington, CT 06279</Addr3>
-		<Addr4>Unites States</Addr4>
-		<Addr5>Unites States, CT 06279 Unites States</Addr5>
-	</BillAddressBlock>
-	<ShipAddress>
-		<Addr1>Attn: Shannon Daniels</Addr1>
-		<Addr2>134 STonemill Road</Addr2>
-		<City>Storrs-Mansfield</City>
-		<State>CT</State>
-		<PostalCode>06268</PostalCode>
-		<Country>USA</Country>
-	</ShipAddress>
-	<ShipAddressBlock>
-		<Addr1>Attn: Shannon Daniels</Addr1>
-		<Addr2>134 STonemill Road</Addr2>
-		<Addr3>Storrs-Mansfield, CT 06268</Addr3>
-		<Addr4>USA</Addr4>
-	</ShipAddressBlock>
-	<IsPending>false</IsPending>
-	<IsFinanceCharge>false</IsFinanceCharge>
-	<DueDate>2009-08-10</DueDate>
-	<SalesRepRef>
-		<ListID>80000003-1249902620</ListID>
-		<FullName>RB</FullName>
-	</SalesRepRef>
-	<ShipDate>2009-08-10</ShipDate>
-	<Subtotal>140.00</Subtotal>
-	<ItemSalesTaxRef>
-		<ListID>80000001-1244024583</ListID>
-		<FullName>Out of State</FullName>
-	</ItemSalesTaxRef>
-	<SalesTaxPercentage>0.00</SalesTaxPercentage>
-	<SalesTaxTotal>0.00</SalesTaxTotal>
-	<AppliedAmount>-39.99</AppliedAmount>
-	<BalanceRemaining>19.99</BalanceRemaining>
-	<IsPaid>false</IsPaid>
-	<IsToBePrinted>true</IsToBePrinted>
-	<IsToBeEmailed>false</IsToBeEmailed>
-	<CustomerSalesTaxCodeRef>
-		<ListID>80000001-1244024367</ListID>
-		<FullName>Tax</FullName>
-	</CustomerSalesTaxCodeRef>
-	<LinkedTxn>
-		<TxnID>33-1249921839</TxnID>
-		<TxnType>ReceivePayment</TxnType>
-		<TxnDate>2009-08-10</TxnDate>
-		<RefNumber>10000000</RefNumber>
-		<LinkType>AMTTYPE</LinkType>
-		<Amount>-100.00</Amount>
-	</LinkedTxn>
-	<InvoiceLineRet>
-		<TxnLineID>2C-1249916009</TxnLineID>
-		<ItemRef>
-			<ListID>80000007-1249914755</ListID>
-			<FullName>Thermal_grease</FullName>
-		</ItemRef>
-		<Desc>Thermal Grease</Desc>
-		<Quantity>3</Quantity>
-		<Rate>25</Rate>
-		<Amount>75.00</Amount>
-		<SalesTaxCodeRef>
-			<ListID>80000001-1244024367</ListID>
-			<FullName>Tax</FullName>
-		</SalesTaxCodeRef>
-	</InvoiceLineRet>
-	<InvoiceLineRet>
-		<TxnLineID>2D-1249916009</TxnLineID>
-		<ItemRef>
-		<ListID>80000008-1249916068</ListID>
-			<FullName>T1500XR</FullName>
-			</ItemRef>
-		<Desc>Compaq T1500XR CSB UPS Battery replacement</Desc>
-		<Quantity>2</Quantity>
-		<Rate>15.00</Rate>
-		<Amount>30.00</Amount>
-		<SalesTaxCodeRef>
-			<ListID>80000002-1244024367</ListID>
-			<FullName>Non</FullName>
-		</SalesTaxCodeRef>
-	</InvoiceLineRet>
-	<InvoiceLineRet>
-		<TxnLineID>2E-1249916009</TxnLineID>
-		<ItemRef>
-			<ListID>80000007-1249914755</ListID>
-			<FullName>Thermal_grease</FullName>
-		</ItemRef>
-		<Desc>Thermal Grease</Desc>
-		<Quantity>1</Quantity>
-		<Rate>25</Rate>
-		<Amount>25.00</Amount>
-		<SalesTaxCodeRef>
-			<ListID>80000001-1244024367</ListID>
-			<FullName>Tax</FullName>
-		</SalesTaxCodeRef>
-	</InvoiceLineRet>
-	<InvoiceLineRet>
-		<TxnLineID>2F-1249916009</TxnLineID>
-		<ItemRef>
-			<ListID>80000008-1249916068</ListID>
-			<FullName>T1500XR</FullName>
-		</ItemRef>
-		<Desc>Compaq T1500XR CSB UPS Battery replacement</Desc>
-		<Quantity>2</Quantity>
-		<Rate>5</Rate>
-		<Amount>10.00</Amount>
-		<SalesTaxCodeRef>
-			<ListID>80000002-1244024367</ListID>
-			<FullName>Non</FullName>
-		</SalesTaxCodeRef>
-	</InvoiceLineRet>
-	<TestFieldDoesntExist>test</TestFieldDoesntExist>
-</InvoiceRet>
-</InvoiceQueryRs>
-</QBXMLMsgsRs>
+	<QBXMLMsgsRs>
+		<CustomerAddRs requestID="' . $requestID . '" statusCode="3180" statusSeverity="Error" statusMessage="There was an error when saving a Customer list, element &quot;Newcastle Tenants Federation&quot;. QuickBooks error message: This list has been modified by another user." />
+	</QBXMLMsgsRs>
 </QBXML>';
 $idents = array();
 
 $tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-print(QuickBooks_Callbacks_SQL_Callbacks::InvoiceImportResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config));
-*/
+//print(QuickBooks_Callbacks_SQL_Callbacks::CustomerAddResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
 
+$errnum = 3180;
+$errmsg = 'There was an error when saving a Customer list, element &quot;Newcastle Tenants Federation&quot;. QuickBooks error message: This record has an error in it.';
+$config = array();
 
-/*
-$xml = '<?xml version="1.0" ?>
-<QBXML>
-<QBXMLMsgsRs>
-<ReceivePaymentQueryRs requestID="UmVjZWl2ZVBheW1lbnRJbXBvcnR8OTM5YjhkODFkYjA2MTZmY2JmZGY1ZjEwMTk3NWRjZmY=" statusCode="0" statusSeverity="Info" statusMessage="Status OK" iteratorRemainingCount="0" iteratorID="{55d8b467-13cd-4b72-96c6-cb4acd1e5de1}">
-<ReceivePaymentRet>
-<TxnID>8BA-1265198220</TxnID>
-<TimeCreated>2010-02-03T06:57:00-05:00</TimeCreated>
-<TimeModified>2010-02-03T06:57:00-05:00</TimeModified>
-<EditSequence>1265198220</EditSequence>
-<TxnNumber>459</TxnNumber>
-<CustomerRef>
-<ListID>1A0004-1264994929</ListID>
-<FullName>Test New Customer</FullName>
-</CustomerRef>
-<ARAccountRef>
-<ListID>3B0000-1211511979</ListID>
-<FullName>Accounts Receivable</FullName>
-</ARAccountRef>
-<TxnDate>2010-02-03</TxnDate>
-<TotalAmount>30.00</TotalAmount>
-<PaymentMethodRef>
-<ListID>30000-1211066025</ListID>
-<FullName>American Express</FullName>
-</PaymentMethodRef>
-<DepositToAccountRef>
-<ListID>3E0000-1211516211</ListID>
-<FullName>Undeposited Funds</FullName>
-</DepositToAccountRef>
-<UnusedPayment>0.00</UnusedPayment>
-<UnusedCredits>0.00</UnusedCredits>
-<AppliedToTxnRet>
-<TxnID>8B6-1265198210</TxnID>
-<TxnType>Invoice</TxnType>
-<TxnDate>2010-02-03</TxnDate>
-<RefNumber>1524</RefNumber>
-<BalanceRemaining>0.00</BalanceRemaining>
-<Amount>30.00</Amount>
-</AppliedToTxnRet>
-</ReceivePaymentRet>
-</ReceivePaymentQueryRs>
-</QBXMLMsgsRs>
-</QBXML>';
+print(QuickBooks_Callbacks_SQL_Errors::catchall($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg, $config));
 
-$requestID = '1234';
-$user = 'quickbooks';
-$action = QUICKBOOKS_ADD_INVOICE;
-$ID = 1;
-$extra = array();
-$err = '';
-$last_action_time = time();
-$last_actionident_time = time();
-$version = "5.0";
-$locale = 'US';
-$callback_config = array();
-$idents = array();
-
-$tmp = QuickBooks_Driver_Singleton::getInstance('pgsql://postgres:password@localhost/quickbooks', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-print(QuickBooks_Callbacks_SQL_Callbacks::ReceivePaymentImportResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config));
-*/
-
-/*
-$requestID = '1234';
-$user = 'quickbooks';
-$ID = 2;
-$extra = array();
-$err = '';
-$last_action_time = time();
-$last_actionident_time = time();
-$version = "5.0";
-$locale = 'US';
-$callback_config = array();
-
-$tmp = QuickBooks_Driver_Singleton::getInstance('pgsql://postgres:password@localhost/quickbooks.qb', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-//print(QuickBooks_Callbacks_SQL_Callbacks::InvoiceAddRequest($requestID, $user, QUICKBOOKS_ADD_INVOICE, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $callback_config));
-print(QuickBooks_Callbacks_SQL_Callbacks::InvoiceModRequest($requestID, $user, QUICKBOOKS_MOD_INVOICE, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $callback_config));
-*/
-
-/*
-$requestID = '1234';
-$user = 'quickbooks';
-$action = QUICKBOOKS_ADD_PURCHASEORDER;
-$ID = 2;
-$extra = array();
-$err = '';
-$last_action_time = time();
-$last_actionident_time = time();
-$version = "5.0";
-$locale = 'US';
-$callback_config = array();
-
-$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-print(QuickBooks_Callbacks_SQL_Callbacks::PurchaseOrderAddRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $callback_config));
-*/
-
-/*
-$requestID = '1234';
-$user = 'quickbooks';
-$action = QUICKBOOKS_MOD_JOURNALENTRY;
-$ID = 1;
-$extra = array();
-$err = '';
-$last_action_time = time();
-$last_actionident_time = time();
-$version = "5.0";
-$locale = 'US';
-$callback_config = array();
-
-$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-print(QuickBooks_Callbacks_SQL_Callbacks::JournalEntryModRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $callback_config));
-*/
-
-/*
-$requestID = '1234';
-$user = 'quickbooks';
-$action = QUICKBOOKS_ADD_RECEIVEPAYMENT;
-$ID = 11;
-$extra = array();
-$err = '';
-$last_action_time = time();
-$last_actionident_time = time();
-$version = "5.0";
-$locale = 'US';
-$callback_config = array();
-
-$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/accounting', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-print(QuickBooks_Callbacks_SQL_Callbacks::ReceivePaymentAddRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $callback_config));
-*/
-
-/*
-$requestID = '1234';
-$user = 'quickbooks';
-$action = QUICKBOOKS_ADD_VENDOR;
-$ID = 15;
-$extra = array();
-$err = '';
-$last_action_time = time();
-$last_actionident_time = time();
-$version = "5.0";
-$locale = 'US';
-$callback_config = array();
-
-$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-print(QuickBooks_Callbacks_SQL_Callbacks::VendorAddRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $callback_config));
-*/
-
-/*
-$requestID = '1234';
-$user = 'quickbooks';
-$action = QUICKBOOKS_ADD_BILLPAYMENTCREDITCARD;
-$ID = 1;
-$extra = array();
-$err = '';
-$last_action_time = time();
-$last_actionident_time = time();
-$version = "5.0";
-$locale = 'US';
-$callback_config = array();
-
-$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-print(QuickBooks_Callbacks_SQL_Callbacks::BillPaymentCreditCardAddRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $callback_config));
-*/
-
-/*
-$requestID = null;
-$user = 'quickbooks';
-$hook = null;
-$err = null;
-$hook_data = array();
-$callback_config = array();
-
-$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-QuickBooks_Callbacks_SQL_Callbacks::onAuthenticate($requestID, $user, $hook, $err, $hook_data, $callback_config);
+//$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
+//print(QuickBooks_Callbacks_SQL_Callbacks::CustomerAddRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
 */

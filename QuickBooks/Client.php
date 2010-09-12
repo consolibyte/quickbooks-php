@@ -3,6 +3,12 @@
 /**
  * QuickBooks SOAP client for testing purposes
  * 
+ * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * Unused for now, might be here for testing in later versions
  * 
  * @author Keith Palmer <keith@consolibyte.com>

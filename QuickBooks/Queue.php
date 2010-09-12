@@ -3,6 +3,12 @@
 /**
  * QuickBooks action queue - A queue of actions to be performed via the QBWC 
  * 
+ * Copyright (c) {2010-04-16} {Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * The QuickBooks action queue can be used to queue up actions that need to be 
  * pushed out to QuickBooks, or queue up items which need to be fetched from 
  * QuickBooks. 

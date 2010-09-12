@@ -3,12 +3,11 @@
 /**
  * Mirror a QuickBooks database in a query-able SQL database 
  * 
- * I received an e-mail with questions about the Web Connector vs. the QODBC 
- * driver that can be found online. The QODBC driver is an ODBC driver for 
- * QuickBooks which allows you to connect to and query QuickBooks using SQL in 
- * real-time. This got me thinking, and what I've attempted to do here is come 
- * up with a similar solution for querying the QuickBooks database in real-time 
- * while utilizing the Web Connector. 
+ * Copyright (c) {2010-04-16} {Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  * 
  * Essentially, this package tries to import your QuickBooks database into an 
  * SQL database of your choice, mapping the QuickBooks schema to SQL tables, 

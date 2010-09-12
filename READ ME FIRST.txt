@@ -53,12 +53,12 @@
  DOCUMENTATION:   (look at these files for examples of how to do stuff)
  
  Integration with the Intuit Partner Platform and IDS
-    docs/example_ipp_basics.php
-    docs/example_ipp_objects.php
+    docs/example_ipp_saml.php
+    docs/example_ipp_federated.php
  
  Integration with QuickBooks Desktop Editions (Pro, Premier, Enterprise)
- 	docs/example_server.php
- 	docs/example_server_import.php
+ 	docs/example_web_connector.php
+ 	docs/example_web_connector_import.php
  	
  Integration with QuickBooks Online Edition
  	docs/example_online_edition.php
@@ -75,9 +75,9 @@
  	docs/example_api_client.php	
  	
  Sending qbXML requests to QuickBooks via PHP from another programming language or a remote server (.NET, Python, etc.)
- 	docs/example_bridge_server.php
- 	docs/example_bridge_http-send.php
- 	docs/example_bridge_http-receive.php
+ 	docs/example_web_connector_bridge.php
+ 	docs/example_web_connector_bridge_http-send.php
+ 	docs/example_web_connector_bridge_http-receive.php
  
  
  RECOMMENDATIONS: 
@@ -101,4 +101,6 @@
  need the QuickBooks OSR to look up the qbXML request/response schema, and you 
  will find that the QuickBooks XML Validator tool is very helpful for 
  debugging.
+ 
+ 
 

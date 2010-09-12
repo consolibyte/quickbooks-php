@@ -3,6 +3,12 @@
 /**
  * QuickBooks Server-Adapter interface
  * 
+ * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * SOAP servers and clients within the QuickBooks class are not accessed 
  * directly, but instead via Adapter classes so that we can support more than 
  * one PHP SOAP server and client type (nuSOAP, PEAR SOAP, PHP ext/soap, etc.)

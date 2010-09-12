@@ -3,6 +3,12 @@
 /**
  * QuickBooks API support for QuickBooks Online Edition
  *
+ * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * This class extends the QuickBooks_API support to QuickBooks Online Edition,
  * by providing an API source which talks directly to QuickBooks Online Edition
  * via HTTPS POST requests. 

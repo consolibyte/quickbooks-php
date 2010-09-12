@@ -3,6 +3,12 @@
 /**
  * QuickBooks SQL-database driver base-class
  * 
+ * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * All SQL back-end drivers should extend this class. This class provides some 
  * database abstraction and scheme generating functions for SQL back-ends. 
  * 

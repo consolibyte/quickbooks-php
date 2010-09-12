@@ -3,6 +3,12 @@
 /** 
  * QuickBooks singleton class for the queueing class
  * 
+ * Copyright (c) {2010-04-16} {Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * Web Connector applications will often use the queueing class within many 
  * different functions within the applications. It is desireable then to always 
  * use a single instance of the queueing class to avoid unneccessary database 

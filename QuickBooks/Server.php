@@ -3,6 +3,12 @@
 /**
  * QuickBooks SOAP server for interacting with the QuickBooks Web Connector 
  * 
+ * Copyright (c) 2010-04-16 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * This class provides a framework for generating and handling messages to send 
  * to and from QuickBooks via the Web Connector. For every operation you wish 
  * to perform on QuickBooks, you should be expecting to implement two functions:

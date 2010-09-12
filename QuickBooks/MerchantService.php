@@ -3,6 +3,12 @@
 /**
  * QuickBooks Merchant Service class 
  * 
+ * Copyright (c) {2010-04-16} {Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
  * QuickBooks Merchant Service enables online stores to charge credit cards and 
  * debit cards via simple HTTPS POSTs to the QuickBooks Merchant Service 
  * payment gateway. This class simplifies the process and wraps it in a nice 
