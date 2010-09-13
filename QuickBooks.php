@@ -1127,15 +1127,3 @@ if (QUICKBOOKS_FRAMEWORK_OBJECTS & QUICKBOOKS_FRAMEWORKS)
 	QuickBooks_Loader::import('/QuickBooks/Object');
 }
 
-if (QUICKBOOKS_FRAMEWORK_INTEGRATORS & QUICKBOOKS_FRAMEWORKS)
-{
-	// Integrator server classes
-	QuickBooks_Loader::import('/QuickBooks/Server/Integrator');
-	
-	// Integrator drivers
-	QuickBooks_Loader::import('/QuickBooks/Integrator');
-	
-	// Integrator runnable classes
-	QuickBooks_Loader::import('/QuickBooks/Runnable/Integrator');
-}
-
