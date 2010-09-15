@@ -62,6 +62,90 @@ class QuickBooks_Callbacks
 		
 	}
 	
+	static public function callSAMLCallback($Driver, $callback, $auth_id, $ticket, $target_url, &$err)
+	{
+		/****  */
+
+
+
+		//$err = '';
+
+		// Determine the type of hook
+		$type = QuickBooks_Callbacks::_type($callback, $Driver, $ticket);
+		
+		if ($Driver)
+		{
+			// Log the callback for debugging
+			$Driver->log('Calling callback [' . $type . ']: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_DEVELOP);
+		}
+
+		// The 4th (start at 0: 0, 1, 2, 3) param is the error handler
+		$which = 3;
+		
+		//             0         1        2            3
+		$vars = array( $auth_id, $ticket, $target_url, &$err );
+		if ($type == QUICKBOOKS_CALLBACKS_TYPE_OBJECT_METHOD)			// Object instance method hook
+		{
+			$object = $callback[0];
+			$method = $callback[1];
+			
+			if ($Driver)
+			{
+				$Driver->log('Calling hook instance method: ' . get_class($callback[0]) . '->' . $callback[1], $ticket, QUICKBOOKS_LOG_VERBOSE);
+			}
+			
+			$ret = QuickBooks_Callbacks::_callObjectMethod( array( $object, $method ), $vars, $err, $which);
+			//$ret = call_user_func_array( array( $object, $method ), array( $requestID, $user, $hook, &$err, $hook_data, $callback_config) );
+		}
+		else if ($type == QUICKBOOKS_CALLBACKS_TYPE_FUNCTION)		// Function hook
+		{
+			$err = '';
+			
+			if ($Driver)
+			{
+				$Driver->log('Calling hook function: ' . $callback, $ticket, QUICKBOOKS_LOG_VERBOSE);
+			}
+			
+			$ret = QuickBooks_Callbacks::_callFunction($callback, $vars, $err, $which);
+			//$ret = $callback($requestID, $user, $hook, $err, $hook_data, $callback_config);
+			// 			$requestID, $user, $action, $ident, $extra, $err, $xml, $qb_identifier
+		}
+		else if ($type == QUICKBOOKS_CALLBACKS_TYPE_STATIC_METHOD)		// Static method hook
+		{
+			if ($Driver)
+			{
+				$Driver->log('Calling hook static method: ' . $callback, $ticket, QUICKBOOKS_LOG_VERBOSE);
+			}
+			
+			//$tmp = explode('::', $callback);
+			//$class = trim(current($tmp));
+			//$method = trim(end($tmp));
+			
+			$ret = QuickBooks_Callbacks::_callStaticMethod($callback, $vars, $err, $which);
+			//$ret = call_user_func_array( array( $class, $method ), array( $requestID, $user, $hook, &$err, $hook_data, $callback_config) );
+		}
+		else
+		{
+			$err = 'Unsupported callback type for callback: ' . print_r($callback, true);
+			return false;
+		}
+		
+		//QuickBooks_Callbacks::_callFunction($function, &$vars, &$err, $which = null)
+		//QuickBooks_Callbacks::_callStaticMethod();
+		//QuickBooks_Callbacks::_callObjectMethod();
+		
+		// Pass on any error messages
+		$err = $vars[$which];
+		
+		return $ret;
+
+
+
+
+		/****    ***/
+		
+	}
+	
 	/**
 	 * Call a callback function
 	 * 
@@ -79,7 +163,7 @@ class QuickBooks_Callbacks
 			return false;
 		}
 		
-		$ret = call_user_func_array($function,$vars);
+		$ret = call_user_func_array($function, $vars);
 		
 		if (!is_null($which))
 		{

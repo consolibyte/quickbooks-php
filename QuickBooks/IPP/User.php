@@ -15,6 +15,8 @@
 
 class QuickBooks_IPP_User
 {
+	const ANONYMOUS = 'anonymous';
+	
 	protected $_userid;
 	
 	protected $_email;
@@ -54,5 +56,45 @@ class QuickBooks_IPP_User
 	public function getEmail()
 	{
 		return $this->_email;
+	}
+	
+	public function getScreenName()
+	{
+		return $this->_screenname;
+	}
+	
+	public function getFirstName()
+	{
+		return $this->_firstname;
+	}
+	
+	public function getLastName()
+	{
+		return $this->_lastname;
+	}
+	
+	public function getLogin()
+	{
+		return $this->_login;
+	}
+	
+	public function isVerified()
+	{
+		return (boolean) $this->_is_verified;
+	}
+	
+	public function isAnonymous()
+	{
+		return $this->_login == QuickBooks_IPP_User::ANONYMOUS;
+	}
+	
+	public function getExternalAuth()
+	{
+		return $this->_external_auth;
+	}
+	
+	public function getAuthId()
+	{
+		return $this->_authid;
 	}
 }

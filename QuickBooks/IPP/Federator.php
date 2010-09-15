@@ -81,6 +81,8 @@ class QuickBooks_IPP_Federator
 	
 	const ERROR_INTERNAL = 4;
 	
+	const ERROR_CALLBACK = 5;
+	
 	protected $_type;
 	
 	protected $_key;
@@ -138,6 +140,26 @@ class QuickBooks_IPP_Federator
 	}
 	
 	/**
+	 * Get the last error number
+	 * 
+	 * @return integer
+	 */
+	public function errorNumber()
+	{
+		return $this->_errnum;
+	}
+	
+	/**
+	 * Get the last error message
+	 * 
+	 * @return string
+	 */
+	public function errorMessage()
+	{
+		return $this->_errmsg;
+	}
+	
+	/**
 	 * Set an error message
 	 * 
 	 * @param integer $errnum	The error number/code
@@ -154,6 +176,17 @@ class QuickBooks_IPP_Federator
 	{
 		$this->_type = $type;
 		$this->_key = $private_key;
+		
+		$this->_driver = null;
+		if ($dsn)
+		{
+			// @todo Logging
+			
+		}
+		
+		$this->_errnum = QuickBooks_IPP_Federator::ERROR_OK;
+		$this->_errmsg = '';
+		
 		$this->_callback = $callback;
 	}					   
 	
@@ -175,6 +208,9 @@ class QuickBooks_IPP_Federator
 			}
 			else
 			{
+				$msg = 'No SAML request in $_POST vars.';
+				$this->_log($msg);
+				$this->_setError(QuickBooks_IPP_Federator::ERROR_SAML, $msg);
 				return false;
 			}
 		}
@@ -335,17 +371,30 @@ class QuickBooks_IPP_Federator
 	{
 		if ($this->_callback)
 		{
+			$err = '';
 			
-			$return = false;
+			$redirect = QuickBooks_Callbacks::callSAMLCallback(
+				$this->_driver, 
+				$this->_callback, 
+				$auth_id, 
+				$ticket, 
+				$target_url, 
+				$err);
+			
+			if ($err)
+			{
+				$this->_setError(QuickBooks_IPP_Federator::ERROR_CALLBACK, 'Callback said: ' . $err);
+				return false;
+			}
 		}
 		else
 		{
 			// Just set the cookie
 			QuickBooks_IPP_Federator::setCookie($ticket);
-			$return = true;
+			$redirect = true;
 		}
 		
-		if ($return)
+		if ($redirect)
 		{
 			$this->_doRedirect($target_url);
 		}

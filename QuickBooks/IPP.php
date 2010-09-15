@@ -315,13 +315,30 @@ class QuickBooks_IPP
 			$ticket = QuickBooks_IPP_Federator::getCookie();
 		}
 		
+		/*
+		if (!$ticket)
+		{
+			return null;
+		}
+		*/
+		
 		$Context = new QuickBooks_IPP_Context($this, $ticket, $token);
 		
 		if ($check_if_valid)
 		{
 			// Now, let's check to make sure the context is valid
+			$User = $this->getUserInfo($Context);
 			
-			// @todo Implement this
+			//print('<pre>');
+			//print_r($User);
+			//print(htmlspecialchars($this->lastResponse(), ENT_QUOTES));
+			//print('</pre>');
+			
+			if (!$User or 
+				$User->isAnonymous())
+			{
+				return null;
+			}
 		}
 		
 		return $Context;
