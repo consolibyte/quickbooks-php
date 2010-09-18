@@ -226,6 +226,8 @@ class QuickBooks_IPP
 			
 		}
 		
+		$this->_cookies = array();
+		
 		$this->_certificate = null;
 		
 		$this->_errcode = QuickBooks_IPP::OK;

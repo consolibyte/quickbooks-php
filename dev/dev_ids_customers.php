@@ -32,7 +32,7 @@ $Service = new QuickBooks_IPP_Service_Customer();
 
 $list = $Service->findAll($Context, $realmID);
 
-file_put_contents('output.txt', $list);
+//file_put_contents('output.txt', $list);
 
 //print_r($list);
 exit;

@@ -429,7 +429,8 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$errnum = 0;
 		$errmsg = '';
 		
-		if ($arr = $this->_fetch($this->_query("
+		if ($ticket and 
+			$arr = $this->_fetch($this->_query("
 			SELECT 
 				quickbooks_ticket_id  
 			FROM 
