@@ -2477,7 +2477,14 @@ class QuickBooks_SQL_Schema
 				'creditcardtxninfo_creditcardtxnresultinfo_resultcode' => array( null, null, 'null' ), 
 				'creditcardtxninfo_creditcardtxnresultinfo_paymentgroupingcode' => array( null, null, 'null' ), 
 				'creditcardtxninfo_creditcardtxnresultinfo_txnauthorizationstamp' => array( null, null, 'null' ), 
-				), 
+				),
+			'salesreceipt_salesreceiptline' => array(
+				'creditcardtxninfo_creditcardtxninputinfo_expirationmonth' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxninputinfo_expirationyear' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_resultcode' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_paymentgroupingcode' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_txnauthorizationstamp' => array( null, null, 'null' ), 				
+				), 	 
 			'invoice_invoiceline' => array(
 				'quantity' => array( null, null, 'null' )
 				),
