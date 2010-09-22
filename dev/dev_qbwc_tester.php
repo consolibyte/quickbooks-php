@@ -5,9 +5,9 @@
 //$username = 'quickbooks';
 //$password = 'password';
 
-$username = 'quickbooks';
-$password = 'password';
-$url = 'http://localhost:8888/QuickBooks/example_mysql_mirror.php';
+$username = 'user106';
+$password = '45oqp68f';
+$url = 'https://secure.consolibyte.com/saas/installs/106/foxycart/qbus/109/public/foxycart/qbwc.php';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -31,7 +31,7 @@ $ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
 print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n");
 
 
-//exit;
+exit;
 
 $max = 1;
 for ($i = 0; $i < $max; $i++)

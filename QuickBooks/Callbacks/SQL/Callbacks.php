@@ -2828,6 +2828,77 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
+	public static function SalesReceiptAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$Driver = QuickBooks_Driver_Singleton::getInstance();
+		if ($SalesReceipt = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesreceipt', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+		{
+			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESRECEIPT, $SalesReceipt, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+		}
+		
+		return ''; 
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static function SalesReceiptAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();		
+		
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesReceiptAddRs');
+		
+		$extra['IsAddResponse'] = true;
+		$extra['is_add_response'] = true;
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_SALESRECEIPT, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
+
+	/**
+	 * Generate a qbXML InvoiceMod request to update an invoice
+	 */
+	public static function SalesReceiptModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$Driver = QuickBooks_Driver_Singleton::getInstance();
+		if ($SalesReceipt = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesreceipt', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+		{
+			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESRECEIPT, $SalesReceipt, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+		}
+		
+		return ''; 
+	}
+	
+	/**
+	 * Handle an InvoiceMod response from QuickBooks
+	 */
+	public static function SalesReceiptModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();		
+		
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesReceiptModRs');
+		
+		$extra['IsModResponse'] = true;
+		$extra['is_mod_response'] = true;
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_SALESRECEIPT, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
+
+
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	public static function CreditMemoAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
