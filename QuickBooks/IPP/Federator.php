@@ -83,6 +83,8 @@ class QuickBooks_IPP_Federator
 	
 	const ERROR_CALLBACK = 5;
 	
+	const ERROR_COOKIE = 6;
+	
 	protected $_type;
 	
 	protected $_key;
@@ -100,6 +102,8 @@ class QuickBooks_IPP_Federator
 	protected $_last_request;
 	
 	protected $_last_response;
+	
+	protected $_config;
 	
 	protected function _log($msg)
 	{
@@ -172,7 +176,7 @@ class QuickBooks_IPP_Federator
 		$this->_errmsg = $errmsg;
 	}
 	
-	public function __construct($type, $private_key, $dsn = null, $callback = null)
+	public function __construct($type, $private_key, $dsn = null, $callback = null, $config = array())
 	{
 		$this->_type = $type;
 		$this->_key = $private_key;
@@ -188,7 +192,29 @@ class QuickBooks_IPP_Federator
 		$this->_errmsg = '';
 		
 		$this->_callback = $callback;
-	}					   
+		
+		$this->_config = $this->_defaults($config);
+	}
+	
+	protected function _defaults($config)
+	{
+		$defaults = array(
+			'cookie_httponly' => true, 
+			'cookie_secure' => null, 		// null is for auto-detection based on $_SERVER['HTTPS']
+			'cookie_domain' => '',			// www.php.net/setcookie() says we can send an empty string for the default value of the current domain 
+			'cookie_path' => '/', 
+			'cookie_expire' => 0, 			// expire when the browser closes
+			);
+		
+		$config = array_merge($defaults, (array) $config);
+		
+		if (is_null($config['cookie_secure']))
+		{
+			$config['cookie_secure'] = (boolean) isset($_SERVER['HTTPS']);
+		}
+		
+		return $config;
+	}
 	
 	public function handle($input = null)
 	{
@@ -390,8 +416,24 @@ class QuickBooks_IPP_Federator
 		else
 		{
 			// Just set the cookie
-			QuickBooks_IPP_Federator::setCookie($ticket);
-			$redirect = true;
+			$cookie_expire = (int) $this->_config['cookie_expire'];
+			$cookie_path = $this->_config['cookie_path'];
+			$cookie_domain = $this->_config['cookie_domain'];
+			$cookie_secure = (boolean) $this->_config['cookie_secure'];
+			$cookie_httponly = (boolean) $this->_config['cookie_httponly'];
+			
+			//print('setting cookie: ' . print_r($this->_config, true));
+			
+			if (QuickBooks_IPP_Federator::setCookie($ticket, $cookie_expire, $cookie_path, $cookie_domain, $cookie_secure, $cookie_httponly))
+			{
+				$redirect = true;
+			}
+			else
+			{
+				// Cookie failed to set for some reason
+				$this->_setError(QuickBooks_IPP_Federator::ERROR_COOKIE, 'Could not set the IPP context cookie (did you make sure *not* to send any output yet?)');
+				return false;
+			}
 		}
 		
 		if ($redirect)
@@ -413,10 +455,15 @@ class QuickBooks_IPP_Federator
 	 * 
 	 *
 	 */
-	static public function setCookie($value, $expire = 0, $path = null, $domain = null)
+	static public function setCookie($value, $expire = 0, $path = '/', $domain = '', $secure = null, $httponly = true)
 	{
-		$secure = true;		// This is required per IPP security guidelines
-		$httponly = true;
+		if (is_null($secure))
+		{
+			$secure = (boolean) isset($_SERVER['HTTPS']);
+		}
+		
+		//$secure = true;		// This is required per IPP security guidelines
+		//$httponly = true;
 		
 		return setcookie(QuickBooks_IPP::COOKIE, $value, $expire, $path, $domain, $secure, $httponly);
 	}

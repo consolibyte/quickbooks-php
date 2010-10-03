@@ -3,6 +3,22 @@
 /**
  * An example of how to mirror parts (or all of) the QuickBooks database to a MySQL database
  * 
+ * 
+ * WARNING WARNING WARNING WARNING
+ * 
+ * THE SQL MIRROR CODE IS BETA CODE, AND IS KNOWN TO HAVE BUGS!
+ * 
+ * With that said:
+ * - If you're planning on using it in a production environment, you better be ready to do a lot of testing and debugging.
+ * - Use a nightly build. There are known problems with the mirror code in the v1.5.2 or v1.5.3 releases of the code.
+ * - There is absolutely no way I can troubleshoot problems for you without you posting your code. Dumps of the quickbooks_queue and quickbooks_log tables and/or phpMyAdmin access to your MySQL database is helpful also.
+ * 
+ * Nightly builds are available here:
+ * https://code.intuit.com/sf/frs/do/viewRelease/projects.php_devkit/frs.php_devkit.latest_sources
+ * 
+ * WARNING WARNING WARNING WARNING
+ *
+ *  
  * The SQL mirror functionality makes it easy to extract information from 
  * QuickBooks into an SQL database, and, if so desired, write changes to the 
  * SQL records back to QuickBooks automatically. 

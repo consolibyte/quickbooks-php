@@ -16,7 +16,7 @@
 header('Content-Type: text/plain');
 
 // 
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keithpalmerjr/Projects/QuickBooks/');
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
 error_reporting(E_ALL | E_STRICT);
 
 /**

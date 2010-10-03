@@ -337,6 +337,7 @@ class QuickBooks_IPP
 			//print('</pre>');
 			
 			if (!$User or 
+				!is_object($User) or 
 				$User->isAnonymous())
 			{
 				return null;

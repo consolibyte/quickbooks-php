@@ -5,9 +5,9 @@
 //$username = 'quickbooks';
 //$password = 'password';
 
-$username = 'user106';
-$password = '45oqp68f';
-$url = 'https://secure.consolibyte.com/saas/installs/106/foxycart/qbus/109/public/foxycart/qbwc.php';
+$username = 'user81';
+$password = 'btmcznhu';
+$url = 'https://secure.consolibyte.com/saas/installs/145/whmcs/qbus/157/public/whmcs/qbwc.php';
 
 if (function_exists('date_default_timezone_set'))
 {

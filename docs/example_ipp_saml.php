@@ -33,11 +33,33 @@ $private_key = dirname(__FILE__) . '/data/example.ipp.key';
 // A database connection string for logging requests/responses/debug information
 $dsn = null;
 
-// 
+// If you want your gateway to call a callback function instead of just redirecting you, you can set the callback here
 $callback = null;
 
+/*
+$callback = 'my_saml_callback';
+function my_saml_callback($auth_id, $ticket, $target_url, &$err)
+{
+	// Do something here to store the ticket your user will use to connect to IPP/IDS
+	
+	// $err = 'Somethign went wrong';		// If something goes wrong, report an error
+	
+	return false;							// No, don't forward the user to the application destination URL
+	//return true;							// Yes, forward the user to the application destination URL 
+}
+*/
+
+// Configuration options for the gateway
+$config = array(
+	//'cookie_httponly' => true,		// Whether or not to set the cookie as HTTP-ONLY (defaults to TRUE)
+	//'cookie_secure' => null, 		// TRUE to force a secure cookie, FALSE to not set a secure cookie, NULL to auto-detect (defaults to NULL)
+	//'cookie_domain' => '',			// Force the cookie to get set for a particular domain (defaults to the current domain)
+	//'cookie_path' => '/', 			// Set the cookie for a specific path (defaults to /)
+	//'cookie_expire' => 0, 			// Set the cookie to expire at a specific time (defaults to the end of the browser session)
+	);
+
 // Create the new federator instance
-$Federator = new QuickBooks_IPP_Federator($type, $private_key, $dsn, $callback);
+$Federator = new QuickBooks_IPP_Federator($type, $private_key, $dsn, $callback, $config);
 
 // This provides helpful troubleshooting information 
 //$Federator->useDebugMode(true);
@@ -45,7 +67,7 @@ $Federator = new QuickBooks_IPP_Federator($type, $private_key, $dsn, $callback);
 // Let the SAML gateway handle the SAML authentication response
 if ($Federator->handle($SAML))
 {
-	; // Success! The end-user will be forwarded automatically to the application URL.
+	print('Please wait while we load your application...'); // Success! The end-user will be forwarded automatically to the application URL.
 }
 else
 {

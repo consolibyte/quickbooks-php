@@ -15,27 +15,34 @@ $realmID = 173642438;
 $IPP = new QuickBooks_IPP();
 $Context = $IPP->authenticate($username, $password, $token);
 
+/*
 print("\n\n");
 print($IPP->lastRequest());
 print("\n\n");
 print($IPP->lastResponse());
 print("\n\n");
+*/
 
 //exit;
 
 $IPP->application($Context, 'be9mh7qd5');
 
-$IPP->useIDSParser(false);
-
+//$IPP->useIDSParser(false);
 
 $Service = new QuickBooks_IPP_Service_Customer();
 
-$list = $Service->findAll($Context, $realmID);
+$list = $Service->rawQuery($Context, $realmID, '<?xml version="1.0" encoding="UTF-16"?>
+<CustomerQuery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns="http://www.intuit.com/sb/cdm/v2">
+	<FirstLastInside>Break Stuff</FirstLastInside>
+</CustomerQuery>');
 
-//file_put_contents('output.txt', $list);
+print_r($list);
 
-//print_r($list);
 exit;
+
+$list = $Service->findAll($Context, $realmID);
 
 foreach ($list as $Customer)
 {

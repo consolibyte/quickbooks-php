@@ -73,6 +73,11 @@ class QuickBooks_Object_Customer extends QuickBooks_Object
 		return $this->set('ParentRef FullName', $name);
 	}
 	
+	public function setParentFullName($FullName)
+	{
+		return $this->set('ParentRef FullName', $FullName);
+	}
+	
 	/**
 	 * Set the application id of the parent client
 	 *

@@ -2437,6 +2437,15 @@ class QuickBooks_SQL_Schema
 		// array( type, length, default )
 		
 		static $overrides = array(
+			'billpaymentcheck' => array(
+				'istobeprinted' => array( null, null, 'null' ), 
+				), 
+			'check' => array(
+				'istobeprinted' => array( null, null, 'null' ), 
+				),
+			'creditmemo' => array(
+				'ispending' => array( null, null, 'null' ), 
+				),
 			'creditmemo_creditmemoline' => array(
 				'creditcardtxninputinfo_expirationmonth' => array( null, null, 'null' ),
 				'creditcardtxninputinfo_expirationyear' => array( null, null, 'null' ),
@@ -2455,38 +2464,17 @@ class QuickBooks_SQL_Schema
 				'creditcardinfo_expirationmonth' => array( null, null, 'null' ),
 				'creditcardinfo_expirationyear' => array( null, null, 'null' )
 				),
-			'estimate_estimateline' => array(
-				'quantity' => array( null, null, 'null' )
-				),
-			'salesorder_salesorderline' => array(
-				'quantity' => array( null, null, 'null' )
-				),
-			'purchaseorder_purchaseorderline' => array(
-				'quantity' => array( null, null, 'null' )
-				),
-			'receivepayment' => array(
-				'creditcardtxninfo_creditcardtxninputinfo_expirationmonth' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxninputinfo_expirationyear' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxnresultinfo_resultcode' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxnresultinfo_paymentgroupingcode' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxnresultinfo_txnauthorizationstamp' => array( null, null, 'null' ), 
+			'employee' => array(
+				'employeepayrollinfo_clearearnings' => array( null, null, 'null' ),
+				'employeepayrollinfo_isusingtimedatatocreatepaychecks' => array( null, null, 'null' ), 
+				'employeepayrollinfo_sickhours_isresettinghourseachnewyear' => array( null, null, 'null' ),
+				'employeepayrollinfo_vacationhours_isresettinghourseachnewyear' => array( null, null, 'null' ),
 				), 
-			'salesreceipt' => array(
-				'creditcardtxninfo_creditcardtxninputinfo_expirationmonth' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxninputinfo_expirationyear' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxnresultinfo_resultcode' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxnresultinfo_paymentgroupingcode' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxnresultinfo_txnauthorizationstamp' => array( null, null, 'null' ), 
+			'estimate' => array(
+				'istobeemailed' => array( null, null, 'null' ), 
 				),
-			'salesreceipt_salesreceiptline' => array(
-				'creditcardtxninfo_creditcardtxninputinfo_expirationmonth' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxninputinfo_expirationyear' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxnresultinfo_resultcode' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxnresultinfo_paymentgroupingcode' => array( null, null, 'null' ), 
-				'creditcardtxninfo_creditcardtxnresultinfo_txnauthorizationstamp' => array( null, null, 'null' ), 				
-				), 	 
-			'invoice_invoiceline' => array(
-				'quantity' => array( null, null, 'null' )
+			'estimate_estimateline' => array(
+				'quantity' => array( null, null, 'null' ),
 				),
 			'itemnoninventory' => array(
 				'salesorpurchase_price' => array( null, null, 'null' ),
@@ -2497,7 +2485,64 @@ class QuickBooks_SQL_Schema
 			'itemdiscount' => array(
 				'discountrate' => array( null, null, 'null' ),
 				'discountratepercent' => array( null, null, 'null' )
-				)
+				),
+			'invoice' => array(
+				'ispending' => array( null, null, 'null' ),
+				'isfinancecharge' => array( null, null, 'null' ),
+				'ispaid' => array( null, null, 'null' ),
+				'istobeprinted' => array( null, null, 'null' ), 
+				'istobeemailed' => array( null, null, 'null' ), 			
+				), 
+			'invoice_invoiceline' => array(
+				'quantity' => array( null, null, 'null' )
+				),
+			'purchaseorder' => array(
+				'ismanuallyclosed' => array( null, null, 'null' ),
+				'isfullyreceived' => array( null, null, 'null' ),
+				'istobeprinted' => array( null, null, 'null' ), 
+				'istobeemailed' => array( null, null, 'null' ), 
+				), 
+			'purchaseorder_purchaseorderline' => array(
+				'ismanuallyclosed' => array( null, null, 'null' ),
+				'receivedquantity' => array( null, null, 'null' ),
+				'quantity' => array( null, null, 'null' )
+				),
+			'receivepayment' => array(
+				'creditcardtxninfo_creditcardtxninputinfo_expirationmonth' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxninputinfo_expirationyear' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_resultcode' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_paymentgroupingcode' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_txnauthorizationstamp' => array( null, null, 'null' ), 
+				), 
+			'salesorder' => array(
+				'ismanuallyclosed' => array( null, null, 'null' ),
+				'isfullyinvoiced' => array( null, null, 'null' ),
+				'istobeprinted' => array( null, null, 'null' ), 
+				'istobeemailed' => array( null, null, 'null' ), 
+				), 
+			'salesorder_salesorderline' => array(
+				'quantity' => array( null, null, 'null' ),
+				'invoiced' => array( null, null, 'null' ),
+				'ismanuallyclosed' => array( null, null, 'null' ),
+				),
+			'salesreceipt' => array(
+				'ispending' => array( null, null, 'null' ), 
+				'istobeprinted' => array( null, null, 'null' ), 
+				'istobeemailed' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxninputinfo_expirationmonth' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxninputinfo_expirationyear' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_resultcode' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_paymentgroupingcode' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_txnauthorizationstamp' => array( null, null, 'null' ), 
+				),
+			'salesreceipt_salesreceiptline' => array(
+				'quantity' => array( null, null, 'null' ),
+				'creditcardtxninfo_creditcardtxninputinfo_expirationmonth' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxninputinfo_expirationyear' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_resultcode' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_paymentgroupingcode' => array( null, null, 'null' ), 
+				'creditcardtxninfo_creditcardtxnresultinfo_txnauthorizationstamp' => array( null, null, 'null' ), 				
+				), 	 
 			);
 			
 		$object_type = strtolower($object_type);
