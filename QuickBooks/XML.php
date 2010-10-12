@@ -298,7 +298,7 @@ class QuickBooks_XML
 				}
 				else if (($attrs{$i} == '"' or $attrs{$i} == '\'') and $in_value)
 				{
-					$attributes[$key] = $value;
+					$attributes[trim($key)] = $value;
 					
 					$key = '';
 					$value = '';
