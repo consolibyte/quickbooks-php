@@ -6,7 +6,7 @@
  * * IMPORTANT * 
  * In order to use this example, you'll need to go through the Intuit 
  * application registration process first! This is documented here: 
- * 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks_
+ * 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks_qbms_integration
  * 
  * @package QuickBooks
  * @subpackage Documentation
@@ -60,6 +60,7 @@ $path_to_private_key_and_certificate = null;
 //	registration process.
 //$application_login = 'test.www.academickeys.com';
 $application_login = 'test.foxycart.com';
+$application_login = 'qbms.consolibyte.com';
 
 // This is the connection ticket assigned to you during the application 
 //	registration process. To conform to Intuit security practices, you are 
@@ -71,6 +72,7 @@ $application_login = 'test.foxycart.com';
 //	encrypted with a crypto library such as {@link http://www.php.net/mcrypt}.
 //$connection_ticket = 'TGT-152-LWGj1YQUufTAlSW8DK1c6A';
 $connection_ticket = 'TGT-145-niiEL2kCFoOTYHvkwBarmg';
+$connection_ticket = 'TGT-157-p3PyZPoH3DtieLSh4ykp6Q';
 
 // Create an instance of the MerchantService object 
 $MS = new QuickBooks_MerchantService(
@@ -167,8 +169,6 @@ if ($Transaction = $MS->authorize($Card, $amount))
 {
 	print('Card authorized!' . "\n");
 	print_r($Transaction);	
-	
-	//exit;
 		
 	// 	Every time the MerchantService class returns a $Transaction object to you, 
 	// 	you should store the returned $Transaction. You'll need the returned 

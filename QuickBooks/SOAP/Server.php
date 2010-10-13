@@ -80,7 +80,8 @@ class QuickBooks_SOAP_Server
 		
 		//print('does this get called?');
 		
-		$Parser = new QuickBooks_XML_Parser($raw_http_input);
+		$builtin = QuickBooks_XML::PARSER_BUILTIN;		// The SimpleXML parser has a difference namespace behavior, so force this to use the builtin parser
+		$Parser = new QuickBooks_XML_Parser($raw_http_input, $builtin);
 		
 		$errnum = 0;
 		$errmsg = '';

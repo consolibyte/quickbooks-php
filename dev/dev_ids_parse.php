@@ -120,7 +120,7 @@ $list = $Parser->parseIDS($xml, $optype, $xml_errnum, $xml_errmsg, $err_code, $e
 
 foreach ($list as $Customer)
 {
-	print($Customer->getName() . ' has an ID of: ' . $Customer->getID() . ', ' . $Customer->getAddress(0)->getId() . "\n");
+	print($Customer->getName() . ' has an ID of: ' . $Customer->getId() . ', ' . $Customer->getAddress(0)->getId() . "\n");
 }
 
 

@@ -73,5 +73,3 @@ class QuickBooks_XML_Document
 		return $this->_root->asXML();
 	}
 }
-
-?>

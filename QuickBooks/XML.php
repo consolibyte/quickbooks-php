@@ -29,6 +29,16 @@ QuickBooks_Loader::load('/QuickBooks/XML/Document.php');
 QuickBooks_Loader::load('/QuickBooks/XML/Parser.php');
 
 /**
+ * XML backend interface
+ */
+QuickBooks_Loader::load('/QuickBooks/XML/Backend.php');
+
+/**
+ * XML parser backends
+ */
+QuickBooks_Loader::import('/QuickBooks/XML/Backend');
+
+/**
  * QuickBooks XML base class
  */
 class QuickBooks_XML
@@ -67,6 +77,28 @@ class QuickBooks_XML
 	 * @var integer
 	 */
 	const ERROR_DANGLING = 4;
+	
+	/**
+	 * Internal XML parser error
+	 * @var integer
+	 */
+	const ERROR_INTERNAL = 5;
+	
+	/**
+	 * No content to parse error
+	 * @var integer
+	 */
+	const ERROR_CONTENT = 6;
+	
+	/**
+	 * 
+	 */
+	const PARSER_BUILTIN = 'builtin';
+	
+	/**
+	 * 
+	 */
+	const PARSER_SIMPLEXML = 'simplexml';
 	
 	/**
 	 * <code>

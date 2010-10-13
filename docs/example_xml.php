@@ -14,25 +14,37 @@
  * @subpackage Documentation
  */
 
+// Error reporting
+header('Content-Type: text/plain');
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 1);
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
+
 /**
  * QuickBooks classes
  */
-require_once '../QuickBooks.php';
+require_once 'QuickBooks.php';
 
-// Error reporting
-error_reporting(E_ALL | E_STRICT);
-ini_set('display_errors', 1);
+$start = microtime(true);
 
 // Our test XML tag
 $xml = '
 	<Tag1>
-		<NestedTag age="25" gender="male" note="Keith &quot;Worminator&quot; Palmer">
+		<NestedTag age="25" gender="male" 
+			note="Keith &quot;Worminator&quot; Palmer">
 			<AnotherTag>Keith</AnotherTag>
 		</NestedTag>
 	</Tag1>';
-
+	
+$use_parser = null;			// Auto-detect the best choice
+//$use_parser = QuickBooks_XML::PARSER_BUILTIN;		// Use the built in XML parser
+//$use_parser = QuickBooks_XML::PARSER_SIMPLEXML;		// Use the PHP simpleXML extension
+	
 // Create the new object
-$Parser = new QuickBooks_XML_Parser($xml);
+$Parser = new QuickBooks_XML_Parser($xml, $use_parser);
+
+print('Using backend: [' . $Parser->backend() . ']' . "\n");
+print("\n");
 
 // Parse the XML document
 $errnum = 0;
@@ -47,6 +59,7 @@ if ($Parser->validate($errnum, $errmsg))
 	
 	// Now fetch some stuff from the parsed document
 	print('Hello there ' . $Root->getChildDataAt('Tag1 NestedTag AnotherTag') . "\n");
+	
 	print_r($Root->getChildAttributesAt('Tag1 NestedTag'));
 	print("\n");
 	print('Root tag name is: ' . $Root->name() . "\n");
@@ -54,18 +67,25 @@ if ($Parser->validate($errnum, $errmsg))
 	$NestedTag = $Root->getChildAt('Tag1 NestedTag');
 	print_r($NestedTag);
 }
+else
+{
+	print('XML validation failed: [' . $errnum . ': ' . $errmsg . ']');
+}
 
 $xml2 = '
 	<Animals>
-		<Animal id="1">
+		<Animal id="1"
+			age="1" >
 			<Name>Yamaguchi</Name>
 			<Type>Rooster</Type>
 		</Animal>
-		<Animal id="2">
+		<Animal id="2"
+			age="2">
 			<Name>Agnus</Name>
 			<Type>Hen</Type>
 		</Animal>
-		<Animal id="3">
+		<Animal id="3"
+			age="3">
 			<Name>Wasabi</Name>
 			<Type>Hen</Type>
 			<Note>Wasabi &amp; Yamaguchi are in *loooovvvveee*</Note>
@@ -93,10 +113,10 @@ if ($Parser->validate($errnum, $errmsg))
 		print("\t" . $name . ' (' . $note . ')' . "\n");
 	}	
 }
-
-print("\n");
-print('Error number: ' . $errnum . "\n");
-print('Error message: ' . $errmsg . "\n");
+else
+{
+	print('XML validation failed: [' . $errnum . ': ' . $errmsg . ']');
+}
 
 $value = 'Keith & Shannon went to Kurt\'s store!';
 
@@ -134,4 +154,7 @@ else
 	print('Error: ' . $errnum . ': ' . $errmsg);
 }
 
+print("\n");
+
+print('total time: ' . (microtime(true) - $start) . ' seconds');
 print("\n");

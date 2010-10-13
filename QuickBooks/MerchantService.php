@@ -42,6 +42,11 @@ QuickBooks_Loader::load('/QuickBooks/Driver/Factory.php');
 QuickBooks_Loader::load('/QuickBooks/MerchantService/CreditCard.php');
 
 /**
+ * QuickBooks checking account class
+ */
+QuickBooks_Loader::load('/QuickBooks/MerchantService/CheckingAccount.php');
+
+/**
  * QuickBooks merchant service transaction class
  */
 QuickBooks_Loader::load('/QuickBooks/MerchantService/Transaction.php');
@@ -147,6 +152,9 @@ class Quickbooks_MerchantService
 	
 	const TYPE_WALLETCHARGE = 'WalletCharge';
 	
+	
+	const TYPE_CHECK_DEBIT = 'CheckDebit';
+	
 	/**
 	 * Constant for the NotAvailable response some fields return 
 	 * @var string
@@ -166,6 +174,13 @@ class Quickbooks_MerchantService
 	const SEVERITY_WARN = 'WARN';
 	
 	const SEVERITY_ERROR = 'ERROR';
+	
+	const MODE_INTERNET = 'Internet';
+	const MODE_TELEPHONE = 'Telephone';
+	const MODE_SIGNED = 'SignedAuthOnFile';
+	const MODE_MAILED = 'Mailed';
+	const MODE_WITHRECEIPT = 'InPersonWithReceipt';
+	const MODE_WITHOUTRECEIPT = 'InPersonNoReceipt';
 	
 	/*
 	2000
@@ -689,6 +704,121 @@ class Quickbooks_MerchantService
 		return false;		
 	}
 	
+	public function debitCheck($CheckingAccount, $amount, $payment_mode, $check_number = null, $comment = null, $is_recurring = false, $force_new_transaction = true)
+	{
+		/*
+<CustomerCheckDebitRq>
+	<TransRequestID >STRTYPE</TransRequestID> <!-- required -->
+	<KeyEnteredCheckInfo> <!-- optional -->
+		<RoutingNumber >STRTYPE</RoutingNumber> <!-- required -->
+		<AccountNumber >STRTYPE</AccountNumber> <!-- required -->
+		<CheckNumber >STRTYPE</CheckNumber> <!-- optional -->
+		<!-- BEGIN OR -->
+		<PersonalPaymentInfo> <!-- optional -->
+		<!-- PersonalDebitAccountType may have one of the following values: Checking, Savings -->
+		<PersonalDebitAccountType >ENUMTYPE</PersonalDebitAccountType> <!-- required -->
+		<PayorFirstName >STRTYPE</PayorFirstName> <!-- required -->
+		<PayorLastName >STRTYPE</PayorLastName> <!-- required -->
+		</PersonalPaymentInfo>
+		<!-- OR -->
+		<BusinessPaymentInfo> <!-- optional -->
+			<!-- BusinessDebitAccountType may have one of the following values: Checking, Savings -->
+			<BusinessDebitAccountType >ENUMTYPE</BusinessDebitAccountType> <!-- required -->
+			<PayorFirstName >STRTYPE</PayorFirstName> <!-- optional -->
+			<PayorLastName >STRTYPE</PayorLastName> <!-- optional -->
+		</BusinessPaymentInfo>
+		<!-- END OR -->
+	</KeyEnteredCheckInfo>
+	
+	<PayorPhoneNumber >STRTYPE</PayorPhoneNumber> <!-- optional -->
+	<Amount >AMTTYPE</Amount> <!-- required -->
+	<!-- PaymentMode may have one of the following values: Internet, Telephone, SignedAuthOnFile, Mailed, InPersonWithReceipt, InPersonNoReceipt -->
+	<PaymentMode >ENUMTYPE</PaymentMode> <!-- required -->
+	<PayeeName >STRTYPE</PayeeName> <!-- optional -->
+	<BatchID >STRTYPE</BatchID> <!-- optional -->
+	<IsRecurring >BOOLTYPE</IsRecurring> <!-- optional -->
+	<Comment >STRTYPE</Comment> <!-- optional -->
+</CustomerCheckDebitRq>
+
+<CustomerCheckDebitRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+	<CheckTransID >STRTYPE</CheckTransID> <!-- optional -->
+	<CheckAuthorizationCode >STRTYPE</CheckAuthorizationCode> <!-- optional -->
+	<TxnAuthorizationTime >DATETIMETYPE</TxnAuthorizationTime> <!-- optional -->
+	<ClientTransID >STRTYPE</ClientTransID> <!-- optional -->
+	<StatusDetail >STRTYPE</StatusDetail> <!-- optional -->
+</CustomerCheckDebitRs>
+*/
+
+		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
+		$this->_log('debitCheck()', QUICKBOOKS_LOG_VERBOSE);
+		
+		if (!$this->isSignedOn())
+		{
+			$this->signOn();
+			
+			if ($this->errorNumber())
+			{
+				return false;
+			}
+		}
+		
+		$transRequestID = $this->_transRequestID(QuickBooks_MerchantService::TYPE_CHECK_DEBIT, $CheckingAccount, $amount, $force_new_transaction);
+		
+		$xml = '';
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<?qbmsxml version="4.1"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<QBMSXML>' . QUICKBOOKS_CRLF;
+		$xml .= $this->_createSessionXML();
+		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
+		$xml .= '		<CustomerCheckDebitRq>' . QUICKBOOKS_CRLF;
+		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
+		
+		$xml .= $this->_createCheckingAccountXML($CheckingAccount, $check_number, $amount, $payment_mode);
+
+		//<BatchID >STRTYPE</BatchID> <!-- optional -->
+		
+		if ($comment)
+		{
+			$xml .= '			<Comment>' . substr(QuickBooks_XML::encode($comment), 0, 500) . '</Comment>' . QUICKBOOKS_CRLF;
+		}
+
+		$xml .= '		</CustomerCheckDebitRq>' . QUICKBOOKS_CRLF;
+		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;		
+		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
+		
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_CHECK_DEBIT, 'QBMSXML/QBMSXMLMsgsRs/CustomerCheckDebitRs', $xml, $CheckingAccount);		
+	}
+	
+	public function voidCheck()
+	{
+		
+	}
+	
+	public function addCheckWallet()
+	{
+		
+	}
+	
+	public function updateCheckWallet()
+	{
+		
+	}
+	
+	public function deleteCheckWallet($customerID, $walletID)
+	{
+		
+	}
+	
+	public function debitCheckWallet($customerID, $walletID, $amount)
+	{
+		
+	}
+	
+	public function debit($Debit, $amount, $force_new_transaction = true)
+	{
+		
+	}
+	
 	public function addWallet($customerID, $Card)
 	{
 		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
@@ -1145,6 +1275,55 @@ class Quickbooks_MerchantService
 		}
 		
 		return false;
+	}
+	
+	protected function _createCheckingAccountXML($CheckingAccount, $check_number, $amount, $payment_mode)
+	{
+		$xml = '';
+		
+		if ($CheckingAccount)
+		{
+			$xml .= '<KeyEnteredCheckInfo>' . QUICKBOOKS_CRLF;
+			$xml .= "\t" . '<RoutingNumber>' . $CheckingAccount->getRoutingNumber() . '</RoutingNumber>' . QUICKBOOKS_CRLF;
+			$xml .= "\t" . '<AccountNumber>' . $CheckingAccount->getAccountNumber() . '</AccountNumber>' . QUICKBOOKS_CRLF;
+			
+			if ($check_number)
+			{
+				$xml .= "\t" . '<CheckNumber>' . $check_number . '</CheckNumber>' . QUICKBOOKS_CRLF;
+			}
+			
+			if ($CheckingAccount->getInfo() == QuickBooks_MerchantService_CheckingAccount::INFO_PERSONAL)
+			{
+				$xml .= "\t" . '<PersonalPaymentInfo>' . QUICKBOOKS_CRLF;
+				// <!-- PersonalDebitAccountType may have one of the following values: Checking, Savings -->
+				$xml .= "\t" . "\t" . '<PersonalDebitAccountType>' . $CheckingAccount->getType() . '</PersonalDebitAccountType>' . QUICKBOOKS_CRLF;
+				$xml .= "\t" . "\t" . '<PayorFirstName>' . htmlspecialchars($CheckingAccount->getFirstName(), ENT_QUOTES) . '</PayorFirstName>' . QUICKBOOKS_CRLF;
+				$xml .= "\t" . "\t" . '<PayorLastName>' . htmlspecialchars($CheckingAccount->getLastName(), ENT_QUOTES) . '</PayorLastName>' . QUICKBOOKS_CRLF;
+				$xml .= "\t" . '</PersonalPaymentInfo>' . QUICKBOOKS_CRLF;
+			}
+			else
+			{
+				$xml .= "\t" . '<BusinessPaymentInfo>' . QUICKBOOKS_CRLF;
+				// <!-- BusinessDebitAccountType may have one of the following values: Checking, Savings -->
+				$xml .= "\t" . "\t" . '<BusinessDebitAccountType>' . $CheckingAccount->getType() . '</BusinessDebitAccountType>' . QUICKBOOKS_CRLF;
+				$xml .= "\t" . "\t" . '<PayorFirstName>' . htmlspecialchars($CheckingAccount->getFirstName(), ENT_QUOTES) . '</PayorFirstName>' . QUICKBOOKS_CRLF;
+				$xml .= "\t" . "\t" . '<PayorLastName>' . htmlspecialchars($CheckingAccount->getLastName(), ENT_QUOTES) . '</PayorLastName>' . QUICKBOOKS_CRLF;
+				$xml .= "\t" . '</BusinessPaymentInfo>' . QUICKBOOKS_CRLF;
+			}
+			
+			$xml .= '</KeyEnteredCheckInfo>' . QUICKBOOKS_CRLF;
+		}
+		
+		$xml .= '<PayorPhoneNumber>' . $CheckingAccount->getPhone() . '</PayorPhoneNumber>' . QUICKBOOKS_CRLF;
+		$xml .= '<Amount>' . sprintf('%01.2f', $amount) . '</Amount>' . QUICKBOOKS_CRLF;
+		// <!-- PaymentMode may have one of the following values: Internet, Telephone, SignedAuthOnFile, Mailed, InPersonWithReceipt, InPersonNoReceipt -->
+		$xml .= '<PaymentMode>' . $payment_mode . '</PaymentMode>' . QUICKBOOKS_CRLF;
+
+		// <PayeeName >STRTYPE</PayeeName> <!-- optional -->
+		// <BatchID >STRTYPE</BatchID> <!-- optional -->
+		// <IsRecurring >BOOLTYPE</IsRecurring> <!-- optional -->
+		
+		return $xml;
 	}
 	
 	protected function _createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true)

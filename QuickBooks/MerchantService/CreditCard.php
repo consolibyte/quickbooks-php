@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ * Credit card class
  * 
  * Copyright (c) {2010-04-16} {Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials

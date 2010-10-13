@@ -89,13 +89,13 @@ define('QUICKBOOKS_PACKAGE_WEBSITE', 'http://www.consolibyte.com/');
  * The name of the package
  * @var string
  */
-define('QUICKBOOKS_PACKAGE_NAME', 'QuickBook PHP Connector');
+define('QUICKBOOKS_PACKAGE_NAME', 'QuickBooks PHP DevKit');
 
 /**
  * The version of this QuickBooks package 
  * @var string
  */
-define('QUICKBOOKS_PACKAGE_VERSION', '1.5.4');
+define('QUICKBOOKS_PACKAGE_VERSION', '0.9');
 
 if (!defined('QUICKBOOKS_CRLF'))
 {
@@ -257,39 +257,9 @@ define('QUICKBOOKS_LOCALE_OE', QUICKBOOKS_LOCALE_ONLINE_EDITION);
 define('QUICKBOOKS_SOAPSERVER_PHP', 'php');
 
 /**
- * Use the PEAR {@link http://pear.php.net/} SOAP package
- */
-define('QUICKBOOKS_SOAPSERVER_PEAR', 'pear');
-
-/**
- * Use the nuSOAP package
- */
-define('QUICKBOOKS_SOAPSERVER_NUSOAP', 'nusoap');
-
-/**
  * Use the built-in pure PHP SOAP server
  */
 define('QUICKBOOKS_SOAPSERVER_BUILTIN', 'builtin');
-
-/**
- * Use the PHP ext/soap SOAP client
- */
-define('QUICKBOOKS_SOAPCLIENT_PHP', QUICKBOOKS_SOAPSERVER_PHP);
-
-/**
- * Use the PEAR SOAP client
- */
-define('QUICKBOOKS_SOAPCLIENT_PEAR', QUICKBOOKS_SOAPSERVER_PEAR);
-
-/**
- * Use the nuSOAP SOAP client
- */
-define('QUICKBOOKS_SOAPCLIENT_NUSOAP', QUICKBOOKS_SOAPSERVER_NUSOAP);
-
-/**
- * Use the built-in SOAP client
- */
-define('QUICKBOOKS_SOAPCLIENT_BUILTIN', QUICKBOOKS_SOAPSERVER_BUILTIN);
 
 /**
  * QuickBooks flag to request to enter "Interactive Mode"
