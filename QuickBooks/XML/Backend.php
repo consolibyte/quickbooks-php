@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 interface QuickBooks_XML_Backend
 {
@@ -10,3 +10,4 @@ interface QuickBooks_XML_Backend
 	
 	public function load($str);
 }
+
