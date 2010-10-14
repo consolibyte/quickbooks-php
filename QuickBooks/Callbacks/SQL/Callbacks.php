@@ -4684,7 +4684,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_CHECK, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 	
-	public static function CheckQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function CheckImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
 		
@@ -4708,7 +4708,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
-	public static function CheckQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function CheckImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
@@ -4773,7 +4773,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_JOURNALENTRY, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
-	public static function ChargeQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function ChargeImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
 		
@@ -4801,7 +4801,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
-	public static function ChargeQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function ChargeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
@@ -4903,7 +4903,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		return QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('company', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
-	public static function CreditCardChargeQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function CreditCardChargeImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
 		
@@ -4926,7 +4926,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
-	public static function CreditCardChargeQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function CreditCardChargeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
@@ -4945,7 +4945,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('creditcardcharge', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 	
-	public static function CreditCardCreditQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function CreditCardCreditImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
 		
@@ -4968,7 +4968,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
-	public static function CreditCardCreditQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function CreditCardCreditImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
@@ -5340,7 +5340,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	}
 	
 		
-	public static function DepositQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function DepositImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
 		
@@ -5368,7 +5368,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
-	public static function DepositQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function DepositImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		

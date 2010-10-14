@@ -5,9 +5,9 @@
 //$username = 'quickbooks';
 //$password = 'password';
 
-$username = 'quickbooks';
+$username = 'user80';
 $password = 'password';
-$url = 'http://localhost:8888/QuickBooks/example_mysql_mirror.php';
+$url = 'http://localhost:8888/saas/installs/80/ejunkie/qbus/93/public/ejunkie/qbwc.php';
 
 if (function_exists('date_default_timezone_set'))
 {
