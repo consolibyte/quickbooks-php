@@ -145,6 +145,29 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 		return null;
 	}
 	
+	public function table($map, $object_or_action, $ID)
+	{
+		$Driver = $this->_driver;
+		
+		if ($map == QuickBooks_Map::MAP_QBXML)
+		{
+			$object = QuickBooks_Utilities::actionToObject($object_or_action);
+			
+			$table_and_field = array();
+			
+			// Convert to table and primary key, select qbsql id
+			QuickBooks_SQL_Schema::mapPrimaryKey($object, QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $table_and_field);  
+			
+			if (!empty($table_and_field[0]) and 
+				!empty($table_and_field[1]))
+			{
+				return QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0];
+			}
+		}
+		
+		return null;
+	}
+	
 	public function adds($adds = array(), $mark_as_queued = true)
 	{
 		$Driver = $this->_driver;

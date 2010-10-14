@@ -45,7 +45,6 @@ class QuickBooks_SQL
 	 */
 	const HOOK_QUICKBOOKS_DELETE = 'QuickBooks_SQL quickbooks-delete';
 	
-	
 	/**
 	 * 
 	 */
