@@ -221,6 +221,8 @@ class QuickBooks_IPP_Federator
 			'test_param_dbid' => '', 
 			'test_param_realm' => '', 
 			'test_param_state' => '', 
+			
+			'segfault_openssl_private_decrypt' => null, 
 			);
 		
 		$config = array_merge($defaults, (array) $config);
@@ -291,7 +293,7 @@ class QuickBooks_IPP_Federator
 			$SAML = base64_decode($SAML);
 		}
 		
-		$this->_log('Incoming SAML request: ' . substr($SAML, 0, 64) . '...');
+		$this->_log('Incoming SAML request: ' . substr($SAML, 0, 128) . '...');
 		
 		//print("\n\n" . $SAML . "\n\n");
 		// 
@@ -366,7 +368,8 @@ class QuickBooks_IPP_Federator
 			
 			// Decrypt the key
 			$decrypted_key = null;
-			$result = openssl_private_decrypt($decoded_key, $decrypted_key, $private_key_data);
+			$result = $this->_segfault_openssl_private_decrypt($decoded_key, $decrypted_key, $private_key_data);
+
 			$this->_log('Key: [' . $decrypted_key . ']');
 
 			if (!$decrypted_key)
@@ -403,7 +406,8 @@ class QuickBooks_IPP_Federator
 			$ticket = null;
 			$errnum = null;
 			$errmsg = null;
-			$Parser = new QuickBooks_XML_Parser($decrypted_ticket);
+			$use_backend = QuickBooks_XML_Parser::BACKEND_BUILTIN;
+			$Parser = new QuickBooks_XML_Parser($decrypted_ticket, $use_backend);
 			if ($Doc = $Parser->parse($errnum, $errmsg))
 			{
 				$Root = $Doc->getRoot();
@@ -538,5 +542,40 @@ class QuickBooks_IPP_Federator
 		}
 		
 		return null;
+	}
+	
+	protected function _segfault_openssl_private_decrypt($decoded_key, &$decrypted_key, $private_key_data)
+	{
+		if ($this->_config['segfault_openssl_private_decrypt'])
+		{
+			$filename = tempnam('/tmp', 'segfault_openssl_private_decrypt__');
+			$fp = fopen($filename, 'w+');
+			fwrite($fp, serialize(array( $decoded_key, $private_key_data )));
+			fclose($fp);
+			
+			$command = $this->_config['segfault_openssl_private_decrypt'] . ' ' . $filename;
+			
+			$this->_log('Using segfault_openssl_private_decrypt work-around [' . $command . ']');
+			
+			$output = array();
+			$return_var = null;
+			exec($command, $output, $return_var);
+			
+			//print("\n\n\n\n-----------------\n");
+			//print_r(implode(PHP_EOL, $output));
+			//print("\n---------------------\n\n\n\n");
+			
+			$this->_log('The segfault_openssl_private_decrypt work-around returned [' . $return_var . ']');
+			
+			$decrypted_key = implode(PHP_EOL, $output);
+			return true;
+		}
+		else
+		{
+			// Decrypt the key
+			$decrypted_key = null;
+			$result = openssl_private_decrypt($decoded_key, $decrypted_key, $private_key_data);
+			return $result;
+		}
 	}
 }
