@@ -442,10 +442,10 @@ class QuickBooks_Cast
 			$value = str_replace(array_keys($entities), array_values($entities), $value);
 			
 			//$value = htmlspecialchars($value, ENT_QUOTES, null, false);
+
+			// UTF8 character handling, decode UTF8 to character decimal codes
+			$value = QuickBooks_Cast::_decodeUTF8($value);
 		}
-		
-		// UTF8 character handling, decode UTF8 to character decimal codes
-		$value = QuickBooks_Cast::_decodeUTF8($value);
 		
 		return $value;
 	}
