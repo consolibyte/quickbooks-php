@@ -72,14 +72,18 @@ class QuickBooks_IPP_Object
 			
 			$field = substr($name, 3);
 			
+			$tmp = null;
 			if (count($args) == 1)
 			{
-				$this->_data[$field] = current($args);
+				$tmp = current($args);
+				$this->_data[$field] = $tmp;
 			}
 			else
 			{
 				
 			}
+			
+			return $tmp;
 		}
 		else if (substr($name, 0, 3) == 'get')
 		{
@@ -126,7 +130,10 @@ class QuickBooks_IPP_Object
 				$this->_data[$field] = array();
 			}
 			
-			$this->_data[$field][] = current($args);
+			$tmp = current($args);
+			$this->_data[$field][] = $tmp;
+			
+			return $tmp;
 		}
 		else if (substr($name, 0, 5) == 'unset')
 		{
@@ -173,7 +180,8 @@ class QuickBooks_IPP_Object
 		{
 			if (is_object($value))
 			{
-				//$xml .= $value->asIDSXML($ident + 1);
+				// If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
+				$xml .= $value->asIDSXML($indent + 1);
 			}
 			else if (is_array($value))
 			{

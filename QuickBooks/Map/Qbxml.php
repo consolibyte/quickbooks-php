@@ -183,7 +183,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 		{
 			$object = QuickBooks_Utilities::actionToObject($action);
 			
-			$Driver->log('Action is: ' . $action . ', object is: ' . $object);
+			//$Driver->log('Action is: ' . $action . ', object is: ' . $object);
 			
 			$table_and_field = array();
 			
@@ -217,7 +217,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						" . QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY . " <= '" . $NOW . "' ";
 				//		" . QUICKBOOKS_DRIVER_SQL_FLAG_TO_VOID . " != 1 ";
 				
-				$Driver->log($sql);
+				//$Driver->log($sql);
 						
 				$errnum = 0;
 				$errmsg = '';

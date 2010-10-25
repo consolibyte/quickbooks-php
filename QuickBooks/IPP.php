@@ -201,7 +201,7 @@ class QuickBooks_IPP
 	 */
 	protected $_ids_version;
 	
-	public function __construct($dsn = null)
+	public function __construct($dsn = null, $config = array(), $log_level = QUICKBOOKS_LOG_NORMAL)
 	{
 		// Use a test gateway?
 		$this->_test = false;
@@ -223,7 +223,7 @@ class QuickBooks_IPP
 		
 		if ($dsn)
 		{
-			
+			$this->_driver = QuickBooks_Driver_Factory::create($dsn, $config, $log_level);
 		}
 		
 		$this->_cookies = array();
@@ -966,7 +966,7 @@ class QuickBooks_IPP
 		if ($this->_driver)
 		{
 			// Send it to the driver to be logged 
-			$this->_driver->log($message, $this->_ticket_session, $level);
+			$this->_driver->log($message, null, $level);
 		}
 		
 		return true;
