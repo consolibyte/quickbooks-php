@@ -7,7 +7,7 @@
 
 $username = 'user80';
 $password = 'password';
-$url = 'http://localhost:8888/saas/installs/80/ejunkie/qbus/93/public/ejunkie/qbwc.php';
+$url = 'https://qbrjustinccs.thegcloud.com/index.php/2010-10-21';
 
 if (function_exists('date_default_timezone_set'))
 {

@@ -40,7 +40,7 @@ if (function_exists('date_default_timezone_set'))
 }
 
 // Include path for the QuickBooks library
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keithpalmerjr/Projects/QuickBooks/');
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
 
 // I always program in E_STRICT error mode... 
 error_reporting(E_ALL | E_STRICT);

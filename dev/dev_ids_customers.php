@@ -27,7 +27,7 @@ print("\n\n");
 
 $IPP->application($Context, 'be9mh7qd5');
 
-//$IPP->useIDSParser(false);
+$IPP->useIDSParser(false);
 
 $Service = new QuickBooks_IPP_Service_Customer();
 
@@ -35,10 +35,17 @@ $list = $Service->rawQuery($Context, $realmID, '<?xml version="1.0" encoding="UT
 <CustomerQuery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns="http://www.intuit.com/sb/cdm/v2">
-	<FirstLastInside>Break Stuff</FirstLastInside>
+	<FirstLastInside>Test Example Customer</FirstLastInside>
 </CustomerQuery>');
 
-print_r($list);
+print("\n\n");
+print($IPP->lastRequest());
+print("\n\n");
+print($IPP->lastResponse());
+print("\n\n");
+
+
+//print_r($list);
 
 exit;
 

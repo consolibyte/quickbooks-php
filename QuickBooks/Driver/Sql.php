@@ -1345,7 +1345,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		if ($by_priority)
 		{
-			$sql .= ' ORDER BY priority DESC ';
+			$sql .= ' ORDER BY priority DESC, ident ASC ';
 		}
 		
 		return $this->_fetch($this->_query($sql, $errnum, $errmsg, 0, 1));
