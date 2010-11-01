@@ -89,8 +89,6 @@ class QuickBooks_SOAP_Server
 		{
 			//print('parsing...');
 			
-			QuickBooks_Utilities::log('mysql://root:root@localhost/quickbooks_server', print_r($Doc, true));
-			
 			$Root = $Doc->getRoot();
 			
 			$Body = $Root->getChildAt('SOAP-ENV:Envelope SOAP-ENV:Body');
