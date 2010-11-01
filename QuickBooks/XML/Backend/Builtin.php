@@ -239,8 +239,11 @@ class QuickBooks_XML_Backend_BuiltIn implements QuickBooks_XML_Backend
 				//print('TAG: [' . substr($tag_w_attrs, 0, -1 . ']' . "\n");
 				//print('TWA: [' . $tag . ']' . "\n");
 				
-				$tag_w_attrs = substr($tag_w_attrs, 0, -1);
-				$tag = substr($tag, 0, -1);
+				//$tag_w_attrs = substr($tag_w_attrs, 0, -1);
+				//$tag = substr($tag, 0, -1);
+				
+				$tag_w_attrs = rtrim($tag_w_attrs, '/');
+				$tag = rtrim($tag, '/');
 				
 				// Shove the item on to the stack
 				array_unshift($vstack, array( $tag, $tag_w_attrs, $current + $opentag_end ) );

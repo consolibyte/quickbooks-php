@@ -6,22 +6,29 @@ error_reporting(E_ALL | E_STRICT);
 require_once '../QuickBooks.php';
 
 // 
-$username = 'keith@consolibyte.com';
-$password = 'password42';
-$token = 'tex3r7hwifx6cci3zk43ibmnd';
-$realmID = 173642438;
+$username = 'support@consolibyte.com';
+$password = '';
+$token = 'bf8cp2mihs6vsdibgqsybinugvj12346';
+$realmID = 18293819223456;
 
 // 
 $IPP = new QuickBooks_IPP();
 $Context = $IPP->authenticate($username, $password, $token);
-$IPP->application($Context, 'be9mh7qd5');
+$IPP->application($Context, 'bfrccpnge');
 
 // Create a new Service for IDS access
 $Service = new QuickBooks_IPP_Service_SalesReceipt();
 
-//$list = $Service->findAll($Context, $realmID);
+$list = $Service->findAll($Context, $realmID);
+
+print("\n\n");
+print($Service->lastRequest() . "\n\n\n");
+print("\n\n");
+print($Service->lastResponse() . "\n\n\n");
+print("\n\n");
 
 
+/*
 $SalesReceipt = new QuickBooks_IPP_Object_SalesReceipt();
 
 $Header = new QuickBooks_IPP_Object_Header();
@@ -43,6 +50,7 @@ $SalesReceipt->addLine($Line);
 $ID = $Service->add($Context, $realmID, $SalesReceipt);
 
 print('new ID is: ' . $ID . "\n");
+*/
 
 /*
 print("\n\n");
