@@ -26,4 +26,29 @@ class QuickBooks_IPP_Service_Item extends QuickBooks_IPP_Service
 		$xml = null;
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEM, $xml);
 	}
+	
+	public function findByName($Context, $realmID, $name)
+	{
+		$list = $this->findAll($Context, $realmID, $name);
+		
+		foreach ($list as $Item)
+		{
+			if (strtolower($Item->getName()) == strtolower($name))
+			{
+				return $Item;
+			}
+		}
+		
+		return false;
+	}	
+	
+	public function add($Context, $realmID, $Object)
+	{
+		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEM, $Object);
+	}
+	
+	public function delete($Context, $realmID, $IDType)
+	{
+		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEM, $IDType);
+	}
 }

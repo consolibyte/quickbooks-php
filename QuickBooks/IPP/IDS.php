@@ -84,6 +84,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_ITEM = 'Item';
 	
+	const RESOURCE_ITEMCONSOLIDATED = 'ItemConsolidated';
+	
 	const RESOURCE_ITEMRECEIPT = 'ItemReceipt';
 	
 	const RESOURCE_JOB = 'Job';

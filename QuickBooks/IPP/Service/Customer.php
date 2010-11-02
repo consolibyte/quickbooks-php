@@ -33,12 +33,26 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
 	 * @param QuickBooks_IPP_Context $Context	
 	 * @param string $realmID					
 	 * @param string $ID						The ID of the customer (this expects an IdType, which includes the domain)
-	 * @return QuickBooks_IPP_Object_Employee	The employee object
+	 * @return QuickBooks_IPP_Object_Customer	The customer object
 	 */
 	public function findById($Context, $realmID, $ID)
 	{
 		$xml = null;
-		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $ID, null, $xml);
+		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $ID, $xml);
+	}
+	
+	/**
+	 * Get a customer by name
+	 * 
+	 * @param QuickBooks_IPP_Context $Context	
+	 * @param string $realmID					
+	 * @param string $name						The name of the customer 
+	 * @return QuickBooks_IPP_Object_Customer	The customer object
+	 */
+	public function findByName($Context, $realmID, $name)
+	{
+		$xml = null;
+		return parent::_findByName($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $name, $xml);
 	}
 	
 	/**

@@ -70,6 +70,13 @@ abstract class QuickBooks_IPP_Service
 		$this->_last_debug = array();
 	}
 	
+	public function useIDSParser($Context, $true_or_false)
+	{
+		$IPP = $Context->IPP();
+		
+		return $IPP->useIDSParser((boolean) $true_or_false);
+	}
+	
 	protected function _report($Context, $realmID, $resource, $xml = '')
 	{
 		$IPP = $Context->IPP();
@@ -164,6 +171,40 @@ abstract class QuickBooks_IPP_Service
 		$this->_setLastDebug($Context->lastDebug());
 		
 		return $return;
+	}
+	
+	/**
+	 * Get an IDS object by Name (i.e. get a customer by the QuickBooks Name field)
+	 * 
+	 * @param QuickBooks_IPP_Context $Context
+	 * @param integer $realmID
+	 * @param string $resource
+	 * @param string $xml
+	 * @return QuickBooks_IPP_Object
+	 */
+	protected function _findByName($Context, $realmID, $resource, $name, $xml = '')
+	{
+		$IPP = $Context->IPP();
+		
+		if (!$xml)
+		{
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+			$xml .= '	<FirstLastInside>' . QuickBooks_XML::encode($name) . '</FirstLastInside>' . QUICKBOOKS_CRLF;
+			$xml .= '</' . $resource . 'Query>';
+		}
+		
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
+		
+		if (count($return))
+		{
+			return $return[0];
+		}
+		
+		return null;
 	}
 	
 	/** 
