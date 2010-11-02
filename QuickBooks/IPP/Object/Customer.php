@@ -10,5 +10,15 @@ class QuickBooks_IPP_Object_Customer extends QuickBooks_IPP_Object
 			'TypeOf' => 'Person', 
 			);
 	}
+	
+	protected function _order()
+	{
+		return array(
+			'Name' => true, 
+			'GivenName' => true, 
+			'FamilyName' => true, 
+			'Address' => true, 
+			);
+	}
 }
 

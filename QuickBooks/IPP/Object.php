@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * Base QuickBooks IPP/IDS class
  *
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
@@ -9,30 +9,32 @@
  * which accompanies this distribution, and is available at
  * http://www.opensource.org/licenses/eclipse-1.0.php
  * 
+ * @author Keith Palmer <keith@ConsoliBYTE.com>
  * 
- * 
+ * @package QuickBooks
+ * @subpackage IPP
  */
 
+/**
+ * This class is the base IPP object class for IPP/IDS objects
+ */
 class QuickBooks_IPP_Object
 {
+	/**
+	 * Array containing all object data
+	 * @var array
+	 */
 	protected $_data;
 	
+	/**
+	 * Create a new object
+	 * 
+	 *
+	 */
 	public function __construct()
 	{
 		$this->_data = array();
 	}
-	
-	/*
-	public function getID()
-	{
-		return $this->__call('getId', array());
-	}
-	
-	public function setID($ID)
-	{
-		return $this->__call('setId', $ID);
-	}
-	*/
 	
 	public function get($field)
 	{
@@ -144,6 +146,11 @@ class QuickBooks_IPP_Object
 				unset($this->_data[$field]);
 			}
 		}
+		else
+		{
+			trigger_error('Call to undefined method $' . get_class($this) . '->' . $name . '(...)', E_USER_ERROR);
+			return false;
+		}
 	}
 	
 	public function resource()
@@ -152,13 +159,54 @@ class QuickBooks_IPP_Object
 		return end($split);
 	}
 	
+	/**
+	 * 
+	 * 
+	 */
 	protected function _defaults()
 	{
 		return array();
 	}
 	
+	/**
+	 * 
+	 * 
+	 */
+	protected function _order()
+	{
+		return array();
+	}
+	
+	protected function _reorder($data, $base = '')
+	{
+		$order = $this->_order();
+		
+		$retr = array();
+		
+		foreach ($order as $path => $null)
+		{
+			if (array_key_exists($path, $data))
+			{
+				$retr[$path] = $data[$path];
+			}
+		}
+		
+		$diff = array_diff_key($data, $order);
+		
+		if (count($diff))
+		{
+			// Some keys got left behind!
+			$retr = array_merge($retr, $diff);
+		}
+		
+		return $retr;
+	}
+	
 	public function asIDSXML($indent = 0, $parent = null, $optype = null)
 	{
+		// We're not going to actually change the data, just change a copy of it
+		$data = $this->_data;
+		
 		if (!$parent)
 		{
 			$parent = $this->resource();
@@ -169,14 +217,18 @@ class QuickBooks_IPP_Object
 			$xml = str_repeat("\t", $indent) . '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
 			
 			// Merge in the defaults for this object type
-			$this->_data = array_merge($this->_defaults(), $this->_data);
+			$data = array_merge($this->_defaults(), $data);
 		}
 		else
 		{
 			$xml = str_repeat("\t", $indent) . '<' . $parent . '>' . QUICKBOOKS_CRLF;
 		}
 		
-		foreach ($this->_data as $key => $value)
+		// Re-order is correctly
+		$data = $this->_reorder($data);
+		
+		// Go through the data, creating XML out of it
+		foreach ($data as $key => $value)
 		{
 			if (is_object($value))
 			{
@@ -192,8 +244,10 @@ class QuickBooks_IPP_Object
 			}
 			else
 			{
+				$for_qbxml = false;
+				
 				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
-				$xml .= $value;
+				$xml .= QuickBooks_XML::encode($value, $for_qbxml);
 				$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
 			}
 		}
