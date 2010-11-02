@@ -224,6 +224,7 @@ class QuickBooks_IPP
 		if ($dsn)
 		{
 			$this->_driver = QuickBooks_Driver_Factory::create($dsn, $config, $log_level);
+			$this->_driver->setLogLevel($log_level);
 		}
 		
 		$this->_cookies = array();
@@ -965,6 +966,7 @@ class QuickBooks_IPP
 		
 		if ($this->_driver)
 		{
+			//die('logging to driver: [' . $level . ']');
 			// Send it to the driver to be logged 
 			$this->_driver->log($message, null, $level);
 		}
