@@ -46,10 +46,12 @@ class QuickBooks_IPP_Object_Header extends QuickBooks_IPP_Object
 			'TotalAmt' => true, 
 			'ToBePrinted' => true, 
 			'ToBeEmailed' => true, 
-			'Custom' => true, 
+			'Custom' => true,
+			'BillAddr' => true,  			// Not part of SalesReceipt
 			'ShipAddr' => true, 
 			'ShipMethodId' => true, 	
 			'ShipMethodName' => true, 
+			'Balance' => true, 				// Not part of SalesReceipt
 			'DepositToAccountId' => true, 	
 			'DepositToAccountName' => true, 
 			'PaymentMethodId' => true, 
