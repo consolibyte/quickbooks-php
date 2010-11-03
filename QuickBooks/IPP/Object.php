@@ -58,6 +58,23 @@ class QuickBooks_IPP_Object
 		return $this->__call('set' . $field, array( $value ));
 	}
 	
+	public function setDateType($field, $value)
+	{
+		if ((string) ((float) $value) == $value)
+		{
+			return $this->set($field, date('Y-m-d', $value));
+		}
+		else
+		{
+			return $this->set($field, date('Y-m-d', strtotime($value)));
+		}
+	}
+	
+	public function getDateType($field, $format = 'Y-m-d')
+	{
+		return date($format, strtotime($this->get($field)));
+	}
+	
 	public function remove($field)
 	{
 		if (isset($this->_data[$field]))
