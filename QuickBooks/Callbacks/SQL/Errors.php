@@ -63,7 +63,8 @@ class QuickBooks_Callbacks_SQL_Errors
 			case 3180:
 				
 				// This error can occur in several different situations, so we test per situation
-				if (false !== strpos($errmsg, 'list has been modified by another user'))
+				if (false !== strpos($errmsg, 'list has been modified by another user') or 
+					false !== strpos($errmsg, 'internals could not be locked'))
 				{
 					// This is *not* an error, we can just send the request again, and it'll go through just fine
 					return true;
