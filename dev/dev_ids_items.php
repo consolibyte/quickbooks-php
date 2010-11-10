@@ -6,58 +6,70 @@ error_reporting(E_ALL | E_STRICT);
 require_once '../QuickBooks.php';
 
 // 
-$username = '';
-$password = '';
-$token = '';
-$realmID = 0;
+$username = 'keith@consolibyte.com';
+$password = 'password42';
+$token = 'tex3r7hwifx6cci3zk43ibmnd';
+$realmID = 173642438;
+$application = 'be9mh7qd5';
 
 // 
 $IPP = new QuickBooks_IPP();
 $Context = $IPP->authenticate($username, $password, $token);
 
-/*
-print("\n\n");
-print($IPP->lastRequest());
-print("\n\n");
-print($IPP->lastResponse());
-print("\n\n");
-*/
-
-//exit;
-
-$IPP->application($Context, '');
+$IPP->application($Context, $application);
 
 $IPP->useIDSParser(false);
 
-$Service = new QuickBooks_IPP_Service_ItemConsolidated();
+/*
+$Service = new QuickBooks_IPP_Service_Item();
 
-$list = $Service->rawQuery($Context, $realmID, '<?xml version="1.0" encoding="UTF-16"?>
-<ItemConsolidatedQuery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-xmlns="http://www.intuit.com/sb/cdm/v2">
-	<NameContains>ish</NameContains>
-</ItemConsolidatedQuery>');
+$Service->findAll($Context, $realmID);
 
-print("\n\n");
-print($IPP->lastRequest());
-print("\n\n");
-print($IPP->lastResponse());
-print("\n\n");
+print($Service->lastRequest() . "\n\n");
+print($Service->lastResponse() . "\n\n");
+*/
 
-print("\n\n\n\n");
+
+/*
+$Service = new QuickBooks_IPP_Service_Item();
+
+$Item = new QuickBooks_IPP_Object_Item();
+$Item->setType('Service');
+$Item->setName('Test Name');
+
+$IncomeAccountRef = new QuickBooks_IPP_Object_IncomeAccountRef();
+$IncomeAccountRef->setAccountName('Account That Does Not Exist');
+$Item->setIncomeAccountRef($IncomeAccountRef);
+
+//print($Item->asIDSXML());
+
+$Service->add($Context, $realmID, $Item);
+
+print($Service->lastRequest() . "\n\n");
+print($Service->lastResponse() . "\n\n");
+*/
+
+
+/*
+$Service = new QuickBooks_IPP_Service_Item();
+
+$Service->findAll($Context, $realmID);
+
+print($Service->lastRequest() . "\n\n");
+print($Service->lastResponse() . "\n\n");
+*/
+
+
+
+
+// ErroredObjectsOnly="true"
+
+$xml = '<?xml version="1.0" encoding="UTF-8"?>
+<ItemQuery ErroredObjectsOnly="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/v2"></ItemQuery>';
 
 $Service = new QuickBooks_IPP_Service_Item();
 
-$list = $Service->rawQuery($Context, $realmID, '<?xml version="1.0" encoding="UTF-16"?>
-<ItemQuery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-xmlns="http://www.intuit.com/sb/cdm/v2">
-</ItemQuery>');
+$Service->rawQuery($Context, $realmID, $xml);
 
-print("\n\n");
-print($IPP->lastRequest());
-print("\n\n");
-print($IPP->lastResponse());
-print("\n\n");
-
-print("\n\n\n\n");
+print($Service->lastRequest() . "\n\n");
+print($Service->lastResponse() . "\n\n");

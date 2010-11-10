@@ -5952,6 +5952,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<PaymentMethodQueryRq requestID="' . $requestID . '">
+						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</PaymentMethodQueryRq>
 				</QBXMLMsgsRq>
@@ -6524,7 +6525,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<ShipMethodQueryRq requestID="' . $requestID . '">
-						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
+						<ActiveStatus>All</ActiveStatus>
+						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '						
 					</ShipMethodQueryRq>
 				</QBXMLMsgsRq>
 			</QBXML>';
@@ -6571,6 +6573,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<TermsQueryRq requestID="' . $requestID . '">
+						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</TermsQueryRq>
 				</QBXMLMsgsRq>
