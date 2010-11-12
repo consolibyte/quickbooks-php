@@ -83,7 +83,7 @@ $source_options = array(
 	'connection_ticket' => 'TGT-47-1sRm2nXMVfm$n8hb2MZfVQ', 
 	'application_login' => 'test.www.academickeys.com', 
 	'application_id' => '134476472', 
-	
+
 	// This is just for debugging/testing, and you should comment this out... 
 	//'override_session_ticket' => 'V1-184-uVBpWbpD17931L2hMNMw$A:134864687', 	// Comment this line out unless you know what you're doing!
 	);
@@ -110,7 +110,17 @@ $API->useDebugMode(true);
 //	(i.e. the QuickBooks Web Connector). 
 //$API->enableRealtime(true);
 
+// Let's get some general information about this connection to QBOE:
+print('Our connection ticket is: ' . $API->connectionTicket() . "\n");
+print('Our session ticket is: ' . $API->sessionTicket() . "\n");
+print('Our application id is: ' . $API->applicationID() . "\n");
+print('Our application login is: ' . $API->applicationLogin() . "\n");
+print("\n"); 
+print('Last error number: ' . $API->errorNumber() . "\n");
+print('Last error message: ' . $API->errorMessage() . "\n");
+print("\n");
 
+/*
 // The "raw" approach to accessing QuickBooks Online Edition is to build and 
 //	parse the qbXML requests/responses send to/from QuickBooks yourself. Here 
 //	is an example of querying for a customer by building a raw qbXML request. 
@@ -119,11 +129,58 @@ $API->useDebugMode(true);
 $return = $API->qbxml('
 		<CustomerQueryRq>
 			<FullName>Keith Palmer Jr.</FullName>
-		</CustomerQueryRq>', '_raw_qbxml_callback_1');
+		</CustomerQueryRq>', '_raw_qbxml_callback');
 
 // This function gets called when QuickBooks Online Edition sends a response back
-function _raw_qbxml_callback_1($method, $action, $ID, &$err, $qbxml, $Iterator, $qbres)
+function _raw_qbxml_callback($method, $action, $ID, &$err, $qbxml, $Iterator, $qbres)
 {
-	print('We got back this Customer qbXML from QuickBooks Online Edition: ' . $qbxml . ', iterator: ' . print_r($Iterator, true));
+	print('We got back this qbXML from QuickBooks Online Edition: ' . $qbxml);
 }
 
+// For QuickBooks Online Edition, you can use real-time connections so that you 
+//	get return values instead of having to write callback functions. Note that 
+//	if you do this, you make your code less portable to other editions of 
+//	QuickBooks that do not support real-time connections (i.e. QuickBooks 
+//	desktop editions via the Web Connector)
+if ($API->usingRealtime())
+{
+	print('Our real-time response from QuickBooks Online Edition was: ');
+	print_r($return);
+}
+*/
+
+// You can also create QuickBooks_Object_* instances and send them directly to 
+//	QBOE via the API as show below. The API takes care of transforming those 
+//	objects to valid qbXML requests for you. 
+$name = 'Keith Palmer (' . mt_rand() . ')';
+
+$Customer = new QuickBooks_Object_Customer();
+$Customer->setName($name);
+$Customer->setShipAddress('134 Stonemill Road', '', '', '', '', 'Storrs', 'CT', '', '06268');
+
+// Just a demo showing how to generate the raw qbXML request
+print('Here is the qbXML request we\'re about to send to QuickBooks Online Edition: ' . "\n");
+print($Customer->asQBXML('CustomerAdd'));
+
+// Send the request to QuickBooks
+$API->addCustomer($Customer, '_add_customer_callback', 15);
+
+// This is our callback function, this will get called when the customer is added successfully
+function _add_customer_callback($method, $action, $ID, &$err, $qbxml, $Customer, $qbres)
+{
+	print('Customer #' . $ID . ' looks like this within QuickBooks Online Edition: ' . "\n");
+	print_r($Customer);
+}
+
+
+// Here's a demo of querying for customers with a specific name: 
+$name = 'Keith Palmer Jr.';
+
+// Here's how to fetch that customer by name
+$API->getCustomerByName($name, '_get_customer_callback', 15);
+
+function _get_customer_callback($method, $action, $ID, &$err, $qbxml, $Iterator, $qbres)
+{
+	print('This is customer #' . $ID . ' we fetched: ' . "\n");
+	print_r($Iterator);
+}

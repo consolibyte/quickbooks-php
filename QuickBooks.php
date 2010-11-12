@@ -1013,14 +1013,6 @@ if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_IPP)
 	QuickBooks_Loader::load('/QuickBooks/IPP.php');
 }
 
-if (QUICKBOOKS_FRAMEWORK_MISCELLANEOUS & QUICKBOOKS_FRAMEWORKS)
-{
-	/**
-	 * SOAP client for QuickBooks testing
-	 */
-	QuickBooks_Loader::load('/QuickBooks/Client.php');
-}
-
 if (QUICKBOOKS_FRAMEWORK_MISCELLANEOUS & QUICKBOOKS_FRAMEWORKS or 
 	QUICKBOOKS_FRAMEWORK_ONLINEEDITION & QUICKBOOKS_FRAMEWORKS or 
 	QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS)
@@ -1075,14 +1067,6 @@ if (QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS)
 	 * QuickBooks Merchant Service support
 	 */
 	QuickBooks_Loader::load('/QuickBooks/MerchantService.php');
-}
-
-if (QUICKBOOKS_FRAMEWORK_FRONTEND & QUICKBOOKS_FRAMEWORKS)
-{
-	/**
-	 * Front-end GUI class
-	 */
-	QuickBooks_Loader::load('/QuickBooks/Frontend.php');
 }
 
 if (QUICKBOOKS_FRAMEWORK_WEBCONNECTOR & QUICKBOOKS_FRAMEWORKS)
