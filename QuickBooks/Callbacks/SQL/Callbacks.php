@@ -42,6 +42,7 @@
 
 // For debugging... 
 //require_once '/Users/kpalmer/Projects/QuickBooks/QuickBooks.php';
+//require_once '/Users/kpalmer/Sites/saas/library/quickbooks/QuickBooks.php';
 
 /**
  * Mapper for qbXML schema
@@ -3641,6 +3642,22 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					continue;
 				}
 			}
+			else
+			{
+				$use_abbrevs = false;
+				$htmlspecialchars = true;
+				
+				//print('THIS RAN [' . $value . ']');
+				
+				$value = QuickBooks_Cast::cast(
+					null, 
+					null, 
+					$value, 
+					$use_abbrevs, 
+					$htmlspecialchars);
+					
+				//print(' => [' . $value . ']' . "\n");
+			}
 			
 			// Special handling for non-US versions of QuickBooks
 			
@@ -3965,6 +3982,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		}
 			
 		$xml .= $Node->asXML();
+		
+		// Bad hack... 
+		$xml = str_replace('&amp;#', '&#', $xml);
+		$xml = str_replace('&amp;amp;', '&amp;', $xml);
+		$xml = str_replace('&amp;quot;', '&quot;', $xml); 
+		
 		$xml .= '</' . QuickBooks_Utilities::actionToRequest($action) .'>
 				</QBXMLMsgsRq>
 			</QBXML>';
@@ -10710,7 +10733,20 @@ $errmsg = 'There was an error when saving a Customer list, element &quot;Newcast
 $config = array();
 
 print(QuickBooks_Callbacks_SQL_Errors::catchall($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg, $config));
+*/
 
-//$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-//print(QuickBooks_Callbacks_SQL_Callbacks::CustomerAddRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
+/*
+$requestID = 'Q3VzdG9tZXJBZGR8Mw==';
+$user = 'quickbooks';
+$action = QUICKBOOKS_ADD_CUSTOMER;
+$ID = 11;
+$extra = array();
+$err = '';
+$last_action_time = time();
+$last_actionident_time = time();
+$xml = '';
+$idents = array();
+
+$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/saas_91_whmcs_qbus_106', array(), array(), QUICKBOOKS_LOG_DEVELOP);
+print(QuickBooks_Callbacks_SQL_Callbacks::CustomerAddRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
 */

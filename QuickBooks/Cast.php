@@ -323,6 +323,9 @@ class QuickBooks_Cast
 		print_r($types5);
 		*/
 		
+		$class = null;
+		$schema = null;
+		
 		if (isset($types[$type_or_action]))
 		{
 			QuickBooks_Loader::load('/QuickBooks/QBXML/Schema/Object/' . $types[$type_or_action] . '.php');
@@ -341,69 +344,72 @@ class QuickBooks_Cast
 			$class = 'QuickBooks_QBXML_Schema_Object_' . $types5[$type_or_action];
 			$schema = new $class();
 		}
-		else
-		{
-			return $value;
-		}
+		//else
+		//{
+		//	return $value;
+		//}
 		
 		//print('	casting using schema: ' . get_class($schema) . "\n");
 		
-		if (!$schema->exists($field) and false !== strpos($field, '_'))
+		if ($class and $schema)
 		{
-			$field = str_replace('_', ' ', $field);
-		}
-		
-		if ($schema->exists($field))
-		{
-			switch ($schema->dataType($field))
+			if (!$schema->exists($field) and false !== strpos($field, '_'))
 			{
-				case QUICKBOOKS_DATATYPE_STRING:
-					
-					$maxlength = $schema->maxLength($field);
-					
-					// Use only ASCII characters
-					//$value = QuickBooks_Cast::_castCharset($value);
-					
-					// Make sure it'll fit in the allocated field length
-					if (is_int($maxlength) and $maxlength > 0)
-					{
-						$value = QuickBooks_Cast::_castTruncate($value, $maxlength, $use_abbrevs);
-					}
-					
-					break;
-				case QUICKBOOKS_DATATYPE_DATE:
-					$value = date('Y-m-d', strtotime($value));
-					break;
-				case QUICKBOOKS_DATATYPE_DATETIME:
-					$value = date('Y-m-d', strtotime($value)) . 'T' . date('H:i:s', strtotime($value));
-					break;
-				case QUICKBOOKS_DATATYPE_ENUM:
-					// do nothing
-					break;
-				case QUICKBOOKS_DATATYPE_ID:
-					// do nothing
-					break;
-				case QUICKBOOKS_DATATYPE_FLOAT:
-					$value = (float) $value;
-					break;
-				case QUICKBOOKS_DATATYPE_BOOLEAN:
-					
-					if ($value and $value !== 'false')
-					{
-						$value = 'true';
-					}
-					else
-					{
-						$value = 'false';
-					}
-					
-					break;
-				case QUICKBOOKS_DATATYPE_INTEGER:
-					$value = (int) $value;
-					break;
-			}			
+				$field = str_replace('_', ' ', $field);
+			}
+			
+			if ($schema->exists($field))
+			{
+				switch ($schema->dataType($field))
+				{
+					case QUICKBOOKS_DATATYPE_STRING:
+						
+						$maxlength = $schema->maxLength($field);
+						
+						// Use only ASCII characters
+						//$value = QuickBooks_Cast::_castCharset($value);
+						
+						// Make sure it'll fit in the allocated field length
+						if (is_int($maxlength) and $maxlength > 0)
+						{
+							$value = QuickBooks_Cast::_castTruncate($value, $maxlength, $use_abbrevs);
+						}
+						
+						break;
+					case QUICKBOOKS_DATATYPE_DATE:
+						$value = date('Y-m-d', strtotime($value));
+						break;
+					case QUICKBOOKS_DATATYPE_DATETIME:
+						$value = date('Y-m-d', strtotime($value)) . 'T' . date('H:i:s', strtotime($value));
+						break;
+					case QUICKBOOKS_DATATYPE_ENUM:
+						// do nothing
+						break;
+					case QUICKBOOKS_DATATYPE_ID:
+						// do nothing
+						break;
+					case QUICKBOOKS_DATATYPE_FLOAT:
+						$value = (float) $value;
+						break;
+					case QUICKBOOKS_DATATYPE_BOOLEAN:
+						
+						if ($value and $value !== 'false')
+						{
+							$value = 'true';
+						}
+						else
+						{
+							$value = 'false';
+						}
+						
+						break;
+					case QUICKBOOKS_DATATYPE_INTEGER:
+						$value = (int) $value;
+						break;
+				}			
+			}
 		}
-		
+			
 		/*
 		if ($htmlspecialchars)
 		{			
@@ -424,9 +430,11 @@ class QuickBooks_Cast
 			//$value = htmlspecialchars($value, ENT_QUOTES, null, false);
 		}
 		*/
-
+		
 		if ($htmlspecialchars)
-		{			
+		{
+			//print("DECODING");
+			
 			$entities = array(
 				'&' => '&amp;', 
 				'<' => '&lt;', 

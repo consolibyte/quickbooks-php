@@ -251,10 +251,13 @@ class QuickBooks_Status_Report
 		
 		$actions = QuickBooks_Utilities::listActions('*IMPORT*');
 		//print_r($actions);
+		//print_r($restrict);
 		
 		foreach ($actions as $action)
 		{
 			$object = QuickBooks_Utilities::actionToObject($action);
+			
+			//print('checking object [' . $object . ']' . "<br />");
 			
 			if ($do_restrict and 
 				!in_array($object, $restrict))
@@ -262,10 +265,14 @@ class QuickBooks_Status_Report
 				continue;
 			}
 			
+			//print('doing object: ' . $object . '<br />');
+			
 			$pretty = $this->_prettyName($object);
 			$report[$pretty] = array();
 			
 			QuickBooks_SQL_Schema::mapPrimaryKey($object, QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $table_and_field);  
+			
+			//print_r($table_and_field);
 			
 			if (!empty($table_and_field[0]) and 
 				!empty($table_and_field[1]))
@@ -299,6 +306,8 @@ class QuickBooks_Status_Report
 				}
 				
 				$sql .= " ORDER BY qbsql_id DESC ";
+				
+				//print($sql);
 				
 				$errnum = 0;
 				$errmsg = '';
