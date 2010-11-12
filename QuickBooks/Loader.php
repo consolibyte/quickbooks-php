@@ -67,7 +67,7 @@ class QuickBooks_Loader
 		{
 			$done = true;
 			
-			if (false and function_exists('spl_autoload_register'))
+			if (function_exists('spl_autoload_register'))
 			{
 				// Register the autoloader, and return TRUE
 				spl_autoload_register(array( 'QuickBooks_Loader', '__autoload' ));
