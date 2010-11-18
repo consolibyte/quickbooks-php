@@ -83,7 +83,6 @@ $source_options = array(
 	'connection_ticket' => 'TGT-47-1sRm2nXMVfm$n8hb2MZfVQ', 
 	'application_login' => 'test.www.academickeys.com', 
 	'application_id' => '134476472', 
-
 	// This is just for debugging/testing, and you should comment this out... 
 	//'override_session_ticket' => 'V1-184-uVBpWbpD17931L2hMNMw$A:134864687', 	// Comment this line out unless you know what you're doing!
 	);

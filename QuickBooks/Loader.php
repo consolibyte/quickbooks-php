@@ -16,7 +16,7 @@
 //  
 if (!defined('QUICKBOOKS_LOADER_REQUIREONCE'))
 {
-	define('QUICKBOOKS_LOADER_REQUIREONCE', false);
+	define('QUICKBOOKS_LOADER_REQUIREONCE', true);
 }
 
 /**

@@ -914,6 +914,16 @@ class QuickBooks_IPP
 			return true;
 		}
 		
+		// Check for IDS XML error codes
+		$errorcode = QuickBooks_XML::extractTagContents('ErrorCode', $response);
+		$errordesc = QuickBooks_XML::extractTagContents('ErrorDesc', $response);
+		
+		if ($errorcode)
+		{
+			$this->_setError($errorcode, $errordesc);
+			return true;
+		}
+		
 		// Does not have any errors
 		return false;
 	}

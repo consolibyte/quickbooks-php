@@ -1,8 +1,8 @@
 <?php
 
-//$url = 'http://localhost:8888/QuickBooks/example_mysql_mirror.php';
-//$username = 'quickbooks';
-//$password = 'password';
+$url = 'http://localhost:8888/saas/installs/92/interspire/qbus/108/public/interspire/qbwc.php';
+$username = 'user92';
+$password = 'abcd1234';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -20,8 +20,8 @@ $return = tester($url, $username, $password, 'authenticate');
 print(date('Y-m-d H:i:s: ') . 'RESPONSE: {{' . $return . '}}');
 
 $pos = strpos($return, '<ns1:string>');
-$ticket = substr($return, $pos + 12, 32);		// FOR MD5 HASH TICKETS
-//$ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
+//$ticket = substr($return, $pos + 12, 32);		// FOR MD5 HASH TICKETS
+$ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
 
 print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n");
 

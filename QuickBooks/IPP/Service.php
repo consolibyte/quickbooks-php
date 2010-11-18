@@ -147,7 +147,7 @@ abstract class QuickBooks_IPP_Service
 			$resource = $this->_guessResource($xml, QuickBooks_IPP::IDS_QUERY);
 		}
 		
-		return $this->_findAll($Context, $realmID, $resource, $xml);
+		return $this->_findAll($Context, $realmID, $resource, null, null, $xml);
 	}
 	
 	public function rawAdd()
@@ -155,7 +155,7 @@ abstract class QuickBooks_IPP_Service
 		
 	}
 	
-	protected function _findAll($Context, $realmID, $resource, $xml = '')
+	protected function _findAll($Context, $realmID, $resource, $Query = null, $sort = null, $page = 1, $size = 50, $xml = '')
 	{
 		$IPP = $Context->IPP();
 		
@@ -163,12 +163,30 @@ abstract class QuickBooks_IPP_Service
 		{
 			$xml = '';
 			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '"></' . $resource . 'Query>';
+			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+			
+			if ($size)
+			{
+				$xml .= '	<StartPage>' . (int) $page . '</StartPage>' . QUICKBOOKS_CRLF;
+				$xml .= '	<ChunkSize>' . (int) $size . '</ChunkSize>' . QUICKBOOKS_CRLF;
+			}
+			
+			$xml .= '</' . $resource . 'Query>';
 		}
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
+		
+		if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+		{
+			$this->_setError(
+				$IPP->errorCode(), 
+				$IPP->errorText(), 
+				$IPP->errorDetail());
+			
+			return false;
+		}
 		
 		return $return;
 	}
