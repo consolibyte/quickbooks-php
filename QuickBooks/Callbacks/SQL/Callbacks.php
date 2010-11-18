@@ -1440,8 +1440,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		{
 			$Customer = new QuickBooks_SQL_Object('customer', null, $arr);
 			
-			if ( !(is_int($Customer->get('CreditCardInfo_ExpirationMonth')) and 
-				is_int($Customer->get('CreditCardInfo_ExpirationYear')) and 
+			if ( !(is_numeric($Customer->get('CreditCardInfo_ExpirationMonth')) and 
+				is_numeric($Customer->get('CreditCardInfo_ExpirationYear')) and 
 				checkdate($Customer->get('CreditCardInfo_ExpirationMonth'), 1, $Customer->get('CreditCardInfo_ExpirationYear')) ))
 			{
 				$Customer->remove('CreditCardInfo_ExpirationMonth');
