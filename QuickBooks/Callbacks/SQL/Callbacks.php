@@ -1079,6 +1079,21 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				
 			return $xml;
 		}
+		else if (!empty($extra['FullName']))
+		{
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="utf-8"?>
+				<?qbxml version="' . $version . '"?>
+				<QBXML>
+					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+						<CustomerQueryRq>
+							<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_CUSTOMER, 'FullName', $extra['FullName']) . '</FullName>
+						</CustomerQueryRq>
+					</QBXMLMsgsRq>
+				</QBXML>';
+				
+			return $xml;
+		}
 		
 		$err = '' . __METHOD__ . ' called without a proper $extra array: ' . print_r($extra, true);
 		return '';		// Error occured
@@ -1159,12 +1174,34 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					// Customer.	Balance, TotalBalance, 
 					
 					$arr = array(
+						'ListID' => $Node->getChildDataAt('CustomerRet ListID'), 
+						'EditSequence' => $Node->getChildDataAt('CustomerRet EditSequence'), 
 						'Balance' => $Node->getChildDataAt('CustomerRet Balance'),
 						'TotalBalance' => $Node->getChildDataAt('CustomerRet TotalBalance'),
 						);
 					
-					$Driver->log('Updating DERIVED CUSTOMER fields: ' . print_r($arr, true) . ' where: ' . print_r($extra, true), null, QUICKBOOKS_LOG_VERBOSE);
+					//$Driver->log('Updating DERIVED CUSTOMER fields: ' . print_r($arr, true) . ' where: ' . print_r($extra, true), null, QUICKBOOKS_LOG_VERBOSE);
 					
+					$Driver->log('Updating DERIVED CUSTOMER fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID, null, QUICKBOOKS_LOG_VERBOSE);
+					
+					$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customer', 
+						$arr, 
+						array( array( 'qbsql_id' => $ID ) ), 
+						false, 		// Don't mark as re-synced
+						false, 		// Don't update the discov time
+						true);		// Do mark it as re-derived
+					
+					// @todo Only do this if the customer actually needs to be modified 
+					// Now, make a request to *modify* the customer 
+					$priority = 9999;		// @todo this probably isn't a good choice of priorities
+					$Driver->queueEnqueue(
+						$user, 
+						QUICKBOOKS_MOD_CUSTOMER, 
+						$ID, 
+						true, 
+						$priority);
+					
+					/*
 					if (!empty($extra['ListID']))
 					{
 						// Update the database
@@ -1173,6 +1210,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							false, 		// Don't update the discov time
 							true);		// Do mark it as re-derived
 					}
+					*/
 					
 					break;
 				case QUICKBOOKS_OBJECT_INVOICE:
@@ -1204,6 +1242,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					
 					$Driver->log('Updating DERIVED INVOICE fields: ' . print_r($arr, true) . ' where: ' . print_r($extra, true), null, QUICKBOOKS_LOG_VERBOSE);
 					
+					/*
 					if (!empty($extra['TxnID']))
 					{
 						// Update the database
@@ -1212,6 +1251,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							false, 		// Don't update the discov time
 							true);		// Do mark it as re-derived
 					}
+					*/
 					
 					break;
 				default:
@@ -1235,8 +1275,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		{
 			$Customer = new QuickBooks_SQL_Object('customer', null, $arr);
 			
-			if (!(is_int($Customer->get('CreditCardInfo_ExpirationMonth')) and 
-				is_int($Customer->get('CreditCardInfo_ExpirationYear')) and 
+			if (!(is_numeric($Customer->get('CreditCardInfo_ExpirationMonth')) and 
+				is_numeric($Customer->get('CreditCardInfo_ExpirationYear')) and 
 				checkdate($Customer->get('CreditCardInfo_ExpirationMonth'), 1, $Customer->get('CreditCardInfo_ExpirationYear')) ))
 			{
 				$Customer->remove('CreditCardInfo_ExpirationMonth');
@@ -9375,10 +9415,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				
 				// A customer has an updated invoice or payment, so the Customer Balance changed
 				
+				/*
 				$Driver->log('Running triggered actions: derive customer', null, QUICKBOOKS_LOG_DEBUG);
 				
 				$Driver->queueEnqueue($user, QUICKBOOKS_DERIVE_CUSTOMER, null, true, $priority, 
 					array( 'ListID' => $Object->get('Customer_ListID') ) );
+				*/
 				
 				break;
 			case 'bill':

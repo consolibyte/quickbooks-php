@@ -54,6 +54,17 @@ class QuickBooks_Callbacks_SQL_Errors
 				
 				// This isn't really an error, just ignore it
 				
+				if ($action == QUICKBOOKS_DERIVE_CUSTOMER)
+				{
+					// Tried to derive, doesn't exist, add it
+					$Driver->queueEnqueue(
+						$user, 
+						QUICKBOOKS_ADD_CUSTOMER, 
+						$ident, 
+						true, 
+						QuickBooks_Utilities::priorityForAction(QUICKBOOKS_ADD_CUSTOMER));
+				}
+				
 				return true;
 			case 1000: // An internal error occured
 				
