@@ -10,10 +10,10 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalm
 require_once 'QuickBooks.php';
 
 // 
-$username = 'support@consolibyte.com';
-$password = '$up3rW0rmy42';
-$token = 'bf8cp2mihs6vsdibgqsybinugvj';
-$realmID = 182938192;
+$username = '';
+$password = '';
+$token = '';
+$realmID = 0;
 
 // 
 $IPP = new QuickBooks_IPP();
