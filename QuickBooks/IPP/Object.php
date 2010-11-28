@@ -140,6 +140,24 @@ class QuickBooks_IPP_Object
 			
 			return null;
 		}
+		else if (substr($name, 0, 5) == 'count')
+		{
+			$field = substr($name, 5);
+			
+			if (isset($this->_data[$field]) and 
+				is_array($this->_data[$field]))
+			{
+				return count($this->_data[$field]);
+			}
+			else if (isset($this->_data[$field]))
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
 		else if (substr($name, 0, 3) == 'add')
 		{
 			$field = substr($name, 3);
@@ -160,7 +178,21 @@ class QuickBooks_IPP_Object
 			
 			if (isset($this->_data[$field]))
 			{
-				unset($this->_data[$field]);
+				if (isset($args[0]) and 
+					is_numeric($args[0]))
+				{
+					// Trying to fetch a repeating element
+					if (isset($this->_data[$field][$args[0]]))
+					{
+						unset($this->_data[$field][$args[0]]);
+					}
+					
+					return true;
+				}
+				else
+				{
+					unset($this->_data[$field]);
+				}
 			}
 		}
 		else
@@ -229,7 +261,7 @@ class QuickBooks_IPP_Object
 			$parent = $this->resource();
 		}
 		
-		if ($optype == QuickBooks_IPP::IDS_ADD)
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD)
 		{
 			$xml = str_repeat("\t", $indent) . '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
 			
@@ -256,8 +288,43 @@ class QuickBooks_IPP_Object
 			{
 				foreach ($value as $skey => $svalue)
 				{
-					$xml .= $svalue->asIDSXML($indent + 1, $key);
+					//print('converting array: [' . $key . ' >> ' . $skey . ']');
+					
+					if (is_object($svalue))
+					{
+						$xml .= $svalue->asIDSXML($indent + 1, $key);
+					}
+					else if (substr($key, -2, 2) == 'Id')
+					{
+						$for_qbxml = false;
+						
+						$tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
+						
+						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+						$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
+						$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;						
+					}
+					else
+					{
+						//$for_qbxml = false;
+						//
+						//$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+						//$xml .= QuickBooks_XML::encode($value, $for_qbxml);
+						//$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+						
+						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . $svalue . '</' . $key . '>' . QUICKBOOKS_CRLF;
+					}
 				}
+			}
+			else if (substr($key, -2, 2) == 'Id')
+			{
+				$for_qbxml = false;
+				
+				$tmp = QuickBooks_IPP_IDS::parseIdType($value);
+				
+				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+				$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
+				$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
 			}
 			else
 			{
@@ -269,7 +336,7 @@ class QuickBooks_IPP_Object
 			}
 		}
 		
-		if ($optype == QuickBooks_IPP::IDS_ADD)
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD)
 		{
 			$xml .= str_repeat("\t", $indent) . '</Object>' . QUICKBOOKS_CRLF;
 		}

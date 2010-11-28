@@ -17,6 +17,11 @@
  */
 
 /**
+ * QuickBooks request base class
+ */
+QuickBooks_Loader::load('/QuickBooks/Request.php');
+
+/**
  * 
  * 
  * 

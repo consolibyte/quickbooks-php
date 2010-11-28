@@ -17,6 +17,11 @@
  */
 
 /**
+ * QuickBooks request base class
+ */
+QuickBooks_Loader::load('/QuickBooks/Request.php');
+
+/**
  * 
  */
 class QuickBooks_Request_Authenticate extends QuickBooks_Request

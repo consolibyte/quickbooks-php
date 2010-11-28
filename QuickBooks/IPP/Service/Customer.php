@@ -68,4 +68,9 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
 	{
 		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $Object);
 	}
+	
+	public function modify($Context, $realmID, $Object)
+	{
+		return parent::_modify($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $Object);
+	}
 }

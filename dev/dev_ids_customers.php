@@ -1,15 +1,19 @@
 <?php
 
+header('Content-Type: text/plain');
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
-require_once '../QuickBooks.php';
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
+
+require_once 'QuickBooks.php';
 
 // 
-$username = 'keith@consolibyte.com';
-$password = 'password42';
-$token = 'tex3r7hwifx6cci3zk43ibmnd';
-$realmID = 173642438;
+$username = 'support@consolibyte.com';
+$password = '$up3rW0rmy42';
+$token = 'bf8cp2mihs6vsdibgqsybinugvj';
+$realmID = 182938192;
 
 // 
 $IPP = new QuickBooks_IPP();
@@ -25,9 +29,9 @@ print("\n\n");
 
 //exit;
 
-$IPP->application($Context, 'be9mh7qd5');
+$IPP->application($Context, 'bfrccpnge');
 
-$IPP->useIDSParser(false);
+//$IPP->useIDSParser(false);
 
 $Service = new QuickBooks_IPP_Service_Customer();
 
@@ -35,8 +39,66 @@ $list = $Service->rawQuery($Context, $realmID, '<?xml version="1.0" encoding="UT
 <CustomerQuery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns="http://www.intuit.com/sb/cdm/v2">
-	<FirstLastInside>Test Example Customer</FirstLastInside>
+	<FirstLastInside>Shannon Daniels</FirstLastInside>
 </CustomerQuery>');
+
+/*
+print($IPP->lastRequest());
+print("\n\n");
+print("\n\n");
+print($IPP->lastResponse());
+print("\n\n");
+print("\n\n");
+*/
+
+//print_r($list);
+
+print('total addresses: ' . $list[0]->countAddress() . "\n");
+print('total names: ' . $list[0]->countName() . "\n");
+print('total emails: ' . $list[0]->countEmail() . "\n");
+print('total blas: ' . $list[0]->countBla() . "\n");
+
+$Email = $list[0]->getEmail(1);
+
+$list[0]->unsetEmail(1);
+
+$Email->setAddress('CCEdit@ccedit.com');
+
+$list[0]->addEmail($Email);
+
+$list[0]->setName('Shannon Daniels - ' . date('H-i-s'));
+
+//print("\n\n\n\n\n\n");
+
+//print_r($list[0]);
+
+//print_r($list);
+
+/*
+$Customer = new QuickBooks_IPP_Object_Customer();
+$Customer->setName('TEST');
+$Customer->setId('{QB-0001}');
+print($Customer->asIDSXML());
+
+print("\n\n\n\n\n");
+*/
+
+//print($list[0]->asIDSXML());
+//exit;
+
+
+//if ($Service->modify($Context, $realmID, $list[0]))
+if ($Service->add($Context, $realmID, $list[0]))
+{
+	print('Updated the customer!');
+}
+else
+{
+	print('An error occurred {' . $Service->errorNumber() . ': ' . $Service->errorMessage() . '}' . "\n");
+}
+
+
+//exit;
 
 print("\n\n");
 print($IPP->lastRequest());

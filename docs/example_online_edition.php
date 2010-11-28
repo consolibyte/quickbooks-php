@@ -80,9 +80,9 @@ $source_options = array(
 	//	connection_ticket - QuickBooks Online Edition does an HTTP POST to your callback URL to send you this
 	//	application_login - Provided by the application registration page
 	//	application_id - Provided by the application registration page 	
-	'connection_ticket' => 'TGT-47-1sRm2nXMVfm$n8hb2MZfVQ', 
-	'application_login' => 'test.www.academickeys.com', 
-	'application_id' => '134476472', 
+	//'connection_ticket' => 'TGT-47-1sRm2nXMVfm$n8hb2MZfVQ', 
+	//'application_login' => 'test.www.academickeys.com', 
+	//'application_id' => '134476472', 
 	// This is just for debugging/testing, and you should comment this out... 
 	//'override_session_ticket' => 'V1-184-uVBpWbpD17931L2hMNMw$A:134864687', 	// Comment this line out unless you know what you're doing!
 	);
@@ -106,7 +106,7 @@ $API->useDebugMode(true);
 // With QuickBooks Online Edition, the API can return values to you rather than 
 //	using callback functions to return values. Remember that is you use this, 
 //	your code will be less portable to systems using non-real-time connections
-//	(i.e. the QuickBooks Web Connector). 
+	//	(i.e. the QuickBooks Web Connector). 
 //$API->enableRealtime(true);
 
 // Let's get some general information about this connection to QBOE:
@@ -119,7 +119,7 @@ print('Last error number: ' . $API->errorNumber() . "\n");
 print('Last error message: ' . $API->errorMessage() . "\n");
 print("\n");
 
-/*
+
 // The "raw" approach to accessing QuickBooks Online Edition is to build and 
 //	parse the qbXML requests/responses send to/from QuickBooks yourself. Here 
 //	is an example of querying for a customer by building a raw qbXML request. 
@@ -146,7 +146,9 @@ if ($API->usingRealtime())
 	print('Our real-time response from QuickBooks Online Edition was: ');
 	print_r($return);
 }
-*/
+
+exit;
+
 
 // You can also create QuickBooks_Object_* instances and send them directly to 
 //	QBOE via the API as show below. The API takes care of transforming those 

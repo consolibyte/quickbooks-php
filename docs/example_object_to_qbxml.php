@@ -12,7 +12,7 @@
  */ 
 
 // include path
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keithpalmerjr/Projects/QuickBooks');
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks');
 
 // error reporting
 ini_set('display_errors', 1);
@@ -20,6 +20,9 @@ error_reporting(E_ALL | E_STRICT);
 
 // QuickBooks framework classes
 require_once 'QuickBooks.php';
+
+// 
+require_once 'QuickBooks/API.php';
 
 // Create the new invoice object
 $Invoice = new QuickBooks_Object_Invoice();
@@ -106,7 +109,7 @@ $Invoice->addInvoiceLine($InvoiceLine2);
 
 $qbxml = $Invoice->asQBXML(QUICKBOOKS_ADD_INVOICE);
 print($qbxml);
- 
+
 // Prints the following XML: 
 /*
 <InvoiceAddRq>
@@ -133,3 +136,6 @@ print($qbxml);
 	</InvoiceAdd>
 </InvoiceAddRq>
 */ 
+
+//
+//print_r($Invoice->asList(QUICKBOOKS_ADD_CUSTOMER));

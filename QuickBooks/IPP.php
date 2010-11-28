@@ -90,26 +90,26 @@ class QuickBooks_IPP
 	 * An IDS request to add an object
 	 * @deprecated
 	 */
-	const IDS_ADD = 'ids-add';
+	//const IDS_ADD = 'ids-add';
 	
 	/**
 	 * An IDS request to modify an object
 	 * @deprecated
 	 */
-	const IDS_MOD = 'ids-mod';
+	//const IDS_MOD = 'ids-mod';
 	
 	/**
 	 * An IDS request to search/query for an object
 	 * @deprecated
 	 */
-	const IDS_QUERY = 'ids-query';
+	//const IDS_QUERY = 'ids-query';
 	
 	/**
 	 * An IDS request to get a report
 	 * @deprecated
 	 * @var unknown_type
 	 */
-	const IDS_REPORT = 'ids-report';
+	//const IDS_REPORT = 'ids-report';
 	
 	/**
 	 * No error occurred
@@ -1047,6 +1047,8 @@ class QuickBooks_IPP
 		$this->_setLastDebug(__CLASS__, array( 'http_request_response_duration' => $HTTP->lastDuration() ));
 		//$this->_last_request = $HTTP->lastRequest();
 		//$this->_last_response = $HTTP->lastResponse();
+		
+		//print($HTTP->getLog());
 		
 		// 
 		$this->_log($HTTP->getLog(), QUICKBOOKS_LOG_DEBUG);

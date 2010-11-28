@@ -88,7 +88,7 @@ abstract class QuickBooks_IPP_Service
 			$xml .= '<' . $resource . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '"></' . $resource . '>';
 		}
 		
-		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_REPORT, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_REPORT, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		
@@ -112,7 +112,7 @@ abstract class QuickBooks_IPP_Service
 			$xml .= '</' . $resource . 'Query>';
 		}
 		
-		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_DELETE, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		
@@ -144,10 +144,10 @@ abstract class QuickBooks_IPP_Service
 		
 		if (!$resource)
 		{
-			$resource = $this->_guessResource($xml, QuickBooks_IPP::IDS_QUERY);
+			$resource = $this->_guessResource($xml, QuickBooks_IPP_IDS::OPTYPE_QUERY);
 		}
 		
-		return $this->_findAll($Context, $realmID, $resource, null, null, $xml);
+		return $this->_findAll($Context, $realmID, $resource, null, null, null, null, $xml);
 	}
 	
 	public function rawAdd()
@@ -174,7 +174,7 @@ abstract class QuickBooks_IPP_Service
 			$xml .= '</' . $resource . 'Query>';
 		}
 		
-		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_QUERY, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		
@@ -213,7 +213,7 @@ abstract class QuickBooks_IPP_Service
 			$xml .= '</' . $resource . 'Query>';
 		}
 		
-		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_QUERY, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		
@@ -271,11 +271,11 @@ abstract class QuickBooks_IPP_Service
 		$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/' . $IPP->version() . ' ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
 		$xml .= '	<OfferingId>ipp</OfferingId>' . QUICKBOOKS_CRLF;
 		$xml .= '	<ExternalRealmId>' . $realmID . '</ExternalRealmId>' . QUICKBOOKS_CRLF;
-		$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP::IDS_ADD);
+		$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP_IDS::OPTYPE_ADD);
 		$xml .= '</Add>';
 		
 		// Send the data to IPP 
-		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_ADD, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_ADD, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		
@@ -290,6 +290,62 @@ abstract class QuickBooks_IPP_Service
 		}
 		
 		return $return;
+	}
+	
+	protected function _modify($Context, $realmID, $resource, $Object)
+	{
+		$IPP = $Context->IPP();
+		
+		// Remove crap that we don't want to send to QuickBooks
+		$unsets = array(
+		//	'Id', 
+		//	'SyncToken', 
+			'MetaData', 
+			'ExternalKey', 
+		//	'Synchronized', 
+		//	'PartyReferenceId', 
+		//	'SalesTaxCodeId', 		// @todo These are customer/vendor specific and probably shouldn't be here
+		//	'SalesTaxCodeName',
+		//	'OpenBalanceDate', 
+		//	'OpenBalance', 
+			);
+		
+		foreach ($unsets as $unset)
+		{
+			$Object->remove($unset);
+		}
+		
+		$Object->set('Synchronized', 'false');
+				
+		// Build the XML request
+		$xml = '';
+		$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+		$xml .= '<Mod xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '" ' . QUICKBOOKS_CRLF;
+		$xml .= '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' . QUICKBOOKS_CRLF;
+		$xml .= '	RequestId="' . md5(mt_rand() . microtime()) . '" ' . QUICKBOOKS_CRLF;
+		$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/' . $IPP->version() . ' ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
+		//$xml .= '	<OfferingId>ipp</OfferingId>' . QUICKBOOKS_CRLF;
+		$xml .= '	<ExternalRealmId>' . $realmID . '</ExternalRealmId>' . QUICKBOOKS_CRLF;
+		$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP_IDS::OPTYPE_ADD);
+		$xml .= '</Mod>';
+		
+		// Send the data to IPP 
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_MOD, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
+		
+		// Check for errors
+		if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+		{
+			$this->_setError(
+				$IPP->errorCode(), 
+				$IPP->errorText(), 
+				$IPP->errorDetail());
+			
+			return false;
+		}
+		
+		return $return;		
 	}
 	
 	/**
@@ -314,7 +370,7 @@ abstract class QuickBooks_IPP_Service
 			$xml .= '</' . $resource . 'Query>';
 		}
 		
-		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP::IDS_QUERY, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_QUERY, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		

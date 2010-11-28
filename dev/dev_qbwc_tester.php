@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://localhost:8888/saas/installs/92/interspire/qbus/108/public/interspire/qbwc.php';
-$username = 'user92';
-$password = 'abcd1234';
+$url = 'https://www.docpros.net/bwmeivF8TJM6BZp/server.php';
+$username = 'quickbooks';
+$password = 'Ps4yGWsSZ';
 
 if (function_exists('date_default_timezone_set'))
 {

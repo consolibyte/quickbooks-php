@@ -15,8 +15,10 @@ class QuickBooks_IPP_Object_Customer extends QuickBooks_IPP_Object
 	{
 		return array(
 			'Id' => true, 
+			'SyncToken' => true, 
 			'MetaData' => true, 
-			'PartyReferenceId' => null, 
+			'Synchronized' => true, 
+			'PartyReferenceId' => true, 
 			'TypeOf' => true, 
 			'Name' => true, 
 			'Address' => true, 

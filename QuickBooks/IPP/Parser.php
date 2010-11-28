@@ -148,8 +148,7 @@ class QuickBooks_IPP_Parser
 			
 			switch ($optype)
 			{
-				case QuickBooks_IPP::IDS_REPORT:
-				case QuickBooks_IPP_IDS::OPTYPE_REPORT:
+				case QuickBooks_IPP_IDS::OPTYPE_REPORT:		// Parse a REPORT type response
 					
 					$Report = new QuickBooks_IPP_Object_Report('@todo Make sure we show the title of the report!');
 					
@@ -170,8 +169,7 @@ class QuickBooks_IPP_Parser
 					return $Report;
 					
 					break;
-				case QuickBooks_IPP::IDS_QUERY:			// Parse a QUERY type response
-				case QuickBooks_IPP_IDS::OPTYPE_QUERY:
+				case QuickBooks_IPP_IDS::OPTYPE_QUERY:		// Parse a QUERY type response
 				
 					$list = array();
 					foreach ($List->children() as $Child)
@@ -189,8 +187,8 @@ class QuickBooks_IPP_Parser
 					return $list;
 					
 					break;
-				case QuickBooks_IPP::IDS_ADD:			// Parse an ADD type response
-				case QuickBooks_IPP_IDS::OPTYPE_ADD:
+				case QuickBooks_IPP_IDS::OPTYPE_ADD:	// Parse an ADD type response
+				case QuickBOoks_IPP_IDS::OPTYPE_MOD:
 					
 					//print("\n\n\n" . 'response was: ' . $List->name() . "\n\n\n");
 					
