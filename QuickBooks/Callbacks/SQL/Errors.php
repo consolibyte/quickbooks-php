@@ -71,6 +71,15 @@ class QuickBooks_Callbacks_SQL_Errors
 				// @todo Hopefully at some point we'll have a better idea of how to handle this error...
 				
 				return true;
+			case 3175:
+				
+				if (false !== strpos($errmsg, 'list element is in use'))
+				{
+					// This error occurs when you have a customer open and try to issue a Mod request
+					return true;
+				}
+				
+				break;
 			case 3180:
 				
 				// This error can occur in several different situations, so we test per situation

@@ -9442,7 +9442,52 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 */
 	protected static function _massageUpdateRecord($table, &$object)
 	{
-		return QuickBooks_Callbacks_SQL_Callbacks::_massageInsertRecord($table, $object);
+		$retr = QuickBooks_Callbacks_SQL_Callbacks::_massageInsertRecord($table, $object);
+		
+		$parts = array(
+			'_Addr1', 
+			'_Addr2', 
+			'_Addr3', 
+			'_Addr4', 
+			'_Addr5', 
+			'_City', 
+			'_State', 
+			'_PostalCode', 
+			'_Country', 
+			'_Note', 
+			);
+		
+		$isset = array();
+		
+		foreach (array( 'ShipAddress', 'BillAddress', 'VendorAddress' ) as $addrtype)
+		{
+			foreach ($parts as $part)
+			{
+				if ($object->get($addrtype . $part))
+				{
+					$isset[$addrtype] = true;
+					break;
+				}
+			}
+		}
+		
+		//$Driver = QuickBooks_Driver_Singleton::getInstance();
+		//$Driver->log('issets: ' . print_r($isset, true));
+		
+		foreach ($isset as $addrtype => $true)
+		{
+			foreach ($parts as $part)
+			{
+				if (!$object->get($addrtype . $part))
+				{
+					$object->set($addrtype . $part, '');
+				}
+			}
+		}
+		
+		//$Driver->log('object: ' . print_r($object, true));
+		
+		return $retr;
 	}
 	
 	protected static function _massageBoolean($value)

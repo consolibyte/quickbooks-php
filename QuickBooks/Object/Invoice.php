@@ -904,6 +904,11 @@ class QuickBooks_Object_Invoice extends QuickBooks_Object
 		return $this->setAmountType('BalanceRemaining', $amount);
 	}	
 	
+	public function getAppliedAmount()
+	{
+		return $this->getAmountType('AppliedAmount');
+	}
+	
 	/**
 	 * 
 	 * 

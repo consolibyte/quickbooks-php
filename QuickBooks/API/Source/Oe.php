@@ -621,6 +621,8 @@ class QuickBooks_API_Source_OE extends QuickBooks_API_Source
 			
 			QUICKBOOKS_QUERY_UNITOFMEASURESET => array( '', 'QuickBooks_Callbacks_API_Callbacks::UnitOfMeasureSetQueryResponse' ), 
 			
+			QUICKBOOKS_QUERY_INVOICE => array( '', 'QuickBooks_Callbacks_API_Callbacks::InvoiceQueryResponse' ), 
+			
 			'*' => array( '', 'QuickBooks_Callbacks_API_Callbacks::RawQBXMLResponse' ), 
 			);
 		
