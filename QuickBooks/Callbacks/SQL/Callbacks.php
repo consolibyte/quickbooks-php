@@ -156,7 +156,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			//foreach ($sql_query as $action => $priority)
 			foreach ($sql_import as $action => $priority)
 			{
-				$Driver->log('Registering recurring event for: ' . $action, null, QUICKBOOKS_LOG_DEBUG);
+				//$Driver->log('Registering recurring event for: ' . $action, null, QUICKBOOKS_LOG_DEBUG);
 				
 				// Make sure that there are handlers registered for this recurring action
 				if (!isset($sql_map[$action]))
@@ -170,8 +170,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				
 				$actions[] = $action;
 			}
+			
+			// Also grab any deleted records
+			$Driver->queueEnqueue($user, QUICKBOOKS_QUERY_DELETEDLISTS, 1, true, 0);
+			$Driver->queueEnqueue($user, QUICKBOOKS_QUERY_DELETEDTXNS, 1, true, 0);
 		}
 		
+		/*
 		// Queue up the audit requests
 		//	Audit requests pull in just the calculated TotalAmount and the 
 		//	TimeModified timestamp from transactions, and store these in 
@@ -187,6 +192,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			
 			$Driver->queueEnqueue($user, $action, 1, true, $priority);
 		}
+		*/
 		
 		// Searching the tables can take a long time, you could potentially 
 		//	have 10 or 15 seconds between when we search for new customers, and 
@@ -209,12 +215,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			$mark_as_queued = true;
 			$map = $Map->adds($sql_add, $mark_as_queued);
 			
-			$Driver->log('ADDS: ' . print_r($map, true));
+			//$Driver->log('ADDS: ' . print_r($map, true));
 			
 			// Go through each action in the returned map
 			foreach ($map as $action => $list)
 			{
-				$Driver->log('Now doing: ' . $action . ', ' . print_r($list, true));
+				//$Driver->log('Now doing: ' . $action . ', ' . print_r($list, true));
 			
 				// Go through each ID for each action
 				foreach ($list as $ID => $priority)
@@ -239,7 +245,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				// Convert to table and primary key, select qbsql id
 				QuickBooks_SQL_Schema::mapPrimaryKey($object, QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $table_and_field);  
 				
-				$Driver->log('Searching table: ' . print_r($table_and_field, true) . ' for MODIFIED records.', null, QUICKBOOKS_LOG_DEBUG);
+				//$Driver->log('Searching table: ' . print_r($table_and_field, true) . ' for MODIFIED records.', null, QUICKBOOKS_LOG_DEBUG);
 				
 				// If we managed to map a table, we need to search that table for changed records
 				if (!empty($table_and_field[0]) and !empty($table_and_field[1]))
@@ -653,7 +659,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 */
 	public static function ListDeletedQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 		
 		$Parser = new QuickBooks_XML_Parser($xml);
@@ -669,11 +674,20 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		{
 			$map = array();
 			$others = array();
-			QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt("ListDeletedRet ListDelType"))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
-			$sqlObject = new QuickBooks_SQL_Object($map[0], trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt("ListDeletedRet ListDelType"))));
-			$table = $sqlObject->table();
-			$multipart = array( "ListID" => $Node->getChildDataAt("ListDeletedRet ListID") );
 			
+			QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt('ListDeletedRet ListDelType'))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
+			
+			$table = $map[0];
+			
+			$data = array(
+				'qbsql_flag_deleted' => 1, 
+				);
+				
+			$multipart = array( 'ListID' => $Node->getChildDataAt('ListDeletedRet ListID') );
+			
+			$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, array( $multipart ));
+			
+			/*
 			// Check the delete mode and if desired, just flag them rather than remove the rows.
 			// @todo Fix this wrong delete flag field
 			if (isset($config['delete']) and 
@@ -700,7 +714,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$deleted = array();
 				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $deleted, $config, true, true);
 			}
-			
+			*/
 		}
 		
 		return true;
@@ -766,7 +780,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 */
 	public static function TxnDeletedQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 		
 		$Parser = new QuickBooks_XML_Parser($xml);
@@ -782,11 +795,23 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		{
 			$map = array();
 			$others = array();
+			
 			QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt("TxnDeletedRet TxnDelType"))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
+			
+			/*
 			$sqlObject = new QuickBooks_SQL_Object($map[0], trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt("TxnDeletedRet TxnDelType"))));
 			$table = $sqlObject->table();
-			$multipart = array( "TxnID" => $Node->getChildDataAt("TxnDeletedRet TxnID") );
+			*/
 			
+			$table = $map[0];
+			$data = array(
+				'qbsql_flag_deleted' => 1, 
+				);
+			$multipart = array( 'TxnID' => $Node->getChildDataAt('TxnDeletedRet TxnID') );
+			
+			$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, array( $multipart ));
+			
+			/*
 			//Check the delete mode and if desired, just flag them rather than remove the rows.
 			// @todo Fix this wrong delete flag field
 			if (isset($config['delete']) and
@@ -812,6 +837,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$deleted = array();
 				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $deleted, $config, true, true);
 			}
+			*/
 			
 		}
 		return true;
