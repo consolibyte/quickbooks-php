@@ -155,6 +155,17 @@ abstract class QuickBooks_IPP_Service
 		
 	}
 	
+	protected function _map($list, $key, $value)
+	{
+		$map = array();
+		foreach ($list as $Object)
+		{
+			$map[$Object->get($key)] = $Object->get($value);
+		}
+		
+		return $map;
+	}
+	
 	protected function _findAll($Context, $realmID, $resource, $Query = null, $sort = null, $page = 1, $size = 50, $xml = '')
 	{
 		$IPP = $Context->IPP();
