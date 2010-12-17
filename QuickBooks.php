@@ -451,6 +451,12 @@ define('QUICKBOOKS_MOD_DEPOSIT', 'DepositMod');
 define('QUICKBOOKS_QUERY_DEPOSIT', 'DepositQuery');
 define('QUICKBOOKS_IMPORT_DEPOSIT', 'DepositImport');
 
+define('QUICKBOOKS_OBJECT_DEPARTMENT', 'Department');
+define('QUICKBOOKS_ADD_DEPARTMENT', 'DepartmentAdd');
+define('QUICKBOOKS_MOD_DEPARTMENT', 'DepartmentMod');
+define('QUICKBOOKS_QUERY_DEPARTMENT', 'DepartmentQuery');
+define('QUICKBOOKS_IMPORT_DEPARTMENT', 'DepartmentImport');
+
 define('QUICKBOOKS_OBJECT_EMPLOYEE', 'Employee');
 define('QUICKBOOKS_ADD_EMPLOYEE', 'EmployeeAdd');
 define('QUICKBOOKS_MOD_EMPLOYEE', 'EmployeeMod');
