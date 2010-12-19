@@ -116,7 +116,7 @@ class QuickBooks_Callbacks_SQL_Errors
 				
 				// 3210: The &quot;AppliedToTxnAdd payment amount&quot; field has an invalid value &quot;129.43&quot;.  QuickBooks error message: You cannot pay more than the amount due.
 				if ($action == QUICKBOOKS_ADD_RECEIVEPAYMENT and 
-					false !== strpos($errmsg, 'pay more than the amount due'))
+					(false !== strpos($errmsg, 'pay more than the amount due') or false !== strpos($errmsg, 'cannot be found')))
 				{
 					// If this happens, we're going to try to re-submit the payment, *without* the AppliedToTxn element
 					
