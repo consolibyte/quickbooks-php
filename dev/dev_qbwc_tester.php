@@ -1,8 +1,8 @@
 <?php
 
-$url = 'https://www.docpros.net/bwmeivF8TJM6BZp/server.php';
+$url = 'http://localhost:8888/test.php';
 $username = 'quickbooks';
-$password = 'Ps4yGWsSZ';
+$password = 'password';
 
 if (function_exists('date_default_timezone_set'))
 {
