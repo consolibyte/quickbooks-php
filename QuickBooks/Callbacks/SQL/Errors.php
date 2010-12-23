@@ -71,6 +71,8 @@ class QuickBooks_Callbacks_SQL_Errors
 				// @todo Hopefully at some point we'll have a better idea of how to handle this error...
 				
 				return true;
+			//case 3120:			// 3120 errors are handled in the 3210 error handler section
+			//	break;
 			case 3175:
 				
 				if (false !== strpos($errmsg, 'list element is in use'))
@@ -113,6 +115,7 @@ class QuickBooks_Callbacks_SQL_Errors
 				
 				return true;
 			case 3210:
+			case 3120:
 				
 				// 3210: The &quot;AppliedToTxnAdd payment amount&quot; field has an invalid value &quot;129.43&quot;.  QuickBooks error message: You cannot pay more than the amount due.
 				if ($action == QUICKBOOKS_ADD_RECEIVEPAYMENT and 

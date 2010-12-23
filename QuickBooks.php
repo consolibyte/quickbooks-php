@@ -83,7 +83,7 @@ define('QUICKBOOKS_PACKAGE_AUTHOR', '"Keith Palmer" <keith@consolibyte.com>');
  * The URL for the package
  * @var string
  */
-define('QUICKBOOKS_PACKAGE_WEBSITE', 'http://www.consolibyte.com/');
+define('QUICKBOOKS_PACKAGE_WEBSITE', 'http://www.ConsoliBYTE.com/');
 
 /**
  * The name of the package

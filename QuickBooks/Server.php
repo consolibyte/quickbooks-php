@@ -480,6 +480,7 @@ class QuickBooks_Server
 
 			print(QUICKBOOKS_PACKAGE_NAME . ' Server v' . QUICKBOOKS_PACKAGE_VERSION . ' at ' . $_SERVER['REQUEST_URI'] . "\n");
 			print('   (c) ' . QUICKBOOKS_PACKAGE_AUTHOR . ' ' . "\n");
+			print('   Visit us at: ' . QUICKBOOKS_PACKAGE_WEBSITE . ' ' . "\n");
 			print("\n");
 			print('Use the QuickBooks Web Connector to access this SOAP server.' . "\n");
 			print("\n");

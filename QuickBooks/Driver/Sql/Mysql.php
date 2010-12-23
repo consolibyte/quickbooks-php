@@ -442,6 +442,22 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	}
 	
 	/**
+	 * Rewind the result set
+	 *
+	 * @param resource $res
+	 * @return boolean
+	 */
+	public function rewind($res)
+	{
+		if (mysql_num_rows($res) > 0)
+		{
+			return mysql_data_seek($res, 0);
+		}
+		
+		return true;
+	}
+	
+	/**
 	 * Escape a string for the database
 	 * 
 	 * @param string $str

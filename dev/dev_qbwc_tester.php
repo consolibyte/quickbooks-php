@@ -1,6 +1,6 @@
 <?php
 
-$url = 'http://localhost:8888/test.php';
+$url = 'http://localhost:8888/autopal/webconnector.php';
 $username = 'quickbooks';
 $password = 'password';
 

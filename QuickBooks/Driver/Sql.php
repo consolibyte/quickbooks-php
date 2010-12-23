@@ -2221,6 +2221,14 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	public abstract function count($res);
 	
 	/**
+	 * Rewind the result set 
+	 *
+	 * @param resource $res
+	 * @return boolean
+	 */
+	public abstract function rewind($res);
+	
+	/**
 	 * Get a list of the fields within an SQL table
 	 * 
 	 * @param string $table
