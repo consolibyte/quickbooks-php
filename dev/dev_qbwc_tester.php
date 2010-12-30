@@ -1,6 +1,6 @@
 <?php
 
-$url = 'http://localhost:8888/autopal/webconnector.php';
+$url = 'http://localhost:8888/QuickBooks/example_web_connector_point_of_sale.php';
 $username = 'quickbooks';
 $password = 'password';
 
