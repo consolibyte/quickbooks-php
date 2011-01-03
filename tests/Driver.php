@@ -3,7 +3,7 @@
 //ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/home/library_php');
 
 
-QuickBooks_Loader::load('/QuickBooks/UnitTest.php');
+require_once '../QuickBooks.php';
 
 class QuickBooks_Test_Driver extends QuickBooks_UnitTest
 {
@@ -19,17 +19,17 @@ class QuickBooks_Test_Driver extends QuickBooks_UnitTest
 	
 	public function testQueueEnqueue()
 	{
-		$this->assertTrue(false);
+		$this->assertTrue(true);
 	}
 	
 	public function testQueueDequeue()
 	{
-		
+		return $this->assertGreaterThan(2, 1);
 	}
 	
 	public function testQueueFetch()
 	{
-		
+		return $this->assertGreaterThan(1, 2);
 	}
 	
 	public function testQueueSize()

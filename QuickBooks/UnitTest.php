@@ -84,17 +84,17 @@ class QuickBooks_UnitTest
 	{
 		$class = get_class($this);
 		
-		foreach ($this->__result as $result)
+		foreach ($this->__result as $Result)
 		{
-			if ($result->result())
+			if ($Result->result())
 			{
-				print($class . '->' . $result->name() . ' PASSED!' . "\n");
+				print($class . '->' . $Result->name() . ' PASSED!' . "\n");
 			}
 			else
 			{
-				print($class . '->' . $result->name() . ' FAILED! ' . "\n");
-				print("\t\t" . 'Expected: ' . $result->expected() . ', Actual: ' . $result->actual() . "\n");
-				print("\t\t" . $result->message() . "\n");
+				print($class . '->' . $Result->name() . ' FAILED! ' . "\n");
+				print("\t\t" . 'Expected: ' . $Result->expected() . ', Actual: ' . $Result->actual() . "\n");
+				print("\t\t" . $Result->message() . "\n");
 			}
 		}
 	}

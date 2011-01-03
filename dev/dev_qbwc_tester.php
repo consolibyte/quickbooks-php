@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://localhost:8888/QuickBooks/example_web_connector_point_of_sale.php';
-$username = 'quickbooks';
-$password = 'password';
+$url = 'https://secure.consolibyte.com/saas/installs/89/infusionsoft/qbus/422/public/infusionsoft/qbwc.php';
+$username = 'user89';
+$password = 'indi1234';
 
 if (function_exists('date_default_timezone_set'))
 {
