@@ -4,7 +4,7 @@ require_once '../QuickBooks.php';
 
 header('Content-Type: text/html; charset=utf-8'); 
 
-/*
+
 $arr = array(
 	'Keith Palmer, Shannon Daniels, Kurtis & Karli', 
 	'Test of some UTF8 chars- Á, Æ, Ë, ¾, Õ, ä, ß, ú, ñ',
@@ -53,8 +53,9 @@ foreach ($fields as $field)
 	print("\n");
 }
 print("\n");
-*/
 
+
+exit;
 
 $invoice = array(
 	'IsPaid' => true,
