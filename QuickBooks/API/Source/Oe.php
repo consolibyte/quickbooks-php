@@ -604,7 +604,9 @@ class QuickBooks_API_Source_OE extends QuickBooks_API_Source
 			QUICKBOOKS_ADD_CUSTOMER => array( '', 'QuickBooks_Callbacks_API_Callbacks::CustomerAddResponse' ), 
 			QUICKBOOKS_MOD_CUSTOMER => array( '', 'QuickBooks_Callbacks_API_Callbacks::CustomerModResponse' ), 
 			QUICKBOOKS_QUERY_CUSTOMER => array( '', 'QuickBooks_Callbacks_API_Callbacks::CustomerQueryResponse' ),
-
+			
+			QUICKBOOKS_ADD_JOURNALENTRY => array( '', 'QuickBooks_Callbacks_API_Callbacks::JournalEntryAddResponse' ), 
+			
 			QUICKBOOKS_QUERY_CLASS => array( '', 'QuickBooks_Callbacks_API_Callbacks::ClassQueryResponse' ), 
 
 			QUICKBOOKS_QUERY_CUSTOMERTYPE => array( '', 'QuickBooks_Callbacks_API_Callbacks::CustomerTypeQueryResponse' ), 

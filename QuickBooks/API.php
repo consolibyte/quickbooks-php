@@ -2478,8 +2478,9 @@ class QuickBooks_API
 	
 	public function supportsAction($action)
 	{
-		$list = $this->supported();
-		return in_array($action, $list);
+		//$list = $this->supported();
+		//return in_array($action, $list);
+		return true;
 	}
 	
 	public function supported()
