@@ -677,44 +677,18 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			
 			QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt('ListDeletedRet ListDelType'))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
 			
-			$table = $map[0];
-			
-			$data = array(
-				'qbsql_flag_deleted' => 1, 
-				);
-				
-			$multipart = array( 'ListID' => $Node->getChildDataAt('ListDeletedRet ListID') );
-			
-			$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, array( $multipart ));
-			
-			/*
-			// Check the delete mode and if desired, just flag them rather than remove the rows.
-			// @todo Fix this wrong delete flag field
-			if (isset($config['delete']) and 
-				$config['delete'] == QuickBooks_Server_SQL::DELETE_FLAG)
+			if (isset($map[0]))
 			{
-				// @todo Make the Boolean TRUE value used in the QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG field a constant,
-				//      in case the sql driver used uses something other than 1 and 0.
-				// @todo Fix this
-				$sqlObject->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
-				$sqlObject->set("ListID", $Node->getChildDataAt("ListDeletedRet ListID"));
-				$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL_SQL . $table, $sqlObject, array( $multipart ));
+				$table = $map[0];
 				
-				// Now Delete/Flag all the children.
-				$deleted = array();
-				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $deleted, $config, true, true);
-			}
-			else
-			{
-				// Otherwise we actually remove the rows.
-				$Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, array( $multipart ));
-				$sqlObject->set("ListID", $Node->getChildDataAt("ListDeletedRet ListID"));
+				$data = array(
+					'qbsql_flag_deleted' => 1, 
+					);
+					
+				$multipart = array( 'ListID' => $Node->getChildDataAt('ListDeletedRet ListID') );
 				
-				// Now Delete/Flag all the children.
-				$deleted = array();
-				QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $sqlObject, $extra, $deleted, $config, true, true);
+				$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, array( $multipart ));
 			}
-			*/
 		}
 		
 		return true;
@@ -8984,7 +8958,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							$actually_do_updaterelatives = true;
 						}
 						
-						$Driver->log('Diagnostics for incoming: is_query[' . !empty($extra['is_query_response']) . '], is_import[' . !empty($extra['is_import_response']) . '], is_mod[' . !empty($extra['is_mod_response']) . '], is_add[' . !empty($extra['is_add_response']) . '], conflict mode: ' . $callback_config['conflicts'] . '', null, QUICKBOOKS_LOG_DEVELOP);
+						//$Driver->log('Diagnostics for incoming: is_query[' . !empty($extra['is_query_response']) . '], is_import[' . !empty($extra['is_import_response']) . '], is_mod[' . !empty($extra['is_mod_response']) . '], is_add[' . !empty($extra['is_add_response']) . '], conflict mode: ' . $callback_config['conflicts'] . '', null, QUICKBOOKS_LOG_DEVELOP);
 						
 						// Conflict handling code
 						// @todo I think this should only apply to query and improt, right? I mean, if it's a mod or add, then 
@@ -9147,7 +9121,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							$actually_do_deletechildren = false;
 							$actually_do_updaterelatives = false;
 							
-							$Driver->log('Ignoring UPDATE: ' . $table . ': ' . print_r($object, true) . ' due to EditSequence equality.', null, QUICKBOOKS_LOG_DEVELOP);
+							//$Driver->log('Ignoring UPDATE: ' . $table . ': ' . print_r($object, true) . ' due to EditSequence equality.', null, QUICKBOOKS_LOG_DEVELOP);
 							
 							// Make sure we ignore the children too (invoice lines, data exts, etc.)
 							$ignore_this_and_its_children = true;
@@ -9168,7 +9142,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						if ($actually_do_deletechildren)
 						{
 							QuickBooks_Callbacks_SQL_Callbacks::_deleteChildren($table, $user, $action, $ID, $object, $extra, $deleted);
-							$Driver->log('Immediately after deleting: ' . print_r($deleted, true));
+							//$Driver->log('Immediately after deleting: ' . print_r($deleted, true));
 						}
 						
 						if ($actually_do_updaterelatives)
@@ -9184,7 +9158,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							//print('applying updates, and with these deletes: ');
 							//print_r($deleted);
 							
-							$Driver->log('Applying UPDATE: ' . $table . ': ' . print_r($object, true) . ', where: ' . print_r($multipart, true), null, QUICKBOOKS_LOG_DEVELOP);
+							//$Driver->log('Applying UPDATE: ' . $table . ': ' . print_r($object, true) . ', where: ' . print_r($multipart, true), null, QUICKBOOKS_LOG_DEVELOP);
 							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
 							
 							$qbsql_id = null;
@@ -9209,7 +9183,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						}
 						else
 						{
-							$Driver->log('Skipping UPDATE: ' . $table . ': ' . print_r($object, true) . ', where: ' . print_r($multipart, true), null, QUICKBOOKS_LOG_DEVELOP);
+							//$Driver->log('Skipping UPDATE: ' . $table . ': ' . print_r($object, true) . ', where: ' . print_r($multipart, true), null, QUICKBOOKS_LOG_DEVELOP);
 						}
 					}
 					else
@@ -9221,7 +9195,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							// This handles setting certain special fields (booleans, SortOrder, etc.)
 							QuickBooks_Callbacks_SQL_Callbacks::_massageInsertRecord($table, $object);
 							
-							$Driver->log('DELETED: ' . print_r($deleted, true) . ', table: [' . $table . ']');
+							//$Driver->log('DELETED: ' . print_r($deleted, true) . ', table: [' . $table . ']');
 							
 							// This makes sure that re-inserted child records are re-inserted with the 
 							//	same qbsql_id values
@@ -9262,7 +9236,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							
 							//print_r($object);
 							
-							$Driver->log('Applying INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
+							//$Driver->log('Applying INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
 							$Driver->insert(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object);
 							$last = $Driver->last();
 							
@@ -9281,7 +9255,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						}
 						else
 						{
-							$Driver->log('Skipping INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
+							//$Driver->log('Skipping INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
 						}
 					}
 					

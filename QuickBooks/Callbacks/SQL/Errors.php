@@ -32,6 +32,19 @@ class QuickBooks_Callbacks_SQL_Errors
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 		
+		$ignore = array(
+			QUICKBOOKS_IMPORT_DELETEDTXNS => true, 
+			QUICKBOOKS_QUERY_DELETEDTXNS => true,
+			QUICKBOOKS_IMPORT_DELETEDLISTS => true,
+			QUICKBOOKS_QUERY_DELETEDLISTS => true
+			);
+		
+		if (isset($ignore[$action]))
+		{
+			// Ignore errors for these requests
+			return true;
+		}
+		
 		/*
 		$Parser = new QuickBooks_XML($xml);
 		$errnumTemp = 0;
