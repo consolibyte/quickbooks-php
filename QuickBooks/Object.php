@@ -403,7 +403,8 @@ abstract class QuickBooks_Object
 		}
 		
 		// 1228241458		vs.		19830102
-		if (ereg('^[[:digit:]]+$', $date) and strlen($date) > 8)
+		//if (ereg('^[[:digit:]]+$', $date) and strlen($date) > 8)
+		if (ctype_digit($date) and strlen($date) > 8)
 		{
 			// It's a unix timestamp (seconds since unix epoch, conver to string)
 			$date = date('Y-m-d', $date);

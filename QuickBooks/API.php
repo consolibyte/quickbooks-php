@@ -266,7 +266,9 @@ class QuickBooks_API
 		$this->_driver = null;
 		if ($api_driver_dsn)
 		{
-			$this->_driver = QuickBooks_Driver_Factory::create($api_driver_dsn, $driver_options, $hooks, $log_level);
+			//$this->_driver = QuickBooks_Driver_Factory::create($api_driver_dsn, $driver_options, $hooks, $log_level);
+			QuickBooks_Driver_Singleton::initialize($api_driver_dsn, $driver_options, $hooks, $log_level);
+			$this->_driver = QuickBooks_Driver_Singleton::getInstance();
 		}
 		
 		$this->_source = $this->_sourceFactory($this->_driver, $user, $source_type, $source_dsn, $source_options);
