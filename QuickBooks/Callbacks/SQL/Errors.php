@@ -36,7 +36,10 @@ class QuickBooks_Callbacks_SQL_Errors
 			QUICKBOOKS_IMPORT_DELETEDTXNS => true, 
 			QUICKBOOKS_QUERY_DELETEDTXNS => true,
 			QUICKBOOKS_IMPORT_DELETEDLISTS => true,
-			QUICKBOOKS_QUERY_DELETEDLISTS => true
+			QUICKBOOKS_QUERY_DELETEDLISTS => true, 
+			QUICKBOOKS_VOID_TRANSACTION => true, 
+			QUICKBOOKS_DELETE_TRANSACTION => true, 
+			QUICKBOOKS_DELETE_LIST => true, 
 			);
 		
 		if (isset($ignore[$action]))
@@ -63,12 +66,15 @@ class QuickBooks_Callbacks_SQL_Errors
 		$object = new QuickBooks_SQL_Object($map[0], trim(QuickBooks_Utilities::actionToXMLElement($action)));
 		$table = $object->table();
 		
-		$multipart = array(
-			QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident
-			);
-		
-		$existing = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $multipart );
+		if ($table)
+		{
+			$multipart = array(
+				QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident
+				);
 			
+			$existing = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $multipart );
+		}
+				
 		switch ($errnum)
 		{
 			case 1:		// These errors occur when we search for something and it doesn't exist
