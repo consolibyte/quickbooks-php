@@ -32,12 +32,15 @@
     get support, report bugs, or ask for help is to ask on the forums:
      http://www.consolibyte.com/forum/
      https://idnforums.intuit.com/
-     
+    
     You will find examples in the docs/ folder. There is additional 
     documentation and additional examples on our wiki:
      http://wiki.consolibyte.com/wiki/doku.php/quickbooks
      http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte
-    
+
+    If you are using the Web Connector, make sure you read the quick-start guide:
+     http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte_webconnector_quickstart
+     
     Please remember that this is an open-source project! Donations, 
     contributions, and general thank-yous are all very appreciated! Monetary 
     donations can be made at my website:
@@ -48,7 +51,8 @@
      aim: consolibyte
      msn: support@consolibyte.com
      gtalk: consolibyte
-
+     yahoo: consolibyte@yahoo.com
+     Skype: consolibyte
 
  DOCUMENTATION:   (look at these files for examples of how to do stuff)
  

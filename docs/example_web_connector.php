@@ -6,6 +6,10 @@
  * This is an example Web Service which adds customers to QuickBooks desktop 
  * editions via the QuickBooks Web Connector. 
  * 
+ * MAKE SURE YOU READ OUR QUICK-START GUIDE:
+ * 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte_webconnector_quickstart
+ * 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks
+ * 
  * You should copy this file and use this file as a reference for when you are 
  * creating your own Web Service to add, modify, query, or delete data from 
  * desktop versions of QuickBooks software. 

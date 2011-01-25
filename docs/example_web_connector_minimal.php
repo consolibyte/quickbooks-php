@@ -6,6 +6,10 @@
  * This is a minimal example of using the QuickBooks Web Connector. Make sure 
  * you look at docs/example_web_connector.php for more details. 
  * 
+ * MAKE SURE YOU READ OUR QUICK-START GUIDE:
+ * 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte_webconnector_quickstart
+ * 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks
+ * 
  * @author Keith Palmer <keith@consolibyte.com>
  * 
  * @package QuickBooks

@@ -158,10 +158,15 @@ class QuickBooks_IPP_IDS
 		// @todo Add validation here so that it always returns the correct types (string/integer)
 		$arr = explode('-', trim($str, '{}'));
 		
-		$arr['domain'] = $arr[0];
-		$arr['ID'] = $arr[1];
+		if (count($arr) == 2)
+		{
+			$arr['domain'] = $arr[0];
+			$arr['ID'] = $arr[1];
+			
+			return $arr;
+		}
 		
-		return $arr;
+		return array( 0 => '?', 'domain' => '?', 1 => $str, 'ID' => $str );
 	}
 	
 	static public function buildIDType($domain, $ID)

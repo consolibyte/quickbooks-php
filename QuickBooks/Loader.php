@@ -19,6 +19,11 @@ if (!defined('QUICKBOOKS_LOADER_REQUIREONCE'))
 	define('QUICKBOOKS_LOADER_REQUIREONCE', true);
 }
 
+if (!defined('QUICKBOOKS_LOADER_AUTOLOADER'))
+{
+	define('QUICKBOOKS_LOADER_AUTOLOADER', true);
+}
+
 /**
  * 
  */
@@ -29,7 +34,8 @@ class QuickBooks_Loader
 	 */
 	static public function load($file, $autoload = true)
 	{
-		if ($autoload and QuickBooks_Loader::_autoload())
+		if ($autoload and 
+			QuickBooks_Loader::_autoload())
 		{
 			return true;
 		}
@@ -60,6 +66,11 @@ class QuickBooks_Loader
 	 */
 	static protected function _autoload()
 	{
+		if (!QUICKBOOKS_LOADER_AUTOLOADER)
+		{
+			return false;
+		}
+		
 		static $done = false;
 		static $auto = false;
 		
