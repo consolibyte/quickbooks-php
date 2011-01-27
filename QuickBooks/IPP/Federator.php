@@ -109,48 +109,91 @@ class QuickBooks_IPP_Federator
 	
 	protected $_errmsg;
 	
-	protected $_last_request;
-	
-	protected $_last_response;
-	
 	protected $_config;
 	
-	protected function _log($msg)
+	protected $_log;
+
+	public function __construct($type, $private_key, $dsn = null, $callback = null, $config = array())
 	{
-		if ($this->_debug)
+		$this->_type = $type;
+		$this->_key = $private_key;
+		
+		$this->_driver = null;
+		if ($dsn)
 		{
-			print(date('Y-m-d H:i:s') . ': ' . $msg . QUICKBOOKS_CRLF);
+			// @todo Logging
+			
 		}
 		
-		if ($this->_driver)
-		{
+		$this->_log = '';
+		
+		$this->_errnum = QuickBooks_IPP_Federator::ERROR_OK;
+		$this->_errmsg = '';
+		
+		$this->_callback = $callback;
+		
+		$this->_config = $this->_defaults($config);
+	}
+	
+	protected function _defaults($config)
+	{
+		$defaults = array(
+			'cookie_httponly' => true, 
+			'cookie_secure' => null, 		// null is for auto-detection based on $_SERVER['HTTPS']
+			'cookie_domain' => '',			// www.php.net/setcookie() says we can send an empty string for the default value of the current domain 
+			'cookie_path' => '/', 
+			'cookie_expire' => 0, 			// expire when the browser closes
 			
+			'http_redirect_method' => null, 
+			'http_redirect_delay' => 0, 
+			
+			'test_username' => '', 
+			'test_password' => '', 
+			'test_target' => '', 
+			'test_param_dbid' => '', 
+			'test_param_realm' => '', 
+			'test_param_state' => '', 
+			
+			'segfault_openssl_private_decrypt' => null, 
+			
+			'log_string' => true,
+			'log_level' => QUICKBOOKS_LOG_NORMAL, 
+			);
+		
+		$config = array_merge($defaults, (array) $config);
+		
+		if (is_null($config['cookie_secure']))
+		{
+			$config['cookie_secure'] = (boolean) isset($_SERVER['HTTPS']);
+		}
+		
+		return $config;
+	}
+	
+	protected function _log($msg, $level = QUICKBOOKS_LOG_NORMAL)
+	{
+		if ($this->_config['log_level'] >= $level)
+		{
+			if ($this->_debug)
+			{
+				print(date('Y-m-d H:i:s') . ': ' . $msg . QUICKBOOKS_CRLF);
+			}
+			
+			if ($this->_config['log_string'])
+			{
+				$this->_log .= $msg . QUICKBOOKS_CRLF . QUICKBOOKS_CRLF . QUICKBOOKS_CRLF;
+			}
+			
+			if ($this->_driver)
+			{
+				
+			}
 		}
 	}
 	
 	public function useDebugMode($true_or_false)
 	{
 		$this->_debug = (boolean) $true_or_false;
-	}
-
-	/**
-	 * Get the last raw XML response that was received
-	 * 
-	 * @return string
-	 */
-	public function lastResponse()
-	{
-		return $this->_last_response;
-	}
-	
-	/**
-	 * Get the last raw XML request that was sent
-	 *
-	 * @return string
-	 */
-	public function lastRequest()
-	{
-		return $this->_last_request;
 	}
 	
 	/**
@@ -186,55 +229,11 @@ class QuickBooks_IPP_Federator
 		$this->_errmsg = $errmsg;
 	}
 	
-	public function __construct($type, $private_key, $dsn = null, $callback = null, $config = array())
+	public function lastLog()
 	{
-		$this->_type = $type;
-		$this->_key = $private_key;
-		
-		$this->_driver = null;
-		if ($dsn)
-		{
-			// @todo Logging
-			
-		}
-		
-		$this->_errnum = QuickBooks_IPP_Federator::ERROR_OK;
-		$this->_errmsg = '';
-		
-		$this->_callback = $callback;
-		
-		$this->_config = $this->_defaults($config);
+		return $this->_log;
 	}
-	
-	protected function _defaults($config)
-	{
-		$defaults = array(
-			'cookie_httponly' => true, 
-			'cookie_secure' => null, 		// null is for auto-detection based on $_SERVER['HTTPS']
-			'cookie_domain' => '',			// www.php.net/setcookie() says we can send an empty string for the default value of the current domain 
-			'cookie_path' => '/', 
-			'cookie_expire' => 0, 			// expire when the browser closes
-			
-			'test_username' => '', 
-			'test_password' => '', 
-			'test_target' => '', 
-			'test_param_dbid' => '', 
-			'test_param_realm' => '', 
-			'test_param_state' => '', 
-			
-			'segfault_openssl_private_decrypt' => null, 
-			);
 		
-		$config = array_merge($defaults, (array) $config);
-		
-		if (is_null($config['cookie_secure']))
-		{
-			$config['cookie_secure'] = (boolean) isset($_SERVER['HTTPS']);
-		}
-		
-		return $config;
-	}
-	
 	public function handle($input = null)
 	{
 		// We only support SAML for now
@@ -294,6 +293,7 @@ class QuickBooks_IPP_Federator
 		}
 		
 		$this->_log('Incoming SAML request: ' . substr($SAML, 0, 128) . '...');
+		$this->_log($SAML, QUICKBOOKS_LOG_DEBUG);
 		
 		//print("\n\n" . $SAML . "\n\n");
 		// 
@@ -315,6 +315,21 @@ class QuickBooks_IPP_Federator
 				return false;
 			}
 			
+			/*
+			$AttributeStatement = $Root->getChildAt('samlp:Response saml:Assertion saml:AttributeStatement');
+			
+			foreach ($AttributeStatement->children() as $Node)
+			{
+				if ($Node->name() == 'saml:Attribute')
+				{
+					$Attribute = $Node;
+					
+					print_r($Attribute);
+				}
+			}
+			exit;
+			*/
+			
 			$encrypted_key = $Root->getChildDataAt('samlp:Response saml:Assertion saml:AttributeStatement saml:EncryptedAttribute xenc:EncryptedData ds:KeyInfo xenc:EncryptedKey xenc:CipherData xenc:CipherValue');
 			$this->_log('Encrypted key: [' . $encrypted_key . ']');
 			
@@ -333,26 +348,41 @@ class QuickBooks_IPP_Federator
 				return false;
 			}
 			
+			// Loop through the nodes, fetching the attributes from the SAML request
 			$Node = $Root->getChildAt('samlp:Response saml:Assertion saml:AttributeStatement');
+			
+			$target_url = null;
+			$realm_id_pseudonym = null;
 			
 			foreach ($Node->children() as $ChildNode)
 			{
-				if ($ChildNode->getAttribute('Name') == 'targetUrl')
+				if ($ChildNode->name() == 'saml:Attribute')
 				{
-					$ChildChildNode = $ChildNode->getChild(0);
-					$target_url = $ChildChildNode->data();
-					break;
+					$Attribute = $ChildNode;
+					
+					if ($Attribute->getAttribute('Name') == 'targetUrl')
+					{
+						$ChildChildNode = $Attribute->getChild(0);
+						$target_url = $ChildChildNode->data();
+					}
+					else if ($Attribute->getAttribute('Name') == 'Intuit.Federation.realmIDPseudonym')
+					{
+						$ChildChildNode = $Attribute->getChild(0);
+						$realm_id_pseudonym = $ChildChildNode->data();
+					}
 				}
 			}
 			
 			$this->_log('Target URL: [' . $target_url . ']');
-
+			$this->_log('Realm ID Pseudonym: [' . $realm_id_pseudonym . ']');
+			//exit;
+			
 			if (!$target_url)
 			{
 				$this->_setError(QuickBooks_IPP_Federator::ERROR_INTERNAL, 'Could not extract target URL from SAML response.');
 				return false;
 			}
-
+			
 			/*
 			// Get the signatureValue
 			$node = $xml->xpath('/samlp:Response/saml:Assertion/ds:Signature/ds:SignatureValue');
@@ -402,6 +432,9 @@ class QuickBooks_IPP_Federator
 			$padding = -ord($last_byte);
 			$decrypted_ticket = substr($decrypted_ticket, 0, $padding);
 			
+			$this->_log('Decrypted ticket is ' . strlen($decrypted_ticket) . ' bytes long...');
+			$this->_log($decrypted_ticket, QUICKBOOKS_LOG_DEBUG);
+			
 			// Parse the XML format to get at the actual ticket value
 			$ticket = null;
 			$errnum = null;
@@ -440,7 +473,7 @@ class QuickBooks_IPP_Federator
 					$this->_log('TEST MODE [authid=' . $auth_id . ', ticket=' . $ticket . ', target_url=' . $target_url . ']');
 				}
 				
-				return $this->_doCallback($auth_id, $ticket, $target_url);
+				return $this->_doCallback($auth_id, $ticket, $target_url, $realm_id_pseudonym);
 			}
 			else
 			{
@@ -455,7 +488,7 @@ class QuickBooks_IPP_Federator
 		}
 	}
 	
-	protected function _doCallback($auth_id, $ticket, $target_url)
+	protected function _doCallback($auth_id, $ticket, $target_url, $realm_id_pseudonym)
 	{
 		if ($this->_callback)
 		{
@@ -467,6 +500,7 @@ class QuickBooks_IPP_Federator
 				$auth_id, 
 				$ticket, 
 				$target_url, 
+				$realm_id_pseudonym,
 				$err);
 			
 			if ($err)
@@ -508,7 +542,7 @@ class QuickBooks_IPP_Federator
 	
 	protected function _doRedirect($target_url)
 	{
-		$html = '<html><head><meta http-equiv="refresh" content="0;url=' . htmlspecialchars($target_url) . '"></head><body></body></html>';
+		$html = '<html><head><meta http-equiv="refresh" content="' . $this->_config['http_redirect_delay'] . ';url=' . htmlspecialchars($target_url) . '"></head><body></body></html>';
 		print($html);
 		return true;
 	}
