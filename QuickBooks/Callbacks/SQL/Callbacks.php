@@ -5932,6 +5932,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<ItemQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemQueryRq>

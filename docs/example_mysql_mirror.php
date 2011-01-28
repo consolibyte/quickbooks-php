@@ -189,13 +189,14 @@ $ops = array(
 	
 	QUICKBOOKS_OBJECT_PRICELEVEL, 
 	*/
+	QUICKBOOKS_OBJECT_ITEM, 
 	);
 
 // 
 $sql_options = array(
-	'only_import' => array( 'none' ), //$ops,
+	'only_import' => $ops,
 	'only_add' => array( 'none' ), //$ops, 
-	'only_modify' => $ops,    // array( 'none' ), //$ops, 
+	'only_modify' => array( 'none' ), //$ops, 
 	);
 
 // 
