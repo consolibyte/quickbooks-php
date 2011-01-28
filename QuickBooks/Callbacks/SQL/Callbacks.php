@@ -1176,7 +1176,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, 
 							$arr, 
 							array( array( 'qbsql_id' => $ID ) ), 
-							false, 		// Don't mark as re-synced
+							true, 		// Don't mark as re-synced
 							false, 		// Don't update the discov time
 							true);		// Do mark it as re-derived
 					}
@@ -1207,7 +1207,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customer', 
 						$arr, 
 						array( array( 'qbsql_id' => $ID ) ), 
-						false, 		// Don't mark as re-synced
+						true, 		// Don't mark as re-synced
 						false, 		// Don't update the discov time
 						true);		// Do mark it as re-derived
 					
@@ -1267,7 +1267,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', 
 						$arr, 
 						array( array( 'qbsql_id' => $ID ) ), 
-						false, 		// Don't mark as re-synced
+						true, 		// Don't mark as re-synced
 						false, 		// Don't update the discov time
 						true);		// Do mark it as re-derived
 					
