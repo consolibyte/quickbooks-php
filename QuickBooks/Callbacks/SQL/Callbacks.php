@@ -9423,7 +9423,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		// Customer.	Balance, TotalBalance, 
 		// Invoice.		IsPending, AppliedAmount, BalanceRemaining, IsPaid
 		
-		$Driver->log('Running triggered actions for: [' . $table . ']', null, QUICKBOOKS_LOG_DEBUG);
+		//$Driver->log('Running triggered actions for: [' . $table . ']', null, QUICKBOOKS_LOG_DEBUG);
 		
 		switch (strtolower($table))
 		{
