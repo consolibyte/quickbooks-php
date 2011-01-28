@@ -66,6 +66,8 @@ class QuickBooks_Callbacks_SQL_Errors
 		$object = new QuickBooks_SQL_Object($map[0], trim(QuickBooks_Utilities::actionToXMLElement($action)));
 		$table = $object->table();
 		
+		$existing = null;
+		
 		if ($table)
 		{
 			$multipart = array(
@@ -101,22 +103,16 @@ class QuickBooks_Callbacks_SQL_Errors
 				return true;
 			//case 3120:			// 3120 errors are handled in the 3210 error handler section
 			//	break;
+			case 3170:	// This list has been modified by another user.
 			case 3175:
-				
-				if (false !== strpos($errmsg, 'list element is in use'))
-				{
-					// This error occurs when you have a customer open and try to issue a Mod request
-					return true;
-				}
-				
-				break;
 			case 3176:
 			case 3180:
 				
 				// This error can occur in several different situations, so we test per situation
 				if (false !== strpos($errmsg, 'list has been modified by another user') or 
 					false !== strpos($errmsg, 'internals could not be locked') or 
-					false !== strpos($errmsg, 'failed to acquire the lock'))
+					false !== strpos($errmsg, 'failed to acquire the lock') or 
+					false !== strpos($errmsg, 'list element is in use'))
 				{
 					// This is *not* an error, we can just send the request again, and it'll go through just fine
 					return true;
@@ -126,22 +122,32 @@ class QuickBooks_Callbacks_SQL_Errors
 			case 3200:
 				// Ignore EditSequence errors (the record will be picked up and a conflict reported next time it runs... maybe?)
 				
-				$query_action = QuickBooks_Utilities::convertActionToQuery($action);
-				
-				$extra = array(
-					
-					);
-				
-				// Do a query to pick up the changes to the record
-				/*
-				$Driver->queueEnqueue(
-					$user, 
-					$query_action, 
-					null, 
-					true, 
-					QuickBooks_Utilities::priorityForAction($query_action), 
-					$extra);
-				*/
+				if ($action == QUICKBOOKS_MOD_CUSTOMER and 
+					$existing)
+				{
+					// Queue up a derive customer request
+					// Tried to derive, doesn't exist, add it
+					$Driver->queueEnqueue(
+						$user, 
+						QUICKBOOKS_DERIVE_CUSTOMER, 
+						$ident, 
+						true, 
+						9999, 
+						array( 'ListID' => $existing['ListID'] ));
+				}
+				else if ($action == QUICKBOOKS_MOD_INVOICE and 
+					$existing)
+				{
+					// Queue up a derive customer request
+					// Tried to derive, doesn't exist, add it
+					$Driver->queueEnqueue(
+						$user, 
+						QUICKBOOKS_DERIVE_INVOICE, 
+						$ident, 
+						true, 
+						9999, 
+						array( 'TxnID' => $existing['TxnID'] ));					
+				}
 				
 				return true;
 			case 3120:
@@ -152,7 +158,8 @@ class QuickBooks_Callbacks_SQL_Errors
 				
 				// 3210: The &quot;AppliedToTxnAdd payment amount&quot; field has an invalid value &quot;129.43&quot;.  QuickBooks error message: You cannot pay more than the amount due.
 				if ($action == QUICKBOOKS_ADD_RECEIVEPAYMENT and 
-					(false !== strpos($errmsg, 'pay more than the amount due') or false !== strpos($errmsg, 'cannot be found')))
+					(false !== strpos($errmsg, 'pay more than the amount due') or false !== strpos($errmsg, 'cannot be found')) and 
+					$existing)
 				{
 					// If this happens, we're going to try to re-submit the payment, *without* the AppliedToTxn element
 					
@@ -182,112 +189,19 @@ class QuickBooks_Callbacks_SQL_Errors
 				
 				return true;
 			case 3260: // Insufficient permission level to perform this action. 
+			case 3261: // The integrated application has no permission to ac...
 				
 				// There's nothing we can do about this, if they don't grant the user permission, just skip it
 				
 				return true;
-			/*
-			case 3200: // The provided edit sequence is out-of-date.
-				
-				if (!$tmp = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, array(QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident) ) )
-				{
-					return true;
-				}
-					
-				switch ($config['conflicts'])
-				{
-					case QUICKBOOKS_SERVER_SQL_CONFLICT_LOG:
-					
-						$multipart = array(QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident);
-						$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER, $errnum);
-						$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE, $errmsg);
-						$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
-						
-						break;						
-					case QUICKBOOKS_SERVER_SQL_CONFLICT_NEWER:
-			*/			
-						/*
-						$Parser = new QuickBooks_XML_Parser($xml);
-						$errnumTemp = 0;
-						$errmsgTemp = '';
-						$Doc = $Parser->parse($errnumTemp, $errmsgTemp);
-						$Root = $Doc->getRoot();		
-							
-						$List = $Root->getChildAt('QBXML QBXMLMsgsRs '.QuickBooks_Utilities::actionToResponse($action));
-						$TimeModified = $Root->getChildDataAt('QBXML QBXMLMsgsRs ' . QuickBooks_Utilities::actionToResponse($action) . ' ' . QuickBooks_Utilities::actionToXMLElement($action) . ' TimeModified');
-						$EditSequence = $Root->getChildDataAt('QBXML QBXMLMsgsRs ' . QuickBooks_Utilities::actionToResponse($action) . ' ' . QuickBooks_Utilities::actionToXMLElement($action) . ' EditSequence');
-							
-						$multipart = array(QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident);
-							
-						if (QuickBooks_Utilities::compareQBTimeToSQLTime($TimeModified, $tmp->get(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY)) >= 0 && $config['mode'] != QUICKBOOKS_SERVER_SQL_MODE_WRITEONLY)
-						{
-							//@TODO: Make this get only a single item, not the whole table
-							$Driver->queueEnqueue($user, QuickBooks_Utilities::convertActionToQuery($action), __FILE__, true, QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY, $extra);							
-						}
-						else if (QuickBooks_Utilities::compareQBTimeToSQLTime($TimeModified, $tmp->get(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY)) < 0)
-						{
-							//Updates the EditSequence without marking the row as resynced.
-							$tmpSQLObject = new QuickBooks_SQL_Object($table, null);
-							$tmpSQLObject->set("EditSequence", $EditSequence);
-							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $tmpSQLObject, array( $multipart ));
-							$Driver->queueEnqueue($user, QuickBooks_Utilities::convertActionToMod($action), $tmp->get(QUICKBOOKS_DRIVER_SQL_FIELD_ID), true, QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY, $extra);
-						}
-						else
-						{
-							//Trash it, set synced.
-							$tmpSQLObject = new QuickBooks_SQL_Object($table, null);
-							$tmpSQLObject->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE, "Read/Write Mode is WRITEONLY, and Conflict Mode is NEWER, and Quickbooks has Newer data, so no Update Occured.");
-							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $tmpSQLObject, array( $multipart ));
-						}
-						*/
-			/*			
-						die('Not supported.');
-						
-						break;
-					case QUICKBOOKS_SERVER_SQL_CONFLICT_QUICKBOOKS:
-						
-						if ($config['mode'] == QUICKBOOKS_SERVER_SQL_MODE_READWRITE)
-						{
-							//@TODO: Make this get only a single item, not the whole table
-							$Driver->queueEnqueue($user, QuickBooks_Utilities::convertActionToQuery($action), null, true, QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY, $extra);
-							$multipart = array(QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident);
-							$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER, $errnum);
-							$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE, $errmsg);
-							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
-							//Use what's on quickbooks, and trash whatever is here.
-						}
-						else
-						{
-							$multipart = array(QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident);
-							$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER, $errnum);
-							$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE, $errmsg);
-							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
-							// @TODO: Raise Notification that the conflicts level requires writing to SQL table, but Mode disallows this
-						}
-						
-						break;						
-					case QUICKBOOKS_SERVER_SQL_CONFLICT_SQL:
-							// Updates the EditSequence without marking the row as resynced.
-							$tmp = new QuickBooks_SQL_Object($table, null);
-							$tmp->set("EditSequence", $EditSequence);
-							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $tmp, array( $multipart ));
-							$Driver->queueEnqueue($user, QuickBooks_Utilities::convertActionToMod($action), $tmp->get(QUICKBOOKS_DRIVER_SQL_FIELD_ID), true, QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY, $extra);
-						break;
-						
-					case QUICKBOOKS_SERVER_SQL_CONFLICT_CALLBACK:
-						break;
-						
-					default:
-						break;
-				}
-				
-				break;
-			*/
 			case 3100: // Name of List Element is already in use.
 				
 				
 				
 				break;
+			case '0x8004040D':	// The ticket parameter is invalid  (how does this happen!?!)
+				
+				return true;
 		}
 		
 		// This is our catch-all which marks the item as errored out

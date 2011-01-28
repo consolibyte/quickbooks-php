@@ -492,6 +492,7 @@ define('QUICKBOOKS_IMPORT_JOB', 'JobImport');
 define('QUICKBOOKS_OBJECT_ITEM', 'Item');
 define('QUICKBOOKS_QUERY_ITEM', 'ItemQuery');
 define('QUICKBOOKS_IMPORT_ITEM', 'ItemImport');
+define('QUICKBOOKS_DERIVE_ITEM', 'ItemDerive');
 
 define('QUICKBOOKS_OBJECT_INVENTORYITEM', 'ItemInventory');
 define('QUICKBOOKS_ADD_INVENTORYITEM', 'ItemInventoryAdd');

@@ -1,8 +1,8 @@
 <?php
 
-$url = 'https://secure.consolibyte.com/saas/installs/89/infusionsoft/qbus/422/public/infusionsoft/qbwc.php';
-$username = 'user89';
-$password = 'indi1234';
+$url = 'http://localhost:8888/saas/installs/97/interspire/qbus/121/public/interspire/qbwc.php';
+$username = 'user97';
+$password = 'password';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -26,7 +26,7 @@ $ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
 print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n");
 
 
-//exit;
+exit;
 
 $max = 1;
 for ($i = 0; $i < $max; $i++)

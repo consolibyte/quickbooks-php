@@ -1064,6 +1064,28 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	{
 		return QuickBooks_Callbacks_SQL_Callbacks::_DeriveResponse('QBXML QBXMLMsgsRs CustomerQueryRs', QUICKBOOKS_OBJECT_CUSTOMER, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
+
+	public static function ItemDeriveRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$xml = '';
+		
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="' . $version . '"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+					<ItemQueryRq requestID="' . $requestID . '">
+						<ListID>' . $extra['ListID'] . '</ListID>
+					</ItemQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>';
+			
+		return $xml;
+	}
+	
+	public static function ItemDeriveResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		return QuickBooks_Callbacks_SQL_Callbacks::_DeriveResponse('QBXML QBXMLMsgsRs ItemQueryRs', QUICKBOOKS_OBJECT_ITEM, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
 	
 	/**
 	 * Fetch derived fields for a customer (Balance, TotalBalance, etc.)
@@ -1121,6 +1143,45 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		{
 			switch ($type)
 			{
+				case QUICKBOOKS_OBJECT_ITEM:
+					
+					$xpath = '';
+					$table = '';
+					switch ($Node->name())
+					{
+						case 'ItemServiceRet':
+							$xpath = $Node->name();
+							$table = 'itemservice';
+							break;
+						case 'ItemInventoryRet':
+							$xpath = $Node->name();
+							$table = 'iteminventory';
+							break;
+						case 'ItemNonInventoryRet';
+							$xpath = $Node->name();
+							$table = 'itemnoninventory';
+							break;
+					}
+					
+					if ($xpath and $table)
+					{
+						$arr = array(
+							'ListID' => $Node->getChildDataAt($xpath . ' ListID'), 
+							'IsActive' => (int) ($Node->getChildDataAt($xpath . ' IsActive') == 'true'), 
+							'EditSequence' => $Node->getChildDataAt($xpath . ' EditSequence'), 
+							);
+						
+						$Driver->log('Updating DERIVED ' . $xpath . ' fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID, null, QUICKBOOKS_LOG_VERBOSE);
+						
+						$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, 
+							$arr, 
+							array( array( 'qbsql_id' => $ID ) ), 
+							false, 		// Don't mark as re-synced
+							false, 		// Don't update the discov time
+							true);		// Do mark it as re-derived
+					}
+					
+					break;
 				case QUICKBOOKS_OBJECT_VENDOR:
 					
 					// Vendor.		
@@ -1133,6 +1194,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					
 					$arr = array(
 						'ListID' => $Node->getChildDataAt('CustomerRet ListID'), 
+						'IsActive' => (int) ($Node->getChildDataAt('CustomerRet IsActive') == 'true'), 
 						'EditSequence' => $Node->getChildDataAt('CustomerRet EditSequence'), 
 						'Balance' => $Node->getChildDataAt('CustomerRet Balance'),
 						'TotalBalance' => $Node->getChildDataAt('CustomerRet TotalBalance'),
@@ -1151,7 +1213,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					
 					// @todo Only do this if the customer actually needs to be modified 
 					// Now, make a request to *modify* the customer 
-					$priority = 9999;		// @todo this probably isn't a good choice of priorities
+					$priority = 9998;		// @todo this probably isn't a good choice of priorities
 					$Driver->queueEnqueue(
 						$user, 
 						QUICKBOOKS_MOD_CUSTOMER, 
@@ -1176,6 +1238,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					// Invoice.		IsPending, AppliedAmount, BalanceRemaining, IsPaid
 					
 					$arr = array(
+						'TxnID' => $Node->getChildDataAt('InvoiceRet TxnID'), 
+						'EditSequence' => $Node->getChildDataAt('InvoiceRet EditSequence'), 
 						'AppliedAmount' => $Node->getChildDataAt('InvoiceRet AppliedAmount'),
 						'BalanceRemaining' => $Node->getChildDataAt('InvoiceRet BalanceRemaining'), 
 						);
@@ -1199,6 +1263,23 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					}
 					
 					$Driver->log('Updating DERIVED INVOICE fields: ' . print_r($arr, true) . ' where: ' . print_r($extra, true), null, QUICKBOOKS_LOG_VERBOSE);
+					
+					$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', 
+						$arr, 
+						array( array( 'qbsql_id' => $ID ) ), 
+						false, 		// Don't mark as re-synced
+						false, 		// Don't update the discov time
+						true);		// Do mark it as re-derived
+					
+					// @todo Only do this if the invoice actually needs to be modified 
+					// Now, make a request to *modify* the customer 
+					$priority = 9998;		// @todo this probably isn't a good choice of priorities
+					$Driver->queueEnqueue(
+						$user, 
+						QUICKBOOKS_MOD_INVOICE, 
+						$ID, 
+						true, 
+						$priority);
 					
 					/*
 					if (!empty($extra['TxnID']))
@@ -3881,7 +3962,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					{
 						case 'AMTTYPE':
 							
-							$value = str_replace(",", "", number_format($value, 2));
+							$value = str_replace(',', '', number_format($value, 2));
 							
 							break;
 						case 'DATETYPE':
@@ -4198,7 +4279,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						{
 							case 'AMTTYPE':
 								
-								$value = str_replace(",", "", number_format($value, 2));
+								$value = str_replace(',', '', number_format($value, 2));
 								
 								break;
 							case 'BOOLTYPE':
@@ -4249,7 +4330,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						{
 							case 'AMTTYPE':
 								
-								$value = str_replace(",", "", number_format($value, 2));
+								$value = str_replace(',', '', number_format($value, 2));
 								
 								break;
 							case 'BOOLTYPE':
@@ -8101,20 +8182,20 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		if (!isset($update_relatives_map[$table]))
 		{
-			$Driver->log('Record has no RELATIVES...?', null, QUICKBOOKS_LOG_NORMAL);
+			//$Driver->log('Record has no RELATIVES...?', null, QUICKBOOKS_LOG_NORMAL);
 			return false;
 		}
 		
 		if (!isset($extra['AddResponse_OldKey']))
 		{
-			$Driver->log('Missing key for RELATIVE update...?', null, QUICKBOOKS_LOG_NORMAL);
+			//$Driver->log('Missing key for RELATIVE update...?', null, QUICKBOOKS_LOG_NORMAL);
 			return false;
 		}
 			
 		$TxnID_or_ListID = $object->get($update_relatives_map[$table]['id_field']);
 		foreach ($update_relatives_map[$table]['relatives'] as $relative_table => $relative_field)
 		{
-			$Driver->log('Now updating [' . $relative_table . '] for field [' . $relative_field . '] with value [' . $TxnID_or_ListID . ']', null, QUICKBOOKS_LOG_DEBUG);
+			//$Driver->log('Now updating [' . $relative_table . '] for field [' . $relative_field . '] with value [' . $TxnID_or_ListID . ']', null, QUICKBOOKS_LOG_DEBUG);
 			
 			$multipart = array( $relative_field => $extra['AddResponse_OldKey'] );
 			$tmp = new QuickBooks_SQL_Object($relative_table, null);
@@ -8788,7 +8869,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				*/
 				
 				// 
-				if (count($map) and $map[0] and $map[1])
+				if ($table and 
+					count($map) and 
+					$map[0] and 
+					$map[1])
 				{
 					$addMapTest = array();
 					$addMapTestOthers = array();

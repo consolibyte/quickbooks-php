@@ -208,6 +208,20 @@ class QuickBooks_Server_SQL extends QuickBooks_Server
 			}
 		}
 		
+		/*
+		$sql_map[QUICKBOOKS_DERIVE_ITEM] = array( 
+			'QuickBooks_Callbacks_SQL_Callbacks::ItemDeriveRequest', 
+			'QuickBooks_Callbacks_SQL_Callbacks::ItemDeriveResponse' );
+			
+		$sql_map[QUICKBOOKS_DERIVE_CUSTOMER] = array( 
+			'QuickBooks_Callbacks_SQL_Callbacks::CustomerDeriveRequest', 
+			'QuickBooks_Callbacks_SQL_Callbacks::CustomerDeriveResponse' );
+
+		$sql_map[QUICKBOOKS_DERIVE_INVOICE] = array( 
+			'QuickBooks_Callbacks_SQL_Callbacks::InvoiceDeriveRequest', 
+			'QuickBooks_Callbacks_SQL_Callbacks::InvoiceDeriveResponse' );			
+		*/
+		
 		//print_r($sql_map);
 		//exit;
 		
