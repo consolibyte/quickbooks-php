@@ -168,7 +168,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 		return null;
 	}
 	
-	public function adds($adds = array(), $mark_as_queued = true)
+	public function adds($adds = array(), $mark_as_queued = true, $limit = null)
 	{
 		$Driver = $this->_driver;
 		
@@ -221,7 +221,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						
 				$errnum = 0;
 				$errmsg = '';
-				$res = $Driver->query($sql, $errnum, $errmsg);
+				$res = $Driver->query($sql, $errnum, $errmsg, 0, $limit);
 				while ($arr = $Driver->fetch($res))
 				{
 					if (strlen($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER]))

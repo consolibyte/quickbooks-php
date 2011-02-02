@@ -206,14 +206,15 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		//	things that are older than NOW()
 		$NOW = date('Y-m-d H:i:s');
 		
-		
+		// Limit to max adds of this many transactions per auth
+		$limit = 500;
 		
 		// Objects that need to be *ADDED* to QuickBooks
 		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
 			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
 		{
 			$mark_as_queued = true;
-			$map = $Map->adds($sql_add, $mark_as_queued);
+			$map = $Map->adds($sql_add, $mark_as_queued, $limit);
 			
 			//$Driver->log('ADDS: ' . print_r($map, true));
 			
@@ -273,7 +274,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						
 					$errnum = 0;
 					$errmsg = '';
-					$res = $Driver->query($sql, $errnum, $errmsg);
+					$res = $Driver->query($sql, $errnum, $errmsg, 0, $limit);
 					while ($arr = $Driver->fetch($res))
 					{
 						if (strlen($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER]))

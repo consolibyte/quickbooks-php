@@ -169,7 +169,6 @@ $handler_options = array();
 $driver_options = array();
 
 $ops = array(
-	/*
 	QUICKBOOKS_OBJECT_SALESTAXITEM, 
 	QUICKBOOKS_OBJECT_SALESTAXCODE, 
 	QUICKBOOKS_OBJECT_CUSTOMER, 
@@ -186,7 +185,7 @@ $ops = array(
 	QUICKBOOKS_OBJECT_SHIPMETHOD, 
 	QUICKBOOKS_OBJECT_PAYMENTMETHOD, 
 	QUICKBOOKS_OBJECT_TERMS, 
-	
+	/*
 	QUICKBOOKS_OBJECT_PRICELEVEL, 
 	*/
 	QUICKBOOKS_OBJECT_ITEM, 
@@ -195,8 +194,8 @@ $ops = array(
 // 
 $sql_options = array(
 	'only_import' => $ops,
-	'only_add' => array( 'none' ), //$ops, 
-	'only_modify' => array( 'none' ), //$ops, 
+	'only_add' => $ops, 
+	'only_modify' => $ops, 
 	);
 
 // 
