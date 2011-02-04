@@ -1230,6 +1230,7 @@ class QuickBooks_Handlers
 				$action = null;
 				$ident = null;
 				
+				$errnum = null;
 				if ($requestID = $this->_extractRequestID($obj->response))
 				{
 					// This happens if a data validation error occurs 
@@ -1267,6 +1268,7 @@ class QuickBooks_Handlers
 						}
 					}
 					
+					$errmsg = null;
 					if ($obj->message)
 					{
 						$errmsg = $obj->message;
