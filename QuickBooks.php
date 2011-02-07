@@ -285,6 +285,8 @@ define('QUICKBOOKS_DELETE', 'Delete');
 define('QUICKBOOKS_IMPORT', 'Import');
 define('QUICKBOOKS_AUDIT', 'Audit');
 
+define('QUICKBOOKS_DERIVE_INVENTORYLEVELS', 'InventoryLevels');
+
 define('QUICKBOOKS_OBJECT_ACCOUNT', 'Account');
 define('QUICKBOOKS_ADD_ACCOUNT', 'AccountAdd');
 define('QUICKBOOKS_MOD_ACCOUNT', 'AccountMod');

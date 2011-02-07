@@ -264,6 +264,8 @@ class QuickBooks_Server_SQL extends QuickBooks_Server
 		$sql_callback_options['_dont_add'] = $defaults['dont_add'];
 		$sql_callback_options['_only_modify'] = $defaults['only_modify'];
 		$sql_callback_options['_dont_modify'] = $defaults['dont_modify'];
+		$sql_callback_options['_only_misc'] = $defaults['only_misc'];
+		$sql_callback_options['_dont_misc'] = $defaults['dont_misc'];
 		
 		// Merge default values with passed in values
 		//	(in this case, we are *required* to have these values present, so 
@@ -305,6 +307,8 @@ class QuickBooks_Server_SQL extends QuickBooks_Server
 			'dont_add',
 			'only_modify',
 			'dont_modify', 
+			'only_misc', 
+			'dont_misc', 
 			);
 		
 		foreach ($tmp as $filter)

@@ -173,7 +173,9 @@ $ops = array(
 	QUICKBOOKS_OBJECT_SALESTAXCODE, 
 	QUICKBOOKS_OBJECT_CUSTOMER, 
 	QUICKBOOKS_OBJECT_VENDOR, 
-	QUICKBOOKS_OBJECT_CUSTOMERTYPE, 
+	
+	QUICKBOOKS_OBJECT_INVENTORYITEM, 
+	/*QUICKBOOKS_OBJECT_CUSTOMERTYPE, 
 	QUICKBOOKS_OBJECT_VENDORTYPE, 
 	QUICKBOOKS_OBJECT_ESTIMATE, 
 	QUICKBOOKS_OBJECT_INVOICE, 
@@ -185,10 +187,13 @@ $ops = array(
 	QUICKBOOKS_OBJECT_SHIPMETHOD, 
 	QUICKBOOKS_OBJECT_PAYMENTMETHOD, 
 	QUICKBOOKS_OBJECT_TERMS, 
-	/*
 	QUICKBOOKS_OBJECT_PRICELEVEL, 
-	*/
-	QUICKBOOKS_OBJECT_ITEM, 
+	QUICKBOOKS_OBJECT_ITEM, */
+	);
+
+$ops_misc = array(		// For fetching inventory levels, deleted transactions, etc. 
+	QUICKBOOKS_DERIVE_INVENTORYLEVELS,
+	// 'nothing', 
 	);
 
 // 
@@ -196,6 +201,7 @@ $sql_options = array(
 	'only_import' => $ops,
 	'only_add' => $ops, 
 	'only_modify' => $ops, 
+	'only_misc' => $ops_misc, 
 	);
 
 // 
