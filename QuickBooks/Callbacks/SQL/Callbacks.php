@@ -1739,6 +1739,28 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$Customer->remove('CreditCardInfo_ExpirationYear');
 			}
 			
+			//print('THIS IS RUNNING' . "\n");
+				
+			// Set these fields to "blank" if they aren't being set in the qbXML request
+			$clear = array(
+				'Phone', 
+				'AltPhone', 
+				'Fax', 
+				'AltFax', 
+				'Email', 
+				'Contact', 
+				'AltContact', 
+				);
+				
+			foreach ($clear as $field)
+			{
+				if (!$Customer->exists($field))
+				{
+					//print('setting ' . $field . ' to NULL' . "\n");
+					$Customer->set($field, QUICKBOOKS_SERVER_SQL_VALUE_CLEAR);
+				}
+			}
+			
 			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CUSTOMER, $Customer, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
 		}
 		
@@ -3673,6 +3695,43 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * 
 	 * 
 	 */
+	public static function BillPaymentCheckModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$Driver = QuickBooks_Driver_Singleton::getInstance();
+		if ($BillPaymentCheck = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'billpaymentcheck', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+		{
+			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_BILLPAYMENTCHECK, $BillPaymentCheck, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+		}
+		
+		return '';
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static function BillPaymentCheckModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();		
+		
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCheckModRs');
+		
+		$extra['IsModResponse'] = true;
+		$extra['is_mod_response'] = true;
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_BILLPAYMENTCHECK, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
+
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	public static function BillPaymentCreditCardAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
@@ -3975,6 +4034,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			}
 			else
 			{
+				if ($value == QUICKBOOKS_SERVER_SQL_VALUE_CLEAR)
+				{
+					$value = '';
+				}
+				
 				$use_abbrevs = false;
 				$htmlspecialchars = true;
 				
@@ -4003,86 +4067,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$map = substr($map, 0, -5) . 'County';
 				//die();
 			}
-			
-			/*
-			else if (stripos($type, 'dataext') !== false)
-			{
-				// DataExt related fields
-				
-				$field = str_replace('_', ' ', $field);
-				if (false === strpos($field, ' '))
-				{
-					if ($schema_object->exists($field))
-					{
-						switch($schema_object->dataType($field))
-						{
-							case 'AMTTYPE':
-								
-								$value = str_replace(',', '', number_format($value, 2));
-								
-								break;
-							default:
-								break;
-						}
-						
-						if ($field == 'DataExtValue' and 
-							$Object->get('DataExtType') == 'AMTTYPE')
-						{
-							$value = str_replace(',', '', number_format($value, 2));
-						}
-						
-						$Child = new QuickBooks_XML_Node($map);
-						$Child->setData($value);
-						$Node->addChild($Child);
-					}
-					else
-					{
-						; //ignore it 
-					}
-				}
-				else
-				{
-					if ($schema_object->exists($field))
-					{
-						$use_in_request = true;
-						
-						switch($schema_object->dataType($field))
-						{
-							case 'AMTTYPE':
-								
-								$value = str_replace(',', '', number_format($value, 2));
-								
-								break;
-							case 'BOOLTYPE':
-								
-								if ($value == 1)
-								{
-									$value = 'true';
-								}
-								else if ($value == 0)
-								{
-									$value = 'false';
-								}
-								else
-								{
-									$use_in_request = false;
-								}
-								
-								break;
-							default:
-								break;
-						}
-						
-						if ($use_in_request)
-						{
-							$Node->setChildDataAt($action . ' ' . $field, $value, true);
-						}
-					}
-				}
-				
-				continue;
-			}
-			*/
 						
 			// OK, the paths look like this: 
 			// 	CustomerRet FirstName
@@ -4311,7 +4295,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				
 			}
 		}
-			
+		
+		//print('ACTION IS: [' . $action . ']');
+		
+		//print_r($Node);
+		
 		$xml .= $Node->asXML();
 		
 		// Bad hack... 
@@ -11120,8 +11108,8 @@ print(QuickBooks_Callbacks_SQL_Errors::catchall($requestID, $user, $action, $ID,
 /*
 $requestID = 'Q3VzdG9tZXJBZGR8Mw==';
 $user = 'quickbooks';
-$action = QUICKBOOKS_ADD_CUSTOMER;
-$ID = 11;
+$action = QUICKBOOKS_MOD_CUSTOMER;
+$ID = 4;
 $extra = array();
 $err = '';
 $last_action_time = time();
@@ -11129,8 +11117,8 @@ $last_actionident_time = time();
 $xml = '';
 $idents = array();
 
-$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/saas_91_whmcs_qbus_106', array(), array(), QUICKBOOKS_LOG_DEVELOP);
-print(QuickBooks_Callbacks_SQL_Callbacks::CustomerAddRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
+$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
+print(QuickBooks_Callbacks_SQL_Callbacks::CustomerModRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
 */
 
 /*

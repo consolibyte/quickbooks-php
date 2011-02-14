@@ -31,6 +31,11 @@ if (!defined('QUICKBOOKS_SERVER_SQL_ON_ERROR'))
 	define('QUICKBOOKS_SERVER_SQL_ON_ERROR', 'continueOnError');
 }
 
+if (!defined('QUICKBOOKS_SERVER_SQL_VALUE_CLEAR'))
+{
+	define('QUICKBOOKS_SERVER_SQL_VALUE_CLEAR', '*CLEAR*');
+}
+
 if (!defined('QUICKBOOKS_SERVER_SQL_ITERATOR_PRIORITY'))
 {
 	/**
