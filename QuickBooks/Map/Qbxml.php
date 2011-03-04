@@ -302,6 +302,18 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 					'invoice_invoiceline' => 'Invoice_TxnID', //  
 					)
 				),
+			'salesreceipt' => array(
+				'key' => 'TxnID', 
+				'relatives' => array(
+					'salesreceipt_salesreceiptline' => 'SalesReceipt_TxnID', 
+					), 
+				), 
+			'salesorder' => array(
+				'key' => 'TxnID', 
+				'relatives' => array(
+					'salesorder_salesorderline' => 'SalesOrder_TxnID', 
+					), 
+				), 
 			);
 		
 		if (empty($map[$table]))

@@ -193,6 +193,8 @@ $ops = array(
 
 $ops_misc = array(		// For fetching inventory levels, deleted transactions, etc. 
 	QUICKBOOKS_DERIVE_INVENTORYLEVELS,
+	QUICKBOOKS_QUERY_DELETEDLISTS,
+	QUICKBOOKS_QUERY_DELETEDTRANSACTIONS,
 	// 'nothing', 
 	);
 

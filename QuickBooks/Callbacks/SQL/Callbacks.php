@@ -739,7 +739,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			$errmsg = null;
 			$Driver->query($sql1, $errnum, $errmsg, 0, 1, $vars1); 
 			
-			$Driver->log($sql1, null, QUICKBOOKS_LOG_DEBUG);
+			//$Driver->log($sql1, null, QUICKBOOKS_LOG_DEBUG);
 			
 			if (!$Driver->affected())
 			{
@@ -759,7 +759,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$errmsg = null;
 				$Driver->query($sql2, $errnum, $errmsg, 0, 1, $vars2); 
 				
-				$Driver->log($sql2, null, QUICKBOOKS_LOG_DEBUG);
+				//$Driver->log($sql2, null, QUICKBOOKS_LOG_DEBUG);
 			}
 		}
 		
@@ -1754,7 +1754,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				
 			foreach ($clear as $field)
 			{
-				if (!$Customer->exists($field))
+				//if (!$Customer->exists($field))
+				if (!$Customer->get($field))
 				{
 					//print('setting ' . $field . ' to NULL' . "\n");
 					$Customer->set($field, QUICKBOOKS_SERVER_SQL_VALUE_CLEAR);
@@ -4300,7 +4301,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		//print_r($Node);
 		
-		$xml .= $Node->asXML();
+		$xml .= $Node->asXML(QuickBooks_XML::XML_PRESERVE);
 		
 		// Bad hack... 
 		$xml = str_replace('&amp;#', '&#', $xml);
