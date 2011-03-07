@@ -1598,7 +1598,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
-		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_CUSTOMER, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+		QuickBooks_Callbacks_SQL_Callbacks::_addResponse(QUICKBOOKS_OBJECT_CUSTOMER, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
 	/**
@@ -3060,7 +3060,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
-		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_RECEIVEPAYMENT, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+		QuickBooks_Callbacks_SQL_Callbacks::_addResponse(QUICKBOOKS_OBJECT_RECEIVEPAYMENT, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
 	/**
@@ -3138,7 +3138,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
-		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_INVOICE, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+		QuickBooks_Callbacks_SQL_Callbacks::_addResponse(QUICKBOOKS_OBJECT_INVOICE, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
 	/**
@@ -9003,6 +9003,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		//print_r($deleted);
 	}
 	
+	protected static function _addResponse($type, $List, $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = array())
+	{
+		// Call our hooks here, we just *added* something to QuickBooks
+		
+		return QuickBooks_Callbacks_SQL_Callbacks::_queryResponse($type, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config);
+	}
+	
 	/**
 	 * 
 	 * 
@@ -9510,6 +9517,53 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						else
 						{
 							//$Driver->log('Skipping UPDATE: ' . $table . ': ' . print_r($object, true) . ', where: ' . print_r($multipart, true), null, QUICKBOOKS_LOG_DEVELOP);
+						}
+						
+						if ($actually_do_update and $extra['is_add_response'])
+						{
+							// It's an add response, call the hooks
+							$qbsql_id = null;
+							if (!empty($multipart[QUICKBOOKS_DRIVER_SQL_FIELD_ID]))			// I'm not sure why this would ever be empty...?
+							{
+								$qbsql_id = $multipart[QUICKBOOKS_DRIVER_SQL_FIELD_ID];
+							}
+							
+							// Call any hooks that occur when a record is updated 	
+							$hook_data = array(
+								'hook' => QuickBooks_SQL::HOOK_QUICKBOOKS_INSERT,
+								'user' => $user,
+								'table' => QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table,
+								'object' => $object,
+								'data' => $object->asArray(), 
+								'qbsql_id' => $qbsql_id, 
+								'where' => array( $multipart ),
+								);
+								
+							$err = null;
+							QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_QUICKBOOKS_INSERT, $requestID, $user, $err, $hook_data, $callback_config);
+						}
+						else if ($actually_do_update and $extra['is_mod_response'])
+						{
+							// It's an add response, call the hooks
+							$qbsql_id = null;
+							if (!empty($multipart[QUICKBOOKS_DRIVER_SQL_FIELD_ID]))			// I'm not sure why this would ever be empty...?
+							{
+								$qbsql_id = $multipart[QUICKBOOKS_DRIVER_SQL_FIELD_ID];
+							}
+							
+							// Call any hooks that occur when a record is updated 	
+							$hook_data = array(
+								'hook' => QuickBooks_SQL::HOOK_QUICKBOOKS_UPDATE,
+								'user' => $user,
+								'table' => QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table,
+								'object' => $object,
+								'data' => $object->asArray(), 
+								'qbsql_id' => $qbsql_id, 
+								'where' => array( $multipart ),
+								);
+								
+							$err = null;
+							QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_QUICKBOOKS_UPDATE, $requestID, $user, $err, $hook_data, $callback_config);
 						}
 					}
 					else

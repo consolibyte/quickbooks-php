@@ -3442,6 +3442,16 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			$object = array_change_key_case($object, CASE_UPPER);
 		}
 		
+		if (!is_array($object) or !is_array($avail))
+		{
+			print('ERROR SAVING [[' . "\n");
+			print('TABLE: ' . $table . "\n");
+			print_r($object);
+			print_r($avail);
+			print(']]');
+			exit;
+		}		
+		
 		// Merge by keys to make sure we don't INSERT any fields that don't exist in this schema
 		$object = array_intersect_key($object, $avail);
 		

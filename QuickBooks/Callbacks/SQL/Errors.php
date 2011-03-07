@@ -94,6 +94,26 @@ class QuickBooks_Callbacks_SQL_Errors
 						true, 
 						QuickBooks_Utilities::priorityForAction(QUICKBOOKS_ADD_CUSTOMER));
 				}
+				else if ($action == QUICKBOOKS_DERIVE_INVOICE)
+				{
+					// Tried to derive, doesn't exist, add it
+					$Driver->queueEnqueue(
+						$user, 
+						QUICKBOOKS_ADD_INVOICE, 
+						$ident, 
+						true, 
+						QuickBooks_Utilities::priorityForAction(QUICKBOOKS_ADD_INVOICE));
+				}
+				else if ($action == QUICKBOOKS_DERIVE_RECEIVEPAYMENT)
+				{
+					// Tried to derive, doesn't exist, add it
+					$Driver->queueEnqueue(
+						$user, 
+						QUICKBOOKS_ADD_RECEIVEPAYMENT, 
+						$ident, 
+						true, 
+						QuickBooks_Utilities::priorityForAction(QUICKBOOKS_ADD_RECEIVEPAYMENT));					
+				}
 				
 				return true;
 			case 1000: // An internal error occured
