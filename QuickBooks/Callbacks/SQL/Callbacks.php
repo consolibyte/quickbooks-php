@@ -1344,6 +1344,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 */
 	public static function InvoiceDeriveRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
+		// Try to fetch it from the database
+		$Driver = QuickBooks_Driver_Singleton::getInstance();
+		
 		if (!empty($extra['TxnID']))
 		{
 			$xml = '';
@@ -1353,6 +1356,21 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 						<InvoiceQueryRq>
 							<TxnID>' . $extra['TxnID'] . '</TxnID>
+						</InvoiceQueryRq>
+					</QBXMLMsgsRq>
+				</QBXML>';
+				
+			return $xml;
+		}
+		else if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+		{
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="utf-8"?>
+				<?qbxml version="' . $version . '"?>
+				<QBXML>
+					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+						<InvoiceQueryRq>
+							<TxnID>' . $arr['TxnID'] . '</TxnID>
 						</InvoiceQueryRq>
 					</QBXMLMsgsRq>
 				</QBXML>';
@@ -1489,6 +1507,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					
 					// Invoice.		IsPending, AppliedAmount, BalanceRemaining, IsPaid
 					
+					$existing = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ));
+					
 					$arr = array(
 						'TxnID' => $Node->getChildDataAt('InvoiceRet TxnID'), 
 						'EditSequence' => $Node->getChildDataAt('InvoiceRet EditSequence'), 
@@ -1532,6 +1552,26 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						$ID, 
 						true, 
 						$priority);
+					
+					// Blow away all of the old line items... (eeek!)
+					$errnum = null;
+					$errmsg = null;
+					$Driver->query("
+						UPDATE 
+							" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "invoice_invoiceline
+						SET
+							qbsql_to_skip = 1 
+						WHERE
+							Invoice_TxnID = '%s' ", $errnum, $errmsg, null, null, array( $arr['TxnID'] ));
+					
+					// This should probably be done through the "QuickBooks_Map_Qbxml::mark()" method... 
+					$errnum = null;
+					$errmsg = null;
+					$Driver->query("
+						UPDATE 
+							" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "invoice_invoiceline
+						SET
+							Invoice_TxnID = '%s' WHERE Invoice_TxnID = '%s' ", $errnum, $errmsg, null, null, array( $arr['TxnID'], $existing['TxnID'] ));
 					
 					/*
 					if (!empty($extra['TxnID']))
@@ -9557,7 +9597,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							//$Driver->log('Skipping UPDATE: ' . $table . ': ' . print_r($object, true) . ', where: ' . print_r($multipart, true), null, QUICKBOOKS_LOG_DEVELOP);
 						}
 						
-						if ($actually_do_update and $extra['is_add_response'])
+						if ($actually_do_update and isset($extra['is_add_response']))
 						{
 							// It's an add response, call the hooks
 							$qbsql_id = null;
@@ -9580,7 +9620,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							$err = null;
 							QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_QUICKBOOKS_INSERT, $requestID, $user, $err, $hook_data, $callback_config);
 						}
-						else if ($actually_do_update and $extra['is_mod_response'])
+						else if ($actually_do_update and isset($extra['is_mod_response']))
 						{
 							// It's an add response, call the hooks
 							$qbsql_id = null;
