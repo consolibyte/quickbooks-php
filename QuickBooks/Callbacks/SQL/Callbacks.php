@@ -1314,7 +1314,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 */
 	public static function CustomerDeriveResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		return QuickBooks_Callbacks_SQL_Callbacks::_DeriveResponse('QBXML QBXMLMsgsRs CustomerQueryRs', QUICKBOOKS_OBJECT_CUSTOMER, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+		return QuickBooks_Callbacks_SQL_Callbacks::_deriveResponse('QBXML QBXMLMsgsRs CustomerQueryRs', QUICKBOOKS_OBJECT_CUSTOMER, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
 	public static function ItemDeriveRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
@@ -1336,7 +1336,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	
 	public static function ItemDeriveResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		return QuickBooks_Callbacks_SQL_Callbacks::_DeriveResponse('QBXML QBXMLMsgsRs ItemQueryRs', QUICKBOOKS_OBJECT_ITEM, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+		return QuickBooks_Callbacks_SQL_Callbacks::_deriveResponse('QBXML QBXMLMsgsRs ItemQueryRs', QUICKBOOKS_OBJECT_ITEM, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 	
 	/**
@@ -1387,13 +1387,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 */
 	public static function InvoiceDeriveResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		return QuickBooks_Callbacks_SQL_Callbacks::_DeriveResponse('QBXML QBXMLMsgsRs InvoiceQueryRs', QUICKBOOKS_OBJECT_INVOICE, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+		return QuickBooks_Callbacks_SQL_Callbacks::_deriveResponse('QBXML QBXMLMsgsRs InvoiceQueryRs', QUICKBOOKS_OBJECT_INVOICE, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}	
 	
 	/**
 	 * 
 	 */
-	protected static function _DeriveResponse($path, $type, $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array())
+	protected static function _deriveResponse($path, $type, $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array())
 	{
 		// Account. 	Balance, TotalBalance
 		// Bill. 		IsPaid, OpenAmount, AmountDue
