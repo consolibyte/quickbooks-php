@@ -4058,7 +4058,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					{
 						continue;
 					}
-	
+					
 					/* and 
 						( strlen($Object->get($begi . 'City')) or strlen($Object->get($begi . 'State')) or strlen($Object->get($begi . 'Country')) or strlen($Object->get($begi . 'PostalCode')) ))
 					{
