@@ -10,9 +10,9 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalm
 require_once '../QuickBooks.php';
 
 // 
-$username = 'support@consolibyte.com';
-$password = '$up3rW0rmy42';
-$token = 'bf8cp2mihs6vsdibgqsybinugvj';
+$username = 'keith@consolibyte.com';
+$password = '';
+$token = '';
 $realmID = 192848234;
 
 // 

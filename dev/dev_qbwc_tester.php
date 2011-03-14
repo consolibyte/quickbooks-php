@@ -1,8 +1,12 @@
 <?php
 
-$url = 'http://localhost:8888/saas/installs/97/foxycart/qpos/167/public/foxycart/qbwc-pos.php';
-$username = 'user97';
-$password = 'password';
+//$url = 'http://playscape.example.com/saas/installs/297/whmcs/qbus/500/public/whmcs/qbwc.php';
+//$username = 'user297';
+//$password = '12fyc438';
+
+$url = 'https://commerce14.pair.com/artisand/production/quickbooks/qbwc_qbtoapp.php?prod=1';
+$username = 'foxycart';
+$password = 'p89U#Ya';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -28,7 +32,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 //exit;
 
-$max = 3;
+$max = 1;
 for ($i = 0; $i < $max; $i++)
 {
 	print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));

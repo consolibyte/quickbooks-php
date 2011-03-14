@@ -74,6 +74,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_CUSTOMER = 'Customer';
 	
+	const RESOURCE_DISCOUNT = 'Discount';
+	
 	const RESOURCE_EMPLOYEE = 'Employee';
 	
 	const RESOURCE_ESTIMATE = 'Estimate';
