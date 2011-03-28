@@ -783,7 +783,8 @@ class QuickBooks_Handlers
 					{
 						// They are sending this request with an INVALID requestID! Error this out and warn them!
 						
-						$err = 'This request contains an invalid embedded requestID="..." attribute; either embed the $requestID parameter, or leave out the requestID="..." attribute entirely!';
+						$err = 'This request contains an invalid embedded requestID="..." attribute; either embed the $requestID parameter, 
+or leave out the requestID="..." attribute entirely, found [' . $requestID . ' => ' . $embedded_action . ', ' . $embedded_ident . ']!';
 					}
 				}
 				

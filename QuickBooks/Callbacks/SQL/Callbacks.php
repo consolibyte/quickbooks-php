@@ -1281,7 +1281,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<?qbxml version="' . $version . '"?>
 				<QBXML>
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-						<CustomerQueryRq>
+						<CustomerQueryRq requestID="' . $requestID . '">
 							<ListID>' . $extra['ListID'] . '</ListID>
 						</CustomerQueryRq>
 					</QBXMLMsgsRq>
@@ -1296,7 +1296,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<?qbxml version="' . $version . '"?>
 				<QBXML>
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-						<CustomerQueryRq>
+						<CustomerQueryRq requestID="' . $requestID . '">
 							<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_CUSTOMER, 'FullName', $extra['FullName']) . '</FullName>
 						</CustomerQueryRq>
 					</QBXMLMsgsRq>
@@ -1354,7 +1354,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<?qbxml version="' . $version . '"?>
 				<QBXML>
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-						<InvoiceQueryRq>
+						<InvoiceQueryRq requestID="' . $requestID . '">
 							<TxnID>' . $extra['TxnID'] . '</TxnID>
 						</InvoiceQueryRq>
 					</QBXMLMsgsRq>
@@ -1369,7 +1369,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<?qbxml version="' . $version . '"?>
 				<QBXML>
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-						<InvoiceQueryRq>
+						<InvoiceQueryRq requestID="' . $requestID . '">
 							<TxnID>' . $arr['TxnID'] . '</TxnID>
 						</InvoiceQueryRq>
 					</QBXMLMsgsRq>

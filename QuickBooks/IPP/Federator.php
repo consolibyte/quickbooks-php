@@ -561,6 +561,9 @@ class QuickBooks_IPP_Federator
 		//$secure = true;		// This is required per IPP security guidelines
 		//$httponly = true;
 		
+		// P3P header to make Internet Exploder set cookies in iFrames
+		header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+
 		return setcookie(QuickBooks_IPP::COOKIE, $value, $expire, $path, $domain, $secure, $httponly);
 	}
 	
