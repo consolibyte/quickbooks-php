@@ -7,8 +7,8 @@ require_once '../QuickBooks.php';
 
 
 // 
-$username = 'keith@consolibyte.com';
-$password = 'password42';
+$username = 'support@consolibyte.com';
+$password = '$up3rW0rmy42';
 $token = 'tex3r7hwifx6cci3zk43ibmnd';
 $realmID = 173642438;
 
@@ -54,7 +54,7 @@ $IPP->application($Context, 'be9mh7qd5');
 $Invoice = new QuickBooks_IPP_Object_Invoice();
 
 $Header = new QuickBooks_IPP_Object_Header();
-$Header->setDocNumber('DF110108JM');
+//$Header->setDocNumber('DF110108JM');
 $Header->setTxnDate('2011-01-14');
 $Header->setCustomerId('2');
 
@@ -76,9 +76,15 @@ $Line->setQty(1);
 
 $Invoice->addLine($Line);
 
-print($Invoice->asIDSXML(null, null, QuickBooks_IPP_IDS::OPTYPE_ADD));
+$Service = new QuickBooks_IPP_Service_Invoice();
+$Service->add($Context, $realmID, $Invoice);
 
-exit;
+
+print($Service->lastResponse());
+
+//print($Invoice->asIDSXML(null, null, QuickBooks_IPP_IDS::OPTYPE_ADD));
+
+//exit;
 
 
 
@@ -87,12 +93,12 @@ $Service = new QuickBooks_IPP_Service_Invoice();
 
 $list = $Service->findAll($Context, $realmID);
 
-print_r($list);
-exit;
+//print_r($list);
+//exit;
 
 foreach ($list as $key => $Invoice)
 {
 	print($key . ': Invoice #' . $Invoice->getHeader()->getDocNumber() . ', balance: $' . $Invoice->getHeader()->getBalance() . "\n");
 }
 
-print_r($list[11]);
+//print_r($list[11]);

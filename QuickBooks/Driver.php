@@ -185,7 +185,9 @@ define('QUICKBOOKS_DRIVER_HOOK_QUEUEENQUEUE', 'QuickBooks_Driver::queueEnqueue')
  * 
  * @var string
  */
+/*
 define('QUICKBOOKS_DRIVER_HOOK_QUEUEFETCH', 'QuickBooks_Driver::queueFetch');
+*/
 
 /**
  * 
@@ -747,27 +749,31 @@ abstract class QuickBooks_Driver
 	 * @param string $msg			An error message (if an error message occured)
 	 * @return boolean
 	 */
-	final public function queueStatus($ticket, $action, $ident, $new_status, $msg = '')
+	//final public function queueStatus($ticket, $action, $ident, $new_status, $msg = '')
+	final public function queueStatus($ticket, $requestID, $new_status, $msg = '')
 	{
 		$user = $this->_authResolve($ticket);
 		
 		$hookdata = array(
 			'username' => $user, 
-			'action' => $action, 
-			'ident' => $ident, 
+			//'action' => $action, 
+			//'ident' => $ident, 
+			'requestID' => $requestID, 
 			'status' => $new_status, 
 			'message' => $msg, 
 			);
 		$hookerr = '';
 		$this->_callHook(QUICKBOOKS_DRIVER_HOOK_QUEUESTATUS, $ticket, $hookerr, $hookdata);
 		
-		return $this->_queueStatus($ticket, $action, $ident, $new_status, $msg);
+		//return $this->_queueStatus($ticket, $action, $ident, $new_status, $msg);
+		return $this->_queueStatus($ticket, $requestID, $new_status, $msg);
 	}
 	
 	/**
 	 * @see QuickBooks_Driver::queueStatus()
 	 */
-	abstract protected function _queueStatus($ticket, $action, $ident, $new_status, $msg = '');
+	//abstract protected function _queueStatus($ticket, $action, $ident, $new_status, $msg = '');
+	abstract protected function _queueStatus($ticket, $requestID, $new_status, $msg = '');
 	
 	/**
 	 * Tell the number of items left in the queue
@@ -884,6 +890,7 @@ abstract class QuickBooks_Driver
 	 * @param char $status
 	 * @return array 
 	 */
+	/*
 	final public function queueFetch($user, $action, $ident, $status = QUICKBOOKS_STATUS_QUEUED)
 	{
 		$hookdata = array(
@@ -897,11 +904,14 @@ abstract class QuickBooks_Driver
 		
 		return $this->_queueFetch($user, $action, $ident, $status);
 	}
+	*/
 	
 	/**
 	 * @see QuickBooks_Driver::queueFetch()
 	 */
+	/*
 	abstract protected function _queueFetch($user, $action, $ident, $status = QUICKBOOKS_STATUS_QUEUED);
+	*/
 	
 	/**
 	 * Tell how many commands have been processed during this login session
@@ -955,6 +965,7 @@ abstract class QuickBooks_Driver
 	 * @param string $action	The action to find the last dequeue time for
 	 * @return integer			A UNIX timestamp
 	 */
+	/*
 	final public function queueActionLast($user, $action)
 	{
 		$hookdata = array(
@@ -966,11 +977,14 @@ abstract class QuickBooks_Driver
 		
 		return $this->_queueActionLast($user, $action);
 	}
+	*/
 	
 	/**
 	 * @see QuickBooks_Driver::queueActionLast()
 	 */
+	/*
 	abstract protected function _queueActionLast($user, $action);
+	*/
 	
 	/**
 	 * Tell when the last time this combination of action/ident was dequeued 
@@ -980,6 +994,7 @@ abstract class QuickBooks_Driver
 	 * @param mixed $ident		The ident string/integer to find the last dequeue time for
 	 * @return integer			An UNIX timestamp indicating the last time this combo was dequeued
 	 */
+	/*
 	final public function queueActionIdentLast($user, $action, $ident)
 	{
 		$hookdata = array(
@@ -992,11 +1007,14 @@ abstract class QuickBooks_Driver
 		
 		return $this->_queueActionIdentLast($user, $action, $ident);
 	}
+	*/
 	
 	/**
 	 * @see QuickBooks_Driver::queueActionIdentLast()
 	 */
+	/*
 	abstract protected function _queueActionIdentLast($user, $action, $ident);
+	*/
 	
 	/**
 	 * Log an error that occured for a specific ticket

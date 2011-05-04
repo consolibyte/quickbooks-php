@@ -23,7 +23,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
 // Require the QuickBooks libraries
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 /*
 // Create a new SalesReceipt object
@@ -70,7 +70,7 @@ $Customer = new QuickBooks_Object_Customer();
 // Set some fields
 $Customer->setFullName('Contractors:ConsoliBYTE, LLC:Keith Palmer');
 $Customer->setCustomerTypeFullName('Web:Direct');
-
+$Customer->setNotes('Test notes go here.');
 
 print('qbXML Customer for QuickBooks qbXML (latest version the framework supports): ' . "\r\n");
 print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER));

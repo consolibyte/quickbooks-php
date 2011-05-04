@@ -1177,12 +1177,52 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			) ", $errnum, $errmsg);
 	}
 	
+	protected function _queueGet($user, $requestID, $status = QUICKBOOKS_STATUS_QUEUED)
+	{
+		$errnum = 0;
+		$errmsg = '';
+		
+		$vars = array(
+			(int) $requestID, 
+			$user
+			);
+		
+		if ($status)
+		{
+			$vars[] = $status;
+			
+			$sql = "
+				SELECT 
+					* 
+				FROM
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . "
+				WHERE
+					quickbooks_queue_id = %d AND 
+					qb_username = '%s' AND 
+					qb_status = '%s'  ";
+		}
+		else
+		{
+			$sql = "
+				SELECT 
+					* 
+				FROM
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . "
+				WHERE
+					quickbooks_queue_id = %d AND 
+					qb_username = '%s' ";
+		}
+		
+		return $this->_fetch($this->_query($sql, $errnum, $errmsg, 0, 1, $vars));
+	}
+	
 	/**
 	 * Fetch a particular item from the queue
 	 * 
 	 * @param integer $queue_id
 	 * @return array 
 	 */
+	/*
 	protected function _queueFetch($user, $action, $ident, $status = QUICKBOOKS_STATUS_QUEUED)
 	{
 		$errnum = 0;
@@ -1216,6 +1256,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		return $this->_fetch($this->_query($sql, $errnum, $errmsg, 0, 1));
 	}
+	*/
 	
 	/**
 	 * Fetch the queue item currently being processed by QuickBooks
@@ -1231,6 +1272,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		// Fetch the latest record to be dequeued for this user, and check that it's set with a status of in processing
 		$sql = "
 			SELECT
+				quickbooks_queue_id, 
 				qb_action, 
 				ident, 
 				qb_status, 
@@ -1240,15 +1282,15 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			WHERE
 				dequeue_datetime IS NOT NULL 
 			ORDER BY
-				dequeue_datetime DESC 
-			LIMIT 1";
+				dequeue_datetime DESC ";
 		
-		$res = $this->_query($sql, $errnum, $errmsg);
+		$res = $this->_query($sql, $errnum, $errmsg, 0, 1);
 		if ($arr = $this->_fetch($res) and 
 			$arr['qb_status'] == QUICKBOOKS_STATUS_PROCESSING and 					// Make sure this was the last thing we tried to process...
 			time() - strtotime($arr['dequeue_datetime']) < QUICKBOOKS_TIMEOUT)		// ... and it occurred during a reasonably recent run
 		{
-			return $this->_queueFetch($user, $arr['qb_action'], $arr['ident'], QUICKBOOKS_STATUS_PROCESSING);
+			return $this->_queueGet($user, $arr['quickbooks_queue_id'], QUICKBOOKS_STATUS_PROCESSING);
+			//return $this->_queueFetch($user, $arr['qb_action'], $arr['ident'], QUICKBOOKS_STATUS_PROCESSING);
 		}
 		
 		return false;
@@ -1261,6 +1303,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $action
 	 * @return integer
 	 */
+	/*
 	protected function _queueActionLast($user, $action)
 	{
 		$errnum = 0;
@@ -1285,6 +1328,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		return null;
 	}
+	*/
 	
 	/**
 	 * Get the last time an action of this type *and* with this ident was dequeued successfully for this user
@@ -1294,6 +1338,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $ident
 	 * @return integer 
 	 */
+	/*
 	protected function _queueActionIdentLast($user, $action, $ident)
 	{
 		$errnum = 0;
@@ -1321,6 +1366,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		return null;
 	}
+	*/
 	
 	/**
 	 * Remove an item from the queue
@@ -1512,7 +1558,8 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $msg
 	 * @return boolean 
 	 */
-	protected function _queueStatus($ticket, $action, $ident, $new_status, $msg = null)
+	//protected function _queueStatus($ticket, $action, $ident, $new_status, $msg = null)
+	protected function _queueStatus($ticket, $requestID, $new_status, $msg = null)
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -1538,6 +1585,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			
 			if ($new_status == QUICKBOOKS_STATUS_PROCESSING)
 			{
+				/*
 				$this->_query("
 					UPDATE 
 						" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . "
@@ -1551,6 +1599,20 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 						qb_action = '" . $this->_escape($action) . "' AND 
 						ident = '" . $this->_escape($ident) . "' AND 
 						qb_status = '" . QUICKBOOKS_STATUS_QUEUED . "' ", $errnum, $errmsg, 0, 1);
+				*/
+
+				$this->_query("
+					UPDATE 
+						" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . "
+					SET
+						qb_status = '" . $this->_escape($new_status) . "', 
+						msg = '" . $this->_escape($msg) . "',
+						quickbooks_ticket_id = " . (int) $ticket_id . ", 
+						dequeue_datetime = '" . date('Y-m-d H:i:s') . "' 
+					WHERE 
+						quickbooks_queue_id = %d AND 
+						qb_username = '%s' AND 
+						qb_status = '%s' ", $errnum, $errmsg, 0, 1, array( $requestID, $user, QUICKBOOKS_STATUS_QUEUED ));
 				
 				//print('running processing status query! ' . $user . ', ' . $action . ', ' . $ident . ', new: ' . $new_status);
 				
@@ -1571,6 +1633,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				// You can only update to a SUCCESS status if you're currently 
 				//	in a PROCESSING status
 				
+				/*
 				$sql = "
 					UPDATE
 						" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . " 
@@ -1583,6 +1646,19 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 						qb_action = '" . $this->_escape($action) . "' AND 
 						ident = '" . $this->_escape($ident) . "' AND 
 						qb_status = '" . QUICKBOOKS_STATUS_PROCESSING . "' ";
+				*/
+
+				$sql = "
+					UPDATE
+						" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . " 
+					SET 
+						qb_status = '" . $this->_escape($new_status) . "', 
+						msg = '" . $this->_escape($msg) . "' 
+					WHERE
+						quickbooks_ticket_id = " . (int) $ticket_id . " AND 
+						qb_username = '" . $this->_escape($user) . "' AND 
+						quickbooks_queue_id = " . (int) $requestID . " AND 
+						qb_status = '" . QUICKBOOKS_STATUS_PROCESSING . "' ";
 				
 				$this->_query($sql, $errnum, $errmsg, 0, 1);
 			}
@@ -1592,6 +1668,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				//	they're already removed from the queue. These are listed in 
 				//	the NOT IN section
 				
+				/*
 				$sql = "
 					UPDATE
 						" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . " 
@@ -1603,6 +1680,23 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 						qb_username = '" . $this->_escape($user) . "' AND 
 						qb_action = '" . $this->_escape($action) . "' AND 
 						ident = '" . $this->_escape($ident) . "' AND
+						qb_status NOT IN ( 
+							'" . QUICKBOOKS_STATUS_SUCCESS . "', 
+							'" . QUICKBOOKS_STATUS_HANDLED . "', 
+							'" . QUICKBOOKS_STATUS_CANCELLED . "', 
+							'" . QUICKBOOKS_STATUS_REMOVED . "' ) ";
+				*/
+
+				$sql = "
+					UPDATE
+						" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . " 
+					SET 
+						qb_status = '" . $this->_escape($new_status) . "', 
+						msg = '" . $this->_escape($msg) . "' 
+					WHERE
+						quickbooks_ticket_id = " . (int) $ticket_id . " AND 					
+						qb_username = '" . $this->_escape($user) . "' AND 
+						quickbooks_queue_id = " . (int) $requestID . " AND 
 						qb_status NOT IN ( 
 							'" . QUICKBOOKS_STATUS_SUCCESS . "', 
 							'" . QUICKBOOKS_STATUS_HANDLED . "', 

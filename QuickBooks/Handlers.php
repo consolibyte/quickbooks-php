@@ -304,6 +304,7 @@ class QuickBooks_Handlers
 			'qbwc_version_error_message' => null,  		// Not implemented...
 			'qbwc_interactive_url' => null, 			// Provide the URL for an interactive session to the QuickBooks Web Connector
 			'autoadd_missing_requestid' => true,  
+			'check_valid_requestid' => true, 
 			'server_version' => 'PHP QuickBooks SOAP Server v' . QUICKBOOKS_PACKAGE_VERSION . ' at ' . $url,	// Server version string
 			'authenticate_dsn' => null, 				// If you want to use some custom authentication scheme (and not the quickbooks_user MySQL table) you can specify your own function here
 			'map_application_identifiers' => true, 		// Try to map web application IDs to QuickBooks ListIDs/TxnIDs
@@ -328,6 +329,7 @@ class QuickBooks_Handlers
 		}
 		
 		$config['autoadd_missing_requestid'] = (boolean) $config['autoadd_missing_requestid'];
+		$config['check_valid_requestid'] = (boolean) $config['check_valid_requestid'];
 		$config['map_application_identifiers'] = (boolean) $config['map_application_identifiers'];
 		$config['convert_unix_newlines'] = (boolean) $config['convert_unix_newlines'];
 		
@@ -707,8 +709,10 @@ class QuickBooks_Handlers
 			{
 				//$this->_driver->log('Dequeued: ( ' . $next['qb_action'] . ', ' . $next['ident'] . ' ) ', $obj->ticket, QUICKBOOKS_LOG_DEBUG);
 				$this->_log('Dequeued: ( ' . $next['qb_action'] . ', ' . $next['ident'] . ' ) ', $obj->ticket, QUICKBOOKS_LOG_DEBUG);
-				$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_PROCESSING);
+				//$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_PROCESSING);
+				$this->_driver->queueStatus($obj->ticket, $next['quickbooks_queue_id'], QUICKBOOKS_STATUS_PROCESSING);
 				
+				/*
 				// Here's a strange case, interactive mode handler
 				if ($next['qb_action'] == QUICKBOOKS_INTERACTIVE_MODE)
 				{
@@ -718,6 +722,7 @@ class QuickBooks_Handlers
 					// This will cause ->getLastError() to be called, and ->getLastError() will then return the string "Interactive mode" which will cause QuickBooks to call ->getInteractiveURL() and start an interactive session... I think...?
 					return new QuickBooks_Result_SendRequestXML('');
 				}
+				*/
 				
 				$extra = '';
 				if ($next['extra'])
@@ -728,8 +733,10 @@ class QuickBooks_Handlers
 				$err = '';
 				$xml = '';
 				
-				$last_action_time = $this->_driver->queueActionLast($user, $next['qb_action']);
-				$last_actionident_time = $this->_driver->queueActionIdentLast($user, $next['qb_action'], $next['ident']);
+				//$last_action_time = $this->_driver->queueActionLast($user, $next['qb_action']);
+				//$last_actionident_time = $this->_driver->queueActionIdentLast($user, $next['qb_action'], $next['ident']);
+				$last_action_time = null;
+				$last_actionident_time = null;
 				
 				// Call the mapped function that should generate an appropriate qbXML request
 				$xml = $this->_callMappedFunction(0, $user, $next['qb_action'], $next['ident'], $extra, $err, $last_action_time, $last_actionident_time, $obj->qbXMLMajorVers . '.' . $obj->qbXMLMinorVers, $obj->qbXMLCountry, $next['qbxml']);
@@ -745,12 +752,14 @@ class QuickBooks_Handlers
 					$this->_driver->errorLog($obj->ticket, 0, QUICKBOOKS_NOOP);
 					
 					// Mark it as a NoOp to remove it from the queue
-					$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_NOOP, 'Handler function returned: ' . QUICKBOOKS_NOOP);
+					//$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_NOOP, 'Handler function returned: ' . QUICKBOOKS_NOOP);
+					$this->_driver->queueStatus($obj->ticket, $next['quickbooks_queue_id'], QUICKBOOKS_STATUS_NOOP, 'Handler function returned: ' . QUICKBOOKS_NOOP);
 					
 					return new QuickBooks_Result_SendRequestXML('');
 				}
 				
 				// If the requestID="..." attribute was not specified, we can try to automatically add it to the request
+				$requestID = null;
 				if (!($requestID = $this->_extractRequestID($xml)) and 
 					$this->_config['autoadd_missing_requestid'])
 				{
@@ -761,25 +770,28 @@ class QuickBooks_Handlers
 						$request = QuickBooks_Utilities::actionToRequest($action);
 						if (false !== strpos($xml, '<' . $request . ' '))
 						{
-							$xml = str_replace('<' . $request . ' ', '<' . $request . ' requestID="' . $this->_constructRequestID($next['qb_action'], $next['ident']) . '" ', $xml);
+							//$xml = str_replace('<' . $request . ' ', '<' . $request . ' requestID="' . $this->_constructRequestID($next['qb_action'], $next['ident']) . '" ', $xml);
+							$xml = str_replace('<' . $request . ' ', '<' . $request . ' requestID="' . $next['quickbooks_queue_id'] . '" ', $xml);
 							break;
 						}
 						else if (false !== strpos($xml, '<' . $request . '>'))
 						{
-							$xml = str_replace('<' . $request . '>', '<' . $request . ' requestID="' . $this->_constructRequestID($next['qb_action'], $next['ident']) . '">', $xml);
+							//$xml = str_replace('<' . $request . '>', '<' . $request . ' requestID="' . $this->_constructRequestID($next['qb_action'], $next['ident']) . '">', $xml);
+							str_replace('<' . $request . '>', '<' . $request . ' requestID="' . $next['quickbooks_queue_id'] . '">', $xml);
 							break;
 						}
 					}
 				}
-				else
+				else if ($this->_config['check_valid_requestid'])
 				{
 					// They embedded a requestID="..." attribute, let's make sure it's valid
 					
-					$embedded_action = null;
-					$embedded_ident = null;
-					$this->_parseRequestID($requestID, $embedded_action, $embedded_ident);
+					//$embedded_action = null;
+					//$embedded_ident = null;
+					//$this->_parseRequestID($requestID, $embedded_action, $embedded_ident);
 					
-					if ($embedded_action != $next['qb_action'] or $embedded_ident != $next['ident'])
+					//if ($embedded_action != $next['qb_action'] or $embedded_ident != $next['ident'])
+					if ($next['quickbooks_queue_id'] != $requestID)
 					{
 						// They are sending this request with an INVALID requestID! Error this out and warn them!
 						
@@ -788,12 +800,14 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 					}
 				}
 				
+				/*
 				if ($this->_config['convert_unix_newlines'] and 
 					false === strpos($xml, "\r") and 				// there are currently no Windows newlines...
 					false !== strpos($xml, "\n"))					// ... but there *are* Unix newlines!
 				{
 					; // (this is currently broken/unimplemented)
 				}
+				*/
 				
 				if ($err) // The function encountered an error when generating the qbXML request
 				{
@@ -802,7 +816,8 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 					//$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_ERROR, 'Registered handler returned error: ' . $err);
 					
 					$errerr = '';
-					$this->_handleError($obj->ticket, QUICKBOOKS_ERROR_HANDLER, $err, $this->_constructRequestID($next['qb_action'], $next['ident']), $next['qb_action'], $next['ident'], $extra, $errerr, $xml);
+					//$this->_handleError($obj->ticket, QUICKBOOKS_ERROR_HANDLER, $err, $this->_constructRequestID($next['qb_action'], $next['ident']), $next['qb_action'], $next['ident'], $extra, $errerr, $xml);
+					$this->_handleError($obj->ticket, QUICKBOOKS_ERROR_HANDLER, $err, $next['quickbooks_queue_id'], $next['qb_action'], $next['ident'], $extra, $errerr, $xml);
 					
 					return new QuickBooks_Result_SendRequestXML('');
 				}
@@ -815,7 +830,8 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 						!$this->_extractRequestID($xml)) // Does not have a requestID in the request
 					{
 						// Mark it as successful right now
-						$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_SUCCESS, 'Unverified... no requestID attribute in XML stream.');
+						//$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_SUCCESS, 'Unverified... no requestID attribute in XML stream.');
+						$this->_driver->queueStatus($obj->ticket, $next['quickbooks_queue_id'], QUICKBOOKS_STATUS_SUCCESS, 'Unverified... no requestID attribute in XML stream.');
 					}
 					
 					// Queue PROCESSING status code has been moved to immediately following the ->dequeue
@@ -852,10 +868,12 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 	 * @param mixed $ident
 	 * @return string
 	 */
+	/*
 	protected function _constructRequestID($action, $ident)
 	{
 		return QuickBooks_Utilities::constructRequestID($action, $ident);
 	}
+	*/
 	
 	/**
 	 * Parse a requestID string into it's action and ident parts
@@ -865,10 +883,12 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 	 * @param mixed $ident
 	 * @return void
 	 */
+	/*
 	protected function _parseRequestID($requestID, &$action, &$ident)
 	{
 		return QuickBooks_Utilities::parseRequestID($requestID, $action, $ident);
 	}
+	*/
 	
 	/**
 	 * Extract a unique record identifier from an XML response
@@ -1084,9 +1104,15 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 		// Call the error handler (if one is set)
 		
 		// First, set the status of the item to error
+		/*
 		if ($action and $ident)
 		{
 			$this->_driver->queueStatus($ticket, $action, $ident, QUICKBOOKS_STATUS_ERROR, $errnum . ': ' . $errmsg);
+		}
+		*/
+		if ($requestID)
+		{
+			$this->_driver->queueStatus($ticket, $requestID, QUICKBOOKS_STATUS_ERROR, $errnum . ': ' . $errmsg);
 		}
 		
 		// Log the last error (for the ticket)
@@ -1118,12 +1144,12 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 		$this->_log('Handled error: ' . $errnum . ': ' . $errmsg . ' (handler returned: ' . $continue . ')', $ticket, QUICKBOOKS_LOG_NORMAL);
 		
 		// Update the queue status
-		if ($action and $ident)
+		//if ($action and $ident)
+		if ($requestID and 
+			$continue)
 		{
-			if ($continue)
-			{
-				$this->_driver->queueStatus($ticket, $action, $ident, QUICKBOOKS_STATUS_HANDLED, $errnum . ': ' . $errmsg);
-			}
+			//$this->_driver->queueStatus($ticket, $action, $ident, QUICKBOOKS_STATUS_HANDLED, $errnum . ': ' . $errmsg);
+			$this->_driver->queueStatus($ticket, $requestID, QUICKBOOKS_STATUS_HANDLED, $errnum . ': ' . $errmsg);
 		}
 		
 		return $continue;
@@ -1216,20 +1242,9 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 			if (strlen($obj->message) or 
 				$this->_extractStatusCode($obj->response)) // or an error code
 			{
-				/*
-				if ($requestID = $this->_extractRequestID($obj->response)) // This will be non-0 if an error occurs
-				{
-					$errnum = $this->_extractStatusCode($obj->response);
-					
-					//$action = current(explode('|', $requestID));
-					//$ident = next(explode('|', $requestID));
-					$action = '';
-					$ident = '';
-					$this->_parseRequestID($requestID, $action, $ident);
-					*/
-				
 				$action = null;
 				$ident = null;
+				$current = null;		// The current item we're receiving a response for
 				
 				$errnum = null;
 				if ($requestID = $this->_extractRequestID($obj->response))
@@ -1239,9 +1254,20 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 					
 					$errnum = $this->_extractStatusCode($obj->response);
 					
-					$action = '';
-					$ident = '';
-					$this->_parseRequestID($requestID, $action, $ident);
+					if ($current = $this->_driver->queueGet($user, $requestID, QUICKBOOKS_STATUS_PROCESSING))
+					{
+						// This is the particular item that experienced an error
+						$action = $current['qb_action'];
+						$ident = $arr['ident'];
+					}
+					else
+					{
+						$requestID = null;
+					}
+					
+					//$action = '';
+					//$ident = '';
+					//$this->_parseRequestID($requestID, $action, $ident);
 				}
 				else
 				{
@@ -1250,23 +1276,33 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 					
 					$errnum = $obj->hresult;
 					
-					if ($arr = $this->_driver->queueProcessing($user))
+					// Try to guess at the request that caused an error (the last request that went out)
+					if ($current = $this->_driver->queueProcessing($user))
 					{
+						$requestID = $arr['quickbooks_queue_id'];
 						$action = $arr['qb_action'];
 						$ident = $arr['ident'];
 					}
 				}
 				
-				if ($user and $action and $ident)
+				//if ($user and $action and $ident)
+				if ($current)
 				{
 					// Fetch the request that was processed and EXPERIENCED AN ERROR! 
-					$extra = '';
+					$extra = null;
+					/*
 					if ($current = $this->_driver->queueFetch($user, $action, $ident, QUICKBOOKS_STATUS_PROCESSING))
 					{
 						if ($current['extra'])
 						{
 							$extra = unserialize($current['extra']);
 						}
+					}
+					*/
+					
+					if ($current['extra'])
+					{
+						$extra = unserialize($current['extra']);
 					}
 					
 					$errmsg = null;
@@ -1322,16 +1358,23 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 			$ident = null;
 			
 			$requestID = null;
-			if ($requestID = $this->_extractRequestID($obj->response))
+			if ($requestID = $this->_extractRequestID($obj->response) and 
+				$current = $this->_queueGet($user, $requestID, QUICKBOOKS_STATUS_PROCESSING))
 			{
 				//$action = current(explode('|', $requestID));
 				//$ident = end(explode('|', $requestID));
+				/*
 				$action = '';
 				$ident = '';
 				$this->_parseRequestID($requestID, $action, $ident);
+				*/
+				
+				$action = $current['qb_action'];
+				$ident = $current['ident'];
 				
 				// Fetch the request that's being processed
-				$extra = '';
+				$extra = null;
+				/*
 				if ($current = $this->_driver->queueFetch($user, $action, $ident, QUICKBOOKS_STATUS_PROCESSING))
 				{
 					if ($current['extra'])
@@ -1339,9 +1382,22 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 						$extra = unserialize($current['extra']);
 					}
 				}
+				*/
+				
+				if ($current['extra'])
+				{
+					$extra = unserialize($current['extra']);
+				}
 				
 				// Update the status to success (no error occured)
 				$this->_driver->queueStatus($obj->ticket, $action, $ident, QUICKBOOKS_STATUS_SUCCESS);
+			}
+			else
+			{
+				// It's a good response... but we couldn't fetch the requestID for some reason?
+				$this->_log('This appears to be a correct response, but the requestID could not be validated... ', $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
+				
+				return new QuickBooks_Result_ReceiveResponseXML($progress);
 			}
 			
 			// Extract ListID, TxnID, etc. from the response
@@ -1376,8 +1432,10 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 			}
 			
 			$err = null;
-			$last_action_time = $this->_driver->queueActionLast($user, $action);
-			$last_actionident_time = $this->_driver->queueActionIdentLast($user, $action, $ident);
+			//$last_action_time = $this->_driver->queueActionLast($user, $action);
+			//$last_actionident_time = $this->_driver->queueActionIdentLast($user, $action, $ident);
+			$last_action_time = null;
+			$last_actionident_time = null;
 				
 			if ($ident) // If they didn't pass a requestID, $ident will not be set, and we can't call this reliably 
 			{
@@ -1605,6 +1663,7 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 	 * @param stdClass $obj
 	 * @return QuickBooks_Result_GetInteractiveURL
 	 */
+	/*
 	public function getInteractiveURL($obj)
 	{
 		//$this->_driver->log('getInteractiveURL()', $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
@@ -1626,6 +1685,7 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 		
 		return new QuickBooks_Result_GetInteractiveURL('');
 	}
+	*/
 	
 	/**
 	 * 
@@ -1634,6 +1694,7 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 	 * @param stdClass $obj
 	 * @return void
 	 */
+	/*
 	public function interactiveRejected($obj)
 	{
 		//$this->_driver->log('interactiveRejected()', $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
@@ -1655,6 +1716,7 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 		
 		return null;
 	}
+	*/
 	
 	/**
 	 * 
@@ -1665,6 +1727,7 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 	 * @param stdClass $obj
 	 * @return QuickBooks_Result_InteractiveDone
 	 */
+	/*
 	public function interactiveDone($obj)
 	{
 		//$this->_driver->log('interactiveDone()', $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
@@ -1686,4 +1749,5 @@ or leave out the requestID="..." attribute entirely, found [' . $requestID . ' =
 		
 		return new QuickBooks_Result_InteractiveDone('');
 	}
+	*/
 }

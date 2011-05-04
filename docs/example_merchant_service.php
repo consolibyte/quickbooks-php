@@ -155,8 +155,8 @@ $cvv = null;
  * errors occuring. You pass these test configuration constants in as the $name 
  * parameter to the credit card to trigger various errors/warnings. 
  */
-// $name = QUICKBOOKS_MERCHANTSERVICE_TEST_AVSZIPCVVFAIL;		// Simulate a sucessful transaction that failed all AVS and CVV checks, but was still processed (i.e. your gateway is set up to accept everything)
-// $name = QUICKBOOKS_MERCHANTSERVICE_TEST_COMMUNICATIONERROR;	// Simulate a general communication error
+// $name = QuickBooks_MerchantService::TEST_AVSZIPCVVFAIL;		// Simulate a sucessful transaction that failed all AVS and CVV checks, but was still processed (i.e. your gateway is set up to accept everything)
+// $name = QuickBooks_MerchantService::TEST_COMMUNICATIONERROR;	// Simulate a general communication error
 
 // Create the CreditCard object
 $Card = new QuickBooks_MerchantService_CreditCard($name, $number, $expyear, $expmonth, $address, $postalcode, $cvv);
@@ -236,6 +236,8 @@ else
 {
 	print('An error occured during authorization: ' . $MS->errorNumber() . ': ' . $MS->errorMessage() . "\n");
 }
+
+exit;
 
 
 // If you didn't want to 
