@@ -395,10 +395,12 @@ class QuickBooks_Handlers
 					$extra = unserialize($next['extra']);
 				}
 				
+				//print_r($next);
+				
 				$hookerr = '';
 				$this->_callHook($ticket, 
 					QUICKBOOKS_HANDLERS_HOOK_RECURRING, 
-					$this->_constructRequestID($next['qb_action'], $next['ident']), 
+					null, 					//$this->_constructRequestID($next['qb_action'], $next['ident']), 
 					$next['qb_action'], 
 					$next['ident'], 
 					$extra, 
@@ -739,7 +741,7 @@ class QuickBooks_Handlers
 				$last_actionident_time = null;
 				
 				// Call the mapped function that should generate an appropriate qbXML request
-				$xml = $this->_callMappedFunction(0, $user, $next['qb_action'], $next['ident'], $extra, $err, $last_action_time, $last_actionident_time, $obj->qbXMLMajorVers . '.' . $obj->qbXMLMinorVers, $obj->qbXMLCountry, $next['qbxml']);
+				$xml = $this->_callMappedFunction(0, $user, $next['quickbooks_queue_id'], $next['qb_action'], $next['ident'], $extra, $err, $last_action_time, $last_actionident_time, $obj->qbXMLMajorVers . '.' . $obj->qbXMLMinorVers, $obj->qbXMLCountry, $next['qbxml']);
 				
 				// Make sure there's no whitespace around it
 				$xml = trim($xml);
@@ -832,13 +834,6 @@ class QuickBooks_Handlers
 						//$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_SUCCESS, 'Unverified... no requestID attribute in XML stream.');
 						$this->_driver->queueStatus($obj->ticket, $next['quickbooks_queue_id'], QUICKBOOKS_STATUS_SUCCESS, 'Unverified... no requestID attribute in XML stream.');
 					}
-					
-					// Queue PROCESSING status code has been moved to immediately following the ->dequeue
-					//else
-					//{
-					//	// Mark it as in progress
-					//	$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_PROCESSING);
-					//}
 					
 					return new QuickBooks_Result_SendRequestXML($xml);
 				}
@@ -1032,15 +1027,15 @@ class QuickBooks_Handlers
 	 * @param array $qb_identifier		
 	 * @return string
 	 */
-	protected function _callMappedFunction($which, $user, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $xml_or_version = '', $qb_identifier_or_locale = array(), $qbxml = null)
+	protected function _callMappedFunction($which, $user, $requestID, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $xml_or_version = '', $qb_identifier_or_locale = array(), $qbxml = null)
 	{
 		if ($which == 0)
 		{
-			return QuickBooks_Callbacks::callRequestHandler($this->_driver, $this->_map, $action, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml_or_version, $qb_identifier_or_locale, $this->_callback_config, $qbxml);
+			return QuickBooks_Callbacks::callRequestHandler($this->_driver, $this->_map, $requestID, $action, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml_or_version, $qb_identifier_or_locale, $this->_callback_config, $qbxml);
 		}
 		else if ($which == 1)
 		{
-			return QuickBooks_Callbacks::callResponseHandler($this->_driver, $this->_map, $action, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml_or_version, $qb_identifier_or_locale, $this->_callback_config, $qbxml);
+			return QuickBooks_Callbacks::callResponseHandler($this->_driver, $this->_map, $requestID, $action, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml_or_version, $qb_identifier_or_locale, $this->_callback_config, $qbxml);
 		}
 		
 		$err = 'Request for a mapped function could not be fulfilled, invalid $which parameter.';
@@ -1127,7 +1122,7 @@ class QuickBooks_Handlers
 		
 		// CALL THE ERROR HANDLER 
 		$err = '';
-		$continue = QuickBooks_Callbacks::callErrorHandler($this->_driver, $this->_onerror, $errnum, $errmsg, $user, $action, $ident, $extra, $err, $xml, $this->_callback_config);
+		$continue = QuickBooks_Callbacks::callErrorHandler($this->_driver, $this->_onerror, $errnum, $errmsg, $user, $requestID, $action, $ident, $extra, $err, $xml, $this->_callback_config);
 		//													$Driver, $errmap, $errnum, $errmsg, $user, $action, $ident, $extra, &$errerr, $xml, $callback_config
 		
 		if ($err)
@@ -1257,7 +1252,7 @@ class QuickBooks_Handlers
 					{
 						// This is the particular item that experienced an error
 						$action = $current['qb_action'];
-						$ident = $arr['ident'];
+						$ident = $current['ident'];
 					}
 					else
 					{
@@ -1358,7 +1353,7 @@ class QuickBooks_Handlers
 			
 			$requestID = null;
 			if ($requestID = $this->_extractRequestID($obj->response) and 
-				$current = $this->_queueGet($user, $requestID, QUICKBOOKS_STATUS_PROCESSING))
+				$current = $this->_driver->queueGet($user, $requestID, QUICKBOOKS_STATUS_PROCESSING))
 			{
 				//$action = current(explode('|', $requestID));
 				//$ident = end(explode('|', $requestID));
@@ -1389,7 +1384,8 @@ class QuickBooks_Handlers
 				}
 				
 				// Update the status to success (no error occured)
-				$this->_driver->queueStatus($obj->ticket, $action, $ident, QUICKBOOKS_STATUS_SUCCESS);
+				//$this->_driver->queueStatus($obj->ticket, $action, $ident, QUICKBOOKS_STATUS_SUCCESS);
+				$this->_driver->queueStatus($obj->ticket, $requestID, QUICKBOOKS_STATUS_SUCCESS);
 			}
 			else
 			{
@@ -1436,9 +1432,10 @@ class QuickBooks_Handlers
 			$last_action_time = null;
 			$last_actionident_time = null;
 				
-			if ($ident) // If they didn't pass a requestID, $ident will not be set, and we can't call this reliably 
+			//if ($ident) // If they didn't pass a requestID, $ident will not be set, and we can't call this reliably 
+			if ($requestID)
 			{
-				$this->_callMappedFunction(1, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $obj->response, $identifiers);
+				$this->_callMappedFunction(1, $user, $requestID, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $obj->response, $identifiers);
 			}
 			
 			// Calculate the percentage done

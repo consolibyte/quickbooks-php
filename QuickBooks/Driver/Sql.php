@@ -1197,9 +1197,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				FROM
 					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . "
 				WHERE
-					quickbooks_queue_id = %d AND 
-					qb_username = '%s' AND 
-					qb_status = '%s'  ";
+					quickbooks_queue_id = " . (int) $requestID . " AND 
+					qb_username = '" . $this->_escape($user) . "' AND 
+					qb_status = '" . $this->_escape($status) . "'  ";
 		}
 		else
 		{
@@ -1209,11 +1209,11 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				FROM
 					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . "
 				WHERE
-					quickbooks_queue_id = %d AND 
-					qb_username = '%s' ";
+					quickbooks_queue_id = " . (int) $requestID . " AND 
+					qb_username = '" . $this->_escape($user) . "' ";
 		}
 		
-		return $this->_fetch($this->_query($sql, $errnum, $errmsg, 0, 1, $vars));
+		return $this->_fetch($this->_query($sql, $errnum, $errmsg, 0, 1));
 	}
 	
 	/**
@@ -1610,9 +1610,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 						quickbooks_ticket_id = " . (int) $ticket_id . ", 
 						dequeue_datetime = '" . date('Y-m-d H:i:s') . "' 
 					WHERE 
-						quickbooks_queue_id = %d AND 
-						qb_username = '%s' AND 
-						qb_status = '%s' ", $errnum, $errmsg, 0, 1, array( $requestID, $user, QUICKBOOKS_STATUS_QUEUED ));
+						quickbooks_queue_id = " . (int) $requestID . " AND 
+						qb_username = '" . $this->_escape($user) . "' AND 
+						qb_status = '" . $this->_escape(QUICKBOOKS_STATUS_QUEUED) . "' ", $errnum, $errmsg, 0, 1);
 				
 				//print('running processing status query! ' . $user . ', ' . $action . ', ' . $ident . ', new: ' . $new_status);
 				

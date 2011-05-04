@@ -509,18 +509,18 @@ class QuickBooks_Callbacks
 	 * 
 	 * 
 	 */
-	static public function callRequestHandler($Driver, &$map, $action, $user, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $version = '', $locale = array(), $callback_config = array(), $qbxml = null)
+	static public function callRequestHandler($Driver, &$map, $requestID, $action, $user, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $version = '', $locale = array(), $callback_config = array(), $qbxml = null)
 	{
-		return QuickBooks_Callbacks::_callRequestOrResponseHandler($Driver, $map, $action, 0, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $callback_config, $qbxml);
+		return QuickBooks_Callbacks::_callRequestOrResponseHandler($Driver, $map, $requestID, $action, 0, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $callback_config, $qbxml);
 	}
 	
 	/**
 	 * 
 	 * 
 	 */
-	static public function callResponseHandler($Driver, &$map, $action, $user, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $xml = '', $qb_identifiers = array(), $callback_config = array(), $qbxml = null)
+	static public function callResponseHandler($Driver, &$map, $requestID, $action, $user, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $xml = '', $qb_identifiers = array(), $callback_config = array(), $qbxml = null)
 	{
-		return QuickBooks_Callbacks::_callRequestOrResponseHandler($Driver, $map, $action, 1, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml, $qb_identifiers, $callback_config, $qbxml);
+		return QuickBooks_Callbacks::_callRequestOrResponseHandler($Driver, $map, $requestID, $action, 1, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml, $qb_identifiers, $callback_config, $qbxml);
 	}
 	
 	/**
@@ -528,7 +528,7 @@ class QuickBooks_Callbacks
 	 * 
 	 * @todo Support for object instance callbacks
 	 */
-	static protected function _callRequestOrResponseHandler($Driver, &$map, $action, $which, $user, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $xml_or_version = '', $qb_identifier_or_locale = array(), $callback_config = array(), $qbxml = null)
+	static protected function _callRequestOrResponseHandler($Driver, &$map, $requestID, $action, $which, $user, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $xml_or_version = '', $qb_identifier_or_locale = array(), $callback_config = array(), $qbxml = null)
 	{
 		//print_r($map);
 		//print('action: ' . $action . "\n");
@@ -565,7 +565,7 @@ class QuickBooks_Callbacks
 				
 				$type = QuickBooks_Callbacks::_type($callback, $Driver, null);
 				
-				$requestID = QuickBooks_Utilities::constructRequestID($action, $ident);
+				//$requestID = QuickBooks_Utilities::constructRequestID($action, $ident);
 				$vars = array( $requestID, $user, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $xml_or_version, $qb_identifier_or_locale, $callback_config, $qbxml );
 				
 				// $class and $method and method_exists($class, $method))
@@ -632,12 +632,12 @@ class QuickBooks_Callbacks
 	 * @todo Support for object instance error handlers
 	 * 
 	 */
-	static public function callErrorHandler($Driver, $errmap, $errnum, $errmsg, $user, $action, $ident, $extra, &$errerr, $xml, $callback_config)
+	static public function callErrorHandler($Driver, $errmap, $errnum, $errmsg, $user, $requestID, $action, $ident, $extra, &$errerr, $xml, $callback_config)
 	{
 		// $Driver, &$map, $action, $which, $user, $action, $ident, $extra, &$err, $last_action_time, $last_actionident_time, $xml_or_version = '', $qb_identifier_or_locale = array(), $callback_config = array(), $qbxml = null
 		
 		// Build the requestID
-		$requestID = QuickBooks_Utilities::constructRequestID($action, $ident);
+		//$requestID = QuickBooks_Utilities::constructRequestID($action, $ident);
 		
 		$callback = '';
 		/*if (is_object($this->_instance_onerror) and 

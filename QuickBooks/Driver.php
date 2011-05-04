@@ -272,6 +272,8 @@ abstract class QuickBooks_Driver
 {
 	const HOOK_QUEUEREPORT = 'QuickBooks_Driver::queueReport';
 	
+	const HOOK_QUEUEGET = 'QuickBooks_Driver::queueGet';
+	
 	/**
 	 * An array of hooks (map of hook-types => array( 'userdef1', 'userdef2', ... )
 	 * @var array
@@ -774,6 +776,30 @@ abstract class QuickBooks_Driver
 	 */
 	//abstract protected function _queueStatus($ticket, $action, $ident, $new_status, $msg = '');
 	abstract protected function _queueStatus($ticket, $requestID, $new_status, $msg = '');
+
+	final public function queueGet($user, $requestID, $status = QUICKBOOKS_STATUS_QUEUED)
+	{
+		//$user = $this->_authResolve($ticket);
+		
+		$hookdata = array(
+			'username' => $user, 
+			//'action' => $action, 
+			//'ident' => $ident, 
+			'requestID' => $requestID, 
+			'status' => $status, 
+			);
+		$hookerr = '';
+		$this->_callHook(QuickBooks_Driver::HOOK_QUEUEGET, null, $hookerr, $hookdata);
+		
+		//return $this->_queueStatus($ticket, $action, $ident, $new_status, $msg);
+		return $this->_queueGet($user, $requestID, $status);
+	}
+	
+	/**
+	 * @see QuickBooks_Driver::queueStatus()
+	 */
+	//abstract protected function _queueStatus($ticket, $action, $ident, $new_status, $msg = '');
+	abstract protected function _queueGet($user, $requestID, $status = QUICKBOOKS_STATUS_QUEUED);
 	
 	/**
 	 * Tell the number of items left in the queue
