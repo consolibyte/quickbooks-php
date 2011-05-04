@@ -5507,7 +5507,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CustomerQueryRq ' . $iterator . '>
+					<CustomerQueryRq requestID="' . $requestID . '" ' . $iterator . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
