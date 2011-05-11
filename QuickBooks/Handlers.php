@@ -1273,9 +1273,9 @@ class QuickBooks_Handlers
 					// Try to guess at the request that caused an error (the last request that went out)
 					if ($current = $this->_driver->queueProcessing($user))
 					{
-						$requestID = $arr['quickbooks_queue_id'];
-						$action = $arr['qb_action'];
-						$ident = $arr['ident'];
+						$requestID = $current['quickbooks_queue_id'];
+						$action = $current['qb_action'];
+						$ident = $current['ident'];
 					}
 				}
 				

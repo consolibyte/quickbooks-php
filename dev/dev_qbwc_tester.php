@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://keith.versapay.com:8888/versapay/vpsync/qbwc.php?350';
-$username = 'tenant350';
-$password = 'abcd1234';
+$url = 'http://demo.embwebstores.com/quickbooks/webconnector/embwebstores_server.php?domain=demo.embwebstores.com';
+$username = 'elr2@crcsales.com';
+$password = 'test';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -28,17 +28,17 @@ print(date('Y-m-d H:i:s: ') . 'RESPONSE: {{' . $return . '}}');
 //$pos = strpos($return, '<string>');
 $pos = strpos($return, '<ns1:string>');
 //$pos = strpos($return, '<s0:string xsi:type="xs:string">');
-//$ticket = substr($return, $pos + 12, 32);		// FOR MD5 HASH TICKETS
-$ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
+$ticket = substr($return, $pos + 12, 32);		// FOR MD5 HASH TICKETS
+//$ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
 
 //$ticket = 'eda2daf8-6482-11e0-aea8-0030487fb92c';
 
 print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n");
 
 
-exit;
+//exit;
 
-$max = 15;
+$max = 10;
 for ($i = 0; $i < $max; $i++)
 {
 	print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
