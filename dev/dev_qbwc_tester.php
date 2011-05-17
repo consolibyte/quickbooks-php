@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://demo.embwebstores.com/quickbooks/webconnector/embwebstores_server.php?domain=demo.embwebstores.com';
-$username = 'elr2@crcsales.com';
-$password = 'test';
+$url = 'http://playscape.example.com/saas/installs/326/ejunkie/qbus/547/public/ejunkie/qbwc.php';
+$username = 'user326';
+$password = 'password';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -28,8 +28,8 @@ print(date('Y-m-d H:i:s: ') . 'RESPONSE: {{' . $return . '}}');
 //$pos = strpos($return, '<string>');
 $pos = strpos($return, '<ns1:string>');
 //$pos = strpos($return, '<s0:string xsi:type="xs:string">');
-$ticket = substr($return, $pos + 12, 32);		// FOR MD5 HASH TICKETS
-//$ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
+//$ticket = substr($return, $pos + 12, 32);		// FOR MD5 HASH TICKETS
+$ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
 
 //$ticket = 'eda2daf8-6482-11e0-aea8-0030487fb92c';
 
@@ -98,8 +98,8 @@ function tester($url, $username_or_ticket, $password, $method, $data = null)
 				<ns1:ticket>' . $username_or_ticket . '</ns1:ticket>
 				<ns1:strHCPResponse></ns1:strHCPResponse>
 				<ns1:strCompanyFileName></ns1:strCompanyFileName>
-				<ns1:qbXMLCountry>UK</ns1:qbXMLCountry>
-				<ns1:qbXMLMajorVers>3</ns1:qbXMLMajorVers>
+				<ns1:qbXMLCountry>US</ns1:qbXMLCountry>
+				<ns1:qbXMLMajorVers>6</ns1:qbXMLMajorVers>
 				<ns1:qbXMLMinorVers>0</ns1:qbXMLMinorVers>
 			</ns1:sendRequestXML>
 		</SOAP-ENV:Body>

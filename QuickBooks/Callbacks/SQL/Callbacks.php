@@ -5067,6 +5067,55 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_CHECK, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static function CheckAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$Driver = QuickBooks_Driver_Singleton::getInstance();
+		if ($Check = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'check', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+		{
+			// Special handling for check add requests
+			
+			// If a RefNumber is printed, then it can't be set as IsToBePrinted
+			if (!empty($Check['RefNumber']))
+			{
+				unset($Check['IsToBePrinted']);
+			}
+			else
+			{
+				unset($Check['RefNumber']);
+			}
+			
+			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CHECK, $Check, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+		}
+		
+		return '';
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static function CheckAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();		
+		
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CheckAddRs');
+		
+		$extra['IsAddResponse'] = true;
+		$extra['is_add_response'] = true;
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_CHECK, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}	
+	
 	public static function CheckImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
