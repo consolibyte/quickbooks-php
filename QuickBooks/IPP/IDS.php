@@ -47,6 +47,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_REPORT_BALANCESHEET = 'ReportBalanceSheet';
 	
+	const RESOURCE_REPORT_BALANCESHEETSTD = 'ReportBalanceSheetStd';
+	
 	const RESOURCE_REPORT_CUSTOMERSWHOOWEME = 'ReportCustomersWhoOweMe';
 	
 	const RESOURCE_REPORT_INCOMEBREAKDOWN = 'ReportIncomeBreakdown';
