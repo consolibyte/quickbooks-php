@@ -68,6 +68,8 @@ class QuickBooks_IPP
 	
 	const API_RENAMEAPP = 'API_RenameApp';
 	
+	const API_ASSERTFEDERATEDIDENTITY = 'API_AssertFederatedIdentity';
+	
 	/**
 	 * 
 	 * @var unknown_type
@@ -471,6 +473,21 @@ class QuickBooks_IPP
 		}
 
 		return $parsed;
+	}
+	
+	public function assertFederatedIdentity($Context, $provider, $target_url, $udata = null)
+	{
+		$url = 'https://workplace.intuit.com/db/main';
+		$action = QuickBooks_IPP::API_ASSERTFEDERATEDIDENTITY;
+		
+		$xml = '<qdbapi>
+				<ticket>' . $Context->ticket() . '</ticket>
+				<apptoken>' . $Context->token() . '</apptoken>
+				<serviceProviderID>' . htmlspecialchars($provider) . '</serviceProviderID>
+				<targetURL>' . htmlspecialchars($target_url, ENT_QUOTES) . '</targetURL>
+			</qdbapi>';
+		
+		return $this->_IPP($Context, $url, $action, $xml);
 	}
 
 	public function renameApp($Context, $name)
