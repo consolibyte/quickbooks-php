@@ -472,6 +472,7 @@ class QuickBooks_HTTP
 		$params[CURLOPT_URL] = $url . $query;
 		//$params[CURLOPT_TIMEOUT] = 15;
 		$params[CURLOPT_HTTPHEADER] = $headers;
+		$params[CURLOPT_ENCODING] = '';			// This makes it say it supports gzip *and* deflate
 		
 		$params[CURLOPT_VERBOSE] = $this->_debug;
 		
