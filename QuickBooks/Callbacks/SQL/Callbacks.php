@@ -1134,7 +1134,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="stopOnError">
-					<TxnVoidRq>
+					<TxnVoidRq requestID="' . $requestID . '">
 						<TxnVoidType>' . $extra['object'] . '</TxnVoidType>
 						<TxnID>' . $arr['TxnID'] . '</TxnID>
 					</TxnVoidRq>
