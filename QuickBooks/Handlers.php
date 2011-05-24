@@ -1392,6 +1392,8 @@ class QuickBooks_Handlers
 				// It's a good response... but we couldn't fetch the requestID for some reason?
 				$this->_log('This appears to be a correct response, but the requestID could not be validated... ', $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
 				
+				$progress = -1;
+				
 				return new QuickBooks_Result_ReceiveResponseXML($progress);
 			}
 			

@@ -1,13 +1,16 @@
 <?php
 
-$url = 'http://playscape.example.com/saas/installs/326/ejunkie/qbus/547/public/ejunkie/qbwc.php';
-$username = 'user326';
-$password = 'password';
+$url = '';
+$username = '';
+$password = '';
 
 if (function_exists('date_default_timezone_set'))
 {
 	date_default_timezone_set('America/New_York');
 }
+
+global $DATA;
+$DATA = '';
 
 header('Content-type: text/plain');
 
@@ -38,11 +41,15 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 //exit;
 
-$max = 10;
+$max = 1;
 for ($i = 0; $i < $max; $i++)
 {
 	print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
 }
+
+$fp = fopen('./out.txt', 'w+');
+fwrite($fp, $DATA);
+fclose($fp);
 
 exit;
 
@@ -55,6 +62,9 @@ exit;
 function tester($url, $username_or_ticket, $password, $method, $data = null)
 {
 	print(date('Y-m-d H:i:s: ') . 'Sending request method: ' . $method . "\n");
+	
+	global $DATA;
+	$DATA .= date('Y-m-d H:i:s: ') . 'Sending request method: ' . $method . "\r\n";
 	
 	switch ($method)
 	{
@@ -209,5 +219,6 @@ function tester($url, $username_or_ticket, $password, $method, $data = null)
 		$return = $resp;
 	}
 	
+	$DATA .= $return . "\r\n";
 	return $return;
 }
