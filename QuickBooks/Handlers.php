@@ -989,7 +989,7 @@ class QuickBooks_Handlers
 			return substr($xml, $start + 13, $end - $start - 13);
 		}
 		
-		return 1;
+		return QUICKBOOKS_ERROR_OK;
 	}
 	
 	/**
@@ -1236,6 +1236,8 @@ class QuickBooks_Handlers
 			if (strlen($obj->message) or 
 				$this->_extractStatusCode($obj->response)) // or an error code
 			{
+				$this->_log('Extracted code[' . $this->_extractStatusCode($obj->response) . ']');
+				
 				$action = null;
 				$ident = null;
 				$current = null;		// The current item we're receiving a response for

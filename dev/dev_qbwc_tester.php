@@ -39,13 +39,212 @@ $ticket = substr($return, $pos + 12, 36);		// FOR UUID TICKETS
 print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n");
 
 
+
 //exit;
 
 $max = 1;
 for ($i = 0; $i < $max; $i++)
 {
-	print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
+	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
+	
+	$resp = tester($url, $ticket, null, 'sendRequestXML');
+	
+	$pos = strpos($resp, 'requestID=&quot;');
 }
+
+$requestID = substr($resp, $pos + 16, 1);
+
+print('REUQEST ID IS [' . $requestID . ']' . "\n");
+
+//exit;
+
+$response = '<?xml version="1.0" encoding="utf-8"?>
+	<?qbposxml version="3.0"?>
+	<QBPOSXML>
+	  <QBPOSXMLMsgsRs>
+	        <ItemInventoryQueryRs requestID="' . $requestID . '">
+
+		     <ItemInventoryRet> <!-- optional, may repeat -->
+<ListID>IDTYPE</ListID> <!-- optional -->
+<TimeCreated>DATETIMETYPE</TimeCreated> <!-- optional -->
+<TimeModified>DATETIMETYPE</TimeModified> <!-- optional -->
+<ALU>STRTYPE</ALU> <!-- optional -->
+<Attribute>STRTYPE</Attribute> <!-- optional -->
+<COGSAccount>STRTYPE</COGSAccount> <!-- optional -->
+<Cost>AMTTYPE</Cost> <!-- optional -->
+<DepartmentCode>STRTYPE</DepartmentCode> <!-- optional -->
+<DepartmentListID>IDTYPE</DepartmentListID> <!-- optional -->
+<Desc1>STRTYPE</Desc1> <!-- optional -->
+<Desc2>STRTYPE</Desc2> <!-- optional -->
+<IncomeAccount>STRTYPE</IncomeAccount> <!-- optional -->
+<IsBelowReorder>BOOLTYPE</IsBelowReorder> <!-- optional -->
+<IsEligibleForCommission>BOOLTYPE</IsEligibleForCommission> <!-- optional -->
+<IsPrintingTags>BOOLTYPE</IsPrintingTags> <!-- optional -->
+<IsUnorderable>BOOLTYPE</IsUnorderable> <!-- optional -->
+<HasPictures>BOOLTYPE</HasPictures> <!-- optional -->
+<IsEligibleForRewards>BOOLTYPE</IsEligibleForRewards> <!-- optional -->
+<IsWebItem>BOOLTYPE</IsWebItem> <!-- optional -->
+<ItemNumber>INTTYPE</ItemNumber> <!-- optional -->
+<!-- ItemType may have one of the following values: Inventory, NonInventory, Service, Assembly, Group, SpecialOrder -->
+<ItemType>ENUMTYPE</ItemType> <!-- optional -->
+<LastReceived>DATETYPE</LastReceived> <!-- optional -->
+<MarginPercent>INTTYPE</MarginPercent> <!-- optional -->
+<MarkupPercent>INTTYPE</MarkupPercent> <!-- optional -->
+<MSRP>AMTTYPE</MSRP> <!-- optional -->
+<OnHandStore01>QUANTYPE</OnHandStore01> <!-- optional -->
+<OnHandStore02>QUANTYPE</OnHandStore02> <!-- optional -->
+<OnHandStore03>QUANTYPE</OnHandStore03> <!-- optional -->
+<OnHandStore04>QUANTYPE</OnHandStore04> <!-- optional -->
+<OnHandStore05>QUANTYPE</OnHandStore05> <!-- optional -->
+<OnHandStore06>QUANTYPE</OnHandStore06> <!-- optional -->
+<OnHandStore07>QUANTYPE</OnHandStore07> <!-- optional -->
+<OnHandStore08>QUANTYPE</OnHandStore08> <!-- optional -->
+<OnHandStore09>QUANTYPE</OnHandStore09> <!-- optional -->
+<OnHandStore10>QUANTYPE</OnHandStore10> <!-- optional -->
+<OnHandStore11>QUANTYPE</OnHandStore11> <!-- optional -->
+<OnHandStore12>QUANTYPE</OnHandStore12> <!-- optional -->
+<OnHandStore13>QUANTYPE</OnHandStore13> <!-- optional -->
+<OnHandStore14>QUANTYPE</OnHandStore14> <!-- optional -->
+<OnHandStore15>QUANTYPE</OnHandStore15> <!-- optional -->
+<OnHandStore16>QUANTYPE</OnHandStore16> <!-- optional -->
+<OnHandStore17>QUANTYPE</OnHandStore17> <!-- optional -->
+<OnHandStore18>QUANTYPE</OnHandStore18> <!-- optional -->
+<OnHandStore19>QUANTYPE</OnHandStore19> <!-- optional -->
+<OnHandStore20>QUANTYPE</OnHandStore20> <!-- optional -->
+<ReorderPointStore01>QUANTYPE</ReorderPointStore01> <!-- optional -->
+<ReorderPointStore02>QUANTYPE</ReorderPointStore02> <!-- optional -->
+<ReorderPointStore03>QUANTYPE</ReorderPointStore03> <!-- optional -->
+<ReorderPointStore04>QUANTYPE</ReorderPointStore04> <!-- optional -->
+<ReorderPointStore05>QUANTYPE</ReorderPointStore05> <!-- optional -->
+<ReorderPointStore06>QUANTYPE</ReorderPointStore06> <!-- optional -->
+<ReorderPointStore07>QUANTYPE</ReorderPointStore07> <!-- optional -->
+<ReorderPointStore08>QUANTYPE</ReorderPointStore08> <!-- optional -->
+<ReorderPointStore09>QUANTYPE</ReorderPointStore09> <!-- optional -->
+<ReorderPointStore10>QUANTYPE</ReorderPointStore10> <!-- optional -->
+<ReorderPointStore11>QUANTYPE</ReorderPointStore11> <!-- optional -->
+<ReorderPointStore12>QUANTYPE</ReorderPointStore12> <!-- optional -->
+<ReorderPointStore13>QUANTYPE</ReorderPointStore13> <!-- optional -->
+<ReorderPointStore14>QUANTYPE</ReorderPointStore14> <!-- optional -->
+<ReorderPointStore15>QUANTYPE</ReorderPointStore15> <!-- optional -->
+<ReorderPointStore16>QUANTYPE</ReorderPointStore16> <!-- optional -->
+<ReorderPointStore17>QUANTYPE</ReorderPointStore17> <!-- optional -->
+<ReorderPointStore18>QUANTYPE</ReorderPointStore18> <!-- optional -->
+<ReorderPointStore19>QUANTYPE</ReorderPointStore19> <!-- optional -->
+<ReorderPointStore20>QUANTYPE</ReorderPointStore20> <!-- optional -->
+<OrderByUnit>STRTYPE</OrderByUnit> <!-- optional -->
+<OrderCost>AMTTYPE</OrderCost> <!-- optional -->
+<Price1>AMTTYPE</Price1> <!-- optional -->
+<Price2>AMTTYPE</Price2> <!-- optional -->
+<Price3>AMTTYPE</Price3> <!-- optional -->
+<Price4>AMTTYPE</Price4> <!-- optional -->
+<Price5>AMTTYPE</Price5> <!-- optional -->
+<QuantityOnCustomerOrder>QUANTYPE</QuantityOnCustomerOrder> <!-- optional -->
+<QuantityOnHand>QUANTYPE</QuantityOnHand> <!-- optional -->
+<QuantityOnOrder>QUANTYPE</QuantityOnOrder> <!-- optional -->
+<QuantityOnPendingOrder>QUANTYPE</QuantityOnPendingOrder> <!-- optional -->
+<AvailableQty> <!-- must occur 0 - 10 times -->
+<StoreNumber>INTTYPE</StoreNumber> <!-- optional -->
+<QuantityOnOrder>QUANTYPE</QuantityOnOrder> <!-- optional -->
+<QuantityOnCustomerOrder>QUANTYPE</QuantityOnCustomerOrder> <!-- optional -->
+<QuantityOnPendingOrder>QUANTYPE</QuantityOnPendingOrder> <!-- optional -->
+</AvailableQty>
+<ReorderPoint>QUANTYPE</ReorderPoint> <!-- optional -->
+<SellByUnit>STRTYPE</SellByUnit> <!-- optional -->
+<!-- SerialFlag may have one of the following values: Optional, Prompt -->
+<SerialFlag>ENUMTYPE</SerialFlag> <!-- optional -->
+<Size>STRTYPE</Size> <!-- optional -->
+<!-- StoreExchangeStatus may have one of the following values: Modified, Sent, Acknowledged -->
+<StoreExchangeStatus>ENUMTYPE</StoreExchangeStatus> <!-- optional -->
+<TaxCode>STRTYPE</TaxCode> <!-- optional -->
+<UnitOfMeasure>STRTYPE</UnitOfMeasure> <!-- optional -->
+<UPC>STRTYPE</UPC> <!-- optional -->
+<VendorCode>STRTYPE</VendorCode> <!-- optional -->
+<VendorListID>IDTYPE</VendorListID> <!-- optional -->
+<WebDesc>STRTYPE</WebDesc> <!-- optional -->
+<WebPrice>AMTTYPE</WebPrice> <!-- optional -->
+<Manufacturer>STRTYPE</Manufacturer> <!-- optional -->
+<Weight>FLOATTYPE</Weight> <!-- optional -->
+<WebSKU>STRTYPE</WebSKU> <!-- optional -->
+<Keywords>STRTYPE</Keywords> <!-- optional -->
+<WebCategories>STRTYPE</WebCategories> <!-- optional -->
+<UnitOfMeasure1> <!-- optional -->
+<ALU>STRTYPE</ALU> <!-- optional -->
+<MSRP>AMTTYPE</MSRP> <!-- optional -->
+<NumberOfBaseUnits>QUANTYPE</NumberOfBaseUnits> <!-- optional -->
+<Price1>AMTTYPE</Price1> <!-- optional -->
+<Price2>AMTTYPE</Price2> <!-- optional -->
+<Price3>AMTTYPE</Price3> <!-- optional -->
+<Price4>AMTTYPE</Price4> <!-- optional -->
+<Price5>AMTTYPE</Price5> <!-- optional -->
+<UnitOfMeasure>STRTYPE</UnitOfMeasure> <!-- optional -->
+<UPC>STRTYPE</UPC> <!-- optional -->
+</UnitOfMeasure1>
+<UnitOfMeasure2> <!-- optional -->
+<ALU>STRTYPE</ALU> <!-- optional -->
+<MSRP>AMTTYPE</MSRP> <!-- optional -->
+<NumberOfBaseUnits>QUANTYPE</NumberOfBaseUnits> <!-- optional -->
+<Price1>AMTTYPE</Price1> <!-- optional -->
+<Price2>AMTTYPE</Price2> <!-- optional -->
+<Price3>AMTTYPE</Price3> <!-- optional -->
+<Price4>AMTTYPE</Price4> <!-- optional -->
+<Price5>AMTTYPE</Price5> <!-- optional -->
+<UnitOfMeasure>STRTYPE</UnitOfMeasure> <!-- optional -->
+<UPC>STRTYPE</UPC> <!-- optional -->
+</UnitOfMeasure2>
+<UnitOfMeasure3> <!-- optional -->
+<ALU>STRTYPE</ALU> <!-- optional -->
+<MSRP>AMTTYPE</MSRP> <!-- optional -->
+<NumberOfBaseUnits>QUANTYPE</NumberOfBaseUnits> <!-- optional -->
+<Price1>AMTTYPE</Price1> <!-- optional -->
+<Price2>AMTTYPE</Price2> <!-- optional -->
+<Price3>AMTTYPE</Price3> <!-- optional -->
+<Price4>AMTTYPE</Price4> <!-- optional -->
+<Price5>AMTTYPE</Price5> <!-- optional -->
+<UnitOfMeasure>STRTYPE</UnitOfMeasure> <!-- optional -->
+<UPC>STRTYPE</UPC> <!-- optional -->
+</UnitOfMeasure3>
+<VendorInfo2> <!-- optional -->
+<ALU>STRTYPE</ALU> <!-- optional -->
+<OrderCost>AMTTYPE</OrderCost> <!-- optional -->
+<UPC>STRTYPE</UPC> <!-- optional -->
+<VendorListID useMacro="MACROTYPE">IDTYPE</VendorListID> <!-- required -->
+</VendorInfo2>
+<VendorInfo3> <!-- optional -->
+<ALU>STRTYPE</ALU> <!-- optional -->
+<OrderCost>AMTTYPE</OrderCost> <!-- optional -->
+<UPC>STRTYPE</UPC> <!-- optional -->
+<VendorListID useMacro="MACROTYPE">IDTYPE</VendorListID> <!-- required -->
+</VendorInfo3>
+<VendorInfo4> <!-- optional -->
+<ALU>STRTYPE</ALU> <!-- optional -->
+<OrderCost>AMTTYPE</OrderCost> <!-- optional -->
+<UPC>STRTYPE</UPC> <!-- optional -->
+<VendorListID useMacro="MACROTYPE">IDTYPE</VendorListID> <!-- required -->
+</VendorInfo4>
+<VendorInfo5> <!-- optional -->
+<ALU>STRTYPE</ALU> <!-- optional -->
+<OrderCost>AMTTYPE</OrderCost> <!-- optional -->
+<UPC>STRTYPE</UPC> <!-- optional -->
+<VendorListID useMacro="MACROTYPE">IDTYPE</VendorListID> <!-- required -->
+</VendorInfo5>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID>GUIDTYPE</OwnerID> <!-- required -->
+<DataExtName>STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: INTTYPE, AMTTYPE, PRICETYPE, QUANTYPE, PERCENTTYPE, DATETIMETYPE, STR255TYPE, STR1024TYPE -->
+<DataExtType>ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue>STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</ItemInventoryRet>
+
+	        </ItemInventoryQueryRs>
+		</QBPOSXMLMsgsRs>
+	</QBPOSXML>';
+
+print('Sending response...' . "\n");
+
+print(tester($url, $ticket, null, 'receiveResponseXML', $response));
+
+print('Done!' . "\n");
 
 $fp = fopen('./out.txt', 'w+');
 fwrite($fp, $DATA);
@@ -53,9 +252,6 @@ fclose($fp);
 
 exit;
 
-$response = '';
-
-print(tester($url, $ticket, null, 'receiveResponseXML', $response));
 
 exit;
 
