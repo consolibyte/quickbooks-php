@@ -35,11 +35,10 @@ class QuickBooks_QBXML_Schema_Object_PaymentMethodAddRq extends QuickBooks_QBXML
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
-  'PaymentMethodAdd Name' => 'STRTYPE',
-  'PaymentMethodAdd IsActive' => 'BOOLTYPE',
-  'PaymentMethodAdd PaymentMethodType' => 'ENUMTYPE',
-  'IncludeRetElement' => 'STRTYPE',
-);
+			'Name' => 'STRTYPE',
+			'IsActive' => 'BOOLTYPE',
+			'PaymentMethodType' => 'ENUMTYPE',
+		);
 		
 		return $paths;
 	}
@@ -47,11 +46,10 @@ class QuickBooks_QBXML_Schema_Object_PaymentMethodAddRq extends QuickBooks_QBXML
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
-  'PaymentMethodAdd Name' => 31,
-  'PaymentMethodAdd IsActive' => 0,
-  'PaymentMethodAdd PaymentMethodType' => 0,
-  'IncludeRetElement' => 50,
-);
+			'Name' => 31,
+			'IsActive' => 0,
+			'PaymentMethodType' => 0,
+			);
 		
 		return $paths;
 	}
@@ -59,11 +57,10 @@ class QuickBooks_QBXML_Schema_Object_PaymentMethodAddRq extends QuickBooks_QBXML
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
-  'PaymentMethodAdd Name' => false,
-  'PaymentMethodAdd IsActive' => true,
-  'PaymentMethodAdd PaymentMethodType' => true,
-  'IncludeRetElement' => true,
-);
+			'Name' => false,
+			'IsActive' => true,
+			'PaymentMethodType' => true,
+			);
 	}
 	
 	protected function &_sinceVersionPaths()
@@ -81,11 +78,10 @@ class QuickBooks_QBXML_Schema_Object_PaymentMethodAddRq extends QuickBooks_QBXML
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
-  'PaymentMethodAdd Name' => false,
-  'PaymentMethodAdd IsActive' => false,
-  'PaymentMethodAdd PaymentMethodType' => false,
-  'IncludeRetElement' => true,
-);
+			'Name' => false,
+			'IsActive' => false,
+			'PaymentMethodType' => false,
+			);
 			
 		return $paths;
 	}
@@ -105,11 +101,10 @@ class QuickBooks_QBXML_Schema_Object_PaymentMethodAddRq extends QuickBooks_QBXML
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
-  0 => 'PaymentMethodAdd Name',
-  1 => 'PaymentMethodAdd IsActive',
-  2 => 'PaymentMethodAdd PaymentMethodType',
-  3 => 'IncludeRetElement',
-);
+			0 => 'Name',
+			1 => 'IsActive',
+			2 => 'PaymentMethodType',
+			);
 			
 		return $paths;
 	}
