@@ -71,7 +71,7 @@ $source_options = array(
 	//	You'll then save that someplace safe with a .pem extension, and point 
 	//	this file path to that file. 
 	//'certificate' => '/Users/keithpalmerjr/Projects/QuickBooks/QuickBooks/dev/test_qboe.pem', 
-	
+	//	
 	// These next 3 configuration options are *required* 
 	//	You should have been supplied with all 3 of these values when you went 
 	//	through the Application Registration process on the Intuit Developer 
@@ -80,9 +80,11 @@ $source_options = array(
 	//	connection_ticket - QuickBooks Online Edition does an HTTP POST to your callback URL to send you this
 	//	application_login - Provided by the application registration page
 	//	application_id - Provided by the application registration page 	
+	
 	'connection_ticket' => 'TGT-47-1sRm2nXMVfm$n8hb2MZfVQ', 
 	'application_login' => 'test.www.academickeys.com', 
 	'application_id' => '134476472', 
+	
 	// This is just for debugging/testing, and you should comment this out... 
 	//'override_session_ticket' => 'V1-184-uVBpWbpD17931L2hMNMw$A:134864687', 	// Comment this line out unless you know what you're doing!
 	);
