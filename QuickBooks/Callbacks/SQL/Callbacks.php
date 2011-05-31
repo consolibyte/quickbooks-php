@@ -2038,7 +2038,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 		if ($ShipMethod = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'shipmethod', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
 		{
-			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SHIPMETHOD, $Class, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SHIPMETHOD, $ShipMethod, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
 		}
 		
 		return '';
@@ -2071,9 +2071,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	public static function PaymentMethodAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-		if ($ShipMethod = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'paymentmethod', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+		if ($PaymentMethod = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'paymentmethod', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
 		{
-			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_PAYMENTMETHOD, $Class, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_PAYMENTMETHOD, $PaymentMethod, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
 		}
 		
 		return '';
@@ -5923,7 +5923,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	
 	
 	
-	public static function InventoryAdjustmentQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function InventoryAdjustmentImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
 		
@@ -5948,7 +5948,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		return $xml;
 	}
 	
-	public static function InventoryAdjustmentQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function InventoryAdjustmentImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
