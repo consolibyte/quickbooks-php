@@ -573,7 +573,7 @@ class QuickBooks_API_Source_OE extends QuickBooks_API_Source
 		// Map any application identifiers
 		$qbxml = QuickBooks_Callbacks_API_Callbacks::mappings($qbxml, $this->_user);
 		
-		//$requestID = null;
+		$requestID = null;
 		$extra = array(
 			'callbacks' => $callbacks, 
 			);
@@ -690,7 +690,7 @@ class QuickBooks_API_Source_OE extends QuickBooks_API_Source
 		
 		// Call the response handler  
 		// @todo What if an error occurs? Are we still calling the handler?
-		return QuickBooks_Callbacks::callResponseHandler($this->_driver, $map, $action, $this->_user, $action, $uniqueid, $extra, $err, $last_action_time, $last_actionident_time, $response, $qb_identifiers);
+		return QuickBooks_Callbacks::callResponseHandler($this->_driver, $map, $requestID, $action, $this->_user, $action, $uniqueid, $extra, $err, $last_action_time, $last_actionident_time, $response, $qb_identifiers);
 	}
 	
 	/**
