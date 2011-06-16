@@ -43,6 +43,7 @@
 // For debugging... 
 //require_once '/Users/kpalmer/Projects/QuickBooks/QuickBooks.php';
 //require_once '/Users/kpalmer/Sites/saas/library/quickbooks/QuickBooks.php';
+//require_once '/home/playscape/www/html/saas/library/quickbooks/QuickBooks.php';
 
 /**
  * Mapper for qbXML schema
@@ -1649,6 +1650,40 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		QuickBooks_Callbacks_SQL_Callbacks::_addResponse(QUICKBOOKS_OBJECT_CUSTOMER, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
+	public static function InventoryAdjustmentAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$Driver = QuickBooks_Driver_Singleton::getInstance();
+		
+		if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'inventoryadjustment', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+		{
+			$InventoryAdjustment = new QuickBooks_SQL_Object('inventoryadjustment', null, $arr);
+			
+			return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVENTORYADJUSTMENT, $InventoryAdjustment, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+		}
+		
+		return ''; 
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static function InventoryAdjustmentAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();		
+		
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs InventoryAdjustmentAddRs');
+		
+		$extra['is_add_response'] = true;
+		QuickBooks_Callbacks_SQL_Callbacks::_addResponse(QUICKBOOKS_OBJECT_INVENTORYADJUSTMENT, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
+	
 	/**
 	 * 
 	 * 
@@ -11425,6 +11460,23 @@ $idents = array();
 $tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
 print(QuickBooks_Callbacks_SQL_Callbacks::CustomerModRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
 */
+
+/*
+$requestID = '38';
+$user = 'quickbooks';
+$action = QUICKBOOKS_ADD_INVENTORYADJUSTMENT;
+$ID = 1;
+$extra = array();
+$err = '';
+$last_action_time = time();
+$last_actionident_time = time();
+$xml = '';
+$idents = array();
+
+$tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:Fuirseet1@localhost/saas_329_bizelo_qbus_557', array(), array(), QUICKBOOKS_LOG_DEVELOP);
+print(QuickBooks_Callbacks_SQL_Callbacks::InventoryAdjustmentAddRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
+*/
+
 
 /*
 $requestID = 'Q3VzdG9tZXJBZGR8Mw==';

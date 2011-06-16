@@ -94,10 +94,10 @@ class QuickBooks_QBXML_Schema_Object_InventoryAdjustmentAddRq extends QuickBooks
   'Memo' => true,
   'InventoryAdjustmentLineAdd ItemRef ListID' => true,
   'InventoryAdjustmentLineAdd ItemRef FullName' => true,
-  'InventoryAdjustmentLineAdd QuantityAdjustment NewQuantity' => false,
-  'InventoryAdjustmentLineAdd QuantityAdjustment QuantityDifference' => false,
-  'InventoryAdjustmentLineAdd ValueAdjustment NewQuantity' => false,
-  'InventoryAdjustmentLineAdd ValueAdjustment NewValue' => false,
+  'InventoryAdjustmentLineAdd QuantityAdjustment NewQuantity' => true,
+  'InventoryAdjustmentLineAdd QuantityAdjustment QuantityDifference' => true,
+  'InventoryAdjustmentLineAdd ValueAdjustment NewQuantity' => true,
+  'InventoryAdjustmentLineAdd ValueAdjustment NewValue' => true,
   'IncludeRetElement' => true,
 );
 	}
@@ -191,5 +191,3 @@ class QuickBooks_QBXML_Schema_Object_InventoryAdjustmentAddRq extends QuickBooks
 		return $paths;
 	}
 }
-
-?>

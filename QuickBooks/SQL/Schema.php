@@ -1196,6 +1196,10 @@ class QuickBooks_SQL_Schema
 			'InventoryAdjustmentRet InventoryAdjustmentLineRet' => 					array( null, null ), 
 			'InventoryAdjustmentRet InventoryAdjustmentLineRet ItemRef' => 			array( null, null ), 
 			'InventoryAdjustmentRet InventoryAdjustmentLineRet ItemRef *' => 		array( 'InventoryAdjustment_InventoryAdjustmentLine', 'Item_*' ), 
+			'InventoryAdjustmentRet InventoryAdjustmentLineRet QuantityAdjustment' => array( null, null ), 
+			'InventoryAdjustmentRet InventoryAdjustmentLineRet QuantityAdjustment *' => array( 'InventoryAdjustment_InventoryAdjustmentLine', 'QuantityAdjustment_*' ), 
+			'InventoryAdjustmentRet InventoryAdjustmentLineRet ValueAdjustment' => array( null, null ), 
+			'InventoryAdjustmentRet InventoryAdjustmentLineRet ValueAdjustment *' => array( 'InventoryAdjustment_InventoryAdjustmentLine', 'ValueAdjustment_*' ), 
 			'InventoryAdjustmentRet InventoryAdjustmentLineRet *' => 				array( 'InventoryAdjustment_InventoryAdjustmentLine', '*' ), 
 			
 			'InventoryAdjustmentRet DataExtRet' => 		array( null, null ), 
@@ -2166,6 +2170,16 @@ class QuickBooks_SQL_Schema
 			'InventoryAdjustmentRet InventoryAdjustmentLineRet' => 					array(
 				array( 'InventoryAdjustment_InventoryAdjustmentLine', 'InventoryAdjustment_TxnID' ), 
 				array( 'InventoryAdjustment_InventoryAdjustmentLine', 'SortOrder' ), 
+				
+				/*
+				array( 'InventoryAdjustment_InventoryAdjustmentLine', 'QuantityAdjustment_NewQuantity' ), 
+				array( 'InventoryAdjustment_InventoryAdjustmentLine', 'QuantityAdjustment_QuantityDifference' ), 
+				
+				array( 'InventoryAdjustment_InventoryAdjustmentLine', 'ValueAdjustment_NewQuantity' ), 
+				array( 'InventoryAdjustment_InventoryAdjustmentLine', 'ValueAdjustment_QuantityDifference' ), 
+				array( 'InventoryAdjustment_InventoryAdjustmentLine', 'ValueAdjustment_NewValue' ), 
+				array( 'InventoryAdjustment_InventoryAdjustmentLine', 'ValueAdjustment_ValueDifference' ), 
+				*/
 				),			
 			'InvoiceRet InvoiceLineRet' => 											array(
 				array( 'Invoice_InvoiceLine', 'Invoice_TxnID' ), 
@@ -2548,6 +2562,14 @@ class QuickBooks_SQL_Schema
 			'itemdiscount' => array(
 				'discountrate' => array( null, null, 'null' ),
 				'discountratepercent' => array( null, null, 'null' )
+				),
+			'inventoryadjustment_inventoryadjustmentline' => array(
+				'quantityadjustment_newquantity' => array( null, null, 'null' ),
+				'quantityadjustment_quantitydifference' => array( null, null, 'null' ),
+				'valueadjustment_newquantity' => array( null, null, 'null' ),
+				'valueadjustment_quantitydifference' => array( null, null, 'null' ),
+				'valueadjustment_newvalue' => array( null, null, 'null' ),
+				'valueadjustment_valuedifference' => array( null, null, 'null' ),
 				),
 			'invoice' => array(
 				'ispending' => array( null, null, 'null' ),

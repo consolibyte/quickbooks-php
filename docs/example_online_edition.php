@@ -22,7 +22,7 @@ error_reporting(E_ALL | E_STRICT);
 /**
  * Require the QuickBooks base classes
  */
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 // Tell the framework what username to use to keep track of your requests
 //	(You can just make these up at the moment, they don't do anything...)
@@ -81,9 +81,13 @@ $source_options = array(
 	//	application_login - Provided by the application registration page
 	//	application_id - Provided by the application registration page 	
 	
-	'connection_ticket' => 'TGT-47-1sRm2nXMVfm$n8hb2MZfVQ', 
-	'application_login' => 'test.www.academickeys.com', 
-	'application_id' => '134476472', 
+	//'connection_ticket' => 'TGT-47-1sRm2nXMVfm$n8hb2MZfVQ', 
+	//'application_login' => 'test.www.academickeys.com', 
+	//'application_id' => '134476472', 
+	
+	'connection_ticket' => 'TGT-211-rQErMOrlyR$vdN7dVHQnNA', 
+	'application_login' => 'saas.consolibyte.com', 
+	'application_id' => '178965328', 
 	
 	// This is just for debugging/testing, and you should comment this out... 
 	//'override_session_ticket' => 'V1-184-uVBpWbpD17931L2hMNMw$A:134864687', 	// Comment this line out unless you know what you're doing!
@@ -128,9 +132,9 @@ print("\n");
 //	The qbXML response is passed back to you in the _raw_qbxml_callback() 
 //	function as the $qbxml parameter. 
 $return = $API->qbxml('
-		<CustomerQueryRq>
-			<FullName>Keith Palmer Jr.</FullName>
-		</CustomerQueryRq>', '_raw_qbxml_callback');
+		<InvoiceQueryRq>
+			<RefNumber>5381</RefNumber>
+		</InvoiceQueryRq>', '_raw_qbxml_callback');
 
 // This function gets called when QuickBooks Online Edition sends a response back
 function _raw_qbxml_callback($method, $action, $ID, &$err, $qbxml, $Iterator, $qbres)
