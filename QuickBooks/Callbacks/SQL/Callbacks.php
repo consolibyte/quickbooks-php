@@ -1166,6 +1166,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		// We just need to set the voided flag on the transaction
 		$update = array(
 			QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_VOIDED => 1, 
+			'AmountDue' => 0.0, 
+			'Amount' => 0.0, 
+			'OpenAmount' => 0.0, 
+			'Amount' => 0.0, 
+			'Subtotal' => 0.0, 
+			'TotalAmount' => 0.0, 
+			'BalanceRemaining' => 0.0, 
+			'SalesTaxTotal' => 0.0,
 			);
 		
 		$where = array(
@@ -5291,7 +5299,86 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('class', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
+
+	public static function HostImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$xml = '';
+		
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+					<HostQueryRq requestID="' . $requestID . '">
+						<IncludeListMetaData>
+							<IncludeMaxCapacity>true</IncludeMaxCapacity>
+						</IncludeListMetaData>
+					</HostQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>';
+			
+		return $xml;
+	}
 	
+	/**
+	 * 
+	 * @todo The $type parameter to _QueryResponse should be from a mapping, not a constant, to support custom mapping later on
+	 * 
+	 * 
+	 */
+	public static function HostImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();
+		
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs HostQueryRs');
+		
+		$extra['is_import_response'] = true;
+		
+		return QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('host', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
+	
+	public static function PreferencesImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$xml = '';
+		
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+					<PreferencesQueryRq requestID="' . $requestID . '"></PreferencesQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>';
+			
+		return $xml;
+	}
+	
+	/**
+	 * 
+	 * @todo The $type parameter to _QueryResponse should be from a mapping, not a constant, to support custom mapping later on
+	 * 
+	 * 
+	 */
+	public static function PreferencesImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();
+		
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PreferencesQueryRs');
+		
+		//print_r($List);
+		
+		$extra['is_import_response'] = true;
+		
+		return QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('preferences', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
 	
 	public static function CompanyImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
@@ -9166,6 +9253,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			$objects = array();
 			QuickBooks_Callbacks_SQL_Callbacks::_transformToSQLObjects('', $Node, $objects);
 			
+			//print_r($objects);
+			//exit;
+			
 			// For each object we created from the XML nodes... 
 			// (might have created more than one, e.g. an Invoice, plus 10 InvoiceLines, plus a Invoice_DataExt, etc.)
 			
@@ -9194,6 +9284,17 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				$path = $Object->path();
 				$map = array();
 				QuickBooks_SQL_Schema::mapPrimaryKey($path, QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map);
+				
+				// Special hack for preferences
+				if ($Object->table() == 'preferences')
+				{
+					$map = array( 'qb_preferences', 'qbsql_external_id' );
+				}
+				
+				//print_r($Object);
+				//print_r($path);
+				//print_r($map);
+				//exit;
 				
 				/*
 				// This is a list of "Boolean" fields in QuickBooks
@@ -9994,7 +10095,27 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			'IsToBePrinted',
 			'IsSampleCompany',
 			'IsTaxable',
-			'IsVendorEligibleFor1099'
+			'IsVendorEligibleFor1099',
+			'AccountingPrefs_IsUsingAccountNumbers', 
+            'AccountingPrefs_IsRequiringAccounts', 
+            'AccountingPrefs_IsUsingClassTracking', 
+            'AccountingPrefs_IsUsingAuditTrail', 
+            'AccountingPrefs_IsAssigningJournalEntryNumbers', 
+            'FinanceChargePrefs_IsAssessingForOverdueCharges', 
+            'FinanceChargePrefs_IsMarkedToBePrinted', 
+            'JobsAndEstimatesPrefs_IsUsingEstimates', 
+            'JobsAndEstimatesPrefs_IsUsingProgressInvoicing', 
+            'JobsAndEstimatesPrefs_IsPrintingItemsWithZeroAmounts', 
+            'MultiCurrencyPrefs_IsMultiCurrencyOn', 
+            'PurchasesAndVendorsPrefs_IsUsingInventory', 
+            'PurchasesAndVendorsPrefs_IsAutomaticallyUsingDiscounts', 
+            'SalesAndCustomersPrefs_IsTrackingReimbursedExpensesAsIncome', 
+            'SalesAndCustomersPrefs_IsAutoApplyingPayments', 
+            'SalesAndCustomersPrefs_PriceLevels_IsUsingPriceLevels', 
+            'SalesAndCustomersPrefs_PriceLevels_IsRoundingSalesPriceUp', 
+            'CurrentAppAccessRights_IsAutomaticLoginAllowed', 
+            'CurrentAppAccessRights_IsPersonalDataAccessAllowed', 
+            'IsAutomaticLogin', 
 			);
 		
 		// Cast QuickBooks booleans (strings, "true" and "false") to database booleans (tinyint 1 and 0)	
@@ -10072,6 +10193,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	{
 		if ($Node->childCount())
 		{
+			//print('LOOKING AT [' . strtolower(trim(trim($curpath) . ', ' . $Node->name())) . ']' . "\n");
+			
 			//
 			switch (strtolower(trim(trim($curpath) . ' ' . $Node->name())))
 			{
@@ -11406,3 +11529,4 @@ $idents = array();
 $tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
 print(QuickBooks_Callbacks_SQL_Callbacks::InventoryLevelsResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
 */
+

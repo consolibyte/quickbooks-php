@@ -1,8 +1,8 @@
 <?php
 
-$url = '';
-$username = '';
-$password = '';
+$url = 'http://keith.versapay.com:8888/versapay/vpsync/qbwc.php?358';
+$username = 'tenant358';
+$password = 'password';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -17,8 +17,6 @@ header('Content-type: text/plain');
 print(date('Y-m-d H:i:s: ') . 'URL: ' . $url . "\n");
 print(date('Y-m-d H:i:s: ') . 'User: ' . $username . "\n");
 print(date('Y-m-d H:i:s: ') . 'Pass: ' . $password . "\n");
-
-//$return = tester($url, null, null, 'fetchVersion');
 
 //print($return);
 
@@ -40,7 +38,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-//exit;
+exit;
 
 $max = 1;
 for ($i = 0; $i < $max; $i++)

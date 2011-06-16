@@ -1236,7 +1236,7 @@ class QuickBooks_Handlers
 			if (strlen($obj->message) or 
 				$this->_extractStatusCode($obj->response)) // or an error code
 			{
-				$this->_log('Extracted code[' . $this->_extractStatusCode($obj->response) . ']', $obj->ticket, QUICKBOOKS_LOG_DEBUG);
+				//$this->_log('Extracted code[' . $this->_extractStatusCode($obj->response) . ']', $obj->ticket, QUICKBOOKS_LOG_DEBUG);
 				
 				$action = null;
 				$ident = null;

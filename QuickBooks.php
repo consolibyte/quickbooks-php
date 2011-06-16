@@ -287,6 +287,14 @@ define('QUICKBOOKS_AUDIT', 'Audit');
 
 define('QUICKBOOKS_DERIVE_INVENTORYLEVELS', 'InventoryLevels');
 
+define('QUICKBOOKS_OBJECT_HOST', 'Host');
+define('QUICKBOOKS_QUERY_HOST', 'HostQuery');
+define('QUICKBOOKS_IMPORT_HOST', 'HostImport');
+
+define('QUICKBOOKS_OBJECT_PREFERENCES', 'Preferences');
+define('QUICKBOOKS_QUERY_PREFERENCES', 'PreferencesQuery');
+define('QUICKBOOKS_IMPORT_PREFERENCES', 'PreferencesImport');
+
 define('QUICKBOOKS_OBJECT_ACCOUNT', 'Account');
 define('QUICKBOOKS_ADD_ACCOUNT', 'AccountAdd');
 define('QUICKBOOKS_MOD_ACCOUNT', 'AccountMod');

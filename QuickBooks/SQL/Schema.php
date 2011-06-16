@@ -335,6 +335,8 @@ class QuickBooks_SQL_Schema
 			'CompanyRet' => 																			array( 'Company', 'CompanyName' ),  
 			'CompanyRet SubscribedServices Services' =>													array( 'Company_SubscribedServices_Services', array('Company_CompanyName', 'Name') ),  
 			'CompanyRet DataExtRet' => 																	array( 'DataExt', array( 'EntityType', 'TxnType', 'Entity_ListID', 'Txn_TxnID' ) ),
+			'HostRet' => 																				array( 'Host', 'ProductName' ), 
+			'PreferencesRet' => 																		array( 'Preferences', 'qbsql_external_id' ), 
 			'CreditCardChargeRet' =>																	array( 'CreditCardCharge', 'TxnID' ),
 			'CreditCardChargeRet ExpenseLineRet' =>														array( 'CreditCardCharge_ExpenseLine', array( 'CreditCardCharge_TxnID', 'TxnLineID' ) ),
 			'CreditCardChargeRet ItemLineRet' =>														array( 'CreditCardCharge_ItemLine', array( 'CreditCardCharge_TxnID', 'TxnLineID' ) ),
@@ -749,6 +751,67 @@ class QuickBooks_SQL_Schema
 			'CompanyRet DataExtRet *' => 					array( 'DataExt', '*' ), 
 			
 			'CompanyRet *' => 								array( 'Company', '*' ), 
+			
+			
+			'HostRet' => 									array( 'Host', null ), 
+			'HostRet *' => 									array( 'Host', '*' ), 
+			
+			
+			'PreferencesRet' => 							array( 'Preferences', null ), 
+			
+			'PreferencesRet AccountingPreferences' => 		array( null, null ), 
+			'PreferencesRet AccountingPreferences *' => 	array( 'Preferences', 'AccountingPrefs_*' ), 
+			
+			'PreferencesRet FinanceChargePreferences' => 	array( null, null ), 
+			
+			'PreferencesRet FinanceChargePreferences FinanceChargeAccountRef' => array( null, null ), 
+			'PreferencesRet FinanceChargePreferences FinanceChargeAccountRef *' => array( 'Preferences', 'FinanceChargePrefs_FinanceChargeAccount_*' ), 
+			
+			'PreferencesRet FinanceChargePreferences *' => 	array( 'Preferences', 'FinanceChargePrefs_*' ), 
+			
+			'PreferencesRet JobsAndEstimatesPreferences' => array( null, null ), 
+			'PreferencesRet JobsAndEstimatesPreferences *' => array( 'Preferences', 'JobsAndEstimatesPrefs_*' ), 
+			
+			'PreferencesRet MultiCurrencyPreferences' => 	array( null, null ), 
+			'PreferencesRet MultiCurrencyPreferences HomeCurrencyRef' => array( null, null ), 
+			'PreferencesRet MultiCurrencyPreferences HomeCurrencyRef *' => array( 'Preferences', 'MultiCurrencyPrefs_HomeCurrency_*' ), 
+			'PreferencesRet MultiCurrencyPreferences *' => 	array( 'Preferences', 'MultiCurrencyPrefs_*' ), 
+			
+			'PreferencesRet MultiLocationInventoryPreferences' => array( null, null ), 
+			'PreferencesRet MultiLocationInventoryPreferences *' => array( 'Preferences', 'MultiLocationInventoryPrefs_*' ), 
+			
+			'PreferencesRet PurchasesAndVendorsPreferences' => array( null, null ), 
+			'PreferencesRet PurchasesAndVendorsPreferences DefaultDiscountAccountRef' => array( null, null ), 
+			'PreferencesRet PurchasesAndVendorsPreferences DefaultDiscountAccountRef *' => array( 'Preferences', 'PurchasesAndVendorsPrefs_DefaultDiscountAccount_*' ), 
+			'PreferencesRet PurchasesAndVendorsPreferences *' => array( 'Preferences', 'PurchasesAndVendorsPrefs_*' ), 
+			
+			'PreferencesRet ReportsPreferences' => 			array( null, null ), 
+			'PreferencesRet ReportsPreferences *' => 		array( 'Preferences', 'ReportsPrefs_*' ), 
+			
+			'PreferencesRet SalesAndCustomersPreferences' => array( null, null ), 
+			'PreferencesRet SalesAndCustomersPreferences DefaultShipMethodRef' => array( null, null ), 
+			'PreferencesRet SalesAndCustomersPreferences DefaultShipMethodRef *' => array( 'Preferences', 'SalesAndCustomersPrefs_DefaultShipMethod_*' ),
+			'PreferencesRet SalesAndCustomersPreferences PriceLevels' => array( null, null ), 
+			'PreferencesRet SalesAndCustomersPreferences PriceLevels *' => array( 'Preferences', 'SalesAndCustomersPrefs_PriceLevels_*' ),
+			'PreferencesRet SalesAndCustomersPreferences *' => array( 'Preferences', 'SalesAndCustomersPrefs_*' ), 
+			
+			'PreferencesRet SalesTaxPreferences' => 		array( null, null ), 
+			'PreferencesRet SalesTaxPreferences DefaultItemSalesTaxRef' => array( null, null ), 
+			'PreferencesRet SalesTaxPreferences DefaultItemSalesTaxRef *' => array( 'Preferences', 'SalesTaxPrefs_DefaultItemSalesTax_*' ),
+			'PreferencesRet SalesTaxPreferences DefaultTaxableSalesTaxCodeRef' => array( null, null ), 
+			'PreferencesRet SalesTaxPreferences DefaultTaxableSalesTaxCodeRef *' => array( 'Preferences', 'SalesTaxPrefs_DefaultTaxableSalesTaxCode_*' ),
+			'PreferencesRet SalesTaxPreferences DefaultNonTaxableSalesTaxCodeRef' => array( null, null ), 
+			'PreferencesRet SalesTaxPreferences DefaultNonTaxableSalesTaxCodeRef *' => array( 'Preferences', 'SalesTaxPrefs_DefaultNonTaxableSalesTaxCode_*' ),
+			'PreferencesRet SalesTaxPreferences *' => 		array( 'Preferences', 'SalesTaxPrefs_*' ), 
+			
+			'PreferencesRet TimeTrackingPreferences' => 	array( null, null ),  
+			'PreferencesRet TimeTrackingPreferences *' => 	array( 'Preferences', 'TimeTrackingPrefs_*' ), 
+			
+			'PreferencesRet CurrentAppAccessRights' => 		array( null, null ), 
+			'PreferencesRet CurrentAppAccessRights *' => 	array( 'Preferences', 'CurrentAppAccessRights_*' ), 
+			
+			'PreferencesRet *' => 							array( 'Preferences', '*' ), 
+			
 			
 			'CreditCardChargeRet' => 						array( 'CreditCardCharge', null ),
 			'CreditCardChargeRet AccountRef' => 			array( null, null ), 

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="10.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnError">
+<HostQueryRq>
+<IncludeListMetaData> <!-- optional -->
+<IncludeMaxCapacity >BOOLTYPE</IncludeMaxCapacity> <!-- required -->
+</IncludeListMetaData>
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+</HostQueryRq>
+<HostQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+<HostRet> <!-- optional -->
+<ProductName >STRTYPE</ProductName> <!-- required -->
+<MajorVersion >STRTYPE</MajorVersion> <!-- required -->
+<MinorVersion >STRTYPE</MinorVersion> <!-- required -->
+<Country >STRTYPE</Country> <!-- optional -->
+<SupportedQBXMLVersion >STRTYPE</SupportedQBXMLVersion> <!-- required, may repeat -->
+<IsAutomaticLogin >BOOLTYPE</IsAutomaticLogin> <!-- optional -->
+<!-- QBFileMode may have one of the following values: MultiUser, SingleUser -->
+<QBFileMode >ENUMTYPE</QBFileMode> <!-- required -->
+<ListMetaData> <!-- optional -->
+<AccountMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</AccountMetaData>
+<BillingRateMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</BillingRateMetaData>
+<ClassMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</ClassMetaData>
+<CustomerMsgMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</CustomerMsgMetaData>
+<CustomerTypeMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</CustomerTypeMetaData>
+<EntityMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</EntityMetaData>
+<ItemMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</ItemMetaData>
+<JobTypeMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</JobTypeMetaData>
+<PaymentMethodMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</PaymentMethodMetaData>
+<PayrollItemMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</PayrollItemMetaData>
+<PriceLevelMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</PriceLevelMetaData>
+<SalesRepMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</SalesRepMetaData>
+<SalesTaxCodeMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</SalesTaxCodeMetaData>
+<ShipMethodMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</ShipMethodMetaData>
+<TemplateMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</TemplateMetaData>
+<TermsMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</TermsMetaData>
+<ToDoMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</ToDoMetaData>
+<VehicleMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</VehicleMetaData>
+<VendorTypeMetaData> <!-- required -->
+<MaxCapacity >INTTYPE</MaxCapacity> <!-- required -->
+</VendorTypeMetaData>
+</ListMetaData>
+</HostRet>
+</HostQueryRs>
+</QBXMLMsgsRq>
+</QBXML>
