@@ -1446,11 +1446,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					{
 						$arr = array(
 							'ListID' => $Node->getChildDataAt($xpath . ' ListID'), 
+							'FullName' => $Node->getChildDataAt($xpath . ' FullName'), 
+							'Parent_FullName' => $Node->getChildDataAt($xpath . ' ParentRef FullName'), 
 							'IsActive' => (int) ($Node->getChildDataAt($xpath . ' IsActive') == 'true'), 
 							'EditSequence' => $Node->getChildDataAt($xpath . ' EditSequence'), 
 							);
 						
 						$Driver->log('Updating DERIVED ' . $xpath . ' fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID, null, QUICKBOOKS_LOG_VERBOSE);
+						mysql_query("INSERT INTO quickbooks_log ( msg ) VALUES ( '" . mysql_real_escape_string('Updating DERIVED ' . $xpath . ' fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID) . "' ) ");
 						
 						$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, 
 							$arr, 
