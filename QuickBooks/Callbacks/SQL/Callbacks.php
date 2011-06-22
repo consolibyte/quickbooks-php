@@ -1453,7 +1453,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							);
 						
 						$Driver->log('Updating DERIVED ' . $xpath . ' fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID, null, QUICKBOOKS_LOG_VERBOSE);
-						mysql_query("INSERT INTO quickbooks_log ( msg ) VALUES ( '" . mysql_real_escape_string('Updating DERIVED ' . $xpath . ' fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID) . "' ) ");
+						//mysql_query("INSERT INTO quickbooks_log ( msg ) VALUES ( '" . mysql_real_escape_string('Updating DERIVED ' . $xpath . ' fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID) . "' ) ");
 						
 						$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, 
 							$arr, 
