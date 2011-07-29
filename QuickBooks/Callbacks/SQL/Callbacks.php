@@ -9177,8 +9177,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					
 					// @todo Make the Boolean TRUE value used in the QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG field a constant,
 					//      in case the sql driver used uses something other than 1 and 0.
-					$obj->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
-					$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $obj, array( $multipart ));
+					//$obj->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
+					//$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $obj, array( $multipart ));
 				}
 				else
 				{

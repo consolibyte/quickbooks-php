@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://keith.versapay.com:8888/versapay/vpsync/qbwc.php?358';
-$username = 'tenant358';
-$password = 'password';
+$url = '';
+$username = '';
+$password = '';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -38,7 +38,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-exit;
+//exit;
 
 $max = 1;
 for ($i = 0; $i < $max; $i++)
@@ -48,13 +48,15 @@ for ($i = 0; $i < $max; $i++)
 	$resp = tester($url, $ticket, null, 'sendRequestXML');
 	
 	$pos = strpos($resp, 'requestID=&quot;');
+	
+	print($resp);
 }
 
 $requestID = substr($resp, $pos + 16, 1);
 
 print('REUQEST ID IS [' . $requestID . ']' . "\n");
 
-//exit;
+exit;
 
 $response = '<?xml version="1.0" encoding="utf-8"?>
 	<?qbposxml version="3.0"?>

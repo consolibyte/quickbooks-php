@@ -102,24 +102,24 @@ $hook_obj = new MyHookClass2('Keith Palmer');
 $hooks = array(
 
 	// Register a hook which occurs when we perform an INSERT into the SQL database for a record from QuickBooks
-	// QUICKBOOKS_SQL_HOOK_SQL_INSERT => 'my_function_name_for_inserts', 
-	//QUICKBOOKS_SQL_HOOK_SQL_INSERT => 'MyHookClass::myMethod',
+	// QuickBooks_SQL::HOOK_SQL_INSERT => 'my_function_name_for_inserts', 
+	// QuickBooks_SQL::HOOK_SQL_INSERT => 'MyHookClass::myMethod',
 	
 	// Register a hook which occurs when we perform an UPDATE on the SQL database for a record from QuickBooks
-	// QUICKBOOKS_SQL_HOOK_SQL_UPDATE => 'my_function_name_for_updates',
+	// QuickBooks_SQL::HOOK_SQL_UPDATE => 'my_function_name_for_updates',
 
 	// Example of registering multiple hooks for one hook type 
-	//QUICKBOOKS_SERVER_HOOK_PREHANDLE => array(
+	// QuickBooks_SQL::HOOK_PREHANDLE => array(
 	//	'my_prehandle_function',
 	//	array( $hook_obj, 'myMethod' ),
 	//	),
 	
 	// Example of using the hook factory to use a pre-defined hook
-	//QUICKBOOKS_SQL_HOOK_SQL_INSERT => QuickBooks_Hook_Factory::create(
+	// QuickBooks_SQL::HOOK_SQL_INSERT => QuickBooks_Hook_Factory::create(
 	//	'Relay_POST', 								// Relay the hook data to a remote URL via a HTTP POST
 	//	'http://localhost:8888/your_script.php'),
 	
-	QUICKBOOKS_SQL_HOOK_SQL_INSERT => array(
+	QuickBooks_SQL::SQL_INSERT => array(
 		QuickBooks_Hook_Factory::create(
 			'Relay_POST', 
 			'http://localhost:8888/your_script.php', 
@@ -194,6 +194,8 @@ $ops = array(
 	QUICKBOOKS_OBJECT_PRICELEVEL, 
 	QUICKBOOKS_OBJECT_ITEM, 
 	*/
+	
+	QUICKBOOKS_OBJECT_PAYMENTMETHOD, 
 	
 	QUICKBOOKS_OBJECT_COMPANY, 
 	QUICKBOOKS_OBJECT_HOST, 
