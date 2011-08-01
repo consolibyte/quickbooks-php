@@ -3549,27 +3549,50 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		// Merge by keys to make sure we don't INSERT any fields that don't exist in this schema
 		$object = array_intersect_key($object, $avail);
 		
+		/*
 		foreach ($object as $field => $value)
 		{
 			$fields[] = $field;
 	
-			/*
-			// * POSSIBLE FIX FOR BELOW CODE *
+			////
+			//// * POSSIBLE FIX FOR BELOW CODE *
+			////
+////if ( strlen((int) $value) == strlen($value) and
+////((int)$value) == $value and
+////ctype_digit($value) )		
+			////
 			
-if ( strlen((int) $value) == strlen($value) and
-((int)$value) == $value and
-ctype_digit($value) )		
-			*/
-			
-			// Commented out because doing this to very large integers (i.e. ItemRef/FullName is a large integer SKU) causes integer overflow
-			/*if (strlen((int) $value) == strlen($value))
-			{
-				$values[] = (int) $value;
-			}
-			else
-			{*/
+			//// Commented out because doing this to very large integers (i.e. ItemRef/FullName is a large integer SKU) causes integer overflow
+			////if (strlen((int) $value) == strlen($value))
+			////{
+			////	$values[] = (int) $value;
+			////}
+			////else
+			////{
 				$values[] = " '" . $this->_escape($value) . "' ";
-			//}
+			////}
+		}
+		*/
+		
+		foreach ($object as $field => $value)
+		{
+			$fields[] = $field;
+			
+			if (ctype_digit($value) && strlen((float) $value) == strlen($value) && ((float)$value) == $value)
+			{
+				// Number, cast as float to avoid integer overflow
+                $values[] = (float) $value;
+			}
+		    else if ($value != '')
+            {
+                // String value, put it in quotes.
+                $values[] = " '" . $this->_escape($value) . "' ";
+            }
+            else
+            {
+                // Empty string value, don't insert
+                array_pop($fields);
+            }
 		}
 		
 		$sql = "INSERT INTO " . $this->_escape($table) . " ( " . implode(', ', $fields) . " ";

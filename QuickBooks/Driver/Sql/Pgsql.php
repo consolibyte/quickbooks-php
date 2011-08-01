@@ -574,6 +574,22 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	}
 	
 	/**
+	 * Rewind the result set
+	 *
+	 * @param resource $res
+	 * @return boolean
+	 */
+	public function rewind($res)
+	{
+		if (pg_num_rows($res) > 0)
+		{
+			pg_fetch_assoc($res, 0);
+		}
+		
+		return true;
+	}
+	
+	/**
 	 * Escape a string for the database
 	 * 
 	 * @param string $str
