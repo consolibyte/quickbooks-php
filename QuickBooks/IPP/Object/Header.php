@@ -43,7 +43,6 @@ class QuickBooks_IPP_Object_Header extends QuickBooks_IPP_Object
 			'TaxGroupName' => true, 
 			'TaxRate' => true, 
 			'TaxAmt' => true, 
-			'TotalAmt' => true, 
 			'ToBePrinted' => true, 
 			'ToBeEmailed' => true, 
 			'Custom' => true,
@@ -62,6 +61,7 @@ class QuickBooks_IPP_Object_Header extends QuickBooks_IPP_Object
 			'DiscountAccountId' => true, 
 			'DiscountAccountName' => true, 
 			'DiscountTaxable' => true, 
+			'TotalAmt' => true, 			// This needs to be almost last for Payments (or at least after PaymentMethodName)
 			);
 	}
 }
