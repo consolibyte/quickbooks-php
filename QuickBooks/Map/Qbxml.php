@@ -302,6 +302,12 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 					'invoice_invoiceline' => 'Invoice_TxnID', //  
 					)
 				),
+			'receivepayment' => array(
+				'key' => 'TxnID', 
+				'relatives' => array(
+					'receivepayment_appliedtotxn' => 'ReceivePayment_TxnID', 
+					), 
+				), 
 			'salesreceipt' => array(
 				'key' => 'TxnID', 
 				'relatives' => array(
