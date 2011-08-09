@@ -970,11 +970,11 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 		{
 			if (is_array($key))		// compound key
 			{
-				$arr_sql[] = 'CREATE INDEX ' . implode('_', $key) . '_' . $name . '_index ON ' . $name . ' USING btree ("' . implode('", "', $key) . '")';
+				$arr_sql[] = 'CREATE INDEX "' . implode('_', $key) . '_' . $name . '_index" ON "' . $name . '" USING btree ("' . implode('", "', $key) . '")';
 			}
 			else
 			{
-				$arr_sql[] = 'CREATE INDEX ' . $key . '_' . $name . '_index ON ' . $name . ' USING btree ("' . $key . '")';
+				$arr_sql[] = 'CREATE INDEX "' . $key . '_' . $name . '_index" ON "' . $name . '" USING btree ("' . $key . '")';
 			}
 		}
 		
