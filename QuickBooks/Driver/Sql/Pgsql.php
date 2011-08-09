@@ -180,6 +180,12 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	 * 
 	 */
 	protected $_schema;
+    
+    /**
+     * The table last used by $this->insert() 
+     * @var string 
+     */
+    protected $last_insert_table;
 	
 	/**
 	 * Create a new MySQL back-end driver
@@ -537,7 +543,33 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	 */
 	public function last()
 	{
-		//return mysql_insert_id($this->_conn);
+        $errnum = 0;
+        $errmsg = '';
+        
+        // get the current table's primary key
+        $sql = "SELECT               
+                pg_attribute.attname, 
+                format_type(pg_attribute.atttypid, pg_attribute.atttypmod) 
+            FROM pg_index, pg_class, pg_attribute 
+            WHERE 
+                pg_class.oid = '" . $this->last_insert_table . "'::regclass AND
+                indrelid = pg_class.oid AND
+                pg_attribute.attrelid = pg_class.oid AND 
+                pg_attribute.attnum = any(pg_index.indkey)
+                AND indisprimary";
+        
+        $res = $this->query($sql, $errnum, $errmsg);
+        
+        $sequence = pg_fetch_result($res, 0, 0);
+        
+        // get the last ID
+        $sql = "select currval(pg_get_serial_sequence('" . $this->last_insert_table . "', '" . $sequence . "'));";
+        
+        $res = $this->query($sql, $errnum, $errmsg);
+        
+        $last_insert_id = pg_fetch_result($res, 0, 0);
+        
+		return $last_insert_id;
 	}
 	
 	/**
@@ -678,8 +710,101 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	{
 		switch ($def[0])
 		{
+            case QUICKBOOKS_DRIVER_SQL_INTEGER:
+				$sql = '"' . $name . '" INTEGER ';
+				
+				if (isset($def[2]))
+				{
+					if (strtolower($def[2]) == 'null')
+					{
+						$sql .= ' DEFAULT NULL ';
+					}
+					else
+					{
+						$sql .= ' DEFAULT ' . (int) $def[2];
+					}
+				}
+				
+				break;
+			case QUICKBOOKS_DRIVER_SQL_DECIMAL:
+				$sql = '"' . $name . '" DECIMAL ';
+		
+				if (!empty($def[1]))
+				{
+					$tmp = explode(',', $def[1]);
+					if (count($tmp) == 2)
+					{
+						$sql .= '(' . (int) $tmp[0] . ',' . (int) $tmp[1] . ') ';
+					}
+				}
+				
+				if (isset($def[2]))
+				{
+					if (strtolower($def[2]) == 'null')
+					{
+						$sql .= ' NULL ';
+					}
+					else
+					{
+						if (isset($tmp) and count($tmp) == 2)
+						{
+							$sql .= ' DEFAULT ' . sprintf('%01.'. (int) $tmp[1] . 'f', (float) $def[2]);
+						}
+						else
+						{
+							$sql .= ' DEFAULT ' . sprintf('%01.2f', (float) $def[2]);
+						}
+					}
+				}
+				
+				if (isset($tmp))
+				{
+					unset($tmp);
+				}
+				
+				break;
+			case QUICKBOOKS_DRIVER_SQL_FLOAT:
+				$sql = '"' . $name . '" FLOAT ';
+				
+				if (isset($def[2]))
+				{
+					if (strtolower($def[2]) == 'null')
+					{
+						$sql .= ' NULL ';
+					}
+					else
+					{
+						$sql .= ' DEFAULT ' . sprintf('%01.2f', (float) $def[2]);
+					}
+				}
+				
+				break;
+			case QUICKBOOKS_DRIVER_SQL_BOOLEAN:
+				$sql = '"' . $name . '" BOOLEAN ';
+				
+				if (isset($def[2]))
+				{
+					if (strtolower($def[2]) == 'null')
+					{
+						$sql .= ' DEFAULT NULL ';
+					}
+					else if ($def[2])
+					{
+						$sql .= ' DEFAULT TRUE ';
+					}
+					else
+					{
+						$sql .= ' DEFAULT FALSE ';
+					}
+				}
+				else
+				{
+					$sql .= ' NOT NULL ';
+				}
+				
+				break;
 			case QUICKBOOKS_DRIVER_SQL_SERIAL:
-				$sql = $name . ' SERIAL NOT NULL '; // AUTO_INCREMENT 
+				$sql = '"' . $name . '" SERIAL NOT NULL '; // AUTO_INCREMENT 
 				
 				return $sql;
 			case QUICKBOOKS_DRIVER_SQL_TIMESTAMP:
@@ -688,7 +813,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 			case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT:
 			case QUICKBOOKS_DRIVER_SQL_DATETIME:
 				
-				$sql = $name . ' timestamp without time zone ';
+				$sql = '"' . $name . '" timestamp without time zone ';
 				
 				if (isset($def[2]))
 				{
@@ -706,7 +831,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 					$sql .= ' NOT NULL ';
 				}
 				
-				return $sql;
+
 			/*case QUICKBOOKS_DRIVER_SQL_BOOLEAN:
 				$sql = $name . ' tinyint(1) ';
 				
@@ -727,10 +852,89 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 				}
 				
 				return $sql;*/				
-			default:
+            case QUICKBOOKS_DRIVER_SQL_VARCHAR:
+				$sql = '"' . $name . '" VARCHAR';
 				
-				return parent::_generateFieldSchema($name, $def);
+				/*if ($name == 'ListID')
+				{
+					print('LIST ID:');
+					print_r($def);
+				}*/
+				
+				if (!empty($def[1]))
+				{
+					$sql .= '(' . (int) $def[1] . ') ';
+				}
+				
+				if (isset($def[2]))
+				{
+					if (strtolower($def[2]) == 'null')
+					{
+						$sql .= ' DEFAULT NULL ';
+					}
+					else if ($def[2] === false)
+					{
+						$sql .= ' NOT NULL ';
+					}
+					else
+					{
+						$sql .= " NOT NULL DEFAULT '" . $def[2] . "' ";
+					}
+				}
+				else
+				{
+					$sql .= ' NOT NULL ';
+				}
+				
+				break;
+			case QUICKBOOKS_DRIVER_SQL_CHAR:
+				$sql = '"' . $name . '" CHAR';
+				
+				if (!empty($def[1]))
+				{
+					$sql .= '(' . (int) $def[1] . ') ';
+				}
+				
+				if (isset($def[2]))
+				{
+					if (strtolower($def[2]) == 'null')
+					{
+						$sql .= ' DEFAULT NULL ';
+					}
+					else
+					{
+						$sql .= " NOT NULL DEFAULT '" . $def[2] . "' ";
+					}
+				}
+				else
+				{
+					$sql .= ' NOT NULL ';
+				}
+				
+				break;
+			default:
+			case QUICKBOOKS_DRIVER_SQL_TEXT:
+				$sql = '"' . $name . '" TEXT ';
+				
+				if (isset($def[2]))
+				{
+					if (strtolower($def[2]) == 'null')
+					{
+						$sql .= ' DEFAULT NULL ';
+					}
+					else
+					{
+						$sql .= " NOT NULL DEFAULT '" . $def[2] . "' ";
+					}
+				}
+				else
+				{
+					$sql .= ' NOT NULL ';
+				}
+				
+				break;
 		}
+        return $sql;
 	}
 	
 	/**
@@ -744,7 +948,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	 */
 	protected function _generateCreateTable($name, $arr, $primary = array(), $keys = array())
 	{
-		$arr_sql = parent::_generateCreateTable($name, $arr, $primary, $keys);
+		$arr_sql = parent::_generateCreateTable('"' . $name . '"', $arr, $primary, $keys);
 		
 		if (is_array($primary) and count($primary) == 1)
 		{
@@ -758,19 +962,19 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 		}
 		else if ($primary)
 		{
-			$arr_sql[] = 'ALTER TABLE ONLY ' . $name . ' 
-				ADD CONSTRAINT ' . $name . '_pkey PRIMARY KEY (' . $primary . ');';
+			$arr_sql[] = 'ALTER TABLE ONLY "' . $name . '" 
+				ADD CONSTRAINT "' . $name . '_pkey" PRIMARY KEY ("' . $primary . '");';
 		}
 		
 		foreach ($keys as $key)
 		{
 			if (is_array($key))		// compound key
 			{
-				$arr_sql[] = 'CREATE INDEX ' . implode('_', $key) . '_' . $name . '_index ON ' . $name . ' USING btree (' . implode(', ', $key) . ')';
+				$arr_sql[] = 'CREATE INDEX ' . implode('_', $key) . '_' . $name . '_index ON ' . $name . ' USING btree ("' . implode('", "', $key) . '")';
 			}
 			else
 			{
-				$arr_sql[] = 'CREATE INDEX ' . $key . '_' . $name . '_index ON ' . $name . ' USING btree (' . $key . ')';
+				$arr_sql[] = 'CREATE INDEX ' . $key . '_' . $name . '_index ON ' . $name . ' USING btree ("' . $key . '")';
 			}
 		}
 		
@@ -781,4 +985,19 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	{
 		return true;
 	}
+
+    
+    /**
+	 * Insert a new record into an SQL table
+	 * 
+	 * @param string $table
+	 * @param object $object
+	 * @return boolean
+	 */
+	public function insert($table, $object, $discov_and_resync = true)
+    {
+        $this->last_insert_table = $table;
+        
+        return parent::insert($table, $object, $discov_and_resync);
+    }
 }
