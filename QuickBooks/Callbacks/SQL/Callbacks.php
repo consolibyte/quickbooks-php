@@ -106,13 +106,22 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		$sql_query = QuickBooks_Callbacks_SQL_Callbacks::_filterActions($sql_query, $callback_config['_only_query'], $callback_config['_dont_query'], QUICKBOOKS_QUERY);
 		*/
 
+		//$start = microtime(true);
+		//$_start = microtime(true);
+
 		$sql_import = array();
-		foreach (QuickBooks_Utilities::listActions('*IMPORT*') as $action)
+		$tmp = QuickBooks_Utilities::listActions('*IMPORT*');
+		//print('0.01 [' . (microtime(true) - $start) . ']' . "\n\n"); 
+		foreach ($tmp as $action)
 		{
 			$sql_import[$action] = QuickBooks_Utilities::priorityForAction($action);
 		}
+		//print('0.02 [' . (microtime(true) - $start) . ']' . "\n\n"); 
 		
 		$sql_import = QuickBooks_Callbacks_SQL_Callbacks::_filterActions($sql_import, $callback_config['_only_import'], $callback_config['_dont_import'], QUICKBOOKS_IMPORT);
+		//print('0.03 [' . (microtime(true) - $start) . ']' . "\n\n"); 
+		
+		//print('0.1 [' . (microtime(true) - $start) . ']' . "\n\n"); 
 		
 		// Which things you want to *add* to QuickBooks (SQL => QuickBooks (adds only!))
 		//	@todo These should be changed to use QuickBooks_Utilities::listActions('*ADD*')
@@ -124,6 +133,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		$sql_add = QuickBooks_Callbacks_SQL_Callbacks::_filterActions($sql_add, $callback_config['_only_add'], $callback_config['_dont_add'], QUICKBOOKS_ADD);
 			
+		//print('0.2 [' . (microtime(true) - $start) . ']' . "\n\n"); 
+			
 		// Which things you want to *modify* in QuickBooks (SQL => QuickBooks (modifys only!))
 		//	@todo These should be changed to use QuickBooks_Utilities::listActions('*MOD*')
 		$sql_mod = array();
@@ -134,12 +145,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		$sql_mod = QuickBooks_Callbacks_SQL_Callbacks::_filterActions($sql_mod, $callback_config['_only_modify'], $callback_config['_dont_modify'], QUICKBOOKS_MOD);
 		
+		//print('0.3 [' . (microtime(true) - $start) . ']' . "\n\n"); 
+		
 		// Which things you want to *audit* in QuickBooks (QuickBooks => SQL)
 		$sql_audit = array();
 		foreach (QuickBooks_Utilities::listActions('*AUDIT*') as $action)
 		{
 			$sql_audit[$action] = QuickBooks_Utilities::priorityForAction($action);
 		}
+		
+		//print('1 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
 		
 		// Queueing class
 		//$Queue = new QuickBooks_Queue($dsn_or_conn);
@@ -190,6 +205,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			}
 		}
 		
+		//print('2 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
+		
 		/*
 		// Queue up the audit requests
 		//	Audit requests pull in just the calculated TotalAmount and the 
@@ -220,14 +237,15 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		//	things that are older than NOW()
 		$NOW = date('Y-m-d H:i:s');
 		
-		// Limit to max adds of this many transactions per auth
-		//$limit = 500;		// this is bad, don't do this
+		// Limit to max adds by time per auth
+		$time_limit = 15; 		// 60 *second* limit
+		$time_start = time();	// When we started
 		
 		// Objects that need to be *ADDED* to QuickBooks
 		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
 			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
 		{
-			$mark_as_queued = true;
+			$mark_as_queued = false;
 			$map = $Map->adds($sql_add, $mark_as_queued);
 			
 			//$Driver->log('ADDS: ' . print_r($map, true));
@@ -236,15 +254,29 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			foreach ($map as $action => $list)
 			{
 				//$Driver->log('Now doing: ' . $action . ', ' . print_r($list, true));
-			
+				
+				//$__start = microtime(true);
+				
 				// Go through each ID for each action
+				$counter = 0;
 				foreach ($list as $ID => $priority)
 				{
-					// Queue it up to be added to QuickBooks
+					$counter++;
+					
+					if (time() - $time_start > $time_limit)
+					{
+						//print('HIT LIMIT SO WE\'RE BREAKING OUT OF HERE [' . $action . '] [ ' . $counter . ' of ' . count($list) . ']!' . "\n");
+						break 2;
+					}
+										// Queue it up to be added to QuickBooks
 					$Driver->queueEnqueue($user, $action, $ID, true, $priority);
 				}
+				
+				//print('now ' . $action . ' [' . (microtime(true) - $__start) . ']' . "\n");
 			}
 		}
+		
+		//print('3 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
 		
 		// Objects that need to be *MODIFIED* within QuickBooks
 		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
@@ -310,6 +342,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			}
 		}		
 		
+		//print('4 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
+		
 		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
 			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
 		{
@@ -365,6 +399,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			}
 		}
 		
+		//print('5 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
+		
 		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
 			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
 		{
@@ -417,6 +453,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			}
 		}
 		
+		//print('6 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
+		
 		/*
 		// This makes sure that timestamps are set up for every action we're doing (fixes a bug where timestamps never get recorded on initial sync without iterator)
 		foreach ($actions as $action)
@@ -445,6 +483,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		}
 		*/
 		
+		//print("\n\n" . 'here [ ' . (microtime(true) - $_start) . ']' . "\n\n\n");
+		
 		return true;
 	}
 	
@@ -458,9 +498,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 */
 	static protected function _filterActions($action_to_priority, $only_do, $dont_do, $type)
 	{
+		$start = microtime(true);
 		foreach ($action_to_priority as $action => $priority)
 		{
+			//print('stepping 1... [' . (microtime(true) - $start) . ']' . "\n");
 			$converted = QuickBooks_Utilities::actionToObject($action);
+			//print('stepping 2... [' . (microtime(true) - $start) . ']' . "\n");
 			
 			if (count($only_do) and
 				(false === array_search($action, $only_do) and 
@@ -476,6 +519,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				unset($action_to_priority[$action]);
 			}
 		}
+		//print("\n" . 'ending... [' . (microtime(true) - $start) . ']' . "\n\n");
+		
+		arsort($action_to_priority);
+		
+		//print_r($action_to_priority);
 		
 		return $action_to_priority;
 	}

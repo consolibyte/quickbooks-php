@@ -699,6 +699,15 @@ class QuickBooks_Utilities
 	 */
 	static public function listObjects($filter = null, $return_keys = false, $order_for_mapping = false)
 	{
+		static $cache = array();
+		
+		$crunch = $filter . '[' . $return_keys . '[' . $order_for_mapping;
+		
+		if (isset($cache[$crunch]))
+		{
+			return $cache[$crunch];
+		}
+		
 		$constants = array();
 			
 		foreach (get_defined_constants() as $constant => $value)
@@ -737,6 +746,8 @@ class QuickBooks_Utilities
 			sort($constants);
 		}
 			
+		$cache[$crunch] = $constants;
+			
 		return $constants;
 	}
 		
@@ -748,12 +759,22 @@ class QuickBooks_Utilities
 	 */
 	static public function actionToObject($action)
 	{
+		static $cache = array();
+		
+		if (isset($cache[$action]))
+		{
+			//print('returning cached [' . $action . ']' . "\n");
+			return $cache[$action];
+		}
+		
 		$types = QuickBooks_Utilities::listObjects(null, false, true);
 		
 		foreach ($types as $type)
 		{
 			if (QuickBooks_Utilities::fnmatch('*' . $type . '*', $action))
 			{
+				$cache[$action] = $type;
+				//print('returning [' . $action . '] => ' . $type . "\n");
 				return $type;
 			}
 		}
@@ -835,6 +856,9 @@ class QuickBooks_Utilities
 			
 			QUICKBOOKS_MOD_SERVICEITEM, 
 			QUICKBOOKS_ADD_SERVICEITEM, 
+			
+			QUICKBOOKS_MOD_PAYMENTITEM, 
+			QUICKBOOKS_ADD_PAYMENTITEM, 
 			
 			QUICKBOOKS_MOD_SALESREP, 
 			QUICKBOOKS_ADD_SALESREP, 
