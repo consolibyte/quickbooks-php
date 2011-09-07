@@ -43,6 +43,22 @@ $Customer->setGivenName('Keith');
 // Set the last name
 $Customer->setFamilyName('Palmer');
 
+// Create the address
+$Address = new QuickBooks_IPP_Object_Address();
+$Address->setLine1('56 Cowles Road');
+$Address->setCity('Willington');
+$Address->setCountrySubDivisionCode('CT');
+$Address->setPostalCode('06279');
+$Address->setTag('Billing');
+
+// Add the address to the customer
+$Customer->addAddress($Address);
+
+/*
+print_r($Customer->asIDSXML());
+exit;
+*/
+
 // Now, let's add the customer to QuickBooks
 if ($ID = $Service->add($Context, $realmID, $Customer))
 {

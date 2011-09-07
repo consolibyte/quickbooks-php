@@ -50,7 +50,7 @@ $realmID = 173642438;
 // 
 $IPP = new QuickBooks_IPP();
 $Context = $IPP->authenticate($username, $password, $token);
-$IPP->application($Context, 'be9mh7qd5');
+$IPP->application('be9mh7qd5');
 
 // Create a new Customer Service for IDS access
 $CustomerService = new QuickBooks_IPP_Service_Customer();

@@ -70,6 +70,10 @@ class QuickBooks_IPP
 	
 	const API_ASSERTFEDERATEDIDENTITY = 'API_AssertFederatedIdentity';
 	
+	const API_GETENTITLEMENTVALUES = 'API_GetEntitlementValues';
+	
+	const API_GETENTITLEMENTVALUESANDUSERROLE = 'API_GetEntitlementValuesAndUserRole';
+	
 	/**
 	 * 
 	 * @var unknown_type
@@ -534,14 +538,40 @@ class QuickBooks_IPP
 		return $response;
 	}
 	
+	public function getEntitlementValues($Context)
+	{
+		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$action = QuickBooks_IPP::API_GETENTITLEMENTVALUES;
+		
+		$xml = '<qdbapi>
+			<ticket>' . $Context->ticket() . '</ticket>
+			<apptoken>' . $Context->token() . '</apptoken>
+			</qdbapi>';
+			
+		return $this->_IPP($Context, $url, $action, $xml);
+	}
+	
+	public function getEntitlementValuesAndUserRole($Context)
+	{
+		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$action = QuickBooks_IPP::API_GETENTITLEMENTVALUESANDUSERROLE;
+		
+		$xml = '<qdbapi>
+			<ticket>' . $Context->ticket() . '</ticket>
+			<apptoken>' . $Context->token() . '</apptoken>
+			</qdbapi>';
+			
+		return $this->_IPP($Context, $url, $action, $xml);
+	}
+	
 	public function provisionUser($Context, $email, $fname, $lname, $roleid = null, $udata = null)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_application;
 		$action = 'API_ProvisionUser';
 		
 		$xml = '<qdbapi>
-				<ticket>' . $Context->ticket() . '</ticket>
-				<apptoken>' . $Context->token() . '</apptoken>';
+					<ticket>' . $Context->ticket() . '</ticket>
+					<apptoken>' . $Context->token() . '</apptoken>';
 		
 		if ($roleid)
 		{

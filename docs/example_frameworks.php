@@ -19,7 +19,7 @@ require_once 'QuickBooks/Frameworks.php';
 // Include *just* stuff we need to queue actions up
 define('QUICKBOOKS_FRAMEWORKS', QUICKBOOKS_FRAMEWORK_QUEUE);
 
-require_once 'Quickbooks.php';
+require_once 'QuickBooks.php';
 
 print('TIME: ' . (microtime(true) - $start) . "\n\n");
 

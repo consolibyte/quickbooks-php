@@ -8365,6 +8365,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					'invoice' => 'Customer_ListID',
 					'receivepayment' => 'Customer_ListID', 
 					'purchaseorder' => 'ShipToEntity_ListID', 
+					'salesreceipt' => 'Customer_ListID', 
 					)
 				),
 					/*						

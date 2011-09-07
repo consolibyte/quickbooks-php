@@ -56,6 +56,10 @@ class QuickBooks_IPP_Parser
 					return $this->_parseIPPGetUserInfo($Root);
 				case QuickBooks_IPP::API_GETUSERROLE:
 					return $this->_parseIPPGetUserRole($Root);
+				case QuickBooks_IPP::API_GETENTITLEMENTVALUES:
+					return $this->_parseIPPGetEntitlementValues($Root);
+				case QuickBooks_IPP::API_GETENTITLEMENTVALUESANDUSERROLE:
+					return $this->_parseIPPGetEntitlementValuesAndUserRole($Root);
 				case QuickBooks_IPP::API_GETDBINFO:
 					return $this->_parseIPP_HashMap($Root);
 				case QuickBooks_IPP::API_GETDBVAR:
@@ -93,6 +97,78 @@ class QuickBooks_IPP_Parser
 		}
 		
 		return $info;
+	}
+	
+	protected function _parseIPPGetEntitlementValuesAndUserRole($Root)
+	{
+		// Parse out the metadata and entitlements
+		$retr = $this->_parseIPPGetEntitlementValues($Root);
+		
+		$User = $Root->getChildAt('qdbapi/user');
+		
+		$retr[0]['userId'] = $User->getAttribute('id');
+		$retr[0]['userName'] = $User->getChildDataAt('user/name');
+		
+		// Now append to that the user roles
+		$Roles = $Root->getChildAt('qdbapi/user/roles');
+		
+		$list = array();
+		foreach ($Roles->children() as $Node)
+		{
+			$Node2 = $Node->getChildAt('role/access');
+			
+			$list[] = new QuickBooks_IPP_Role(
+				$Node->getAttribute('id'), 
+				$Node->getChildDataAt('role/name'), 
+				$Node2->getAttribute('id'), 
+				$Node2->data()
+				);
+		}
+		
+		$retr[] = $list;
+		
+		return $retr;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * IMPORTANT NOTE:
+	 * 	This code is re-used by GetEntitlementValuesAndUserRole(), so make sure 
+	 * 	that if you change this code, you don't break anything in that method.
+	 * 
+	 * @param object $Root
+	 * @return array
+	 */
+	protected function _parseIPPGetEntitlementValues($Root)
+	{
+		$metadata = array();
+		foreach ($Root->children() as $Node)
+		{
+			if (!$Node->hasChildren())
+			{
+				$metadata[$Node->name()] = $Node->data();
+			}
+		}
+		
+		$list = array();
+		$Entitlements = $Root->getChildAt('qdbapi/entitlements');
+		foreach ($Entitlements->children() as $Node)
+		{
+			$Node2 = $Node->getChildAt('entitlement/term');
+			
+			$list[] = new QuickBooks_IPP_Entitlement(
+				$Node->getAttribute('id'), 
+				$Node->getChildDataAt('entitlement/name'), 
+				$Node2->getAttribute('id'), 
+				$Node2->data()
+				);
+		}
+		
+		return array(
+			0 => $metadata, 
+			1 => $list, 
+			);
 	}
 	
 	protected function _parseIPPGetUserInfo($Root)
