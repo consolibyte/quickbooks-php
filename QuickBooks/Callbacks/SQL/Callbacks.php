@@ -9383,55 +9383,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				//print_r($map);
 				//exit;
 				
-				/*
-				// This is a list of "Boolean" fields in QuickBooks
-				//	QuickBooks sends us boolean value as the strings "true" and 
-				//	"false", so we need to convert them to 1 and 0 so that we 
-				//	can store this in an INT field in the database (not all 
-				//	databases support a BOOLEAN type)
-				$qb_to_sql_booleans = array(
-					'EmployeePayrollInfo_IsUsingTimeDataToCreatePaychecks',
-					'EmployeePayrollInfo_ClearEarnings',
-					'EmployeePayrollInfo_SickHours_IsResettingHoursEachNewYear',
-					'EmployeePayrollInfo_VacationHours_IsResettingHoursEachNewYear',
-					'IsAdjustment',
-					'IsActive',
-					'IsBillable',
-					'IsBilled',
-					'IsClosed',
-					'IsFinanceCharge',
-					'IsFullyInvoiced',
-					'IsFullyReceived',
-					'IsManuallyClosed',
-					'IsPaid',
-					'IsPending',
-					'IsPrintItemsInGroup',
-					'IsToBeEmailed',
-					'IsToBePrinted',
-					'IsSampleCompany',
-					'IsTaxable',
-					'IsVendorEligibleFor1099'
-					);
-				
-				// Cast QuickBooks booleans (strings, "true" and "false") to database booleans (tinyint 1 and 0)	
-				foreach ($qb_to_sql_booleans as $qb_field_boolean)
-				{
-					$qb_bool = $object->get($qb_field_boolean, false);
-					
-					if ($qb_bool !== false)
-					{
-						if ($qb_bool == 'true')
-						{
-							$object->set($qb_field_boolean, 1);
-						}
-						else
-						{
-							$object->set($qb_field_boolean, 0);
-						}
-					}
-				}
-				*/
-				
 				// 
 				if ($table and 
 					count($map) and 
@@ -9496,93 +9447,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							$extra['temporary_TxnID_or_ListID_or_LineID'] = $tmp['TxnLineID'];
 						}
 						
-						/*
-						if ((isset($extra['IsAddResponse']) or isset($extra['is_add_response'])) and 
-							stripos($action, 'dataext') === false)
-						{
-							// DATAEXT custom field handling
-							// 	Handling data extensions here... 
-							
-							$tmpSQLObject = new QuickBooks_SQL_Object("dataext", null);
-							$tempMulti = array();
-							if(Quickbooks_Utilities::keyForAction($action) == "ListID")
-							{
-								$tmpSQLObject->set('Entity_ListID', $object->get("ListID"));
-								$tempMulti["Entity_ListID"] = $extra['AddResponse_OldKey'];
-								$wField = "Entity_ListID";
-								$wValue = $object->get("ListID");
-							}
-							else
-							{
-								$tmpSQLObject->set('Txn_TxnID', $object->get("TxnID"));
-								$tempMulti["Txn_TxnID"] = $extra['AddResponse_OldKey'];
-								$wField = "Txn_TxnID";
-								$wValue = $object->get("TxnID");
-								if($object->get("TxnID") == null)
-								{
-									$tmpSQLObject->set('Txn_TxnID', $object->get("TxnLineID"));
-									$wValue = $object->get("TxnLineID");
-								}
-							}
-							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "dataext", $tmpSQLObject, array( $tempMulti ) );
-							
-							$sql = "
-									SELECT 
-										" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . "
-									FROM 
-										" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "dataext" . " 
-									WHERE 
-										 " . $wField . " = '" . $Driver->escape($wValue) ."'" ;
-								
-							$errnum = 0;
-							$errmsg = '';
-							$tRes = $Driver->query($sql, $errnum, $errmsg);
-							while ($tArr = $Driver->fetch($tRes))
-							{
-								$Driver->queueEnqueue($user, QUICKBOOKS_ADD_DATAEXT, $tArr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY, array());
-							}
-									
-						}
-						else if ((isset($extra['IsModResponse']) or isset($extra['is_mod_response']))  and 
-							stripos($action, "dataext") === false)
-						{
-							// *MORE* DATAEXT custom field stuff
-							// I'mt not sure this actually is DataExt related... 
-							
-							if (Quickbooks_Utilities::keyForAction($action) == "ListID")
-							{
-								$wField = "Entity_ListID";
-								$wValue = $object->get("ListID");
-							}
-							else
-							{
-								$wField = "Txn_TxnID";
-								$wValue = $object->get("TxnID");
-								
-								if ($object->get("TxnID") == null)
-								{
-									$wValue = $object->get("TxnLineID");
-								}
-							}
-							
-							$sql = "
-									SELECT 
-										" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . "
-									FROM 
-										" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "dataext" . " 
-									WHERE 
-										 " . $wField . " = '" . $Driver->escape($wValue) ."'" ;
-								
-							$errnum = 0;
-							$errmsg = '';
-							$tRes = $Driver->query($sql, $errnum, $errmsg);
-							while ($tArr = $Driver->fetch($tRes))
-							{
-								$Driver->queueEnqueue($user, QUICKBOOKS_MOD_DATAEXT, $tArr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY, array());
-							}
-						}
-						*/
-						
 						// Make sure a conflict mode has been selected
 						if (empty($callback_config['conflicts']))
 						{
@@ -9624,49 +9488,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 									trigger_error($msg);
 									die($msg);
 								
-									/*
-									
-									This code needs to be looked over and fixed:
-									 - Needs to use the $actually_do_update stuff
-									 - Needs to not depend on those deprecated QBTimeToSQLTime functions which are MySQL dependent
-									 - Needs to be documented
-										
-									if (QuickBooks_Utilities::compareQBTimeToSQLTime($object->get('TimeModified'), $tmp->get(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY)) >= 0 and 
-										$callback_config['mode'] != QUICKBOOKS_SERVER_SQL_MODE_WRITEONLY)
-									{
-										//mail("grgisme@gmail.com", "April 10TM", "QB Was Newer or Equal\n\n"."QB: ".$object->get('TimeModified')."\n\nSQL: ".$tmp->get(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY));
-										QuickBooks_Callbacks_SQL_Callbacks::_DeleteChildren($table, $user, $action, $ID, $object, $extra);
-										$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
-										
-										//$actually_do_update = true;
-										//$actually_do_deletechildren = true;
-										
-									}
-									else if (QuickBooks_Utilities::compareQBTimeToSQLTime($object->get('TimeModified'), $tmp->get(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY)) < 0)
-									{
-										//mail("grgisme@gmail.com", "April 10TM", "SQL Was Newer\n\n"."QB: ".$object->get('TimeModified')."\n\nSQL: ".$tmp->get(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY));
-										//Updates the EditSequence without marking the row as resynced.
-										$tmpSQLObject = new QuickBooks_SQL_Object($table, null);
-										$tmpSQLObject->set('EditSequence', $object->get('EditSequence'));
-										//mail("grgisme@gmail.com", "April10 ES", $object->name());
-										$tempmap = '';
-										$tempothers = array();
-										QuickBooks_SQL_Schema::mapToSchema($table . ".*", QUICKBOOKS_SQL_SCHEMA_MAP_TO_XML, $tempmap, $tempothers);
-										$tempmap = str_replace(" *", "", $tempmap);
-										$tempmap = str_replace("Ret", "Mod", $tempmap);
-										
-										$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $tmpSQLObject, array( $multipart ), false);
-										$Driver->queueEnqueue($user, $tempmap, $tmp->get(QUICKBOOKS_DRIVER_SQL_FIELD_ID), true, QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY, $extra);
-									}
-									else
-									{
-										//Trash it, set synced.
-										$tmpSQLObject = new QuickBooks_SQL_Object($table, null);
-										$tmpSQLObject->set(QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE, "Read/Write Mode is WRITEONLY, and Conflict Mode is NEWER, and Quickbooks has Newer data, so no Update Occured.");
-										$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $tmpSQLObject, array( $multipart ));
-									}
-									
-									break;*/
 								case QuickBooks_Server_SQL::CONFLICT_QUICKBOOKS:
 									
 									// QuickBooks is master, so remove all existing child records of this record, then apply the QuickBooks version update
@@ -9723,28 +9544,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 									break;
 							}
 						}
-						
-						/*
-						else if (isset($extra['IsAddResponse']))
-						{
-							// If this is set, it means we just added something 
-							//	to QuickBooks, and now we need to record the 
-							//	ListID and EditSequence provided to us by QuickBooks
-							
-							$actually_do_update = true;
-							$actually_do_updaterelatives = true;
-							$actually_do_deletechildren = true;
-						}
-						*/
-						
-						/*else if (!isset($callback_config['conflicts']) or $callback_config['mode'] != QUICKBOOKS_SERVER_SQL_MODE_WRITEONLY)
-						{
-							// No conflicts have occurred, let's update the record in the SQL table
-							QuickBooks_Callbacks_SQL_Callbacks::_DeleteChildren($table, $user, $action, $ID, $object, $extra);
-							QuickBooks_Callbacks_SQL_Callbacks::_UpdateRelatives($table, $user, $action, $ID, $object, $extra);
-							$Driver->log('Applying UPDATE: ' . $table . ': ' . print_r($object) . ', where: ' . print_r($multipart), null, QUICKBOOKS_LOG_DEVELOP);
-							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
-						}*/
 						
 						//print_r($object);
 						//print_r($tmp);
@@ -9805,6 +9604,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							
 							//print('applying updates, and with these deletes: ');
 							//print_r($deleted);
+							
+							$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY, date('Y-m-d H:i:s'));
 							
 							//$Driver->log('Applying UPDATE: ' . $table . ': ' . print_r($object, true) . ', where: ' . print_r($multipart, true), null, QUICKBOOKS_LOG_DEVELOP);
 							$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
@@ -9932,6 +9733,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							//print_r($object);
 							
 							//$Driver->log('Applying INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
+							
+							$object->set(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY, date('Y-m-d H:i:s'));
+							
 							$Driver->insert(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object);
 							$last = $Driver->last();
 							
