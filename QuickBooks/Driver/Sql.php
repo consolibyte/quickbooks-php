@@ -475,7 +475,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONFIGTABLE) . "
 				SET
 					cfgval = '" . $this->_escape($value) . "', 
-					mod_datetime = NOW()
+					mod_datetime = '" . date('Y-m-d H:i:s') . "'
 				WHERE
 					quickbooks_config_id = " . $arr['quickbooks_config_id'], $errnum, $errmsg);
 		}
@@ -500,8 +500,8 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 					'" . $this->_escape($value) . "', 
 					'" . $this->_escape($type) . "', 
 					'" . $this->_escape(serialize($opts)) . "', 
-					NOW(), 
-					NOW()
+					'" . date('Y-m-d H:i:s') . "', 
+					'" . date('Y-m-d H:i:s') . "'
 				) ", $errnum, $errmsg);
 		}
 	}
@@ -3466,7 +3466,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		if ($resync)
 		{
-			$sql .= ", " . QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC . " = NOW() ";
+			$sql .= ", " . QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC . " = '" . date('Y-m-d H:i:s') . "' ";
 		}
 		
 		$sql .= " WHERE " . implode(' AND ', $wheres);
@@ -3606,7 +3606,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		if ($discov_and_resync)
 		{
-			$sql .= ", NOW(), NOW() ";
+			$sql .= ", '" . date('Y-m-d H:i:s') . "', '" . date('Y-m-d H:i:s') . "' ";
 		}
 		
 		$sql .= " ); ";
