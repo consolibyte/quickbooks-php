@@ -1495,6 +1495,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						$arr = array(
 							'ListID' => $Node->getChildDataAt($xpath . ' ListID'), 
 							'FullName' => $Node->getChildDataAt($xpath . ' FullName'), 
+							'Parent_ListID' => $Node->getChildDataAt($xpath . ' ParentRef ListID'), 
 							'Parent_FullName' => $Node->getChildDataAt($xpath . ' ParentRef FullName'), 
 							'IsActive' => (int) ($Node->getChildDataAt($xpath . ' IsActive') == 'true'), 
 							'EditSequence' => $Node->getChildDataAt($xpath . ' EditSequence'), 
@@ -1524,6 +1525,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					
 					$arr = array(
 						'ListID' => $Node->getChildDataAt('CustomerRet ListID'), 
+						'FullName' => $Node->getChildDataAt('CustomerRet FullName'), 
+						'Parent_ListID' => $Node->getChildDataAt('CustomerRet ParentRef ListID'), 
+						'Parent_FullName' => $Node->getChildDataAt('CustomerRet ParentRef FullName'), 
 						'IsActive' => (int) ($Node->getChildDataAt('CustomerRet IsActive') == 'true'), 
 						'EditSequence' => $Node->getChildDataAt('CustomerRet EditSequence'), 
 						'Balance' => $Node->getChildDataAt('CustomerRet Balance'),
@@ -1541,6 +1545,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						false, 		// Don't update the discov time
 						true);		// Do mark it as re-derived
 					
+					/*
 					// @todo Only do this if the customer actually needs to be modified 
 					// Now, make a request to *modify* the customer 
 					$priority = 9998;		// @todo this probably isn't a good choice of priorities
@@ -1550,6 +1555,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						$ID, 
 						true, 
 						$priority);
+					*/
 					
 					/*
 					if (!empty($extra['ListID']))
@@ -1603,6 +1609,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						false, 		// Don't update the discov time
 						true);		// Do mark it as re-derived
 					
+					/*
 					// @todo Only do this if the invoice actually needs to be modified 
 					// Now, make a request to *modify* the customer 
 					$priority = 9998;		// @todo this probably isn't a good choice of priorities
@@ -1632,16 +1639,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "invoice_invoiceline
 						SET
 							Invoice_TxnID = '%s' WHERE Invoice_TxnID = '%s' ", $errnum, $errmsg, null, null, array( $arr['TxnID'], $existing['TxnID'] ));
-					
-					/*
-					if (!empty($extra['TxnID']))
-					{
-						// Update the database
-						$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', $arr, array( $extra ), 
-							false, 		// Don't mark as re-synced
-							false, 		// Don't update the discov time
-							true);		// Do mark it as re-derived
-					}
 					*/
 					
 					break;
