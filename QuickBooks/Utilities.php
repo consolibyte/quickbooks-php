@@ -952,15 +952,20 @@ class QuickBooks_Utilities
 			QUICKBOOKS_QUERY_COMPANY, 
 			
 			
+			QUICKBOOKS_IMPORT_RECEIVEPAYMENT, 
 			
 			
 			QUICKBOOKS_IMPORT_PURCHASEORDER,
 			QUICKBOOKS_IMPORT_ITEMRECEIPT,
-			QUICKBOOKS_IMPORT_SALESORDER, 
 			QUICKBOOKS_IMPORT_SALESRECEIPT, 
+			
+			// The ESTIMATE, then INVOICE, then SALES ORDER order is important, 
+			//	because we might have events which depend on the estimate being present 
+			//	when the invoice is imported, or the sales order being present when 
+			//	then invoice is imported, etc. 
 			QUICKBOOKS_IMPORT_INVOICE,
+			QUICKBOOKS_IMPORT_SALESORDER, 
 			QUICKBOOKS_IMPORT_ESTIMATE, 
-			QUICKBOOKS_IMPORT_RECEIVEPAYMENT, 
 			
 			QUICKBOOKS_IMPORT_BILLPAYMENTCHECK, 
 			QUICKBOOKS_IMPORT_BILLPAYMENTCREDITCARD, 
