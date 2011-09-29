@@ -43,7 +43,7 @@
 // For debugging... 
 //require_once '/Users/kpalmer/Projects/QuickBooks/QuickBooks.php';
 //require_once '/Users/kpalmer/Sites/saas/library/quickbooks/QuickBooks.php';
-//require_once '/home/playscape/www/html/saas/library/quickbooks/QuickBooks.php';
+//require_once '/home/playscape/www/html/QuickBooks/QuickBooks.php';
 
 /**
  * Mapper for qbXML schema
@@ -678,7 +678,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	/**
 	 * Handle an inventory stock status report from QuickBooks
 	 */
-	public static function InventoryLevelsResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array())
+	public static function InventoryLevelsResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = array())
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 		
@@ -810,6 +810,25 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				
 				//$Driver->log($sql2, null, QUICKBOOKS_LOG_DEBUG);
 			}
+			
+			$hooks = array();
+			if (isset($callback_config['hooks']))
+			{
+				$hooks = $callback_config['hooks'];
+			}
+			
+			$Driver->log('CALLING THE HOOKS! ' . print_r($hooks, true), null, QUICKBOOKS_LOG_VERBOSE);
+			
+			// Call any hooks that occur when a record is updated 	
+			$hook_data = array(
+				'hook' => QuickBooks_SQL::HOOK_SQL_INVENTORY,
+				'user' => $user,
+				'table' => QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventory',
+				'data' => $item, 
+				);
+								
+			$err = null;
+			QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_SQL_INVENTORY, $requestID, $user, $err, $hook_data, $callback_config);
 		}
 		
 		//print_r($items);

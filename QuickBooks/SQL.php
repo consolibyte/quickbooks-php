@@ -31,6 +31,11 @@ class QuickBooks_SQL
 	const HOOK_SQL_DELETE = 'QuickBooks_SQL sql-delete';
 	
 	/**
+	 * 
+	 */
+	const HOOK_SQL_INVENTORY = 'QuickBooks_SQL sql-inventory';
+	
+	/**
 	 *
 	 */
 	const HOOK_QUICKBOOKS_INSERT = 'QuickBooks_SQL quickbooks-insert';

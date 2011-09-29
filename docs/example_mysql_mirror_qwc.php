@@ -28,7 +28,7 @@ $descrip = 'QuickBooks SQL Mirror - ' . $_SERVER['HTTP_HOST'];		// A description
 //$appsupport = 'https://' . $_SERVER['HTTP_HOST'] . '/store/quickbooks/server.php?support=1'; 		// This *must* be httpS:// and the domain name must match the domain name above
 
 // This *must* be httpS:// (path to your QuickBooks SOAP server)
-$appurl = 'https://' . str_replace('//', '/', $_SERVER['HTTP_HOST'] . '' . dirname($_SERVER['REQUEST_URI']) . '/' . basename($_SERVER['PHP_SELF'], '_qwc.php') . '_server.php');
+$appurl = 'https://' . str_replace('//', '/', $_SERVER['HTTP_HOST'] . '' . dirname($_SERVER['REQUEST_URI']) . '/example_mysql_mirror.php');
 if (false !== strpos($_SERVER['HTTP_HOST'], 'localhost'))
 {
 	$appurl = str_replace('https://', 'http://', $appurl);
@@ -65,5 +65,3 @@ header('Content-type: text/xml');
 header('Content-Disposition: attachment; filename="QuickBooks-SQL-Mirror_' . $_SERVER['HTTP_HOST'] . '.qwc"');
 print($xml);
 exit;
-
-?>
