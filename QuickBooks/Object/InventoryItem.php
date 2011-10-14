@@ -81,6 +81,27 @@ class QuickBooks_Object_InventoryItem extends QuickBooks_Object
 	}	
 	
 	/**
+	 * Set the QuantityOnHand for this item
+	 * 
+	 * @param string $ListID
+	 * @return boolean
+	 */
+	public function setQuantityOnHand($quantity)
+	{
+		return $this->set('QuantityOnHand', (int) $quantity);
+	}
+    
+	/**
+	 * Get the QuantityOnHand for this item
+	 * 
+	 * @return boolean
+	 */
+	public function getQuantityOnHand()
+	{
+		return $this->get('QuantityOnHand');
+	}
+	
+	/**
 	 * Set the description of this item
 	 * 
 	 * @param string $descrip
