@@ -1597,6 +1597,12 @@ class QuickBooks_API
 		return $this->_doAdd(__METHOD__, QUICKBOOKS_ADD_INVENTORYITEM, QUICKBOOKS_OBJECT_INVENTORYITEM, $obj, $callback, $webapp_ID, $priority, $err);
 	}
 
+	public function modifyInventoryItem($obj, $callback = null, $webapp_ID = null, $priority = null)
+    {
+		$err = '';
+		return $this->_doMod(__METHOD__, QUICKBOOKS_MOD_INVENTORYITEM, QUICKBOOKS_OBJECT_INVENTORYITEM, $obj, $callback, $webapp_ID, $priority, $err);
+	}
+	
 	public function addReceiptItem($obj, $callback = null, $webapp_ID = null, $priority = null)
 	{
 		$err = '';

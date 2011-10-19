@@ -779,7 +779,7 @@ class QuickBooks_Handlers
 						else if (false !== strpos($xml, '<' . $request . '>'))
 						{
 							//$xml = str_replace('<' . $request . '>', '<' . $request . ' requestID="' . $this->_constructRequestID($next['qb_action'], $next['ident']) . '">', $xml);
-							str_replace('<' . $request . '>', '<' . $request . ' requestID="' . $next['quickbooks_queue_id'] . '">', $xml);
+							$xml = str_replace('<' . $request . '>', '<' . $request . ' requestID="' . $next['quickbooks_queue_id'] . '">', $xml);
 							break;
 						}
 					}
