@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://myshapeintegration.myshape.com/qbsync/qbwc_myshape.php';
-$username = 'quickbooks1';
-$password = 'g23igao84';
+$url = '';
+$username = '';
+$password = '';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -38,9 +38,9 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-//exit;
+exit;
 
-$max = 3;
+$max = 6;
 for ($i = 0; $i < $max; $i++)
 {
 	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
