@@ -1405,6 +1405,7 @@ class QuickBooks_Handlers
 			//$this->_driver->log(var_export($identifiers, true), $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
 			
 			// Auto-map $ident unique identifier from web application to the QuickBooks ListID or TxnID 
+			/*
 			if ($this->_config['map_application_identifiers'])
 			{
 				$adds = QuickBooks_Utilities::listActions('*Add*');
@@ -1429,6 +1430,7 @@ class QuickBooks_Handlers
 					$this->_driver->identMap($user, $type, $ident, $identifiers[$qbkey], $EditSequence);					
 				}
 			}
+			*/
 			
 			$err = null;
 			//$last_action_time = $this->_driver->queueActionLast($user, $action);

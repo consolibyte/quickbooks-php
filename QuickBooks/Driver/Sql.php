@@ -426,11 +426,21 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 */
 	protected function _ticketResolve($ticket)
 	{
+		static $cache = array();
+		
+		if (!$ticket)
+		{
+			return 0;
+		}
+		
 		$errnum = 0;
 		$errmsg = '';
 		
-		if ($ticket and 
-			$arr = $this->_fetch($this->_query("
+		if (isset($cache[$ticket]))
+		{
+			return $cache[$ticket];
+		}
+		else if ($arr = $this->_fetch($this->_query("
 			SELECT 
 				quickbooks_ticket_id  
 			FROM 
@@ -438,6 +448,8 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			WHERE 
 				ticket = '" . $this->_escape($ticket) . "' ", $errnum, $errmsg)))
 		{
+			$cache[$ticket] = $arr['quickbooks_ticket_id'];
+			
 			return $arr['quickbooks_ticket_id'];
 		}
 		
@@ -559,19 +571,34 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 */
 	protected function _authResolve($ticket)
 	{
-		if ($ticket_id = $this->_ticketResolve($ticket))
+		static $cache = array();
+		
+		if (!$ticket)
+		{
+			return 0;
+		}
+		
+		if (isset($cache[$ticket]))
+		{
+			return $cache[$ticket];
+		}
+		else if ($ticket_id = $this->_ticketResolve($ticket))
 		{
 			$errnum = 0;
 			$errmsg = '';
-			$arr = $this->_fetch($this->_query("
+			
+			if ($arr = $this->_fetch($this->_query("
 				SELECT 
 					qb_username 
 				FROM 
 					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) . " 
 				WHERE 
-					quickbooks_ticket_id = " . $ticket_id, $errnum, $errmsg));
-			
-			return $arr['qb_username'];
+					quickbooks_ticket_id = " . $ticket_id, $errnum, $errmsg)))
+			{
+				$cache[$ticket] = $arr['qb_username'];
+				
+				return $arr['qb_username'];
+			}
 		}
 		
 		return '';
@@ -1994,6 +2021,12 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 */
 	protected function _truncate($table, $max_history)
 	{
+		// Don't do this all the time... 
+		if (mt_rand(0, 10) == 1)
+		{
+			return;
+		}
+		
 		// We only need to run this once per table per HTTP session, so keep track of if we've alrealdy run or not
 		static $runs = array();
 		if (!empty($runs[$table]))
@@ -2045,7 +2078,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			// Truncate the log to the size specified
 			
 			$start = time();
-			$cutoff = 5; 		// 5 seconds max cutoff time to avoid timeouts
+			$cutoff = 3; 		// 3 seconds max cutoff time to avoid timeouts
 			
 			$limit = 100;
 			$list = array();
@@ -2083,7 +2116,8 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	protected function _log($msg, $ticket = null, $log_level = QUICKBOOKS_LOG_NORMAL)
 	{
 		static $batch = 0;
-		if ($batch == 0)
+		if ($batch == 0 and 
+			$log_level == QUICKBOOKS_LOG_DEBUG)			// Don't do batches unless we're in DEBUG mode
 		{
 			// We store a batch ID so that we can tell which logged messages go with which actual separate HTTP request
 			
@@ -2211,6 +2245,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * 
 	 * 
 	 */
+	/*
 	protected function _connectionLoad($user)
 	{
 		$errnum = 0;
@@ -2232,6 +2267,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			WHERE 
 				qb_username = '" . $this->_escape($user) . "' ", $errnum, $errmsg));
 	}
+	*/
 	
 	/**
 	 * 
@@ -2752,6 +2788,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
 		
+		/*
 		$table = $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_IDENTTABLE);
 		$def = array(
 			'quickbooks_ident_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
@@ -2768,6 +2805,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$uniques = array( array( 'qb_username', 'qb_object', 'unique_id' ) );
 		
 		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
+		*/
 		
 		$table = $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONFIGTABLE);
 		$def = array(
@@ -2787,6 +2825,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
 		
+		/*
 		$table = $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE);
 		$def = array(
 			'quickbooks_notify_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
@@ -2806,7 +2845,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$uniques = array(  );
 		
 		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
+		*/
 		
+		/*
 		$table = $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE);
 		$def = array(
 			'quickbooks_connection_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ), 
@@ -2826,287 +2867,12 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$uniques = array(  );
 		
 		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
-
+		*/
+		
 		//header('Content-Type: text/plain');
 		//print_r($arr_sql);
 		//exit;
-		
-		/*
-		// Support for specialized integrator stuff
-		if ($config['quickbooks_integrator_enabled'])
-		{
-			// Sales tax codes
-			$table = 'qb_integrator_salestaxcode';
-			$def = array(
-				'qb_integrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				'IsTaxable' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 				
-				);
-			$primary = 'qb_integrator_id';
-			$keys = array( 'qb_username', 'Name' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
-			
-			// Units of measure
-			$table = 'qb_integrator_unitofmeasureset';
-			$def = array(
-				'qb_integrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				'UnitOfMeasureType' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 16 ), 
-				'BaseUnit_Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'BaseUnit_Abbreviation' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Name_1' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Abbreviation_1' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_ConversionRatio_1' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Name_2' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Abbreviation_2' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_ConversionRatio_2' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Name_3' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Abbreviation_3' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_ConversionRatio_3' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Name_4' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Abbreviation_4' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_ConversionRatio_4' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Name_5' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_Abbreviation_5' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'RelatedUnit_ConversionRatio_5' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_UnitUsedFor_1' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_Unit_1' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_UnitUsedFor_2' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_Unit_2' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_UnitUsedFor_3' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_Unit_3' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_UnitUsedFor_4' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_Unit_4' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_UnitUsedFor_5' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'DefaultUnit_Unit_5' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 				
-				);
-			$primary = 'qb_integrator_id';
-			$keys = array( 'qb_username', 'Name' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
-			
-			// Sales tax
-			$table = 'qb_integrator_itemsalestax';
-			$def = array(
-				'qbintegrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				'ItemDesc' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				'TaxRate' => array( QUICKBOOKS_DRIVER_SQL_DECIMAL, '10,2' ), 
-				'TaxVendor_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'TaxVendor_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				);
-			$primary = 'qbintegrator_id';
-			$keys = array( 'qb_username', 'Name' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
-			
-			// Sales tax GROUPS			
-			$table = 'qb_integrator_itemsalestaxgroup';
-			$def = array(
-				'qbintegrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				'ItemDesc' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				'ItemSalesTax_ListID_1' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'ItemSalesTax_FullName_1' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				'ItemSalesTax_ListID_2' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'ItemSalesTax_FullName_2' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				'ItemSalesTax_ListID_3' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'ItemSalesTax_FullName_3' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				'ItemSalesTax_ListID_4' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'ItemSalesTax_FullName_4' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				'ItemSalesTax_ListID_5' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'ItemSalesTax_FullName_5' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 	
-				);
-			$primary = 'qbintegrator_id';
-			$keys = array( 'qb_username', 'Name' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));			
-			
-			// Items
-			$table = 'qb_integrator_item';
-			$def = array(
-				'qbintegrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'qb_itemtype' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				'Parent_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' ),
-				'Parent_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				'ManufacturerPartNumber' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 31, 'null' ), 
-				'UnitOfMeasureSet_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' ), 
-				'UnitOfMeasureSet_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 				
-				'Account_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' ), 
-				'Account_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				'IncomeAccount_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' ), 
-				'IncomeAccount_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				'COGSAccount_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' ), 
-				'COGSAccount_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				'AssetAccount_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' ), 
-				'AssetAccount_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				'ExpenseAccount_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' ), 
-				'ExpenseAccount_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				'PrefVendor_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' ), 
-				'PrefVendor_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT, 'null' ), 
-				);
-			$primary = 'qbintegrator_id';
-			$keys = array( 'qb_username', 'Name' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
-			
-			// @Todo Change these to constants in QuickBooks/Integrator.php
-			$table = 'qb_integrator_account';
-			$def = array(
-				'qbintegrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				'Parent_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'Parent_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				'AccountType' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'SpecialAccountType' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'AccountNumber' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'CashFlowClassification' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 				
-				);
-			$primary = 'qbintegrator_id';
-			$keys = array( 'qb_username', 'Name', 'AccountType' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
-			
-			$table = 'qb_integrator_paymentmethod';
-			$def = array(
-				'qbintegrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				'PaymentMethodType' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				);
-			$primary = 'qbintegrator_id';
-			$keys = array( 'qb_username', 'Name' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));	
-			
-			$table = 'qb_integrator_shipmethod';
-			$def = array(
-				'qbintegrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				);
-			$primary = 'qbintegrator_id';
-			$keys = array( 'qb_username', 'Name' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));				
-			
-			// CustomerTypes
-			$table = 'qb_integrator_customertype';
-			$def = array(
-				'qbintegrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				'Parent_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'Parent_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				);
-			$primary = 'qbintegrator_id';
-			$keys = array( 'qb_username', 'Name' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
-
-			// Classes
-			$table = 'qb_integrator_class';
-			$def = array(
-				'qbintegrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'TimeCreated' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'TimeModified' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'EditSequence' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ), 
-				'Name' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 100 ), 
-				'FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				'IsActive' => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN ), 
-				'Parent_ListID' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'Parent_FullName' => array( QUICKBOOKS_DRIVER_SQL_TEXT ), 
-				);
-			$primary = 'qbintegrator_id';
-			$keys = array( 'qb_username', 'Name' );
-			$uniques = array( );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
-			
-			// mapping table
-			$table = 'qb_integrator_mapping';
-			$def = array(
-				'qbintegrator_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
-				'qb_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40 ),
-				'map_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
-				'QuickBooks_Name_or_RefNumber' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ), 
-				'Integrator_Name_or_RefNumber' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ),
-				);
-			$primary = 'qbintegrator_id';
-			$keys = array( 'qb_username', 'Integrator_Name_or_RefNumber' );
-			$uniques = array( array( 'qb_username', 'QuickBooks_Name_or_RefNumber', 'Integrator_Name_or_RefNumber' ) );
-			
-			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
-		}
-		*/
-		
+				
 		// Support for mirroring the QuickBooks database in an SQL database
 		if ($config['quickbooks_sql_enabled'])
 		{

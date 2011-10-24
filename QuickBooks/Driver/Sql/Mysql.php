@@ -233,15 +233,15 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	protected function _initialized()
 	{
 		$required = array(
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_IDENTTABLE) => false, 
+			//$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_IDENTTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_USERTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_RECURTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_LOGTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONFIGTABLE) => false, 
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE) => false, 
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE) => false, 
+			//$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE) => false, 
+			//$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE) => false, 
 			);
 		
 		$errnum = 0;
@@ -338,6 +338,29 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 		//print($sql . "\n\n");
 		$res = mysql_query($sql, $this->_conn);
 		//mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( '" . mysql_real_escape_string($sql) . "', NOW() ) ");
+		
+		/*
+		CREATE TABLE quickbooks_debug (
+		  quickbooks_debug_id int(10) unsigned NOT NULL AUTO_INCREMENT,
+		  msg text NOT NULL,
+		  debug_datetime datetime NOT NULL,
+		  PRIMARY KEY (quickbooks_debug_id)
+		) ENGINE=MyISAM
+		*/
+		
+		// Debugging... 
+		mysql_query("
+			INSERT INTO
+				quickbooks_debug
+			(
+				msg, 
+				debug_datetime 
+			)
+			VALUES
+			(
+				'" . $this->_escape($sql) . "', 
+				NOW() 
+			)");
 		
 		if (!$res)
 		{
@@ -575,12 +598,12 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 				return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MYSQL_USERTABLE;
 			case QUICKBOOKS_DRIVER_SQL_CONFIGTABLE:
 				return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MYSQL_CONFIGTABLE;
-			case QUICKBOOKS_DRIVER_SQL_IDENTTABLE:
-				return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MYSQL_IDENTTABLE;
-			case QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE:
-				return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MYSQL_NOTIFYTABLE;
-			case QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE:
-				return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MYSQL_CONNECTIONTABLE;
+			//case QUICKBOOKS_DRIVER_SQL_IDENTTABLE:
+			//	return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MYSQL_IDENTTABLE;
+			//case QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE:
+			//	return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MYSQL_NOTIFYTABLE;
+			//case QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE:
+			//	return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MYSQL_CONNECTIONTABLE;
 			default:
 				return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . $table;
 		}

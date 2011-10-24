@@ -1,8 +1,8 @@
 <?php
 
-$url = '';
-$username = '';
-$password = '';
+$url = 'http://localhost:8888/quickbooks/example_web_connector.php';
+$username = 'quickbooks';
+$password = 'password';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -38,9 +38,9 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-exit;
+//exit;
 
-$max = 6;
+$max = 1;
 for ($i = 0; $i < $max; $i++)
 {
 	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
@@ -52,11 +52,13 @@ for ($i = 0; $i < $max; $i++)
 	print($resp);
 }
 
+//exit;
+
 $requestID = substr($resp, $pos + 16, 1);
 
 print('REUQEST ID IS [' . $requestID . ']' . "\n");
 
-exit;
+//exit;
 
 $response = '<?xml version="1.0" encoding="utf-8"?>
 	<?qbposxml version="3.0"?>
