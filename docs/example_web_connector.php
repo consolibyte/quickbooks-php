@@ -202,8 +202,8 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
 // Logging level
 //$log_level = QUICKBOOKS_LOG_NORMAL;
 //$log_level = QUICKBOOKS_LOG_VERBOSE;
-//$log_level = QUICKBOOKS_LOG_DEBUG;				
-$log_level = QUICKBOOKS_LOG_DEVELOP;		// Use this level until you're sure everything works!!!
+$log_level = QUICKBOOKS_LOG_DEBUG;				
+//$log_level = QUICKBOOKS_LOG_DEVELOP;		// Use this level until you're sure everything works!!!
 
 // What SOAP server you're using 
 //$soapserver = QUICKBOOKS_SOAPSERVER_PHP;			// The PHP SOAP extension, see: www.php.net/soap
