@@ -2113,11 +2113,11 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param integer $log_level
 	 * @return boolean
 	 */
-	protected function _log($msg, $ticket = null, $log_level = QUICKBOOKS_LOG_NORMAL)
+	protected function _log($msg, $ticket = null, $log_level = QUICKBOOKS_LOG_NORMAL, $cur_log_level = null)
 	{
 		static $batch = 0;
-		if ($batch == 0 and 
-			$log_level == QUICKBOOKS_LOG_DEBUG)			// Don't do batches unless we're in DEBUG mode
+		/*
+		if ($batch == 0)		// Batching needs to be revised, *major* performance hit
 		{
 			// We store a batch ID so that we can tell which logged messages go with which actual separate HTTP request
 			
@@ -2131,6 +2131,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			
 			$batch++;
 		}
+		*/
 		
 		// Truncate log and queue tables
 		$this->_truncate(QUICKBOOKS_DRIVER_SQL_LOGTABLE, $this->_max_log_history);

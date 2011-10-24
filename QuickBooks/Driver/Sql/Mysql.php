@@ -349,6 +349,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 		*/
 		
 		// Debugging... 
+		/*
 		mysql_query("
 			INSERT INTO
 				quickbooks_debug
@@ -361,6 +362,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 				'" . $this->_escape($sql) . "', 
 				NOW() 
 			)");
+		*/
 		
 		if (!$res)
 		{

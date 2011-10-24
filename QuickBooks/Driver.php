@@ -1379,12 +1379,14 @@ abstract class QuickBooks_Driver
 	 */
 	final public function log($msg, $ticket = null, $lvl = QUICKBOOKS_LOG_NORMAL)
 	{
+		/*
 		$hookdata = array(
 			'message' => $msg, 
 			'level' => $lvl, 
 			);
 		$err = '';
 		$this->_callHook(QUICKBOOKS_DRIVER_HOOK_LOG, $ticket, $err, $hookdata);
+		*/
 		
 		if (is_null($lvl) or $this->_loglevel >= $lvl)
 		{
