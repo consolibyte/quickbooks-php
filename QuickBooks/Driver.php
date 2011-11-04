@@ -318,6 +318,7 @@ abstract class QuickBooks_Driver
 		}
 	}
 	
+	/*
 	final public function connectionLoad($user)
 	{
 		$hookdata = array(
@@ -340,6 +341,7 @@ abstract class QuickBooks_Driver
 		
 		return $arr;
 	}
+	*/
 	
 	/**
 	 * Set the logging level for the driver class

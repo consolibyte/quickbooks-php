@@ -311,6 +311,8 @@ class QuickBooks_Handlers
 			'allow_remote_addr' => array(), 
 			'deny_remote_addr' => array(), 
 			'convert_unix_newlines' => true, 
+			'deny_concurrent_logins' => true, 
+			'deny_concurrent_timeout' => 60, 
 			'masking' => true, 
 			);
 			
@@ -332,6 +334,8 @@ class QuickBooks_Handlers
 		$config['check_valid_requestid'] = (boolean) $config['check_valid_requestid'];
 		$config['map_application_identifiers'] = (boolean) $config['map_application_identifiers'];
 		$config['convert_unix_newlines'] = (boolean) $config['convert_unix_newlines'];
+		$config['deny_concurrent_logins'] = (boolean) $config['deny_concurrent_logins'];
+		$config['deny_concurrent_timeout'] = (int) max(1, $config['deny_concurrent_timeout']);
 		
 		return $config;
 	}
@@ -472,10 +476,25 @@ class QuickBooks_Handlers
 			return new QuickBooks_Result_Authenticate('', 'nvu', null, null);
 		}
 		
+		// Check for concurrent logins
+		if ($this->_config['deny_concurrent_logins'])
+		{
+			$authlast = $this->_driver->authLast($obj->strUserName);
+			
+			if ($authlast and 
+				time() - strtotime($authlast[1]) < $this->_config['deny_concurrent_timeout'])
+			{
+				$this->_log('Denied concurrent login from: ' . $obj->strUserName, null, QUICKBOOKS_LOG_VERBOSE);
+			
+				return new QuickBooks_Result_Authenticate('', 'nvu', null, null);
+			}
+		}
+		
+		// Custom authentication backends
 		$override_dsn = $this->_config['authenticate_dsn'];
 		$auth = null;
 		
-		if (strlen($override_dsn))		// Custom authentication backends
+		if (strlen($override_dsn))
 		{
 			$parse = QuickBooks_Utilities::parseDSN($override_dsn);
 			$class = 'QuickBooks_Authenticate_' . ucfirst(strtolower($parse['scheme']));

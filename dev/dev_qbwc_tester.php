@@ -1,6 +1,6 @@
 <?php
 
-$url = 'http://localhost:8888/quickbooks/example_web_connector.php';
+$url = 'http://playscape.uglyslug.com/QuickBooks/example_web_connector.php';
 $username = 'quickbooks';
 $password = 'password';
 
@@ -38,10 +38,10 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-//exit;
+exit;
 
-$max = 1;
-for ($i = 0; $i < $max; $i++)
+$max = 15;
+for ($i = 1; $i < $max; $i++)
 {
 	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
 	
@@ -50,9 +50,11 @@ for ($i = 0; $i < $max; $i++)
 	$pos = strpos($resp, 'requestID=&quot;');
 	
 	print($resp);
+	
+	sleep(10);
 }
 
-//exit;
+exit;
 
 $requestID = substr($resp, $pos + 16, 1);
 
@@ -346,11 +348,11 @@ function tester($url, $username_or_ticket, $password, $method, $data = null)
 		curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
 		curl_setopt($curl, CURLOPT_HEADER, true);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
-		curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
-		curl_setopt($curl, CURLOPT_MAXCONNECTS, 1);
+		//curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+		//curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+		//curl_setopt($curl, CURLOPT_MAXCONNECTS, 1);
 		
-		curl_setopt($curl, CURLOPT_USERPWD, 'milo:foofoo');
+		//curl_setopt($curl, CURLOPT_USERPWD, 'milo:foofoo');
 		
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 		
