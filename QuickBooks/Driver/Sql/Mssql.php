@@ -256,15 +256,15 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
 	protected function _initialized()
 	{
 		$required = array(
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_IDENTTABLE) => false, 
+			//$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_IDENTTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_USERTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_RECURTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_LOGTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONFIGTABLE) => false, 
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE) => false, 
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE) => false, 
+			//$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE) => false, 
+			//$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE) => false, 
 			);
 		
 		$errnum = 0;
@@ -436,6 +436,22 @@ select * from (
 		}
 		
 		return 0;
+	}
+	
+	/**
+	 * Rewind the result set
+	 *
+	 * @param resource $res
+	 * @return boolean
+	 */
+	public function rewind($res)
+	{
+		if (mssql_num_rows($res) > 0)
+		{
+			return mssql_data_seek($res, 0);
+		}
+		
+		return true;
 	}
 	
 	/**
