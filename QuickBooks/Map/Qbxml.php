@@ -221,7 +221,10 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						
 				$errnum = 0;
 				$errmsg = '';
-				$res = $Driver->query($sql, $errnum, $errmsg, 0, $limit);
+				//$res = $Driver->query($sql, $errnum, $errmsg, 0, $limit);
+				
+				$count = 0;
+				$res = $Driver->query($sql, $errnum, $errmsg);
 				while ($arr = $Driver->fetch($res))
 				{
 					if (strlen($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER]))
@@ -236,6 +239,8 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 					
 					$list[$action][$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID]] = $priority;
 					
+					$count++;
+					
 					if ($mark_as_queued)
 					{
 						// Make the record as having been ->enqueue()d
@@ -248,6 +253,11 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 								" . QUICKBOOKS_DRIVER_SQL_FIELD_ENQUEUE_TIME . " = '" . date('Y-m-d H:i:s') . "'
 							WHERE 
 								" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . " = " . $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], $errnum, $errmsg);
+					}
+					
+					if ($count >= $limit)
+					{
+						break;
 					}
 				}
 			}
