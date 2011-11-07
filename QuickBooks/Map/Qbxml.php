@@ -255,7 +255,8 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 								" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . " = " . $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], $errnum, $errmsg);
 					}
 					
-					if ($count >= $limit)
+					if ($limit > 0 and 
+						$count >= $limit)
 					{
 						break;
 					}

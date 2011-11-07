@@ -42,6 +42,6 @@ if ($_POST['customer'])
 	$queue = new QuickBooks_Queue('mysql://root:password@localhost/my_database');
 	
 	// Queue it up!
-	$queue->enqueue('CustomerAdd', $id_value);
+	$queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $id_value);
 }
 
