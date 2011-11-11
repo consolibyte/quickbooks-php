@@ -178,19 +178,21 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 		
 		$list = array();
 		
+		$Driver->log('Input is: ' . print_r($adds, true));
+		
 		// Check if any objects need to be pushed back to QuickBooks 
 		foreach ($sql_add as $action => $priority)
 		{
 			$object = QuickBooks_Utilities::actionToObject($action);
 			
-			//$Driver->log('Action is: ' . $action . ', object is: ' . $object);
+			$Driver->log('Action is: ' . $action . ', object is: ' . $object);
 			
 			$table_and_field = array();
 			
 			// Convert to table and primary key, select qbsql id
 			QuickBooks_SQL_Schema::mapPrimaryKey($object, QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $table_and_field);  
 			
-			$Driver->log('Searching table: ' . print_r($table_and_field, true) . ' for ADDED records.', null, QUICKBOOKS_LOG_DEBUG);
+			$Driver->log('Searching table: ' . print_r($table_and_field, true) . ' for ADDED records.');
 			
 			//print_r($table_and_field);
 			
@@ -221,10 +223,10 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						
 				$errnum = 0;
 				$errmsg = '';
-				//$res = $Driver->query($sql, $errnum, $errmsg, 0, $limit);
 				
 				$count = 0;
 				$res = $Driver->query($sql, $errnum, $errmsg);
+
 				while ($arr = $Driver->fetch($res))
 				{
 					if (strlen($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER]))
@@ -253,6 +255,11 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 								" . QUICKBOOKS_DRIVER_SQL_FIELD_ENQUEUE_TIME . " = '" . date('Y-m-d H:i:s') . "'
 							WHERE 
 								" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . " = " . $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], $errnum, $errmsg);
+					}
+					
+					if (count($list[$action]) >= $limit)
+					{
+						break;
 					}
 					
 					if ($limit > 0 and 
