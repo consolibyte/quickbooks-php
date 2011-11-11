@@ -197,6 +197,10 @@
 <FullName >STRTYPE</FullName> <!-- optional -->
 </ClassRef>
 <Amount >AMTTYPE</Amount> <!-- optional -->
+<InventorySiteRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</InventorySiteRef>
 <SalesTaxCodeRef> <!-- optional -->
 <ListID >IDTYPE</ListID> <!-- optional -->
 <FullName >STRTYPE</FullName> <!-- optional -->

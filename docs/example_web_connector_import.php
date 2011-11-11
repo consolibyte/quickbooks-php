@@ -574,36 +574,6 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 				) VALUES (
 					'" . implode("', '", array_values($arr)) . "'
 				)") or die(trigger_error(mysql_error()));
-			
-			// Stuff some information in WHMCS
-			$WHMCS = new _QuickBooks_Custom_WHMCS(
-				'http://www.prolificcommunications.com/Shop/includes/api.php', 
-				'keith', 
-				'keith');
-				
-			$whmcs = array(
-				'firstname' => $Customer->getChildDataAt('CustomerRet FirstName'), 
-				'lastname' => $Customer->getChildDataAt('CustomerRet LastName'), 
-				'companyname' => $Customer->getChildDataAt('CustomerRet CompanyName'), 
-				'email' => $Customer->getChildDataAt('CustomerRet Email'), 
-				'address1' => $Customer->getChildDataAt('CustomerRet BillAddress Addr1'), 
-				'address2' => $Customer->getChildDataAt('CustomerRet BillAddress Addr2'), 
-				'city' => $Customer->getChildDataAt('CustomerRet BillAddress City'), 
-				'state' => $Customer->getChildDataAt('CustomerRet BillAddress State'), 
-				'postcode' => $Customer->getChildDataAt('CustomerRet BillAddress PostalCode'), 
-				'country' => $Customer->getChildDataAt('CustomerRet BillAddress Country'), 
-				'phonenumber' => $Customer->getChildDataAt('CustomerRet Phone'), 
-				'password2' => 'asdg1234',
-				'currency' => '1', 
-				);
-			
-			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Adding customer to WHMCS: ' . print_r($whmcs, true));
-				
-			$WHMCS->addCustomer($whmcs);
-			
-			$response = $WHMCS->getLastResponse();
-			
-			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Got WHMCS response: ' . $response);	
 		}
 	}
 	

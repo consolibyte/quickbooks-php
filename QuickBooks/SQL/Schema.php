@@ -1147,7 +1147,9 @@ class QuickBooks_SQL_Schema
 			'EstimateRet EstimateLineRet OverrideUOMSetRef' => 			array( null, null ), 
 			'EstimateRet EstimateLineRet OverrideUOMSetRef *' => 		array( 'Estimate_EstimateLine', 'OverrideUOMSet_*' ), 
 			'EstimateRet EstimateLineRet ClassRef' => 					array( null, null ), 
-			'EstimateRet EstimateLineRet ClassRef *' => 				array( 'Estimate_EstimateLine', 'Class_*' ), 
+			'EstimateRet EstimateLineRet ClassRef *' => 				array( 'Estimate_EstimateLine', 'Class_*' ),
+			'EstimateRet EstimateLineRet InventorySiteRef' => 			array( null, null ), 
+			'EstimateRet EstimateLineRet InventorySiteRef *' => 		array( 'Estimate_EstimateLine', 'InventorySite_*' ), 
 			'EstimateRet EstimateLineRet SalesTaxCodeRef' => 			array( null, null ), 
 			'EstimateRet EstimateLineRet SalesTaxCodeRef *' => 			array( 'Estimate_EstimateLine', 'SalesTaxCode_*' ), 
 			
@@ -1250,6 +1252,8 @@ class QuickBooks_SQL_Schema
 			'InvoiceRet InvoiceLineRet OverrideUOMSetRef *' => 		array( 'Invoice_InvoiceLine', 'OverrideUOMSet_*' ), 
 			'InvoiceRet InvoiceLineRet ClassRef' => 				array( null, null ), 
 			'InvoiceRet InvoiceLineRet ClassRef *' => 				array( 'Invoice_InvoiceLine', 'Class_*' ), 
+			'InvoiceRet InvoiceLineRet InventorySiteRef' => 		array( null, null ), 
+			'InvoiceRet InvoiceLineRet InventorySiteRef *' => 		array( 'Invoice_InvoiceLine', 'InventorySite_*' ), 
 			'InvoiceRet InvoiceLineRet SalesTaxCodeRef' => 			array( null, null ), 
 			'InvoiceRet InvoiceLineRet SalesTaxCodeRef *' => 		array( 'Invoice_InvoiceLine', 'SalesTaxCode_*' ), 
 			
@@ -1715,6 +1719,8 @@ class QuickBooks_SQL_Schema
 			'SalesOrderRet SalesOrderLineRet OverrideUOMSetRef *' => 		array( 'SalesOrder_SalesOrderLine', 'OverrideUOMSet_*' ), 
 			'SalesOrderRet SalesOrderLineRet ClassRef' => 					array( null, null ), 
 			'SalesOrderRet SalesOrderLineRet ClassRef *' => 				array( 'SalesOrder_SalesOrderLine', 'Class_*' ), 
+			'SalesOrderRet SalesOrderLineRet InventorySiteRef' => 			array( null, null ), 
+			'SalesOrderRet SalesOrderLineRet InventorySiteRef *' => 		array( 'SalesOrder_SalesOrderLine', 'InventorySite_*' ), 
 			'SalesOrderRet SalesOrderLineRet SalesTaxCodeRef' => 			array( null, null ), 
 			'SalesOrderRet SalesOrderLineRet SalesTaxCodeRef *' => 			array( 'SalesOrder_SalesOrderLine', 'SalesTaxCode_*' ), 
 			
@@ -1800,6 +1806,8 @@ class QuickBooks_SQL_Schema
 			'SalesReceiptRet SalesReceiptLineRet OverrideUOMSetRef *' => 			array( 'SalesReceipt_SalesReceiptLine', 'OverrideUOMSet_*' ), 
 			'SalesReceiptRet SalesReceiptLineRet ClassRef' => 						array( null, null ), 
 			'SalesReceiptRet SalesReceiptLineRet ClassRef *' => 					array( 'SalesReceipt_SalesReceiptLine', 'Class_*' ), 
+			'SalesReceiptRet SalesReceiptLineRet InventorySiteRef' => 				array( null, null ), 
+			'SalesReceiptRet SalesReceiptLineRet InventorySiteRef *' => 			array( 'SalesReceipt_SalesReceiptLine', 'InventorySite_*' ), 
 			'SalesReceiptRet SalesReceiptLineRet SalesTaxCodeRef' => 				array( null, null ), 
 			'SalesReceiptRet SalesReceiptLineRet SalesTaxCodeRef *' => 				array( 'SalesReceipt_SalesReceiptLine', 'SalesTaxCode_*' ), 
 			'SalesReceiptRet SalesReceiptLineRet CreditCardTxnInfo' => 				array( null, null ), 

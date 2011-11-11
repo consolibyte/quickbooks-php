@@ -233,6 +233,14 @@
 <FullName >STRTYPE</FullName> <!-- optional -->
 </ClassRef>
 <Amount >AMTTYPE</Amount> <!-- optional -->
+<InventorySiteRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</InventorySiteRef>
+<!-- BEGIN OR -->
+<SerialNumber >STRTYPE</SerialNumber> <!-- optional -->
+<!-- OR -->
+<LotNumber >STRTYPE</LotNumber> <!-- optional -->
 <ServiceDate >DATETYPE</ServiceDate> <!-- optional -->
 <SalesTaxCodeRef> <!-- optional -->
 <ListID >IDTYPE</ListID> <!-- optional -->

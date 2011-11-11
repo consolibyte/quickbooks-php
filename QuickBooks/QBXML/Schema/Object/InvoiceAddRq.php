@@ -104,6 +104,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'InvoiceLineAdd ClassRef ListID' => 'IDTYPE',
   'InvoiceLineAdd ClassRef FullName' => 'STRTYPE',
   'InvoiceLineAdd Amount' => 'AMTTYPE',
+  'InvoiceLineAdd InventorySiteRef ListID' => 'IDTYPE', 
+  'InvoiceLineAdd InventorySiteRef FullName' => 'STRTYPE', 
   'InvoiceLineAdd ServiceDate' => 'DATETYPE',
   'InvoiceLineAdd SalesTaxCodeRef ListID' => 'IDTYPE',
   'InvoiceLineAdd SalesTaxCodeRef FullName' => 'STRTYPE',
@@ -216,6 +218,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'InvoiceLineAdd ClassRef ListID' => 0,
   'InvoiceLineAdd ClassRef FullName' => 209,
   'InvoiceLineAdd Amount' => 0,
+  'InvoiceLineAdd InventorySiteRef ListID' => 0,
+  'InvoiceLineAdd InventorySiteRef FullName' => 209,
   'InvoiceLineAdd ServiceDate' => 0,
   'InvoiceLineAdd SalesTaxCodeRef ListID' => 0,
   'InvoiceLineAdd SalesTaxCodeRef FullName' => 209,
@@ -328,6 +332,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'InvoiceLineAdd ClassRef ListID' => true,
   'InvoiceLineAdd ClassRef FullName' => true,
   'InvoiceLineAdd Amount' => true,
+  'InvoiceLineAdd InventorySiteRef ListID' => true,
+  'InvoiceLineAdd InventorySiteRef FullName' => true,
   'InvoiceLineAdd ServiceDate' => true,
   'InvoiceLineAdd SalesTaxCodeRef ListID' => true,
   'InvoiceLineAdd SalesTaxCodeRef FullName' => true,
@@ -438,6 +444,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'InvoiceLineAdd ClassRef ListID' => 999.99,
   'InvoiceLineAdd ClassRef FullName' => 999.99,
   'InvoiceLineAdd Amount' => 999.99,
+  'InvoiceLineAdd InventorySiteRef ListID' => 999.99,
+  'InvoiceLineAdd InventorySiteRef FullName' => 999.99,
   'InvoiceLineAdd ServiceDate' => 999.99,
   'InvoiceLineAdd SalesTaxCodeRef ListID' => 999.99,
   'InvoiceLineAdd SalesTaxCodeRef FullName' => 999.99,
@@ -550,6 +558,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'InvoiceLineAdd ClassRef ListID' => false,
   'InvoiceLineAdd ClassRef FullName' => false,
   'InvoiceLineAdd Amount' => false,
+  'InvoiceLineAdd InventorySiteRef ListID' => false,
+  'InvoiceLineAdd InventorySiteRef FullName' => false,
   'InvoiceLineAdd ServiceDate' => false,
   'InvoiceLineAdd SalesTaxCodeRef ListID' => false,
   'InvoiceLineAdd SalesTaxCodeRef FullName' => false,
@@ -688,6 +698,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
 	'InvoiceLineAdd ClassRef ListID', 
 	'InvoiceLineAdd ClassRef FullName', 
 	'InvoiceLineAdd Amount', 
+	'InvoiceLineAdd InventorySiteRef ListID', 
+	'InvoiceLineAdd InventorySiteRef FullName', 
 	'InvoiceLineAdd ServiceDate', 
 	'InvoiceLineAdd SalesTaxCodeRef ListID', 
 	'InvoiceLineAdd SalesTaxCodeRef FullName', 
@@ -732,5 +744,3 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
 		return $paths;
 	}
 }
-
-?>
