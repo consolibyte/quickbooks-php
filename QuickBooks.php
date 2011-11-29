@@ -595,6 +595,8 @@ define('QUICKBOOKS_MOD_SUBTOTALITEM', 'ItemSubtotalMod');
 define('QUICKBOOKS_QUERY_SUBTOTALITEM', 'ItemSubtotalQuery');
 define('QUICKBOOKS_IMPORT_SUBTOTALITEM', 'ItemSubtotalImport');
 
+define('QUICKBOOKS_QUERY_ITEMSITES', 'ItemSitesQuery');
+
 define('QUICKBOOKS_OBJECT_JOBTYPE', 'JobType');
 define('QUICKBOOKS_ADD_JOBTYPE', 'JobTypeAdd');
 define('QUICKBOOKS_QUERY_JOBTYPE', 'JobTypeQuery');
