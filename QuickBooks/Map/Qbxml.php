@@ -178,14 +178,14 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 		
 		$list = array();
 		
-		$Driver->log('Input is: ' . print_r($adds, true));
+		//$Driver->log('Input is: ' . print_r($adds, true));
 		
 		// Check if any objects need to be pushed back to QuickBooks 
 		foreach ($sql_add as $action => $priority)
 		{
 			$object = QuickBooks_Utilities::actionToObject($action);
 			
-			$Driver->log('Action is: ' . $action . ', object is: ' . $object);
+			//$Driver->log('Action is: ' . $action . ', object is: ' . $object);
 			
 			$table_and_field = array();
 			
@@ -257,15 +257,17 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 								" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . " = " . $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], $errnum, $errmsg);
 					}
 					
+					/*
 					if (count($list[$action]) >= $limit)
 					{
 						break;
 					}
+					*/
 					
 					if ($limit > 0 and 
 						$count >= $limit)
 					{
-						break;
+						break 2;
 					}
 				}
 			}

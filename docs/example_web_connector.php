@@ -284,7 +284,7 @@ if (!QuickBooks_Utilities::initialized($dsn))
 	// We're going to queue up a request to add a customer, just as a test...
 	// 
 	// NOTE: You would normally *never* want to do this in this file! This is 
-	//	meant as an initial test ONLY. See example_integration.php for more 
+	//	meant as an initial test ONLY. See example_web_connector_queueing.php for more 
 	//	details!
 	// 
 	// IMPORTANT NOTE: This particular example of queueing something up will 

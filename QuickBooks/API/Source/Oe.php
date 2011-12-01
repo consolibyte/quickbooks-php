@@ -122,7 +122,7 @@ class QuickBooks_API_Source_OE extends QuickBooks_API_Source
 			$this->_application_login = $this->_config['application_login'];
 			$this->_application_id = $this->_config['application_id'];
 		}
-		else
+		/*else
 		{
 			// Otherwise, try to load it from connection table
 			
@@ -132,7 +132,7 @@ class QuickBooks_API_Source_OE extends QuickBooks_API_Source
 			$this->_certificate = $connection['certificate'];
 			$this->_application_login = $connection['application_login'];
 			$this->_application_id = $connection['application_id'];
-		}
+		}*/
 		
 		// Manual overrides... 
 		if ($this->_config['override_session_ticket'])
