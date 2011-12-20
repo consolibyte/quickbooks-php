@@ -81,10 +81,6 @@ $source_options = array(
 	//	application_login - Provided by the application registration page
 	//	application_id - Provided by the application registration page 	
 	
-	//'connection_ticket' => 'TGT-47-1sRm2nXMVfm$n8hb2MZfVQ', 
-	//'application_login' => 'test.www.academickeys.com', 
-	//'application_id' => '134476472', 
-	
 	'connection_ticket' => 'TGT-211-rQErMOrlyR$vdN7dVHQnNA', 
 	'application_login' => 'saas.consolibyte.com', 
 	'application_id' => '178965328', 

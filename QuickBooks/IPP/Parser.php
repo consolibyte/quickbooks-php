@@ -208,6 +208,21 @@ class QuickBooks_IPP_Parser
 	
 	public function parseIDS($xml, $optype, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
+		if (false !== strpos($xml, '<qbo:'))
+		{
+			// BAD HACK: It's a QBO data set, we need to adjust some things
+			$xml = str_replace(
+				array( 
+					'<qbo:', 
+					'</qbo:'
+				 ), 
+				 array( 
+				 	'<qbo', 
+				 	'</qbo'
+				 ), $xml);
+		}
+
+		// Parse it 
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
 		// Initial to success
@@ -246,6 +261,9 @@ class QuickBooks_IPP_Parser
 					
 					break;
 				case QuickBooks_IPP_IDS::OPTYPE_QUERY:		// Parse a QUERY type response
+					
+					//print_r($List);
+					//exit;
 				
 					$list = array();
 					foreach ($List->children() as $Child)
