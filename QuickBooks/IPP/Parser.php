@@ -280,7 +280,8 @@ class QuickBooks_IPP_Parser
 					
 					break;
 				case QuickBooks_IPP_IDS::OPTYPE_QUERY:		// Parse a QUERY type response
-					
+				case QuickBooks_IPP_IDS::OPTYPE_FINDBYID:
+				
 					//print_r($List);
 					//exit;
 				

@@ -929,6 +929,20 @@ class QuickBooks_IPP
 		{
 			$resource = substr($resource, 6);
 		}
+
+		// This is because IDS v2 with QuickBooks Online is retarded
+		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
+			$resource == QuickBooks_IPP_IDS::RESOURCE_PAYMENTMETHOD)
+		{
+			$resource = 'payment-method';
+		}
+		
+		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
+			$optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
+		{
+			// Make the resource plural... *sigh*
+			$resource .= 's';
+		}
 		
 		//$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
 		$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;

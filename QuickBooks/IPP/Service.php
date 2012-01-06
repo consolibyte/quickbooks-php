@@ -182,19 +182,32 @@ abstract class QuickBooks_IPP_Service
 		//print('flavor [' . $flavor . ']');
 		//exit;
 		
-		if (!$xml)
+		if ($flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
 		{
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
-			
-			if ($size)
+			if (!$xml)
 			{
-				$xml .= '	<StartPage>' . (int) $page . '</StartPage>' . QUICKBOOKS_CRLF;
-				$xml .= '	<ChunkSize>' . (int) $size . '</ChunkSize>' . QUICKBOOKS_CRLF;
+				$xml = '';
+				$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+				$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+				
+				if ($size)
+				{
+					$xml .= '	<StartPage>' . (int) $page . '</StartPage>' . QUICKBOOKS_CRLF;
+					$xml .= '	<ChunkSize>' . (int) $size . '</ChunkSize>' . QUICKBOOKS_CRLF;
+				}
+				
+				$xml .= '</' . $resource . 'Query>';
 			}
-			
-			$xml .= '</' . $resource . 'Query>';
+		}
+		else if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
+		{
+			if (!$xml)
+			{
+				$xml = http_build_query(array(
+					'PageNum' => (int) $page, 
+					'ResultsPerPage' => (int) $size, 
+					));
+			}
 		}
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_QUERY, $xml);
@@ -393,7 +406,7 @@ abstract class QuickBooks_IPP_Service
 			$xml .= '</' . $resource . 'Query>';
 		}
 		
-		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_QUERY, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_FINDBYID, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		
