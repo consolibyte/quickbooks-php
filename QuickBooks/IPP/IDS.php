@@ -22,6 +22,10 @@
  */
 class QuickBooks_IPP_IDS
 {
+	const FLAVOR_DESKTOP = 'desktop';
+	
+	const FLAVOR_ONLINE = 'online';
+
 	const OPTYPE_ADD = 'Add';
 	
 	const OPTYPE_MOD = 'Mod';
@@ -40,8 +44,14 @@ class QuickBooks_IPP_IDS
 	
 	const VERSION_2 = 'v2';
 	
+	const VERSION_3 = 'v3';
+	
 	const VERSION_LATEST = 'v2';
 	
+	/**
+	 * Default BASEURL for QuickBooks Desktop (QuickBooks Online requires you to fetch a specific BASEURL)
+	 */
+	const BASEURL_DESKTOP = 'https://services.intuit.com/sb';
 	
 	const RESOURCE_REPORT_ACCOUNTBALANCES = 'ReportAccountBalances';
 	

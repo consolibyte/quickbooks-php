@@ -48,6 +48,11 @@ class QuickBooks_IPP
 	
 	const API_GETBILLINGSTATUS = 'API_GetBillingStatus';
 	
+	/**
+	 * This is not a real API call! 
+	 */
+	const API_GETBASEURL = '_getBaseURL_';
+	
 	const API_GETDBINFO = 'API_GetDBInfo';
 	
 	const API_GETDBVAR = 'API_GetDBVar';
@@ -59,6 +64,8 @@ class QuickBooks_IPP
 	const API_GETSCHEMA = 'API_GetSchema';
 	
 	const API_SETDBVAR = 'API_SetDBVar';
+	
+	const API_GETISREALMQBO = 'API_GetIsRealmQBO';
 	
 	const API_GETIDSREALM = 'API_GetIDSRealm';
 	
@@ -171,7 +178,15 @@ class QuickBooks_IPP
 	protected $_password;
 	protected $_ticket;
 	protected $_token;
+	protected $_dbid;
+	
+	/**
+	 * @deprecated
+	 */
 	protected $_application;
+	
+	protected $_flavor;
+	protected $_baseurl;
 	
 	protected $_debug;
 	
@@ -408,14 +423,59 @@ class QuickBooks_IPP
 	}
 	*/
 	
+	/**
+	 *
+	 *
+	 */
+	public function flavor($flavor = null)
+	{
+		if ($flavor)
+		{
+			$this->_flavor = $flavor;
+			
+			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
+			{
+				$this->baseURL(QuickBooks_IPP_IDS::BASEURL_DESKTOP);
+			}
+		}
+		
+		return $this->_flavor;
+	}
+
+	public function baseURL($baseURL = null)
+	{
+		if ($baseURL)
+		{
+			$this->_baseurl = $baseURL;
+		}
+		
+		return $this->_baseurl;
+	}
+
+	
+	/**
+	 * @deprecated 
+	 */
 	public function application($application = null)
 	{
 		if ($application)
 		{
-			$this->_application = $application;
+			$this->_application = $application;		// Old way
+			$this->_dbid = $application;
 		}
 		
 		return $this->_application;
+	}
+	
+	public function dbid($dbid = null)
+	{
+		if ($dbid)
+		{
+			$this->_dbid = $dbid;
+			$this->_application = $dbid;		// Old way
+		}
+		
+		return $this->_dbid;
 	}
 
 	/**
@@ -423,9 +483,17 @@ class QuickBooks_IPP
 	 * 
 	 * 
 	 */
-	protected function _IPP($Context, $url, $action, $xml)
+	protected function _IPP($Context, $url, $action, $xml, $post = true)
 	{
-		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
+		// Ick, special case here...
+		$type = QuickBooks_IPP::REQUEST_IPP;
+		if ($action == QuickBooks_IPP::API_GETBASEURL)
+		{
+			$type = QuickBooks_IPP::REQUEST_IDS;
+		}
+		
+		// Make the HTTP request 
+		$response = $this->_request($Context, $type, $url, $action, $xml, $post);
 		
 		if ($this->_hasErrors($response))
 		{
@@ -459,6 +527,12 @@ class QuickBooks_IPP
 		// Try to parse the response from IPP
 		$parsed = $Parser->parseIPP($data, $action, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
 		
+		/*
+		print('parsed out: [');
+		print_r($parsed);
+		print(']');
+		*/
+		
 		//$this->_setLastDebug(__CLASS__, array( 'ipp_parser_duration' => microtime(true) - $start ));
 		
 		if ($xml_errnum != QuickBooks_XML::ERROR_OK)
@@ -477,6 +551,29 @@ class QuickBooks_IPP
 		}
 
 		return $parsed;
+	}
+	
+	public function getBaseURL($Context, $realmID)
+	{
+		$url = 'https://qbo.intuit.com/qbo1/rest/user/v2/' . $realmID;
+		$action = QuickBooks_IPP::API_GETBASEURL;
+		$xml = null;
+		
+		$post = false;
+		return $this->_IPP($Context, $url, $action, $xml, $post);
+	}
+	
+	public function getIsRealmQBO($Context)
+	{
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
+		$action = QuickBooks_IPP::API_GETISREALMQBO;
+		
+		$xml = '<qdbapi>
+				<ticket>' . $Context->ticket() . '</ticket>
+   				<apptoken>' . $Context->token() . '</apptoken>
+			</qdbapi>';
+		
+		return $this->_IPP($Context, $url, $action, $xml);
 	}
 	
 	public function assertFederatedIdentity($Context, $provider, $target_url, $udata = null)
@@ -833,11 +930,10 @@ class QuickBooks_IPP
 			$resource = substr($resource, 6);
 		}
 		
-		$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
+		//$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
+		$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
 		
 		$action = null;
-		//$xml = '';
-		
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml);
 		
 		// Check for generic IPP errors and HTTP errors
@@ -1041,10 +1137,10 @@ class QuickBooks_IPP
 		return $this->_log($message, $level);
 	}
 	
-	protected function _request($Context, $type, $url, $action, $xml)
+	protected function _request($Context, $type, $url, $action, $xml, $post = true)
 	{
 		$HTTP = new QuickBooks_HTTP($url);
-		$post = true;
+		//$post = true;
 		
 		$headers = array(
 			);
@@ -1056,7 +1152,15 @@ class QuickBooks_IPP
 		}
 		else if ($type == QuickBooks_IPP::REQUEST_IDS) 
 		{
-			$headers['Content-Type'] = 'text/xml';
+			if ($this->_flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
+			{
+				$headers['Content-Type'] = 'text/xml';
+			}
+			else if ($this->_flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
+			{
+				$headers['Content-Type'] = 'application/x-www-form-urlencoded';
+			}
+			
 			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $Context->token() . '",intuit-token="' . $Context->ticket() . '"';
 			$headers['Cookie'] = $this->cookies(true);
 		}

@@ -40,6 +40,11 @@ abstract class QuickBooks_IPP_Service
 	protected $_last_debug;
 	
 	/**
+	 * 
+	 */
+	protected $_flavor;
+	
+	/**
 	 * The last error code
 	 * @var string
 	 */
@@ -68,6 +73,8 @@ abstract class QuickBooks_IPP_Service
 		$this->_last_request = null;
 		$this->_last_response = null;
 		$this->_last_debug = array();
+		
+		$this->_flavor = null;		// auto-detect
 	}
 	
 	public function useIDSParser($Context, $true_or_false)
@@ -169,6 +176,11 @@ abstract class QuickBooks_IPP_Service
 	protected function _findAll($Context, $realmID, $resource, $Query = null, $sort = null, $page = 1, $size = 50, $xml = '')
 	{
 		$IPP = $Context->IPP();
+		
+		$flavor = $IPP->flavor();
+		
+		//print('flavor [' . $flavor . ']');
+		//exit;
 		
 		if (!$xml)
 		{

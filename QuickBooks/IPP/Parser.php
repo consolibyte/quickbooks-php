@@ -37,6 +37,11 @@ class QuickBooks_IPP_Parser
 	
 	public function parseIPP($xml, $method, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
+		// Massage it... *sigh*
+		$xml = $this->_massageQBOXML($xml);
+	
+		//print($xml);
+	
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
 		// Initial to success
@@ -49,6 +54,8 @@ class QuickBooks_IPP_Parser
 		if ($Doc = $Parser->parse($errnum, $errmsg))
 		{
 			$Root = $Doc->getRoot();
+			
+			//print_r($Root);
 			
 			switch ($method)
 			{
@@ -66,6 +73,10 @@ class QuickBooks_IPP_Parser
 					return $this->_parseIPP_NodeValue($Root, 'qdbapi/value');
 				case QuickBooks_IPP::API_GETIDSREALM:
 					return $this->_parseIPP_NodeValue($Root, 'qdbapi/realm');
+				case QuickBooks_IPP::API_GETISREALMQBO:
+					return $this->_parseIPP_NodeValue($Root, 'qdbapi/IsQBO') == 'true';
+				case QuickBooks_IPP::API_GETBASEURL:
+					return $this->_parseIPP_NodeValue($Root, 'qboQboUser/qboCurrentCompany/qboBaseURI') . '/resource';		// Oooh, that's probably bad...
 			}
 		}
 		
@@ -206,7 +217,7 @@ class QuickBooks_IPP_Parser
 		return $list;
 	}
 	
-	public function parseIDS($xml, $optype, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
+	protected function _massageQBOXML($xml)
 	{
 		if (false !== strpos($xml, '<qbo:'))
 		{
@@ -221,6 +232,14 @@ class QuickBooks_IPP_Parser
 				 	'</qbo'
 				 ), $xml);
 		}
+		
+		return $xml;
+	}
+	
+	public function parseIDS($xml, $optype, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
+	{
+		// Massage it... *sigh*
+		$xml = $this->_massageQBOXML($xml);
 
 		// Parse it 
 		$Parser = new QuickBooks_XML_Parser($xml);
