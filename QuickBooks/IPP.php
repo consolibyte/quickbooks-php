@@ -944,11 +944,19 @@ class QuickBooks_IPP
 			$resource .= 's';
 		}
 		
+		$post = true;
+		if ($resource == QuickBooks_IPP_IDS::RESOURCE_COMPANY or 		// QuickBooks desktop
+			$resource == QuickBooks_IPP_IDS::RESOURCE_COMPANYMETADATA)	// QuickBooks online
+		{
+			$post = false;
+			$xml = '';
+		}
+		
 		//$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
 		$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
 		
 		$action = null;
-		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml);
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml, $post);
 		
 		// Check for generic IPP errors and HTTP errors
 		if ($this->_hasErrors($response))

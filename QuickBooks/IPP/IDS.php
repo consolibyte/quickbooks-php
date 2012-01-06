@@ -87,6 +87,10 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_CLASS = 'Class';
 	
+	const RESOURCE_COMPANY = 'Company';
+	
+	const RESOURCE_COMPANYMETADATA = 'CompanyMetaData';
+	
 	const RESOURCE_CREDITMEMO = 'CreditMemo';
 	
 	const RESOURCE_CUSTOMER = 'Customer';
