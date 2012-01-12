@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://playscape.uglyslug.com/QuickBooks/example_web_connector.php';
+$url = 'http://nationalfootballacademies.com/superbam/quickbooks/qbwc.php';
 $username = 'quickbooks';
-$password = 'password';
+$password = 'golj23098ug';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -38,7 +38,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-exit;
+
 
 $max = 15;
 for ($i = 1; $i < $max; $i++)

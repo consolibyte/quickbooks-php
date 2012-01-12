@@ -22,9 +22,9 @@
  */
 class QuickBooks_IPP_IDS
 {
-	const FLAVOR_DESKTOP = 'desktop';
+	const FLAVOR_DESKTOP = 'QBD';
 	
-	const FLAVOR_ONLINE = 'online';
+	const FLAVOR_ONLINE = 'QBO';
 
 	const OPTYPE_ADD = 'Add';
 	

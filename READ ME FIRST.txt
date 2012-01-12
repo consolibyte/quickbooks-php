@@ -36,7 +36,6 @@
     You will find examples in the docs/ folder. There is additional 
     documentation and additional examples on our wiki:
      http://wiki.consolibyte.com/wiki/doku.php/quickbooks
-     http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte
 
     If you are using the Web Connector, make sure you read the quick-start guide:
      http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte_webconnector_quickstart
@@ -53,58 +52,3 @@
      gtalk: consolibyte
      yahoo: consolibyte@yahoo.com
      Skype: consolibyte
-
- DOCUMENTATION:   (look at these files for examples of how to do stuff)
- 
- Integration with the Intuit Partner Platform and IDS
-    docs/example_ipp_saml.php
-    docs/example_ipp_federated.php
- 
- Integration with QuickBooks Desktop Editions (Pro, Premier, Enterprise)
- 	docs/example_web_connector.php
- 	docs/example_web_connector_import.php
- 	
- Integration with QuickBooks Online Edition
- 	docs/example_online_edition.php
- 	
- Integration with QuickBooks Merchant Services (charge credit cards)
- 	docs/example_merchant_service.php
- 
- Mirroring the QuickBooks company file in an SQL database
- 	docs/example_mysql_mirror.php
- 	docs/example_pgsql_mirror.php
- 	
- Using the QuickBooks_API classes for a very OOP approach to talking to QuickBooks
- 	docs/example_api_server.php
- 	docs/example_api_client.php	
- 	
- Sending qbXML requests to QuickBooks via PHP from another programming language or a remote server (.NET, Python, etc.)
- 	docs/example_web_connector_bridge.php
- 	docs/example_web_connector_bridge_http-send.php
- 	docs/example_web_connector_bridge_http-receive.php
- 
- 
- RECOMMENDATIONS: 
- 
- If you're developing a SaaS application that integrates with QuickBooks, you 
- should be developing on the Intuit Partner Platform using IDS. 
-  
- QuickBooks integration can be a *beast* to develop for and debug. You will 
- save yourself *countless* hours if you configure PHP so that: 
- 	- error_reporting = E_ALL | E_STRICT
- 	- display_errors = On
- 	- display_startup_errors = On
- 	- log_errors = On
- 	- error_log = /path/to/your/log/file.log
- 
- No, seriously. Go set up your PHP development server like that. I promise that 
- it will make your life easier, at least as far as QuickBooks development goes.
- 
- I would *highly* encourage you to at least download and install the QuickBooks 
- SDK. Most of the implementation details are hidden from you, but you *will* 
- need the QuickBooks OSR to look up the qbXML request/response schema, and you 
- will find that the QuickBooks XML Validator tool is very helpful for 
- debugging.
- 
- 
-
