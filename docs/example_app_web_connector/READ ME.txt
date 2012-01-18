@@ -1,0 +1,36 @@
+
+This is a very simple application that allows someone to enter a customer name 
+into a web form, and then adds the customer to QuickBooks.
+
+BEFORE YOU CAN USE THIS, YOU NEED TO EDIT THE config.php FILE! WITHIN THE 
+config.php FILE, CHANGE THE $dsn VARIABLE TO POINT TO YOUR OWN DATABASE!
+
+YOU ALSO NEED TO EDIT THE example.qwc FILE TO POINT IT TO THE URL OF YOUR 
+server.php FILE. THE AppURL VARIABLE IN THE example.qwc FILE CAN ALSO POINT TO 
+THAT SAME URL. 
+
+* Modify the config.php file.
+
+* Modify the example.qwc file.
+
+* Open QuickBooks as the administrative user.
+
+* Open the QuickBooks Web Connector. 
+
+* Load your .qwc file into the Web Connector with the [Add Application] button.
+
+* Follow the prompts to allow access to QuickBooks.
+
+* Enter the password 'password' into the Web Connector.
+
+* Visit the form.php file in your web browser, fill in the form, and submit it.
+
+* Check the left-most checkbox in the Web Connector.
+
+* Hit the [Update Selected] button in the Web Connector. 
+
+* Check QuickBooks for the customer. If you see it, good. If you don't see it, 
+  check the quickbooks_* fields in the SQL 'my_customer_table' table. 
+
+
+

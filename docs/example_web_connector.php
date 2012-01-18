@@ -218,6 +218,7 @@ $handler_options = array(
 	//'authenticate_dsn' => 'mysql://user:pass@localhost/database?quickbooks_user',  
 	//'authenticate_dsn' => 'postgresql://user:pass@localhost/database?quickbooks_user', 
 	//'authenticate_dsn' => 'function://your_function_name_here', 
+	'deny_concurrent_logins' => false, 
 	);		// See the comments in the QuickBooks/Server/Handlers.php file
 
 $driver_options = array(		// See the comments in the QuickBooks/Driver/<YOUR DRIVER HERE>.php file ( i.e. 'Mysql.php', etc. )
@@ -290,8 +291,9 @@ if (!QuickBooks_Utilities::initialized($dsn))
 	// IMPORTANT NOTE: This particular example of queueing something up will 
 	//	only ever happen *once* when these scripts are first run/used. After 
 	//	this initial test, you MUST do your queueing in another script. DO NOT 
-	//	DO YOUR OWN QUEUEING IN THIS FILE! See docs/example_integration.php for 
-	//	more details and examples of queueing things up.
+	//	DO YOUR OWN QUEUEING IN THIS FILE! See 
+	//	docs/example_web_connector_queueing.php for more details and examples 
+	//	of queueing things up.
 	
 	$primary_key_of_your_customer = 5;
 
