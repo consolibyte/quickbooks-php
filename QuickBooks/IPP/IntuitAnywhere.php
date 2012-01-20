@@ -1,8 +1,19 @@
 <?php
 
-
-
-include ('OAuthSimple.php');  
+/**
+ * QuickBooks PHP DevKit
+ * 
+ * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.opensource.org/licenses/eclipse-1.0.php
+ * 
+ * @author Keith Palmer <keith@consolibyte.com>
+ * @license LICENSE.txt 
+ * 
+ * @package QuickBooks
+ */
 
 class QuickBooks_IPP_IntuitAnywhere 
 {
@@ -20,6 +31,8 @@ class QuickBooks_IPP_IntuitAnywhere
 	protected $_oauth_token;
 	protected $_oauth_token_secret;
 	
+	protected $_driver;
+	
 	const URL_REQUEST_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_request_token';
 	const URL_ACCESS_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_access_token';
 	const URL_CONNECT_BEGIN = 'https://appcenter.intuit.com/Connect/Begin';
@@ -34,8 +47,10 @@ class QuickBooks_IPP_IntuitAnywhere
 	 * @param string $this_url			The URL of your QuickBooks_IntuitAnywhere class instance
 	 * @param string $that_url			The URL the user should be sent to after authenticated 
 	 */
-	public function __construct($consumer_key, $consumer_secret, $this_url, $that_url) 
+	public function __construct($dsn, $consumer_key, $consumer_secret, $this_url, $that_url) 
 	{
+		$this->_driver = QuickBooks_Driver_Factory::create($dsn);
+		
 		$this->_this_url = $this_url;
 		$this->_that_url = $that_url;
 		
@@ -107,8 +122,8 @@ class QuickBooks_IPP_IntuitAnywhere
 			{
 				// We're in the middle of an OAuth token session
 				
-				print('TOKEN [[' . $_REQUEST['oauth_token'] . ']]');
-				print('<br /><br />');
+				//print('TOKEN [[' . $_REQUEST['oauth_token'] . ']]');
+				//print('<br /><br />');
 				
 				$arr = mysql_fetch_array(mysql_query("
 					SELECT
@@ -123,10 +138,16 @@ class QuickBooks_IPP_IntuitAnywhere
 					//$this->_oauth_token = $arr['oauth_token'];
 					//$this->_oauth_token_secret = $arr['oauth_token_secret'];
 					
+					//print('about to get access token...');
+					
 					$info = $this->_getAccessToken(
 						$arr['oauth_request_token'], 
 						$arr['oauth_request_token_secret'], 
 						$_REQUEST['oauth_verifier']);
+					
+					//print('got back [' . $info . ']');
+					//print_r($info);
+					//exit;
 					
 					if ($info)
 					{
@@ -142,8 +163,8 @@ class QuickBooks_IPP_IntuitAnywhere
 								quickbooks_oauth_id = " . $arr['quickbooks_oauth_id']);
 						
 						
-						print_r($_REQUEST);
-						print_r($info);
+						//print_r($_REQUEST);
+						//print_r($info);
 		
 						//print('authd now, go here <a href="exchange_data.php">exchange_data.php</a>');
 						header('Location: ' . $this->_that_url);
@@ -180,7 +201,9 @@ class QuickBooks_IPP_IntuitAnywhere
 		
 	protected function _getAuthenticateURL($url) 
 	{
-		$info = $this->_request(QuickBooks_IntuitAnywhere::URL_REQUEST_TOKEN, array('oauth_callback' => $url));
+		$info = $this->_request(QuickBooks_IPP_OAuth::METHOD_GET, QuickBooks_IPP_IntuitAnywhere::URL_REQUEST_TOKEN, array( 'oauth_callback' => $url ));
+		
+		//print('info [' . $info . ']');
 		
 		$vars = array();
 		parse_str($info, $vars);
@@ -196,15 +219,20 @@ class QuickBooks_IPP_IntuitAnywhere
 				'" . $vars['oauth_token_secret'] . "'
 			)");
 		
-		return QuickBooks_IntuitAnywhere::URL_CONNECT_BEGIN . '?oauth_callback=' . urlencode($url) . '&oauth_consumer_key=' . $this->_consumer_key . '&oauth_token=' . $vars['oauth_token'];	
+		return QuickBooks_IPP_IntuitAnywhere::URL_CONNECT_BEGIN . '?oauth_callback=' . urlencode($url) . '&oauth_consumer_key=' . $this->_consumer_key . '&oauth_token=' . $vars['oauth_token'];	
 	}
 	
 	protected function _getAccessToken($oauth_token, $oauth_token_secret, $verifier) 
 	{
-		if ($str = $this->_request(QuickBooks_IntuitAnywhere::URL_ACCESS_TOKEN, array( 'oauth_verifier' => $verifier ), '', $oauth_token, $oauth_token_secret))
+		if ($str = $this->_request(QuickBooks_IPP_OAuth::METHOD_GET, QuickBooks_IPP_IntuitAnywhere::URL_ACCESS_TOKEN, 
+			array( 
+				'oauth_token' => $oauth_token, 
+				'oauth_secret' => $oauth_token_secret, 
+				'oauth_verifier' => $verifier, 
+				)))
 		{
 			$info = array();
-			parse_str($tmp, $info);
+			parse_str($str, $info);
 			
 			return $info;		
 		}
@@ -220,76 +248,61 @@ class QuickBooks_IPP_IntuitAnywhere
 	public function widgetMenu() 
 	{
 		try {
-			return $this->_request('https://appcenter.intuit.com/api/v1/Account/AppMenu',array(),true);
+			return $this->_request(QuickBooks_IPP_OAuth::METHOD_GET, 'https://appcenter.intuit.com/api/v1/Account/AppMenu', array(), true);
 		} catch (OAuthSimpleException $e) {
 			print_r($e);
 		}
 	}
 
-	protected function _request($path, $parameters = array(), $authenticated = false, $token = '', $secret = '', $data = '') 
+	protected function _request($method, $url, $params = array(), $token = null, $secret = null, $data = null) 
 	{
-		$oauth = new OAuthSimple();
+		$OAuth = new QuickBooks_IPP_OAuth($this->_consumer_key, $this->_consumer_secret);
 		
-		$signatures = array(
-			'consumer_key' => $this->_consumer_key, 
-			'shared_secret' => $this->_consumer_secret  
-		);
+		// This returns a signed request
+		// 
+		// 0 => signature base string
+		// 1 => signature
+		// 2 => normalized url
+		// 3 => header string
+		$signed = $OAuth->sign($method, $url, $token, $secret, $params);
 		
-    if ( $authenticated ) {
-    	$signatures['access_token'] = $this->access_token;
-    	$signatures['access_secret'] = $this->access_secret;
-    
-    } elseif ( $token ) {
-    	$signatures['access_token'] = $token;
-    	$signatures['access_secret'] = $secret;
-    } 
-    
-    $sign_args = array(
-    	'path'=>$path,  
-      'parameters'=>$parameters,  
-      'signatures'=>$signatures
-    );
-    
-    if ( $data ) {
-    	$sign_args['action'] = 'POST';
-    }
-    $signed = $oauth->sign($sign_args);  
-
+		//print_r($signed);
 		
-
-    $curl = curl_init();  
-    if ( $data ) {
-		/* THIS IS WHERE I STARTED PLAYING WITH DIFFERENT THINGS TO GET THE POST TO WORK */
+		// Create the new HTTP object
+		//$HTTP = new QuickBooks_HTTP($url);
+		$HTTP = new QuickBooks_HTTP($signed[2]);
 		
-    	curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: '.$signed['header']));//,'Content-Type: application/xml'));
-  		curl_setopt($curl, CURLOPT_URL,$path);
-    	curl_setopt($curl, CURLOPT_POST,       1 );
-    	curl_setopt($curl, CURLOPT_POSTFIELDS, urlencode($data) );
-    } else {
-    	curl_setopt($curl, CURLOPT_URL,$signed['signed_url']);  
-    }    
-    curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);  
-    
-    //curl_setopt($curl,CURLOPT_ENCODING,'gzip,deflate');
-    //curl_setopt($curl,CURLOPT_SETTIMEOUT,2);  
-    
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-    
-    $buffer = curl_exec($curl);  
-    
-    /*
-    print('<pre>');
-    print_r(curl_getinfo($curl));
-    print('</pre>');
-    
-  	print('[[' . $buffer . ']]');
-  	*/
-  	
-  	return $buffer;  
-  	
-  	
-	
+		$headers = array(
+			//'Authorization' => $signed[3], 
+			);
+		
+		$HTTP->setHeaders($headers);
+		
+		// 
+		$HTTP->setRawBody($data);
+		
+		$HTTP->verifyHost(false);
+		$HTTP->verifyPeer(false);
+		
+		// We need the headers back
+		//$HTTP->returnHeaders(true);
+		
+		// Send the request
+		$return = $HTTP->GET();
+		
+		$errnum = $HTTP->errorNumber();
+		$errmsg = $HTTP->errorMessage();
+		
+		if ($errnum)
+		{
+			// An error occurred!
+			$this->_setError(QuickBooks_IPP::ERROR_HTTP, $errnum . ': ' . $errmsg);
+			return false;
+		}
+		
+		// Everything is good, return the data!
+		$this->_setError(QuickBooks_IPP::ERROR_OK, '');
+		return $return;		
 	}
 }
 

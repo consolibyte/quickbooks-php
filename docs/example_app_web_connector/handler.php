@@ -37,6 +37,7 @@ if (isset($_POST['submitted']))
 	// Get the primary key of the new record
 	$id = mysql_insert_id();
 	
+	// Queue up the customer add 
 	$Queue = new QuickBooks_Queue($dsn);
 	$Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $id);
 	

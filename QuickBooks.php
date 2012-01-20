@@ -1,7 +1,7 @@
 <?php
  
 /**
- * QuickBooks integration package via the QuickBooks Web Connector SOAP service 
+ * QuickBooks PHP DevKit
  * 
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
@@ -95,7 +95,7 @@ define('QUICKBOOKS_PACKAGE_NAME', 'QuickBooks PHP DevKit');
  * The version of this QuickBooks package 
  * @var string
  */
-define('QUICKBOOKS_PACKAGE_VERSION', '0.99');
+define('QUICKBOOKS_PACKAGE_VERSION', '2.0');
 
 if (!defined('QUICKBOOKS_CRLF'))
 {
@@ -1071,15 +1071,6 @@ if (QUICKBOOKS_FRAMEWORK_CONSTANTS != QUICKBOOKS_FRAMEWORKS)
 	 * QuickBooks PHP error handler
 	 */
 	QuickBooks_Loader::load('/QuickBooks/ErrorHandler.php');
-}
-
-if (QUICKBOOKS_FRAMEWORK_ONLINEEDITION & QUICKBOOKS_FRAMEWORKS or 
-	QUICKBOOKS_FRAMEWORK_WEBCONNECTOR & QUICKBOOKS_FRAMEWORKS)
-{
-	/**
-	 * API class
-	 */
-	QuickBooks_Loader::load('/QuickBooks/API.php');
 }
 
 if (QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS)

@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://nationalfootballacademies.com/superbam/quickbooks/qbwc.php';
+$url = 'http://localhost:8888/quickbooks_example/server.php';
 $username = 'quickbooks';
-$password = 'golj23098ug';
+$password = 'password';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -40,7 +40,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-$max = 15;
+$max = 2;
 for ($i = 1; $i < $max; $i++)
 {
 	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
@@ -51,7 +51,7 @@ for ($i = 1; $i < $max; $i++)
 	
 	print($resp);
 	
-	sleep(10);
+	//sleep(10);
 }
 
 exit;
