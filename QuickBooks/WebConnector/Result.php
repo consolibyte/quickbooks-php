@@ -22,7 +22,7 @@
 /**
  * QuickBooks result base class
  */
-abstract class QuickBooks_Result
+abstract class QuickBooks_WebConnector_Result
 {
 	/**
 	 * Placeholder constructor method

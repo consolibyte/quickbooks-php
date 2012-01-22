@@ -10,12 +10,6 @@
  * @subpackage QBXML
  */
 
-
-/**
- *
- */
-QuickBooks_Loader::load('/QuickBooks/API.php');
-
 /**
  * 
  */
@@ -329,7 +323,7 @@ abstract class QuickBooks_QBXML_Schema_Object
 			{
 				$tmp[$key] = $path;
 			}
-			else if (substr($path, -6) == 'ListID' and $allow_application_id)
+			/*else if (substr($path, -6) == 'ListID' and $allow_application_id)
 			{
 				// Modify and add:  (so that application IDs are supported and in the correct place)
 				//	CustomerRef ListID tags 
@@ -364,7 +358,7 @@ abstract class QuickBooks_QBXML_Schema_Object
 				{
 					$tmp[$key] = $apppath;
 				}
-			}
+			}*/
 			
 			/*else if ($path == QUICKBOOKS_API_APPLICATIONID)
 			{

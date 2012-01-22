@@ -19,12 +19,12 @@
 /**
  * QuickBooks result base class
  */
-QuickBooks_Loader::load('/QuickBooks/Result.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result.php');
 
 /**
  * Response result for the SOAP ->sendRequestXML() method call
  */
-class QuickBooks_Result_SendRequestXML extends QuickBooks_Result
+class QuickBooks_WebConnector_Result_SendRequestXML extends QuickBooks_WebConnector_Result
 {
 	/**
 	 * A QBXML XML request string

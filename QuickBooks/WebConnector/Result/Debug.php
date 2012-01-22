@@ -19,12 +19,12 @@
 /**
  * QuickBooks result base class
  */
-QuickBooks_Loader::load('/QuickBooks/Result.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result.php');
 
 /**
  * Result container object for the SOAP ->authenticate() method call
  */
-class QuickBooks_Result_Debug extends QuickBooks_Result
+class QuickBooks_WebConnector_Result_Debug extends QuickBooks_WebConnector_Result
 {
 	/**
 	 * A two element array indicating the result of the call to ->authenticate()

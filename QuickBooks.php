@@ -95,7 +95,7 @@ define('QUICKBOOKS_PACKAGE_NAME', 'QuickBooks PHP DevKit');
  * The version of this QuickBooks package 
  * @var string
  */
-define('QUICKBOOKS_PACKAGE_VERSION', '2.0');
+define('QUICKBOOKS_PACKAGE_VERSION', '2.0rc1');
 
 if (!defined('QUICKBOOKS_CRLF'))
 {
@@ -192,6 +192,7 @@ define('QUICKBOOKS_LOG_NORMAL', 1);
  */
 define('QUICKBOOKS_LOG_NONE', 0);
 
+/*
 define('QUICKBOOKS_SERVICE_DESKTOP', 'Desktop');
 define('QUICKBOOKS_SERVICE_DESKTOP_EDITION', QUICKBOOKS_SERVICE_DESKTOP);
 
@@ -200,6 +201,7 @@ define('QUICKBOOKS_SERVICE_ONLINE_EDITION', QUICKBOOKS_SERVICE_QBOE);
 
 define('QUICKBOOKS_SERVICE_QBMS', 'QBMS');
 define('QUICKBOOKS_SERVICE_MERCHANT_SERVICES', QUICKBOOKS_SERVICE_QBMS);
+*/
 
 /**
  * 
@@ -220,6 +222,7 @@ define('QUICKBOOKS_DATATYPE_DATE', 'DATETYPE');
 define('QUICKBOOKS_DATATYPE_ENUM', 'ENUMTYPE');
 define('QUICKBOOKS_DATATYPE_DATETIME', 'DATETIMETYPE');
 
+/*
 define('QUICKBOOKS_SUPPORTED_DEFAULT', '');
 define('QUICKBOOKS_SUPPORTED_ALL', '0x0');
 define('QUICKBOOKS_SUPPORTED_SIMPLESTART', '0x1'); 
@@ -235,7 +238,9 @@ define('QUICKBOOKS_PERSONALDATA_REQUIRED', 'pdpRequired');
 define('QUICKBOOKS_UNATTENDEDMODE_DEFAULT', '');
 define('QUICKBOOKS_UNATTENDEDMODE_REQUIRED', 'umpRequired');
 define('QUICKBOOKS_UNATTENDEDMODE_OPTIONAL', 'umpOptional');
+*/
 
+/*
 define('QUICKBOOKS_LOCALE_UNITED_STATES', 'US');
 define('QUICKBOOKS_LOCALE_US', QUICKBOOKS_LOCALE_UNITED_STATES);
 
@@ -250,6 +255,7 @@ define('QUICKBOOKS_LOCALE_AU', QUICKBOOKS_LOCALE_AUSTRALIA);
 
 define('QUICKBOOKS_LOCALE_ONLINE_EDITION', 'OE');
 define('QUICKBOOKS_LOCALE_OE', QUICKBOOKS_LOCALE_ONLINE_EDITION);
+*/
 
 /**
  * Use the PHP SoapServer ext/soap PHP extension
@@ -268,15 +274,19 @@ define('QUICKBOOKS_SOAPSERVER_BUILTIN', 'builtin');
  * 
  * @var string
  */
+/*
 define('QUICKBOOKS_INTERACTIVE_MODE', 'Interactive mode');
+*/
 
 /**
  * 
  */
+/*
 define('QUICKBOOKS_NOOP', 'NoOp');
 
 // This is temporary, eventually we should implement an actual in-handler skip method
 define('QUICKBOOKS_SKIP', 'NoOp');
+*/
 
 define('QUICKBOOKS_ADD', 'Add');
 define('QUICKBOOKS_MOD', 'Mod');
@@ -816,6 +826,7 @@ define('QUICKBOOKS_LISTID', 'ListID');
 define('QUICKBOOKS_TXNID', 'TxnID');
 define('QUICKBOOKS_TXNLINEID', 'TxnLineID');
 
+/*
 define('QUICKBOOKS_ACCOUNT_ACCOUNTTYPE_ACCOUNTSPAYABLE', 'AccountsPayable');
 define('QUICKBOOKS_ACCOUNT_ACCOUNTTYPE_ACCOUNTSRECEIVABLE', 'AccountsReceivable');
 define('QUICKBOOKS_ACCOUNT_ACCOUNTTYPE_BANK', 'Bank');
@@ -872,6 +883,7 @@ define('QUICKBOOKS_UNITOFMEASURESET_UNITOFMEASTURETYPE_WEIGHT', 'Weight');
 define('QUICKBOOKS_REPORT_GENERAL_SUMMARY', 'GeneralSummaryReportQuery');
 define('QUICKBOOKS_REPORT_AGING', 'AgingReportQuery');
 define('QUICKBOOKS_REPORT_BUDGET_SUMMARY', 'BudgetSummaryReportQuery');
+*/
 
 /**
  * Queuing status for queued QuickBooks transactions - QUEUED
@@ -1005,7 +1017,7 @@ if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_QUEUE or
 	/**
 	 * Queue class for QuickBooks queueing 
 	 */
-	QuickBooks_Loader::load('/QuickBooks/Queue.php');
+	QuickBooks_Loader::load('/QuickBooks/WebConnector/Queue.php');
 }
 
 if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_WEBCONNECTOR)
@@ -1013,12 +1025,12 @@ if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_WEBCONNECTOR)
 	/**
 	 * SOAP server for QuickBooks web services
 	 */
-	QuickBooks_Loader::load('/QuickBooks/Server.php');
+	QuickBooks_Loader::load('/QuickBooks/WebConnector/Server.php');
 	
 	/**
 	 * Web Connector generation
 	 */
-	QuickBooks_Loader::load('/QuickBooks/QWC.php');
+	QuickBooks_Loader::load('/QuickBooks/WebConnector/QWC.php');
 	
 	/**
 	 * Various QuickBooks utility classes
@@ -1058,19 +1070,6 @@ if (QUICKBOOKS_FRAMEWORK_MISCELLANEOUS & QUICKBOOKS_FRAMEWORKS)
 	 * Utilities for ensuring values fit into qbXML fields 
 	 */
 	QuickBooks_Loader::load('/QuickBooks/Cast.php');
-	
-	/**
-	 * Pre-defined hooks to use with QuickBooks components
-	 */
-	QuickBooks_Loader::load('/QuickBooks/Hook/Factory.php');
-}
-
-if (QUICKBOOKS_FRAMEWORK_CONSTANTS != QUICKBOOKS_FRAMEWORKS)
-{
-	/**
-	 * QuickBooks PHP error handler
-	 */
-	QuickBooks_Loader::load('/QuickBooks/ErrorHandler.php');
 }
 
 if (QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS)
@@ -1084,12 +1083,12 @@ if (QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS)
 if (QUICKBOOKS_FRAMEWORK_WEBCONNECTOR & QUICKBOOKS_FRAMEWORKS)
 {
 	// Other servers
-	QuickBooks_Loader::import('/QuickBooks/Server');
+	QuickBooks_Loader::import('/QuickBooks/WebConnector/Server');
 }
 
-if (QUICKBOOKS_FRAMEWORK_OBJECTS & QUICKBOOKS_FRAMEWORKS)
+if (QUICKBOOKS_FRAMEWORK_QBXML & QUICKBOOKS_FRAMEWORKS)
 {
 	// Objects for the API
-	QuickBooks_Loader::import('/QuickBooks/Object');
+	QuickBooks_Loader::import('/QuickBooks/QBXML/Object');
 }
 

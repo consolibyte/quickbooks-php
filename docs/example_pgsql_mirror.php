@@ -20,8 +20,7 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
 // Set the include path
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keithpalmerjr/Projects/QuickBooks');
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 // You should make sure this matches the time-zone QuickBooks is running in
 if (function_exists('date_default_timezone_set'))
@@ -69,13 +68,13 @@ if (!QuickBooks_Utilities::initialized($dsn))
 // What mode do we want to run the mirror in? 
 //$mode = QUICKBOOKS_SERVER_SQL_MODE_READONLY;		// Read from QuickBooks only (no data will be pushed back to QuickBooks)
 //$mode = QUICKBOOKS_SERVER_SQL_MODE_WRITEONLY;		// Write to QuickBooks only (no data will be copied into the SQL database)
-$mode = QuickBooks_Server_SQL::MODE_READWRITE;		// Keep both QuickBooks and the database in sync, reading and writing changes back and forth)
+$mode = QuickBooks_WebConnector_Server_SQL::MODE_READWRITE;		// Keep both QuickBooks and the database in sync, reading and writing changes back and forth)
 
 // What should we do if a conflict is found? (a record has been changed by another user or process that we're trying to update)
-$conflicts = QuickBooks_Server_SQL::CONFLICT_LOG;
+$conflicts = QuickBooks_WebConnector_Server_SQL::CONFLICT_LOG;
 
 // What should we do with records deleted from QuickBooks? 
-$delete = QuickBooks_Server_SQL::DELETE_REMOVE;		// Delete the record from the database too
+$delete = QuickBooks_WebConnector_Server_SQL::DELETE_REMOVE;		// Delete the record from the database too
 //$delete = QUICKBOOKS_SERVER_SQL_DELETE_FLAG; 		// Just flag it as deleted
 
 $hooks = array(
@@ -152,7 +151,7 @@ $callback_options = array();
 
 // $dsn_or_conn, $how_often, $mode, $conflicts, $users = null, 
 //	$map = array(), $onerror = array(), $hooks = array(), $log_level, $soap = QUICKBOOKS_SOAPSERVER_BUILTIN, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array()
-$Server = new QuickBooks_Server_SQL(
+$Server = new QuickBooks_WebConnector_Server_SQL(
 	$dsn, 
 	'1 minute', 
 	$mode, 

@@ -12,12 +12,12 @@
  * @subpackage Documentation
  */
 
-// 
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keithpalmerjr/Projects/QuickBooks/');
-
-// I always program in E_STRICT error mode... 
+// Show errors
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', true);
+
+// Plain text output
+header('Content-Type: text/plain');
 
 // Include the QuickBooks files
 require_once '../QuickBooks.php';

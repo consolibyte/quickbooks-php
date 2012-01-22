@@ -20,7 +20,7 @@
  * 
  * 
  */
-class QuickBooks_QWC
+class QuickBooks_WebConnector_QWC
 {
 	protected $_name;
 	protected $_descrip;
@@ -39,6 +39,22 @@ class QuickBooks_QWC
 	protected $_appdisplayname;
 	protected $_appuniquename;
 	protected $_appid;
+	
+	const SUPPORTED_DEFAULT = '';
+	const SUPPORTED_ALL = '0x0';
+	const SUPPORTED_SIMPLESTART = '0x1'; 
+	const SUPPORTED_PRO = '0x2'; 
+	const SUPPORTED_PREMIER = '0x4'; 
+	const SUPPORTED_ENTERPRISE = '0x8';
+
+	const PERSONALDATA_DEFAULT = '';
+	const PERSONALDATA_NOTNEEDED = 'pdpNotNeeded';
+	const PERSONALDATA_OPTIONAL = 'pdpOptional';
+	const PERSONALDATA_REQUIRED = 'pdpRequired';
+
+	const UNATTENDEDMODE_DEFAULT = '';
+	const UNATTENDEDMODE_REQUIRED = 'umpRequired';
+	const UNATTENDEDMODE_OPTIONAL = 'umpOptional';
 	
 	/**
 	 * Generate a valid QuickBooks Web Connector *.QWC file 
@@ -73,9 +89,9 @@ class QuickBooks_QWC
 		$qbtype = QUICKBOOKS_TYPE_QBFS, 
 		$readonly = false, 
 		$run_every_n_seconds = null, 
-		$personaldata = QUICKBOOKS_PERSONALDATA_DEFAULT, 
-		$unattendedmode = QUICKBOOKS_UNATTENDEDMODE_DEFAULT, 
-		$authflags = QUICKBOOKS_SUPPORTED_DEFAULT, 
+		$personaldata = QuickBooks_WebConnector_QWC::PERSONALDATA_DEFAULT, 
+		$unattendedmode = QuickBooks_WebConnector_QWC::UNATTENDEDMODE_DEFAULT, 
+		$authflags = QuickBooks_WebConnector_QWC::SUPPORTED_DEFAULT, 
 		$notify = false, 
 		$appdisplayname = '', 
 		$appuniquename = '', 
@@ -183,17 +199,17 @@ class QuickBooks_QWC
 		$xml .= "\t" . '<FileID>' . $fileid . '</FileID>' . QUICKBOOKS_CRLF;
 		$xml .= "\t" . '<QBType>' . $qbtype . '</QBType>' . QUICKBOOKS_CRLF;
 			
-		if ($personaldata != QUICKBOOKS_PERSONALDATA_DEFAULT)
+		if ($personaldata != QuickBooks_WebConnector_QWC::PERSONALDATA_DEFAULT)
 		{
 			$xml .= "\t" . '<PersonalDataPref>' . $personaldata . '</PersonalDataPref>' . QUICKBOOKS_CRLF;
 		}
 			
-		if ($unattendedmode != QUICKBOOKS_UNATTENDEDMODE_DEFAULT)
+		if ($unattendedmode != QuickBooks_WebConnector_QWC::UNATTENDEDMODE_DEFAULT)
 		{
 			$xml .= "\t" . '<UnattendedModePref>' . $unattendedmode . '</UnattendedModePref>' . QUICKBOOKS_CRLF;
 		}
 			
-		if ($authflags != QUICKBOOKS_SUPPORTED_DEFAULT)
+		if ($authflags != QuickBooks_WebConnector_QWC::SUPPORTED_DEFAULT)
 		{
 			$xml .= "\t" . '<AuthFlags>' . $authflags . '</AuthFlags>' . QUICKBOOKS_CRLF;
 		}
@@ -262,7 +278,7 @@ class QuickBooks_QWC
 	 */
 	static public function fileID($surround = true)
 	{
-		return QuickBooks_QWC::_guid($surround);
+		return QuickBooks_WebConnector_QWC::_guid($surround);
 	}
 	
 	/**
@@ -273,7 +289,7 @@ class QuickBooks_QWC
 	 */
 	static public function GUID($surround = true)
 	{
-		return QuickBooks_QWC::_guid($surround);
+		return QuickBooks_WebConnector_QWC::_guid($surround);
 	}
 	
 	/**
@@ -311,7 +327,7 @@ class QuickBooks_QWC
 	 */
 	static public function ownerID($surround = true)
 	{
-		return QuickBooks_QWC::_guid($surround);
+		return QuickBooks_WebConnector_QWC::_guid($surround);
 	}
 	
 }

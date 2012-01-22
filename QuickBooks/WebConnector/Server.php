@@ -66,12 +66,12 @@ define('QUICKBOOKS_SERVER_HOOK_POSTHANDLE', 'QuickBooks_Server::handle (post)');
 /**
  * Base handlers for each of the methods required by the QuickBooks Web Connector
  */
-QuickBooks_Loader::load('/QuickBooks/Handlers.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Handlers.php');
 
 /**
  * QuickBooks SOAP Server
  */
-class QuickBooks_Server
+class QuickBooks_WebConnector_Server
 {
 	/**
 	 * WSDL location
@@ -207,7 +207,7 @@ class QuickBooks_Server
 				
 		// Base handlers
 		// $dsn_or_conn, $map, $onerror, $hooks, $log_level, $input, $handler_config = array(), $driver_config = array()
-		$this->_server->setClass('QuickBooks_Handlers', $dsn_or_conn, $map, $onerror, $hooks, $log_level, $input, $handler_options, $driver_options, $callback_options);
+		$this->_server->setClass('QuickBooks_WebConnector_Handlers', $dsn_or_conn, $map, $onerror, $hooks, $log_level, $input, $handler_options, $driver_options, $callback_options);
 	}
 	
 	/**

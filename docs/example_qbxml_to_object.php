@@ -7,6 +7,9 @@
  * @subpackage Documentation
  */
 
+// Plain test
+header('Content-Type: text/plain');
+
 // include path
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keithpalmerjr/Projects/QuickBooks/');
 
@@ -17,7 +20,7 @@ error_reporting(E_ALL | E_STRICT);
 /**  
  * Require the QuickBooks framework code
  */
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 /*
 // Our qbXML string
@@ -294,6 +297,6 @@ $qbxml = '<ItemServiceRet>
 </SalesOrPurchase>
 </ItemServiceRet>';
 
-$Object = QuickBooks_Object::fromQBXML($qbxml, QUICKBOOKS_QUERY_ITEM);
+$Object = QuickBooks_QBXML_Object::fromQBXML($qbxml, QUICKBOOKS_QUERY_ITEM);
 
 print('[' . $Object->object() . ']: ' . $Object->asQBXML(QUICKBOOKS_ADD_SERVICEITEM));

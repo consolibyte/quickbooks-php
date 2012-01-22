@@ -19,12 +19,12 @@
 /**
  * Result base class
  */
-QuickBooks_Loader::load('/QuickBooks/Result.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result.php');
 
 /**
  * Result container object for the SOAP ->getLastError() method call
  */
-class QuickBooks_Result_GetLastError extends QuickBooks_Result
+class QuickBooks_WebConnector_Result_GetLastError extends QuickBooks_WebConnector_Result
 {
 	/**
 	 * An error message

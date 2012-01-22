@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Example of building qbXML requests using the QuickBooks_Object_* classes
+ * Example of building qbXML requests using the QuickBooks_QBXML_Object_* classes
  * 
  * 
  * 
@@ -11,8 +11,8 @@
  * @subpackage Documentation
  */ 
 
-// include path
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks');
+// 
+header('Content-Type: text/plain');
 
 // error reporting
 ini_set('display_errors', 1);
@@ -21,11 +21,9 @@ error_reporting(E_ALL | E_STRICT);
 // QuickBooks framework classes
 require_once '../QuickBooks.php';
 
-// 
-//require_once 'QuickBooks/API.php';
 
 // Create the new invoice object
-$Invoice = new QuickBooks_Object_Invoice();
+$Invoice = new QuickBooks_QBXML_Object_Invoice();
 
 // We need to assign this invoice to a customer. There are a few ways you can 
 // refer to this customer in your qbXML requests. You can refer to them by 
@@ -61,13 +59,13 @@ $Invoice->setMemo('This invoice was created using the QuickBooks PHP API!');
 //	must already be present in QuickBooks for this invoice to be added. 
 
 // 3 items of type "Item Type 1" at $10.00 per item
-$InvoiceLine1 = new QuickBooks_Object_Invoice_InvoiceLine();
+$InvoiceLine1 = new QuickBooks_QBXML_Object_Invoice_InvoiceLine();
 $InvoiceLine1->setItemName('Item Type 1');
 $InvoiceLine1->setRate(10.00);
 $InvoiceLine1->setQuantity(3);
 
 // 5 items of type "Item Type 2", for a total amount of $225.00 ($45.00 each)
-$InvoiceLine2 = new QuickBooks_Object_Invoice_InvoiceLine();
+$InvoiceLine2 = new QuickBooks_QBXML_Object_Invoice_InvoiceLine();
 $InvoiceLine2->setItemName('Item Type 2');
 $InvoiceLine2->setAmount(225.00);
 $InvoiceLine2->setQuantity(5);
@@ -79,12 +77,12 @@ $Invoice->addInvoiceLine($InvoiceLine2);
 // NOTE: These next few lines *only work for QuickBooks Online Edition* 
 
 // Let's add a discount also  
-//$DiscountLine = new QuickBooks_Object_Invoice_DiscountLine();
+//$DiscountLine = new QuickBooks_QBXML_Object_Invoice_DiscountLine();
 //$DiscountLine->setAmount(-125.0);
 //$Invoice->addDiscountLine($DiscountLine);
 
 // And a shipping charge
-//$ShippingLine = new QuickBooks_Object_Invoice_ShippingLine();
+//$ShippingLine = new QuickBooks_QBXML_Object_Invoice_ShippingLine();
 //$ShippingLine->setAmount(5.0);
 //$Invoice->addShippingLine($ShippingLine);
 
@@ -140,7 +138,7 @@ print($qbxml);
 //
 //print_r($Invoice->asList(QUICKBOOKS_ADD_CUSTOMER));
 
-$ReceivePayment = new QuickBooks_Object_ReceivePayment();
+$ReceivePayment = new QuickBooks_QBXML_Object_ReceivePayment();
 $ReceivePayment->setCustomerListID(123);
 $ReceivePayment->setTotalAmount(25.0);
 $ReceivePayment->setMemo('Memo goes here');
@@ -149,7 +147,7 @@ $ReceivePayment->setPaymentMethodListID(10);
 $ReceivePayment->setDepositToAccountListID(54);
 $ReceivePayment->setRefNumber('1061');
 
-$AppliedToTxn = new QuickBooks_Object_ReceivePayment_AppliedToTxn();
+$AppliedToTxn = new QuickBooks_QBXML_Object_ReceivePayment_AppliedToTxn();
 $AppliedToTxn->setTransactionID('82');
 $AppliedToTxn->setPaymentAmount(25.0);
 

@@ -19,12 +19,12 @@
 /**
  * Result base class
  */
-QuickBooks_Loader::load('/QuickBooks/Result.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result.php');
 
 /**
  * Response result for the SOAP ->receiveRequestXML() method call
  */
-class QuickBooks_Result_ReceiveResponseXML extends QuickBooks_Result
+class QuickBooks_WebConnector_Result_ReceiveResponseXML extends QuickBooks_WebConnector_Result
 {
 	/**
 	 * Integer indicating update progress

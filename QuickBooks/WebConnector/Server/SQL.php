@@ -80,7 +80,7 @@ QuickBooks_Loader::load('/QuickBooks/Driver/Singleton.php');
 /**
  * Server base class
  */
-QuickBooks_Loader::load('/QuickBooks/Server.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Server.php');
 
 /**
  * SQL schema generation
@@ -105,13 +105,13 @@ QuickBooks_Loader::load('/QuickBooks/Callbacks/SQL/Errors.php');
 /**
  * Handlers file (we need this for soem constant declarations)
  */
-QuickBooks_Loader::load('/QuickBooks/Handlers.php', false);
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Handlers.php', false);
 
 /**
  * 
  * 
  */
-class QuickBooks_Server_SQL extends QuickBooks_Server
+class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
 {
 	/**
 	 * Read from the QuickBooks database, and write to the SQL database
@@ -240,7 +240,7 @@ class QuickBooks_Server_SQL extends QuickBooks_Server
 		// Default hooks
 		$sql_hooks = array(
 			// This hook is neccessary for queueing up the appropriate actions to perform the sync 	(use login success so we know user to sync for)
-			QuickBooks_Handlers::HOOK_LOGINSUCCESS => array( 'QuickBooks_Callbacks_SQL_Callbacks::onAuthenticate' ), 
+			QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => array( 'QuickBooks_Callbacks_SQL_Callbacks::onAuthenticate' ), 
 			);
 		
 		// Merge with user-defined hooks

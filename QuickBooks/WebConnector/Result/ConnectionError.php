@@ -19,12 +19,12 @@
 /**
  * Result interface
  */
-QuickBooks_Loader::load('/QuickBooks/Result.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result.php');
 
 /**
  * Result container object for the SOAP ->connectionError() method call
  */
-class QuickBooks_Result_ConnectionError extends QuickBooks_Result
+class QuickBooks_WebConnector_Result_ConnectionError extends QuickBooks_WebConnector_Result
 {
 	/**
 	 * An error message

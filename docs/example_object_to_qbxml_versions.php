@@ -15,10 +15,10 @@
  * @subpackage Documentation
  */ 
 
-// include path
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keithpalmerjr/Projects/QuickBooks');
+// Plain text output
+header('Content-Type: text/plain');
 
-// error reporting
+// Error reporting
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
@@ -61,11 +61,8 @@ print($SalesReceipt->asQBXML(QUICKBOOKS_ADD_SALESRECEIPT, null, QUICKBOOKS_LOCAL
 exit;
 */
 
-// 
-$API = new QuickBooks_API('mysql://root:root@localhost/quickbooks_api', 'test', QuickBooks_API::SOURCE_OE);
-
 // Create a new Customer object
-$Customer = new QuickBooks_Object_Customer();
+$Customer = new QuickBooks_QBXML_Object_Customer();
 
 // Set some fields
 $Customer->setFullName('Contractors:ConsoliBYTE, LLC:Keith Palmer');
@@ -78,12 +75,12 @@ print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER));
 print("\r\n\r\n");
 
 print('qbXML Customer for QuickBooks qbXML US editions: ' . "\r\n");
-print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER, null, QUICKBOOKS_LOCALE_UNITED_STATES));
+print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER, null, QuickBooks_QBXML::LOCALE_UNITED_STATES));
 
 print("\r\n\r\n");
 
 print('qbXML Customer for QuickBooks qbXML Online Edition: ' . "\r\n");
-print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER, null, QUICKBOOKS_LOCALE_ONLINE_EDITION));
+print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER, null, QuickBooks_QBXML::LOCALE_ONLINE_EDITION));
 
 print("\r\n\r\n");
 
@@ -91,4 +88,4 @@ $Customer->setListID('1234');
 $Customer->setEditSequence('5678');
 
 print('qbXML Customer (modification) for QuickBooks qbXML Online Edition: ' . "\r\n");
-print($Customer->asQBXML(QUICKBOOKS_MOD_CUSTOMER, null, QUICKBOOKS_LOCALE_ONLINE_EDITION));
+print($Customer->asQBXML(QUICKBOOKS_MOD_CUSTOMER, null, QuickBooks_QBXML::LOCALE_ONLINE_EDITION));

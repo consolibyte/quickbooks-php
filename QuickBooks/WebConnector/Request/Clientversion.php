@@ -19,12 +19,12 @@
 /**
  * QuickBooks request base class
  */
-QuickBooks_Loader::load('/QuickBooks/Request.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Request.php');
 
 /**
  * 
  */
-class QuickBooks_Request_ClientVersion extends QuickBooks_Request
+class QuickBooks_WebConnector_Request_ClientVersion extends QuickBooks_WebConnector_Request
 {
 	public $strVersion;
 	

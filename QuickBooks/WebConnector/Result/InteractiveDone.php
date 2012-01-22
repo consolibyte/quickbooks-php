@@ -19,12 +19,12 @@
 /**
  * QuickBooks result base class
  */
-QuickBooks_Loader::load('/QuickBooks/Result.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result.php');
 
 /**
  * QuickBooks response object for responses to the ->interactiveDone() SOAP method call
  */
-class QuickBooks_Result_InteractiveDone extends QuickBooks_Result
+class QuickBooks_WebConnector_Result_InteractiveDone extends QuickBooks_WebConnector_Result
 {
 	/**
 	 * A string indicating the interactive session is done

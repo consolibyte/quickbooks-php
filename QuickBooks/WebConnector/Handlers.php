@@ -38,42 +38,42 @@ QuickBooks_Loader::load('/QuickBooks/Callbacks.php');
 /**
  * Response container for calls to ->authenticate()
  */
-QuickBooks_Loader::load('/QuickBooks/Result/Authenticate.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result/Authenticate.php');
 
 /**
  * Response container for calls to ->closeConnection()
  */
-QuickBooks_Loader::load('/QuickBooks/Result/CloseConnection.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result/CloseConnection.php');
 
 /**
  * Response container for calls to ->connectionError()
  */
-QuickBooks_Loader::load('/QuickBooks/Result/ConnectionError.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result/ConnectionError.php');
 
 /**
  * Response container for calls to ->getLastError()
  */
-QuickBooks_Loader::load('/QuickBooks/Result/GetLastError.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result/GetLastError.php');
 
 /**
  * Response container for calls to ->receiveResponseXML()
  */
-QuickBooks_Loader::load('/QuickBooks/Result/ReceiveResponseXML.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result/ReceiveResponseXML.php');
 
 /**
  * Response container for calls to ->sendRequestXML()
  */
-QuickBooks_Loader::load('/QuickBooks/Result/SendRequestXML.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result/SendRequestXML.php');
 
 /**
  * Response container for calls to ->getServerVersion()
  */
-QuickBooks_Loader::load('/QuickBooks/Result/ServerVersion.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result/ServerVersion.php');
 
 /**
  * Response container for calls to ->clientVersion()
  */
-QuickBooks_Loader::load('/QuickBooks/Result/ClientVersion.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result/ClientVersion.php');
 
 /**
  * Hook which gets called when the ->authenticate() method gets called
@@ -169,7 +169,7 @@ define('QUICKBOOKS_HANDLERS_HOOK_PERCENT', 'QuickBooks_Handlers::percent');
 /**
  * Handlers for each of the QBWC SOAP server required methods
  */
-class QuickBooks_Handlers
+class QuickBooks_WebConnector_Handlers
 {
 	const HOOK_AUTHENTICATE = QUICKBOOKS_HANDLERS_HOOK_AUTHENTICATE;
 	const HOOK_LOGINSUCCESS = QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS;
@@ -574,7 +574,7 @@ class QuickBooks_Handlers
 					'qbwc_min_run_every_n_seconds' => $min_run_every_n_seconds, 
 					);
 				$hookerr = '';
-				$this->_callHook($ticket, QuickBooks_Handlers::HOOK_LOGINSUCCESS, null, null, null, null, $hookerr, null, array(), $hookdata);
+				$this->_callHook($ticket, QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS, null, null, null, null, $hookerr, null, array(), $hookdata);
 				
 				// Move any recurring events that are due to the queue table
 				$this->_handleRecurringEvents($ticket);

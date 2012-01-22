@@ -19,12 +19,12 @@
 /**
  * Result interface
  */
-QuickBooks_Loader::load('/QuickBooks/Result.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result.php');
 
 /**
  * Result class for ->closeConnection() SOAP method
  */
-class QuickBooks_Result_CloseConnection extends QuickBooks_Result
+class QuickBooks_WebConnector_Result_CloseConnection extends QuickBooks_WebConnector_Result
 {
 	/**
 	 * A message indicating the connection has been closed/update was successful

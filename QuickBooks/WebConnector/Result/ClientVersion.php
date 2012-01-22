@@ -19,12 +19,12 @@
 /**
  * QuickBooks result base class
  */
-QuickBooks_Loader::load('/QuickBooks/Result.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Result.php');
 
 /**
  * Result container object for the SOAP ->clientVersion() method call
  */
-class QuickBooks_Result_ClientVersion extends QuickBooks_Result
+class QuickBooks_WebConnector_Result_ClientVersion extends QuickBooks_WebConnector_Result
 {
 	/**
 	 * Client version response string (empty string, E:..., W:..., or O:...
