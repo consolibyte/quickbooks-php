@@ -12,18 +12,18 @@
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Object.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Object/BillPaymentCheck.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/BillPaymentCheck.php');
 
 /**
  * 
  * 
  */
-class QuickBooks_Object_BillPaymentCheck_AppliedToTxn extends QuickBooks_Object
+class QuickBooks_QBXML_Object_BillPaymentCheck_AppliedToTxn extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks ReceivePayment AppliedToTxn object

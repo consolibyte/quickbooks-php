@@ -1,10 +1,10 @@
 <?php
 
 /**
- * QuickBooks Class object container
+ * QuickBooks CustomerType object container
  * 
  * @author Keith Palmer <keith@consolibyte.com>
- * @license LICENSE.txt
+ * @license LICENSE.txt 
  * 
  * @package QuickBooks
  * @subpackage Object
@@ -13,12 +13,12 @@
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Object.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
  * 
  */
-class QuickBooks_Object_Class extends QuickBooks_Object
+class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_Class object
@@ -64,14 +64,12 @@ class QuickBooks_Object_Class extends QuickBooks_Object
 		return $this->get('ParentRef ListID');
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public function setParentName($name)
 	{
 		return $this->set('ParentRef FullName', $name);
-	}
-	
-	public function getParentFullName()
-	{
-		return $this->get('ParentRef FullName');
 	}
 	
 	/**
@@ -82,9 +80,19 @@ class QuickBooks_Object_Class extends QuickBooks_Object
 		return $this->get('ParentRef FullName');
 	}
 	
+	public function setParentFullName($name)
+	{
+		return $this->set('ParentRef FullName', $name);
+	}
+	
+	public function getParentFullName()
+	{
+		return $this->get('ParentRef FullName');
+	}
+	
 	public function setParentApplicationID($value)
 	{
-		return $this->set('ParentRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_CLASS, QUICKBOOKS_LISTID, $value));
+		return $this->set('ParentRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID($this->object(), QUICKBOOKS_LISTID, $value));
 	}
 	
 	public function getParentApplicationID()
@@ -134,7 +142,7 @@ class QuickBooks_Object_Class extends QuickBooks_Object
 	 */
 	public function setIsActive($value)
 	{
-		return $this->set('IsActive', (boolean) $value);
+		return $this->setBooleanType('IsActive', $value);
 	}
 	
 	/**
@@ -144,7 +152,7 @@ class QuickBooks_Object_Class extends QuickBooks_Object
 	 */
 	public function getIsActive()
 	{
-		return $this->get('IsActive');
+		return $this->getBooleanType('IsActive');
 	}
 	
 	/**
@@ -194,6 +202,6 @@ class QuickBooks_Object_Class extends QuickBooks_Object
 	 */
 	public function object()
 	{
-		return QUICKBOOKS_OBJECT_CLASS;
+		return QUICKBOOKS_OBJECT_CUSTOMERTYPE;
 	}
 }

@@ -18,12 +18,12 @@
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Object.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
  * 
  */
-class QuickBooks_Object_DiscountItem extends QuickBooks_Object
+class QuickBooks_QBXML_Object_DiscountItem extends QuickBooks_QBXML_Object
 {
 	public function __construct($arr = array())
 	{

@@ -27,35 +27,30 @@ QuickBooks_Loader::load('/QuickBooks/XML.php', false);
 QuickBooks_Loader::load('/QuickBooks/XML/Parser.php');
 
 /**
- * QuickBooks API class
- */
-QuickBooks_Loader::load('/QuickBooks/API.php');
-
-/**
  * QuickBooks data type casting
  */
 QuickBooks_Loader::load('/QuickBooks/Cast.php');
-
-/**
- * QuickBooks XML parser option - preserve empty XML elements
- */
-define('QUICKBOOKS_OBJECT_XML_PRESERVE', QuickBooks_XML::XML_PRESERVE);
-
-/**
- * QuickBooks XML parser option - drop empty XML elements
- */
-define('QUICKBOOKS_OBJECT_XML_DROP', QuickBooks_XML::XML_DROP);
-
-/**
- * QuickBooks XML parser option - compress /> empty XML elements
- */
-define('QUICKBOOKS_OBJECT_XML_COMPRESS', QuickBooks_XML::XML_COMPRESS);
 
 /**
  * Base class for QuickBooks objects
  */
 abstract class QuickBooks_QBXML_Object
 {
+	/**
+	 * QuickBooks XML parser option - preserve empty XML elements
+	 */
+	const XML_PRESERVE = QuickBooks_XML::XML_PRESERVE);
+	
+	/**
+	 * QuickBooks XML parser option - drop empty XML elements
+	 */
+	const XML_DROP = QuickBooks_XML::XML_DROP);
+	
+	/**
+	 * QuickBooks XML parser option - compress /> empty XML elements
+	 */
+	const XML_COMPRESS = QuickBooks_XML::XML_COMPRESS);
+
 	/**
 	 * Keys/values stored within the object
 	 * 
@@ -79,73 +74,7 @@ abstract class QuickBooks_QBXML_Object
 	 * @return string
 	 */
 	abstract public function object();
-	
-	/**
-	 * 
-	 */
-	public function encodeApplicationID($type, $tag, $ID)
-	{
-		return QuickBooks_API::encodeApplicationID($type, $tag, $ID);
-	}
-	
-	/**
-	 * 
-	 */
-	public function decodeApplicationID($encode, &$type, &$tag, &$ID)
-	{
-		return QuickBooks_API::decodeApplicationID($encode, $type, $tag, $ID);
-	}
-	
-	/**
-	 * 
-	 */
-	public function extractApplicationID($encode)
-	{
-		return QuickBooks_API::extractApplicationID($encode);
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @param mixed $value
-	 * @return void
-	 */
-	public function setApplicationID($value)
-	{
-		$tag = 'ListID';
-		if (method_exists($this, 'setTxnID') or method_exists($this, 'getTxnID'))
-		{
-			$tag = 'TxnID';
-		}
 		
-		return $this->set(QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID($this->object(), $tag, $value));
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @return mixed
-	 */
-	public function getApplicationID()
-	{
-		return $this->extractApplicationID($this->get(QUICKBOOKS_API_APPLICATIONID));
-	}
-	
-	public function encodeApplicationEditSequence($type, $tag, $ID)
-	{
-		return QuickBooks_API::encodeApplicationEditSequence($type, $tag, $ID);
-	}
-	
-	public function setApplicationEditSequence($value)
-	{
-		return $this->set(QUICKBOOKS_API_APPLICATIONEDITSEQUENCE, $this->encodeApplicationEditSequence($this->object(), 'EditSequence', $value));
-	}
-	
-	public function getApplicationEditSequence()
-	{
-		return $this->extractApplicationEditSequence($this->get(QUICKBOOKS_API_APPLICATIONEDITSEQUENCE));
-	}
-	
 	/**
 	 * Get the date/time this object was created in QuickBooks
 	 * 
@@ -734,7 +663,7 @@ abstract class QuickBooks_QBXML_Object
 							}
 						}
 						
-						$tmp2 = new QuickBooks_Object_Generic($tmp2, $arr->object());
+						$tmp2 = new QuickBooks_QBXML_Object_Generic($tmp2, $arr->object());
 						
 						$tmp[$path][] = $tmp2;
 					}
@@ -862,17 +791,17 @@ abstract class QuickBooks_QBXML_Object
 		$type = QuickBooks_Utilities::actionToObject($action_or_object);
 		
 		$exceptions = array(
-			QUICKBOOKS_OBJECT_SERVICEITEM => 'ServiceItem', 
-			QUICKBOOKS_OBJECT_INVENTORYITEM => 'InventoryItem', 
-			QUICKBOOKS_OBJECT_NONINVENTORYITEM => 'NonInventoryItem', 
-			QUICKBOOKS_OBJECT_DISCOUNTITEM => 'DiscountItem', 
-			QUICKBOOKS_OBJECT_FIXEDASSETITEM => 'FixedAssetItem', 
-			QUICKBOOKS_OBJECT_GROUPITEM => 'GroupItem', 
-			QUICKBOOKS_OBJECT_OTHERCHARGEITEM => 'OtherChargeItem', 
-			QUICKBOOKS_OBJECT_SALESTAXITEM => 'SalesTaxItem', 
-			QUICKBOOKS_OBJECT_SALESTAXGROUPITEM => 'SalesTaxGroupItem', 
-			QUICKBOOKS_OBJECT_SUBTOTALITEM => 'SubtotalItem', 
-			QUICKBOOKS_OBJECT_INVENTORYASSEMBLYITEM => 'InventoryAssemblyItem', 
+			QUICKBOOKS_QBXML_OBJECT_SERVICEITEM => 'ServiceItem', 
+			QUICKBOOKS_QBXML_OBJECT_INVENTORYITEM => 'InventoryItem', 
+			QUICKBOOKS_QBXML_OBJECT_NONINVENTORYITEM => 'NonInventoryItem', 
+			QUICKBOOKS_QBXML_OBJECT_DISCOUNTITEM => 'DiscountItem', 
+			QUICKBOOKS_QBXML_OBJECT_FIXEDASSETITEM => 'FixedAssetItem', 
+			QUICKBOOKS_QBXML_OBJECT_GROUPITEM => 'GroupItem', 
+			QUICKBOOKS_QBXML_OBJECT_OTHERCHARGEITEM => 'OtherChargeItem', 
+			QUICKBOOKS_QBXML_OBJECT_SALESTAXITEM => 'SalesTaxItem', 
+			QUICKBOOKS_QBXML_OBJECT_SALESTAXGROUPITEM => 'SalesTaxGroupItem', 
+			QUICKBOOKS_QBXML_OBJECT_SUBTOTALITEM => 'SubtotalItem', 
+			QUICKBOOKS_QBXML_OBJECT_INVENTORYASSEMBLYITEM => 'InventoryAssemblyItem', 
 			);
 		
 		if (isset($exceptions[$type]))
@@ -886,7 +815,7 @@ abstract class QuickBooks_QBXML_Object
 		
 		if (class_exists($class, false))
 		{
-			$Object = QuickBooks_Object::_fromXMLHelper($class, $XML);
+			$Object = QuickBooks_QBXML_Object::_fromXMLHelper($class, $XML);
 			
 			if (!is_object($Object))
 			{
@@ -896,7 +825,7 @@ abstract class QuickBooks_QBXML_Object
 			$children = array();
 			switch ($Object->object())
 			{
-				case QUICKBOOKS_OBJECT_BILL:
+				case QUICKBOOKS_QBXML_OBJECT_BILL:
 					
 					$children = array(
 						'ItemLineRet' => array( 'QuickBooks_Object_Bill_ItemLine', 'addItemLine' ), 
@@ -904,35 +833,35 @@ abstract class QuickBooks_QBXML_Object
 						);					
 					
 					break;
-				case QUICKBOOKS_OBJECT_PURCHASEORDER:
+				case QUICKBOOKS_QBXML_OBJECT_PURCHASEORDER:
 					
 					$children = array(
 						'PurchaseOrderLineRet' => array( 'QuickBooks_Object_PurchaseOrder_PurchaseOrderLine', 'addPurchaseOrderLine' ), 
 						);
 					
 					break;
-				case QUICKBOOKS_OBJECT_INVOICE:
+				case QUICKBOOKS_QBXML_OBJECT_INVOICE:
 					
 					$children = array( 
 						'InvoiceLineRet' => array( 'QuickBooks_Object_Invoice_InvoiceLine', 'addInvoiceLine' ), 
 						);
 					
 					break;
-				case QUICKBOOKS_OBJECT_ESTIMATE:
+				case QUICKBOOKS_QBXML_OBJECT_ESTIMATE:
 					
 					$children = array( 
 						'EstimateLineRet' => array( 'QuickBooks_Object_Estimate_EstimateLine', 'addEstimateLine' ), 
 						);					
 					
 					break;
-				case QUICKBOOKS_OBJECT_SALESRECEIPT:
+				case QUICKBOOKS_QBXML_OBJECT_SALESRECEIPT:
 					
 					$children = array( 
 						'SalesReceiptLineRet' => array( 'QuickBooks_Object_SalesReceipt_SalesReceiptLine', 'addSalesReceiptLine' ), 
 						);					
 					
 					break;
-				case QUICKBOOKS_OBJECT_JOURNALENTRY:
+				case QUICKBOOKS_QBXML_OBJECT_JOURNALENTRY:
 					
 					$children = array(
 						'JournalCreditLineRet' => array( 'QuickBooks_Object_JournalEntry_JournalCreditLine', 'addCreditLine' ), 
@@ -940,14 +869,14 @@ abstract class QuickBooks_QBXML_Object
 						);
 					
 					break;
-				case QUICKBOOKS_OBJECT_SALESTAXGROUPITEM:
+				case QUICKBOOKS_QBXML_OBJECT_SALESTAXGROUPITEM:
 					
 					$children = array(
 						'ItemSalesTaxRef' => array( 'QuickBooks_Object_SalesTaxGroupItem_ItemSalesTaxRef', 'addItemSalesTaxRef' ), 
 						);
 					
 					break;
-				case QUICKBOOKS_OBJECT_UNITOFMEASURESET:
+				case QUICKBOOKS_QBXML_OBJECT_UNITOFMEASURESET:
 					
 					$children = array(
 						'RelatedUnit' => array( 'QuickBooks_Object_UnitOfMeasureSet_RelatedUnit', 'addRelatedUnit' ), 
@@ -968,7 +897,7 @@ abstract class QuickBooks_QBXML_Object
 					{
 						if ($ChildXML->name() == $node)
 						{
-							$ChildObject = QuickBooks_Object::_fromXMLHelper($childclass, $ChildXML);
+							$ChildObject = QuickBooks_QBXML_Object::_fromXMLHelper($childclass, $ChildXML);
 							$Object->$childmethod($ChildObject);			
 						}	
 					}
@@ -1002,7 +931,7 @@ abstract class QuickBooks_QBXML_Object
 		{
 			$XML = $Doc->getRoot();
 			
-			return QuickBooks_Object::fromXML($XML, $action_or_object);
+			return QuickBooks_QBXML_Object::fromXML($XML, $action_or_object);
 		}
 		
 		return false;

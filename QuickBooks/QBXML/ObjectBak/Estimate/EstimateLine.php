@@ -12,18 +12,18 @@
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Object.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Object/Estimate.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Estimate.php');
 
 /**
  * 
  * 
  */
-class QuickBooks_Object_Estimate_EstimateLine extends QuickBooks_Object
+class QuickBooks_QBXML_Object_Estimate_EstimateLine extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks Invoice InvoiceLine object

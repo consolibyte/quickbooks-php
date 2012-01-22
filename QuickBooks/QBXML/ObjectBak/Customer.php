@@ -13,12 +13,12 @@
 /**
  * Base object class
  */
-QuickBooks_Loader::load('/QuickBooks/Object.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
  * QuickBooks Customer object class
  */
-class QuickBooks_Object_Customer extends QuickBooks_Object
+class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_Customer object

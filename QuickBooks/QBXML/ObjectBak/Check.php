@@ -13,32 +13,32 @@
 /**
  * QuickBooks object base class
  */
-QuickBooks_Loader::load('/QuickBooks/Object.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
  *
  */
-QuickBooks_Loader::load('/QuickBooks/Object/Check/ExpenseLine.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Check/ExpenseLine.php');
 
 /**
  *
  */
-QuickBooks_Loader::load('/QuickBooks/Object/Check/ItemLine.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Check/ItemLine.php');
 
 /**
  *
  */
-QuickBooks_Loader::load('/QuickBooks/Object/Check/ItemGroupLine.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Check/ItemGroupLine.php');
 
 /**
  *
  */
-QuickBooks_Loader::load('/QuickBooks/Object/Check/ApplyCheckToTxn.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Check/ApplyCheckToTxn.php');
 
 /**
  * 
  */
-class QuickBooks_Object_Check extends QuickBooks_Object
+class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_Check object

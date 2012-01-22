@@ -13,17 +13,17 @@
 /**
  * Base object class
  */
-QuickBooks_Loader::load('/QuickBooks/Object.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
  * Dependency class (applied payment)
  */
-QuickBooks_Loader::load('/QuickBooks/Object/BillPaymentCheck/AppliedToTxn.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/BillPaymentCheck/AppliedToTxn.php');
 
 /**
  * QuickBooks ReceivePayment object 
  */
-class QuickBooks_Object_BillPaymentCheck extends QuickBooks_Object
+class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_ReceivePayment object

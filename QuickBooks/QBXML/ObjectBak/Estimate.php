@@ -13,17 +13,17 @@
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Object.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Object/Generic.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Generic.php');
 
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Object/Estimate/EstimateLine.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Estimate/EstimateLine.php');
 
 /**
  * 
