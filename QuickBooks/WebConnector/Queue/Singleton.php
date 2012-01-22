@@ -26,7 +26,7 @@
 /**
  * QuickBooks singleton class for the QuickBooks_Queue class
  */
-class QuickBooks_Queue_Singleton
+class QuickBooks_WebConnector_Queue_Singleton
 {
 	/**
 	 * Initialize the queueing object
@@ -46,7 +46,7 @@ class QuickBooks_Queue_Singleton
 				return false;
 			}
 			
-			$instance = new QuickBooks_Queue($dsn, $user, $config);
+			$instance = new QuickBooks_WebConnector_Queue($dsn, $user, $config);
 		}
 		
 		if ($return_boolean and $instance)
@@ -72,6 +72,6 @@ class QuickBooks_Queue_Singleton
 	 */
 	static public function getInstance()
 	{
-		return QuickBooks_Queue_Singleton::initialize(null, null, null, false);
+		return QuickBooks_WebConnector_Queue_Singleton::initialize(null, null, null, false);
 	}
 }

@@ -9,17 +9,14 @@
  * @subpackage Documentation
  */
 
-// 
+// Error reporting
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
-
-// 
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keithpalmerjr/Projects/QuickBooks/');
 
 /**
  * Require the utilities class
  */
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 $name = 'QuickBooks PostgreSQL Mirror - ' . $_SERVER['HTTP_HOST'];			// A name for your server (make it whatever you want)
 $descrip = 'QuickBooks PostgreSQL Mirror - ' . $_SERVER['HTTP_HOST'];		// A description of your server 
@@ -46,8 +43,8 @@ $username = 'quickbooks';		// This is the username you stored in the 'quickbooks
 //$fileid = '57F3B9B6-86F1-4FCC-B1FF-966DE1813D20';		// Just make this up, but make sure it keeps that format
 //$ownerid = '57F3B9B6-86F1-4FCC-B1FF-166DE1813D20';		// Just make this up, but make sure it keeps that format
 
-$fileid = QuickBooks_QWC::GUID();
-$ownerid = QuickBooks_QWC::GUID();
+$fileid = QuickBooks_WebConnector_QWC::GUID();
+$ownerid = QuickBooks_WebConnector_QWC::GUID();
 
 $qbtype = QUICKBOOKS_TYPE_QBFS;	// You can leave this as-is unless you're using QuickBooks POS
 
@@ -56,7 +53,7 @@ $readonly = false; // No, we want to write data to QuickBooks
 $run_every_n_seconds = 600; // Run every 600 seconds (10 minutes)
 
 // Generate the XML file
-$QWC = new QuickBooks_QWC($name, $descrip, $appurl, $appsupport, $username, $fileid, $ownerid, $qbtype, $readonly, $run_every_n_seconds);
+$QWC = new QuickBooks_WebConnector_QWC($name, $descrip, $appurl, $appsupport, $username, $fileid, $ownerid, $qbtype, $readonly, $run_every_n_seconds);
 $xml = $QWC->generate();
 
 // Send as a file download

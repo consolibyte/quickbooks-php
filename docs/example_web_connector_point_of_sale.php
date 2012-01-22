@@ -23,14 +23,12 @@ if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('America/New_York');
 }
 
-// Include path for the QuickBooks library
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
-
-// I always program in E_STRICT error mode... 
+// Error reporting for easier debugging
 error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', true);
 
 // Require the framework
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 // A username and password you'll use in: 
 //	a) Your .QWC file
@@ -90,13 +88,13 @@ if (!QuickBooks_Utilities::initialized($dsn))
 	// We're going to queue up a request to add a customer, just as a test...
 	$primary_key_of_your_customer = 5;
 
-	$Queue = new QuickBooks_Queue($dsn);
+	$Queue = new QuickBooks_WebConnector_Queue($dsn);
 	$Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_your_customer);
 }
 
 // Create a new server and tell it to handle the requests
 // __construct($dsn_or_conn, $map, $errmap = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_PHP, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array(), $callback_options = array()
-$Server = new QuickBooks_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
+$Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
 $response = $Server->handle(true, true);
 
 /**

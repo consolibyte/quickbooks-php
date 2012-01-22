@@ -38,11 +38,8 @@ if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('America/New_York');
 }
 
-// Include path for the QuickBooks library
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
-
 // Require the framework
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 // A username and password you'll use in: 
 //	a) Your .QWC file
@@ -126,7 +123,7 @@ $errmap = array(
 
 // An array of callback hooks
 $hooks = array(
-	QuickBooks_Handlers::HOOK_LOGINSUCCESS => '_quickbooks_hook_loginsuccess', 	// call this whenever a successful login occurs
+	QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => '_quickbooks_hook_loginsuccess', 	// call this whenever a successful login occurs
 	);
 
 // Logging level
@@ -198,11 +195,11 @@ if (!QuickBooks_Utilities::initialized($dsn))
 }
 
 // Initialize the queue
-QuickBooks_Queue_Singleton::initialize($dsn);
+QuickBooks_WebConnector_Queue_Singleton::initialize($dsn);
 
 // Create a new server and tell it to handle the requests
 // __construct($dsn_or_conn, $map, $errmap = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_PHP, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array(), $callback_options = array()
-$Server = new QuickBooks_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
+$Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
 $response = $Server->handle(true, true);
 
 /*
@@ -223,7 +220,7 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
 	// For new users, we need to set up a few things
 
 	// Fetch the queue instance
-	$Queue = QuickBooks_Queue_Singleton::getInstance();
+	$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 	$date = '1983-01-02 12:01:01';
 	
 	// Set up the invoice imports

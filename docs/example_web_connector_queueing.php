@@ -13,10 +13,14 @@
  * @subpackage Documentation
  */
  
+// Error reporting for easier debugging
+ini_set('display_errors', true);
+error_reporting(E_ALL | E_STRICT);
+ 
 // Require the queueuing class
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
-if ($_POST['customer'])
+if (isset($_POST['customer']))
 {
 	// Oooh, here's a new customer, let's do some stuff with them
 	
@@ -39,7 +43,7 @@ if ($_POST['customer'])
 	$id_value = mysql_insert_id();
 	
 	// QuickBooks queueing class
-	$queue = new QuickBooks_Queue('mysql://root:password@localhost/my_database');
+	$queue = new QuickBooks_WebConnector_Queue('mysql://root:password@localhost/my_database');
 	
 	// Queue it up!
 	$queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $id_value);

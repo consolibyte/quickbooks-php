@@ -9,15 +9,14 @@
  * @subpackage Documentation
  */
 
-// 
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
+// Error reporting... 
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
 /**
  * Require the utilities class
  */
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 $name = 'My QuickBooks SOAP Server';				// A name for your server (make it whatever you want)
 $descrip = 'An example QuickBooks SOAP Server';		// A description of your server 
@@ -37,7 +36,7 @@ $readonly = false; // No, we want to write data to QuickBooks
 $run_every_n_seconds = 600; // Run every 600 seconds (10 minutes)
 
 // Generate the XML file
-$QWC = new QuickBooks_QWC($name, $descrip, $appurl, $appsupport, $username, $fileid, $ownerid, $qbtype, $readonly, $run_every_n_seconds);
+$QWC = new QuickBooks_WebConnector_QWC($name, $descrip, $appurl, $appsupport, $username, $fileid, $ownerid, $qbtype, $readonly, $run_every_n_seconds);
 $xml = $QWC->generate();
 
 // Send as a file download

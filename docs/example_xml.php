@@ -14,16 +14,17 @@
  * @subpackage Documentation
  */
 
-// Error reporting
+// Plain text
 header('Content-Type: text/plain');
+
+// Error reporting
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
 
 /**
  * QuickBooks classes
  */
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 $start = microtime(true);
 

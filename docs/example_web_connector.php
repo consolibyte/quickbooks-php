@@ -35,6 +35,10 @@
  * @subpackage Documentation
  */
 
+// I always program in E_STRICT error mode... 
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 1);
+
 // We need to make sure the correct timezone is set, or some PHP installations will complain
 if (function_exists('date_default_timezone_set'))
 {
@@ -42,12 +46,6 @@ if (function_exists('date_default_timezone_set'))
 	// List of valid timezones is here: http://us3.php.net/manual/en/timezones.php
 	date_default_timezone_set('America/New_York');
 }
-
-// Include path for the QuickBooks library
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
-
-// I always program in E_STRICT error mode... 
-error_reporting(E_ALL | E_STRICT);
 
 // There are some constants you can define to override some default... 
 //define('QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX', 'myqb_');
@@ -59,7 +57,7 @@ error_reporting(E_ALL | E_STRICT);
 //define('QUICKBOOKS_FRAMEWORKS', QUICKBOOKS_FRAMEWORK_WEBCONNECTOR);
 
 // Require the framework
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 // A username and password you'll use in: 
 //	a) Your .QWC file
@@ -297,7 +295,7 @@ if (!QuickBooks_Utilities::initialized($dsn))
 	
 	$primary_key_of_your_customer = 5;
 
-	$Queue = new QuickBooks_Queue($dsn);
+	$Queue = new QuickBooks_WebConnector_Queue($dsn);
 	$Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_your_customer);
 	
 	// Also note the that ->enqueue() method supports some other parameters: 
@@ -326,7 +324,7 @@ if (!QuickBooks_Utilities::initialized($dsn))
 
 // Create a new server and tell it to handle the requests
 // __construct($dsn_or_conn, $map, $errmap = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_PHP, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array(), $callback_options = array()
-$Server = new QuickBooks_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
+$Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
 $response = $Server->handle(true, true);
 
 /*

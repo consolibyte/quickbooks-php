@@ -39,22 +39,12 @@ if (function_exists('date_default_timezone_set'))
 }
 
 // Require the framework
-require_once 'QuickBooks.php'; 
+require_once '../QuickBooks.php'; 
 
 // Web Connector username/password
 $user = 'user';
 $pass = 'pass';
-$dsn = 'mysql://user:pass@localhost/db_name';
-
-/** 
- *  NB: Case counts for the custom field name! The name must match the custom field name in QB
- *      AND the destination field name in the database table.
- *      The database field must allow nulls. Null will stored for customers who don't have the custom field.
- *      Sample database definition line:  app1_account_id varchar(10) NULL,
- *      Remember to add an index for the field for your table in the schema file. Eg
- *      CREATE UNIQUE INDEX app1_account_id_indx ON qb_customer (app1_account_id);
- *      See http://dev.mysql.com/doc/refman/5.5/en/create-index.html
- */
+$dsn = 'mysql://root:root@localhost/quickbooks';
  
 // How many customer records should be grabbed per chunk (we have to chunk up 
 //	the result set, or the Web Connector will barf if there's too much data)
@@ -77,7 +67,7 @@ $errmap = array(
 
 // An array of callback hooks
 $hooks = array(
-	QuickBooks_Handlers::HOOK_LOGINSUCCESS => '_quickbooks_hook_loginsuccess', 	// call this for a successful login
+	QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => '_quickbooks_hook_loginsuccess', 	// call this for a successful login
 	);
 
 // Logging level
@@ -104,10 +94,10 @@ if (!QuickBooks_Utilities::initialized($dsn))
 }
 
 // Initialize the queue
-QuickBooks_Queue_Singleton::initialize($dsn);
+QuickBooks_WebConnector_Queue_Singleton::initialize($dsn);
 
 // Create a new server and tell it to handle the requests
-$Server = new QuickBooks_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
+$Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
 $response = $Server->handle(true, true);
 
 /**
@@ -119,7 +109,7 @@ $response = $Server->handle(true, true);
 function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_data, $callback_config)
 {
 	// Fetch the queue instance
-	$Queue = QuickBooks_Queue_Singleton::getInstance();
+	$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 		
 	// Queue request
 	$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1);
@@ -164,15 +154,15 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
 					<IncludeRetElement>LastName</IncludeRetElement>
 					
 					<!-- Note that you can NOT specify child nodes here. i.e 
-					        You can't indicate that you just want the City tag. 
-					        You'd have to indicate that you want the ShipAddress 
+					        You can\'t indicate that you just want the City tag. 
+					        You\'d have to indicate that you want the ShipAddress 
 					        tag and then parse the City tag out of that in the 
 					        response. For example: -->
 					        
 					<!-- This is WRONG, there is no root level City tag! -->
 					<!-- <IncludeRetElement>City</IncludeRetElement> -->
 					
-					<!-- This is RIGHT, you'll get back the entire ShipAddress, 
+					<!-- This is RIGHT, you\'ll get back the entire ShipAddress, 
 					        and you can then grab the City tag within that. -->
 					<IncludeRetElement>ShipAddress</IncludeRetElement>
 					        
@@ -180,7 +170,7 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
 					<IncludeRetElement>DataExtRet</IncludeRetElement>
 					
 					<!-- Make sure you set OwnerID to 0 (zero) in the query!
-					        If you don't, you won't get back any custom fields! -->
+					        If you don\'t, you won\'t get back any custom fields! -->
 					<OwnerID>0</OwnerID>
 					
 				</CustomerQueryRq>	
@@ -198,7 +188,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 	if (!empty($idents['iteratorRemainingCount']))
 	{
 		// Queue up another request	
-		$Queue = QuickBooks_Queue_Singleton::getInstance();
+		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 		$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, null, 0, array( 'iteratorID' => $idents['iteratorID'] ));
 	}
 	

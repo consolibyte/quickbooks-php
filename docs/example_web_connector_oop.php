@@ -24,9 +24,6 @@ if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('America/New_York');
 }
 
-// Include path for the QuickBooks library
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
-
 // I always program in E_STRICT error mode... 
 error_reporting(E_ALL | E_STRICT);
 
@@ -35,7 +32,7 @@ error_reporting(E_ALL | E_STRICT);
 //define('QUICKBOOKS_DRIVER_SQL_MYSQLI_PREFIX', 'myqb_');
 
 // Require the framework
-require_once 'QuickBooks.php';
+require_once '../QuickBooks.php';
 
 // A username and password you'll use in: 
 //	a) Your .QWC file
@@ -304,7 +301,7 @@ $callback_options = array(
 //	- You are connecting to MySQL with an empty password
 //	- Your MySQL server is located on the same machine as the script ( i.e.: 'localhost', if it were on another machine, you might use 'other-machines-hostname.com', or '192.168.1.5', or ... etc. )
 //	- Your MySQL database name containing the QuickBooks tables is named 'quickbooks' (if the tables don't exist, they'll be created for you) 
-$dsn = 'mysql://root:@localhost/quickbooks';
+$dsn = 'mysql://root:root@localhost/quickbooks';
 //$dsn = 'mysql://root:password@localhost/your_database';				// Connect to a MySQL database with user 'root' and password 'password'
 //$dsn = 'mysqli://root:@localhost/quickbooks_mysqli';					// Connect to a MySQL database using the PHP MySQLi extension
 //$dsn = 'mssql://kpalmer:password@192.168.18.128/test4';					// Connect to MS SQL Server database
@@ -336,7 +333,7 @@ if (!QuickBooks_Utilities::initialized($dsn))
 	
 	$primary_key_of_your_customer = 5;
 
-	$Queue = new QuickBooks_Queue($dsn);
+	$Queue = new QuickBooks_WebConnector_Queue($dsn);
 	$Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_your_customer);
 	
 	// Also note the that ->enqueue() method supports some other parameters: 
@@ -354,7 +351,7 @@ $obj->setDSN($dsn);
 
 // Create a new server and tell it to handle the requests
 // __construct($dsn_or_conn, $map, $errmap = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_PHP, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array(), $callback_options = array()
-$Server = new QuickBooks_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
+$Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
 $response = $Server->handle(true, true);
 
 /*
