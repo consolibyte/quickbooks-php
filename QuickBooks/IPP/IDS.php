@@ -186,8 +186,10 @@ class QuickBooks_IPP_IDS
 	
 	static public function parseIDType($str)
 	{
+		$str = trim($str, '{}');
+		
 		// @todo Add validation here so that it always returns the correct types (string/integer)
-		$arr = explode('-', trim($str, '{}'));
+		$arr = explode('-', $str);
 		
 		if (count($arr) == 2)
 		{
@@ -197,7 +199,7 @@ class QuickBooks_IPP_IDS
 			return $arr;
 		}
 		
-		return array( 0 => '?', 'domain' => '?', 1 => $str, 'ID' => $str );
+		return array( 0 => '', 'domain' => '', 1 => $str, 'ID' => $str );
 	}
 	
 	static public function buildIDType($domain, $ID)

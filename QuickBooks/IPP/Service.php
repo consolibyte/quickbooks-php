@@ -298,17 +298,26 @@ abstract class QuickBooks_IPP_Service
 			$Object->remove($unset);
 		}
 		
-		// Build the XML request
-		$xml = '';
-		$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-		$xml .= '<Add xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '" ' . QUICKBOOKS_CRLF;
-		$xml .= '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' . QUICKBOOKS_CRLF;
-		$xml .= '	RequestId="' . md5(mt_rand() . microtime()) . '" ' . QUICKBOOKS_CRLF;
-		$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/' . $IPP->version() . ' ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
-		$xml .= '	<OfferingId>ipp</OfferingId>' . QUICKBOOKS_CRLF;
-		$xml .= '	<ExternalRealmId>' . $realmID . '</ExternalRealmId>' . QUICKBOOKS_CRLF;
-		$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP_IDS::OPTYPE_ADD);
-		$xml .= '</Add>';
+		if ($IPP->flavor() == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
+		{
+			// Build the XML request
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+			$xml .= '<Add xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '" ' . QUICKBOOKS_CRLF;
+			$xml .= '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' . QUICKBOOKS_CRLF;
+			$xml .= '	RequestId="' . md5(mt_rand() . microtime()) . '" ' . QUICKBOOKS_CRLF;
+			$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/' . $IPP->version() . ' ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
+			$xml .= '	<OfferingId>ipp</OfferingId>' . QUICKBOOKS_CRLF;
+			$xml .= '	<ExternalRealmId>' . $realmID . '</ExternalRealmId>' . QUICKBOOKS_CRLF;
+			$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP_IDS::OPTYPE_ADD);
+			$xml .= '</Add>';
+		}
+		else
+		{
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' . QUICKBOOKS_CRLF;
+			$xml .= $Object->asIDSXML(0, null, QuickBooks_IPP_IDS::OPTYPE_ADD, $IPP->flavor());
+		}
 		
 		// Send the data to IPP 
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_ADD, $xml);

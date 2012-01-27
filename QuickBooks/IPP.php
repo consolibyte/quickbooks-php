@@ -955,8 +955,7 @@ class QuickBooks_IPP
 		//$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
 		$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
 		
-		$action = null;
-		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $action, $xml, $post);
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
 		
 		// Check for generic IPP errors and HTTP errors
 		if ($this->_hasErrors($response))
@@ -1167,6 +1166,8 @@ class QuickBooks_IPP
 		$headers = array(
 			);
 			
+		//print('[' . $this->_flavor . '], ACTION [' . $action . ']');
+		
 		if ($type == QuickBooks_IPP::REQUEST_IPP)
 		{
 			$headers['Content-Type'] = 'application/xml';
@@ -1180,7 +1181,14 @@ class QuickBooks_IPP
 			}
 			else if ($this->_flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
 			{
-				$headers['Content-Type'] = 'application/x-www-form-urlencoded';
+				if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD or $action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
+				{
+					$headers['Content-Type'] = 'application/xml';
+				}
+				else
+				{
+					$headers['Content-Type'] = 'application/x-www-form-urlencoded';
+				}
 			}
 			
 			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $Context->token() . '",intuit-token="' . $Context->ticket() . '"';

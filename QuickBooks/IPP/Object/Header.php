@@ -14,6 +14,11 @@ class QuickBooks_IPP_Object_Header extends QuickBooks_IPP_Object
 		return $this->getDateType('TxnDate', $format);
 	}
 	
+	public function setTotalAmt($amt)
+	{
+		return $this->setAmountType('TotalAmt', $amt);
+	}
+	
 	protected function _order()
 	{
 		return array(

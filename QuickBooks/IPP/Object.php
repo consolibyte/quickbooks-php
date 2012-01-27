@@ -75,6 +75,11 @@ class QuickBooks_IPP_Object
 		return date($format, strtotime($this->get($field)));
 	}
 	
+	public function setAmountType($field, $value)
+	{
+		return $this->set($field, sprintf('%01.2f', $value));
+	}
+	
 	public function remove($field)
 	{
 		if (isset($this->_data[$field]))
@@ -251,7 +256,7 @@ class QuickBooks_IPP_Object
 		return $retr;
 	}
 	
-	public function asIDSXML($indent = 0, $parent = null, $optype = null)
+	public function asIDSXML($indent = 0, $parent = null, $optype = null, $flavor = null)
 	{
 		// We're not going to actually change the data, just change a copy of it
 		$data = $this->_data;
@@ -263,7 +268,14 @@ class QuickBooks_IPP_Object
 		
 		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD)
 		{
-			$xml = str_repeat("\t", $indent) . '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
+			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
+			{
+				$xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' xmlns="http://www.intuit.com/sb/cdm/v2" xmlns:ns2="http://www.intuit.com/sb/cdm/qbopayroll/v1" xmlns:ns3="http://www.intuit.com/sb/cdm/qbo">' . QUICKBOOKS_CRLF;
+			}
+			else
+			{
+				$xml = str_repeat("\t", $indent) . '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
+			}
 			
 			// Merge in the defaults for this object type
 			$data = array_merge($this->_defaults(), $data);
@@ -282,7 +294,7 @@ class QuickBooks_IPP_Object
 			if (is_object($value))
 			{
 				// If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
-				$xml .= $value->asIDSXML($indent + 1);
+				$xml .= $value->asIDSXML($indent + 1, null, null, $flavor);
 			}
 			else if (is_array($value))
 			{
@@ -292,7 +304,7 @@ class QuickBooks_IPP_Object
 					
 					if (is_object($svalue))
 					{
-						$xml .= $svalue->asIDSXML($indent + 1, $key);
+						$xml .= $svalue->asIDSXML($indent + 1, $key, null, $flavor);
 					}
 					else if (substr($key, -2, 2) == 'Id')
 					{
@@ -300,7 +312,15 @@ class QuickBooks_IPP_Object
 						
 						$tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
 						
-						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+						if ($tmp[0])
+						{
+							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+						}
+						else
+						{
+							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+						}
+						
 						$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
 						$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;						
 					}
@@ -322,7 +342,15 @@ class QuickBooks_IPP_Object
 				
 				$tmp = QuickBooks_IPP_IDS::parseIdType($value);
 				
-				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+				if ($tmp[0])
+				{
+					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+				}
+				else
+				{
+					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+				}
+				
 				$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
 				$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
 			}
@@ -338,7 +366,14 @@ class QuickBooks_IPP_Object
 		
 		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD)
 		{
-			$xml .= str_repeat("\t", $indent) . '</Object>' . QUICKBOOKS_CRLF;
+			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
+			{
+				$xml .= str_repeat("\t", $indent) . '</' . $this->resource() . '>' . QUICKBOOKS_CRLF;
+			}
+			else
+			{
+				$xml .= str_repeat("\t", $indent) . '</Object>' . QUICKBOOKS_CRLF;
+			}
 		}
 		else
 		{
