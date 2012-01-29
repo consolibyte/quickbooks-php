@@ -38,7 +38,7 @@ if (isset($_POST['submitted']))
 	$id = mysql_insert_id();
 	
 	// Queue up the customer add 
-	$Queue = new QuickBooks_Queue($dsn);
+	$Queue = new QuickBooks_WebConnector_Queue($dsn);
 	$Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $id);
 	
 	die('Great, queued up a customer!');

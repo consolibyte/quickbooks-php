@@ -473,7 +473,7 @@ class QuickBooks_WebConnector_Handlers
 			//$this->_driver->log('Connection from remote address rejected: ' . $_SERVER['REMOTE_ADDR'], null, QUICKBOOKS_LOG_VERBOSE);
 			$this->_log('Connection from remote address rejected: ' . $_SERVER['REMOTE_ADDR'], null, QUICKBOOKS_LOG_VERBOSE);
 			
-			return new QuickBooks_Result_Authenticate('', 'nvu', null, null);
+			return new QuickBooks_WebConnector_Result_Authenticate('', 'nvu', null, null);
 		}
 		
 		// Check for concurrent logins
@@ -486,7 +486,7 @@ class QuickBooks_WebConnector_Handlers
 			{
 				$this->_log('Denied concurrent login from: ' . $obj->strUserName, null, QUICKBOOKS_LOG_VERBOSE);
 			
-				return new QuickBooks_Result_Authenticate('', 'nvu', null, null);
+				return new QuickBooks_WebConnector_Result_Authenticate('', 'nvu', null, null);
 			}
 		}
 		
@@ -603,7 +603,7 @@ class QuickBooks_WebConnector_Handlers
 				$status = 'nvu'; // Invalid username/password
 			}
 			
-			return new QuickBooks_Result_Authenticate($ticket, $status, $wait_before_next_update, $min_run_every_n_seconds);
+			return new QuickBooks_WebConnector_Result_Authenticate($ticket, $status, $wait_before_next_update, $min_run_every_n_seconds);
 		} 
 		else	// Standard authentication
 		{
@@ -667,7 +667,7 @@ class QuickBooks_WebConnector_Handlers
 				$status = 'nvu'; // Invalid username/password
 			}
 			
-			return new QuickBooks_Result_Authenticate($ticket, $status, $wait_before_next_update, $min_run_every_n_seconds);
+			return new QuickBooks_WebConnector_Result_Authenticate($ticket, $status, $wait_before_next_update, $min_run_every_n_seconds);
 		}
 	}
 	
@@ -776,7 +776,7 @@ class QuickBooks_WebConnector_Handlers
 					//$this->_driver->queueStatus($obj->ticket, $next['qb_action'], $next['ident'], QUICKBOOKS_STATUS_NOOP, 'Handler function returned: ' . QUICKBOOKS_NOOP);
 					$this->_driver->queueStatus($obj->ticket, $next['quickbooks_queue_id'], QUICKBOOKS_STATUS_NOOP, 'Handler function returned: ' . QUICKBOOKS_NOOP);
 					
-					return new QuickBooks_Result_SendRequestXML('');
+					return new QuickBooks_WebConnector_Result_SendRequestXML('');
 				}
 				
 				// If the requestID="..." attribute was not specified, we can try to automatically add it to the request
@@ -839,7 +839,7 @@ class QuickBooks_WebConnector_Handlers
 					//$this->_handleError($obj->ticket, QUICKBOOKS_ERROR_HANDLER, $err, $this->_constructRequestID($next['qb_action'], $next['ident']), $next['qb_action'], $next['ident'], $extra, $errerr, $xml);
 					$this->_handleError($obj->ticket, QUICKBOOKS_ERROR_HANDLER, $err, $next['quickbooks_queue_id'], $next['qb_action'], $next['ident'], $extra, $errerr, $xml);
 					
-					return new QuickBooks_Result_SendRequestXML('');
+					return new QuickBooks_WebConnector_Result_SendRequestXML('');
 				}
 				else
 				{
@@ -854,13 +854,13 @@ class QuickBooks_WebConnector_Handlers
 						$this->_driver->queueStatus($obj->ticket, $next['quickbooks_queue_id'], QUICKBOOKS_STATUS_SUCCESS, 'Unverified... no requestID attribute in XML stream.');
 					}
 					
-					return new QuickBooks_Result_SendRequestXML($xml);
+					return new QuickBooks_WebConnector_Result_SendRequestXML($xml);
 				}
 			}
 		}
 		
 		// Reporting an error, this will cause the QBWC to call ->getLastError()
-		return new QuickBooks_Result_SendRequestXML('');
+		return new QuickBooks_WebConnector_Result_SendRequestXML('');
 	}
 	
 	/**
@@ -1365,7 +1365,7 @@ class QuickBooks_WebConnector_Handlers
 				//$this->_driver->log('Transaction error at ' . $progress . '% complete... ', $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
 				$this->_log('Transaction error at ' . $progress . '% complete... ', $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
 				
-				return new QuickBooks_Result_ReceiveResponseXML($progress);
+				return new QuickBooks_WebConnector_Result_ReceiveResponseXML($progress);
 			}
 			
 			$extra = null;
@@ -1415,7 +1415,7 @@ class QuickBooks_WebConnector_Handlers
 				
 				$progress = -1;
 				
-				return new QuickBooks_Result_ReceiveResponseXML($progress);
+				return new QuickBooks_WebConnector_Result_ReceiveResponseXML($progress);
 			}
 			
 			// Extract ListID, TxnID, etc. from the response
@@ -1480,10 +1480,10 @@ class QuickBooks_WebConnector_Handlers
 			//$this->_driver->log($progress . '% complete... ', $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
 			$this->_log($progress . '% complete... ', $obj->ticket, QUICKBOOKS_LOG_VERBOSE);
 			
-			return new QuickBooks_Result_ReceiveResponseXML($progress);
+			return new QuickBooks_WebConnector_Result_ReceiveResponseXML($progress);
 		}
 		
-		return new QuickBooks_Result_ReceiveResponseXML(-1);
+		return new QuickBooks_WebConnector_Result_ReceiveResponseXML(-1);
 	}
 
 	/**
@@ -1521,10 +1521,10 @@ class QuickBooks_WebConnector_Handlers
 			$err = '';
 			$this->_handleError($obj->ticket, $obj->hresult, $obj->message, null, null, null, null, $err, null);
 			
-			return new QuickBooks_Result_ConnectionError('done');
+			return new QuickBooks_WebConnector_Result_ConnectionError('done');
 		}
 		
-		return new QuickBooks_Result_ConnectionError('done');
+		return new QuickBooks_WebConnector_Result_ConnectionError('done');
 	}
 
 	/**
@@ -1559,10 +1559,10 @@ class QuickBooks_WebConnector_Handlers
 			
 			$lasterr = $this->_driver->errorLast($obj->ticket);
 			
-			return new QuickBooks_Result_GetLastError($lasterr);
+			return new QuickBooks_WebConnector_Result_GetLastError($lasterr);
 		}
 	
-		return new QuickBooks_Result_GetLastError('Bad ticket.');
+		return new QuickBooks_WebConnector_Result_GetLastError('Bad ticket.');
 	}
 	
 	/**
@@ -1597,11 +1597,11 @@ class QuickBooks_WebConnector_Handlers
 			$this->_callHook($obj->ticket, QUICKBOOKS_HANDLERS_HOOK_CLOSECONNECTION, null, null, null, null, $hookerr, null, array(), $hookdata);
 			
 			// 
-			return new QuickBooks_Result_CloseConnection('Complete!');
+			return new QuickBooks_WebConnector_Result_CloseConnection('Complete!');
 		}
 		
 		// Bad ticket
-		return new QuickBooks_Result_CloseConnection('Bad ticket.');
+		return new QuickBooks_WebConnector_Result_CloseConnection('Bad ticket.');
 	}
 	
 	/**
@@ -1622,7 +1622,7 @@ class QuickBooks_WebConnector_Handlers
 		$hookerr = '';
 		$this->_callHook(null, QUICKBOOKS_HANDLERS_HOOK_SERVERVERSION, null, null, null, null, $hookerr, null, array(), $hookdata);
 		
-		return new QuickBooks_Result_ServerVersion($this->_config['server_version']);
+		return new QuickBooks_WebConnector_Result_ServerVersion($this->_config['server_version']);
 	}
 	
 	/**
@@ -1664,11 +1664,11 @@ class QuickBooks_WebConnector_Handlers
 				//$this->_driver->log('Version Requirement, current: ' . $obj->strVersion . ', required: ' . $this->_config['qbwc_min_version'], '', QUICKBOOKS_LOG_NORMAL);
 				$this->_log('Version Requirement, current: ' . $obj->strVersion . ', required: ' . $this->_config['qbwc_min_version'], '', QUICKBOOKS_LOG_NORMAL);
 				
-				return new QuickBooks_Result_ClientVersion('O:' . $this->_config['qbwc_min_version']);
+				return new QuickBooks_WebConnector_Result_ClientVersion('O:' . $this->_config['qbwc_min_version']);
 			}
 		}
 
-		return new QuickBooks_Result_ClientVersion('');
+		return new QuickBooks_WebConnector_Result_ClientVersion('');
 	}
 	
 	/**

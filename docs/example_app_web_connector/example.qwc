@@ -2,7 +2,7 @@
 <QBWCXML>
 	<AppName>QuickBooks Web Connector example</AppName>
 	<AppID></AppID>
-	<AppURL>https://secure.domain.com/path/to/server.php</AppURL>
+	<AppURL>https://secure.domain.com/path/to/qbwc.php</AppURL>
 	<AppDescription></AppDescription>
 	<AppSupport>http://www.domain.com/support.php</AppSupport>
 	<UserName>username</UserName>

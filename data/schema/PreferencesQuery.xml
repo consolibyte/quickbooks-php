@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="10.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnError">
+<PreferencesQueryRq>
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+</PreferencesQueryRq>
+<PreferencesQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+<PreferencesRet> <!-- optional -->
+<AccountingPreferences> <!-- required -->
+<IsUsingAccountNumbers >BOOLTYPE</IsUsingAccountNumbers> <!-- required -->
+<IsRequiringAccounts >BOOLTYPE</IsRequiringAccounts> <!-- required -->
+<IsUsingClassTracking >BOOLTYPE</IsUsingClassTracking> <!-- required -->
+<IsUsingAuditTrail >BOOLTYPE</IsUsingAuditTrail> <!-- required -->
+<IsAssigningJournalEntryNumbers >BOOLTYPE</IsAssigningJournalEntryNumbers> <!-- required -->
+<ClosingDate >DATETYPE</ClosingDate> <!-- optional -->
+</AccountingPreferences>
+<FinanceChargePreferences> <!-- required -->
+<AnnualInterestRate >PERCENTTYPE</AnnualInterestRate> <!-- optional -->
+<MinFinanceCharge >AMTTYPE</MinFinanceCharge> <!-- optional -->
+<GracePeriod >INTTYPE</GracePeriod> <!-- required -->
+<FinanceChargeAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</FinanceChargeAccountRef>
+<IsAssessingForOverdueCharges >BOOLTYPE</IsAssessingForOverdueCharges> <!-- required -->
+<!-- CalculateChargesFrom may have one of the following values: DueDate, InvoiceOrBilledDate -->
+<CalculateChargesFrom >ENUMTYPE</CalculateChargesFrom> <!-- required -->
+<IsMarkedToBePrinted >BOOLTYPE</IsMarkedToBePrinted> <!-- required -->
+</FinanceChargePreferences>
+<JobsAndEstimatesPreferences> <!-- required -->
+<IsUsingEstimates >BOOLTYPE</IsUsingEstimates> <!-- required -->
+<IsUsingProgressInvoicing >BOOLTYPE</IsUsingProgressInvoicing> <!-- required -->
+<IsPrintingItemsWithZeroAmounts >BOOLTYPE</IsPrintingItemsWithZeroAmounts> <!-- required -->
+</JobsAndEstimatesPreferences>
+<MultiCurrencyPreferences> <!-- optional -->
+<IsMultiCurrencyOn >BOOLTYPE</IsMultiCurrencyOn> <!-- optional -->
+<HomeCurrencyRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</HomeCurrencyRef>
+</MultiCurrencyPreferences>
+<MultiLocationInventoryPreferences> <!-- optional -->
+<IsMultiLocationInventoryAvailable >BOOLTYPE</IsMultiLocationInventoryAvailable> <!-- optional -->
+<IsMultiLocationInventoryEnabled >BOOLTYPE</IsMultiLocationInventoryEnabled> <!-- optional -->
+</MultiLocationInventoryPreferences>
+<PurchasesAndVendorsPreferences> <!-- required -->
+<IsUsingInventory >BOOLTYPE</IsUsingInventory> <!-- required -->
+<DaysBillsAreDue >INTTYPE</DaysBillsAreDue> <!-- required -->
+<IsAutomaticallyUsingDiscounts >BOOLTYPE</IsAutomaticallyUsingDiscounts> <!-- required -->
+<DefaultDiscountAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</DefaultDiscountAccountRef>
+</PurchasesAndVendorsPreferences>
+<ReportsPreferences> <!-- required -->
+<!-- AgingReportBasis may have one of the following values: AgeFromDueDate, AgeFromTransactionDate -->
+<AgingReportBasis >ENUMTYPE</AgingReportBasis> <!-- required -->
+<!-- SummaryReportBasis may have one of the following values: Accrual, Cash -->
+<SummaryReportBasis >ENUMTYPE</SummaryReportBasis> <!-- required -->
+</ReportsPreferences>
+<SalesAndCustomersPreferences> <!-- required -->
+<DefaultShipMethodRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</DefaultShipMethodRef>
+<DefaultFOB >STRTYPE</DefaultFOB> <!-- optional -->
+<DefaultMarkup >PERCENTTYPE</DefaultMarkup> <!-- optional -->
+<IsTrackingReimbursedExpensesAsIncome >BOOLTYPE</IsTrackingReimbursedExpensesAsIncome> <!-- required -->
+<IsAutoApplyingPayments >BOOLTYPE</IsAutoApplyingPayments> <!-- required -->
+<PriceLevels> <!-- optional -->
+<IsUsingPriceLevels >BOOLTYPE</IsUsingPriceLevels> <!-- required -->
+<IsRoundingSalesPriceUp >BOOLTYPE</IsRoundingSalesPriceUp> <!-- optional -->
+</PriceLevels>
+</SalesAndCustomersPreferences>
+<SalesTaxPreferences> <!-- optional -->
+<DefaultItemSalesTaxRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</DefaultItemSalesTaxRef>
+<!-- PaySalesTax may have one of the following values: Monthly, Quarterly, Annually -->
+<PaySalesTax >ENUMTYPE</PaySalesTax> <!-- required -->
+<DefaultTaxableSalesTaxCodeRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</DefaultTaxableSalesTaxCodeRef>
+<DefaultNonTaxableSalesTaxCodeRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</DefaultNonTaxableSalesTaxCodeRef>
+<IsUsingVendorTaxCode >BOOLTYPE</IsUsingVendorTaxCode> <!-- optional -->
+<IsUsingCustomerTaxCode >BOOLTYPE</IsUsingCustomerTaxCode> <!-- optional -->
+<IsUsingAmountsIncludeTax >BOOLTYPE</IsUsingAmountsIncludeTax> <!-- optional -->
+</SalesTaxPreferences>
+<TimeTrackingPreferences> <!-- optional -->
+<!-- FirstDayOfWeek may have one of the following values: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday -->
+<FirstDayOfWeek >ENUMTYPE</FirstDayOfWeek> <!-- required -->
+</TimeTrackingPreferences>
+<CurrentAppAccessRights> <!-- required -->
+<IsAutomaticLoginAllowed >BOOLTYPE</IsAutomaticLoginAllowed> <!-- required -->
+<AutomaticLoginUserName >STRTYPE</AutomaticLoginUserName> <!-- optional -->
+<IsPersonalDataAccessAllowed >BOOLTYPE</IsPersonalDataAccessAllowed> <!-- required -->
+</CurrentAppAccessRights>
+</PreferencesRet>
+</PreferencesQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

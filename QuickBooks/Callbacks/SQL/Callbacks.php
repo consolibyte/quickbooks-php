@@ -162,8 +162,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		// List of all actions we're performing
 		$actions = array();
 		
-		if ($mode == QuickBooks_Server_SQL::MODE_READONLY or 
-			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
+		if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_READONLY or 
+			$mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE)
 		{
 			//print_r($sql_query);
 			//print_r($sql_map);
@@ -242,8 +242,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		$time_start = time();	// When we started
 		
 		// Objects that need to be *ADDED* to QuickBooks
-		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
-			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
+		if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY or 
+			$mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE)
 		{
 			$mark_as_queued = false;
 			$map = $Map->adds($sql_add, $mark_as_queued);
@@ -279,8 +279,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		//print('3 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
 		
 		// Objects that need to be *MODIFIED* within QuickBooks
-		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
-			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
+		if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY or 
+			$mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE)
 		{
 			// Check if any objects need to be pushed back to QuickBooks 
 			foreach ($sql_mod as $action => $priority)
@@ -344,8 +344,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		//print('4 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
 		
-		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
-			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
+		if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY or 
+			$mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE)
 		{
 			// Check if any *voided* objects need to be voided in QuickBooks
 			foreach ($sql_add as $action => $priority)
@@ -401,8 +401,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		//print('5 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
 		
-		if ($mode == QuickBooks_Server_SQL::MODE_WRITEONLY or 
-			$mode == QuickBooks_Server_SQL::MODE_READWRITE)
+		if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY or 
+			$mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE)
 		{
 			// Check if any *deleted* objects need to be deleted from QuickBooks 
 			foreach ($sql_add as $action => $priority)
@@ -9210,7 +9210,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				// If we are actually deleting an entire element, then we need to check the delete mode and if desired, just flag them rather than remove the rows.
 				if ($fullDelete and
 					isset($callback_config['delete']) and 
-					$callback_config['delete'] == QuickBooks_Server_SQL::DELETE_FLAG)
+					$callback_config['delete'] == QuickBooks_WebConnector_Server_SQL::DELETE_FLAG)
 				{
 					if ($key == 'dataext' and !$deleteDataExt)
 					{
@@ -9471,7 +9471,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						
 						if (empty($callback_config['mode']))
 						{
-							$callback_config['mode'] = QuickBooks_Server_SQL::MODE_READONLY;
+							$callback_config['mode'] = QuickBooks_WebConnector_Server_SQL::MODE_READONLY;
 						}
 						
 						if (isset($extra['is_query_response']) or
@@ -9492,19 +9492,19 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						// @todo I think this should only apply to query and improt, right? I mean, if it's a mod or add, then 
 						//	*of course* it was modified after resynced, thats how we knew to send it back to QuickBooks... 
 						if ($tmp[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY] > $tmp[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC] and
-							$callback_config['mode'] != QuickBooks_Server_SQL::MODE_READONLY)
+							$callback_config['mode'] != QuickBooks_WebConnector_Server_SQL::MODE_READONLY)
 						{
 							// CONFLICT resolution code
 							
 							switch ($callback_config['conflicts'])
 							{
-								case QuickBooks_Server_SQL::CONFLICT_NEWER:
+								case QuickBooks_WebConnector_Server_SQL::CONFLICT_NEWER:
 								
 									$msg = 'Conflict mode: (newer) ' . $callback_config['conflicts'] . ' is not supported right now.';
 									trigger_error($msg);
 									die($msg);
 								
-								case QuickBooks_Server_SQL::CONFLICT_QUICKBOOKS:
+								case QuickBooks_WebConnector_Server_SQL::CONFLICT_QUICKBOOKS:
 									
 									// QuickBooks is master, so remove all existing child records of this record, then apply the QuickBooks version update
 									
@@ -9515,14 +9515,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
 									//$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object, array( $multipart ));
 									
 									break;
-								case QuickBooks_Server_SQL::CONFLICT_CALLBACK:
+								case QuickBooks_WebConnector_Server_SQL::CONFLICT_CALLBACK:
 									
 									$msg = 'Conflict mode: (callback) ' . $callback_config['conflicts'] . ' is not supported right now.';
 									trigger_error($msg);
 									die($msg);
 									
 									break;
-								case QuickBooks_Server_SQL::CONFLICT_SQL:
+								case QuickBooks_WebConnector_Server_SQL::CONFLICT_SQL:
 										
 									// The SQL table is the master table, but we have an out-of-date EditSequence value
 									//	In this case, what we want to do is update our record to the latest EditSequence value, 
@@ -9539,7 +9539,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 									$Driver->queueEnqueue($user, QuickBooks_Utilities::convertActionToMod($action), $tmp[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY, $extra);
 										
 									break;
-								case QuickBooks_Server_SQL::CONFLICT_LOG:
+								case QuickBooks_WebConnector_Server_SQL::CONFLICT_LOG:
 								default:
 									
 									if (isset($extra['IsModResponse']) or isset($extra['is_mod_response']) or isset($extra['is_add_response']))
@@ -9590,7 +9590,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							$ignore_this_and_its_children = true;
 						}
 						
-						if ($callback_config['mode'] == QuickBooks_Server_SQL::MODE_WRITEONLY)
+						if ($callback_config['mode'] == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY)
 						{
 							// In WRITE-ONLY mode, we only write changes to QuickBooks, but never read them back
 							
@@ -9702,7 +9702,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					{
 						// The record *DOES NOT* exist in the current table, so just INSERT it
 						
-						if ($callback_config['mode'] != QuickBooks_Server_SQL::MODE_WRITEONLY)
+						if ($callback_config['mode'] != QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY)
 						{
 							// This handles setting certain special fields (booleans, SortOrder, etc.)
 							QuickBooks_Callbacks_SQL_Callbacks::_massageInsertRecord($table, $object);

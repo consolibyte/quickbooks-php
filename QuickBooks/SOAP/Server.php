@@ -53,8 +53,8 @@ class QuickBooks_SOAP_Server
 	 */
 	protected function _requestFactory($request)
 	{
-		$class = 'QuickBooks_Request_' . ucfirst(strtolower($request));
-		$file = '/QuickBooks/Request/' . ucfirst(strtolower($request)) . '.php';
+		$class = 'QuickBooks_WebConnector_Request_' . ucfirst(strtolower($request));
+		$file = '/QuickBooks/WebConnector/Request/' . ucfirst(strtolower($request)) . '.php';
 		
 		// Make sure that class gets loaded
 		QuickBooks_Loader::load($file, false);
@@ -75,10 +75,7 @@ class QuickBooks_SOAP_Server
 	 */	
 	public function handle($raw_http_input)
 	{
-		// determine the method, call the correct handler function 
-		//
-		
-		//print('does this get called?');
+		// Determine the method, call the correct handler function 
 		
 		$builtin = QuickBooks_XML::PARSER_BUILTIN;		// The SimpleXML parser has a difference namespace behavior, so force this to use the builtin parser
 		$Parser = new QuickBooks_XML_Parser($raw_http_input, $builtin);

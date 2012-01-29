@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<BillingRateQueryRq metaData="ENUMTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<ItemRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemRef>
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+</BillingRateQueryRq>
+<BillingRateQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+<BillingRateRet> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- optional -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- optional -->
+<EditSequence >STRTYPE</EditSequence> <!-- optional -->
+<Name >STRTYPE</Name> <!-- optional -->
+<!-- BillingRateType may have one of the following values: FixedRate, PerItem -->
+<BillingRateType >ENUMTYPE</BillingRateType> <!-- optional -->
+<!-- BEGIN OR -->
+<FixedBillingRate >PRICETYPE</FixedBillingRate> <!-- optional -->
+<!-- OR -->
+<BillingRatePerItemRet> <!-- optional, may repeat -->
+<ItemRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ItemRef>
+<!-- BEGIN OR -->
+<CustomRate >PRICETYPE</CustomRate> <!-- optional -->
+<!-- OR -->
+<CustomRatePercent >PERCENTTYPE</CustomRatePercent> <!-- optional -->
+<!-- END OR -->
+</BillingRatePerItemRet>
+<!-- END OR -->
+</BillingRateRet>
+</BillingRateQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

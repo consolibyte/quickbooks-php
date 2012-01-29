@@ -34,6 +34,8 @@ class QuickBooks_Loader
 	 */
 	static public function load($file, $autoload = true)
 	{
+		//print('loading file [' . $file . ']' . "\n");
+		
 		if ($autoload and 
 			QuickBooks_Loader::_autoload())
 		{

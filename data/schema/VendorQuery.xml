@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<VendorQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+<ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<TotalBalanceFilter> <!-- optional -->
+<!-- Operator may have one of the following values: LessThan, LessThanEqual, Equal, GreaterThan, GreaterThanEqual -->
+<Operator >ENUMTYPE</Operator> <!-- required -->
+<Amount >AMTTYPE</Amount> <!-- required -->
+</TotalBalanceFilter>
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</VendorQueryRq>
+<VendorQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+<VendorRet> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<CompanyName >STRTYPE</CompanyName> <!-- optional -->
+<Salutation >STRTYPE</Salutation> <!-- optional -->
+<FirstName >STRTYPE</FirstName> <!-- optional -->
+<MiddleName >STRTYPE</MiddleName> <!-- optional -->
+<LastName >STRTYPE</LastName> <!-- optional -->
+<VendorAddress> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+<City >STRTYPE</City> <!-- optional -->
+<State >STRTYPE</State> <!-- optional -->
+<PostalCode >STRTYPE</PostalCode> <!-- optional -->
+<Country >STRTYPE</Country> <!-- optional -->
+<Note >STRTYPE</Note> <!-- optional -->
+</VendorAddress>
+<VendorAddressBlock> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+</VendorAddressBlock>
+<Phone >STRTYPE</Phone> <!-- optional -->
+<AltPhone >STRTYPE</AltPhone> <!-- optional -->
+<Fax >STRTYPE</Fax> <!-- optional -->
+<Email >STRTYPE</Email> <!-- optional -->
+<Contact >STRTYPE</Contact> <!-- optional -->
+<AltContact >STRTYPE</AltContact> <!-- optional -->
+<NameOnCheck >STRTYPE</NameOnCheck> <!-- optional -->
+<AccountNumber >STRTYPE</AccountNumber> <!-- optional -->
+<Notes >STRTYPE</Notes> <!-- optional -->
+<VendorTypeRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</VendorTypeRef>
+<TermsRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</TermsRef>
+<CreditLimit >AMTTYPE</CreditLimit> <!-- optional -->
+<VendorTaxIdent >STRTYPE</VendorTaxIdent> <!-- optional -->
+<IsVendorEligibleFor1099 >BOOLTYPE</IsVendorEligibleFor1099> <!-- optional -->
+<Balance >AMTTYPE</Balance> <!-- optional -->
+<BillingRateRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</BillingRateRef>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</VendorRet>
+</VendorQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

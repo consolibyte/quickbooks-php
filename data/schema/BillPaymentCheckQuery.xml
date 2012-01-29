@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="2.1"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<BillPaymentCheckQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+<!-- BEGIN OR -->
+<TxnID >IDTYPE</TxnID> <!-- optional, may repeat -->
+<!-- OR -->
+<RefNumber >STRTYPE</RefNumber> <!-- optional, may repeat -->
+<!-- OR -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- BEGIN OR -->
+<ModifiedDateRangeFilter> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+</ModifiedDateRangeFilter>
+<!-- OR -->
+<TxnDateRangeFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<FromTxnDate >DATETYPE</FromTxnDate> <!-- optional -->
+<ToTxnDate >DATETYPE</ToTxnDate> <!-- optional -->
+<!-- OR -->
+<!-- DateMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisCalendarQuarter, ThisCalendarQuarterToDate, ThisFiscalQuarter, ThisFiscalQuarterToDate, ThisCalendarYear, ThisCalendarYearToDate, ThisFiscalYear, ThisFiscalYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastCalendarQuarter, LastCalendarQuarterToDate, LastFiscalQuarter, LastFiscalQuarterToDate, LastCalendarYear, LastCalendarYearToDate, LastFiscalYear, LastFiscalYearToDate, NextWeek, NextFourWeeks, NextMonth, NextCalendarQuarter, NextCalendarYear, NextFiscalQuarter, NextFiscalYear -->
+<DateMacro >ENUMTYPE</DateMacro> <!-- optional -->
+<!-- END OR -->
+</TxnDateRangeFilter>
+<!-- END OR -->
+<EntityFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+<!-- OR -->
+<FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+<!-- END OR -->
+</EntityFilter>
+<AccountFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+<!-- OR -->
+<FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+<!-- END OR -->
+</AccountFilter>
+<!-- BEGIN OR -->
+<RefNumberFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<RefNumber >STRTYPE</RefNumber> <!-- required -->
+</RefNumberFilter>
+<!-- OR -->
+<RefNumberRangeFilter> <!-- optional -->
+<FromRefNumber >STRTYPE</FromRefNumber> <!-- optional -->
+<ToRefNumber >STRTYPE</ToRefNumber> <!-- optional -->
+</RefNumberRangeFilter>
+<!-- END OR -->
+<!-- END OR -->
+<IncludeLineItems >BOOLTYPE</IncludeLineItems> <!-- optional -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</BillPaymentCheckQueryRq>
+<BillPaymentCheckQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+<BillPaymentCheckRet> <!-- optional, may repeat -->
+<TxnID >IDTYPE</TxnID> <!-- optional -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- optional -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- optional -->
+<EditSequence >STRTYPE</EditSequence> <!-- optional -->
+<TxnNumber >INTTYPE</TxnNumber> <!-- optional -->
+<PayeeEntityRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PayeeEntityRef>
+<APAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</APAccountRef>
+<TxnDate >DATETYPE</TxnDate> <!-- optional -->
+<BankAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</BankAccountRef>
+<Amount >AMTTYPE</Amount> <!-- optional -->
+<RefNumber >STRTYPE</RefNumber> <!-- optional -->
+<Memo >STRTYPE</Memo> <!-- optional -->
+<Address> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Note >STRTYPE</Note><!-- optional -->
+<City >STRTYPE</City> <!-- optional -->
+<State >STRTYPE</State> <!-- optional -->
+<PostalCode >STRTYPE</PostalCode> <!-- optional -->
+<Country >STRTYPE</Country> <!-- optional -->
+</Address>
+<AddressBlock><!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<Addr3 >STRTYPE</Addr3> <!-- optional -->
+<Addr4 >STRTYPE</Addr4> <!-- optional -->
+<Addr5 >STRTYPE</Addr5> <!-- optional -->
+</AddressBlock>
+<IsToBePrinted >BOOLTYPE</IsToBePrinted> <!-- optional -->
+<AppliedToTxnRet> <!-- optional, may repeat -->
+<TxnID >IDTYPE</TxnID> <!-- required -->
+<!-- TxnType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+<TxnType >ENUMTYPE</TxnType> <!-- required -->
+<TxnDate >DATETYPE</TxnDate> <!-- optional -->
+<RefNumber >STRTYPE</RefNumber> <!-- optional -->
+<BalanceRemaining >AMTTYPE</BalanceRemaining> <!-- optional -->
+<Amount >AMTTYPE</Amount> <!-- optional -->
+<DiscountAmount >AMTTYPE</DiscountAmount> <!-- optional -->
+<DiscountAccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</DiscountAccountRef>
+</AppliedToTxnRet>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</BillPaymentCheckRet>
+</BillPaymentCheckQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

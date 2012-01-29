@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<AccountQueryRq metaData="ENUMTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+<ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<!-- AccountType may have one of the following values: AccountsPayable, AccountsReceivable, Bank, CostOfGoodsSold, CreditCard, Equity, Expense, FixedAsset, Income, LongTermLiability, NonPosting, OtherAsset, OtherCurrentAsset, OtherCurrentLiability, OtherExpense, OtherIncome -->
+<AccountType >ENUMTYPE</AccountType> <!-- optional, may repeat -->
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</AccountQueryRq>
+<AccountQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+<AccountRet> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<FullName >STRTYPE</FullName> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<ParentRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ParentRef>
+<Sublevel >INTTYPE</Sublevel> <!-- required -->
+<!-- AccountType may have one of the following values: AccountsPayable, AccountsReceivable, Bank, CostOfGoodsSold, CreditCard, Equity, Expense, FixedAsset, Income, LongTermLiability, NonPosting, OtherAsset, OtherCurrentAsset, OtherCurrentLiability, OtherExpense, OtherIncome -->
+<AccountType >ENUMTYPE</AccountType> <!-- required -->
+<!-- SpecialAccountType may have one of the following values: AccountsPayable, AccountsReceivable, CondenseItemAdjustmentExpenses, CostOfGoodsSold, DirectDepositLiabilities, Estimates, InventoryAssets, OpeningBalanceEquity, PayrollExpenses, PayrollLiabilities, PettyCash, PurchaseOrders, ReconciliationDifferences, RetainedEarnings, SalesOrders, SalesTaxPayable, UncategorizedExpenses, UncategorizedIncome, UndepositedFunds -->
+<SpecialAccountType >ENUMTYPE</SpecialAccountType> <!-- optional -->
+<AccountNumber >STRTYPE</AccountNumber> <!-- optional -->
+<BankNumber >STRTYPE</BankNumber> <!-- optional -->
+<Desc >STRTYPE</Desc> <!-- optional -->
+<Balance >AMTTYPE</Balance> <!-- optional -->
+<TotalBalance >AMTTYPE</TotalBalance> <!-- optional -->
+<TaxLineInfoRet> <!-- optional -->
+<TaxLineID >INTTYPE</TaxLineID> <!-- required -->
+<TaxLineName >STRTYPE</TaxLineName> <!-- optional -->
+</TaxLineInfoRet>
+<!-- CashFlowClassification may have one of the following values: None, Operating, Investing, Financing, NotApplicable -->
+<CashFlowClassification >ENUMTYPE</CashFlowClassification> <!-- optional -->
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</AccountRet>
+</AccountQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

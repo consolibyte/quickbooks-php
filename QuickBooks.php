@@ -95,7 +95,7 @@ define('QUICKBOOKS_PACKAGE_NAME', 'QuickBooks PHP DevKit');
  * The version of this QuickBooks package 
  * @var string
  */
-define('QUICKBOOKS_PACKAGE_VERSION', '2.0rc1');
+define('QUICKBOOKS_PACKAGE_VERSION', '2.0rc2');
 
 if (!defined('QUICKBOOKS_CRLF'))
 {
@@ -240,7 +240,6 @@ define('QUICKBOOKS_UNATTENDEDMODE_REQUIRED', 'umpRequired');
 define('QUICKBOOKS_UNATTENDEDMODE_OPTIONAL', 'umpOptional');
 */
 
-/*
 define('QUICKBOOKS_LOCALE_UNITED_STATES', 'US');
 define('QUICKBOOKS_LOCALE_US', QUICKBOOKS_LOCALE_UNITED_STATES);
 
@@ -255,7 +254,6 @@ define('QUICKBOOKS_LOCALE_AU', QUICKBOOKS_LOCALE_AUSTRALIA);
 
 define('QUICKBOOKS_LOCALE_ONLINE_EDITION', 'OE');
 define('QUICKBOOKS_LOCALE_OE', QUICKBOOKS_LOCALE_ONLINE_EDITION);
-*/
 
 /**
  * Use the PHP SoapServer ext/soap PHP extension
@@ -281,12 +279,10 @@ define('QUICKBOOKS_INTERACTIVE_MODE', 'Interactive mode');
 /**
  * 
  */
-/*
 define('QUICKBOOKS_NOOP', 'NoOp');
 
 // This is temporary, eventually we should implement an actual in-handler skip method
 define('QUICKBOOKS_SKIP', 'NoOp');
-*/
 
 define('QUICKBOOKS_ADD', 'Add');
 define('QUICKBOOKS_MOD', 'Mod');

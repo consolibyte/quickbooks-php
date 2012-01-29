@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<DepositQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+<!-- BEGIN OR -->
+<TxnID >IDTYPE</TxnID> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- BEGIN OR -->
+<ModifiedDateRangeFilter> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+</ModifiedDateRangeFilter>
+<!-- OR -->
+<TxnDateRangeFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<FromTxnDate >DATETYPE</FromTxnDate> <!-- optional -->
+<ToTxnDate >DATETYPE</ToTxnDate> <!-- optional -->
+<!-- OR -->
+<!-- DateMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisCalendarQuarter, ThisCalendarQuarterToDate, ThisFiscalQuarter, ThisFiscalQuarterToDate, ThisCalendarYear, ThisCalendarYearToDate, ThisFiscalYear, ThisFiscalYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastCalendarQuarter, LastCalendarQuarterToDate, LastFiscalQuarter, LastFiscalQuarterToDate, LastCalendarYear, LastCalendarYearToDate, LastFiscalYear, LastFiscalYearToDate, NextWeek, NextFourWeeks, NextMonth, NextCalendarQuarter, NextCalendarYear, NextFiscalQuarter, NextFiscalYear -->
+<DateMacro >ENUMTYPE</DateMacro> <!-- optional -->
+<!-- END OR -->
+</TxnDateRangeFilter>
+<!-- END OR -->
+<EntityFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+<!-- OR -->
+<FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+<!-- END OR -->
+</EntityFilter>
+<AccountFilter> <!-- optional -->
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+<!-- OR -->
+<FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+<!-- END OR -->
+</AccountFilter>
+<!-- END OR -->
+<IncludeLineItems >BOOLTYPE</IncludeLineItems> <!-- optional -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</DepositQueryRq>
+<DepositQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+<DepositRet> <!-- optional, may repeat -->
+<TxnID >IDTYPE</TxnID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<TxnNumber >INTTYPE</TxnNumber> <!-- optional -->
+<TxnDate >DATETYPE</TxnDate> <!-- required -->
+<DepositToAccountRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</DepositToAccountRef>
+<Memo >STRTYPE</Memo> <!-- optional -->
+<DepositTotal >AMTTYPE</DepositTotal> <!-- optional -->
+<CashBackInfoRet> <!-- optional -->
+<TxnLineID >IDTYPE</TxnLineID> <!-- required -->
+<AccountRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AccountRef>
+<Memo >STRTYPE</Memo> <!-- optional -->
+<Amount >AMTTYPE</Amount> <!-- optional -->
+</CashBackInfoRet>
+<DepositLineRet> <!-- optional, may repeat -->
+<!-- TxnType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+<TxnType >ENUMTYPE</TxnType> <!-- optional -->
+<TxnID >IDTYPE</TxnID> <!-- optional -->
+<TxnLineID >IDTYPE</TxnLineID> <!-- required -->
+<PaymentTxnLineID >IDTYPE</PaymentTxnLineID> <!-- optional -->
+<EntityRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</EntityRef>
+<AccountRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</AccountRef>
+<Memo >STRTYPE</Memo> <!-- optional -->
+<CheckNumber >STRTYPE</CheckNumber> <!-- optional -->
+<PaymentMethodRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PaymentMethodRef>
+<ClassRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ClassRef>
+<Amount >AMTTYPE</Amount> <!-- optional -->
+</DepositLineRet>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</DepositRet>
+</DepositQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

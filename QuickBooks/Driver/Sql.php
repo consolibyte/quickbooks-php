@@ -33,7 +33,7 @@ QuickBooks_Loader::load('/QuickBooks/SQL/Schema.php');
 /**
  * QWC file class (for the GUID ticket)
  */
-QuickBooks_Loader::load('/QuickBooks/QWC.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/QWC.php');
 
 /**
  * SQL data type - CHAR
@@ -860,7 +860,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 					status = '" . QUICKBOOKS_USER_ENABLED . "' ", $errnum, $errmsg, 0, 1)))
 		{
 			//$ticket = md5((string) microtime() . $username . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_SALT));
-			$ticket = QuickBooks_QWC::GUID(false);
+			$ticket = QuickBooks_WebConnector_QWC::GUID(false);
 			
 			$this->_query("
 				INSERT INTO 
@@ -2685,7 +2685,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			//'quickbooks_api_print' => false, 
 			
 			'quickbooks_sql_enabled' => false, 
-			'quickbooks_sql_schema' => realpath(dirname(__FILE__) . '/../data/schema'),
+			'quickbooks_sql_schema' => realpath(dirname(__FILE__) . '/../../data/schema'),
 			'quickbooks_sql_debug' => false, 
 			'quickbooks_sql_droptable' => false, 
 			'quickbooks_sql_prefix' => QUICKBOOKS_DRIVER_SQL_PREFIX_SQL,

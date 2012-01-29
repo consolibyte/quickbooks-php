@@ -1132,9 +1132,9 @@ class QuickBooks_Utilities
 			);
 			
 		$constants = array();
-			
-		$inter_key = 'QUICKBOOKS_INTERACTIVE_MODE';
-		$inter_val = QUICKBOOKS_INTERACTIVE_MODE;
+		
+		//$inter_key = 'QUICKBOOKS_INTERACTIVE_MODE';
+		//$inter_val = QUICKBOOKS_INTERACTIVE_MODE;
 		if (is_null($filter))
 		{
 			if ($return_keys)
@@ -1146,6 +1146,7 @@ class QuickBooks_Utilities
 				$constants[] = $inter_val;
 			}
 		}
+		/*
 		else if ($return_keys and QuickBooks_Utilities::fnmatch($filter, $inter_key))
 		{
 			$constants[] = $inter_key;
@@ -1154,6 +1155,7 @@ class QuickBooks_Utilities
 		{
 			$constants[] = $inter_val;
 		}
+		*/
 			
 		foreach (get_defined_constants() as $constant => $value)
 		{

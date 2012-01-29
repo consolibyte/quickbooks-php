@@ -162,13 +162,14 @@ class MyHookClass2
 $soap_options = array();
 
 // 
-$handler_options = array();
+$handler_options = array(
+	'deny_concurrent_logins' => false,
+	);
 
 // 
 $driver_options = array();
 
 $ops = array(
-	/*
 	QUICKBOOKS_OBJECT_SALESTAXITEM, 
 	QUICKBOOKS_OBJECT_SALESTAXCODE, 
 	QUICKBOOKS_OBJECT_CUSTOMER, 
@@ -184,6 +185,9 @@ $ops = array(
 	QUICKBOOKS_OBJECT_INVOICE, 
 	QUICKBOOKS_OBJECT_CLASS, 
 	
+	QUICKBOOKS_OBJECT_INVOICE, 
+	
+	/*
 	QUICKBOOKS_OBJECT_INVENTORYITEM, 
 	QUICKBOOKS_OBJECT_NONINVENTORYITEM, 
 	QUICKBOOKS_OBJECT_SERVICEITEM, 

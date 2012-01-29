@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="7.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnErrror">
+<EmployeeQueryRq metaData="ENUMTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+<ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+</EmployeeQueryRq>
+<EmployeeQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+<EmployeeRet> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- required -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+<EditSequence >STRTYPE</EditSequence> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<Salutation >STRTYPE</Salutation> <!-- optional -->
+<FirstName >STRTYPE</FirstName> <!-- optional -->
+<MiddleName >STRTYPE</MiddleName> <!-- optional -->
+<LastName >STRTYPE</LastName> <!-- optional -->
+<EmployeeAddress> <!-- optional -->
+<Addr1 >STRTYPE</Addr1> <!-- optional -->
+<Addr2 >STRTYPE</Addr2> <!-- optional -->
+<City >STRTYPE</City> <!-- optional -->
+<State >STRTYPE</State> <!-- optional -->
+<PostalCode >STRTYPE</PostalCode> <!-- optional -->
+</EmployeeAddress>
+<PrintAs >STRTYPE</PrintAs> <!-- optional -->
+<Phone >STRTYPE</Phone> <!-- optional -->
+<Mobile >STRTYPE</Mobile> <!-- optional -->
+<Pager >STRTYPE</Pager> <!-- optional -->
+<PagerPIN >STRTYPE</PagerPIN> <!-- optional -->
+<AltPhone >STRTYPE</AltPhone> <!-- optional -->
+<Fax >STRTYPE</Fax> <!-- optional -->
+<SSN >STRTYPE</SSN> <!-- optional -->
+<Email >STRTYPE</Email> <!-- optional -->
+<!-- EmployeeType may have one of the following values: Officer, Owner, Regular [DEFAULT], Statutory -->
+<EmployeeType >ENUMTYPE</EmployeeType> <!-- optional -->
+<!-- Gender may have one of the following values: Male, Female -->
+<Gender >ENUMTYPE</Gender> <!-- optional -->
+<HiredDate >DATETYPE</HiredDate> <!-- optional -->
+<ReleasedDate >DATETYPE</ReleasedDate> <!-- optional -->
+<BirthDate >DATETYPE</BirthDate> <!-- optional -->
+<AccountNumber >STRTYPE</AccountNumber> <!-- optional -->
+<Notes >STRTYPE</Notes> <!-- optional -->
+<BillingRateRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</BillingRateRef>
+<EmployeePayrollInfo> <!-- optional -->
+<!-- PayPeriod may have one of the following values: Daily, Weekly, Biweekly, Semimonthly, Monthly, Quarterly, Yearly -->
+<PayPeriod >ENUMTYPE</PayPeriod> <!-- optional -->
+<ClassRef> <!-- optional -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</ClassRef>
+<!-- BEGIN OR -->
+<ClearEarnings >BOOLTYPE</ClearEarnings> <!-- optional -->
+<!-- OR -->
+<Earnings> <!-- optional, may repeat -->
+<PayrollItemWageRef> <!-- required -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<FullName >STRTYPE</FullName> <!-- optional -->
+</PayrollItemWageRef>
+<!-- BEGIN OR -->
+<Rate >PRICETYPE</Rate> <!-- optional -->
+<!-- OR -->
+<RatePercent >PERCENTTYPE</RatePercent> <!-- optional -->
+<!-- END OR -->
+</Earnings>
+<!-- END OR -->
+<IsUsingTimeDataToCreatePaychecks >BOOLTYPE</IsUsingTimeDataToCreatePaychecks> <!-- optional -->
+<!-- UseTimeDataToCreatePaychecks may have one of the following values: NotSet, UseTimeData, DoNotUseTimeData -->
+<UseTimeDataToCreatePaychecks >ENUMTYPE</UseTimeDataToCreatePaychecks> <!-- optional -->
+<SickHours> <!-- optional -->
+<HoursAvailable >TIMEINTERVALTYPE</HoursAvailable> <!-- optional -->
+<!-- AccrualPeriod may have one of the following values: BeginningOfYear, EveryHourOnPaycheck, EveryPaycheck -->
+<AccrualPeriod >ENUMTYPE</AccrualPeriod> <!-- optional -->
+<HoursAccrued >TIMEINTERVALTYPE</HoursAccrued> <!-- optional -->
+<MaximumHours >TIMEINTERVALTYPE</MaximumHours> <!-- optional -->
+<IsResettingHoursEachNewYear >BOOLTYPE</IsResettingHoursEachNewYear> <!-- optional -->
+<HoursUsed >TIMEINTERVALTYPE</HoursUsed> <!-- optional -->
+<AccrualStartDate >DATETYPE</AccrualStartDate> <!-- optional -->
+</SickHours>
+<VacationHours> <!-- optional -->
+<HoursAvailable >TIMEINTERVALTYPE</HoursAvailable> <!-- optional -->
+<!-- AccrualPeriod may have one of the following values: BeginningOfYear, EveryHourOnPaycheck, EveryPaycheck -->
+<AccrualPeriod >ENUMTYPE</AccrualPeriod> <!-- optional -->
+<HoursAccrued >TIMEINTERVALTYPE</HoursAccrued> <!-- optional -->
+<MaximumHours >TIMEINTERVALTYPE</MaximumHours> <!-- optional -->
+<IsResettingHoursEachNewYear >BOOLTYPE</IsResettingHoursEachNewYear> <!-- optional -->
+<HoursUsed >TIMEINTERVALTYPE</HoursUsed> <!-- optional -->
+<AccrualStartDate >DATETYPE</AccrualStartDate> <!-- optional -->
+</VacationHours>
+</EmployeePayrollInfo>
+<DataExtRet> <!-- optional, may repeat -->
+<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+<DataExtName >STRTYPE</DataExtName> <!-- required -->
+<!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+<DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+<DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+</DataExtRet>
+</EmployeeRet>
+</EmployeeQueryRs>
+</QBXMLMsgsRq>
+</QBXML>
