@@ -46,7 +46,7 @@ class QuickBooks_IPP_IntuitAnywhere
 	 * @param string $this_url			The URL of your QuickBooks_IntuitAnywhere class instance
 	 * @param string $that_url			The URL the user should be sent to after authenticated 
 	 */
-	public function __construct($dsn, $encryption_key, $consumer_key, $consumer_secret, $this_url, $that_url) 
+	public function __construct($dsn, $encryption_key, $consumer_key, $consumer_secret, $this_url = null, $that_url = null) 
 	{
 		$this->_driver = QuickBooks_Driver_Factory::create($dsn);
 		
@@ -105,13 +105,39 @@ class QuickBooks_IPP_IntuitAnywhere
 	}
 	
 	/**
-	 * 
-	 * 
 	 * Returns TRUE if an OAuth token exists for this user, FALSE otherwise
+	 * 
+	 * @param string $app_username
+	 * @return bool
 	 */
-	public function check($app_username)
+	public function check($app_username, $app_tenant)
 	{
+		if ($arr = $this->load($app_username, $app_tenant))
+		{
+			return true;
+		}
 		
+		return false;
+	}
+	
+	/**
+	 * Load OAuth credentials from the database
+	 *
+	 * @param string $app_username
+	 * @return array
+	 */
+	public function load($app_username, $app_tenant)
+	{
+		if ($arr = $this->_driver->oauthLoad($this->_key, $app_username, $app_tenant) and 
+			strlen($arr['oauth_access_token']) > 0 and 
+			strlen($arr['oauth_access_token_secret']) > 0)
+		{
+			$arr['oauth_consumer_key'] = $this->_consumer_key;
+			$arr['oauth_consumer_secret'] = $this->_consumer_secret;
+			
+			return $arr;
+		}
+			
 		return false;
 	}
 	
@@ -120,9 +146,9 @@ class QuickBooks_IPP_IntuitAnywhere
 	 *
 	 * 
 	 */
-	public function handle($app_username)
+	public function handle($app_username, $app_tenant)
 	{
-		if ($this->check($app_username))
+		if ($this->check($app_username, $app_tenant))
 		{
 			// They are already logged in, send them on to exchange data
 			header('Location: ' . $this->_that_url);
@@ -179,6 +205,7 @@ class QuickBooks_IPP_IntuitAnywhere
 							$_REQUEST['dataSource']);
 						
 						//print_r($_REQUEST);
+						//exit;
 						//print_r($info);
 		
 						//print('authd now, go here <a href="exchange_data.php">exchange_data.php</a>');
@@ -198,7 +225,7 @@ class QuickBooks_IPP_IntuitAnywhere
 			}
 			else
 			{
-				$auth_url = $this->_getAuthenticateURL($app_username, $this->_this_url);
+				$auth_url = $this->_getAuthenticateURL($app_username, $app_tenant, $this->_this_url);
 				
 				// Forward them to the auth page
 				header('Location: ' . $auth_url);
@@ -215,7 +242,7 @@ class QuickBooks_IPP_IntuitAnywhere
 	 * @param string $url
 	 * @return string
 	 */	
-	protected function _getAuthenticateURL($app_username, $url) 
+	protected function _getAuthenticateURL($app_username, $app_tenant, $url) 
 	{
 		// Fetch a request token from the OAuth service
 		$info = $this->_request(QuickBooks_IPP_OAuth::METHOD_GET, QuickBooks_IPP_IntuitAnywhere::URL_REQUEST_TOKEN, array( 'oauth_callback' => $url ));
@@ -226,7 +253,7 @@ class QuickBooks_IPP_IntuitAnywhere
 		parse_str($info, $vars);
 		
 		// Write the request tokens to the database
-		$this->_driver->oauthRequestWrite($app_username, $vars['oauth_token'], $vars['oauth_token_secret']);
+		$this->_driver->oauthRequestWrite($app_username, $app_tenant, $vars['oauth_token'], $vars['oauth_token_secret']);
 		
 		/*
 		mysql_query("

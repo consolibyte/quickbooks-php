@@ -1374,6 +1374,26 @@ abstract class QuickBooks_Driver
 	 */
 	abstract protected function _initialized();
 	
+	public function oauthLoad($key, $app_username, $app_tenant)
+	{
+		if ($data = $this->_oauthLoad($app_username, $app_tenant))
+		{
+			if (strlen($data['oauth_access_token']) > 0)
+			{
+				$AES = QuickBooks_Encryption_Factory::create('aes');
+				
+				$data['oauth_access_token'] = $AES->decrypt($key, $data['oauth_access_token']);
+				$data['oauth_access_token_secret'] = $AES->decrypt($key, $data['oauth_access_token_secret']);
+			}
+			
+			return $data;
+		}
+		
+		return false;
+	}
+	
+	abstract protected function _oauthLoad($app_username, $app_tenant);
+	
 	public function oauthAccessWrite($key, $request_token, $token, $token_secret, $realm, $flavor)
 	{
 		$AES = QuickBooks_Encryption_Factory::create('aes');
@@ -1386,7 +1406,7 @@ abstract class QuickBooks_Driver
 	
 	abstract protected function _oauthAccessWrite($request_token, $token, $token_secret, $realm, $flavor);
 	
-	public function oauthRequestWrite($app_username, $token, $token_secret)
+	public function oauthRequestWrite($app_username, $app_tenant, $token, $token_secret)
 	{
 		/*
 		$AES = QuickBooks_Encryption_Factory::create('aes');
@@ -1395,10 +1415,10 @@ abstract class QuickBooks_Driver
 		$token_secret = $AES->encrypt($key, $token_secret);
 		*/
 		
-		return $this->_oauthRequestWrite($app_username, $token, $token_secret);
+		return $this->_oauthRequestWrite($app_username, $app_tenant, $token, $token_secret);
 	}
 	
-	abstract protected function _oauthRequestWrite($app_username, $token, $token_secret);
+	abstract protected function _oauthRequestWrite($app_username, $app_tenant, $token, $token_secret);
 	
 	public function oauthRequestResolve($token)
 	{

@@ -81,6 +81,9 @@ class QuickBooks_IPP
 	
 	const API_GETENTITLEMENTVALUESANDUSERROLE = 'API_GetEntitlementValuesAndUserRole';
 	
+	const AUTHMODE_FEDERATED = 'federated';
+	const AUTHMODE_OAUTH = 'oauth';
+	
 	/**
 	 * 
 	 * @var unknown_type
@@ -174,6 +177,8 @@ class QuickBooks_IPP
 	
 	protected $_test;
 	
+	protected $_key;
+	
 	protected $_username;
 	protected $_password;
 	protected $_ticket;
@@ -183,10 +188,14 @@ class QuickBooks_IPP
 	/**
 	 * @deprecated
 	 */
-	protected $_application;
+	//protected $_application;
 	
 	protected $_flavor;
 	protected $_baseurl;
+	
+	protected $_authmode;
+	protected $_authuser;
+	protected $_authcred;
 	
 	protected $_debug;
 	
@@ -222,7 +231,7 @@ class QuickBooks_IPP
 	 */
 	protected $_ids_version;
 	
-	public function __construct($dsn = null, $config = array(), $log_level = QUICKBOOKS_LOG_NORMAL)
+	public function __construct($dsn = null, $encryption_key = null, $config = array(), $log_level = QUICKBOOKS_LOG_NORMAL)
 	{
 		// Use a test gateway?
 		$this->_test = false;
@@ -259,6 +268,13 @@ class QuickBooks_IPP
 		$this->_last_request = null;
 		$this->_last_response = null;
 		$this->_last_debug = array();
+		
+		$this->_authmode = QuickBooks_IPP::AUTHMODE_FEDERATED;
+		$this->_authuser = null;
+		$this->_authcred = null;
+		
+		// Encryption key (used for database storage)
+		$this->_key = $encryption_key;
 	}
 	
 	/**
@@ -334,38 +350,37 @@ class QuickBooks_IPP
 	 */
 	public function context($ticket = null, $token = null, $check_if_valid = true)
 	{
-		if (is_null($ticket))
-		{
-			$ticket = QuickBooks_IPP_Federator::getCookie();
-		}
+		$Context = null;
 		
-		/*
-		if (!$ticket)
+		if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTH)
 		{
-			return null;
-		}
-		*/
-		
-		$Context = new QuickBooks_IPP_Context($this, $ticket, $token);
-		
-		if ($check_if_valid)
-		{
-			// Now, let's check to make sure the context is valid
-			$User = $this->getUserInfo($Context);
+			$Context = new QuickBooks_IPP_Context($this, null, $token);
 			
-			//print('<pre>');
-			//print_r($User);
-			//print(htmlspecialchars($this->lastResponse(), ENT_QUOTES));
-			//print('</pre>');
-			
-			if (!$User or 
-				!is_object($User) or 
-				$User->isAnonymous())
+			// @todo Support for checking if it's valid or not
+		}
+		else
+		{
+			if (is_null($ticket))
 			{
-				return null;
+				$ticket = QuickBooks_IPP_Federator::getCookie();
+			}
+			
+			$Context = new QuickBooks_IPP_Context($this, $ticket, $token);
+			
+			if ($check_if_valid)
+			{
+				// Now, let's check to make sure the context is valid
+				$User = $this->getUserInfo($Context);
+				
+				if (!$User or 
+					!is_object($User) or 
+					$User->isAnonymous())
+				{
+					return null;
+				}
 			}
 		}
-		
+			
 		return $Context;
 	}
 	
@@ -451,28 +466,44 @@ class QuickBooks_IPP
 		
 		return $this->_baseurl;
 	}
-
+	
+	/**
+	 * Set the authorization mode for HTTP requests (Federated, or OAuth)
+	 *
+	 * @param string $authmode		The new auth mode
+	 * @return string				The currently set auth mode
+	 */
+	public function authMode($authmode = null, $authuser = null, $authcred = null)
+	{
+		if ($authmode)
+		{
+			$this->_authmode = $authmode;
+			$this->_authuser = $authuser;
+			$this->_authcred = $authcred;
+		}
+		
+		return $this->_authmode;
+	}
 	
 	/**
 	 * @deprecated 
 	 */
-	public function application($application = null)
+	/*public function application($application = null)
 	{
 		if ($application)
 		{
-			$this->_application = $application;		// Old way
+			$this->_dbid = $application;		// Old way
 			$this->_dbid = $application;
 		}
 		
-		return $this->_application;
-	}
+		return $this->_dbid;
+	}*/
 	
 	public function dbid($dbid = null)
 	{
 		if ($dbid)
 		{
 			$this->_dbid = $dbid;
-			$this->_application = $dbid;		// Old way
 		}
 		
 		return $this->_dbid;
@@ -593,7 +624,7 @@ class QuickBooks_IPP
 
 	public function renameApp($Context, $name)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_RENAMEAPP;
 		
 		$xml = '<qdbapi>
@@ -607,7 +638,7 @@ class QuickBooks_IPP
 	
 	public function getIDSRealm($Context)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_GETIDSREALM;
 		
 		$xml = '<qdbapi>
@@ -637,7 +668,7 @@ class QuickBooks_IPP
 	
 	public function getEntitlementValues($Context)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_GETENTITLEMENTVALUES;
 		
 		$xml = '<qdbapi>
@@ -650,7 +681,7 @@ class QuickBooks_IPP
 	
 	public function getEntitlementValuesAndUserRole($Context)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_GETENTITLEMENTVALUESANDUSERROLE;
 		
 		$xml = '<qdbapi>
@@ -663,7 +694,7 @@ class QuickBooks_IPP
 	
 	public function provisionUser($Context, $email, $fname, $lname, $roleid = null, $udata = null)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = 'API_ProvisionUser';
 		
 		$xml = '<qdbapi>
@@ -700,7 +731,7 @@ class QuickBooks_IPP
 	
 	public function getUserRoles($Context, $userid, $udata = null)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_GETUSERROLE;
 		$xml = '<qdbapi>
 				<ticket>' . $Context->ticket() . '</ticket>
@@ -744,7 +775,7 @@ class QuickBooks_IPP
 	
 	public function sendInvitation($Context, $userid, $usertext, $udata = null)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = 'API_SendInvitation';
 		$xml = '<qdbapi>
 				<ticket>' . $Context->ticket() . '</ticket>
@@ -772,7 +803,7 @@ class QuickBooks_IPP
 	
 	public function getDBInfo($Context, $udata = null)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_GETDBINFO;		
 		$xml = '<qdbapi>
 				<ticket>' . $Context->ticket() . '</ticket>
@@ -791,7 +822,7 @@ class QuickBooks_IPP
 	
 	public function setDBVar($Context, $varname, $value, $udata = null)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_SETDBVAR;		
 		$xml = '<qdbapi>
 				<ticket>' . $Context->ticket() . '</ticket>
@@ -812,7 +843,7 @@ class QuickBooks_IPP
 	
 	public function getDBVar($Context, $varname, $udata = null)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_GETDBVAR;
 		$xml = '<qdbapi>
 				<ticket>' . $Context->ticket() . '</ticket>
@@ -832,7 +863,7 @@ class QuickBooks_IPP
 	
 	public function createTable($Context, $tname, $pnoun, $udata = null)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = 'API_CreateTable';		
 		$xml = '<qdbapi>
 				<ticket>' . $Context->ticket() . '</ticket>
@@ -860,7 +891,7 @@ class QuickBooks_IPP
 	
 	public function attachIDSRealm($Context, $realm)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_ATTACHIDSREALM;
 		$xml = '<qdbapi>
 				<realm>' . $realm . '</realm>
@@ -873,7 +904,7 @@ class QuickBooks_IPP
 	
 	public function detachIDSRealm($Context, $realm)
 	{
-		$url = 'https://workplace.intuit.com/db/' . $this->_application;
+		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
 		$action = QuickBooks_IPP::API_DETACHIDSREALM;
 		$xml = '<qdbapi>
 				<realm>' . $realm . '</realm>
@@ -1158,11 +1189,8 @@ class QuickBooks_IPP
 		return $this->_log($message, $level);
 	}
 	
-	protected function _request($Context, $type, $url, $action, $xml, $post = true)
+	protected function _request($Context, $type, $url, $action, $data, $post = true)
 	{
-		$HTTP = new QuickBooks_HTTP($url);
-		//$post = true;
-		
 		$headers = array(
 			);
 			
@@ -1190,18 +1218,82 @@ class QuickBooks_IPP
 					$headers['Content-Type'] = 'application/x-www-form-urlencoded';
 				}
 			}
-			
-			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $Context->token() . '",intuit-token="' . $Context->ticket() . '"';
-			$headers['Cookie'] = $this->cookies(true);
 		}
-		
+
+		// Authorization stuff
+		if ($this->_authmode = QuickBooks_IPP::AUTHMODE_OAUTH)
+		{
+			// If we have credentials, sign the request
+			if ($this->_authcred['oauth_access_token'] and 
+				$this->_authcred['oauth_access_token_secret'])
+			{
+				// Sign the request
+				$OAuth = new QuickBooks_IPP_OAuth($this->_authcred['oauth_consumer_key'], $this->_authcred['oauth_consumer_secret']);
+				
+				if ($post)
+				{
+					$action = QuickBooks_IPP_OAuth::METHOD_POST;
+				}
+				else
+				{
+					$action = QuickBooks_IPP_OAuth::METHOD_GET;
+				}
+				
+				$signdata = null;
+				if ($data[0] == '<')
+				{
+					// It's an XML body, we don't sign that
+					$signdata = null;
+				}
+				else
+				{
+					// It's form-encoded data, parse it so we can sign it 
+					$signdata = array();
+					parse_str($data, $signdata);
+				}
+				
+				$signed = $OAuth->sign($action, $url, $this->_authcred['oauth_access_token'], $this->_authcred['oauth_access_token_secret'], $signdata);
+
+				if ($post)
+				{
+					// Add the OAuth headers
+					$headers['Authorization'] = $signed[3];
+					
+					if ($data[0] == '<')
+					{
+						; // Do nothing	
+					}
+					else
+					{
+						$data = http_build_query($signdata);
+					}
+				}
+				else
+				{
+					// Replace the URL with the signed URL
+					$url = $signed[2];
+				}
+			}
+		}
+		else
+		{
+			// FEDERATED authentication
+			
+			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $Context->token() . '", intuit-token="' . $Context->ticket() . '"';
+			$headers['Cookie'] = $this->cookies(true);
+		}	
+
+		// Our HTTP requestor
+		$HTTP = new QuickBooks_HTTP($url);
+
+		// Set the headers
 		$HTTP->setHeaders($headers);
 		
 		// Turn on debugging for the HTTP object if it's been enabled in the payment processor
 		$HTTP->useDebugMode($this->_debug);
 		
 		// 
-		$HTTP->setRawBody($xml);
+		$HTTP->setRawBody($data);
 		
 		$HTTP->verifyHost(false);
 		$HTTP->verifyPeer(false);

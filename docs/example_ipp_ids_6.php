@@ -57,20 +57,14 @@ if ($Context = $IPP->context())
 	
 	$CustomerService = new QuickBooks_IPP_Service_Customer();
 	
-	$perpage = 3;
-	for ($page = 1; $page <= 3; $page++)
-	{
-		print('PAGE ' . $page . "\n\n");
-		
-		$list = $CustomerService->findAll($Context, $realm, null, null, $page, $perpage);
-		
-		foreach ($list as $Customer)
-		{
-			print('Name [' . $Customer->getName() . ']' . "\n\n");
-		}
-		
-		print("\n\n\n");
-	}
+	$Customer = new QuickBooks_IPP_Object_Customer();
+	$Customer->setName('Willy Wonka #' . mt_rand(0, 1000));
+	$Customer->setGivenName('Willy');
+	$Customer->setFamilyName('Wonka');
+	
+	$resp = $CustomerService->add($Context, $realm, $Customer);
+	
+	print('New customer is [' . $resp . ']' . "\n\n");
 	
 	print("\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');

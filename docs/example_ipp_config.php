@@ -37,6 +37,12 @@ $dsn = 'mysql://root:root@localhost/quickbooks';
 // You should set this to an encryption key specific to your app
 $encryption_key = 'abcd1234';
 
+// The user that's logged in
+$the_username = 'your_app_username_here_2';
+
+// The tenant that user is accessing within your own app
+$the_tenant = 12345;
+
 // Initialize the database tables for storing OAuth information
 if (!QuickBooks_Utilities::initialized($dsn))
 {

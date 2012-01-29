@@ -233,13 +233,20 @@ class QuickBooks_IPP_Parser
 				 ), $xml);
 		}
 		
+		/*
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)
+		{
+			//$xml = '<RestResponse>' . $xml . '</RestResponse>';
+		}
+		*/
+		
 		return $xml;
 	}
 	
 	public function parseIDS($xml, $optype, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
 		// Massage it... *sigh*
-		$xml = $this->_massageQBOXML($xml);
+		$xml = $this->_massageQBOXML($xml, $optype);
 
 		// Parse it 
 		$Parser = new QuickBooks_XML_Parser($xml);
@@ -315,8 +322,13 @@ class QuickBooks_IPP_Parser
 					
 					//print("\n\n\n" . 'response was: ' . $List->name() . "\n\n\n");
 					
+					//print_r('list name [' . $List->name() . ']');
+					
 					switch ($List->name())
 					{
+						case 'Id':		// This is what QuickBooks Online, IDS v2 does
+							
+							return QuickBooks_IPP_IDS::buildIDType($List->getAttribute('idDomain'), $List->data());
 						case 'Error':
 							
 							$err_code = $List->getChildDataAt('Error ErrorCode');
@@ -327,9 +339,9 @@ class QuickBooks_IPP_Parser
 						case 'Success':
 							
 							$checks = array(
-								'Success PartyRoleRef Id', 
-								'Success PartyRoleRef PartyReferenceId',
-								'Success ObjectRef Id',  
+								'Success PartyRoleRef Id', 	// QuickBooks desktop, IDS v2
+								'Success PartyRoleRef PartyReferenceId', 	// QuickBooks desktop, IDS v2
+								'Success ObjectRef Id',   	// QuickBooks desktop, IDS v2
 								);
 								
 							foreach ($checks as $xpath)

@@ -23,9 +23,6 @@ require_once dirname(__FILE__) . '/../QuickBooks.php';
  */
 require_once dirname(__FILE__) . '/example_ipp_config.php';
 
-// The user that's logged in
-$the_username = 'your_app_username_here';
-
 // Instantiate our Intuit Anywhere auth handler 
 // 
 // The parameters passed to the constructor are:
@@ -38,7 +35,7 @@ $the_username = 'your_app_username_here';
 $IntuitAnywhere = new QuickBooks_IPP_IntuitAnywhere($dsn, $encryption_key, $oauth_consumer_key, $oauth_consumer_secret, $this_url, $that_url);
 
 // Try to handle the OAuth request 
-if ($IntuitAnywhere->handle($the_username))
+if ($IntuitAnywhere->handle($the_username, $the_tenant))
 {
 	; // The user has been connected, and will be redirected to $that_url automatically. 
 }
