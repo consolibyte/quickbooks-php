@@ -11,9 +11,14 @@
  * @author Keith Palmer <keith@ConsoliBYTE.com>
  */
 
+// Headers
+header('Content-Type: text/plain');
+
+// Error reporting
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
+// Require the library
 require_once dirname(__FILE__) . '/../QuickBooks.php';
 
 // Our application token
@@ -21,6 +26,9 @@ $token = 'tex3r7hwifx6cci3zk43ibmnd';
 
 // The realm we want to get IDS data from
 $realmID = 173642438;
+
+// The dbid instance
+$dbid = 'be9mh7qd5';
 
 // Create our new IPP instance
 $IPP = new QuickBooks_IPP();
@@ -30,7 +38,10 @@ $ticket = null;		// By setting this to NULL we're telling the framework to try t
 if ($Context = $IPP->context($ticket, $token))
 {
 	// Set the application
-	$IPP->application($Context, 'be9mh7qd5');
+	$IPP->dbid($Context, $dbid);
+	
+	// Set the flavor 
+	$IPP->flavor(QuickBooks_IPP_IDS::FLAVOR_DESKTOP);
 	
 	// Create a new Customer Service for IDS
 	$CustomerService = new QuickBooks_IPP_Service_Customer();

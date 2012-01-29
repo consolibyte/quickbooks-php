@@ -1,18 +1,38 @@
 <?php
 
+/**
+ * Example of adding new objects to QuickBooks via IPP/IDS
+ * 
+ * @author Keith Palmer <keith@ConsoliBYTE.com>
+ * 
+ * @package QuickBooks
+ * @subpackage docs
+ */
+
+// Error reporting
+ini_set('display_errors', 1);
+error_reporting(E_ALL | E_STRICT);
+
+// QuickBooks library
 require_once '../QuickBooks.php';
 
+// Credentials
 $username = 'keith@consolibyte.com';
-$password = 'password42';
+$password = 'abcd1234';
+
+// Application token
 $token = '';
 
-$application = 'abcd1234';
+// Application
+$dbid = 'abcd1234';
 
+// IPP instance
 $IPP = new QuickBooks_IPP();
 
 if ($Context = $IPP->authenticate($username, $password, $token))
 {
-	$IPP->application($application);
+	// DBID
+	$IPP->dbid($dbid);
 
 	// Debug mode
 	//$IPP->useDebugMode(true);
@@ -40,5 +60,5 @@ if ($Context = $IPP->authenticate($username, $password, $token))
 }
 else
 {
-	print('auth failed!');
+	print('Auth failed!');
 }

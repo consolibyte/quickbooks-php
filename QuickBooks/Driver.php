@@ -258,11 +258,6 @@ define('QUICKBOOKS_DRIVER_HOOK_CONNECTIONLOAD', 'QuickBooks_Driver::connectionLo
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/Iterator.php');
-
-/**
- * 
- */
 QuickBooks_Loader::load('/QuickBooks/Encryption.php');
 
 /**
@@ -395,6 +390,7 @@ abstract class QuickBooks_Driver
 	 * @param mixed $ident
 	 * @return string
 	 */
+	/*
 	final public function identToQuickBooks($user, $type, $uniqueid, &$editsequence, &$extra)
 	{
 		$hookdata = array(
@@ -442,10 +438,12 @@ abstract class QuickBooks_Driver
 		
 		return null;
 	}
+	*/
 	
 	/**
 	 * @see QuickBooks_Driver::identFetch()
 	 */
+	/*
 	abstract protected function _identToQuickBooks($user, $action, $uniqueid, &$editsequence, &$extra);
 	
 	final public function identToApplication($user, $type, $qbid, &$extra)
@@ -464,12 +462,14 @@ abstract class QuickBooks_Driver
 	}
 	
 	abstract protected function _identToApplication($user, $action, $qbid, &$extra);
+	*/
 	
 	/**
 	 * 
 	 * 
 	 * 
 	 */
+	/*
 	final public function identMap($user, $type, $uniqueid, $qb_ident, $editsequence = '', $extra = null)
 	{
 		$hookdata = array(
@@ -486,11 +486,14 @@ abstract class QuickBooks_Driver
 		
 		return $this->_identMap($user, $type, $uniqueid, $qb_ident, $editsequence);
 	} 
+	*/
 	
 	/**
 	 * @see QuickBooks_Driver::identMap()
 	 */
+	/*
 	abstract protected function _identMap($user, $action, $uniqueid, $qb_ident, $editsequence = '', $extra = null);
+	*/
 	
 	/**
 	 * 
@@ -1370,6 +1373,39 @@ abstract class QuickBooks_Driver
 	 * @see QuickBooks_Driver::initialized()
 	 */
 	abstract protected function _initialized();
+	
+	public function oauthAccessWrite($key, $request_token, $token, $token_secret, $realm, $flavor)
+	{
+		$AES = QuickBooks_Encryption_Factory::create('aes');
+		
+		$encrypted_token = $AES->encrypt($key, $token);
+		$encrypted_token_secret = $AES->encrypt($key, $token_secret);
+		
+		return $this->_oauthAccessWrite($request_token, $encrypted_token, $encrypted_token_secret, $realm, $flavor);
+	}
+	
+	abstract protected function _oauthAccessWrite($request_token, $token, $token_secret, $realm, $flavor);
+	
+	public function oauthRequestWrite($app_username, $token, $token_secret)
+	{
+		/*
+		$AES = QuickBooks_Encryption_Factory::create('aes');
+		
+		$token = $AES->encrypt($key, $token);
+		$token_secret = $AES->encrypt($key, $token_secret);
+		*/
+		
+		return $this->_oauthRequestWrite($app_username, $token, $token_secret);
+	}
+	
+	abstract protected function _oauthRequestWrite($app_username, $token, $token_secret);
+	
+	public function oauthRequestResolve($token)
+	{
+		return $this->_oauthRequestResolve($token);
+	}
+	
+	abstract protected function _oauthRequestResolve($token);
 	
 	/**
 	 * Log a message to the QuickBooks log

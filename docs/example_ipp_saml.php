@@ -17,6 +17,7 @@
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
+// QuickBooks library
 require_once dirname(__FILE__) . '/../QuickBooks.php';
 
 // This is just for testing! Do not uncomment this unless you know what you're doing!

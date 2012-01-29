@@ -11,9 +11,13 @@
  * 
  */
 
+// 
 QuickBooks_Loader::load('/QuickBooks/Encryption.php');
 
-class QuickBooks_Encryption_RC4 extends QuickBooks_Encryption
+/**
+ * 
+ */
+class QuickBooks_Encryption_AES extends QuickBooks_Encryption
 {
 	/**
 	 * RC4 encrypt

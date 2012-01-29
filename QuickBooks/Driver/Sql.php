@@ -198,6 +198,12 @@ define('QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE', 'notify');
 define('QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE', 'connection');
 
 /**
+ * Default table name for OAuth stuff
+ * @var string
+ */
+define('QUICKBOOKS_DRIVER_SQL_OAUTHTABLE', 'oauth');
+
+/**
  * 
  * 
  * @var string
@@ -1819,6 +1825,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param mixed $extra				Any extra data you stored with the mapping will be placed here 
 	 * @return string					The QuickBooks ListID or TxnID 
 	 */
+	/*
 	protected function _identToQuickBooks($user, $objecttype, $uniqueid, &$editsequence, &$extra)
 	{
 		$errnum = 0;
@@ -1851,6 +1858,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		return null;
 	}
+	*/
 	
 	/**
 	 * Resolve a mapping of a QuickBooks ListID or TxnID to a unique application ID
@@ -1861,6 +1869,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param mixed $extra			Any extra data you stored with this mapping
 	 * @return mixed				The application unique ID
 	 */
+	/*
 	protected function _identToApplication($user, $objecttype, $qbid, &$extra)
 	{
 		$errnum = 0;
@@ -1890,6 +1899,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		return null;
 	}
+	*/
 	
 	/**
 	 * Map a QuickBooks identifier (ListID, TxnID, etc.) to a QuickBooks object type and web application identifier
@@ -1902,6 +1912,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param mixed $extra				Any extra data you want to store with the mapping
 	 * @return boolean 
 	 */
+	/*
 	protected function _identMap($user, $objecttype, $uniqueid, $qb_ident, $editsequence = '', $extra = null)
 	{
 		if ($user and $objecttype and $uniqueid and $qb_ident)
@@ -1945,6 +1956,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		return false;
 	}
+	*/
 	
 	/**
 	 * 
@@ -2103,6 +2115,112 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 		
 		return;
+	}
+	
+	protected function _oauthRequestResolve($request_token)
+	{
+		$errnum = 0;
+		$errmsg = '';
+
+		return $this->fetch($this->query("
+			SELECT
+				* 
+			FROM 
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . " 
+			WHERE
+				oauth_request_token = '%s' ", $errnum, $errmsg, null, null, array( $request_token )));
+	}
+	
+	protected function _oauthLoad($app_username)
+	{
+		$errnum = 0;
+		$errmsg = '';
+
+		if ($arr = $this->fetch($this->query("
+			SELECT
+				* 
+			FROM 
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . " 
+			WHERE
+				app_username = '%s' ", $errnum, $errmsg, null, null, array( $app_username ))))
+		{
+			$this->query("
+				UPDATE 
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+				SET
+					touch_datetime = '%s' 
+				WHERE
+					app_username = '%s' ", $errnum, $errmsg, 0, 1, array( date('Y-m-d H:i:s'), $app_username ));
+			
+			return $arr;
+		}
+		
+		return false;
+	}
+	
+	protected function _oauthRequestWrite($app_username, $token, $token_secret)
+	{
+		$errnum = 0;
+		$errmsg = '';
+		
+		// Check if it exists or not first
+		if ($arr = $this->_oauthLoad($app_username))
+		{
+			// Exists... UPDATE!
+			return $this->query("
+				UPDATE
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+				SET 
+					oauth_request_token = '%s', 
+					oauth_request_token_secret = '%s', 
+					request_datetime = '%s'
+				WHERE
+					app_username = '%s' ", $errnum, $errmsg, null, null, array( $token, $token_secret, date('Y-m-d H:i:s'), $app_username ));
+		}
+		else
+		{
+			// Insert it 
+			return $this->query("
+				INSERT INTO 
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+				(
+					app_username, 
+					oauth_request_token,
+					oauth_request_token_secret,
+					request_datetime
+				) VALUES (
+					'%s', 
+					'%s',
+					'%s',
+					'%s'
+				)", $errnum, $errmsg, null, null, array( $app_username, $token, $token_secret, date('Y-m-d H:i:s') ));
+		}
+	}
+
+	protected function _oauthAccessWrite($request_token, $token, $token_secret, $realm, $flavor)
+	{
+		$errnum = 0;
+		$errmsg = '';
+		
+		// Check if it exists or not first
+		if ($arr = $this->_oauthRequestResolve($request_token))
+		{
+			// Exists... UPDATE!
+			return $this->query("
+				UPDATE
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+				SET 
+					oauth_access_token = '%s', 
+					oauth_access_token_secret = '%s', 
+					qb_realm = '%s', 
+					qb_flavor = '%s', 
+					access_datetime = '%s'
+				WHERE
+					oauth_request_token = '%s' ", $errnum, $errmsg, null, null, 
+				array( $token, $token_secret, $realm, $flavor, date('Y-m-d H:i:s'), $request_token ));
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -2869,6 +2987,27 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
 		*/
+		
+		$table = $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE);
+		$def = array(
+			'quickbooks_oauth_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ), 
+			'app_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ), 
+			'oauth_request_token' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' ), 
+			'oauth_request_token_secret' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' ), 
+			'oauth_access_token' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' ), 
+			'oauth_access_token_secret' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' ), 
+			'qb_realm' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 32, 'null' ), 
+			'qb_flavor' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 12, 'null' ), 
+			'qb_user' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 64, 'null' ), 
+			'request_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ), 
+			'access_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ), 
+			'touch_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
+			);
+		$primary = 'quickbooks_oauth_id';
+		$keys = array(  );
+		$uniques = array( 'app_username' );
+		
+		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
 		
 		//header('Content-Type: text/plain');
 		//print_r($arr_sql);

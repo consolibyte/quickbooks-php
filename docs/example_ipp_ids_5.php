@@ -21,6 +21,12 @@ $res = mysql_query("SELECT * FROM quickbooks_oauth ORDER BY quickbooks_oauth_id 
 $arr = mysql_fetch_assoc($res);
 
 
+$AES = QuickBooks_Encryption_Factory::create('aes');
+
+$arr['oauth_access_token'] = $AES->decrypt($encryption_key, $arr['oauth_access_token']);
+$arr['oauth_access_token_secret'] = $AES->decrypt($encryption_key, $arr['oauth_access_token_secret']);
+
+
 //$oauth = new OAuthSimple();
 $oauth = new QuickBooks_IPP_OAuth($oauth_consumer_key, $oauth_consumer_secret);
 
