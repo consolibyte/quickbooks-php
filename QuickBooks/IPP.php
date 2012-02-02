@@ -1221,7 +1221,7 @@ class QuickBooks_IPP
 		}
 
 		// Authorization stuff
-		if ($this->_authmode = QuickBooks_IPP::AUTHMODE_OAUTH)
+		if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTH)
 		{
 			// If we have credentials, sign the request
 			if ($this->_authcred['oauth_access_token'] and 
