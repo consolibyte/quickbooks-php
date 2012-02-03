@@ -1275,7 +1275,7 @@ class QuickBooks_IPP
 				}
 			}
 		}
-		else
+		else if (is_object($Context)) 
 		{
 			// FEDERATED authentication
 			
