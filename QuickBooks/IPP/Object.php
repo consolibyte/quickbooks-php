@@ -72,7 +72,10 @@ class QuickBooks_IPP_Object
 	
 	public function getDateType($field, $format = 'Y-m-d')
 	{
-		return date($format, strtotime($this->get($field)));
+		// This fixes a problem with PHP interpreting dates in the format "2012-01-02T00:00:00Z" as being from the day previous
+		$value = str_replace('T00:00:00Z', '', $this->get($field));
+		
+		return date($format, strtotime($value));
 	}
 	
 	public function setAmountType($field, $value)
