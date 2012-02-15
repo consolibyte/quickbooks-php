@@ -515,6 +515,7 @@ class QuickBooks_WebConnector_Server
 				print('Registered handler functions: ' . "\n");
 				print_r($this->_server->getFunctions());
 				
+				/*
 				print("\n");
 				print('Registered hooks: ' . "\n");
 				//print_r($this->_hooks);		// This is bad because it prints passwords
@@ -533,6 +534,7 @@ class QuickBooks_WebConnector_Server
 						print('    ' . $y . QUICKBOOKS_CRLF);
 					}
 				}
+				*/
 				
 				print("\n");
 				print('Detected input: ' . "\n");

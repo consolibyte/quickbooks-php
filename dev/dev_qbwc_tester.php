@@ -1,6 +1,6 @@
 <?php
 
-$url = 'http://localhost:8888/quickbooks_example/server.php';
+$url = 'http://localhost:8888/qbwtest.php';
 $username = 'quickbooks';
 $password = 'password';
 
@@ -38,7 +38,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-
+//exit;
 
 $max = 2;
 for ($i = 1; $i < $max; $i++)

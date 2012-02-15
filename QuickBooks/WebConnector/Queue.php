@@ -48,7 +48,7 @@ QuickBooks_Loader::load('/QuickBooks/Utilities.php');
 /**
  * Helper singleton class
  */
-QuickBooks_Loader::load('/QuickBooks/Queue/Singleton.php');
+QuickBooks_Loader::load('/QuickBooks/WebConnector/Queue/Singleton.php');
 
 /**
  * QuickBooks queueing class - Queue up actions to be performed in QuickBooks
