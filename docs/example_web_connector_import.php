@@ -368,7 +368,7 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 	{
 		// Queue up another request
 		
-		$Queue = QuickBooks_Queue_Singleton::getInstance();
+		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 		$Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, null, QB_PRIORITY_INVOICE, array( 'iteratorID' => $idents['iteratorID'] ));
 	}
 	
@@ -516,7 +516,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 	{
 		// Queue up another request
 		
-		$Queue = QuickBooks_Queue_Singleton::getInstance();
+		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 		$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, null, QB_PRIORITY_CUSTOMER, array( 'iteratorID' => $idents['iteratorID'] ));
 	}
 	
@@ -632,7 +632,7 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 	{
 		// Queue up another request
 		
-		$Queue = QuickBooks_Queue_Singleton::getInstance();
+		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 		$Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, null, QB_PRIORITY_SALESORDER, array( 'iteratorID' => $idents['iteratorID'] ));
 	}
 	
@@ -780,7 +780,7 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 	{
 		// Queue up another request
 		
-		$Queue = QuickBooks_Queue_Singleton::getInstance();
+		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 		$Queue->enqueue(QUICKBOOKS_IMPORT_ITEM, null, QB_PRIORITY_ITEM, array( 'iteratorID' => $idents['iteratorID'] ));
 	}
 	
@@ -920,7 +920,7 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 	{
 		// Queue up another request
 		
-		$Queue = QuickBooks_Queue_Singleton::getInstance();
+		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 		$Queue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, null, QB_PRIORITY_PURCHASEORDER, array( 'iteratorID' => $idents['iteratorID'] ));
 	}
 	
@@ -1009,7 +1009,7 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
  */
 function _quickbooks_error_e500_notfound($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)
 {
-	$Queue = QuickBooks_Queue_Singleton::getInstance();
+	$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 	
 	if ($action == QUICKBOOKS_IMPORT_INVOICE)
 	{
