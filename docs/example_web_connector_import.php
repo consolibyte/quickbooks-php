@@ -252,7 +252,7 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
 	//$Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, 1, QB_PRIORITY_SALESORDER);
 	//$Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, 1, QB_PRIORITY_INVOICE);
 	$Queue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, 1, QB_PRIORITY_PURCHASEORDER);
-	//$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1, QB_PRIORITY_CUSTOMER);
+	$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1, QB_PRIORITY_CUSTOMER);
 	//$Queue->enqueue(QUICKBOOKS_IMPORT_ITEM, 1, QB_PRIORITY_ITEM);
 }
 
@@ -1024,6 +1024,10 @@ function _quickbooks_error_e500_notfound($requestID, $user, $action, $ID, $extra
 		return true;
 	}
 	else if ($action == QUICKBOOKS_IMPORT_ITEM)
+	{
+		return true;
+	}
+	else if ($action == QUICKBOOKS_IMPORT_PURCHASEORDER)
 	{
 		return true;
 	}
