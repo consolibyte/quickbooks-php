@@ -36,6 +36,41 @@ class QuickBooks_IPP_Object
 		$this->_data = array();
 	}
 	
+	/**
+	 *
+	 * 
+	 * NOTE: This only works for SimpleXML... should probably be changed so 
+	 * that this calls the QuickBooks_XML_Node class and then calls an XPath
+	 * method within that... *sigh* 
+	 *
+	 */ 
+	public function getXPath($xpath)
+	{
+		$str = $this->asIDSXML();
+		
+		$XML = new SimpleXMLElement($str);
+		
+		$retr = $XML->xpath($xpath);
+		
+		// This is our node value
+		$cur = current($retr);
+		
+		if ($cur)
+		{
+			// Check if it's an id type, in which case we need to build an IdType return string
+			$attrs = $cur->attributes();
+			
+			if (isset($attrs['idDomain']))
+			{
+				return QuickBooks_IPP_IDS::buildIdType($attrs['idDomain'], $cur . '');
+			}
+			
+			return $cur . '';
+		}
+		
+		return null;
+	}
+	
 	public function get($field)
 	{
 		/*

@@ -292,14 +292,17 @@ class QuickBooks_IPP_Parser
 					//print_r($List);
 					//exit;
 					
+					//print_r($Root);
+					//exit;
+					
 					// Stupid QuickBooks Online... *sigh*
 					if ($optype == QuickBooks_IPP_IDS::OPTYPE_FINDBYID and 
-						$Root->name() == 'CompanyMetaData')
+						true) //$Root->name() == 'CompanyMetaData')
 					{
 						$List = new QuickBooks_XML_Node();
 						$List->addChild($Root);
 					}
-				
+					
 					//  Normal parsing of query results
 					$list = array();
 					foreach ($List->children() as $Child)

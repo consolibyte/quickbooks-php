@@ -984,7 +984,21 @@ class QuickBooks_IPP
 		}
 		
 		//$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
-		$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
+		
+		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
+			$optype == QuickBooks_IPP_IDS::OPTYPE_FINDBYID)
+		{
+			$parse = QuickBooks_IPP_IDS::parseIDType($xml);
+			
+			$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID . '/' . $parse[1];
+			
+			$post = false;
+			$xml = null;
+		}
+		else
+		{
+			$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
+		}
 		
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
 		
@@ -1282,7 +1296,10 @@ class QuickBooks_IPP
 			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $Context->token() . '", intuit-token="' . $Context->ticket() . '"';
 			$headers['Cookie'] = $this->cookies(true);
 		}	
-
+		
+		//print_r($headers);
+		//exit;
+		
 		// Our HTTP requestor
 		$HTTP = new QuickBooks_HTTP($url);
 

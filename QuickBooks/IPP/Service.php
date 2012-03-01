@@ -398,24 +398,33 @@ abstract class QuickBooks_IPP_Service
 	 * 
 	 * 
 	 */
-	protected function _findById($Context, $realmID, $resource, $IDType, $xml = '')
+	protected function _findById($Context, $realmID, $resource, $IDType, $xml_or_IDType = '')
 	{
 		$IPP = $Context->IPP();
 		
-		if (!$xml)
+		$flavor = $IPP->flavor();
+		
+		if (!$xml_or_IDType)
 		{
-			$parse = QuickBooks_IPP_IDS::parseIDType($IDType);
-			
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
-			$xml .= '	<' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
-			$xml .= '		<Id idDomain="' . $parse['domain'] . '">' . $parse['ID'] . '</Id>' . QUICKBOOKS_CRLF;
-			$xml .= '	</' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
-			$xml .= '</' . $resource . 'Query>';
+			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
+			{
+				$parse = QuickBooks_IPP_IDS::parseIDType($IDType);
+				
+				$xml = '';
+				$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+				$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+				$xml .= '	<' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
+				$xml .= '		<Id idDomain="' . $parse['domain'] . '">' . $parse['ID'] . '</Id>' . QUICKBOOKS_CRLF;
+				$xml .= '	</' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
+				$xml .= '</' . $resource . 'Query>';
+			}
+			else if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
+			{
+				$xml_or_IDType = $IDType;
+			}
 		}
 		
-		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_FINDBYID, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_FINDBYID, $xml_or_IDType);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		
