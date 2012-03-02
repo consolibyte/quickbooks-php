@@ -48,6 +48,8 @@ class QuickBooks_IPP_Object
 	{
 		$str = $this->asIDSXML();
 		
+		//print('[[' . $str . ']]');
+		
 		$XML = new SimpleXMLElement($str);
 		
 		$retr = $XML->xpath($xpath);
@@ -370,7 +372,7 @@ class QuickBooks_IPP_Object
 						//$xml .= QuickBooks_XML::encode($value, $for_qbxml);
 						//$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
 						
-						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . $svalue . '</' . $key . '>' . QUICKBOOKS_CRLF;
+						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
 					}
 				}
 			}

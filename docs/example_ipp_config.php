@@ -38,7 +38,7 @@ $dsn = 'mysql://root:root@localhost/quickbooks';
 $encryption_key = 'abcd1234';
 
 // The user that's logged in
-$the_username = 'your_app_username_here_2';
+$the_username = 'your_app_username_here';
 
 // The tenant that user is accessing within your own app
 $the_tenant = 12345;

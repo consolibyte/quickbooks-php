@@ -55,28 +55,41 @@ if ($Context = $IPP->context())
 	
 	print('Base URL is [' . $IPP->baseURL() . ']' . "\n\n");
 	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
+	$InvoiceService = new QuickBooks_IPP_Service_Invoice();
 	
-	$perpage = 3;
-	for ($page = 1; $page <= 3; $page++)
+	// Unfortunately, QuickBooks Online and QuickBooks desktop don't use the 
+	//	same query syntax (in this case, filtering invoices by a specific 
+	//	customer)
+	if ($creds['qb_flavor'] == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
 	{
-		print('PAGE ' . $page . "\n\n");
-		
-		$list = $CustomerService->findAll($Context, $realm, null, $page, $perpage);
-		
-		foreach ($list as $Customer)
-		{
-			print('Name [' . $Customer->getId() . ' => ' . $Customer->getName() . ']' . "\n\n");
-		}
-		
-		print("\n\n\n");
+		$query = array( 'Filter' => 'CustomerId :EQUALS: 1' );
+	}
+	else
+	{
+		$query = '
+			<ContactIdSet>
+				<Id>44617999</Id>
+			</ContactIdSet>';		
 	}
 	
-	print("\n\n\n\n");
-	print('Request [' . $IPP->lastRequest() . ']');
-	print("\n\n\n\n");
-	print('Response [' . $IPP->lastResponse() . ']');
-	print("\n\n\n\n");
+	$page = 1;
+	$limit = 25;
+	$list = $InvoiceService->findAll($Context, $realm, $query, $page, $limit);
+	
+	foreach ($list as $Invoice)
+	{
+		print($Invoice->getXPath('Header/CustomerId') . ' (customer id) => # ' . $Invoice->getXPath('Header/DocNumber') . "\n");
+	}
+	
+	//print_r($list);
+	
+	/*
+	print("\n\n");
+	print($InvoiceService->lastRequest());
+	print("\n\n");
+	print($InvoiceService->lastResponse());
+	print("\n\n");
+	*/
 }
 else
 {

@@ -173,7 +173,12 @@ abstract class QuickBooks_IPP_Service
 		return $map;
 	}
 	
-	protected function _findAll($Context, $realmID, $resource, $Query = null, $sort = null, $page = 1, $size = 50, $xml = '')
+	protected function _find()
+	{
+		
+	}
+	
+	protected function _findAll($Context, $realmID, $resource, $query = null, $sort = null, $page = 1, $size = 50, $xml = '')
 	{
 		$IPP = $Context->IPP();
 		
@@ -196,6 +201,8 @@ abstract class QuickBooks_IPP_Service
 					$xml .= '	<ChunkSize>' . (int) $size . '</ChunkSize>' . QUICKBOOKS_CRLF;
 				}
 				
+				$xml .= $query;
+				
 				$xml .= '</' . $resource . 'Query>';
 			}
 		}
@@ -203,10 +210,10 @@ abstract class QuickBooks_IPP_Service
 		{
 			if (!$xml)
 			{
-				$xml = http_build_query(array(
+				$xml = http_build_query(array_merge(array(
 					'PageNum' => (int) $page, 
 					'ResultsPerPage' => (int) $size, 
-					));
+					), (array) $query));
 			}
 		}
 		

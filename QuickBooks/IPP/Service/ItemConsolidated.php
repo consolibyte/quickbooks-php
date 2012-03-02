@@ -21,9 +21,9 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_ItemConsolidated extends QuickBooks_IPP_Service
 {
-	public function findAll($Context, $realmID, $Query = null, $sort = null, $page = 1, $size = 50)
+	public function findAll($Context, $realmID, $query = null, $page = 1, $size = 50)
 	{
-		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEMCONSOLIDATED, $Query, $sort, $page, $size);
+		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEMCONSOLIDATED, $query, null, $page, $size);
 	}
 
 	/**
