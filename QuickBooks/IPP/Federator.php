@@ -501,6 +501,7 @@ class QuickBooks_IPP_Federator
 				$ticket, 
 				$target_url, 
 				$realm_id_pseudonym,
+				$this->_config,
 				$err);
 			
 			if ($err)

@@ -47,10 +47,10 @@ if (!QuickBooks_Utilities::initialized($dsn))
 	  name varchar(64) NOT NULL,
 	  fname varchar(64) NOT NULL,
 	  lname varchar(64) NOT NULL,
-	  quickbooks_listid varchar(255) NOT NULL,
-	  quickbooks_editsequence varchar(255) NOT NULL,
-	  quickbooks_errnum varchar(255) NOT NULL,
-	  quickbooks_errmsg varchar(255) NOT NULL,
+	  quickbooks_listid varchar(255) DEFAULT NULL,
+	  quickbooks_editsequence varchar(255) DEFAULT NULL,
+	  quickbooks_errnum varchar(255) DEFAULT NULL,
+	  quickbooks_errmsg varchar(255) DEFAULT NULL,
 	  PRIMARY KEY (id)
 	) ENGINE=MyISAM");
 }

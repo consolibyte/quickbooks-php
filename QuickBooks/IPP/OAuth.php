@@ -25,6 +25,10 @@ class QuickBooks_IPP_OAuth
 	protected $_oauth_access_token;
 	protected $_oauth_access_token_secret;
 
+	protected $_version = null;
+	protected $_signature = null;
+	protected $_keyfile;
+
 	/**
 	 * 
 	 */
@@ -35,18 +39,41 @@ class QuickBooks_IPP_OAuth
 	const METHOD_PUT = 'PUT';
 	const METHOD_DELETE = 'DELETE';
 
-	const OAUTH_VERSION = '1.0';
-	const OAUTH_SIGNATURE = 'HMAC-SHA1';
+	const DEFAULT_VERSION = '1.0';
+	const DEFAULT_SIGNATURE = 'HMAC-SHA1';
+
+	const SIGNATURE_PLAINTEXT = 'PLAINTEXT';
+	const SIGNATURE_HMAC = 'HMAC-SHA1';
+	const SIGNATURE_RSA = 'RSA-SHA1';
 
 	/** 
-	 * 
+	 * Create our OAuth instance
 	 */
 	public function __construct($oauth_consumer_key, $oauth_consumer_secret)
 	{
 		$this->_oauth_consumer_key = $oauth_consumer_key;
 		$this->_oauth_consumer_secret = $oauth_consumer_secret;
+		
+		$this->_version = QuickBooks_IPP_OAuth::DEFAULT_VERSION;
+		$this->_signature = QuickBooks_IPP_OAuth::DEFAULT_SIGNATURE;
 	}
-
+	
+	/**
+	 * Set the signature method
+	 * 
+	 * 
+	 */
+	public function signature($method, $keyfile = null)
+	{
+		$this->_signature = $method;
+		$this->_keyfile = $keyfile;
+	}
+	
+	/**
+	 * Sign an OAuth request and return the signing data (auth string, URL, etc.)
+	 *
+	 * 
+	 */
 	public function sign($method, $url, $oauth_token = null, $oauth_token_secret = null, $params = array()) 
 	{
 		/*
@@ -62,10 +89,10 @@ class QuickBooks_IPP_OAuth
 		
 		$params = array_merge($params, array(
 			'oauth_consumer_key' => $this->_oauth_consumer_key, 
-			'oauth_signature_method' => QuickBooks_IPP_OAuth::OAUTH_SIGNATURE, 
+			'oauth_signature_method' => $this->_signature, 
 			'oauth_nonce' => $this->_nonce(), 
 			'oauth_timestamp' => $this->_timestamp(), 
-			'oauth_version' => QuickBooks_IPP_OAuth::OAUTH_VERSION,
+			'oauth_version' => $this->_version,
 			));
 		
 		// Add in the tokens if they were passed in
@@ -80,7 +107,7 @@ class QuickBooks_IPP_OAuth
 		}
 		
 		// Generate the signature
-		$signature_and_basestring = $this->_generateSignature($method, $url, $params);
+		$signature_and_basestring = $this->_generateSignature($this->_signature, $method, $url, $params);
 		
 		$params['oauth_signature'] = $signature_and_basestring[1];
 		
@@ -187,17 +214,8 @@ class QuickBooks_IPP_OAuth
 		return implode('&', $normalized);
 	}
 
-	protected function _generateSignature($method, $url, $params = array()) 
+	protected function _generateSignature($signature, $method, $url, $params = array()) 
 	{
-		$secret = $this->_escape($this->_oauth_consumer_secret);
-
-		$secret .= '&';
-		
-		if (!empty($params['oauth_secret']))
-		{
-			$secret .= $this->_escape($params['oauth_secret']);
-		}
-		
 		/*
 		print('<pre>params for signing');
 		print_r($params);
@@ -220,6 +238,73 @@ class QuickBooks_IPP_OAuth
 		*/
 		
 		$sbs = $this->_escape($method) . '&' . $this->_escape($url) . '&' . $this->_escape($this->_normalize($params));
+		
+		// Which signature method? 
+		switch ($signature)
+		{
+			case QuickBooks_IPP_OAuth::SIGNATURE_HMAC:
+				return $this->_generateSignature_HMAC($sbs, $method, $url, $params);	
+			case QuickBooks_IPP_OAuth::SIGNATURE_RSA:
+				return $this->_generateSignature_RSA($sbs, $method, $url, $params);
+		}
+		
+		return false;
+	}
+	
+
+	/*
+		// Pull the private key ID from the certificate
+		$privatekeyid = openssl_get_privatekey($cert);
+		
+		// Sign using the key
+		$sig = false;
+		$ok  = openssl_sign($base_string, $sig, $privatekeyid);   
+		
+		// Release the key resource
+		openssl_free_key($privatekeyid);
+		
+		base64_encode($sig)
+	*/
+		
+	
+	protected function _generateSignature_RSA($sbs, $method, $url, $params = array())
+	{
+		// $res = ... 
+		$res = openssl_pkey_get_private('file://' . $this->_keyfile);
+		
+		print('key id is: [');
+		print_r($res);
+		print(']');
+		print("\n\n\n");
+		
+		$signature = null;
+		$retr = openssl_sign($sbs, $signature, $res);
+		
+		openssl_free_key($res);
+		
+		return array(
+			0 => $sbs, 
+			1 => base64_encode($signature), 
+			);
+	}
+		
+		
+		
+	/*
+	$key = $request->urlencode($consumer_secret).'&'.$request->urlencode($token_secret);
+	$signature = base64_encode(hash_hmac("sha1", $base_string, $key, true));
+	*/	
+		
+	protected function _generateSignature_HMAC($sbs, $method, $url, $params = array())
+	{
+		$secret = $this->_escape($this->_oauth_consumer_secret);
+		
+		$secret .= '&';
+		
+		if (!empty($params['oauth_secret']))
+		{
+			$secret .= $this->_escape($params['oauth_secret']);
+		}
 		
 		return array(
 			0 => $sbs, 

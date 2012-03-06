@@ -62,7 +62,7 @@ class QuickBooks_Callbacks
 		
 	}
 	
-	static public function callSAMLCallback($Driver, $callback, $auth_id, $ticket, $target_url, $realm_id_pseudonym, &$err)
+	static public function callSAMLCallback($Driver, $callback, $auth_id, $ticket, $target_url, $realm_id_pseudonym, $config, &$err)
 	{
 		/****  */
 
@@ -79,11 +79,11 @@ class QuickBooks_Callbacks
 			$Driver->log('Calling callback [' . $type . ']: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_DEVELOP);
 		}
 
-		// The 5th (start at 0: 0, 1, 2, 3, 4) param is the error handler
-		$which = 4;
+		// The 6th (start at 0: 0, 1, 2, 3, 4, 5) param is the error handler
+		$which = 5;
 		
-		//             0         1        2            3					4
-		$vars = array( $auth_id, $ticket, $target_url, $realm_id_pseudonym, &$err );
+		//             0         1        2            3                    4        5
+		$vars = array( $auth_id, $ticket, $target_url, $realm_id_pseudonym, $config, &$err );
 		if ($type == QUICKBOOKS_CALLBACKS_TYPE_OBJECT_METHOD)			// Object instance method hook
 		{
 			$object = $callback[0];
@@ -138,12 +138,6 @@ class QuickBooks_Callbacks
 		$err = $vars[$which];
 		
 		return $ret;
-
-
-
-
-		/****    ***/
-		
 	}
 	
 	/**

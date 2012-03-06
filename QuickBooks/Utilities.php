@@ -368,7 +368,7 @@ class QuickBooks_Utilities
 				{
 					// CIDR notation
 					
-					if ($this->_checkCIDR($remoteaddr, $allow))
+					if (QuickBooks_Utilities::_checkCIDR($remoteaddr, $allow))
 					{
 						$allowed = true;
 						break;
@@ -401,7 +401,7 @@ class QuickBooks_Utilities
 				{
 					// CIDR notation
 					
-					if ($this->_checkCIDR($remoteaddr, $deny))
+					if (QuickBooks_Utilities::_checkCIDR($remoteaddr, $deny))
 					{
 						return false;
 					}

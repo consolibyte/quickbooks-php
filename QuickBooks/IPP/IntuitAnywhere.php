@@ -37,6 +37,7 @@ class QuickBooks_IPP_IntuitAnywhere
 	const URL_REQUEST_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_request_token';
 	const URL_ACCESS_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_access_token';
 	const URL_CONNECT_BEGIN = 'https://appcenter.intuit.com/Connect/Begin';
+	const URL_APP_MENU = 'https://appcenter.intuit.com/api/v1/Account/AppMenu';
 	
 	/**
 	 * 
@@ -295,9 +296,22 @@ class QuickBooks_IPP_IntuitAnywhere
 		
 	}
 		
-	public function widgetMenu() 
+	public function widgetMenu($app_username, $app_password) 
 	{
-		return $this->_request(QuickBooks_IPP_OAuth::METHOD_GET, 'https://appcenter.intuit.com/api/v1/Account/AppMenu', array(), true);
+		$token = null;
+		$secret = null;
+		
+		if ($creds = $this->load($app_username, $app_password))
+		{
+			return $this->_request(
+				QuickBooks_IPP_OAuth::METHOD_GET, 
+				QuickBooks_IPP_IntuitAnywhere::URL_APP_MENU, 
+				array(), 
+				$creds['oauth_access_token'], 
+				$creds['oauth_access_token_secret']);
+		}
+		
+		return '';
 	}
 
 	protected function _request($method, $url, $params = array(), $token = null, $secret = null, $data = null) 
