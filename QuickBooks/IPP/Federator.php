@@ -68,12 +68,6 @@ class QuickBooks_IPP_Federator
 	const TYPE_SAML = 'saml';
 	
 	/**
-	 * OAuth authorization
-	 * @var string
-	 */
-	const TYPE_OAUTH = 'oauth';
-	
-	/**
 	 * No error, everything is OK
 	 * @var integer
 	 */
@@ -95,6 +89,8 @@ class QuickBooks_IPP_Federator
 	
 	const ERROR_COOKIE = 6;
 	
+	const URL_OAUTH = 'https://oauth.intuit.com/oauth/v1/get_access_token_by_intuit_pseudonym';
+	
 	protected $_type;
 	
 	protected $_key;
@@ -113,9 +109,8 @@ class QuickBooks_IPP_Federator
 	
 	protected $_log;
 
-	public function __construct($type, $private_key, $dsn = null, $callback = null, $config = array())
+	public function __construct($private_key, $dsn = null, $callback = null, $config = array())
 	{
-		$this->_type = $type;
 		$this->_key = $private_key;
 		
 		$this->_driver = null;
@@ -238,6 +233,109 @@ class QuickBooks_IPP_Federator
 	{
 		// We only support SAML for now
 		return $this->_handleSAML($input);
+	}
+	
+	public function checkOAuth($user, $tenant)
+	{
+		if ($arr = $this->loadOAuth($user, $tenant))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public function loadOAuth($user, $tenant)
+	{
+		if (!$this->_driver)
+		{
+			return false;
+		}
+		
+		if ($arr = $this->_driver->oauthLoad($this->_key, $user, $tenant) and
+			strlen($arr['oauth_access_token']) > 0 and
+			strlen($arr['oauth_access_token_secret']) > 0)
+		{
+			$arr['oauth_consumer_key'] = null;
+			$arr['oauth_consumer_secret'] = null;
+			
+			return $arr;
+		}
+			
+		return false;
+	}
+	
+	/**
+	 * Fetch OAuth tokens with the data provided to you in the SAML request
+	 * 
+	 * Federated applications can use OAuth for unattended access to IDS data. 
+	 * (i.e. access data even if the user isn't logged in) Before you start 
+	 * using this, you have to make sure Intuit onboards you for OAuth access.
+	 * 
+	 * @param unknown_type $provider				Your federated provider id (Intuit should have given you this)
+	 * @param unknown_type $token					Your application token
+	 * @param unknown_type $key						The full path to your .pem file (e.g. /path/to/file.pem)
+	 * @param unknown_type $user					The username or user ID of the authenticating user
+	 * @param unknown_type $tenant					The tenant ID of the authenticating user
+	 * @param unknown_type $auth_id_pseudonym		The Auth ID Pseudonym extracted from the SAML message
+	 * @param unknown_type $realm_id_pseudonym		The Realm ID Pseudonym extracted from the SAML message
+	 * @return boolean
+	 */
+	public function connectOAuth($provider, $token, $pem_key, $encryption_key, $app_username, $app_tenant, $auth_id_pseudonym, $realm_id_pseudonym)
+	{
+		if (!$this->_driver)
+		{
+			return false;
+		}
+		
+		$url = QuickBooks_IPP_Federator::URL_OAUTH;
+		
+		// First we need to push the request data into the OAuth storage
+		$this->_driver->oauthRequestWrite(
+			$app_username, 
+			$app_tenant, 
+			$auth_id_pseudonym, 
+			$realm_id_pseudonym);
+		
+		$params = array(
+			'xoauth_service_provider_id' => $provider,
+			'xoauth_auth_id_pseudonym' => $auth_id_pseudonym, 
+			'xoauth_realm_id_pseudonym' => $realm_id_pseudonym,
+			);
+		
+		// Create our OAuth instance class
+		$OAuth = new QuickBooks_IPP_OAuth(
+			$token,		// The "consumer key" in this case is our application token 
+			'');		// There is no consumer secret 
+		
+		$OAuth->signature(QuickBooks_IPP_OAuth::SIGNATURE_RSA, $pem_key);
+		
+		// Sign the request
+		$sign = $OAuth->sign(QuickBooks_IPP_OAuth::METHOD_GET, $url, null, null, $params);
+		
+		// Now make our HTTP request to get the OAuth tokens 
+		$HTTP = new QuickBooks_HTTP($sign[2]);
+		
+		$HTTP->verifyHost(false);
+		$HTTP->verifyPeer(false);
+		
+		$HTTP->useDebugMode($this->_debug);
+		
+		if ($data = $HTTP->GET())
+		{
+			$tmp = array();
+			parse_str($data, $tmp);
+			
+			if (!empty($tmp['oauth_token']) and 
+				!empty($tmp['oauth_token_secret']))
+			{
+				// Store the OAuth tokens  
+				
+				return $this->_driver->oauthAccessWrite($encryption_key, $request_token, $token, $token_secret, $realm, $flavor);
+			}
+		}
+		
+		return false;
 	}
 	
 	protected function _handleSAML($SAML = null)
