@@ -117,7 +117,7 @@ class QuickBooks_IPP_Federator
 		if ($dsn)
 		{
 			// @todo Logging
-			
+			$this->_driver = QuickBooks_Driver_Factory::create($dsn);
 		}
 		
 		$this->_log = '';
@@ -235,9 +235,9 @@ class QuickBooks_IPP_Federator
 		return $this->_handleSAML($input);
 	}
 	
-	public function checkOAuth($user, $tenant)
+	public function checkOAuth($encryption_key, $user, $tenant)
 	{
-		if ($arr = $this->loadOAuth($user, $tenant))
+		if ($arr = $this->loadOAuth($encryption_key, $user, $tenant))
 		{
 			return true;
 		}
@@ -245,14 +245,14 @@ class QuickBooks_IPP_Federator
 		return false;
 	}
 	
-	public function loadOAuth($user, $tenant)
+	public function loadOAuth($encryption_key, $user, $tenant)
 	{
 		if (!$this->_driver)
 		{
 			return false;
 		}
 		
-		if ($arr = $this->_driver->oauthLoad($this->_key, $user, $tenant) and
+		if ($arr = $this->_driver->oauthLoad($encryption_key, $user, $tenant) and
 			strlen($arr['oauth_access_token']) > 0 and
 			strlen($arr['oauth_access_token_secret']) > 0)
 		{
@@ -281,7 +281,7 @@ class QuickBooks_IPP_Federator
 	 * @param unknown_type $realm_id_pseudonym		The Realm ID Pseudonym extracted from the SAML message
 	 * @return boolean
 	 */
-	public function connectOAuth($provider, $token, $pem_key, $encryption_key, $app_username, $app_tenant, $auth_id_pseudonym, $realm_id_pseudonym)
+	public function connectOAuth($provider, $token, $pem_key, $encryption_key, $app_username, $app_tenant, $auth_id_pseudonym, $realm_id_pseudonym, $realm, $flavor)
 	{
 		if (!$this->_driver)
 		{
@@ -331,7 +331,15 @@ class QuickBooks_IPP_Federator
 			{
 				// Store the OAuth tokens  
 				
-				return $this->_driver->oauthAccessWrite($encryption_key, $request_token, $token, $token_secret, $realm, $flavor);
+				print_r($tmp);
+				
+				return $this->_driver->oauthAccessWrite(
+					$encryption_key, 
+					$auth_id_pseudonym, 
+					$tmp['oauth_token'], 
+					$tmp['oauth_token_secret'], 
+					$realm, 
+					$flavor);
 			}
 		}
 		

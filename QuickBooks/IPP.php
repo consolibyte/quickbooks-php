@@ -367,6 +367,8 @@ class QuickBooks_IPP
 			
 			$Context = new QuickBooks_IPP_Context($this, $ticket, $token);
 			
+			//print('check if valid [' . $check_if_valid . ']');
+			
 			if ($check_if_valid)
 			{
 				// Now, let's check to make sure the context is valid
@@ -380,6 +382,8 @@ class QuickBooks_IPP
 				}
 			}
 		}
+		
+		//print_r($Context);
 			
 		return $Context;
 	}
