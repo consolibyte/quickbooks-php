@@ -235,9 +235,18 @@ class QuickBooks_IPP_Federator
 		return $this->_handleSAML($input);
 	}
 	
-	public function checkOAuth($encryption_key, $user, $tenant)
+	/**
+	 * Check if an OAuth token exists for the given user
+	 * 
+	 * @param string $token					Your Intuit application token
+	 * @param string $encryption_key		Your internal encryption key
+	 * @param string $user					The username or user ID from within your app
+	 * @param string $tenant				The tenant ID from within your app
+	 * @return boolean						TRUE if OAuth credentials exist, FALSE if they do not
+	 */
+	public function checkOAuth($token, $encryption_key, $user, $tenant)
 	{
-		if ($arr = $this->loadOAuth($encryption_key, $user, $tenant))
+		if ($arr = $this->loadOAuth($token, $encryption_key, $user, $tenant))
 		{
 			return true;
 		}
@@ -245,7 +254,16 @@ class QuickBooks_IPP_Federator
 		return false;
 	}
 	
-	public function loadOAuth($encryption_key, $user, $tenant)
+	/**
+	 * 
+	 * 
+	 * @param string $token					Your Intuit application token
+	 * @param string $encryption_key		Your internal encryption key
+	 * @param string $user					The username or user ID from within your app
+	 * @param string $tenant				The tenant ID from within your app
+	 * @return array						An array of OAuth credentials 
+	 */
+	public function loadOAuth($token, $encryption_key, $user, $tenant)
 	{
 		if (!$this->_driver)
 		{
@@ -256,7 +274,7 @@ class QuickBooks_IPP_Federator
 			strlen($arr['oauth_access_token']) > 0 and
 			strlen($arr['oauth_access_token_secret']) > 0)
 		{
-			$arr['oauth_consumer_key'] = null;
+			$arr['oauth_consumer_key'] = $token;
 			$arr['oauth_consumer_secret'] = null;
 			
 			return $arr;
@@ -272,19 +290,20 @@ class QuickBooks_IPP_Federator
 	 * (i.e. access data even if the user isn't logged in) Before you start 
 	 * using this, you have to make sure Intuit onboards you for OAuth access.
 	 * 
-	 * @param unknown_type $provider				Your federated provider id (Intuit should have given you this)
-	 * @param unknown_type $token					Your application token
-	 * @param unknown_type $key						The full path to your .pem file (e.g. /path/to/file.pem)
-	 * @param unknown_type $user					The username or user ID of the authenticating user
-	 * @param unknown_type $tenant					The tenant ID of the authenticating user
-	 * @param unknown_type $auth_id_pseudonym		The Auth ID Pseudonym extracted from the SAML message
-	 * @param unknown_type $realm_id_pseudonym		The Realm ID Pseudonym extracted from the SAML message
+	 * @param string $provider					Your federated provider id (Intuit should have given you this)
+	 * @param string $token						Your application token
+	 * @param string $key						The full path to your .pem file (e.g. /path/to/file.pem)
+	 * @param string $user						The username or user ID of the authenticating user
+	 * @param string $tenant					The tenant ID of the authenticating user
+	 * @param string $auth_id_pseudonym			The Auth ID Pseudonym extracted from the SAML message
+	 * @param string $realm_id_pseudonym		The Realm ID Pseudonym extracted from the SAML message
 	 * @return boolean
 	 */
 	public function connectOAuth($provider, $token, $pem_key, $encryption_key, $app_username, $app_tenant, $auth_id_pseudonym, $realm_id_pseudonym, $realm, $flavor)
 	{
 		if (!$this->_driver)
 		{
+			$this->_log('Could not connect to OAuth, no DRIVER storage instance.');
 			return false;
 		}
 		
@@ -321,7 +340,12 @@ class QuickBooks_IPP_Federator
 		
 		$HTTP->useDebugMode($this->_debug);
 		
-		if ($data = $HTTP->GET())
+		$data = $HTTP->GET();
+		
+		$this->_log('OAuth HTTP request: [' . $HTTP->lastRequest() . ']');
+		$this->_log('OAuth HTTP response: [' . $HTTP->lastResponse() . ']');
+		
+		if ($data)
 		{
 			$tmp = array();
 			parse_str($data, $tmp);
@@ -331,7 +355,7 @@ class QuickBooks_IPP_Federator
 			{
 				// Store the OAuth tokens  
 				
-				print_r($tmp);
+				$this->_log('Storing OAuth tokens...');
 				
 				return $this->_driver->oauthAccessWrite(
 					$encryption_key, 

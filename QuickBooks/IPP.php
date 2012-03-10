@@ -185,17 +185,24 @@ class QuickBooks_IPP
 	protected $_token;
 	protected $_dbid;
 	
-	/**
-	 * @deprecated
-	 */
-	//protected $_application;
-	
 	protected $_flavor;
 	protected $_baseurl;
 	
 	protected $_authmode;
 	protected $_authuser;
 	protected $_authcred;
+	
+	/**
+	 * Auth signing method (if applicable)
+	 * @var string
+	 */
+	protected $_authsign;
+	
+	/**
+	 * Auth key (if applicable)
+	 * @var string
+	 */
+	protected $_authkey;
 	
 	protected $_debug;
 	
@@ -272,6 +279,9 @@ class QuickBooks_IPP
 		$this->_authmode = QuickBooks_IPP::AUTHMODE_FEDERATED;
 		$this->_authuser = null;
 		$this->_authcred = null;
+		
+		$this->_authsign = null;
+		$this->_authkey = null;
 		
 		// Encryption key (used for database storage)
 		$this->_key = $encryption_key;
@@ -477,32 +487,27 @@ class QuickBooks_IPP
 	 * @param string $authmode		The new auth mode
 	 * @return string				The currently set auth mode
 	 */
-	public function authMode($authmode = null, $authuser = null, $authcred = null)
+	public function authMode($authmode = null, $authuser = null, $authcred = null, $authsign = null, $authkey = null)
 	{
 		if ($authmode)
 		{
 			$this->_authmode = $authmode;
 			$this->_authuser = $authuser;
 			$this->_authcred = $authcred;
+			
+			$this->_authsign = $authsign;
+			$this->_authkey = $authkey;
 		}
 		
 		return $this->_authmode;
 	}
 	
 	/**
-	 * @deprecated 
+	 * Get or set the DBID of the attached federated app
+	 * 
+	 * @param string $dbid
+	 * @return string
 	 */
-	/*public function application($application = null)
-	{
-		if ($application)
-		{
-			$this->_dbid = $application;		// Old way
-			$this->_dbid = $application;
-		}
-		
-		return $this->_dbid;
-	}*/
-	
 	public function dbid($dbid = null)
 	{
 		if ($dbid)
@@ -1248,6 +1253,14 @@ class QuickBooks_IPP
 				// Sign the request
 				$OAuth = new QuickBooks_IPP_OAuth($this->_authcred['oauth_consumer_key'], $this->_authcred['oauth_consumer_secret']);
 				
+				// Different than default signature method?
+				if ($this->_authsign)
+				{
+					$OAuth->signature($this->_authsign, $this->_authkey);
+				}
+				
+				//print('signing with method and key ' . $this->_authsign . ', ' . $this->_authkey);
+				
 				if ($post)
 				{
 					$action = QuickBooks_IPP_OAuth::METHOD_POST;
@@ -1270,8 +1283,19 @@ class QuickBooks_IPP
 					parse_str($data, $signdata);
 				}
 				
+				/*
+				print('signing [');
+				print($action . "\n");
+				print($url . "\n");
+				print_r($this->_authcred);
+				print('[[' . $signdata . ']]');
+				print(' all done ]');
+				*/
+				
 				$signed = $OAuth->sign($action, $url, $this->_authcred['oauth_access_token'], $this->_authcred['oauth_access_token_secret'], $signdata);
 
+				//print_r($signed);
+				
 				if ($post)
 				{
 					// Add the OAuth headers
@@ -1343,6 +1367,15 @@ class QuickBooks_IPP
 		//$this->_last_response = $HTTP->lastResponse();
 		
 		//print($HTTP->getLog());
+		
+		/*
+		print("\n\n\n\n");
+		print($this->_last_request);
+		print("\n\n\n\n");
+		print($this->_last_response);
+		print("\n\n\n\n");
+		exit;
+		*/
 		
 		// 
 		$this->_log($HTTP->getLog(), QUICKBOOKS_LOG_DEBUG);

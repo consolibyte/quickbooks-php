@@ -272,10 +272,12 @@ class QuickBooks_IPP_OAuth
 		// $res = ... 
 		$res = openssl_pkey_get_private('file://' . $this->_keyfile);
 		
+		/*
 		print('key id is: [');
 		print_r($res);
 		print(']');
 		print("\n\n\n");
+		*/
 		
 		$signature = null;
 		$retr = openssl_sign($sbs, $signature, $res);
