@@ -952,7 +952,8 @@ class QuickBooks_WebConnector_Handlers
 			'TxnLineID', 
 			'EditSequence',
 			'FullName', 
-			'Name',  
+			'Name', 
+			'RefNumber', 
 			);
 		
 		$fetch_attributes = array(
