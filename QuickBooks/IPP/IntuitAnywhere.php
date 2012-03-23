@@ -295,13 +295,34 @@ class QuickBooks_IPP_IntuitAnywhere
 	{
 		
 	}
-		
-	public function widgetMenu($app_username, $app_password) 
+    
+	/**
+	 * This function returns the html for displaying the "Blue Dot" menu
+	 * 
+	 * As per Intuit's recommendation, your app should call this function before the user clicks the
+	 * blue dot menu and cache it. This will improve the user's experience and prevent unnecessary API
+	 * calls to Intuit's web service. See:
+	 * https://ipp.developer.intuit.com/0010_Intuit_Partner_Platform/0025_Intuit_Anywhere/1000_Getting_Started_With_IA/0500_Add_IA_Widgets/3000_Blue_Dot_Menu/Menu_Proxy_Code
+	 *
+	 * Example usage:
+	 *     // Your app should read from cache here if possible before calling widgetMenu()
+	 *     $html = $object->widgetMenu($app_username, $app_tenant);
+	 *     if (strlen($html)) {
+	 *         // Your app should write to cache here if possible
+	 *         print $html;
+	 *         exit;
+	 *     }
+	 * 
+	 * @param string $app_username
+	 * @param string $app_tenant
+	 * @return html string
+	 */
+	public function widgetMenu($app_username, $app_tenant)
 	{
 		$token = null;
 		$secret = null;
 		
-		if ($creds = $this->load($app_username, $app_password))
+		if ($creds = $this->load($app_username, $app_tenant))
 		{
 			return $this->_request(
 				QuickBooks_IPP_OAuth::METHOD_GET, 
