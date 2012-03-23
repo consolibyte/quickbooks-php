@@ -1080,17 +1080,17 @@ class QuickBooks_Utilities
 			//	
 			$dependencies = array(
 				QUICKBOOKS_ADD_DATAEXT => array( 
-					QUICKBOOKS_ADD_CUSTOMER => QuickBooks_API::priority(QUICKBOOKS_ADD_CUSTOMER) - 1, 
-					QUICKBOOKS_MOD_CUSTOMER => QuickBooks_API::priority(QUICKBOOKS_MOD_CUSTOMER) - 1, 
+					QUICKBOOKS_ADD_CUSTOMER => QuickBooks_Utilities::priorityForAction(QUICKBOOKS_ADD_CUSTOMER) - 1, 
+					QUICKBOOKS_MOD_CUSTOMER => QuickBooks_Utilities::priorityForAction(QUICKBOOKS_MOD_CUSTOMER) - 1, 
 				),
 				QUICKBOOKS_MOD_DATAEXT => array(
-					QUICKBOOKS_ADD_CUSTOMER => QuickBooks_API::priority(QUICKBOOKS_ADD_CUSTOMER) - 1, 
-					QUICKBOOKS_MOD_CUSTOMER => QuickBooks_API::priority(QUICKBOOKS_MOD_CUSTOMER) - 1, 
+					QUICKBOOKS_ADD_CUSTOMER => QuickBooks_Utilities::priorityForAction(QUICKBOOKS_ADD_CUSTOMER) - 1, 
+					QUICKBOOKS_MOD_CUSTOMER => QuickBooks_Utilities::priorityForAction(QUICKBOOKS_MOD_CUSTOMER) - 1, 
 					),
 					
 				// A *Bill VOID* has a slightly higher priority than a PurchaseOrderMod so that we can IsManuallyClosed POs (we'll get an error if we try to close it and a bill is dependent on it)  
 				QUICKBOOKS_VOID_TRANSACTION => array(
-					QUICKBOOKS_MOD_PURCHASEORDER => QuickBooks_API::priority(QUICKBOOKS_MOD_PURCHASEORDER) + 1, 
+					QUICKBOOKS_MOD_PURCHASEORDER => QuickBooks_Utilities::priorityForAction(QUICKBOOKS_MOD_PURCHASEORDER) + 1, 
 					), 
 				);			
 		}
