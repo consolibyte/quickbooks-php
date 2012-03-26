@@ -540,11 +540,11 @@ class QuickBooks_HTTP
 		curl_setopt_array($ch, $params);
 		$response = curl_exec($ch);
 		
-		print_r($params);
-		print('[[' . $response . ']]');
+		print('[[request ' . $request . ']]' . "\n\n\n");
+		print('[[resonse ' . $response . ']]' . "\n\n\n\n\n");
 		
 		$this->_last_response = $response;
-		$this->_log('HTTP response: ' . $response, QUICKBOOKS_LOG_VERBOSE);
+		$this->_log('HTTP response: ' . substr($response, 0, 500) . '...', QUICKBOOKS_LOG_VERBOSE);
 		
 		if (curl_errno($ch)) 
 		{
