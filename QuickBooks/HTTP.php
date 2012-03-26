@@ -476,7 +476,7 @@ class QuickBooks_HTTP
 		
 		$params[CURLOPT_VERBOSE] = $this->_debug;
 		
-		if ($this->_return_headers)
+		if (true or $this->_return_headers)
 		{
 			$params[CURLOPT_HEADER] = true;
 		}
@@ -539,6 +539,9 @@ class QuickBooks_HTTP
 		$ch = curl_init();
 		curl_setopt_array($ch, $params);
 		$response = curl_exec($ch);
+		
+		print_r($params);
+		print('[[' . $response . ']]');
 		
 		$this->_last_response = $response;
 		$this->_log('HTTP response: ' . $response, QUICKBOOKS_LOG_VERBOSE);

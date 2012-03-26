@@ -285,6 +285,9 @@ class QuickBooks_IPP
 		
 		// Encryption key (used for database storage)
 		$this->_key = $encryption_key;
+		
+		// Default to QuickBooks desktop
+		$this->flavor(QuickBooks_IPP_IDS::FLAVOR_DESKTOP);
 	}
 	
 	/**
@@ -1271,7 +1274,7 @@ class QuickBooks_IPP
 				}
 				
 				$signdata = null;
-				if ($data[0] == '<')
+				if (strlen($data) and $data[0] == '<')
 				{
 					// It's an XML body, we don't sign that
 					$signdata = null;
@@ -1301,7 +1304,7 @@ class QuickBooks_IPP
 					// Add the OAuth headers
 					$headers['Authorization'] = $signed[3];
 					
-					if ($data[0] == '<')
+					if (strlen($data) and $data[0] == '<')
 					{
 						; // Do nothing	
 					}
