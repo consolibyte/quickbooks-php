@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://localhost:8888/qbwtest.php';
+$url = '';
 $username = 'quickbooks';
-$password = 'password';
+$password = '';
 
 if (function_exists('date_default_timezone_set'))
 {
