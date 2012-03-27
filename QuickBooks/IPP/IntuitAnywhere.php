@@ -157,7 +157,7 @@ class QuickBooks_IPP_IntuitAnywhere
 		}
 		else
 		{
-			if (isset($_REQUEST['oauth_token']))
+			if (isset($_GET['oauth_token']))
 			{
 				// We're in the middle of an OAuth token session
 				
@@ -171,12 +171,12 @@ class QuickBooks_IPP_IntuitAnywhere
 						oauth_request_token = '" . $_REQUEST['oauth_token'] . "' "));
 				*/
 				
-				if ($arr = $this->_driver->oauthRequestResolve($_REQUEST['oauth_token']))
+				if ($arr = $this->_driver->oauthRequestResolve($_GET['oauth_token']))
 				{
 					$info = $this->_getAccessToken(
 						$arr['oauth_request_token'], 
 						$arr['oauth_request_token_secret'], 
-						$_REQUEST['oauth_verifier']);
+						$_GET['oauth_verifier']);
 					
 					//print('got back [' . $info . ']');
 					//print_r($info);
