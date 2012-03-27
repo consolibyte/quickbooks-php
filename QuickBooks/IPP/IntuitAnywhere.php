@@ -202,8 +202,8 @@ class QuickBooks_IPP_IntuitAnywhere
 							$arr['oauth_request_token'], 
 							$info['oauth_token'], 
 							$info['oauth_token_secret'],
-							$_REQUEST['realmId'], 
-							$_REQUEST['dataSource']);
+							$_GET['realmId'], 
+							$_GET['dataSource']);
 						
 						//print_r($_REQUEST);
 						//exit;
