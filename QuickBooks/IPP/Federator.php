@@ -91,6 +91,8 @@ class QuickBooks_IPP_Federator
 	
 	const URL_OAUTH = 'https://oauth.intuit.com/oauth/v1/get_access_token_by_intuit_pseudonym';
 	
+	const TIMEOUT_OAUTH = 3000;		// Expires after almost an hour
+	
 	protected $_type;
 	
 	protected $_key;
@@ -236,7 +238,7 @@ class QuickBooks_IPP_Federator
 	}
 	
 	/**
-	 * Check if an OAuth token exists for the given user
+	 * Check if an OAuth token auth/realm psuedonym for the given user
 	 * 
 	 * @param string $token					Your Intuit application token
 	 * @param string $encryption_key		Your internal encryption key
@@ -246,7 +248,19 @@ class QuickBooks_IPP_Federator
 	 */
 	public function checkOAuth($token, $encryption_key, $user, $tenant)
 	{
+		/*
 		if ($arr = $this->loadOAuth($token, $encryption_key, $user, $tenant))
+		{
+			return true;
+		}
+		*/
+		
+		if (!$this->_driver)
+		{
+			return false;
+		}
+		
+		if ($arr = $this->_driver->oauthLoad($encryption_key, $user, $tenant))
 		{
 			return true;
 		}
@@ -280,6 +294,55 @@ class QuickBooks_IPP_Federator
 			return $arr;
 		}
 			
+		return false;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public function refreshOAuth($provider, $token, $pem_key, $encryption_key, $app_username, $app_tenant)
+	{
+		if (!$this->_driver)
+		{
+			$this->_log('Could not connect to OAuth, no DRIVER storage instance.');
+			return false;
+		}
+		
+		// Load from OAuth
+		$arr = $this->_driver->oauthLoad($encryption_key, $app_username, $app_tenant);
+		
+		if ($arr)
+		{
+			// Check the timestamps to see if they are more than 1 HOUR old
+			if (time() - strtotime($arr['access_datetime']) < QuickBooks_IPP_Federator::TIMEOUT_OAUTH)
+			{
+				// Use the existing tokens
+				
+				print('USING EXISTING TOKEN' . "\n\n");
+				
+				return true;
+			}
+			else
+			{
+				// Otherwise, fetch a new OAuth token
+				
+				//print('we need to fetch a new token,e xpired!');
+				//print_r($arr);
+				
+				print('REFRESHING TOKEN!' . "\n\n");
+				
+				$connected = $this->connectOAuth($provider, $token, $pem_key, $encryption_key, $app_username, $app_tenant, 
+					$arr['oauth_request_token'], 
+					$arr['oauth_request_token_secret'], 
+					null, 
+					null);
+					
+				return $connected;
+			}
+		}
+		
 		return false;
 	}
 	

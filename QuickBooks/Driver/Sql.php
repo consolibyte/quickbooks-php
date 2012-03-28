@@ -2207,6 +2207,24 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		// Check if it exists or not first
 		if ($arr = $this->_oauthRequestResolve($request_token))
 		{
+			$vars = array( $token, $token_secret, date('Y-m-d H:i:s') );
+			
+			$more = "";
+			
+			if ($realm)
+			{
+				$more .= ", qb_realm = '%s' ";
+				$vars[] = $realm;
+			}
+			
+			if ($flavor)
+			{
+				$more .= ", qb_flavor = '%s' ";
+				$vars[] = $flavor;
+			}
+
+			$vars[] = $request_token;
+
 			// Exists... UPDATE!
 			return $this->query("
 				UPDATE
@@ -2214,12 +2232,10 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				SET 
 					oauth_access_token = '%s', 
 					oauth_access_token_secret = '%s', 
-					qb_realm = '%s', 
-					qb_flavor = '%s', 
-					access_datetime = '%s'
+					access_datetime = '%s' 
+					" . $more . "
 				WHERE
-					oauth_request_token = '%s' ", $errnum, $errmsg, null, null, 
-				array( $token, $token_secret, $realm, $flavor, date('Y-m-d H:i:s'), $request_token ));
+					oauth_request_token = '%s' ", $errnum, $errmsg, null, null, $vars);
 		}
 		
 		return false;
