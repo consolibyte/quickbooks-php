@@ -204,10 +204,25 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 				//	- Do not sync if to_delete = 1
 				//	- Do not sync if last_errnum is not empty		@TODO Implement this
 				
+				switch ($table_and_field[0])
+				{
+					case 'customer':
+						$priority_reduce = 'Parent_FullName';
+						break;
+					default:
+						$priority_reduce = null;
+				}
+				
+				$extras = '';
+				if ($priority_reduce)
+				{
+					$extras = ', ' . $priority_reduce;
+				}
+				
 				$sql = "
 					SELECT 
 						" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . ", 
-						" . QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER . "
+						" . QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER . " " . $extras . "
 					FROM 
 						" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0] . " 
 					WHERE 
@@ -239,7 +254,15 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						$list[$action] = array();
 					}
 					
-					$list[$action][$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID]] = $priority;
+					$tmp_priority = $priority;
+					if ($priority_reduce and 
+						isset($arr[$priority_reduce]) and 
+						!empty($arr[$priority_reduce]))
+					{
+						$tmp_priority = $priority - 1;
+					}
+					
+					$list[$action][$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID]] = $tmp_priority;
 					
 					$count++;
 					

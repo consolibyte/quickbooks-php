@@ -486,7 +486,7 @@ class QuickBooks_WebConnector_Handlers
 			{
 				$this->_log('Denied concurrent login from: ' . $obj->strUserName, null, QUICKBOOKS_LOG_VERBOSE);
 			
-				return new QuickBooks_WebConnector_Result_Authenticate('', 'nvu', null, null);
+				return new QuickBooks_WebConnector_Result_Authenticate('ABCD1234', 'none', null, null);
 			}
 		}
 		
@@ -496,6 +496,7 @@ class QuickBooks_WebConnector_Handlers
 		
 		if (strlen($override_dsn))
 		{
+			/*
 			$parse = QuickBooks_Utilities::parseDSN($override_dsn);
 			$class = 'QuickBooks_Authenticate_' . ucfirst(strtolower($parse['scheme']));
 			$file = '/QuickBooks/Authenticate/' . ucfirst(strtolower($parse['scheme'])) . '.php';
@@ -505,6 +506,9 @@ class QuickBooks_WebConnector_Handlers
 			QuickBooks_Loader::load($file);
 			
 			$auth = new $class($override_dsn);
+			*/
+			
+			$override_dsn = str_replace('function://', '', $override_dsn);
 		}
 		
 		$company_file = null;
@@ -516,9 +520,11 @@ class QuickBooks_WebConnector_Handlers
 		$customauth_min_run_every_n_seconds = null;
 		
 		if (strlen($override_dsn) and 	// Custom authentication
-			is_object($auth))
+			true) //is_object($auth))
 		{
-			if ($auth->authenticate($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and 
+			//if ($auth->authenticate($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and 
+			
+			if ($override_dsn($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and 
 				$ticket = $this->_driver->authLogin($obj->strUserName, $obj->strPassword, $company_file, $wait_before_next_update, $min_run_every_n_seconds, true))
 			{
 				//$this->_driver->log('Login (' . $parse['scheme'] . '): ' . $obj->strUserName, $ticket, QUICKBOOKS_LOG_DEBUG);

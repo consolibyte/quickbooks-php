@@ -224,7 +224,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 				if ($Node->name() === 'DataExtRet' and 
 					$Node->getChildDataAt('DataExtRet DataExtName') == 'Your Custom Field Name Goes Here')
 				{
-					$values['Your Custom Field Names Goes Here'] = $CustChild->getChildDataAt('DataExtRet DataExtValue');
+					$values['Your Custom Field Names Goes Here'] = $Node->getChildDataAt('DataExtRet DataExtValue');
 				}
 			}
 			
