@@ -111,6 +111,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_ITEMRECEIPT = 'ItemReceipt';
 	
+	const RESOURCE_PAYROLLITEM = 'PayrollItem';
+	
 	const RESOURCE_JOB = 'Job';
 	
 	const RESOURCE_JOURNALENTRY = 'JournalEntry';
