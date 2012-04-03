@@ -85,7 +85,7 @@ $MS = new QuickBooks_MerchantService(
 $MS->useTestEnvironment(true);
 
 // If you want to see the full XML input/output, you can turn on debug mode
-//$MS->useDebugMode(true);
+$MS->useDebugMode(true);
 
 /*
 There are several methods available in the QuickBooks_MerchantService class. 

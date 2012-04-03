@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="11.0"?>
+<QBXML>
+<QBXMLMsgsRq onError="stopOnError">
+<CurrencyQueryRq metaData="ENUMTYPE">
+<!-- BEGIN OR -->
+<ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+<!-- OR -->
+<FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+<!-- OR -->
+<MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+<!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+<ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+<FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+<ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+<!-- BEGIN OR -->
+<NameFilter> <!-- optional -->
+<!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+<MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+<Name >STRTYPE</Name> <!-- required -->
+</NameFilter>
+<!-- OR -->
+<NameRangeFilter> <!-- optional -->
+<FromName >STRTYPE</FromName> <!-- optional -->
+<ToName >STRTYPE</ToName> <!-- optional -->
+</NameRangeFilter>
+<!-- END OR -->
+<!-- END OR -->
+<IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+</CurrencyQueryRq>
+<CurrencyQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+<CurrencyRet> <!-- optional, may repeat -->
+<ListID >IDTYPE</ListID> <!-- optional -->
+<TimeCreated >DATETIMETYPE</TimeCreated> <!-- optional -->
+<TimeModified >DATETIMETYPE</TimeModified> <!-- optional -->
+<EditSequence >STRTYPE</EditSequence> <!-- optional -->
+<Name >STRTYPE</Name> <!-- optional -->
+<IsActive >BOOLTYPE</IsActive> <!-- optional -->
+<CurrencyCode >STRTYPE</CurrencyCode> <!-- optional -->
+<CurrencyFormat> <!-- optional -->
+<!-- ThousandSeparator may have one of the following values: Comma [DEFAULT], Period, Space, Apostrophe -->
+<ThousandSeparator >ENUMTYPE</ThousandSeparator> <!-- optional -->
+<!-- ThousandSeparatorGrouping may have one of the following values: XX_XXX_XXX [DEFAULT], X_XX_XX_XXX -->
+<ThousandSeparatorGrouping >ENUMTYPE</ThousandSeparatorGrouping> <!-- optional -->
+<!-- DecimalPlaces may have one of the following values: 0, 2 [DEFAULT] -->
+<DecimalPlaces >ENUMTYPE</DecimalPlaces> <!-- optional -->
+<!-- DecimalSeparator may have one of the following values: Period [DEFAULT], Comma -->
+<DecimalSeparator >ENUMTYPE</DecimalSeparator> <!-- optional -->
+</CurrencyFormat>
+<IsUserDefinedCurrency >BOOLTYPE</IsUserDefinedCurrency> <!-- optional -->
+<ExchangeRate >FLOATTYPE</ExchangeRate> <!-- optional -->
+<AsOfDate >DATETYPE</AsOfDate> <!-- optional -->
+</CurrencyRet>
+</CurrencyQueryRs>
+</QBXMLMsgsRq>
+</QBXML>

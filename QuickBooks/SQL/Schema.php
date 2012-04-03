@@ -363,6 +363,7 @@ class QuickBooks_SQL_Schema
 			'CustomerRet DataExtRet' => 																array( 'DataExt', array( 'EntityType', 'TxnType', 'Entity_ListID', 'Txn_TxnID' ) ),
 			'CustomerMsgRet' => 																		array( 'CustomerMsg', 'ListID' ),
 			'CustomerTypeRet' => 																		array( 'CustomerType', 'ListID' ),
+			'CurrencyRet' => 																			array( 'Currency', 'ListID' ), 
 			'DataExtDefRet' => 																			array( 'DataExtDef', 'DataExtName' ),
 			'DataExtDefRet AssignToObject' => 															array( 'DataExtDef_AssignToObject', array( 'DataExtDef_DataExtName', 'AssignToObject' ) ),
 			'DateDrivenTermsRet' => 																	array( 'DateDrivenTerms', 'ListID' ),
@@ -752,6 +753,12 @@ class QuickBooks_SQL_Schema
 			
 			'CompanyRet *' => 								array( 'Company', '*' ), 
 			
+			'CurrencyRet' => 								array( 'Currency', null ),
+			
+			'CurrencyRet CurrencyFormat' => 				array( null, null ), 
+			'CurrencyRet CurrencyFormat *' => 				array( 'Currency', 'Currency_CurrencyFormat_*' ), 
+			
+			'CurrencyRet *' => 								array( 'Currency', '*' ),  
 			
 			'HostRet' => 									array( 'Host', null ), 
 			'HostRet *' => 									array( 'Host', '*' ), 
