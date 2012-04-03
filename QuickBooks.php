@@ -389,6 +389,12 @@ define('QUICKBOOKS_QUERY_CREDITMEMO', 'CreditMemoQuery');
 define('QUICKBOOKS_IMPORT_CREDITMEMO', 'CreditMemoImport');
 define('QUICKBOOKS_DERIVE_CREDITMEMO', 'CreditMemoDerive');
 
+define('QUICKBOOKS_OBJECT_CURRENCY', 'Currency');
+define('QUICKBOOKS_ADD_CURRENCY', 'CurrencyAdd');
+define('QUICKBOOKS_MOD_CURRENCY', 'CurrencyMod');
+define('QUICKBOOKS_QUERY_CURRENCY', 'CurrencyQuery');
+define('QUICKBOOKS_IMPORT_CURRENCY', 'CurrencyImport');
+
 /**
  * QuickBooks company object (company file meta-data)
  * @var string
