@@ -1,0 +1,328 @@
+<?php
+
+/**
+ * Very simple example Drupal 7 module for QuickBooks integration
+ * 
+ * This is a very simple Drupal 7 example module which integrates with 
+ * QuickBooks. The module creates a Customer in QuickBooks for every User in 
+ * Drupal. 
+ * 
+ * IMPORTANT:
+ * 	The module assumes that you have the QuickBooks PHP DevKit in a folder in 
+ * 	your root Drupal directory. If you want to put it somewhere else, change 
+ * 	the require_once path below. 
+ *
+ * Please note that this is NOT meant for use out-of-the-box. It's meant as an 
+ * example, on top of which you can build your own Drupal and QuickBooks 
+ * integration. To be a really robust Drupal module, it would at the very least 
+ * need some cleanup so that things are configurable within Drupal, etc.
+ *
+ * @author Keith Palmer <support@consolibyte.com>
+ */
+
+// Initialize some stuff
+if (!class_exists('QuickBooks_WebConnector_Server'))
+{
+	// Error reporting... 
+	error_reporting(E_ALL | E_STRICT);
+	ini_set('display_errors', 1);
+
+	// We need to make sure the correct timezone is set, or some PHP installations will complain
+	if (function_exists('date_default_timezone_set'))
+	{
+		// * MAKE SURE YOU SET THIS TO THE CORRECT TIMEZONE! *
+		// List of valid timezones is here: http://us3.php.net/manual/en/timezones.php
+		date_default_timezone_set('America/New_York');
+	}
+	
+	/**
+	 * Require the utilities class
+	 */
+	require_once dirname(__FILE__) . '/../../quickbooks/trunk/QuickBooks.php';
+}
+
+/**
+ * Menu link to the server page, and .QWC page
+ */
+function quickbooks_menu() 
+{
+	$items['quickbooks/server'] = array(
+		'page callback' => 'quickbooks_server',
+		'access arguments' => array('access content'),
+		'title' => 'QuickBooks Server',
+		);
+ 
+	$items['quickbooks/qwc'] = array(
+		'page callback' => 'quickbooks_qwc',
+		'access arguments' => array('access content'),
+		'title' => 'Download .QWC',
+		);
+ 
+	return $items;
+}
+
+/**
+ * Add a field we can use to track which users have been added to QuickBooks
+ */
+function quickbooks_enable()
+{
+	// Check if our field is not already created.
+	if (!field_info_field('field_quickbooks_listid')) 
+	{
+		$field = array(
+			'field_name' => 'field_quickbooks_listid', 
+			'type' => 'text', 
+			);
+		
+		field_create_field($field);
+
+		// Create the instance on the bundle.
+		$instance = array(
+			'field_name' => 'field_quickbooks_listid', 
+			'entity_type' => 'user', 
+			'label' => 'QuickBooks ListID', 
+			'bundle' => 'user', 
+			
+			// If you don't set the "required" property then the field wont be required by default.
+			'required' => FALSE,
+			'settings' => array(
+				// Here you inform either or not you want this field showing up on the registration form.
+				'user_register_form' => 0,
+			),
+			
+			'widget' => array(
+				'type' => 'textfield',
+			), 
+		);
+		
+		field_create_instance($instance);
+	}
+}
+
+/**
+ * Configuration data
+ */
+function _quickbooks_config()
+{
+	return array(
+		'username' => 'quickbooks', 
+		'password' => 'password', 
+		);
+}
+
+/**
+ * Get DSN-style connection string
+ */
+function _quickbooks_dsn()
+{
+	$info = Database::getConnectionInfo();
+	
+	// * MAKE SURE YOU CHANGE THE DATABASE CONNECTION STRING BELOW TO A VALID MYSQL USERNAME/PASSWORD/HOSTNAME *
+	// 
+	// This assumes that:
+	//	- You are connecting to MySQL with the username 'root'
+	//	- You are connecting to MySQL with an empty password
+	//	- Your MySQL server is located on the same machine as the script ( i.e.: 'localhost', if it were on another machine, you might use 'other-machines-hostname.com', or '192.168.1.5', or ... etc. )
+	//	- Your MySQL database name containing the QuickBooks tables is named 'quickbooks' (if the tables don't exist, they'll be created for you) 
+	$dsn = $info['default']['driver'] . '://' . $info['default']['username'] . ':' . $info['default']['password'] . '@' . $info['default']['host'] . ':' . $info['default']['port'] . '/' . $info['default']['database'];
+	
+	return $dsn;
+}
+
+/**
+ * Download a .QWC file
+ */
+function quickbooks_qwc()
+{
+	$name = 'My QuickBooks SOAP Server';				// A name for your server (make it whatever you want)
+	$descrip = 'An example QuickBooks SOAP Server';		// A description of your server 
+
+	$appurl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . '?q=quickbooks/server';		// This *must* be httpS:// (path to your QuickBooks SOAP server)
+	$appsupport = 'https://' . $_SERVER['HTTP_HOST']; 		// This *must* be httpS:// and the domain name must match the domain name above
+
+	// User name the Web Connector will use to connect
+	$data = _quickbooks_config();
+	$username = $data['username'];
+
+	$fileid = QuickBooks_WebConnector_QWC::fileID();		// Just make this up, but make sure it keeps that format
+	$ownerid = QuickBooks_WebConnector_QWC::ownerID();		// Just make this up, but make sure it keeps that format
+
+	$qbtype = QUICKBOOKS_TYPE_QBFS;	// You can leave this as-is unless you're using QuickBooks POS
+
+	$readonly = false; // No, we want to write data to QuickBooks
+
+	$run_every_n_seconds = 600; // Run every 600 seconds (10 minutes)
+
+	// Generate the XML file
+	$QWC = new QuickBooks_WebConnector_QWC($name, $descrip, $appurl, $appsupport, $username, $fileid, $ownerid, $qbtype, $readonly, $run_every_n_seconds);
+	$xml = $QWC->generate();
+
+	// Send as a file download
+	header('Content-type: text/xml');
+	header('Content-Disposition: attachment; filename="my-quickbooks-wc-file.qwc"');
+	//header('Content-Type: text/plain');
+	print($xml);
+	exit;
+
+}
+
+/**
+ * The Web Connector SOAP endpoint
+ */
+function quickbooks_server() 
+{
+	// A username and password you'll use in: 
+	//	a) Your .QWC file
+	//	b) The Web Connector
+	//	c) The QuickBooks framework
+	//
+	// 	NOTE: This has *no relationship* with QuickBooks usernames, Windows usernames, etc. 
+	// 		It is *only* used for the Web Connector and SOAP server! 
+	$data = _quickbooks_config();
+	$user = $data['username'];
+	$pass = $data['password'];
+
+	// Map QuickBooks actions to handler functions
+	$map = array(
+		QUICKBOOKS_ADD_CUSTOMER => array( '_quickbooks_customer_add_request', '_quickbooks_customer_add_response' ),
+		);
+
+	// This is entirely optional, use it to trigger actions when an error is returned by QuickBooks
+	$errmap = array(
+		'*' => '_quickbooks_error_catchall', 				// Using a key value of '*' will catch any errors which were not caught by another error handler
+		// ... more error handlers here ...
+		);
+
+	// An array of callback hooks
+	$hooks = array(
+		// There are many hooks defined which allow you to run your own functions/methods when certain events happen within the framework
+		QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => '_quickbooks_hook_loginsuccess', 	// Run this function whenever a successful login occurs
+		);
+
+	// Logging level
+	//$log_level = QUICKBOOKS_LOG_NORMAL;
+	//$log_level = QUICKBOOKS_LOG_VERBOSE;
+	//$log_level = QUICKBOOKS_LOG_DEBUG;				
+	$log_level = QUICKBOOKS_LOG_DEVELOP;		// Use this level until you're sure everything works!!!
+
+	// What SOAP server you're using 
+	$soapserver = QUICKBOOKS_SOAPSERVER_PHP;			// The PHP SOAP extension, see: www.php.net/soap
+	//$soapserver = QUICKBOOKS_SOAPSERVER_BUILTIN;		// A pure-PHP SOAP server (no PHP ext/soap extension required, also makes debugging easier)
+
+	$soap_options = array(		// See http://www.php.net/soap
+		);
+
+	$handler_options = array(
+		//'authenticate_dsn' => 'function://your_function_name_here', 
+		'deny_concurrent_logins' => false, 
+		);		// See the comments in the QuickBooks/Server/Handlers.php file
+
+	$driver_options = array(		// See the comments in the QuickBooks/Driver/<YOUR DRIVER HERE>.php file ( i.e. 'Mysql.php', etc. )
+		//'max_log_history' => 1024,	// Limit the number of quickbooks_log entries to 1024
+		//'max_queue_history' => 64, 	// Limit the number of *successfully processed* quickbooks_queue entries to 64
+		);
+
+	$callback_options = array(
+		);
+	
+	// DSN connection string
+	$dsn = _quickbooks_dsn();
+	
+	if (!QuickBooks_Utilities::initialized($dsn))
+	{
+		// Initialize creates the neccessary database schema for queueing up requests and logging
+		QuickBooks_Utilities::initialize($dsn);
+		
+		// This creates a username and password which is used by the Web Connector to authenticate
+		QuickBooks_Utilities::createUser($dsn, $user, $pass);
+	}
+	
+	/*
+	// For testing ONLY
+	header('Content-Type: text/plain');
+	$err = null;
+	_quickbooks_hook_loginsuccess(null, null, null, $err, array(), array());
+	exit;
+	*/
+	
+	// Create a new server and tell it to handle the requests
+	// __construct($dsn_or_conn, $map, $errmap = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_PHP, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array(), $callback_options = array()
+	$Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
+	$response = $Server->handle(true, true);
+}
+
+/**
+ * This function runs whenever the Web Connector connects
+ */
+function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_data, $callback_config)
+{
+	$dsn = _quickbooks_dsn();
+	$Queue = new QuickBooks_WebConnector_Queue($dsn);
+
+	// Find all users who don't have a quickbooks_listid field set yet, and queue them up to be added to QuickBooks
+	$res = db_query("SELECT * FROM {users} WHERE uid != 0 ");
+	foreach ($res as $drupuser)
+	{
+		// Load the full user object
+		$drupuser = user_load($drupuser->uid);
+	
+		// Check if they have a ListID set 
+		$items = field_get_items('user', $drupuser, 'field_quickbooks_listid');
+		$val = current($items);
+		
+		if (!isset($val['value']))
+		{
+			// Queue it up to add it to QuickBooks as a customer
+			$Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $drupuser->uid);
+		}
+	}
+}
+
+/**
+ * Add a customer to QuickBooks
+ */
+function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+{
+	// Fetch Drupal user data
+	$user = user_load($ID);
+
+	// Build our qbXML request 
+	$xml = '<?xml version="1.0" encoding="utf-8"?>
+		<?qbxml version="' . $version . '"?>
+		<QBXML>
+			<QBXMLMsgsRq onError="stopOnError">
+				<CustomerAddRq requestID="' . $requestID . '">
+					<CustomerAdd>
+						<Name>' . $user->name . '</Name>
+						<Email>' . $user->mail . '</Email>
+					</CustomerAdd>
+				</CustomerAddRq>
+			</QBXMLMsgsRq>
+		</QBXML>';
+	
+	return $xml;
+}
+
+/**
+ * Receive a response from QuickBooks 
+ */
+function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
+{	
+	// Update the user as having been added to QuickBooks
+	$drupuser = user_load($ID);
+	
+	$update = array(
+		'uid' => $ID,
+		'field_quickbooks_listid' => array( 'und' => array( 0 => array( 'value' => $idents['ListID'] ))),
+		);
+		
+	user_save($drupuser, $update);
+}
+
+/**
+ * Error handler
+ */
+function _quickbooks_error_catchall($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)
+{
+	return true;
+}

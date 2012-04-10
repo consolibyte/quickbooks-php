@@ -1,0 +1,3 @@
+name = QuickBooks test
+description = My QuickBooks module test for Drupal - please see the READ ME DRUPAL 7.txt file for details.
+core = 7.x

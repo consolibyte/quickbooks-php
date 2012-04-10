@@ -1,0 +1,19 @@
+
+Very simple example Drupal 7 module for QuickBooks integration
+
+This is a very simple Drupal 7 example module which integrates with 
+QuickBooks. The module creates a Customer in QuickBooks for every User in 
+Drupal. 
+
+IMPORTANT:
+	The module assumes that you have the QuickBooks PHP DevKit in a folder in 
+	your root Drupal directory. If you want to put it somewhere else, change 
+	the require_once path below. 
+
+Please note that this is NOT meant for use out-of-the-box. It's meant as an 
+example, on top of which you can build your own Drupal and QuickBooks 
+integration. To be a really robust Drupal module, it would at the very least 
+need some cleanup so that things are configurable within Drupal, etc.
+
+ - Keith Palmer
+   support@consolibyte.com
