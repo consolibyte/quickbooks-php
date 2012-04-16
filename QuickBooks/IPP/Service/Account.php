@@ -20,8 +20,8 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_Account extends QuickBooks_IPP_Service
 {
-	public function findAll($Context, $realmID)
+	public function findAll($Context, $realmID, $query = null, $page = 1, $size = 50)
 	{
-		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ACCOUNT);
+		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ACCOUNT, $query, null, $page, $size);
 	}
 }

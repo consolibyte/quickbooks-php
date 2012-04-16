@@ -21,9 +21,8 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_SalesTax extends QuickBooks_IPP_Service
 {
-	public function findAll($Context, $realmID)
+	public function findAll($Context, $realmID, $query = null, $page = 1, $size = 50)
 	{
-		$xml = null;
-		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESTAX, $xml);
+		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESTAX, $query, null, $page, $size);
 	}
 }
