@@ -306,7 +306,7 @@ class QuickBooks_IPP_Object
 			$parent = $this->resource();
 		}
 		
-		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD)
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)
 		{
 			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
 			{

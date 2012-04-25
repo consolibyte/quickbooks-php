@@ -22,11 +22,6 @@
 abstract class QuickBooks_WebConnector_Request
 {
 	/**
-	 * Placeholder constructor method
-	 */
-	abstract public function __construct($var);
-	
-	/**
 	 * 
 	 * 
 	 * @param string $key

@@ -1,8 +1,8 @@
 <?php
 
-$url = '';
-$username = 'quickbooks';
-$password = '';
+$url = 'http://dev.myseeds.me/application/third_party/quickbooks/server.php';
+$username = 'linda2';
+$password = 'dcspass123';
 
 if (function_exists('date_default_timezone_set'))
 {

@@ -344,7 +344,24 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 	
-	protected function _modify($Context, $realmID, $resource, $Object)
+	/**
+	 * @deprecated 			Use _update() instead
+	 */
+	protected function _modify($Context, $realmID, $resource, $Object, $ID)
+	{
+		return $this->_update($Context, $realmID, $resource, $Object, $ID);
+	}
+	
+	/**
+	 * Update an object within IDS (QuickBooks)
+	 *
+	 * @param object $Context
+	 * @param string $realmID
+	 * @param string $resource
+	 * @param object $Object
+	 * @return boolean
+	 */
+	protected function _update($Context, $realmID, $resource, $Object, $ID)
 	{
 		$IPP = $Context->IPP();
 		
@@ -368,21 +385,30 @@ abstract class QuickBooks_IPP_Service
 		}
 		
 		$Object->set('Synchronized', 'false');
-				
-		// Build the XML request
-		$xml = '';
-		$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-		$xml .= '<Mod xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '" ' . QUICKBOOKS_CRLF;
-		$xml .= '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' . QUICKBOOKS_CRLF;
-		$xml .= '	RequestId="' . md5(mt_rand() . microtime()) . '" ' . QUICKBOOKS_CRLF;
-		$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/' . $IPP->version() . ' ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
-		//$xml .= '	<OfferingId>ipp</OfferingId>' . QUICKBOOKS_CRLF;
-		$xml .= '	<ExternalRealmId>' . $realmID . '</ExternalRealmId>' . QUICKBOOKS_CRLF;
-		$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP_IDS::OPTYPE_ADD);
-		$xml .= '</Mod>';
 		
+		if ($IPP->flavor() == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
+		{		
+			// Build the XML request
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+			$xml .= '<Mod xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '" ' . QUICKBOOKS_CRLF;
+			$xml .= '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' . QUICKBOOKS_CRLF;
+			$xml .= '	RequestId="' . md5(mt_rand() . microtime()) . '" ' . QUICKBOOKS_CRLF;
+			$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/' . $IPP->version() . ' ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
+			//$xml .= '	<OfferingId>ipp</OfferingId>' . QUICKBOOKS_CRLF;
+			$xml .= '	<ExternalRealmId>' . $realmID . '</ExternalRealmId>' . QUICKBOOKS_CRLF;
+			$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP_IDS::OPTYPE_MOD);
+			$xml .= '</Mod>';
+		}
+		else
+		{
+			$xml = '';
+			$xml .= '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' . QUICKBOOKS_CRLF;
+			$xml .= $Object->asIDSXML(0, null, QuickBooks_IPP_IDS::OPTYPE_MOD, $IPP->flavor());
+		}
+			
 		// Send the data to IPP 
-		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_MOD, $xml);
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_MOD, $xml, $ID);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		

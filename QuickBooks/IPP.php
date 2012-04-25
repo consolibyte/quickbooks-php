@@ -966,7 +966,7 @@ class QuickBooks_IPP
 	 * @param string $xml	
 	 * @return QuickBooks_IPP_Object										
 	 */
-	public function IDS($Context, $realmID, $resource, $optype, $xml = '')
+	public function IDS($Context, $realmID, $resource, $optype, $xml = '', $ID = null)
 	{
 		if (substr($resource, 0, 6) == 'Report')
 		{
@@ -1002,15 +1002,27 @@ class QuickBooks_IPP
 		
 		//$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
 		
-		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
-			$optype == QuickBooks_IPP_IDS::OPTYPE_FINDBYID)
+		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
 		{
-			$parse = QuickBooks_IPP_IDS::parseIDType($xml);
-			
-			$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID . '/' . $parse[1];
-			
-			$post = false;
-			$xml = null;
+			if ($optype == QuickBooks_IPP_IDS::OPTYPE_FINDBYID)
+			{
+				$parse = QuickBooks_IPP_IDS::parseIDType($xml);
+				
+				$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID . '/' . $parse[1];
+				
+				$post = false;
+				$xml = null;
+			}
+			else if ($optype == QuickBooks_IPP_IDS::OPTYPE_MOD)
+			{
+				$parse = QuickBooks_IPP_IDS::parseIDType($ID);
+				
+				$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID . '/' . $parse[1];
+			}
+			else
+			{
+				$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
+			}
 		}
 		else
 		{
