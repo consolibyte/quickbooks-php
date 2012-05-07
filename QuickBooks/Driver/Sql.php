@@ -2441,13 +2441,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			$sql = call_user_func_array('sprintf', $vars);
 		}
 		
-		return $this->__query($sql, $errnum, $errmsg, $offset, $limit);
+		return $this->_query($sql, $errnum, $errmsg, $offset, $limit);
 	}
 	 
 	/**
 	 * @see QuickBooks_Driver_Sql::query()
 	 */ 
-	protected abstract function __query($sql, $offset = 0, $limit = null);
+	protected abstract function _query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null);
 	
 	protected abstract function _fetch($res);
 	
