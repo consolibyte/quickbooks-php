@@ -2427,7 +2427,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $errmsg
 	 * @return resource
 	 */
-	public function query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null, $vars = array())
+	public function query($sql, $offset = 0, $limit = null, $vars = array())
 	{
 		if (is_array($vars) 
 			and count($vars))
@@ -2441,13 +2441,15 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			$sql = call_user_func_array('sprintf', $vars);
 		}
 		
-		return $this->_query($sql, $errnum, $errmsg, $offset, $limit);
+		return $this->__query($sql, $errnum, $errmsg, $offset, $limit);
 	}
 	 
 	/**
 	 * @see QuickBooks_Driver_Sql::query()
 	 */ 
-	protected abstract function _query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null);
+	protected abstract function __query($sql, $offset = 0, $limit = null);
+	
+	protected abstract function _fetch($res);
 	
 	/**
 	 * Escape a string

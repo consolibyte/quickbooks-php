@@ -1,8 +1,8 @@
 <?php
 
-$url = 'http://dev.myseeds.me/application/third_party/quickbooks/server.php';
-$username = 'linda2';
-$password = 'dcspass123';
+$url = 'https://www.lienbase.com/qb/server.php';
+$username = '';
+$password = '';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -38,7 +38,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-//exit;
+exit;
 
 $max = 2;
 for ($i = 1; $i < $max; $i++)
@@ -354,7 +354,7 @@ function tester($url, $username_or_ticket, $password, $method, $data = null)
 		
 		//curl_setopt($curl, CURLOPT_USERPWD, 'milo:foofoo');
 		
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		//curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 		
 		$return = curl_exec($curl);
 	}
