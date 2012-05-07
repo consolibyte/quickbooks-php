@@ -2427,7 +2427,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * @param string $errmsg
 	 * @return resource
 	 */
-	public function query($sql, $offset = 0, $limit = null, $vars = array())
+	public function query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null, $vars = array())
 	{
 		if (is_array($vars) 
 			and count($vars))
