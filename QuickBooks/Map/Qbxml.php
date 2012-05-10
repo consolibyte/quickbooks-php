@@ -85,10 +85,12 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 						$discov = false;
 					}
 					
+					/*
 					if ($mark_as_dequeued)
 					{
 						$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ENQUEUE_TIME] = date('Y-m-d H:i:s');
 					}
+					*/
 						
 					$Driver->update(
 						QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0], 
@@ -343,6 +345,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 					//'salesorder_linkedtxn' => 'ToTxnID:Type=Invoice',
 					'receivepayment_appliedtotxn' => 'ToTxnID:TxnType=Invoice', // 'ToTxnID:Type=Invoice',
 					'invoice_invoiceline' => 'Invoice_TxnID', //  
+					'qb_dataext' => 'Entity_ListID:EntityType=Customer', 	// update the Entity_ListID where EntityType = 'Customer' (and the existing Entity_ListID is the old ListID)
 					)
 				),
 			'receivepayment' => array(
