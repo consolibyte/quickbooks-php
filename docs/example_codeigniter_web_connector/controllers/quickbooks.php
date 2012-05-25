@@ -26,11 +26,11 @@
 /**
  * Example CodeIgniter controller for QuickBooks Web Connector integrations
  */
-class QuickBooks extends Controller
+class QuickBooks extends CI_Controller
 {
 	public function __construct()
 	{
-		parent::Controller();
+		parent::__construct();
 		
 		// QuickBooks config
 		$this->load->config('quickbooks');

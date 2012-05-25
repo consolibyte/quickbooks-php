@@ -19,33 +19,53 @@
 
 define('BASEPATH', dirname(__FILE__));
 
-class Controller
+class CI_Controller
 {
 	protected $load;
 	protected $config;
 	protected $db;
 	
-	protected function Controller()
+	public function __construct()
 	{
-		$this->load = new Loader();
+		$this->load = new Loader($this);
 		$this->config = Config::instance();
 		$this->db = new Database();
 	}
 	
-	public function instance()
+	static public function instance()
 	{
 		$CI = null;
 		if (is_null($CI))
 		{
-			$CI = new Controller();
+			$CI = new CI_Controller();
 		}
 		
 		return $CI;
+	}
+	
+	public function model($name, $Model)
+	{
+		$this->$name = $Model;
+	}
+}
+
+class CI_Model
+{
+	public function __construct()
+	{
+		
 	}
 }
 
 class Loader
 {
+	protected $_controller;
+	
+	public function __construct($Controller)
+	{
+		$this->_controller = $Controller;
+	}
+	
 	public function config($file)
 	{
 		$Config = Config::instance();
@@ -56,6 +76,16 @@ class Loader
 		$Config->merge($config);
 		
 		return;
+	}
+	
+	public function model($model)
+	{
+		require_once dirname(__FILE__) . '/models/' . $model . '.php';
+		
+		$var = $model . '_model';
+		$Model = new $var();
+		
+		$this->_controller->model($model, $Model);
 	}
 }
 

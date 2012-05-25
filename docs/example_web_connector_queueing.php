@@ -43,9 +43,9 @@ if (isset($_POST['customer']))
 	$id_value = mysql_insert_id();
 	
 	// QuickBooks queueing class
-	$queue = new QuickBooks_WebConnector_Queue('mysql://root:password@localhost/my_database');
+	$Queue = new QuickBooks_WebConnector_Queue('mysql://root:password@localhost/my_database');
 	
 	// Queue it up!
-	$queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $id_value);
+	$Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $id_value);
 }
 
