@@ -243,7 +243,7 @@ class QuickBooks_IPP_Parser
 		return $xml;
 	}
 	
-	public function parseIDS($xml, $optype, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
+	public function parseIDS($xml, $optype, $flavor, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
 		// Massage it... *sigh*
 		$xml = $this->_massageQBOXML($xml, $optype);
@@ -297,11 +297,14 @@ class QuickBooks_IPP_Parser
 					
 					// Stupid QuickBooks Online... *sigh*
 					if ($optype == QuickBooks_IPP_IDS::OPTYPE_FINDBYID and 
-						true) //$Root->name() == 'CompanyMetaData')
+						$flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE) //$Root->name() == 'CompanyMetaData')
 					{
-						$List = new QuickBooks_XML_Node();
+						$List = new QuickBooks_XML_Node(__CLASS__ . '__line_' . __LINE__);
 						$List->addChild($Root);
 					}
+					
+					//print_r($List);
+					//exit;
 					
 					//  Normal parsing of query results
 					$list = array();

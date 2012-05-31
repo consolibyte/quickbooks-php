@@ -11,6 +11,7 @@ $arr = array(
 	'Test & Then Some',  
 	'Test of already encoded &amp; data.', 
 	'Tapio Törmänen',
+	'Here is the £ pound sign for you British gents...', 
 	);
 
 $fields = array(

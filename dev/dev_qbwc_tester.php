@@ -1,8 +1,8 @@
 <?php
 
-$url = 'https://www.lienbase.com/qb/server.php';
-$username = '';
-$password = '';
+$url = 'http://localhost:8888/citest/test.php';
+$username = 'quickbooks';
+$password = 'password';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -40,7 +40,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 exit;
 
-$max = 2;
+$max = 10;
 for ($i = 1; $i < $max; $i++)
 {
 	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
@@ -54,7 +54,7 @@ for ($i = 1; $i < $max; $i++)
 	//sleep(10);
 }
 
-exit;
+//exit;
 
 $requestID = substr($resp, $pos + 16, 1);
 

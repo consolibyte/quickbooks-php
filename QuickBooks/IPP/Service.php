@@ -431,7 +431,7 @@ abstract class QuickBooks_IPP_Service
 	 * 
 	 * 
 	 */
-	protected function _findById($Context, $realmID, $resource, $IDType, $xml_or_IDType = '')
+	protected function _findById($Context, $realmID, $resource, $IDType, $xml_or_IDType = '', $query = null)
 	{
 		$IPP = $Context->IPP();
 		
@@ -443,13 +443,19 @@ abstract class QuickBooks_IPP_Service
 			{
 				$parse = QuickBooks_IPP_IDS::parseIDType($IDType);
 				
-				$xml = '';
-				$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-				$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
-				$xml .= '	<' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
-				$xml .= '		<Id idDomain="' . $parse['domain'] . '">' . $parse['ID'] . '</Id>' . QUICKBOOKS_CRLF;
-				$xml .= '	</' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
-				$xml .= '</' . $resource . 'Query>';
+				$xml_or_IDType = '';
+				$xml_or_IDType .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+				$xml_or_IDType .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+				
+				if ($query)
+				{
+					$xml_or_IDType .= $query;
+				}
+				
+				$xml_or_IDType .= '	<' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
+				$xml_or_IDType .= '		<Id idDomain="' . $parse['domain'] . '">' . $parse['ID'] . '</Id>' . QUICKBOOKS_CRLF;
+				$xml_or_IDType .= '	</' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
+				$xml_or_IDType .= '</' . $resource . 'Query>';
 			}
 			else if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
 			{

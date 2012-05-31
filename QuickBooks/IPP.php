@@ -1057,7 +1057,7 @@ class QuickBooks_IPP
 		$err_db = null;
 		
 		// Try to parse the responses into QuickBooks_IPP_Object_* classes
-		$parsed = $Parser->parseIDS($data, $optype, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+		$parsed = $Parser->parseIDS($data, $optype, $this->flavor(), $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
 		
 		$this->_setLastDebug(__CLASS__, array( 'ids_parser_duration' => microtime(true) - $start ));
 		

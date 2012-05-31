@@ -1,4 +1,4 @@
-	<?php
+<?php
 
 /**
  * 
@@ -34,10 +34,10 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
 	 * @param string $ID						The ID of the customer (this expects an IdType, which includes the domain)
 	 * @return QuickBooks_IPP_Object_Customer	The customer object
 	 */
-	public function findById($Context, $realmID, $IDType)
+	public function findById($Context, $realmID, $IDType, $query = null)
 	{
 		$xml = null;
-		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $IDType, $xml);
+		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $IDType, $xml, $query);
 	}
 	
 	/**
