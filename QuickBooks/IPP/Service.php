@@ -210,10 +210,22 @@ abstract class QuickBooks_IPP_Service
 		{
 			if (!$xml)
 			{
-				$xml = http_build_query(array_merge(array(
-					'PageNum' => (int) $page, 
-					'ResultsPerPage' => (int) $size, 
-					), (array) $query));
+				if (is_array($query) and count($query) > 0)
+				{
+					$xml = http_build_query(array_merge(array(
+						'PageNum' => (int) $page, 
+						'ResultsPerPage' => (int) $size, 
+						), (array) $query));
+				}
+				else 
+				{
+					$xml = http_build_query(array_merge(array(
+						'PageNum' => (int) $page, 
+						'ResultsPerPage' => (int) $size, 
+						)));
+					
+					$xml .= $query;
+				}
 			}
 		}
 		
@@ -247,13 +259,20 @@ abstract class QuickBooks_IPP_Service
 	{
 		$IPP = $Context->IPP();
 		
-		if (!$xml)
+		if ($IPP->flavor() == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
 		{
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
-			$xml .= '	<FirstLastInside>' . QuickBooks_XML::encode($name) . '</FirstLastInside>' . QUICKBOOKS_CRLF;
-			$xml .= '</' . $resource . 'Query>';
+			if (!$xml)
+			{
+				$xml = '';
+				$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+				$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+				$xml .= '	<FirstLastInside>' . QuickBooks_XML::encode($name) . '</FirstLastInside>' . QUICKBOOKS_CRLF;
+				$xml .= '</' . $resource . 'Query>';
+			}
+		}
+		else
+		{
+			$xml = http_build_query(array( 'Filter' => 'Name :EQUALS: ' . $name ));
 		}
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_QUERY, $xml);

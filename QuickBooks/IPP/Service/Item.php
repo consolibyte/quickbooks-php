@@ -32,19 +32,39 @@ class QuickBooks_IPP_Service_Item extends QuickBooks_IPP_Service
 		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEM, $ID, $xml);
 	}
 	
+	/**
+	 * Find an item by name 
+	 * 
+	 * @param unknown_type $Context
+	 * @param unknown_type $realmID
+	 * @param unknown_type $name
+	 */
 	public function findByName($Context, $realmID, $name)
 	{
-		$list = $this->findAll($Context, $realmID, $name);
+		$IPP = $Context->IPP();
 		
-		foreach ($list as $Item)
+		if ($IPP->flavor() == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
 		{
-			if (strtolower($Item->getName()) == strtolower($name))
+			for ($i = 0; $i < 999; $i++)
 			{
-				return $Item;
+				$list = $this->findAll($Context, $realmID, $name, $i, 50);
+				
+				foreach ($list as $Item)
+				{
+					if (strtolower($Item->getName()) == strtolower($name))
+					{
+						return $Item;
+					}
+				}
 			}
+			
+			return false;
 		}
-		
-		return false;
+		else
+		{
+			$xml = null;
+			return parent::_findByName($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEM, $name, $xml);
+		}
 	}	
 	
 	public function add($Context, $realmID, $Object)
