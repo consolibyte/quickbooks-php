@@ -1,8 +1,20 @@
 <?php
 
+<<<<<<< .mine
+$url = '';
+$username = '';
+$password = '';
+=======
 $url = 'http://localhost:8888/citest/test.php';
 $username = 'quickbooks';
 $password = 'password';
+>>>>>>> .r235
+
+/*
+$url = '';
+$username = 'user584';
+$password = 'abcd1234';
+*/
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -40,8 +52,14 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 exit;
 
+<<<<<<< .mine
+
+$max = 1;
+for ($i = 0; $i < $max; $i++)
+=======
 $max = 10;
 for ($i = 1; $i < $max; $i++)
+>>>>>>> .r235
 {
 	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
 	
@@ -49,7 +67,7 @@ for ($i = 1; $i < $max; $i++)
 	
 	$pos = strpos($resp, 'requestID=&quot;');
 	
-	print($resp);
+	print('got back [' . $resp . ']');
 	
 	//sleep(10);
 }
