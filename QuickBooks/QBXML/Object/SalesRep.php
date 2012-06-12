@@ -12,7 +12,7 @@
 /**
  * Base object class
  */
-QuickBooks_Loader::load('/QuickBooks/Object.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
  * QuickBooks Customer object class
