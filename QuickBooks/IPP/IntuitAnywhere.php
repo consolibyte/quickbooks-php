@@ -37,6 +37,7 @@ class QuickBooks_IPP_IntuitAnywhere
 	const URL_REQUEST_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_request_token';
 	const URL_ACCESS_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_access_token';
 	const URL_CONNECT_BEGIN = 'https://appcenter.intuit.com/Connect/Begin';
+	const URL_CONNECT_DISCONNECT = 'https://appcenter.intuit.com/api/v1/Connection/Disconnect';
 	const URL_APP_MENU = 'https://appcenter.intuit.com/api/v1/Account/AppMenu';
 	
 	/**
@@ -139,6 +140,33 @@ class QuickBooks_IPP_IntuitAnywhere
 			return $arr;
 		}
 			
+		return false;
+	}
+	
+	public function disconnect($app_username, $app_tenant)
+	{
+		if ($arr = $this->_driver->oauthLoad($this->_key, $app_username, $app_tenant) and
+			strlen($arr['oauth_access_token']) > 0 and
+			strlen($arr['oauth_access_token_secret']) > 0)
+		{
+			$arr['oauth_consumer_key'] = $this->_consumer_key;
+			$arr['oauth_consumer_secret'] = $this->_consumer_secret;
+			
+			$retr = $this->_request(QuickBooks_IPP_OAuth::METHOD_GET, 
+				QuickBooks_IPP_IntuitAnywhere::URL_CONNECT_DISCONNECT, 
+				array(), 
+				$arr['oauth_access_token'], 
+				$arr['oauth_access_token_secret']);
+			
+			// Extract the error code
+			$code = (int) QuickBooks_XML::extractTagContents('ErrorCode', $retr);
+			
+			if ($code == 0)
+			{
+				return $this->_driver->oauthAccessDelete($arr['oauth_access_token']);
+			}
+		}
+		
 		return false;
 	}
 	
