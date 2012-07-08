@@ -36,7 +36,7 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
 // Set the include path
-require_once '../QuickBooks.php';
+require_once dirname(__FILE__) . '/../QuickBooks.php';
 
 // You should make sure this matches the time-zone QuickBooks is running in
 if (function_exists('date_default_timezone_set'))

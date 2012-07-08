@@ -1,6 +1,6 @@
 <?php
 
-class QuickBooks_model extends CI_Model
+class Quickbooks extends CI_Model
 {
 	public function __construct()
 	{

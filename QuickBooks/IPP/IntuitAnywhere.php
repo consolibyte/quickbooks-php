@@ -143,7 +143,7 @@ class QuickBooks_IPP_IntuitAnywhere
 		return false;
 	}
 	
-	public function disconnect($app_username, $app_tenant)
+	public function disconnect($app_username, $app_tenant, $force = false)
 	{
 		if ($arr = $this->_driver->oauthLoad($this->_key, $app_username, $app_tenant) and
 			strlen($arr['oauth_access_token']) > 0 and
@@ -161,7 +161,7 @@ class QuickBooks_IPP_IntuitAnywhere
 			// Extract the error code
 			$code = (int) QuickBooks_XML::extractTagContents('ErrorCode', $retr);
 			
-			if ($code == 0)
+			if ($code == 0 or $force)
 			{
 				return $this->_driver->oauthAccessDelete($arr['oauth_access_token']);
 			}

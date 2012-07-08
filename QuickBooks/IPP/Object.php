@@ -296,6 +296,45 @@ class QuickBooks_IPP_Object
 		return $retr;
 	}
 	
+	
+	/**
+	 * Apply a user-defined function to every single data field in the object
+	 *
+	 * @param string $callback		The callback function 
+	 */
+	public function walk($callback)
+	{
+		//print_r($this->_data);
+		//exit;
+		
+		foreach ($this->_data as $key => $value)
+		{
+			if (is_object($value))
+			{
+				$value->walk($callback);
+			}
+			else if (is_array($value))
+			{
+				foreach ($value as $skey => $svalue)
+				{
+					if (is_object($svalue))
+					{
+						$svalue->walk($callback);
+					}
+					else
+					{
+						$this->_data[$key][$skey] = call_user_func($callback, $this->resource(), $key, $svalue);
+					}
+				}
+			}
+			else
+			{
+				$this->_data[$key] = call_user_func($callback, $this->resource(), $key, $value);
+			}
+		}
+	}
+		
+	
 	public function asIDSXML($indent = 0, $parent = null, $optype = null, $flavor = null)
 	{
 		// We're not going to actually change the data, just change a copy of it
