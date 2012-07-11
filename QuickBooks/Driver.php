@@ -1407,12 +1407,12 @@ abstract class QuickBooks_Driver
 	abstract protected function _oauthAccessWrite($request_token, $token, $token_secret, $realm, $flavor);
 	
 	
-	public function oauthAccessDelete($access_token)
+	public function oauthAccessDelete($app_username, $app_tenant)
 	{
-		return $this->_oauthAccessDelete($access_token);
+		return $this->_oauthAccessDelete($app_username, $app_tenant);
 	}
 	
-	abstract protected function _oauthAccessDelete($access_token);
+	abstract protected function _oauthAccessDelete($app_username, $app_tenant);
 	
 	
 	public function oauthRequestWrite($app_username, $app_tenant, $token, $token_secret)

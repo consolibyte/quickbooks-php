@@ -2241,7 +2241,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		return false;
 	}
 	
-	protected function _oauthAccessDelete($access_token)
+	protected function _oauthAccessDelete($app_username, $app_tenant)
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -2251,7 +2251,10 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			DELETE FROM
 				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
 			WHERE
-				oauth_access_token = '%s' ", $errnum, $errmsg, null, null, array( $access_token ));
+			app_username = '%s' AND 
+			app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $app_username, $app_tenant ));
+		
+		print('ran with username ' . $app_username . ' and tenant ' . $app_tenant);
 		
 		return $this->affected() > 0;
 	}	

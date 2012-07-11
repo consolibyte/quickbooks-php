@@ -163,11 +163,22 @@ class QuickBooks_IPP_IntuitAnywhere
 			
 			if ($code == 0 or $force)
 			{
-				return $this->_driver->oauthAccessDelete($arr['oauth_access_token']);
+				return $this->_driver->oauthAccessDelete($arr['app_username'], $arr['app_tenant']);
 			}
 		}
 		
 		return false;
+	}
+	
+	public function fudge($request_token, $access_token, $access_token_secret, $realm, $flavor)
+	{
+		$this->_driver->oauthAccessWrite(
+			$this->_key, 
+			$request_token, 
+			$access_token, 
+			$access_token_secret,
+			$realm, 
+			$flavor);
 	}
 	
 	/**
