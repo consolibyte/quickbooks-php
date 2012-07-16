@@ -2254,8 +2254,6 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			app_username = '%s' AND 
 			app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $app_username, $app_tenant ));
 		
-		print('ran with username ' . $app_username . ' and tenant ' . $app_tenant);
-		
 		return $this->affected() > 0;
 	}	
 	
