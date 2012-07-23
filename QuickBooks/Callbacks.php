@@ -302,6 +302,7 @@ class QuickBooks_Callbacks
 	 * 
 	 * 
 	 */
+	/*
 	static public function callAPICallback($Driver, $ticket, $callback, $method, $action, $ID, &$err, $qbxml, $qbobject, $qbres)
 	{
 		// Determine the type of hook
@@ -371,6 +372,7 @@ class QuickBooks_Callbacks
 		
 		return $ret;
 	}
+	*/
 	
 	/**
 	 * Call a hook function / object method / static method
@@ -618,6 +620,11 @@ class QuickBooks_Callbacks
 		}
 		
 		return '';		
+	}
+	
+	static public function callAuth($Driver, $callback, $username, $password, &$qb_company_file, &$wait_before_next_update, &$min_run_every_n_seconds, &$err)
+	{
+		
 	}
 	
 	/**

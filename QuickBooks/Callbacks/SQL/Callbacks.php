@@ -203,6 +203,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				// Update inventory levels
 				$Driver->queueEnqueue($user, QUICKBOOKS_DERIVE_INVENTORYLEVELS, 1, true, 0);
 			}
+			
+			if (in_array(QUICKBOOKS_DERIVE_INVENTORYASSEMBLYLEVELS, $callback_config['_only_misc']))
+			{
+				// Update inventory assembly levels
+				$Driver->queueEnqueue($user, QUICKBOOKS_DERIVE_INVENTORYASSEMBLYLEVELS, 1, true, 0);
+			}
 		}
 		
 		//print('2 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
@@ -667,6 +673,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					
 						<GeneralSummaryReportType>InventoryStockStatusByItem</GeneralSummaryReportType>
 						<DisplayReport>false</DisplayReport>
+						
+						<!--
+						<ReportItemFilter>
+							<ItemTypeFilter>Inventory</ItemTypeFilter>
+						</ReportItemFilter>
+						-->
 					
 					</GeneralSummaryReportQueryRq>
 				</QBXMLMsgsRq>
@@ -833,6 +845,189 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		//print_r($items);
 		
+		//$Driver->log('Inventory: ' . print_r($items, true), null, QUICKBOOKS_LOG_VERBOSE);
+	}
+
+public static function InventoryAssemblyLevelsRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$xml = '<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="8.0"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="stopOnError">
+					<GeneralSummaryReportQueryRq requestID="' . $requestID . '">
+
+						<GeneralSummaryReportType>InventoryStockStatusByItem</GeneralSummaryReportType>
+						<DisplayReport>false</DisplayReport>
+
+						<ReportItemFilter>
+							<ItemTypeFilter>Assembly</ItemTypeFilter>
+						</ReportItemFilter>
+
+					</GeneralSummaryReportQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>';
+
+		return $xml;
+	}
+	
+	/**
+	 * Handle an inventory stock status report from QuickBooks
+	 */
+	public static function InventoryAssemblyLevelsResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = array())
+	{
+		$Driver = QuickBooks_Driver_Singleton::getInstance();
+		
+		$col_defs = array();
+		
+		//mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( 'TESTING', NOW() ) ") or die(mysql_error());
+		
+		// First, find the column definitions
+		$tmp = $xml;
+		$find = 'ColDesc';
+		while ($inner = QuickBooks_Callbacks_SQL_Callbacks::_reportNextXML($tmp, $find))
+		{
+			$colID = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColID($inner);
+			$type = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColType($inner);
+			
+			$col_defs[$colID] = $type;
+		}
+		
+		//print_r($col_defs);
+		//exit;
+		
+		$items = array();
+		
+		// Now, find the actual data
+		$tmp = $xml;
+		$find = 'DataRow';
+		while ($inner = QuickBooks_Callbacks_SQL_Callbacks::_reportNextXML($tmp, $find))
+		{
+			$item = array(
+				'FullName' => null, 
+				'Blank' => null, 					// 
+				'ItemDesc' => null, 				// 
+				'ItemVendor' => null, 				// Pref Vendor
+				'ReorderPoint' => null, 			// Reorder Pt
+				'QuantityOnHand' => null, 			// On Hand
+				'SuggestedReorder' => null, 		// Order
+				'QuantityOnOrder' => null, 			// On PO
+				'QuantityOnSalesOrder' => null, 	// On Sales Order 
+				'EarliestReceiptDate' => null, 		// Next Deliv
+				'SalesPerWeek' => null, 			// Sales/Week
+				);
+			
+			$find2 = 'RowData';
+			if ($tag = QuickBooks_Callbacks_SQL_Callbacks::_reportNextTag($inner, $find2))
+			{
+				$value = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColValue($tag);
+				
+				$item['FullName'] = $value;
+			}
+				
+			$find3 = 'ColData';
+			while ($tag = QuickBooks_Callbacks_SQL_Callbacks::_reportNextTag($inner, $find3))
+			{
+				$colID = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColID($tag);
+				$value = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColValue($tag);
+				
+				if (array_key_exists($colID, $col_defs))
+				{
+					$item[$col_defs[$colID]] = $value;
+				}
+			}
+			
+			//$items[] = $item;
+			
+			/*
+			Inventory for "another inventory": Array
+			(
+			    [FullName] => another inventory
+			    [Blank] => another inventory
+			    [ItemDesc] => 
+			    [ItemVendor] => 
+			    [ReorderPoint] => 5
+			    [QuantityOnHand] => 35
+			    [SuggestedReorder] => false
+			    [QuantityOnOrder] => 0
+			    [EarliestReceiptDate] => 
+			    [SalesPerWeek] => 0
+			)
+			*/
+			
+			$Driver->log('Inventory Assembly for "' . $item['FullName'] . '": ' . print_r($item, true), null, QUICKBOOKS_LOG_DEBUG);
+			//$errnum = null;
+			//$errmsg = null;
+			//mysql_query("INSERT INTO quickbooks_log VALUES ( msg, log_datetime) VALUES ( '" . mysql_real_escape_string(print_r($item, true)) . "', NOW() ) ");
+			// UPDATE item SET QuantityOnHand = x WHERE FullName = y, resync = NOW() AND qbsql_resync_datetime = qbsql_modify_timestamp
+			// if (!affected_rows)
+			// 	UPDATE item SET QuantityOnHand = x WHERE FullName = y 		// this was a modified item, so it needs to stay modified
+
+			$sql1 = "
+				UPDATE
+					" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "iteminventoryassembly
+				SET
+					QuantityOnHand = " . (float) $item['QuantityOnHand'] . ",
+					QuantityOnOrder = " . (float) $item['QuantityOnOrder'] . ",
+					QuantityOnSalesOrder = " . (float) $item['QuantityOnSalesOrder'] . ",
+					qbsql_resync_datetime = '%s',
+					qbsql_modify_timestamp = '%s'
+				WHERE
+					FullName = '%s' AND 
+					qbsql_resync_datetime = qbsql_modify_timestamp ";
+
+			$datetime = date('Y-m-d H:i:s');
+
+			$vars1 = array( $datetime, $datetime, $item['FullName'] );
+
+			$errnum = null;
+			$errmsg = null;
+			$Driver->query($sql1, $errnum, $errmsg, 0, 1, $vars1);
+
+			//$Driver->log($sql1, null, QUICKBOOKS_LOG_DEBUG);
+
+			if (!$Driver->affected())
+			{
+				$sql2 = "
+					UPDATE
+						" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "iteminventoryassembly
+					SET
+						QuantityOnHand = " . (float) $item['QuantityOnHand'] . ",
+						QuantityOnOrder = " . (float) $item['QuantityOnOrder'] . ",
+						QuantityOnSalesOrder = " . (float) $item['QuantityOnSalesOrder'] . "
+					WHERE
+						FullName = '%s' ";
+
+				$vars2 = array( $item['FullName'] );
+
+				$errnum = null;
+				$errmsg = null;
+				$Driver->query($sql2, $errnum, $errmsg, 0, 1, $vars2);
+
+				//$Driver->log($sql2, null, QUICKBOOKS_LOG_DEBUG);
+			}
+
+			$hooks = array();
+			if (isset($callback_config['hooks']))
+			{
+				$hooks = $callback_config['hooks'];
+			}
+
+			$Driver->log('CALLING THE HOOKS! ' . print_r($hooks, true), null, QUICKBOOKS_LOG_VERBOSE);
+
+			// Call any hooks that occur when a record is updated
+			$hook_data = array(
+				'hook' => QuickBooks_SQL::HOOK_SQL_INVENTORYASSEMBLY,
+				'user' => $user,
+				'table' => QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventoryassembly',
+				'data' => $item,
+				);
+
+			$err = null;
+			QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_SQL_INVENTORYASSEMBLY, $requestID, $user, $err, $hook_data, $callback_config);
+		}
+
+		//print_r($items);
+
 		//$Driver->log('Inventory: ' . print_r($items, true), null, QUICKBOOKS_LOG_VERBOSE);
 	}
 	
@@ -2432,6 +2627,83 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_FIXEDASSETITEM, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
+	    /**
+     *
+     *
+     *
+     */
+    public static function ItemInventoryAssemblyAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+    {
+    	$Driver = QuickBooks_Driver_Singleton::getInstance();
+    	if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventoryassembly', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+    	{
+    		return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVENTORYASSEMBLYITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+    	}
+
+    	return '';
+    }
+
+    /**
+     *
+     *
+     *
+     */
+    public static function ItemInventoryAssemblyAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+    {
+    	$Driver = QuickBooks_Driver_Singleton::getInstance();
+    	$Parser = new QuickBooks_XML_Parser($xml);
+
+    	$errnum = 0;
+    	$errmsg = '';
+    	$Doc = $Parser->parse($errnum, $errmsg);
+    	$Root = $Doc->getRoot();
+
+    	$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAssemblyAddRs');
+
+    	$extra['IsAddResponse'] = true;
+    	$extra['is_add_response'] = true;
+    	QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_INVENTORYASSEMBLYITEM, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+
+    	//$Driver->queueEnqueue($user, QUICKBOOKS_QUERY_INVENTORYADJUSTMENT, md5(__FILE__), true, QuickBooks_Utilities::priorityForAction(QUICKBOOKS_QUERY_INVENTORYADJUSTMENT));
+    }
+
+    /**
+     *
+     *
+     *
+     */
+    public static function ItemInventoryAssemblyModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+    {
+    	$Driver = QuickBooks_Driver_Singleton::getInstance();
+    	if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventoryassembly', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
+    	{
+    		return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVENTORYASSEMBLYITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+    	}
+
+    	return '';
+    }
+
+    /**
+     *
+     *
+     *
+     */
+    public static function ItemInventoryAssemblyModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+    {
+    	$Parser = new QuickBooks_XML_Parser($xml);
+
+    	$errnum = 0;
+    	$errmsg = '';
+    	$Doc = $Parser->parse($errnum, $errmsg);
+    	$Root = $Doc->getRoot();
+
+    	$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAssemblyModRs');
+
+    	$extra['IsModResponse'] = true;
+    	$extra['is_mod_response'] = true;
+    	QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_INVENTORYASSEMBLYITEM, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+    }
+	
 	/**
 	 * 
 	 * 
@@ -2471,7 +2743,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		
 		//$Driver->queueEnqueue($user, QUICKBOOKS_QUERY_INVENTORYADJUSTMENT, md5(__FILE__), true, QuickBooks_Utilities::priorityForAction(QUICKBOOKS_QUERY_INVENTORYADJUSTMENT));
 	}
-
+	
 	/**
 	 * 
 	 * 
@@ -6399,6 +6671,44 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_INVENTORYITEM, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
+	public static function ItemInventoryAssemblyImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$xml = '';
+
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="' . $version . '"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+					<ItemInventoryAssemblyQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+						<ActiveStatus>All</ActiveStatus>
+						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
+						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
+					</ItemInventoryAssemblyQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>';
+
+		return $xml;
+	}
+
+	public static function ItemInventoryAssemblyImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$Parser = new QuickBooks_XML_Parser($xml);
+
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+
+		$Root = $Doc->getRoot();
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAssemblyQueryRs');
+
+		if (!isset($extra['is_query_response']))
+		{
+			$extra['is_import_response'] = true;
+		}
+
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_QUERY_INVENTORYASSEMBLYITEM, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}	
+	
 	public static function ItemSalesTaxImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = '';
@@ -8143,6 +8453,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				case 'estimate_estimateline':
 				case 'bill_itemline':
 				case 'bill_expenseline':
+				case 'iteminventoryassembly_iteminventoryassemblyline':
 					$sort = ' SortOrder ASC ';
 					break;
 			}
@@ -9223,6 +9534,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					if (substr($key, -4, 4) == 'line')
 					{
 						$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
+						
+						if ($key == 'iteminventoryassembly_iteminventoryassemblyline')
+						{
+							unset($order['TxnLineID']);
+						}
 					}
 					
 					$obj = new QuickBooks_SQL_Object($table, null);
@@ -9260,6 +9576,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					if (substr($key, -4, 4) == 'line')
 					{
 						$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
+						
+						if ($key == 'iteminventoryassembly_iteminventoryassemblyline')
+						{
+							unset($order['TxnLineID']);
+						}
 					}
 					
 					//print_r($multipart);

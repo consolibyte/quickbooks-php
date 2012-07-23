@@ -528,7 +528,7 @@ class QuickBooks_WebConnector_Handlers
 				$ticket = $this->_driver->authLogin($obj->strUserName, $obj->strPassword, $company_file, $wait_before_next_update, $min_run_every_n_seconds, true))
 			{
 				//$this->_driver->log('Login (' . $parse['scheme'] . '): ' . $obj->strUserName, $ticket, QUICKBOOKS_LOG_DEBUG);
-				$this->_log('Login (' . $parse['scheme'] . '): ' . $obj->strUserName, $ticket, QUICKBOOKS_LOG_DEBUG);
+				$this->_log('Login via ' . print_r($override_dsn, true) . ': ' . $obj->strUserName, $ticket, QUICKBOOKS_LOG_DEBUG);
 				
 				if ($customauth_company_file)
 				{

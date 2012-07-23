@@ -292,6 +292,7 @@ define('QUICKBOOKS_IMPORT', 'Import');
 define('QUICKBOOKS_AUDIT', 'Audit');
 
 define('QUICKBOOKS_DERIVE_INVENTORYLEVELS', 'InventoryLevels');
+define('QUICKBOOKS_DERIVE_INVENTORYASSEMBLYLEVELS', 'InventoryAssemblyLevels');
 
 define('QUICKBOOKS_OBJECT_HOST', 'Host');
 define('QUICKBOOKS_QUERY_HOST', 'HostQuery');

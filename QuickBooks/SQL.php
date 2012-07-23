@@ -35,6 +35,8 @@ class QuickBooks_SQL
 	 */
 	const HOOK_SQL_INVENTORY = 'QuickBooks_SQL sql-inventory';
 	
+	const HOOK_SQL_INVENTORYASSEMBLY = 'QuickBooks_SQL sql-inventoryassembly';
+	
 	/**
 	 *
 	 */
