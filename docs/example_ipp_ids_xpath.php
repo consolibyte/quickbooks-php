@@ -95,13 +95,18 @@ $Parser = new QuickBooks_IPP_Parser();
 // It's the results of a query
 $optype = QuickBooks_IPP_IDS::OPTYPE_QUERY;
 
+// Flavor of IDS (v2.x and lower)
+$flavor = QuickBooks_IPP_IDS::FLAVOR_DESKTOP;
+
 // Parse it into some objects
 $xml_errnum = null;
 $xml_errmsg = null;
 $err_code = null;
 $err_desc = null;
 $err_db = null;
-$list = $Parser->parseIDS($xml, $optype, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+
+//                        $xml, $optype, $flavor, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db
+$list = $Parser->parseIDS($xml, $optype, $flavor, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
 
 // Here's the last customer in the list
 $Customer = end($list);

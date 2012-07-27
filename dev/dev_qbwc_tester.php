@@ -1,14 +1,9 @@
 <?php
 
-<<<<<<< .mine
+
 $url = '';
 $username = '';
 $password = '';
-=======
-$url = 'http://localhost:8888/citest/test.php';
-$username = 'quickbooks';
-$password = 'password';
->>>>>>> .r235
 
 /*
 $url = '';
@@ -50,16 +45,11 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-exit;
+//exit;
 
-<<<<<<< .mine
 
-$max = 1;
+$max = 2;
 for ($i = 0; $i < $max; $i++)
-=======
-$max = 10;
-for ($i = 1; $i < $max; $i++)
->>>>>>> .r235
 {
 	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
 	
@@ -72,7 +62,7 @@ for ($i = 1; $i < $max; $i++)
 	//sleep(10);
 }
 
-//exit;
+exit;
 
 $requestID = substr($resp, $pos + 16, 1);
 
