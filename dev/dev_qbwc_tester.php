@@ -45,7 +45,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-//exit;
+exit;
 
 
 $max = 2;

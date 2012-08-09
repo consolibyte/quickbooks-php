@@ -123,6 +123,48 @@ class QuickBooks_IPP_IntuitAnywhere
 	}
 	
 	/**
+	 * Test to see if a connection actually works (make sure you haven't been disconnected on Intuit's end)
+	 *
+	 */
+	public function test($app_username, $app_tenant)
+	{
+		if ($creds = $this->load($app_username, $app_tenant))
+		{
+			$IPP = new QuickBooks_IPP();
+			
+			$IPP->authMode(
+				QuickBooks_IPP::AUTHMODE_OAUTH, 
+				$app_username, 
+				$creds);
+			
+			if ($Context = $IPP->context())
+			{
+				// Set the DBID
+				$IPP->dbid($Context, 'something');
+				
+				// Set the IPP flavor
+				$IPP->flavor($creds['qb_flavor']);
+				
+				// Get the base URL if it's QBO
+				if ($creds['qb_flavor'] == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
+				{
+					$IPP->baseURL($IPP->getBaseURL($Context, $creds['qb_realm']));
+				}
+				
+				// Check the last error code now... 
+				if ($IPP->errorCode() == 401)
+				{
+					return false;
+				}
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Load OAuth credentials from the database
 	 *
 	 * @param string $app_username
@@ -188,7 +230,8 @@ class QuickBooks_IPP_IntuitAnywhere
 	 */
 	public function handle($app_username, $app_tenant)
 	{
-		if ($this->check($app_username, $app_tenant))
+		if ($this->check($app_username, $app_tenant) and 		// We have tokens ...
+			$this->test($app_username, $app_tenant))			// ... and they are valid
 		{
 			// They are already logged in, send them on to exchange data
 			header('Location: ' . $this->_that_url);

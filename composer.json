@@ -5,6 +5,7 @@
     "description": "QuickBooks DevKit with support for Intuit Anywhere, Intuit Partner Platform, Web Connector, QuickBooks Merchant Services, and more.",
     "keywords": ["quickbooks","intuit","intuit anywhere","intuit partner platform","quickbooks web connector","qbxml","intuit data services","quickbooks merchant services","intuit merchant services","web connector"],
     "homepage": "http://www.consolibyte.com/",
+    "license": "EPL-1.0",
     "authors": [
         {
             "name": "Keith Palmer",
