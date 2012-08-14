@@ -211,11 +211,9 @@ $soap_options = array(		// See http://www.php.net/soap
 	);
 
 $handler_options = array(
-	//'authenticate_dsn' => ' *** YOU DO NOT NEED TO PROVIDE THIS CONFIGURATION VARIABLE TO USE THE DEFAULT AUTHENTICATION METHOD FOR THE DRIVER YOU'RE USING (I.E.: MYSQL) *** '
-	//'authenticate_dsn' => 'ldapv3://ldap.example.com:389/ou=People,dc=example,dc=com',
-	//'authenticate_dsn' => 'mysql://user:pass@localhost/database?quickbooks_user',  
-	//'authenticate_dsn' => 'postgresql://user:pass@localhost/database?quickbooks_user', 
-	//'authenticate_dsn' => 'function://your_function_name_here', 
+	//'authenticate' => ' *** YOU DO NOT NEED TO PROVIDE THIS CONFIGURATION VARIABLE TO USE THE DEFAULT AUTHENTICATION METHOD FOR THE DRIVER YOU'RE USING (I.E.: MYSQL) *** '
+	//'authenticate' => 'your_function_name_here', 
+	//'authenticate' => array( 'YourClassName', 'YourStaticMethod' ),
 	'deny_concurrent_logins' => false, 
 	);		// See the comments in the QuickBooks/Server/Handlers.php file
 

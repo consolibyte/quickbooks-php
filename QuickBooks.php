@@ -95,7 +95,7 @@ define('QUICKBOOKS_PACKAGE_NAME', 'QuickBooks PHP DevKit');
  * The version of this QuickBooks package 
  * @var string
  */
-define('QUICKBOOKS_PACKAGE_VERSION', '2.0rc4');
+define('QUICKBOOKS_PACKAGE_VERSION', '2.0');
 
 if (!defined('QUICKBOOKS_CRLF'))
 {

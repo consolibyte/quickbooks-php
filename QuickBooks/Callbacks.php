@@ -53,13 +53,84 @@ define('QUICKBOOKS_CALLBACKS_TYPE_HOOK_INSTANCE', 'instanceof-hook');
  */
 class QuickBooks_Callbacks
 {
+	const TYPE_NONE = 'none';
+
+	const TYPE_FUNCTION = 'function';
+
+	const TYPE_STATIC_METHOD = 'static-method';
+
+	const TYPE_OBJECT_METHOD = 'object-method';
+	
 	/**
 	 * 
 	 * 
 	 */
-	static public function callAuthenticate()
+	static public function callAuthenticate($Driver, $callback, $username, $password, &$customauth_company_file, &$customauth_wait_before_next_update, &$customauth_min_run_every_n_seconds)
 	{
+		$type = QuickBooks_Callbacks::_type($callback, $Driver);
 		
+		if ($Driver)
+		{
+			// Log the callback for debugging
+			$Driver->log('Calling auth callback [' . $type . ']: ' . print_r($callback, true), null, QUICKBOOKS_LOG_DEVELOP);
+		}
+		
+		$which = 5;
+		
+		$err = null;
+		
+		$vars = array( $username, $password, &$customauth_company_file, &$customauth_wait_before_next_update, &$customauth_min_run_every_n_seconds, &$err );
+		if ($type == QuickBooks_Callbacks::TYPE_OBJECT_METHOD)			// Object instance method hook
+		{
+			$object = $callback[0];
+			$method = $callback[1];
+			
+			if ($Driver)
+			{
+				$Driver->log('Calling auth instance method: ' . get_class($callback[0]) . '->' . $callback[1], null, QUICKBOOKS_LOG_VERBOSE);
+			}
+			
+			$ret = QuickBooks_Callbacks::_callObjectMethod( array( $object, $method ), $vars, $err, $which);
+		}
+		else if ($type == QuickBooks_Callbacks::TYPE_FUNCTION)		// Function hook
+		{
+			$err = '';
+			
+			if ($Driver)
+			{
+				$Driver->log('Calling auth function: ' . $callback, null, QUICKBOOKS_LOG_VERBOSE);
+			}
+			
+			$ret = QuickBooks_Callbacks::_callFunction($callback, $vars, $err, $which);
+		}
+		else if ($type == QuickBooks_Callbacks::TYPE_STATIC_METHOD)		// Static method hook
+		{
+			if ($Driver)
+			{
+				$Driver->log('Calling auth static method: ' . $callback, null, QUICKBOOKS_LOG_VERBOSE);
+			}
+			
+			//$tmp = explode('::', $callback);
+			//$class = trim(current($tmp));
+			//$method = trim(end($tmp));
+			
+			$ret = QuickBooks_Callbacks::_callStaticMethod($callback, $vars, $err, $which);
+		}
+		else
+		{
+			if ($Driver)
+			{
+				$Driver->log('Unsupported callback type for callback: ' . print_r($callback, true), null, QUICKBOOKS_LOG_VERBOSE);
+			}
+		}
+		
+		if ($err and 
+			$Driver)
+		{
+			$Driver->log('Auth callback error: ' . $err, null, QUICKBOOKS_LOG_VERBOSE);
+		}
+		
+		return $ret;
 	}
 	
 	static public function callSAMLCallback($Driver, $callback, $auth_id, $ticket, $target_url, $realm_id_pseudonym, $config, &$err)
@@ -76,7 +147,7 @@ class QuickBooks_Callbacks
 		if ($Driver)
 		{
 			// Log the callback for debugging
-			$Driver->log('Calling callback [' . $type . ']: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_DEVELOP);
+			$Driver->log('Calling SAML callback [' . $type . ']: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_DEVELOP);
 		}
 
 		// The 6th (start at 0: 0, 1, 2, 3, 4, 5) param is the error handler

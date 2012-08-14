@@ -306,7 +306,8 @@ class QuickBooks_WebConnector_Handlers
 			'autoadd_missing_requestid' => true,  
 			'check_valid_requestid' => true, 
 			'server_version' => 'PHP QuickBooks SOAP Server v' . QUICKBOOKS_PACKAGE_VERSION . ' at ' . $url,	// Server version string
-			'authenticate_dsn' => null, 				// If you want to use some custom authentication scheme (and not the quickbooks_user MySQL table) you can specify your own function here
+			'authenticate' => null, 					// If you want to use some custom authentication scheme (and not the quickbooks_user MySQL table) you can specify your own function here
+			'authenticate_dsn' => null, 				//		(backward compat. for 'authenticate')
 			'map_application_identifiers' => true, 		// Try to map web application IDs to QuickBooks ListIDs/TxnIDs
 			'allow_remote_addr' => array(), 
 			'deny_remote_addr' => array(), 
@@ -491,25 +492,22 @@ class QuickBooks_WebConnector_Handlers
 		}
 		
 		// Custom authentication backends
-		$override_dsn = $this->_config['authenticate_dsn'];
+		$override_dsn = $this->_config['authenticate'];
+		
+		if (!empty($this->_config['authenticate_dsn']))
+		{
+			// Backwards compat.
+			$override_dsn = $this->_config['authenticate_dsn'];
+		}
+		
 		$auth = null;
 		
+		/*
 		if (strlen($override_dsn))
 		{
-			/*
-			$parse = QuickBooks_Utilities::parseDSN($override_dsn);
-			$class = 'QuickBooks_Authenticate_' . ucfirst(strtolower($parse['scheme']));
-			$file = '/QuickBooks/Authenticate/' . ucfirst(strtolower($parse['scheme'])) . '.php';
-			
-			//print('LOADING {' . $file . '}');
-			
-			QuickBooks_Loader::load($file);
-			
-			$auth = new $class($override_dsn);
-			*/
-			
 			$override_dsn = str_replace('function://', '', $override_dsn);
 		}
+		*/
 		
 		$company_file = null;
 		$wait_before_next_update = null;
@@ -519,12 +517,13 @@ class QuickBooks_WebConnector_Handlers
 		$customauth_wait_before_next_update = null;
 		$customauth_min_run_every_n_seconds = null;
 		
-		if (strlen($override_dsn) and 	// Custom authentication
-			true) //is_object($auth))
+		if (is_array($override_dsn) or strlen($override_dsn)) 	// Custom autj
 		{
 			//if ($auth->authenticate($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and 
 			
-			if ($override_dsn($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and 
+			//if ($override_dsn($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and 
+			
+			if (QuickBooks_Callbacks::callAuthenticate($this->_driver, $override_dsn, $obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and 
 				$ticket = $this->_driver->authLogin($obj->strUserName, $obj->strPassword, $company_file, $wait_before_next_update, $min_run_every_n_seconds, true))
 			{
 				//$this->_driver->log('Login (' . $parse['scheme'] . '): ' . $obj->strUserName, $ticket, QUICKBOOKS_LOG_DEBUG);
@@ -595,7 +594,7 @@ class QuickBooks_WebConnector_Handlers
 			else
 			{
 				//$this->_driver->log('Login failed (' . $parse['scheme'] . '): ' . $obj->strUserName, '', QUICKBOOKS_LOG_DEBUG);
-				$this->_log('Login failed (' . $parse['scheme'] . '): ' . $obj->strUserName, '', QUICKBOOKS_LOG_DEBUG);
+				$this->_log('Login failed: ' . $obj->strUserName, '', QUICKBOOKS_LOG_DEBUG);
 				
 				$hookdata = array(
 					'authenticate_dsn' => $override_dsn, 
