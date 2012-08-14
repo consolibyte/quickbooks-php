@@ -75,6 +75,13 @@ class QuickBooks_Callbacks
 			$Driver->log('Calling auth callback [' . $type . ']: ' . print_r($callback, true), null, QUICKBOOKS_LOG_DEVELOP);
 		}
 		
+		// Backward compat
+		if (is_string($callback))
+		{
+			$callback = str_replace('function://', '', $callback);
+		}
+		
+		// Make sure we can pass back an error
 		$which = 5;
 		
 		$err = null;

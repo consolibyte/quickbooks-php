@@ -59,7 +59,7 @@ $dsn = 'mysql://root:root@localhost/quickbooks_auth';
 
 // Handler options
 $handler_options = array(
-	//'authenticate' => '_quickbooks_custom_auth', 
+	'authenticate' => '_quickbooks_custom_auth', 
 	//'authenticate' => '_QuickBooksClass::theStaticMethod',
 	'deny_concurrent_logins' => false, 
 	);
