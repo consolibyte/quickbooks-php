@@ -1,7 +1,7 @@
 <?php
 
 
-$url = 'http://localhost:8888/quickbooksv3/auth.php';
+$url = '';
 $username = 'keith';
 $password = 'rocks';
 
