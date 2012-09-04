@@ -68,7 +68,7 @@ class QuickBooks_Callbacks_SQL_Errors
 		
 		$existing = null;
 		
-		if ($table)
+		if ($table and is_numeric($ident))
 		{
 			$multipart = array(
 				QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ident

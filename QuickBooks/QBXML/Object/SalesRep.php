@@ -17,7 +17,7 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 /**
  * QuickBooks Customer object class
  */
-class QuickBooks_Object_SalesRep extends QuickBooks_Object
+class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_SalesRep object

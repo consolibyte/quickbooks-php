@@ -18,7 +18,7 @@ require_once '../QuickBooks.php';
 
 // Credentials
 $username = 'keith@consolibyte.com';
-$password = 'abcd1234';
+$password = 'password42';
 
 // Application token 
 $token = 'tex3r7hwifx6cci3zk43ibmnd';
