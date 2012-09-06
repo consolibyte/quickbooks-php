@@ -364,6 +364,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 				'key' => 'TxnID', 
 				'relatives' => array(
 					'salesorder_salesorderline' => 'SalesOrder_TxnID', 
+					'invoice_linkedtxn' => 'ToTxnID:TxnType=SalesOrder', 
 					), 
 				), 
 			);
