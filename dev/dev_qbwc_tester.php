@@ -1,9 +1,9 @@
 <?php
 
 
-$url = '';
-$username = 'keith';
-$password = 'rocks';
+$url = 'http://saas.uglyslug.com/saas/installs/584/opencart/qbus/844/public/opencart/qbwc.php';
+$username = 'user584';
+$password = 'swebpxuf';
 
 /*
 $url = '';
@@ -45,10 +45,10 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-exit;
+//exit;
 
 
-$max = 2;
+$max = 15;
 for ($i = 0; $i < $max; $i++)
 {
 	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
