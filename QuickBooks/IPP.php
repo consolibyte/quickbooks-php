@@ -984,12 +984,24 @@ class QuickBooks_IPP
 		{
 			$resource = 'sales-receipt';
 		}
+		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
+			$resource == QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY)
+		{
+			$resource = 'time-activity';
+		}
 		
 		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
 			$optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
 		{
-			// Make the resource plural... *sigh*
-			$resource .= 's';
+			// Make the resource plural... (unless it's the changedatadeleted) *sigh*
+			if ($resource == QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY)
+			{
+			    $resource = 'time-activities';
+			}
+			else if ($resource != QuickBooks_IPP_IDS::RESOURCE_CHANGEDATADELETED)
+			{
+			    $resource .= 's';
+            }
 		}
 		
 		$post = true;
@@ -1026,7 +1038,10 @@ class QuickBooks_IPP
 		}
 		else
 		{
-			$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
+		    // Case matters on "syncActivity" #fun (everything else is lower cased)
+		    if (strtolower($resource) == 'syncactivity') $resource = 'syncActivity';
+		    else $resource = strtolower($resource); // everything else should be lowercase
+			$url = $this->_baseurl . '/' . $resource . '/' . $this->_ids_version . '/' . $realmID;
 		}
 		
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
@@ -1321,9 +1336,12 @@ class QuickBooks_IPP
 					// Add the OAuth headers
 					$headers['Authorization'] = $signed[3];
 					
+					// Remove any whitespace padding before checking
+					$data = trim($data);
+					
 					if ($data[0] == '<')
 					{
-						; // Do nothing	
+						// Do nothing
 					}
 					else
 					{

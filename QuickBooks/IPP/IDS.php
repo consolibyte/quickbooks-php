@@ -83,6 +83,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_BILLPAYMENTCREDITCARD = 'BillPaymentCreditCard';
 	
+	const RESOURCE_CHANGEDATADELETED = 'ChangeDataDeleted';
+	
 	const RESOURCE_CHECK = 'Check';
 	
 	const RESOURCE_CLASS = 'Class';
@@ -137,6 +139,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_SHIPMETHOD = 'ShipMethod';
 	
+	const RESOURCE_TIMEACTIVITY = 'TimeActivity';
+	
 	/**
 	 * IDS v2 - QuickBooks Desktop
 	 */
@@ -165,6 +169,7 @@ class QuickBooks_IPP_IDS
 			QuickBooks_IPP_IDS::RESOURCE_BILL, 
 			QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENT,
 			QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENTCREDITCARD, 
+			QuickBooks_IPP_IDS::RESOURCE_CHANGEDATADELETED, 
 			QuickBooks_IPP_IDS::RESOURCE_CHECK,
 			QuickBooks_IPP_IDS::RESOURCE_CREDITMEMO,
 			QuickBooks_IPP_IDS::RESOURCE_ESTIMATE, 
@@ -175,6 +180,7 @@ class QuickBooks_IPP_IDS
 			QuickBooks_IPP_IDS::RESOURCE_PURCHASEORDER, 
 			QuickBooks_IPP_IDS::RESOURCE_SALESORDER, 
 			QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, 
+			QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY, 
 			QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT,
 			);
 		
