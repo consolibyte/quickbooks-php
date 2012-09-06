@@ -157,9 +157,31 @@ abstract class QuickBooks_IPP_Service
 		return $this->_findAll($Context, $realmID, $resource, null, null, null, null, $xml);
 	}
 	
-	public function rawAdd()
+	public function rawAdd($Context, $realmID, $xml, $resource = null)
 	{
+		$IPP = $Context->IPP();
 		
+		if (!$resource)
+		{
+			$resource = $this->_guessResource($xml, QuickBooks_IPP_IDS::OPTYPE_ADD);
+		}
+		
+		// Send the data to IPP 
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_ADD, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
+		
+		if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+		{
+			$this->_setError(
+				$IPP->errorCode(), 
+				$IPP->errorText(), 
+				$IPP->errorDetail());
+			
+			return false;
+		}
+		
+		return $return;
 	}
 	
 	protected function _map($list, $key, $value)
@@ -229,7 +251,7 @@ abstract class QuickBooks_IPP_Service
 		}
 		else if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
 		{
-			if (!$xml)
+		    if (!$xml)
 			{
 				if (is_array($query) and count($query) > 0)
 				{
