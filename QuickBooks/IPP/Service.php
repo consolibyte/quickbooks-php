@@ -178,10 +178,21 @@ abstract class QuickBooks_IPP_Service
 		
 	}
 	
-	protected function _findAll($Context, $realmID, $resource, $query = null, $sort = null, $page = 1, $size = 50, $xml = '')
+	
+	/**
+	 * 
+	 * Returns false on error, and sets $IPP->errorCode, $IPP->errorText, and $IPP->errorDetail
+	 * 
+	 * Added $options array in 09/2012:
+	 *   Supported array keys for QuickBooks Desktop are:
+	 *     ActiveOnly       => true/false (False by default. May not be used with DeletedObjects)
+	 *     DeletedObjects   => true/false (False by default. May not be used with ActiveOnly)
+	 *   Supported array keys for QuickBooks Online are:
+	 *     (none yet)
+	 */
+	protected function _findAll($Context, $realmID, $resource, $query = null, $sort = null, $page = 1, $size = 50, $xml = '', $options = array())
 	{
 		$IPP = $Context->IPP();
-		
 		$flavor = $IPP->flavor();
 		
 		//print('flavor [' . $flavor . ']');
@@ -191,9 +202,19 @@ abstract class QuickBooks_IPP_Service
 		{
 			if (!$xml)
 			{
+				$options_string = '';
+				if ($options['ActiveOnly'])
+				{
+					$options_string = 'ActiveOnly="true" ';
+				}
+				else if ($options['DeletedObjects'])
+				{
+					$options_string = 'DeletedObjects="true" ';
+				}
+				
 				$xml = '';
 				$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-				$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+				$xml .= '<' . $resource . 'Query '.$options_string.'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
 				
 				if ($size)
 				{
