@@ -2,9 +2,9 @@
 
 require_once '../QuickBooks.php';
 
-$Customer = new QuickBooks_Object_Customer();
+$Customer = new QuickBooks_QBXML_Object_Customer();
 
-$Customer->setName('Child Customer Name');
+$Customer->setName('Child & Customer Name');
 
 $Customer->setPhone('860-634-1602');
 $Customer->setEmail('keith@uglyslug.com');
@@ -13,7 +13,7 @@ $Customer->setFirstName('Keith');
 $Customer->setLastName('Palmer');
 
 // Set the parent of the customer
-$Customer->setParentFullName('Parent Customer Name');
+$Customer->setParentFullName('Parent & Customer Name');
 
 // You could also set the parent customer by ListID too
 //$Customer->setParentListID('ABCD-1234');

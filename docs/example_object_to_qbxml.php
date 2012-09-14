@@ -35,7 +35,7 @@ $Invoice = new QuickBooks_QBXML_Object_Invoice();
 //	you. (For an example of this last case you should see 
 //	example_api_client.php and example_api_client_canadian.php) 
 // 
-$Invoice->setCustomerName('The Company Name Here');
+$Invoice->setCustomerName('The Company & Name Here');
 // $Invoice->setCustomerListID($ListID_from_QuickBooks);
 
 // Invoice #A-123
