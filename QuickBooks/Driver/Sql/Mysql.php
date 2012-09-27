@@ -201,6 +201,8 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 			
 			$parse = QuickBooks_Utilities::parseDSN($dsn_or_conn, $defaults);
 			
+			//print_r($parse);
+			
 			$this->_connect($parse['host'], $parse['port'], $parse['user'], $parse['pass'], substr($parse['path'], 1), $config['new_link'], $config['client_flags']);
 		}
 		
