@@ -49,6 +49,11 @@ class QuickBooks_IPP_Context
 		return $this->_IPP->lastDebug();
 	}
 	
+	public function lastError()
+	{
+		return $this->_IPP->lastError();
+	}
+	
 	public function ticket()
 	{
 		return $this->_ticket;

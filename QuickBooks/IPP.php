@@ -1511,6 +1511,11 @@ class QuickBooks_IPP
 		return $this->_errcode != QuickBooks_IPP::ERROR_OK;
 	}
 	
+	public function lastError()
+	{
+		return $this->_errcode . ': [' . $this->_errtext . ', ' . $this->_errdetail . ']';
+	}
+	
 	/**
 	 * Set an error message
 	 * 

@@ -587,6 +587,16 @@ abstract class QuickBooks_IPP_Service
 		return $this->_last_response;
 	}
 	
+	public function lastError($Context = null)
+	{
+		if ($Context)
+		{
+			return $Context->lastError();
+		}
+		
+		return $this->_errcode . ': [' . $this->_errtext . ', ' . $this->_errdetail . ']';
+	}
+	
 	public function lastDebug($Context = null)
 	{
 		if ($Context)
