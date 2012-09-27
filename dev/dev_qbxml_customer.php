@@ -4,7 +4,7 @@ require_once '../QuickBooks.php';
 
 $Customer = new QuickBooks_QBXML_Object_Customer();
 
-$Customer->setName('Child & Customer Name');
+$Customer->setName('Child Derpé Customer Name');
 
 $Customer->setPhone('860-634-1602');
 $Customer->setEmail('keith@uglyslug.com');

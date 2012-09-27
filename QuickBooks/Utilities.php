@@ -680,6 +680,11 @@ class QuickBooks_Utilities
 	 */
 	static public function fnmatch($pattern, $str)
 	{
+		if (function_exists('fnmatch'))
+		{
+			return fnmatch($pattern, $str);
+		}
+		
 		$arr = array(
 			'\*' => '.*', 
 			'\?' => '.'

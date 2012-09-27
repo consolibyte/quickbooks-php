@@ -225,11 +225,11 @@ abstract class QuickBooks_IPP_Service
 			if (!$xml)
 			{
 				$options_string = '';
-				if ($options['ActiveOnly'])
+				if (!empty($options['ActiveOnly']))
 				{
 					$options_string = 'ActiveOnly="true" ';
 				}
-				else if ($options['DeletedObjects'])
+				else if (!empty($options['DeletedObjects']))
 				{
 					$options_string = 'DeletedObjects="true" ';
 				}

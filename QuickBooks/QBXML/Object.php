@@ -141,10 +141,10 @@ abstract class QuickBooks_QBXML_Object
 			
 			if ($cast)
 			{
-				$value = QuickBooks_Cast::cast($this->object(), $key, $value, false, false);
+				$value = QuickBooks_Cast::cast($this->object(), $key, $value);
 			}
 			
-			//print('	setting [' . $key . '] to value {' . $value . '}' . "\n");
+			print('	setting [' . $key . '] to value {' . $value . '}' . "\n");
 			
 			$this->_object[$key] = $value;
 		}
@@ -825,7 +825,7 @@ abstract class QuickBooks_QBXML_Object
 			$children = array();
 			switch ($Object->object())
 			{
-				case QUICKBOOKS_QBXML_OBJECT_BILL:
+				case QUICKBOOKS_OBJECT_BILL:
 					
 					$children = array(
 						'ItemLineRet' => array( 'QuickBooks_QBXML_Object_Bill_ItemLine', 'addItemLine' ), 
@@ -833,35 +833,35 @@ abstract class QuickBooks_QBXML_Object
 						);					
 					
 					break;
-				case QUICKBOOKS_QBXML_OBJECT_PURCHASEORDER:
+				case QUICKBOOKS_OBJECT_PURCHASEORDER:
 					
 					$children = array(
 						'PurchaseOrderLineRet' => array( 'QuickBooks_QBXML_Object_PurchaseOrder_PurchaseOrderLine', 'addPurchaseOrderLine' ), 
 						);
 					
 					break;
-				case QUICKBOOKS_QBXML_OBJECT_INVOICE:
+				case QUICKBOOKS_OBJECT_INVOICE:
 					
 					$children = array( 
 						'InvoiceLineRet' => array( 'QuickBooks_QBXML_Object_Invoice_InvoiceLine', 'addInvoiceLine' ), 
 						);
 					
 					break;
-				case QUICKBOOKS_QBXML_OBJECT_ESTIMATE:
+				case QUICKBOOKS_OBJECT_ESTIMATE:
 					
 					$children = array( 
 						'EstimateLineRet' => array( 'QuickBooks_QBXML_Object_Estimate_EstimateLine', 'addEstimateLine' ), 
 						);					
 					
 					break;
-				case QUICKBOOKS_QBXML_OBJECT_SALESRECEIPT:
+				case QUICKBOOKS_OBJECT_SALESRECEIPT:
 					
 					$children = array( 
 						'SalesReceiptLineRet' => array( 'QuickBooks_QBXML_Object_SalesReceipt_SalesReceiptLine', 'addSalesReceiptLine' ), 
 						);					
 					
 					break;
-				case QUICKBOOKS_QBXML_OBJECT_JOURNALENTRY:
+				case QUICKBOOKS_OBJECT_JOURNALENTRY:
 					
 					$children = array(
 						'JournalCreditLineRet' => array( 'QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine', 'addCreditLine' ), 
@@ -869,14 +869,14 @@ abstract class QuickBooks_QBXML_Object
 						);
 					
 					break;
-				case QUICKBOOKS_QBXML_OBJECT_SALESTAXGROUPITEM:
+				case QUICKBOOKS_OBJECT_SALESTAXGROUPITEM:
 					
 					$children = array(
 						'ItemSalesTaxRef' => array( 'QuickBooks_QBXML_Object_SalesTaxGroupItem_ItemSalesTaxRef', 'addItemSalesTaxRef' ), 
 						);
 					
 					break;
-				case QUICKBOOKS_QBXML_OBJECT_UNITOFMEASURESET:
+				case QUICKBOOKS_OBJECT_UNITOFMEASURESET:
 					
 					$children = array(
 						'RelatedUnit' => array( 'QuickBooks_QBXML_Object_UnitOfMeasureSet_RelatedUnit', 'addRelatedUnit' ), 
