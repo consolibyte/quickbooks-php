@@ -682,7 +682,7 @@ class QuickBooks_Utilities
 	{
 		if (function_exists('fnmatch'))
 		{
-			return fnmatch($pattern, $str);
+			return fnmatch($pattern, $str, FNM_CASEFOLD);
 		}
 		
 		$arr = array(
