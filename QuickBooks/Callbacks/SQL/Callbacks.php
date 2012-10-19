@@ -10335,15 +10335,23 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
             'JobsAndEstimatesPrefs_IsUsingProgressInvoicing', 
             'JobsAndEstimatesPrefs_IsPrintingItemsWithZeroAmounts', 
             'MultiCurrencyPrefs_IsMultiCurrencyOn', 
-            'PurchasesAndVendorsPrefs_IsUsingInventory', 
+			'MultiLocationInventoryPrefs_IsMultiLocationInventoryAvailable', 
+			'MultiLocationInventoryPrefs_IsMultiLocationInventoryEnabled', 
+			'PurchasesAndVendorsPrefs_IsUsingInventory', 
             'PurchasesAndVendorsPrefs_IsAutomaticallyUsingDiscounts', 
             'SalesAndCustomersPrefs_IsTrackingReimbursedExpensesAsIncome', 
             'SalesAndCustomersPrefs_IsAutoApplyingPayments', 
             'SalesAndCustomersPrefs_PriceLevels_IsUsingPriceLevels', 
             'SalesAndCustomersPrefs_PriceLevels_IsRoundingSalesPriceUp', 
+			'SalesTaxPrefs_IsUsingVendorTaxCode',
+			'SalesTaxPrefs_IsUsingCustomerTaxCode',
+			'SalesTaxPrefs_IsUsingAmountsIncludeTax',
             'CurrentAppAccessRights_IsAutomaticLoginAllowed', 
             'CurrentAppAccessRights_IsPersonalDataAccessAllowed', 
             'IsAutomaticLogin', 
+			
+			
+			
 			);
 		
 		// Cast QuickBooks booleans (strings, "true" and "false") to database booleans (tinyint 1 and 0)	
