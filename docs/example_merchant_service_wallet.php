@@ -69,6 +69,8 @@ else
 	print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
 }
 
+exit;
+
 // Now, let's update it
 $Card->setName('Keith R. Palmer Jr.');
 
