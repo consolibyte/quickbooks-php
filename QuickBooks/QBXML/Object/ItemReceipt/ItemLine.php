@@ -69,7 +69,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	
 	public function setQuantity($Quantity)
 	{
-		return $this->set('Quantity', $Quantity);
+		return $this->set('Quantity', (float) $Quantity);
 	}
 
 	public function getUnitOfMeasure()

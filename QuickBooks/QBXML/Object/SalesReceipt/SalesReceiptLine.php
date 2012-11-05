@@ -120,7 +120,7 @@ class QuickBooks_QBXML_Object_SalesReceipt_SalesReceiptLine extends QuickBooks_Q
 	
 	public function setQuantity($quan)
 	{
-		return $this->set('Quantity', (int) $quan);
+		return $this->set('Quantity', (float) $quan);
 	}
 	
 	public function setRate($rate)

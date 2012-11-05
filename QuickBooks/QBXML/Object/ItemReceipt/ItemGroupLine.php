@@ -59,7 +59,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemGroupLine extends QuickBooks_QBXML
 	
 	public function setQuantity($Quantity)
 	{
-		return $this->set('Quantity', $Quantity);
+		return $this->set('Quantity', (float) $Quantity);
 	}
   
 	public function getUnitOfMeasure()

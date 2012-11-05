@@ -135,7 +135,7 @@ class QuickBooks_QBXML_Object_Check_ItemLine extends QuickBooks_QBXML_Object
 	 */
 	public function setQuantity($value)
 	{
-		return $this->set('Quantity', $value);
+		return $this->set('Quantity', (float) $value);
 	}
 
 	/**

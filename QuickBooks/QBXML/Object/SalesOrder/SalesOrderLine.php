@@ -72,7 +72,7 @@ class QuickBooks_QBXML_Object_SalesOrder_SalesOrderLine extends QuickBooks_QBXML
 	
 	public function setQuantity($quan)
 	{
-		return $this->set('Quantity', (int) $quan);
+		return $this->set('Quantity', (float) $quan);
 	}
 	
 	public function getQuantity()

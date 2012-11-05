@@ -83,7 +83,7 @@ class QuickBooks_QBXML_Object_Estimate_EstimateLine extends QuickBooks_QBXML_Obj
 	
 	public function setQuantity($quan)
 	{
-		return $this->set('Quantity', (int) $quan);
+		return $this->set('Quantity', (float) $quan);
 	}
 	
 	public function getQuantity()

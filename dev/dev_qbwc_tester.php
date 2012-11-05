@@ -1,9 +1,9 @@
 <?php
 
 
-$url = 'http://playscape.uglyslug.com/valuedguest/example.php';
-$username = 'Admin';
-$password = 'scrubbed';
+$url = 'http://saas.uglyslug.com/saas/installs/584/oscommerce/qbus/862/public/oscommerce/qbwc.php';
+$username = 'user584';
+$password = 'password';
 
 /*
 $url = '';
@@ -45,7 +45,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-exit;
+//exit;
 
 
 $max = 15;
