@@ -345,7 +345,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 					//'salesorder_linkedtxn' => 'ToTxnID:Type=Invoice',
 					'receivepayment_appliedtotxn' => 'ToTxnID:TxnType=Invoice', // 'ToTxnID:Type=Invoice',
 					'invoice_invoiceline' => 'Invoice_TxnID', //  
-					'qb_dataext' => 'Entity_ListID:EntityType=Customer', 	// update the Entity_ListID where EntityType = 'Customer' (and the existing Entity_ListID is the old ListID)
+					'dataext' => 'Entity_ListID:EntityType=Customer', 	// update the Entity_ListID where EntityType = 'Customer' (and the existing Entity_ListID is the old ListID)
 					)
 				),
 			'receivepayment' => array(
