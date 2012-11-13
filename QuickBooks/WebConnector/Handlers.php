@@ -312,8 +312,13 @@ class QuickBooks_WebConnector_Handlers
 			'allow_remote_addr' => array(), 
 			'deny_remote_addr' => array(), 
 			'convert_unix_newlines' => true, 
+			
 			'deny_concurrent_logins' => true, 
 			'deny_concurrent_timeout' => 60, 
+			
+			'deny_reallyfast_logins' => true, 
+			'deny_reallyfast_timeout' => 900, 
+			
 			'masking' => true, 
 			);
 			
@@ -335,8 +340,12 @@ class QuickBooks_WebConnector_Handlers
 		$config['check_valid_requestid'] = (boolean) $config['check_valid_requestid'];
 		$config['map_application_identifiers'] = (boolean) $config['map_application_identifiers'];
 		$config['convert_unix_newlines'] = (boolean) $config['convert_unix_newlines'];
+		
 		$config['deny_concurrent_logins'] = (boolean) $config['deny_concurrent_logins'];
 		$config['deny_concurrent_timeout'] = (int) max(1, $config['deny_concurrent_timeout']);
+		
+		$config['deny_reallyfast_logins'] = (boolean) $config['deny_reallyfast_logins'];
+		$config['deny_reallyfast_timeout'] = (int) max(1, $config['deny_reallyfast_timeout']);
 		
 		return $config;
 	}
@@ -477,17 +486,35 @@ class QuickBooks_WebConnector_Handlers
 			return new QuickBooks_WebConnector_Result_Authenticate('', 'nvu', null, null);
 		}
 		
+		// If we do either concurrent login checks, or rate-limiting, we need to grab the date/time 
+		//	of the last connection.
+		$authLast = null;
+		if ($this->_config['deny_concurrent_logins'] or $this->_config['deny_reallyfast_logins'])
+		{
+			$authlast = $this->_driver->authLast($obj->strUserName);
+		}
+		
 		// Check for concurrent logins
 		if ($this->_config['deny_concurrent_logins'])
 		{
-			$authlast = $this->_driver->authLast($obj->strUserName);
-			
 			if ($authlast and 
 				time() - strtotime($authlast[1]) < $this->_config['deny_concurrent_timeout'])
 			{
 				$this->_log('Denied concurrent login from: ' . $obj->strUserName, null, QUICKBOOKS_LOG_VERBOSE);
 			
-				return new QuickBooks_WebConnector_Result_Authenticate('ABCD1234', 'none', null, null);
+				return new QuickBooks_WebConnector_Result_Authenticate('CONC1234', 'none', null, null);
+			}
+		}
+		
+		// Rate-limiting
+		if ($this->_config['deny_reallyfast_logins'])
+		{
+			if ($authlast and 
+				time() - strtotime($authlast[1]) < $this->_config['deny_reallyfast_timeout'])
+			{
+				$this->_log('Denied really fast login from: ' . $obj->strUserName . ' (last login: ' . $authlast[1] . ')', null, QUICKBOOKS_LOG_VERBOSE);
+			
+				return new QuickBooks_WebConnector_Result_Authenticate('FAST1234', 'none', null, null);
 			}
 		}
 		

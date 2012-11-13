@@ -452,7 +452,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			FROM 
 				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) . " 
 			WHERE 
-				ticket = '" . $this->_escape($ticket) . "' ", $errnum, $errmsg)))
+				ticket = '" . $this->_escape($ticket) . "' ", $errnum, $errmsg, 0, 1)))
 		{
 			$cache[$ticket] = $arr['quickbooks_ticket_id'];
 			
@@ -486,7 +486,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			WHERE 
 				qb_username = '" . $this->_escape($user) . "' AND 
 				module = '" . $this->_escape($module) . "' AND 
-				cfgkey = '" . $this->_escape($key) . "' ", $errnum, $errmsg)))
+				cfgkey = '" . $this->_escape($key) . "' ", $errnum, $errmsg, 0, 1)))
 		{
 			$this->_query("
 				UPDATE
@@ -553,7 +553,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		
 		//print($sql);
 		
-		if ($arr = $this->_fetch($this->_query($sql, $errnum, $errmsg)))
+		if ($arr = $this->_fetch($this->_query($sql, $errnum, $errmsg, 0, 1)))
 		{
 			$type = $arr['cfgtype'];
 			$opts = $arr['cfgopts'];
@@ -599,7 +599,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				FROM 
 					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) . " 
 				WHERE 
-					quickbooks_ticket_id = " . $ticket_id, $errnum, $errmsg)))
+					quickbooks_ticket_id = " . $ticket_id, $errnum, $errmsg, 0, 1)))
 			{
 				$cache[$ticket] = $arr['qb_username'];
 				
@@ -738,7 +738,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			WHERE
 				qb_username = '" . $this->_escape($username) . "'
 			ORDER BY
-				touch_datetime DESC ", $errnum, $errmsg, 0, 1)))
+				quickbooks_ticket_id DESC ", $errnum, $errmsg, 0, 1)))
 		{
 			return array(
 				$arr['write_datetime'], 
@@ -925,7 +925,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) . " 
 			WHERE 
 				ticket = '" . $this->_escape($ticket) . "' AND 
-				touch_datetime > '" . date('Y-m-d H:i:s', time() - QUICKBOOKS_TIMEOUT) . "' ", $errnum, $errmsg)))
+				touch_datetime > '" . date('Y-m-d H:i:s', time() - QUICKBOOKS_TIMEOUT) . "' ", $errnum, $errmsg, 0, 1)))
 		{
 			$this->_query("
 				UPDATE 
@@ -1783,7 +1783,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			FROM 
 				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) . " 
 			WHERE 
-				ticket = '" . $this->_escape($ticket) . "' ", $errnum, $errmsg)))
+				ticket = '" . $this->_escape($ticket) . "' ", $errnum, $errmsg, 0, 1)))
 		{
 			return $arr['processed'];
 		}
