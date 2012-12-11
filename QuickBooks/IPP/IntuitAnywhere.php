@@ -150,9 +150,20 @@ class QuickBooks_IPP_IntuitAnywhere
 				{
 					$IPP->baseURL($IPP->getBaseURL($Context, $creds['qb_realm']));
 				}
+				else
+				{
+					$companies = $IPP->getAvailableCompanies($Context);
+				}
+				
+				/*
+				print('[[' . $IPP->lastRequest() . ']]');
+				print('[[' . $IPP->lastResponse() . ']]');
+				print('here we are! [' . $IPP->errorCode() . ']');
+				*/
 				
 				// Check the last error code now... 
-				if ($IPP->errorCode() == 401)
+				if ($IPP->errorCode() == 401 or 			// most calls return this
+					$IPP->errorCode() == 3200)				// but for some stupid reason the getAvailableCompanies call returns this
 				{
 					return false;
 				}

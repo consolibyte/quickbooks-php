@@ -1339,7 +1339,7 @@ class QuickBooks_IPP
 					// Remove any whitespace padding before checking
 					$data = trim($data);
 					
-					if ($data[0] == '<')
+					if ($data and $data[0] == '<')
 					{
 						// Do nothing
 					}
