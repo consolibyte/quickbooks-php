@@ -317,7 +317,7 @@ class QuickBooks_WebConnector_Handlers
 			'deny_concurrent_timeout' => 60, 
 			
 			'deny_reallyfast_logins' => true, 
-			'deny_reallyfast_timeout' => 900, 
+			'deny_reallyfast_timeout' => 600, 
 			
 			'masking' => true, 
 			);

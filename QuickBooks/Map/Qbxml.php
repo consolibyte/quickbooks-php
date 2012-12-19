@@ -354,6 +354,7 @@ class QuickBooks_Map_QBXML extends QuickBooks_Map
 					'receivepayment_appliedtotxn' => 'ReceivePayment_TxnID', 
 					), 
 				), 
+
 			'salesreceipt' => array(
 				'key' => 'TxnID', 
 				'relatives' => array(
