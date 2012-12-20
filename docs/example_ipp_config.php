@@ -32,7 +32,7 @@ $that_url = 'http://localhost:8888/intuitanywheretest/data.php';
 // This is a database connection string that will be used to store the OAuth credentials 
 // $dsn = 'pgsql://username:password@hostname/database';
 // $dsn = 'mysql://username:password@hostname/database';
-$dsn = 'mysql://root:root@localhost/quickbooks';
+$dsn = 'mysql://root:root@localhost/quickbooks';		
 
 // You should set this to an encryption key specific to your app
 $encryption_key = 'abcd1234';

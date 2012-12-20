@@ -87,7 +87,7 @@ $errmap = array(
 	);
 
 $hooks = array(
-	QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS => 'my_function_name_for_when_a_login_succeeds', 
+	QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => 'my_function_name_for_when_a_login_succeeds', 
 	);
 
 function my_function_name_for_requests() { ... }
@@ -109,7 +109,7 @@ $errmap = array(
 	);
 	
 $hooks = array(
-	QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS => 'My_Class_Name::my_method_name_for_when_a_login_succeeds', 
+	QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => 'My_Class_Name::my_method_name_for_when_a_login_succeeds', 
 	);
 	
 class My_Class_Name
@@ -151,7 +151,7 @@ $errmap = array(
 	);
 
 $hooks = array(
-	QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS => array( $obj, 'my_method_name_for_when_a_login_succeeds' ), 
+	QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => array( $obj, 'my_method_name_for_when_a_login_succeeds' ), 
 	);
 	
 class My_Class_Name
@@ -187,7 +187,7 @@ $errmap = array(
 // An array of callback hooks
 $hooks = array(
 	// There are many hooks defined which allow you to run your own functions/methods when certain events happen within the framework
-	// QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS => '_quickbooks_hook_loginsuccess', 	// Run this function whenever a successful login occurs
+	// QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => '_quickbooks_hook_loginsuccess', 	// Run this function whenever a successful login occurs
 	);
 
 /*

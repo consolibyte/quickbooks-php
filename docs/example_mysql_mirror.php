@@ -4,7 +4,7 @@
  * An example of how to mirror parts (or all of) the QuickBooks database to a MySQL database
  * 
  * 
- * WARNING WARNING WARNING WARNING
+ * *REALLY FREAKING IMPORTANT* WARNING WARNING WARNING WARNING
  * 
  * THE SQL MIRROR CODE IS BETA CODE, AND IS KNOWN TO HAVE BUGS!
  * 
@@ -16,7 +16,13 @@
  * Nightly builds are available here:
  * https://code.intuit.com/sf/frs/do/viewRelease/projects.php_devkit/frs.php_devkit.latest_sources
  * 
- * WARNING WARNING WARNING WARNING
+ * IN ALL LIKELIHOOD, YOU SHOULD *NOT* BE USING THIS CODE. YOU SHOULD INSTEAD 
+ * LOOK AT THE FOLLOWING SCRIPTS AND IMPLEMENT YOUR REQUEST/RESPONSE HANDLERS 
+ * YOURSELF:
+ * 	docs/example_web_connector.php
+ * 	docs/example_web_connector_import.php
+ * 
+ * *REALLY FREAKING IMPORTANT* WARNING WARNING WARNING WARNING
  *
  *  
  * The SQL mirror functionality makes it easy to extract information from 
@@ -26,6 +32,10 @@
  * You should look at my wiki for more information about mirroring QuickBooks 
  * data into SQL databases:
  * 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte_sqlmirror
+ * 
+ * You should also read this forum post before even thinking about using this:
+ * 	http://consolibyte.com/forum/viewtopic.php?id=20
+ * 
  * 
  * @package QuickBooks
  * @subpackage Documentation

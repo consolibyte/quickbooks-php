@@ -11,7 +11,7 @@
   
   - Charge credit cards using the QuickBooks Merchant Service
   
-  - Connect to the Intuit Partner Platform and access IDS Services  
+  - Connect to Intuit Anywhere / the Intuit Partner Platform and access IDS Services  
   
   - Get access to QuickBooks reports 
   
@@ -34,16 +34,15 @@
      https://idnforums.intuit.com/
     
     You will find examples in the docs/ folder. There is additional 
-    documentation and additional examples on our wiki:
-     http://wiki.consolibyte.com/wiki/doku.php/quickbooks
+    documentation and additional examples on our legacy and new wikis:
+     http://wiki.consolibyte.com/wiki/doku.php/quickbooks     (legacy)
+     http://www.consolibyte.com/docs/index.php                (new wiki)
 
     If you are using the Web Connector, make sure you read the quick-start guide:
-     http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte_webconnector_quickstart
+     http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start
      
     Please remember that this is an open-source project! Donations, 
-    contributions, and general thank-yous are all very appreciated! Monetary 
-    donations can be made at my website:
-     http://www.consolibyte.com/
+    contributions, and general thank-yous are all very appreciated! 
     
    - Keith Palmer
      support@consolibyte.com

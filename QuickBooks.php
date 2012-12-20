@@ -790,6 +790,7 @@ define('QUICKBOOKS_DERIVE_VENDOR', 'VendorDerive');
 
 define('QUICKBOOKS_OBJECT_VENDORCREDIT', 'VendorCredit');
 define('QUICKBOOKS_ADD_VENDORCREDIT', 'VendorCreditAdd');
+define('QUICKBOOKS_MOD_VENDORCREDIT', 'VendorCreditMod');
 define('QUICKBOOKS_QUERY_VENDORCREDIT', 'VendorCreditQuery');
 define('QUICKBOOKS_IMPORT_VENDORCREDIT', 'VendorCreditImport');
 define('QUICKBOOKS_DERIVE_VENDORCREDIT', 'VendorCreditDerive');

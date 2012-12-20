@@ -53,22 +53,23 @@ class QuickBooks_IPP_Object_Header extends QuickBooks_IPP_Object
 			'ToBePrinted' => true, 
 			'ToBeEmailed' => true, 
 			'Custom' => true,
+			'PaymentMethodId' => true, 
+			'PaymentMethodName' => true, 
+			'TotalAmt' => true, 			// This needs to be almost last for Payments (or at least after PaymentMethodName)
 			'BillAddr' => true,  			// Not part of SalesReceipt
 			'ShipAddr' => true, 
+			'BillEmail' => true,
 			'ShipMethodId' => true, 	
 			'ShipMethodName' => true, 
 			'Balance' => true, 				// Not part of SalesReceipt
 			'DepositToAccountId' => true, 	
 			'DepositToAccountName' => true, 
-			'PaymentMethodId' => true, 
-			'PaymentMethodName' => true, 
 			'Detail' => true, 
 			'DiscountAmt' => true, 	
 			'DiscountRate' => true, 
 			'DiscountAccountId' => true, 
 			'DiscountAccountName' => true, 
 			'DiscountTaxable' => true, 
-			'TotalAmt' => true, 			// This needs to be almost last for Payments (or at least after PaymentMethodName)
 			);
 	}
 }

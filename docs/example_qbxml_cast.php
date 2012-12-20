@@ -56,7 +56,11 @@ foreach ($fields as $field)
 print("\n");
 
 
-exit;
+print("\n");
+print("\n");
+print("\n");
+
+//exit;
 
 $invoice = array(
 	'IsPaid' => true,
@@ -64,6 +68,9 @@ $invoice = array(
 	'IsToBeEmailed' => true,
 	'IsFinanceCharge' => false,
 	'IsPending' => true,
+	
+	'InvoiceLine Class FullName' => 'Test & Class', 
+	'InvoiceLine Item FullName' => 'Item & Test', 
 	);
 	
 foreach ($invoice as $key => $value)
