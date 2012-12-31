@@ -989,6 +989,11 @@ class QuickBooks_IPP
 		{
 			$resource = 'time-activity';
 		}
+		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
+			$resource == QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENT)
+		{
+			$resource = 'bill-payment';
+		}
 		
 		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
 			$optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
