@@ -377,10 +377,16 @@ class QuickBooks_Cast
 						
 						break;
 					case QUICKBOOKS_DATATYPE_DATE:
-						$value = date('Y-m-d', strtotime($value));
+						if ($value)
+						{
+							$value = date('Y-m-d', strtotime($value));
+						}
 						break;
 					case QUICKBOOKS_DATATYPE_DATETIME:
-						$value = date('Y-m-d', strtotime($value)) . 'T' . date('H:i:s', strtotime($value));
+						if ($value)
+						{
+							$value = date('Y-m-d', strtotime($value)) . 'T' . date('H:i:s', strtotime($value));
+						}
 						break;
 					case QUICKBOOKS_DATATYPE_ENUM:
 						// do nothing

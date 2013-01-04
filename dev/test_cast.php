@@ -5,6 +5,13 @@ require_once '../QuickBooks.php';
 header('Content-Type: text/html; charset=utf-8'); 
 
 
+print('null date: ' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_SALESORDER, 'ShipDate', null)); print("\n");
+print('empty date: ' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_SALESORDER, 'ShipDate', '')); print("\n");
+print('real date: ' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_SALESORDER, 'ShipDate', 'Jan 5 2012')); print("\n");
+
+print("\n\n\n");
+
+
 $arr = array(
 	'Keith Palmer, Shannon Daniels, Kurtis & Karli', 
 	'Test of some UTF8 chars- Á, Æ, Ë, ¾, Õ, ä, ß, ú, ñ',
