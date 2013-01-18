@@ -345,7 +345,7 @@ function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $ex
 		<?qbxml version="' . $version . '"?>
 		<QBXML>
 			<QBXMLMsgsRq onError="stopOnError">
-				<InvoiceQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . '>
+				<InvoiceQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<ModifiedDateRangeFilter>
 						<FromModifiedDate>' . $last . '</FromModifiedDate>
@@ -496,7 +496,7 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
 		<?qbxml version="' . $version . '"?>
 		<QBXML>
 			<QBXMLMsgsRq onError="stopOnError">
-				<CustomerQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . '>
+				<CustomerQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<FromModifiedDate>' . $last . '</FromModifiedDate>
 					<OwnerID>0</OwnerID>
@@ -609,7 +609,7 @@ function _quickbooks_salesorder_import_request($requestID, $user, $action, $ID, 
 		<?qbxml version="' . $version . '"?>
 		<QBXML>
 			<QBXMLMsgsRq onError="stopOnError">
-				<SalesOrderQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . '>
+				<SalesOrderQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<ModifiedDateRangeFilter>
 						<FromModifiedDate>' . $last . '</FromModifiedDate>
@@ -760,7 +760,7 @@ function _quickbooks_item_import_request($requestID, $user, $action, $ID, $extra
 		<?qbxml version="' . $version . '"?>
 		<QBXML>
 			<QBXMLMsgsRq onError="stopOnError">
-				<ItemQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . '>
+				<ItemQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<FromModifiedDate>' . $last . '</FromModifiedDate>
 					<OwnerID>0</OwnerID>
@@ -897,7 +897,7 @@ function _quickbooks_purchaseorder_import_request($requestID, $user, $action, $I
 		<?qbxml version="' . $version . '"?>
 		<QBXML>
 			<QBXMLMsgsRq onError="stopOnError">
-				<PurchaseOrderQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . '>
+				<PurchaseOrderQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<!--<ModifiedDateRangeFilter>
 						<FromModifiedDate>' . $last . '</FromModifiedDate>
