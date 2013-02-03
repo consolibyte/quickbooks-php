@@ -164,12 +164,11 @@ $Card = new QuickBooks_MerchantService_CreditCard($name, $number, $expyear, $exp
 // We're going to authorize $295.00
 $amount = 295.0;
 
-
 if ($Transaction = $MS->authorize($Card, $amount))
 {
 	print('Card authorized!' . "\n");
 	print_r($Transaction);	
-		
+	
 	// 	Every time the MerchantService class returns a $Transaction object to you, 
 	// 	you should store the returned $Transaction. You'll need the returned 
 	// 	$Transaction object (or at the very least the data contained therein) in 
@@ -238,6 +237,7 @@ else
 }
 
 exit;
+
 
 
 // If you didn't want to 

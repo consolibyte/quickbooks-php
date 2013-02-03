@@ -143,17 +143,24 @@ print_r($list);
 // Loop through the list of customers
 foreach ($list as $Customer)
 {
+	print('' . $Customer->getName() . ' has these addresses: ' . "\n");
+	
 	$line = '';
 	$city = '';
 	$state = '';
-	if ($Address = $Customer->getAddress(0))
+	for ($i = 0; $i < $Customer->countAddress(); $i++)
 	{
+		print('  Address #' . ($i + 1) . "\n");
+		$Address = $Customer->getAddress($i);
+	
 		$line = $Address->getLine1();
 		$city = $Address->getCity();
 		$state = $Address->getCountrySubDivisionCode();
+		
+		print('    ' . $line . ', ' . $city . ', ' . $state . "\n");
 	}
 	
-	print('' . $Customer->getName() . ' has an address of: ' . $line . ' ' . $city . ' ' . $state . "\n");
+	print("\n");
 }
 
 // Here's the last customer in the list

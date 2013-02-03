@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Example of OAuth authentication for an Intuit Anywhere application
+ * Example of OAuth testing to see if a specific set of OAuth credentials are still valid (e.g. the QuickBooks company file is still connected)
  * 
  * 
  * 

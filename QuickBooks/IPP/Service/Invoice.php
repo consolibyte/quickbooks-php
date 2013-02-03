@@ -41,4 +41,10 @@ class QuickBooks_IPP_Service_Invoice extends QuickBooks_IPP_Service
 	{
 		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_INVOICE, $Object);
 	}
+	
+	public function update($Context, $realmID, $IDType, $Object)
+	{
+		return parent::_update($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_INVOICE, $Object, $IDType);
+	}
+	
 }

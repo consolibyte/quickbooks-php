@@ -144,7 +144,7 @@ abstract class QuickBooks_QBXML_Object
 				$value = QuickBooks_Cast::cast($this->object(), $key, $value);
 			}
 			
-			print('	setting [' . $key . '] to value {' . $value . '}' . "\n");
+			//print('	setting [' . $key . '] to value {' . $value . '}' . "\n");
 			
 			$this->_object[$key] = $value;
 		}
