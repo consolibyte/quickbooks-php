@@ -69,7 +69,8 @@ class QuickBooks_WebConnector_Queue
 	 */
 	public function __construct($dsn_or_conn, $user = null, $config = array())
 	{
-		$this->_driver = QuickBooks_Utilities::driverFactory($dsn_or_conn, $config);
+		//$this->_driver = QuickBooks_Utilities::driverFactory($dsn_or_conn, $config);
+		$this->_driver = QuickBooks_Driver_Factory::create($dsn_or_conn, $config);
 		
 		// No default username was provided, fetch the default from the driver
 		if (!$user)

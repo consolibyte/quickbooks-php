@@ -299,6 +299,12 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 		// Support UTF-8 chars
 		mysql_query("SET NAMES 'utf8'", $this->_conn);
 		
+		/*
+		static $connections = array();
+		$connections[] = $user . ':' . $pass . '@' . $host . ':' . $port . '/' . $db;
+		mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( 'MySQL connection #" . count($connections) . ", " . print_r($connections, true) . "', NOW() )", $this->_conn) or die(mysql_error());
+		*/
+		
 		return $tmp;
 	}
 	

@@ -1039,7 +1039,7 @@ class QuickBooks_Utilities
 		//	wiggle room in case we need to add things inbetween the default 
 		//	priority values
 		static $wiggled = false;
-		$wiggle = 4;
+		$wiggle = 6;
 		
 		if (!$wiggled)
 		{

@@ -24,6 +24,11 @@ QuickBooks_Loader::load('/QuickBooks/Driver.php');
 /**
  * 
  */
+QuickBooks_Loader::load('/QuickBooks/Driver/Factory.php');
+
+/**
+ * 
+ */
 QuickBooks_Loader::load('/QuickBooks/Utilities.php');
 
 /**
@@ -43,7 +48,8 @@ class QuickBooks_Driver_Singleton
 		static $instance = null;
 		if (is_null($instance))
 		{
-			$instance = QuickBooks_Utilities::driverFactory($dsn_or_conn, $options, $hooks, $log_level);
+			//$instance = QuickBooks_Utilities::driverFactory($dsn_or_conn, $options, $hooks, $log_level);
+			$instance = QuickBooks_Driver_Factory::create($dsn_or_conn, $options, $hooks, $log_level);
 		}
 		
 		return $instance;

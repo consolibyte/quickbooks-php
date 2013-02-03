@@ -51,7 +51,7 @@ class QuickBooks_Driver_Factory
 		}
 			
 		// Do not serialize the $hooks because they might contain non-serializeable objects
-		$key = (string) $dsn_or_conn . serialize($config) . count($hooks) . $log_level;
+		$key = (string) $dsn_or_conn . serialize($config) . $log_level;
 			
 		if (!isset($instances[$key]))
 		{
@@ -86,6 +86,14 @@ class QuickBooks_Driver_Factory
 				$Driver = new $class($dsn_or_conn, $config);
 				$Driver->registerHooks($hooks);
 				$Driver->setLogLevel($log_level);
+				
+				/*
+				static $static = 0;
+				$static++;
+				print('Constructed new instance ' . $static . ' [' . $key . ']' . "\n");
+				mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( 'Here is my " . $static . " key: " . $key . "', NOW() )");
+				//print_r($hooks);
+				*/
 				
 				// @todo Ugh this is really ugly... maybe have $log_level passed in as a parameter? Not really a driver option at all?
 				//if (isset($config['log_level']))
