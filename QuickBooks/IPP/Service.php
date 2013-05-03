@@ -105,18 +105,29 @@ abstract class QuickBooks_IPP_Service
 	protected function _delete($Context, $realmID, $resource, $IDType, $xml = '')
 	{
 		$IPP = $Context->IPP();
+		$flavor = $IPP->flavor();
 		
 		if (!$xml)
 		{
 			$parse = QuickBooks_IPP_IDS::parseIDType($IDType);
-			
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-			$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
-			$xml .= '	<TransactionIdSet>' . QUICKBOOKS_CRLF;
-			$xml .= '		<Id idDomain="' . $parse[0] . '">' . $parse[1] . '</Id>' . QUICKBOOKS_CRLF;
-			$xml .= '	</TransactionIdSet>' . QUICKBOOKS_CRLF;
-			$xml .= '</' . $resource . 'Query>';
+			$xml = '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+
+			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
+			{
+				$xml .= '<Del RequestId="' . md5(microtime()) . '" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+				$xml .= '	<Object xsi:type="'. $resource .'" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+				$xml .= '		<Id idDomain="' . $parse[0] . '">' . $parse[1] . '</Id>' . QUICKBOOKS_CRLF;
+				$xml .= '	</Object>';
+				$xml .= '</Del>';
+			}
+			else
+			{
+				$xml .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+				$xml .= '	<TransactionIdSet>' . QUICKBOOKS_CRLF;
+				$xml .= '		<Id idDomain="' . $parse[0] . '">' . $parse[1] . '</Id>' . QUICKBOOKS_CRLF;
+				$xml .= '	</TransactionIdSet>' . QUICKBOOKS_CRLF;
+				$xml .= '</' . $resource . 'Query>';
+			}
 		}
 		
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_DELETE, $xml);
