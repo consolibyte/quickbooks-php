@@ -1161,13 +1161,21 @@ class QuickBooks_IPP
 	 */
 	protected function _hasErrors($response)
 	{
-		// @todo This should first check for HTTP errors
-		// ... 
-		
-		// Check for generic IPP XML node errors
-		$errcode = QuickBooks_XML::extractTagContents('errcode', $response);
-		$errtext = QuickBooks_XML::extractTagContents('errtext', $response);
-		$errdetail = QuickBooks_XML::extractTagContents('errdetail', $response);
+		preg_match_all('/HTTP\/1.1 ([0-9]*)/', $this->_last_response, $matches);
+		$http_status = $matches[1][0];
+		if($http_status != '200')
+		{
+			$errcode = $http_status;
+			$errtext = 'HTTP response code is '.$http_status;
+			$errdetail = strip_tags($this->_stripHTTPHeaders($response));
+		}
+		else
+		{
+			// Check for generic IPP XML node errors
+			$errcode = QuickBooks_XML::extractTagContents('errcode', $response);
+			$errtext = QuickBooks_XML::extractTagContents('errtext', $response);
+			$errdetail = QuickBooks_XML::extractTagContents('errdetail', $response);
+		}
 		
 		if ($errcode != QuickBooks_IPP::OK)
 		{
