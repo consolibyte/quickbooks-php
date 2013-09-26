@@ -1003,6 +1003,10 @@ class QuickBooks_IPP
 			{
 			    $resource = 'time-activities';
 			}
+			else if ($resource == QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY)
+    			{
+                		$resource = 'journal-entries';
+            		}
 			else if ($resource == QuickBooks_IPP_IDS::RESOURCE_CLASS)
 			{
 				$resource .= 'es';
