@@ -994,6 +994,12 @@ class QuickBooks_IPP
 		{
 			$resource = 'bill-payment';
 		}
+		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
+                        $resource == QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY and
+                        $optype != QuickBooks_IPP_IDS::OPTYPE_QUERY)
+                {
+                        $resource = 'journal-entry';
+                }
 		
 		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
 			$optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
