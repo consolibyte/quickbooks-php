@@ -333,7 +333,106 @@ class QuickBooks_IPP_Object
 			}
 		}
 	}
+	
+	public function asXML($indent = 0, $parent = null, $optype = null, $flavor = null, $version = QuickBooks_IPP_IDS::VERSION_2)
+	{
+		if ($version == QuickBooks_IPP_IDS::VERSION_3)
+		{
+			return $this->_asXML_v3($indent, $parent, $optype, $flavor);
+		}
+		else
+		{
+			return $this->asIDSXML($indent, $parent, $optype, $flavor);
+		}
+	}
+
+	protected function _asXML_v3($indent, $parent, $optype, $flavor)
+	{
+		$data = $this->_data;
+		$data = $this->_reorder($data);
+
+		$xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' xmlns="http://schema.intuit.com/finance/v3">' . QUICKBOOKS_CRLF;
 		
+		// Go through the data, creating XML out of it
+		foreach ($data as $key => $value)
+		{
+			if (is_object($value))
+			{
+				// If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
+				$xml .= $value->_asXML_v3($indent + 1, null, null, $flavor);
+			}
+			else if (is_array($value))
+			{
+				foreach ($value as $skey => $svalue)
+				{
+					//print('converting array: [' . $key . ' >> ' . $skey . ']');
+					
+					if (is_object($svalue))
+					{
+						$xml .= $svalue->_asXML_v3($indent + 1, $key, null, $flavor);
+					}
+					/*else if (substr($key, -2, 2) == 'Id')
+					{
+						$for_qbxml = false;
+						
+						$tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
+						
+						if ($tmp[0])
+						{
+							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+						}
+						else
+						{
+							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+						}
+						
+						$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
+						$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;						
+					}*/
+					else
+					{
+						//$for_qbxml = false;
+						//
+						//$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+						//$xml .= QuickBooks_XML::encode($value, $for_qbxml);
+						//$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+						
+						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
+					}
+				}
+			}
+			/*else if (substr($key, -2, 2) == 'Id')
+			{
+				$for_qbxml = false;
+				
+				$tmp = QuickBooks_IPP_IDS::parseIdType($value);
+				
+				if ($tmp[0])
+				{
+					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+				}
+				else
+				{
+					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+				}
+				
+				$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
+				$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+			}*/
+			else
+			{
+				$for_qbxml = false;
+				
+				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+				$xml .= QuickBooks_XML::encode($value, $for_qbxml);
+				$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+			}
+		}
+		
+		$xml .= str_repeat("\t", $indent) . '</' . $this->resource() . '>' . QUICKBOOKS_CRLF;
+		
+		return $xml;
+	}
 	
 	public function asIDSXML($indent = 0, $parent = null, $optype = null, $flavor = null)
 	{
@@ -358,6 +457,10 @@ class QuickBooks_IPP_Object
 			
 			// Merge in the defaults for this object type
 			$data = array_merge($this->_defaults(), $data);
+		}
+		else if ($parent == 'CustomField')
+		{
+			$xml = str_repeat("\t", $indent) . '<' . $parent . ' xsi:type="StringTypeCustomField">' . QUICKBOOKS_CRLF;
 		}
 		else
 		{

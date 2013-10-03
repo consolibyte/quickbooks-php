@@ -47,8 +47,8 @@ function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $ext
 		UPDATE 
 			my_customer_table 
 		SET 
-			quickbooks_listid = '" . mysql_escape_string($idents['ListID']) . "', 
-			quickbooks_editsequence = '" . mysql_escape_string($idents['EditSequence']) . "'
+			quickbooks_listid = '" . mysql_real_escape_string($idents['ListID']) . "', 
+			quickbooks_editsequence = '" . mysql_real_escape_string($idents['EditSequence']) . "'
 		WHERE 
 			id = " . (int) $ID);
 }
@@ -62,8 +62,8 @@ function _quickbooks_error_catchall($requestID, $user, $action, $ID, $extra, &$e
 		UPDATE 
 			my_customer_table 
 		SET 
-			quickbooks_errnum = '" . mysql_escape_string($errnum) . "', 
-			quickbooks_errmsg = '" . mysql_escape_string($errmsg) . "'
+			quickbooks_errnum = '" . mysql_real_escape_string($errnum) . "', 
+			quickbooks_errmsg = '" . mysql_real_escape_string($errmsg) . "'
 		WHERE 
 			id = " . (int) $ID);
 }

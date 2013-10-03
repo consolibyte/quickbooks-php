@@ -4,6 +4,7 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Object.php');
 
 class QuickBooks_IPP_Object_Line extends QuickBooks_IPP_Object
 {
+	/*
 	public function setQuantity($quantity)
 	{
 		return $this->set('Qty', (float) $quantity);
@@ -23,6 +24,7 @@ class QuickBooks_IPP_Object_Line extends QuickBooks_IPP_Object
 	{
 		return $this->get('Desc');
 	}
+	*/
 	
 	protected function _order()
 	{

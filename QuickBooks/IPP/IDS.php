@@ -26,6 +26,8 @@ class QuickBooks_IPP_IDS
 	
 	const FLAVOR_ONLINE = 'QBO';
 
+	const OPTYPE_SYNCSTATUS = 'SyncStatus';
+
 	const OPTYPE_ADD = 'Add';
 	
 	const OPTYPE_MOD = 'Mod';
@@ -52,6 +54,8 @@ class QuickBooks_IPP_IDS
 	const VERSION_3 = 'v3';
 	
 	const VERSION_LATEST = 'v2';
+
+	const URL_V3 = 'https://quickbooks.api.intuit.com/v3';
 	
 	/**
 	 * Default BASEURL for QuickBooks Desktop (QuickBooks Online requires you to fetch a specific BASEURL)

@@ -85,6 +85,7 @@ class QuickBooks_Callbacks
 		$which = 5;
 		
 		$err = null;
+		$ret = null;
 		
 		$vars = array( $username, $password, &$customauth_company_file, &$customauth_wait_before_next_update, &$customauth_min_run_every_n_seconds, &$err );
 		if ($type == QuickBooks_Callbacks::TYPE_OBJECT_METHOD)			// Object instance method hook
@@ -337,7 +338,7 @@ class QuickBooks_Callbacks
 			{
 				if ($Driver)
 				{
-					$Driver->log('Invalid callback format: ' . print_r($func, true), $ticket, QUICKBOOKS_LOG_NORMAL);
+					$Driver->log('Invalid callback format: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_NORMAL);
 				}
 				
 				return false;

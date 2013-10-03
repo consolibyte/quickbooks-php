@@ -160,14 +160,17 @@ class Quickbooks_MerchantService
 	 * @var string
 	 */
 	const NOTAVAILABLE = 'NotAvailable';
+	const AVS_NOTAVAILABLE = 'NotAvailable';
 	
 	/**
 	 * Constant to indicate success
 	 * @var string
 	 */
 	const PASS = 'Pass';
+	const AVS_PASS = 'Pass';
 	
 	const FAIL = 'Fail';
+	const AVS_FAIL = 'Fail';
 	
 	const SEVERITY_INFO = 'INFO';
 	
@@ -622,7 +625,7 @@ class Quickbooks_MerchantService
 	 * @param object $Creditcard
 	 * @return QuickBooks_MerchantService_Transaction
 	 */
-	protected function _doQBMS($type, $path, $xml, $CreditCard = null)
+	protected function _doQBMS($type, $path, $xml, $CreditCard = null, $Transaction = null)
 	{
 		$errnum = QuickBooks_MerchantService::ERROR_OK;
 		$errmsg = '';
@@ -682,11 +685,11 @@ class Quickbooks_MerchantService
 		// Create a transaction result 
 		$xml_errnum = 0;
 		$xml_errmsg = '';
-		if ($Transaction = $this->_parseResponse($type, $path, $response, $xml_errnum, $xml_errmsg))
+		if ($NewTransaction = $this->_parseResponse($type, $path, $response, $xml_errnum, $xml_errmsg))
 		{
 			if ($CreditCard instanceof QuickBooks_MerchantService_CreditCard)
 			{
-				$Transaction->setExtraData(
+				$NewTransaction->setExtraData(
 					$qbms_code, 
 					$qbms_message, 
 					$CreditCard->getNumber(true), 
@@ -696,8 +699,27 @@ class Quickbooks_MerchantService
 					$CreditCard->getAddress(), 
 					$CreditCard->getPostalCode());
 			}
+			else if ($Transaction instanceof QuickBooks_MerchantService_Transaction)
+			{
+				$tmp = $Transaction->toArray();
+
+				$NewTransaction->setExtraData(
+					$qbms_code, 
+					$qbms_message, 
+					$tmp['CreditCardTxnInfo_CreditCardTxnInputInfo_CreditCardNumber'],
+					$tmp['CreditCardTxnInfo_CreditCardTxnInputInfo_ExpirationMonth'],
+					$tmp['CreditCardTxnInfo_CreditCardTxnInputInfo_ExpirationYear'],
+					$tmp['CreditCardTxnInfo_CreditCardTxnInputInfo_NameOnCard'],
+					$tmp['CreditCardTxnInfo_CreditCardTxnInputInfo_CreditCardAddress'],
+					$tmp['CreditCardTxnInfo_CreditCardTxnInputInfo_CreditCardPostalCode']
+					);
+
+				$NewTransaction->setAVSStreet($tmp['CreditCardTxnInfo_CreditCardTxnResultInfo_AVSStreet']);
+				$NewTransaction->setAVSZip($tmp['CreditCardTxnInfo_CreditCardTxnResultInfo_AVSZip']);
+				$NewTransaction->setCardSecurityCodeMatch($tmp['CreditCardTxnInfo_CreditCardTxnResultInfo_CardSecurityCodeMatch']);
+			}
 			
-			return $Transaction;
+			return $NewTransaction;
 		}
 		
 		$this->_setError(QuickBooks_MerchantService::ERROR_XML, $xml_errnum . ': ' . $xml_errmsg);
@@ -1526,7 +1548,7 @@ class Quickbooks_MerchantService
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
 		
-		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_CAPTURE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardCaptureRs', $xml);
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_CAPTURE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardCaptureRs', $xml, null, $Transaction);
 	}
 	
 	/**
@@ -1573,7 +1595,8 @@ class Quickbooks_MerchantService
 		$xml .= '		<CustomerCreditCardRefundRq>' . QUICKBOOKS_CRLF;
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
 		
-		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, false, false);
+		//                                  $Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true
+		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, false,         false,                        true,                    true,                        false);
 		
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
 

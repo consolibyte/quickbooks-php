@@ -27,13 +27,6 @@ class QuickBooks_IPP_Service_SalesReceipt extends QuickBooks_IPP_Service
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $xml);
 	}
 	
-	
-	public function findById($Context, $realmID, $ID, $domain = null)
-	{
-		$xml = null;
-		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $ID, $domain, $xml);
-	}
-
 	/**
 	 * Add a new sales receipt to IDS/QuickBooks
 	 *
@@ -46,4 +39,9 @@ class QuickBooks_IPP_Service_SalesReceipt extends QuickBooks_IPP_Service
 	{
 		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $Object);
 	}	
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
+	}
 }

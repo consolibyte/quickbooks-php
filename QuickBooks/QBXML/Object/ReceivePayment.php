@@ -218,6 +218,16 @@ class QuickBooks_QBXML_Object_ReceivePayment extends QuickBooks_QBXML_Object
 		return $this->addListItem('AppliedToTxn', $obj);
 	}
 	
+	public function getAppliedToTxn($i)
+	{
+		return $this->getListItem('AppliedToTxn', $i);
+	}
+	
+	public function listAppliedToTxns()
+	{
+		return $this->getList('AppliedToTxn');
+	}
+
 	/**
 	 * Alias of {@link QuickBooks_Object_Invoice::getTxnDate()}
 	 */

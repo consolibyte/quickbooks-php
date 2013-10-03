@@ -24,4 +24,9 @@ class QuickBooks_IPP_Service_Account extends QuickBooks_IPP_Service
 	{
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ACCOUNT, $query, null, $page, $size);
 	}
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
+	}
 }

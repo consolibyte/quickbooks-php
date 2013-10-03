@@ -966,7 +966,96 @@ class QuickBooks_IPP
 	 * @param string $xml	
 	 * @return QuickBooks_IPP_Object										
 	 */
-	public function IDS($Context, $realmID, $resource, $optype, $xml = '', $ID = null)
+	public function IDS($Context, $realm, $resource, $optype, $xml = '', $ID = null)
+	{
+		$IPP = $Context->IPP();
+
+		switch ($IPP->version())
+		{
+			case QuickBooks_IPP_IDS::VERSION_2:
+				return $this->_IDS_v2($Context, $realm, $resource, $optype, $xml, $ID);
+			case QuickBooks_IPP_IDS::VERSION_3:
+				return $this->_IDS_v3($Context, $realm, $resource, $optype, $xml, $ID);
+			default:
+				return false;
+		}
+	}
+
+	protected function _IDS_v3($Context, $realm, $resource, $optype, $xml_or_query, $ID)
+	{
+		// All v3 URLs have the same baseURL
+		$this->baseURL(QuickBooks_IPP_IDS::URL_V3);
+
+		$post = false;
+		$xml = null;
+		$query = null;
+
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD)	
+		{
+			$post = true;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource);
+			$xml = $xml_or_query;
+		}
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
+		{
+			$post = false;
+			$url = $this->baseURL() . '/company/' . $realm . '/query?query=' . $xml_or_query;
+		}
+
+		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
+
+		//print('URL is [' . $url . ']');
+		//die('RESPONSE IS [' . $response . ']');
+
+		// Check for generic IPP errors and HTTP errors
+		if ($this->_hasErrors($response))
+		{
+			return false;
+		}
+		
+		$data = $this->_stripHTTPHeaders($response);
+
+		if (!$this->_ids_parser)
+		{
+			// If they don't want the responses parsed into objects, then just return the raw XML data
+			return $data;
+		}
+		
+		$start = microtime(true);
+
+		$Parser = $this->_parserInstance();
+		
+		$xml_errnum = null;
+		$xml_errmsg = null;
+		$err_code = null;
+		$err_desc = null;
+		$err_db = null;
+		
+		// Try to parse the responses into QuickBooks_IPP_Object_* classes
+		$parsed = $Parser->parseIDS($data, $optype, $this->flavor(), QuickBooks_IPP_IDS::VERSION_3, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+		
+		$this->_setLastDebug(__CLASS__, array( 'ids_parser_duration' => microtime(true) - $start ));
+		
+		if ($xml_errnum != QuickBooks_XML::ERROR_OK)
+		{
+			// Error parsing the returned XML?
+			$this->_setError(QuickBooks_IPP::ERROR_XML, 'XML parser said: ' . $xml_errnum . ': ' . $xml_errmsg);
+			
+			return false;
+		}
+		else if ($err_code != QuickBooks_IPP::ERROR_OK)
+		{
+			// Some other IPP error
+			$this->_setError($err_code, $err_desc, 'Database error code: ' . $err_db);
+			
+			return false;
+		}
+		
+		// Return the parsed response
+		return $parsed;		
+	}
+
+	protected function _IDS_v2($Context, $realmID, $resource, $optype, $xml, $ID)
 	{
 		if (substr($resource, 0, 6) == 'Report')
 		{
@@ -1045,15 +1134,30 @@ class QuickBooks_IPP
 				$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
 			}
 		}
+
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_SYNCSTATUS)
+		{
+			$url = $this->_baseurl . '/status/v2/' . $realmID;
+		}
 		else
 		{
 		    // Case matters on "syncActivity" #fun (everything else is lower cased)
-		    if (strtolower($resource) == 'syncactivity') $resource = 'syncActivity';
-		    else $resource = strtolower($resource); // everything else should be lowercase
+		    if (strtolower($resource) == 'syncactivity') 
+		    {
+		    	$resource = 'syncActivity';
+		    }
+		    else 
+		    {
+		    	$resource = strtolower($resource); // everything else should be lowercase
+		    }
+
 			$url = $this->_baseurl . '/' . $resource . '/' . $this->_ids_version . '/' . $realmID;
 		}
 		
+		//print('hitting URL [' . $url . ']');
+		//print($xml);
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
+		//print($response);
 		
 		// Check for generic IPP errors and HTTP errors
 		if ($this->_hasErrors($response))
@@ -1081,7 +1185,7 @@ class QuickBooks_IPP
 		$err_db = null;
 		
 		// Try to parse the responses into QuickBooks_IPP_Object_* classes
-		$parsed = $Parser->parseIDS($data, $optype, $this->flavor(), $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+		$parsed = $Parser->parseIDS($data, $optype, $this->flavor(), QuickBooks_IPP_IDS::VERSION_2, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
 		
 		$this->_setLastDebug(__CLASS__, array( 'ids_parser_duration' => microtime(true) - $start ));
 		
@@ -1164,30 +1268,44 @@ class QuickBooks_IPP
 		// @todo This should first check for HTTP errors
 		// ... 
 		
-		// Check for generic IPP XML node errors
-		$errcode = QuickBooks_XML::extractTagContents('errcode', $response);
-		$errtext = QuickBooks_XML::extractTagContents('errtext', $response);
-		$errdetail = QuickBooks_XML::extractTagContents('errdetail', $response);
-		
-		if ($errcode != QuickBooks_IPP::OK)
+		// v3 errors
+		if (false !== strpos($response, '<Error'))
 		{
-			// Has errors!
+			$errcode = QuickBooks_XML::extractTagAttribute('code', $response);
+			$errtext = QuickBooks_XML::extractTagContents('Message', $response);
+			$errdetail = QuickBooks_XML::extractTagContents('Detail', $response);
+
 			$this->_setError($errcode, $errtext, $errdetail);
-			return true;
+
+			return true;		// Yes, there's an error! 
 		}
-		
-		// Check for IDS XML error codes
-		$errorcode = QuickBooks_XML::extractTagContents('ErrorCode', $response);
-		$errordesc = QuickBooks_XML::extractTagContents('ErrorDesc', $response);
-		
-		if ($errorcode)
+		else 
 		{
-			$this->_setError($errorcode, $errordesc);
-			return true;
+			// Check for generic IPP XML node errors
+			$errcode = QuickBooks_XML::extractTagContents('errcode', $response);
+			$errtext = QuickBooks_XML::extractTagContents('errtext', $response);
+			$errdetail = QuickBooks_XML::extractTagContents('errdetail', $response);
+			
+			if ($errcode != QuickBooks_IPP::OK)
+			{
+				// Has errors!
+				$this->_setError($errcode, $errtext, $errdetail);
+				return true;
+			}
+			
+			// Check for IDS XML error codes
+			$errorcode = QuickBooks_XML::extractTagContents('ErrorCode', $response);
+			$errordesc = QuickBooks_XML::extractTagContents('ErrorDesc', $response);
+			
+			if ($errorcode)
+			{
+				$this->_setError($errorcode, $errordesc);
+				return true;
+			}
+			
+			// Does not have any errors
+			return false;
 		}
-		
-		// Does not have any errors
-		return false;
 	}
 	
 	/**
@@ -1263,26 +1381,41 @@ class QuickBooks_IPP
 			
 		//print('[' . $this->_flavor . '], ACTION [' . $action . ']');
 		
-		if ($type == QuickBooks_IPP::REQUEST_IPP)
+		if ($Context->IPP()->version() == QuickBooks_IPP_IDS::VERSION_3)
 		{
-			$headers['Content-Type'] = 'application/xml';
-			$headers['QUICKBASE-ACTION'] = $action;
-		}
-		else if ($type == QuickBooks_IPP::REQUEST_IDS) 
-		{
-			if ($this->_flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
+			if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD)
 			{
-				$headers['Content-Type'] = 'text/xml';
+				$headers['Content-Type'] = 'application/xml';
 			}
-			else if ($this->_flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
+			else
 			{
-				if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD or $action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
+				$headers['Content-Type'] = 'text/plain';
+			}
+		}
+		else
+		{
+			// Old v2 stuff
+			if ($type == QuickBooks_IPP::REQUEST_IPP)
+			{
+				$headers['Content-Type'] = 'application/xml';
+				$headers['QUICKBASE-ACTION'] = $action;
+			}
+			else if ($type == QuickBooks_IPP::REQUEST_IDS) 
+			{
+				if ($this->_flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
 				{
-					$headers['Content-Type'] = 'application/xml';
+					$headers['Content-Type'] = 'text/xml';
 				}
-				else
+				else if ($this->_flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
 				{
-					$headers['Content-Type'] = 'application/x-www-form-urlencoded';
+					if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD or $action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
+					{
+						$headers['Content-Type'] = 'application/xml';
+					}
+					else
+					{
+						$headers['Content-Type'] = 'application/x-www-form-urlencoded';
+					}
 				}
 			}
 		}
@@ -1294,6 +1427,23 @@ class QuickBooks_IPP
 			if ($this->_authcred['oauth_access_token'] and 
 				$this->_authcred['oauth_access_token_secret'])
 			{
+				/*
+				//// **** TEST STUFF **** ////
+				$url = 'https://api.twitter.com/1/statuses/update.json?include_entities=true';
+
+				$this->_authcred['oauth_consumer_key'] = 'xvz1evFS4wEEPTGEFPHBog';
+				$this->_authcred['oauth_consumer_secret'] = 'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw';
+
+				$this->_authcred['oauth_access_token'] = '370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb';
+				$this->_authcred['oauth_access_token_secret'] = 'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE';
+
+				$data = http_build_query(array('status' => 'Hello Ladies + Gentlemen, a signed OAuth request!'));
+				$post = true;
+				*/
+
+				//print('URL [' . $url . ']' . "\n");
+				//print('what is POST [' . $post . ']' . "\n");
+
 				// Sign the request
 				$OAuth = new QuickBooks_IPP_OAuth($this->_authcred['oauth_consumer_key'], $this->_authcred['oauth_consumer_secret']);
 				
@@ -1315,7 +1465,8 @@ class QuickBooks_IPP
 				}
 				
 				$signdata = null;
-				if ($data[0] == '<')
+				if ($data and 
+					$data[0] == '<')
 				{
 					// It's an XML body, we don't sign that
 					$signdata = null;
@@ -1340,10 +1491,13 @@ class QuickBooks_IPP
 
 				//print_r($signed);
 				
+				// Always use the header, regardless of POST or GET 
+				$headers['Authorization'] = $signed[3];
+
 				if ($post)
 				{
 					// Add the OAuth headers
-					$headers['Authorization'] = $signed[3];
+					//$headers['Authorization'] = $signed[3];
 					
 					// Remove any whitespace padding before checking
 					$data = trim($data);
@@ -1360,7 +1514,7 @@ class QuickBooks_IPP
 				else
 				{
 					// Replace the URL with the signed URL
-					$url = $signed[2];
+					//$url = $signed[2];
 				}
 			}
 		}
@@ -1375,6 +1529,9 @@ class QuickBooks_IPP
 		//print_r($headers);
 		//exit;
 		
+		//$url = str_replace("SELECT * FROM customer", "SELECT+*+FROM+customer", $url);
+		//print('NEW URL [' . $url . ']' . "\n\n");
+
 		// Our HTTP requestor
 		$HTTP = new QuickBooks_HTTP($url);
 

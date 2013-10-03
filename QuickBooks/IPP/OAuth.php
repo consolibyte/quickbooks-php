@@ -125,19 +125,23 @@ class QuickBooks_IPP_OAuth
 		print('NORMZLIZE 2 [' . $this->_normalize2($params) . ']' . "\n");
 		*/
 		
+		$normalized_url = '?' . $normalized;			// normalized URL
+
 		return array (
 			0 => $signature_and_basestring[0], 		// signature basestring
 			1 => $signature_and_basestring[1],		// signature
-			2 => $url . '?' . $normalized,			// normalized URL
+			2 => $normalized_url, 
 			3 => $this->_generateHeader($params, $normalized),	// header string
 			);
 	}
 
 	protected function _generateHeader($params, $normalized) 
 	{
+		// oauth_signature="' . $this->_escape($params['oauth_signature']) . '", 
+
 		$str = 'OAuth realm="", 
 			oauth_signature_method="' . $params['oauth_signature_method'] . '", 
-			oauth_signature="' . $this->_escape($params['oauth_signature']) . '", 
+			oauth_signature="' . $this->_escape($params['oauth_signature']) . '", 			
 			oauth_nonce="' . $params['oauth_nonce'] . '", 
 			oauth_timestamp="' . $params['oauth_timestamp'] . '", ';
 			
@@ -164,7 +168,7 @@ class QuickBooks_IPP_OAuth
 		}
 		else
 		{
-			return str_replace('%7E', '~', rawurlencode($str));
+			return str_replace('+', ' ', str_replace('%7E', '~', rawurlencode($str)));
 		}
 	}
 	
@@ -172,6 +176,7 @@ class QuickBooks_IPP_OAuth
 	{
 		//return 1326976195;
 		
+		//return 1318622958;
 		return time();
 	}
 
@@ -181,7 +186,8 @@ class QuickBooks_IPP_OAuth
 		
 		$tmp = str_split(QuickBooks_IPP_OAuth::NONCE);
 		shuffle($tmp);
-			
+		
+		//return 'kYjzVBB8Y0ZFabxSWbWovY3uYSQ2pTgmZeNu2VS4cg';
 		return substr(implode('', $tmp), 0, $len);
 	}
 		
@@ -237,8 +243,23 @@ class QuickBooks_IPP_OAuth
 		print('</pre>');
 		*/
 		
+		if (false !== ($pos = strpos($url, '?')))
+		{
+			$tmp = array();
+			parse_str(substr($url, $pos + 1), $tmp);
+
+			$params = array_merge($tmp, $params);
+
+			$url = substr($url, 0, $pos);
+		}
+
+		//print('url [' . $url . ']' . "\n");
+		//print_r($params);
+
 		$sbs = $this->_escape($method) . '&' . $this->_escape($url) . '&' . $this->_escape($this->_normalize($params));
 		
+		//print('sbs [' . $sbs . ']' . "\n");
+
 		// Which signature method? 
 		switch ($signature)
 		{
@@ -307,6 +328,8 @@ class QuickBooks_IPP_OAuth
 		{
 			$secret .= $this->_escape($params['oauth_secret']);
 		}
+
+		//print('generating signature from [' . $secret . ']' . "\n\n");
 		
 		return array(
 			0 => $sbs, 

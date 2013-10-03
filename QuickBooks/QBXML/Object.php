@@ -825,6 +825,13 @@ abstract class QuickBooks_QBXML_Object
 			$children = array();
 			switch ($Object->object())
 			{
+				case QUICKBOOKS_OBJECT_RECEIVEPAYMENT:
+
+					$children = array(
+						'AppliedToTxnRet' => array( 'QuickBooks_QBXML_Object_ReceivePayment_AppliedToTxn', 'addAppliedToTxn' ),
+						);
+
+					break;
 				case QUICKBOOKS_OBJECT_BILL:
 					
 					$children = array(

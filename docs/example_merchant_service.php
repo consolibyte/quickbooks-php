@@ -240,7 +240,8 @@ exit;
 
 
 
-// If you didn't want to 
+// If you didn't want to do a two-part authorize + capture, you can just do a 
+//	single call to ->charge() to charge the credit card right away. 
 if ($Transaction = $MS->charge($Card, $amount))
 {
 	print('Card charged!' . "\n");

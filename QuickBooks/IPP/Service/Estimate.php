@@ -45,4 +45,9 @@ class QuickBooks_IPP_Service_Estimate extends QuickBooks_IPP_Service
 		$xml = null;
 		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ESTIMATE, $ID, null, $xml);
 	}	
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
+	}
 }

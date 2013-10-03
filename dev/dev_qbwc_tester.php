@@ -1,15 +1,9 @@
 <?php
 
 
-$url = '';
-$username = '';
-$password = '';
-
-/*
-$url = '';
-$username = 'user584';
-$password = 'abcd1234';
-*/
+$url = 'http://dev.chargeover.com/signup/admin/?stage=QBWC/qbwc';
+$username = 'c787ef1210bd3c7da7d817923817d7d3';
+$password = '1299c41e';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -45,7 +39,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 
 
 
-exit;
+//exit;
 
 
 $max = 1;

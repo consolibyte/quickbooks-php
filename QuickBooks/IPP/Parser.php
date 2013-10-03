@@ -243,7 +243,71 @@ class QuickBooks_IPP_Parser
 		return $xml;
 	}
 	
-	public function parseIDS($xml, $optype, $flavor, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
+	public function parseIDS($xml, $optype, $flavor, $version, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
+	{
+		switch ($version)
+		{
+			case QuickBooks_IPP_IDS::VERSION_2:
+				return $this->_parseIDS_v2($xml, $optype, $flavor, $version, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+			case QuickBooks_IPP_IDS::VERSION_3:
+				return $this->_parseIDS_v3($xml, $optype, $flavor, $version, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+		}
+
+		return false;
+	}
+
+	protected function _parseIDS_v3($xml, $optype, $flavor, $version, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
+	{
+		// Parse it 
+		$Parser = new QuickBooks_XML_Parser($xml);
+		
+		// Initial to success
+		$xml_errnum = QuickBooks_XML::ERROR_OK;
+		$err_code = QuickBooks_IPP::ERROR_OK;
+		
+		// Try to parse the XML IDS response
+		$errnum = QuickBooks_XML::ERROR_OK;
+		$errmsg = null;
+
+		if ($Doc = $Parser->parse($errnum, $errmsg))
+		{
+			$Root = $Doc->getRoot();
+
+			switch ($optype)
+			{
+				case QuickBooks_IPP_IDS::OPTYPE_ADD:	// Parse an ADD type response
+					return QuickBooks_XML::extractTagContents('Id', $xml);
+				case QuickBooks_IPP_IDS::OPTYPE_QUERY: 
+
+					$list = array();
+
+					$List = $Root->getChildAt('IntuitResponse QueryResponse');
+					foreach ($List->children() as $Child)
+					{
+						$class = 'QuickBooks_IPP_Object_' . $Child->name();
+						$Object = new $class();
+						
+						foreach ($Child->children() as $Data)
+						{
+							$this->_push($Data, $Object);
+						}
+						
+						$list[] = $Object;
+					}
+
+					return $list;
+			}
+		}
+		else
+		{
+			$xml_errnum = $errnum;
+			$xml_errmsg = $errmsg;
+			
+			return false;
+		}
+	}	
+
+	protected function _parseIDS_v2($xml, $optype, $flavor, $version, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
 		// Massage it... *sigh*
 		$xml = $this->_massageQBOXML($xml, $optype);

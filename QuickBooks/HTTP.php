@@ -450,7 +450,6 @@ class QuickBooks_HTTP
 		$raw_body = $this->getRawBody();
 		
 		$headers = $this->getHeaders(true);
-		$headers[] = 'Content-Length: ' . strlen($raw_body);
 		
 		$this->_log('Opening connection to: ' . $url, QUICKBOOKS_LOG_VERBOSE);
 		
@@ -458,16 +457,25 @@ class QuickBooks_HTTP
 		
 		if ($method == QUICKBOOKS_HTTP_METHOD_POST)
 		{
+			$headers[] = 'Content-Length: ' . strlen($raw_body);
 			$params[CURLOPT_POST] = true;
 			$params[CURLOPT_POSTFIELDS] = $raw_body;
 		}
-		
+
 		$query = '';
 		if (count($this->_get))
 		{
 			$query = '?' . http_build_query($this->_get);
 		}
-		
+
+		if ($qs = parse_url($url, PHP_URL_QUERY) and 
+			false !== strpos($qs, ' '))
+		{
+			$url = str_replace($qs, str_replace(' ', '+', $qs), $url);
+		}
+
+		//print(' [[[ ' . parse_url($url, PHP_URL_QUERY) . '  /  ' . $url . ' ]]] ');
+
 		$params[CURLOPT_RETURNTRANSFER] = true;
 		$params[CURLOPT_URL] = $url . $query;
 		//$params[CURLOPT_TIMEOUT] = 15;
@@ -543,6 +551,10 @@ class QuickBooks_HTTP
 		//print('[[request ' . $request . ']]' . "\n\n\n");
 		//print('[[resonse ' . $response . ']]' . "\n\n\n\n\n");
 		
+		//print_r($params);
+		//print_r(curl_getinfo($ch));
+		//print_r($headers);
+
 		$this->_last_response = $response;
 		$this->_log('HTTP response: ' . substr($response, 0, 500) . '...', QUICKBOOKS_LOG_VERBOSE);
 		
@@ -550,7 +562,7 @@ class QuickBooks_HTTP
 		{
 			$errnum = curl_errno($ch);
 			$errmsg = curl_error($ch);
-			
+
 			$this->_log('CURL error: ' . $errnum . ': ' . $errmsg, QUICKBOOKS_LOG_NORMAL);
 			
 			return false;

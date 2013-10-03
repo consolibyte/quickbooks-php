@@ -192,6 +192,11 @@ class QuickBooks_MerchantService_Transaction
 		return $this->_avsstreet;
 	}
 
+	public function setAVSStreet($avsstreet)
+	{
+		$this->_avsstreet = $avsstreet;
+	}
+
 	/**
 	 * Get the postal code verification (AVS) status of the transaction
 	 * 
@@ -201,10 +206,20 @@ class QuickBooks_MerchantService_Transaction
 	{
 		return $this->_avszip;
 	}
+
+	public function setAVSZip($avszip)
+	{
+		return $this->_avszip = $avszip;
+	}
 	
 	public function getCardSecurityCodeMatch()
 	{
 		return $this->_cvvmatch;
+	}
+
+	public function setCardSecurityCodeMatch($cvvmatch)
+	{
+		return $this->_cvvmatch = $cvvmatch;
 	}
 	
 	public function getReconBatchID()
@@ -394,12 +409,12 @@ class QuickBooks_MerchantService_Transaction
 		
 		$arr = array(
 			'CreditCardTxnInputInfo' => array(
-				'CreditCardNumber' => '', 
-				'ExpirationMonth' => '', 
-				'ExpirationYear' => '', 
-				'NameOnCard' => '', 
-				'CreditCardAddress' => '', 
-				'CreditCardPostalCode' => '', 
+				'CreditCardNumber' => $this->_creditcardnumber, 
+				'ExpirationMonth' => $this->_expmonth, 
+				'ExpirationYear' => $this->_expyear, 
+				'NameOnCard' => $this->_nameoncard, 
+				'CreditCardAddress' => $this->_address, 
+				'CreditCardPostalCode' => $this->_postalcode, 
 				// <!-- TransactionMode may have one of the following values: CardNotPresent [DEFAULT], CardPresent -->
 				// TransactionMode	// CardNotPresent, CardPresent
 				'CreditCardTxnType' => $this->_type, 
