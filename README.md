@@ -22,11 +22,11 @@ If you have questions, suggestions, or find a bug, the absolute best way to get 
 
 You will find examples in the docs/ folder. There is additional documentation and additional examples on our legacy and new wikis:  
 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks     (legacy)  
-	http://www.consolibyte.com/docs/index.php                (new wiki)  
+	http://www.consolibyte.com/docs/index.php/QuickBooks     (new wiki)  
 
-If you are using the Web Connector, make sure you read the [quick start guide](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)   
+If you are using the Web Connector, make sure you read the [quick start guide for the Web Connector](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)   
 
-Please remember that this is an open-source project! Donations, contributions, and general thank-yous are all very appreciated! 
+If you are using the Intuit Partner Platform/Intuit Anywhere, make sure you read the [quick start guide for IPP/IA] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
 
 -------------------------------------
 ###Keith Palmer###
