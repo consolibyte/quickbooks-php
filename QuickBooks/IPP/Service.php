@@ -524,7 +524,8 @@ abstract class QuickBooks_IPP_Service
 		//	'SyncToken', 
 			'MetaData', 
 			'ExternalKey', 
-			'Synchronized', 
+			'Synchronized',
+			'CustomField',  
 		//	'PartyReferenceId', 
 		//	'SalesTaxCodeId', 		// @todo These are customer/vendor specific and probably shouldn't be here
 		//	'SalesTaxCodeName',

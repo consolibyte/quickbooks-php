@@ -1079,6 +1079,11 @@ class QuickBooks_IPP
 			$resource = 'time-activity';
 		}
 		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
+			$resource == QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY)
+		{
+			$resource = 'journal-entries';
+		}
+		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and 
 			$resource == QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENT)
 		{
 			$resource = 'bill-payment';

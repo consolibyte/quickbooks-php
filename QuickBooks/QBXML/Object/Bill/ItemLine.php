@@ -18,7 +18,7 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 /**
  * 
  */
-class QuickBooks_Object_QBXML_Bill_ItemLine extends QuickBooks_QBXML_Object
+class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_Check_ItemLine object
