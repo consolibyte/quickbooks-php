@@ -124,8 +124,13 @@ class QuickBooks_IPP_OAuth
 		print('NORMALIZE 1 [' . $normalized . ']' . "\n");
 		print('NORMZLIZE 2 [' . $this->_normalize2($params) . ']' . "\n");
 		*/
+
+		if (false !== ($pos = strpos($url, '?')))
+		{
+			$url = substr($url, 0, $pos);
+		}
 		
-		$normalized_url = '?' . $normalized;			// normalized URL
+		$normalized_url = $url . '?' . $normalized;			// normalized URL
 
 		return array (
 			0 => $signature_and_basestring[0], 		// signature basestring
