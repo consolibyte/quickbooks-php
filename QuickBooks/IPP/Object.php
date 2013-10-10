@@ -46,7 +46,7 @@ class QuickBooks_IPP_Object
 	 */ 
 	public function getXPath($xpath)
 	{
-		$str = $this->asIDSXML();
+		$str = $this->asXML();
 		
 		//print('[[' . $str . ']]');
 		
@@ -154,9 +154,7 @@ class QuickBooks_IPP_Object
 			$field = substr($name, 3);
 			
 			//print('getting field: [' . $field . ']' . "\n");
-			//print_r($this->_data);
-			
-			
+
 			if (isset($this->_data[$field]))
 			{
 				if (isset($args[0]) and 
@@ -342,7 +340,7 @@ class QuickBooks_IPP_Object
 		}
 		else
 		{
-			return $this->asIDSXML($indent, $parent, $optype, $flavor);
+			return $this->_asXML_v2($indent, $parent, $optype, $flavor);
 		}
 	}
 
@@ -371,24 +369,6 @@ class QuickBooks_IPP_Object
 					{
 						$xml .= $svalue->_asXML_v3($indent + 1, $key, null, $flavor);
 					}
-					/*else if (substr($key, -2, 2) == 'Id')
-					{
-						$for_qbxml = false;
-						
-						$tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
-						
-						if ($tmp[0])
-						{
-							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
-						}
-						else
-						{
-							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
-						}
-						
-						$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
-						$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;						
-					}*/
 					else
 					{
 						//$for_qbxml = false;
@@ -406,24 +386,24 @@ class QuickBooks_IPP_Object
 					}
 				}
 			}
-			/*else if (substr($key, -2, 2) == 'Id')
-			{
-				$for_qbxml = false;
-				
-				$tmp = QuickBooks_IPP_IDS::parseIdType($value);
-				
-				if ($tmp[0])
-				{
-					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
-				}
-				else
-				{
-					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
-				}
-				
-				$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
-				$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
-			}*/
+            else if (substr($key, -2, 2) == 'Id')
+            {
+                $for_qbxml = false;
+
+                $tmp = QuickBooks_IPP_IDS::parseIdType($value);
+
+                if ($tmp[0])
+                {
+                    $xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+                }
+                else
+                {
+                    $xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+                }
+
+                $xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
+                $xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+            }
 			else
 			{
 				$for_qbxml = false;
@@ -444,7 +424,7 @@ class QuickBooks_IPP_Object
 		return $xml;
 	}
 	
-	public function asIDSXML($indent = 0, $parent = null, $optype = null, $flavor = null)
+	protected function _asXML_v2($indent = 0, $parent = null, $optype = null, $flavor = null)
 	{
 		// We're not going to actually change the data, just change a copy of it
 		$data = $this->_data;

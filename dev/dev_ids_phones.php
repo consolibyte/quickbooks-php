@@ -35,4 +35,4 @@ $Phone->setFreeFormNumber('1-203-687-5504');
 
 $Customer->addPhone($Phone);
 
-print($Customer->asIDSXML());
+print($Customer->asXML());

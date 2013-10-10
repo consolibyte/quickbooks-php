@@ -996,11 +996,15 @@ class QuickBooks_IPP
 		$xml = null;
 		$query = null;
 
-		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD)	
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)
 		{
 			$post = true;
 			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource);
 			$xml = $xml_or_query;
+
+            if ($optype == QuickBooks_IPP_IDS::OPTYPE_MOD) {
+                $url .= '?operation=update';
+            }
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
 		{

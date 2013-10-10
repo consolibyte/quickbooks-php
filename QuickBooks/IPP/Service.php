@@ -559,7 +559,7 @@ abstract class QuickBooks_IPP_Service
 		//	'OpenBalanceDate', 
 		//	'OpenBalance', 
 			);
-		
+
 		foreach ($unsets as $unset)
 		{
 			$Object->remove($unset);
@@ -578,14 +578,14 @@ abstract class QuickBooks_IPP_Service
 			$xml .= '	xsi:schemaLocation="http://www.intuit.com/sb/cdm/' . $IPP->version() . ' ./RestDataFilter.xsd ">' . QUICKBOOKS_CRLF;
 			//$xml .= '	<OfferingId>ipp</OfferingId>' . QUICKBOOKS_CRLF;
 			$xml .= '	<ExternalRealmId>' . $realmID . '</ExternalRealmId>' . QUICKBOOKS_CRLF;
-			$xml .= '' . $Object->asIDSXML(1, null, QuickBooks_IPP_IDS::OPTYPE_MOD);
+			$xml .= '' . $Object->asXML(1, null, QuickBooks_IPP_IDS::OPTYPE_MOD, $IPP->flavor(), $IPP->version());
 			$xml .= '</Mod>';
 		}
 		else
 		{
 			$xml = '';
 			$xml .= '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' . QUICKBOOKS_CRLF;
-			$xml .= $Object->asIDSXML(0, null, QuickBooks_IPP_IDS::OPTYPE_MOD, $IPP->flavor());
+			$xml .= $Object->asXML(0, null, QuickBooks_IPP_IDS::OPTYPE_MOD, $IPP->flavor(), $IPP->version());
 		}
 			
 		// Send the data to IPP 
