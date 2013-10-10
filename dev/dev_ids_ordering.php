@@ -24,7 +24,7 @@ $SalesReceipt = new QuickBooks_IPP_Object_SalesReceipt();
 
 $SalesReceipt->addHeader($Header);
 
-print($SalesReceipt->asIDSXML(null, null, QuickBooks_IPP::IDS_ADD));
+print($SalesReceipt->asXML(null, null, QuickBooks_IPP::IDS_ADD));
 
 print("\n\n");
 print('DATE OF TRANSACTION: [' . $Header->getTxnDate('M. j, Y') . ']');
