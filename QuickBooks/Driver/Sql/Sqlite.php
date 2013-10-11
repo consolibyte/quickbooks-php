@@ -1,7 +1,7 @@
 <?php
 
 /**
- * MySQL backend for the QuickBooks SOAP server
+ * SQLite backend for the QuickBooks SOAP server
  * 
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
@@ -13,8 +13,8 @@
  * SOAP server and your application. The SOAP server stores queue requests 
  * using the backend. 
  * 
- * This backend driver is for a MySQL database. You can use the 
- * {@see QuickBooks_Utilities} class to initalize the five tables in the MySQL 
+ * This backend driver is for a SQLite database. You can use the
+ * {@see QuickBooks_Utilities} class to initalize the five tables in the SQLite
  * database. 
  * 
  * @author Keith Palmer <keith@consolibyte.com>
@@ -65,7 +65,7 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX'))
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_QUEUETABLE'))
 {
 	/**
-	 * MySQL table name to store queued requests in
+	 * SQLite table name to store queued requests in
 	 * 
 	 * @var string
 	 */
@@ -75,7 +75,7 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_QUEUETABLE'))
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_USERTABLE'))
 {
 	/**
-	 * MySQL table name to store usernames/passwords for the QuickBooks SOAP server
+	 * SQLite table name to store usernames/passwords for the QuickBooks SOAP server
 	 * 
 	 * @var string
 	 */
@@ -153,12 +153,12 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_CONNECTIONTABLE'))
 }
 
 /**
- * QuickBooks MySQL back-end driver
+ * QuickBooks SQLite back-end driver
  */
 class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 {
 	/**
-	 * MySQL connection resource
+	 * SQLite connection resource or object
 	 * 
 	 * @var resource
 	 */
@@ -184,54 +184,54 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 	protected $_database;
 	
 	/**
-	 * Create a new MySQL back-end driver
+	 * Create a new SQLite back-end driver
 	 * 
-	 * @param string $dsn		A DSN-style connection string (i.e.: "mysql://your-mysql-username:your-mysql-password@your-mysql-host:port/your-mysql-database")
+	 * @param string $dsn		A DSN-style connection string (sqlite:/full/path/to/database.sqlite)
 	 * @param array $config		Configuration options for the driver (not currently supported)
 	 */
 	public function __construct($dsn_or_conn, $config)
 	{
 		$config = $this->_defaults($config);
 		$this->_log_level = (int) $config['log_level'];
-		
+
 		if (is_resource($dsn_or_conn))
 		{
 			$this->_conn = $dsn_or_conn;
-		}
+		} elseif (is_object($dsn_or_conn) && $dsn_or_conn instanceof SQLite3) {
+            $this->_conn = $dsn_or_conn;
+        }
 		else
 		{
 			$trim = false;
-			if (false === strpos($dsn_or_conn, ':///'))
-			{
-				$dsn_or_conn = str_replace('://', '://localhost/', $dsn_or_conn);
-				$trim = true;
-			}
-			
-			$defaults = array(
-				'scheme' => 'mysql', 
-				'host' => 'localhost', 
-				'port' => 3306, 
-				'user' => 'root', 
-				'pass' => '', 
-				'path' => '/quickbooks',
-				);
-			
-			$parse = QuickBooks_Utilities::parseDSN($dsn_or_conn, $defaults);
-			
+
+			$parse = QuickBooks_Utilities::parseDSN($dsn_or_conn, array());
+
 			if ($trim)
 			{
 				$parse['path'] = substr($parse['path'], 1);
 			}
 			
-			//print_r($parse);
-			//exit;
-			
-			$this->_connect($parse['host'], $parse['port'], $parse['user'], $parse['pass'], $parse['path'], $config['new_link'], $config['client_flags']);
+			$this->_connect($parse['path'], $config['new_link']);
 		}
 		
 		// Call the parent constructor too
 		parent::__construct($dsn_or_conn, $config);
 	}
+
+    /**
+     * Rewinds to the first record of a result set.
+     *
+     * @param resource $res
+     *
+     * @return boolean  true if successful, false otherwise
+     */
+    public function rewind($res) {
+        if (is_object($res)) {
+            return $res->reset();
+        } else {
+            return sqlite_rewind($res);
+        }
+    }
 	
 	/**
 	 * Merge an array of configuration options with the defaults
@@ -251,22 +251,20 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 	}
 	
 	/**
-	 * Tell whether or not the SQL driver has been initialized
+	 * Check to see if the database has been initialized. (i.e. all required
+     * tables already exist).
 	 * 
-	 * @return boolean
+	 * @return boolean  true if all required tables exist in the database
 	 */
 	protected function _initialized()
 	{
 		$required = array(
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_IDENTTABLE) => false, 
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) => false, 
+			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) => false,
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_USERTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_RECURTABLE) => false, 
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) => false, 
+			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) => false,
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_LOGTABLE) => false, 
 			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONFIGTABLE) => false, 
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE) => false, 
-			$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE) => false, 
 			);
 		
 		$errnum = 0;
@@ -275,7 +273,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 		while ($arr = $this->_fetch($res))
 		{
 			$table = $arr['tbl_name'];
-			
+
 			if (isset($required[$table]))
 			{
 				$required[$table] = true;
@@ -296,20 +294,32 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 	/**
 	 * Connect to the database
 	 * 
-	 * @param string $host				The hostname the database is located at
-	 * @param integer $port				The port the database is at
-	 * @param string $user				Username for connecting
-	 * @param string $pass				Password for connecting
-	 * @param string $db				The database name
+	 * @param string $db				Absolute path to the database file.
 	 * @param boolean $new_link			TRUE for establishing a new link to the database, FALSE to re-use an existing one
-	 * @param integer $client_flags		Database connection flags (see the PHP/MySQL documentation)
 	 * @return boolean
 	 */
-	protected function _connect($host, $port, $user, $pass, $db, $new_link, $client_flags)
+	protected function _connect($db, $new_link)
 	{
-		$this->_conn = sqlite_open($db) or die('db: ' . $db . '');
-			
-		return true;
+        if ($new_link) {
+            if(function_exists('sqlite_popen')) {
+                $this->_conn = sqlite_popen($db);
+
+                return $this->_conn != false;
+            }
+        }
+
+        // if either $new_link is false or popen isn't available, failback.
+        if (function_exists('sqlite_open')) {
+            $this->_conn = sqlite_open($db);
+            return $this->_conn != false;
+        } else {
+            try {
+                $this->_conn = new SQLite3($db);
+                return true;
+            } catch (Exception $ex) {
+                return false;
+            }
+        }
 	}
 	
 	/**
@@ -320,7 +330,11 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 	 */
 	protected function _fetch($res)
 	{
-		return sqlite_fetch_array($res, SQLITE_ASSOC);
+        if (is_resource($res)) {
+            return sqlite_fetch_array($res, SQLITE_ASSOC);
+        } else {
+            return $res->fetchArray(SQLITE3_ASSOC);
+        }
 	}
 	
 	/**
@@ -346,31 +360,39 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 		{
 			// @todo Should this be implemented...?
 		}
-		
-		$res = sqlite_query($this->_conn, $sql);
-		
+
+        if (is_resource($this->_conn)) {
+            $res = sqlite_query($this->_conn, $sql);
+        } else {
+		    $res = $this->_conn->query($sql);
+        }
+
 		if (!$res)
 		{
-			//$errnum = mysql_errno($this->_conn);
-			//$errmsg = mysql_error($this->_conn);
-			$errnum = -99;
-			$errmsg = 'SQLLite Query Error';
-			
-			//print($sql);
-			
+            if (is_resource($this->_conn)) {
+                $errnum = sqlite_last_error($this->_conn);
+                $errmsg = sqlite_error_string($errnum);
+            } else {
+                $errnum = $this->_conn->lastErrorCode();
+                $errmsg = $this->_conn->lastErrorMsg();
+            }
+
 			trigger_error('Error Num.: ' . $errnum . "\n" . 'Error Msg.:' . $errmsg . "\n" . 'SQL: ' . $sql, E_USER_ERROR);
+
 			return false;
 		}
 		
 		return $res;
 	}
-	
-	/**
-	 * 
-	 * 
-	 * 
-	 */
-	protected function _fields($table)
+
+    /**
+     * Returns a list of fieldnames for the specified table in the database
+     *
+     * @param string $table    The name of the table whose fields are to be retrieved
+     *
+     * @return array           Array of the fields in the named table
+     */
+    protected function _fields($table)
 	{
 		$sql = "SHOW FIELDS FROM " . $table;
 		
@@ -401,25 +423,31 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 	}*/
 	
 	/**
-	 * Tell the number of rows the last run query affected
+	 * Returns the number of rows affected by the most recent query.
 	 * 
-	 * @return integer
+	 * @return integer  The number of rows affected by the most recent query.
 	 */
 	public function affected()
 	{
-		//return mysql_affected_rows($this->_conn);
-		return 0;
+        if (is_resource($this->_conn)) {
+            return sqlite_changes($this->_conn);
+        } else {
+            return $this->_conn->changes();
+        }
 	}
 	
 	/**
-	 * Tell the last inserted AUTO_INCREMENT value
+	 * Returns the last inserted AUTO_INCREMENT value
 	 * 
-	 * @return integer
+	 * @return integer AUTO_INCREMENT value of the last row inserted.
 	 */
 	public function last()
 	{
-		//return mysql_insert_id($this->_conn);
-		return sqlite_last_insert_rowid($this->_conn);
+        if (is_resource($this->_conn)) {
+            return sqlite_last_insert_rowid($this->_conn);
+        } else {
+            return $this->_conn->lastInsertRowID();
+        }
 	}
 	
 	/**
@@ -459,12 +487,15 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 	 * Escape a string for the database
 	 * 
 	 * @param string $str
-	 * @return string
+	 * @return string   Properly escaped string for use with SQLite
 	 */
 	protected function _escape($str)
 	{
-		//return mysql_real_escape_string($str, $this->_conn);
-		return sqlite_escape_string($str);
+        if (function_exists('sqlite_escape_string')) {
+            return sqlite_escape_string($str);
+        } else {
+            return SQLite3::escapeString($str);
+        }
 	}
 	
 	/**
@@ -475,12 +506,15 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 	 */
 	protected function _count($res)
 	{
-		//return mysql_num_rows($res);
-		return sqlite_num_rows($res);
+        if (is_resource($res)) {
+            return sqlite_num_rows($res);
+        } else {
+            return $res->numRows();
+        }
 	}
 	
 	/**
-	 * Override for the default SQL generation functions, MySQL-specific field generation function
+	 * Override for the default SQL generation functions, SQLite-specific field generation function
 	 * 
 	 * @param string $name
 	 * @param array $def
@@ -554,7 +588,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 	}
 	
 	/**
-	 * Map a default SQL table name to a MySQL table name
+	 * Map a default SQL table name to a SQLite table name
 	 * 
 	 * @param string
 	 * @return string
