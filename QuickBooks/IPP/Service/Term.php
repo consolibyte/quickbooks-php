@@ -25,4 +25,14 @@ class QuickBooks_IPP_Service_Term extends QuickBooks_IPP_Service
 	{
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TERM, $query, null, $page, $size);
 	}
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
+	}
+
+	public function add($Context, $realm, $Object)
+	{
+		return parent::_add($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_TERM, $Object);
+	}
 }

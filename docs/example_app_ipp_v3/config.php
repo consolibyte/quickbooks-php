@@ -17,7 +17,7 @@ ini_set('display_errors', 1);
 require_once dirname(__FILE__) . '/../../QuickBooks.php';
 
 // Your OAuth token (Intuit will give you this when you register an Intuit Anywhere app)
-$token = '831327bcb3657b420bbb024b2db487884b8c';
+$token = '83e26868b5134b49beb97d8bd2a3e57755ca';
 
 // Your OAuth consumer key and secret (Intuit will give you both of these when you register an Intuit app)
 // 
@@ -27,22 +27,22 @@ $token = '831327bcb3657b420bbb024b2db487884b8c';
 // 
 // The OAuth request/access tokens will be encrypted and stored for you by the 
 //	PHP DevKit IntuitAnywhere classes automatically. 
-$oauth_consumer_key = 'qyprdo4PfQzZLpmFtXBRHnfQlUJx0E';
-$oauth_consumer_secret = '3cPAnK8LXVr1KIXPGZmRAcqYJzwOlzoBJlPnCtF0';
+$oauth_consumer_key = 'qyprdlGJ4gWv4sMW0syilH2o4KirQe';
+$oauth_consumer_secret = '49ou99QiG47KhvY6AaMPSnHhXXNMAJxLv7QXNm4L';
 
 // This is the URL of your OAuth auth handler page
-$quickbooks_oauth_url = 'http://example.com/trunk/docs/example_app_ipp_v3/oauth.php';
+$quickbooks_oauth_url = 'http://quickbooks.v3.com:8888/quickbooks-php/docs/example_app_ipp_v3/oauth.php';
 
 // This is the URL to forward the user to after they have connected to IPP/IDS via OAuth
-$quickbooks_success_url = 'http://example.com/trunk/docs/example_app_ipp_v3/success.php';
+$quickbooks_success_url = 'http://quickbooks.v3.com:8888/quickbooks-php/docs/example_app_ipp_v3/success.php';
 
 // This is the menu URL script 
-$quickbooks_menu_url = 'http://example.com/trunk/docs/example_app_ipp_v3/menu.php';
+$quickbooks_menu_url = 'http://quickbooks.v3.com:8888/quickbooks-php/docs/example_app_ipp_v3/menu.php';
 
 // This is a database connection string that will be used to store the OAuth credentials 
 // $dsn = 'pgsql://username:password@hostname/database';
 // $dsn = 'mysql://username:password@hostname/database';
-$dsn = 'mysql://example:ar4pT4rUbNsvh67w@localhost/example_app_ipp_v3';		
+$dsn = 'mysqli://root:root@localhost/example_app_ipp_v3';		
 
 // You should set this to an encryption key specific to your app
 $encryption_key = 'bcde1234';

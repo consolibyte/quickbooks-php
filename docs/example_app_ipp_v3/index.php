@@ -4,6 +4,28 @@ require_once dirname(__FILE__) . '/config.php';
 
 require_once dirname(__FILE__) . '/views/header.tpl.php';
 
+$examples = array();
+
+$dh = opendir(dirname(__FILE__));
+while (false !== ($file = readdir($dh)))
+{
+	if (substr($file, 0, 7) != 'example') 
+	{ 
+		continue; 
+	}
+
+	$tmp = explode('_', $file);
+	switch ($tmp[2])
+	{
+		case 'add.php':
+			$examples[$file] = 'Add a ' . $tmp[1];
+			break;
+		case 'query.php':
+			$examples[$file] = 'Query for ' . $tmp[1];
+			break;
+	}
+}
+
 ?>
 
 <div>
@@ -22,9 +44,9 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 			<h2>Example QuickBooks Stuff</h2>
 
 			<ul>
-				<li><a href="example_customer_query.php">Show me my QuickBooks customers</a></li>
-				<li><a href="example_customer_add.php">Add a customer to QuickBooks</a></li>
-				<li><a href="example_invoice_query.php">Show me my QuickBooks invoices</a></li>
+				<?php foreach ($examples as $file => $title): ?>
+					<li><a href="<?php print($file); ?>"><?php print($title); ?></a></li>
+				<?php endforeach; ?>
 			</ul>
 			<ul>
 				<li><a href="disconnect.php">Disconnect from QuickBooks</a></li>
