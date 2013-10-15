@@ -331,8 +331,19 @@ class QuickBooks_IPP_Object
 			}
 		}
 	}
-	
-	public function asXML($indent = 0, $parent = null, $optype = null, $flavor = null, $version = QuickBooks_IPP_IDS::VERSION_2)
+
+    /**
+     * Returns an XML representation of this object formatted for the specified IDS flavor and version.
+     *
+     * @param int         $indent   Indent level for this object
+     * @param string|null $parent   Name of the parent node
+     * @param string|null $optype   Operation being performed
+     * @param string|null $flavor   Targeted IPP flavor
+     * @param string      $version  Targeted IDS version
+     *
+     * @return string
+     */
+    public function asXML($indent = 0, $parent = null, $optype = null, $flavor = null, $version = QuickBooks_IPP_IDS::VERSION_2)
 	{
 		if ($version == QuickBooks_IPP_IDS::VERSION_3)
 		{
@@ -554,4 +565,20 @@ class QuickBooks_IPP_Object
 		
 		return $xml;
 	}
+
+    /**
+     * Returns an IDS XML v2 representation of this instance.
+     *
+     * @param int         $indent   The indent level
+     * @param string|null $parent   The name of the parent node
+     * @param string|null $optype   The opreation type being performed.
+     * @param string|null $flavor   Whether targeting QBO or QBD
+     *
+     * @return string     The XML representation of this object
+     * @deprecated  No longer recommended.  Please use asXML instead as it provide v2/v3 support.
+     * @see asXML
+     */
+    public function asIDSXML($indent = 0, $parent = null, $optype = null, $flavor = null) {
+        return $this->_asXML_v2($indent, $parent, $optype, $flavor);
+    }
 }
