@@ -49,7 +49,7 @@ if ($Context = $IPP->context())
 	}
 	else
 	{
-		print($VendorService->lastError());
+		print($VendorService->lastError($Context));
 	}
 
 	/*

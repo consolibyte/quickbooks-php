@@ -31,9 +31,9 @@ class QuickBooks_IPP_Object
 	 * 
 	 *
 	 */
-	public function __construct()
+	public function __construct($data = array())
 	{
-		$this->_data = array();
+		$this->_data = $data;
 	}
 	
 	/**
@@ -57,7 +57,7 @@ class QuickBooks_IPP_Object
 		// This is our node value
 		$cur = current($retr);
 		
-		if ($cur)
+		if (is_object($cur))
 		{
 			// Check if it's an id type, in which case we need to build an IdType return string
 			$attrs = $cur->attributes();
@@ -397,6 +397,11 @@ class QuickBooks_IPP_Object
 						//$xml .= QuickBooks_XML::encode($value, $for_qbxml);
 						//$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
 						
+						if (substr($key, -3, 3) == 'Ref' and $svalue{0} == '{')
+						{
+							$svalue = trim($svalue, '{}-');
+						}
+
 						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
 					}
 				}
@@ -422,6 +427,11 @@ class QuickBooks_IPP_Object
 			else
 			{
 				$for_qbxml = false;
+				
+				if (substr($key, -3, 3) == 'Ref' and $value{0} == '{')
+				{
+					$value = trim($value, '{}-');
+				}
 				
 				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
 				$xml .= QuickBooks_XML::encode($value, $for_qbxml);

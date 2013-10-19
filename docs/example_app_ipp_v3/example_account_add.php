@@ -48,7 +48,7 @@ if ($Context = $IPP->context())
 	}
 	else
 	{
-		print($AccountService->lastError());
+		print($AccountService->lastError($Context));
 	}
 
 	/*

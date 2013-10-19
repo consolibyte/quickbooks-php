@@ -48,7 +48,7 @@ if ($Context = $IPP->context())
 	}
 	else
 	{
-		print($ItemService->lastError());
+		print($ItemService->lastError($Context));
 	}
 
 	

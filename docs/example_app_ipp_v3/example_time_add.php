@@ -52,7 +52,7 @@ if ($Context = $IPP->context())
 	}
 	else
 	{
-		print($TimeActivityService->lastError());
+		print($TimeActivityService->lastError($Context));
 	}
 
 	print('<br><br><br><br>');

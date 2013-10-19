@@ -46,7 +46,7 @@ if ($Context = $IPP->context())
 	}
 	else
 	{
-		print($ClassService->lastError());
+		print($ClassService->lastError($Context));
 	}
 
 	

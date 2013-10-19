@@ -395,7 +395,7 @@ class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
 	 */
 	public function affected()
 	{
-		return $res->affected_rows;
+		return $this->_conn->affected_rows;
 	}
 
 	/**
