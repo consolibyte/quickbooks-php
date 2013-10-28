@@ -36,7 +36,7 @@ if ($Context = $IPP->context())
 	
 	$ItemService = new QuickBooks_IPP_Service_Term();
 	
-	$items = $ItemService->query($Context, $realm, "SELECT * FROM item");
+	$items = $ItemService->query($Context, $realm, "SELECT * FROM Item");
 	
 	foreach ($items as $Item)
 	{

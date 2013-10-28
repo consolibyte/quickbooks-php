@@ -36,7 +36,7 @@ if ($Context = $IPP->context())
 	
 	$TermService = new QuickBooks_IPP_Service_Term();
 	
-	$terms = $TermService->query($Context, $realm, "SELECT * FROM term");
+	$terms = $TermService->query($Context, $realm, "SELECT * FROM Term");
 
 	//print_r($terms);
 	
