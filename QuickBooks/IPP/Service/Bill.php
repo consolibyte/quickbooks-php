@@ -26,4 +26,19 @@ class QuickBooks_IPP_Service_Bill extends QuickBooks_IPP_Service
 		$xml = null;
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_BILL, $xml);
 	}
+
+	public function add($Context, $realm, $Object)
+	{
+		return parent::_add($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_BILL, $Object);
+	}
+	
+	public function update($Context, $realm, $IDType, $Object)
+	{
+		return parent::_update($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_BILL, $Object, $IDType);
+	}
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
+	}
 }

@@ -34,32 +34,29 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
+	$ClassService = new QuickBooks_IPP_Service_Class();
 	
-	$Customer = new QuickBooks_IPP_Object_Customer();
-	$Customer->setTitle('Mr');
-	$Customer->setGivenName('Keith');
-	$Customer->setMiddleName('R');
-	$Customer->setFamilyName('Palmer');
-	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
+	$Class = new QuickBooks_IPP_Object_Class();
+	
+	$Class->setName('My Class');
 
-	if ($resp = $CustomerService->add($Context, $realm, $Customer))
+	if ($resp = $ClassService->add($Context, $realm, $Class))
 	{
-		print('Our new customer ID is: [' . $resp . ']');
+		print('Our new class ID is: [' . $resp . ']');
 	}
 	else
 	{
-		print($CustomerService->lastError($Context));
+		print($ClassService->lastError($Context));
 	}
 
-	/*
+	
 	print('<br><br><br><br>');
 	print("\n\n\n\n\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
 	print('Response [' . $IPP->lastResponse() . ']');
 	print("\n\n\n\n\n\n\n\n\n");
-	*/
+	
 }
 else
 {

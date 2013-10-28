@@ -34,22 +34,21 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
+	$AccountService = new QuickBooks_IPP_Service_Account();
 	
-	$Customer = new QuickBooks_IPP_Object_Customer();
-	$Customer->setTitle('Mr');
-	$Customer->setGivenName('Keith');
-	$Customer->setMiddleName('R');
-	$Customer->setFamilyName('Palmer');
-	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
+	$Account = new QuickBooks_IPP_Object_Account();
+	
+	$Account->setName('My Test Name');
+	$Account->setDescription('Here is my description');
+	$Account->setAccountType('Income');
 
-	if ($resp = $CustomerService->add($Context, $realm, $Customer))
+	if ($resp = $AccountService->add($Context, $realm, $Account))
 	{
-		print('Our new customer ID is: [' . $resp . ']');
+		print('Our new Account ID is: [' . $resp . ']');
 	}
 	else
 	{
-		print($CustomerService->lastError($Context));
+		print($AccountService->lastError($Context));
 	}
 
 	/*

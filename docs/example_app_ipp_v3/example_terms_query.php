@@ -34,38 +34,31 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
+	$TermService = new QuickBooks_IPP_Service_Term();
 	
-	$Customer = new QuickBooks_IPP_Object_Customer();
-	$Customer->setTitle('Mr');
-	$Customer->setGivenName('Keith');
-	$Customer->setMiddleName('R');
-	$Customer->setFamilyName('Palmer');
-	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
+	$terms = $TermService->query($Context, $realm, "SELECT * FROM term");
 
-	if ($resp = $CustomerService->add($Context, $realm, $Customer))
+	//print_r($terms);
+	
+	foreach ($terms as $Term)
 	{
-		print('Our new customer ID is: [' . $resp . ']');
-	}
-	else
-	{
-		print($CustomerService->lastError($Context));
+		//print_r($Term);
+
+		print('Term Id=' . $Term->getId() . ' is named: ' . $Term->getName() . '<br>');
 	}
 
 	/*
-	print('<br><br><br><br>');
-	print("\n\n\n\n\n\n\n\n");
+	print("\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
 	print('Response [' . $IPP->lastResponse() . ']');
-	print("\n\n\n\n\n\n\n\n\n");
+	print("\n\n\n\n");
 	*/
 }
 else
 {
 	die('Unable to load a context...?');
 }
-
 
 ?>
 
@@ -74,3 +67,5 @@ else
 <?php
 
 require_once dirname(__FILE__) . '/views/footer.tpl.php';
+
+?>

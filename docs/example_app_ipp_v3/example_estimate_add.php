@@ -34,22 +34,36 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
+	$EstimateService = new QuickBooks_IPP_Service_Estimate();
 	
-	$Customer = new QuickBooks_IPP_Object_Customer();
-	$Customer->setTitle('Mr');
-	$Customer->setGivenName('Keith');
-	$Customer->setMiddleName('R');
-	$Customer->setFamilyName('Palmer');
-	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
+	$Estimate = new QuickBooks_IPP_Object_Estimate();
+	
+	$Estimate->setDocNumber('WEB123');
+	$Estimate->setTxnDate('2013-10-11');
+	
+	$Line = new QuickBooks_IPP_Object_Line();
+	$Line->setDetailType('SalesItemLineDetail');
+	$Line->setAmount(12.95 * 2);
 
-	if ($resp = $CustomerService->add($Context, $realm, $Customer))
+	$SalesItemLineDetail = new QuickBooks_IPP_Object_SalesItemLineDetail();
+	$SalesItemLineDetail->setItemRef('8');
+	$SalesItemLineDetail->setUnitPrice(12.95);
+	$SalesItemLineDetail->setQty(2);
+
+	$Line->addSalesItemLineDetail($SalesItemLineDetail);
+
+	$Estimate->addLine($Line);
+
+	$Estimate->setCustomerRef('67');
+	
+
+	if ($resp = $EstimateService->add($Context, $realm, $Estimate))
 	{
-		print('Our new customer ID is: [' . $resp . ']');
+		print('Our new Estimate ID is: [' . $resp . ']');
 	}
 	else
 	{
-		print($CustomerService->lastError($Context));
+		print($EstimateService->lastError());
 	}
 
 	/*

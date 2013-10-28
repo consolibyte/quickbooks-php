@@ -34,22 +34,22 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
+	$VendorService = new QuickBooks_IPP_Service_Vendor();
 	
-	$Customer = new QuickBooks_IPP_Object_Customer();
-	$Customer->setTitle('Mr');
-	$Customer->setGivenName('Keith');
-	$Customer->setMiddleName('R');
-	$Customer->setFamilyName('Palmer');
-	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
+	$Vendor = new QuickBooks_IPP_Object_Vendor();
+	$Vendor->setTitle('Mr');
+	$Vendor->setGivenName('Keith');
+	$Vendor->setMiddleName('R');
+	$Vendor->setFamilyName('Palmer');
+	$Vendor->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
 
-	if ($resp = $CustomerService->add($Context, $realm, $Customer))
+	if ($resp = $VendorService->add($Context, $realm, $Vendor))
 	{
-		print('Our new customer ID is: [' . $resp . ']');
+		print('Our new Vendor ID is: [' . $resp . ']');
 	}
 	else
 	{
-		print($CustomerService->lastError($Context));
+		print($VendorService->lastError($Context));
 	}
 
 	/*

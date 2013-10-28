@@ -34,32 +34,34 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
+	$TimeActivityService = new QuickBooks_IPP_Service_TimeActivity();
 	
-	$Customer = new QuickBooks_IPP_Object_Customer();
-	$Customer->setTitle('Mr');
-	$Customer->setGivenName('Keith');
-	$Customer->setMiddleName('R');
-	$Customer->setFamilyName('Palmer');
-	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
+	$TimeActivity = new QuickBooks_IPP_Object_TimeActivity();
+	$TimeActivity->setTxnDate('2013-10-10');
+	$TimeActivity->setNameOf('Vendor');
+	$TimeActivity->setVendorRef('89');
+	$TimeActivity->setItemRef('8');
+	$TimeActivity->setHourlyRate('250');
+	$TimeActivity->setStartTime(QuickBooks_Utilities::datetime('-5 hours'));
+	$TimeActivity->setEndTime(QuickBooks_Utilities::datetime('-1 hour'));
+	$TimeActivity->setDescription('Test entry.');
 
-	if ($resp = $CustomerService->add($Context, $realm, $Customer))
+	if ($resp = $TimeActivityService->add($Context, $realm, $TimeActivity))
 	{
-		print('Our new customer ID is: [' . $resp . ']');
+		print('Our new TimeActivity ID is: [' . $resp . ']');
 	}
 	else
 	{
-		print($CustomerService->lastError($Context));
+		print($TimeActivityService->lastError($Context));
 	}
 
-	/*
 	print('<br><br><br><br>');
 	print("\n\n\n\n\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
 	print('Response [' . $IPP->lastResponse() . ']');
 	print("\n\n\n\n\n\n\n\n\n");
-	*/
+	
 }
 else
 {

@@ -34,32 +34,31 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
+	$ItemService = new QuickBooks_IPP_Service_Item();
 	
-	$Customer = new QuickBooks_IPP_Object_Customer();
-	$Customer->setTitle('Mr');
-	$Customer->setGivenName('Keith');
-	$Customer->setMiddleName('R');
-	$Customer->setFamilyName('Palmer');
-	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
+	$Item = new QuickBooks_IPP_Object_Item();
+	
+	$Item->setName('My Item');
+	$Item->setType('Inventory');
+	$Item->setIncomeAccountRef('53');
 
-	if ($resp = $CustomerService->add($Context, $realm, $Customer))
+	if ($resp = $ItemService->add($Context, $realm, $Item))
 	{
-		print('Our new customer ID is: [' . $resp . ']');
+		print('Our new Item ID is: [' . $resp . ']');
 	}
 	else
 	{
-		print($CustomerService->lastError($Context));
+		print($ItemService->lastError($Context));
 	}
 
-	/*
+	
 	print('<br><br><br><br>');
 	print("\n\n\n\n\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
 	print('Response [' . $IPP->lastResponse() . ']');
 	print("\n\n\n\n\n\n\n\n\n");
-	*/
+	
 }
 else
 {
