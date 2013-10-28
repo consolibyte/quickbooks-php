@@ -15,13 +15,13 @@ while (false !== ($file = readdir($dh)))
 	}
 
 	$tmp = explode('_', $file);
-	switch ($tmp[2])
+	switch (end($tmp))
 	{
 		case 'add.php':
-			$examples[$file] = 'Add a ' . $tmp[1];
+			$examples[$file] = 'Add a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
 		case 'query.php':
-			$examples[$file] = 'Query for ' . $tmp[1];
+			$examples[$file] = 'Query for ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
 	}
 }
