@@ -34,15 +34,17 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$ItemService = new QuickBooks_IPP_Service_Term();
+	$InvoiceService = new QuickBooks_IPP_Service_Invoice();
 	
-	$items = $ItemService->query($Context, $realm, "SELECT * FROM Item");
-	
-	foreach ($items as $Item)
-	{
-		//print_r($Item);
+	$invoices = $InvoiceService->query($Context, $realm, "SELECT *, Line.* FROM Invoice STARTPOSITION 1 MAXRESULTS 5");
 
-		print('Item Id=' . $Item->getId() . ' is named: ' . $Item->getName() . '<br>');
+	//print_r($customers);
+	
+	foreach ($invoices as $Invoice)
+	{
+		print_r($Invoice);
+		//$Line = $Invoice->getLine(0);
+		//print_r($Line);
 	}
 
 	/*

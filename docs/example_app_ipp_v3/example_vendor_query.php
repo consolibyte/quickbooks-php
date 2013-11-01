@@ -36,7 +36,7 @@ if ($Context = $IPP->context())
 	
 	$VendorService = new QuickBooks_IPP_Service_Vendor();
 	
-	$vendors = $VendorService->query($Context, $realm, "SELECT * FROM vendor");
+	$vendors = $VendorService->query($Context, $realm, "SELECT * FROM Vendor");
 
 	//print_r($terms);
 	

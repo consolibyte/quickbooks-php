@@ -36,7 +36,7 @@ if ($Context = $IPP->context())
 	
 	$AccountService = new QuickBooks_IPP_Service_Account();
 	
-	$accounts = $AccountService->query($Context, $realm, "SELECT * FROM account");
+	$accounts = $AccountService->query($Context, $realm, "SELECT * FROM Account");
 
 	//print_r($customers);
 	
