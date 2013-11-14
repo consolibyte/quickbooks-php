@@ -35,6 +35,8 @@ class QuickBooks_IPP_IDS
 	const OPTYPE_DELETE = 'Delete';
 	
 	const OPTYPE_QUERY = 'Query';
+
+	const OPTYPE_CDC = 'ChangeDataCapture';
 	
 	/**
 	 * This is not a real operation type in IDS terms, but is neccessary to distinguish between queries and findById in QuickBooks Online in IDS v2.
@@ -88,6 +90,8 @@ class QuickBooks_IPP_IDS
 	const RESOURCE_BILLPAYMENTCREDITCARD = 'BillPaymentCreditCard';
 	
 	const RESOURCE_CHANGEDATADELETED = 'ChangeDataDeleted';
+
+	const RESOURCE_CHANGEDATACAPTURE = 'ChangeDataCapture';
 	
 	const RESOURCE_CHECK = 'Check';
 	

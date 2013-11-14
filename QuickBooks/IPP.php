@@ -1001,6 +1001,11 @@ class QuickBooks_IPP
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/query?query=' . $xml_or_query;
 		}
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_CDC)
+		{
+			$post = false;
+			$url = $this->baseURL() . '/company/' . $realm . '/cdc?entities=' . implode(',', $xml_or_query[0]) . '&changedSince=' . $xml_or_query[1];
+		}
 
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
 

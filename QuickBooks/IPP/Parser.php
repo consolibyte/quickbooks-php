@@ -275,6 +275,36 @@ class QuickBooks_IPP_Parser
 
 			switch ($optype)
 			{
+				case QuickBooks_IPP_IDS::OPTYPE_CDC:
+
+					$types = array();
+
+					$List = $Root->getChildAt('IntuitResponse CDCResponse');
+					foreach ($List->children() as $ObjList)
+					{
+						foreach ($ObjList->children() as $Child)
+						{
+							$type = $Child->name();
+							if (empty($types[$type]))
+							{
+								$types[$type] = array();
+							}
+
+							$class = 'QuickBooks_IPP_Object_' . $Child->name();
+							$Object = new $class();
+							
+							foreach ($Child->children() as $Data)
+							{
+								$this->_push($Data, $Object);
+							}
+							
+							$types[$type][] = $Object;
+						}
+					}
+
+					return $types;
+
+					break;
 				case QuickBooks_IPP_IDS::OPTYPE_ADD:	// Parse an ADD type response
 					return QuickBooks_IPP_IDS::buildIDType('', QuickBooks_XML::extractTagContents('Id', $xml));
 				case QuickBooks_IPP_IDS::OPTYPE_QUERY: 
