@@ -42,6 +42,8 @@ if ($Context = $IPP->context())
 	$Customer->setMiddleName('R');
 	$Customer->setFamilyName('Palmer');
 	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
+	$Customer->setAccountNum('1234');
+	$Customer->setWebAddr('http://www.consolibyte.com/');
 
 	if ($resp = $CustomerService->add($Context, $realm, $Customer))
 	{
@@ -52,14 +54,13 @@ if ($Context = $IPP->context())
 		print($CustomerService->lastError($Context));
 	}
 
-	/*
 	print('<br><br><br><br>');
 	print("\n\n\n\n\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
 	print('Response [' . $IPP->lastResponse() . ']');
 	print("\n\n\n\n\n\n\n\n\n");
-	*/
+	
 }
 else
 {

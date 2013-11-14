@@ -59,6 +59,7 @@ class QuickBooks_IPP_Object_Customer extends QuickBooks_IPP_Object
 			'OpenBalanceDate' => true, 
 			'OpenBalanceWithJobs' => true, 
 			'CreditLimit' => true, 
+			'WebAddr' => true,
 			'AcctNum' => true, 
 			'OverDueBalance' => true, 
 			'TotalRevenue' => true, 

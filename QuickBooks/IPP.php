@@ -31,6 +31,12 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Parser.php');
 // SAML federation of applications
 QuickBooks_Loader::load('/QuickBooks/IPP/Federator.php');
 
+// OAuth
+QuickBooks_Loader::load('/QuickBooks/IPP/OAuth.php');
+
+// IntuitAnywhere widgets
+QuickBooks_Loader::load('/QuickBooks/IPP/IntuitAnywhere.php');
+
 // IDS (Intuit Data Services) base class
 QuickBooks_Loader::load('/QuickBooks/IPP/IDS.php');
 

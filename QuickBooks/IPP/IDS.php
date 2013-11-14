@@ -218,4 +218,9 @@ class QuickBooks_IPP_IDS
 	{
 		return '{' . $domain . '-' . $ID . '}';
 	}
+
+	static public function usableIDType($str)
+	{
+		return trim(str_replace('-', ':', $str), '{}:');
+	}
 }
