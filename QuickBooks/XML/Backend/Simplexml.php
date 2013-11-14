@@ -39,6 +39,23 @@ class QuickBooks_XML_Backend_SimpleXML implements QuickBooks_XML_Backend
 		
 		// Check for errors
 		$errs = libxml_get_errors();
+
+		$pcdata_chars = 'PCDATA invalid Char';
+		if (count($errs) > 0 and 
+			substr($errs[0]->message, 0, strlen($pcdata_chars)) == $pcdata_chars)
+		{
+			// Try to remove special chars, and try again
+			libxml_clear_errors();
+
+			$this->_xml = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $this->_xml);
+			$root = simplexml_load_string($this->_xml);
+			$errs = libxml_get_errors();
+
+			//die('this ran!  ' . print_r($errs, true));
+		}
+
+		//print_r($errs);
+		//exit;
 		
 		// Reset it to it's previous state
 		libxml_clear_errors();

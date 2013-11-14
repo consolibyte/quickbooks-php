@@ -26,4 +26,9 @@ class QuickBooks_IPP_Service_JournalEntry extends QuickBooks_IPP_Service
 		$xml = null;
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY, $xml);
 	}
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
+	}
 }
