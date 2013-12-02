@@ -3542,6 +3542,10 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
                 // String value, put it in quotes.
                 $values[] = " '" . $this->_escape($value) . "' ";
             }
+            else if ($value === 0)
+            {
+            	$values[] = $value;
+            }
             else
             {
                 // Empty string value, don't insert
@@ -3564,6 +3568,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 		
 		$sql .= " ); ";
+
+		//print_r($object);
+		//die($sql);
 		
 		/*
 		if ($table == 'pricemodel_tierset')
