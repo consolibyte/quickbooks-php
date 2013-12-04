@@ -42,8 +42,20 @@ if ($Context = $IPP->context())
 	$Customer->setMiddleName('R');
 	$Customer->setFamilyName('Palmer');
 	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
-	$Customer->setAccountNum('1234');
-	$Customer->setWebAddr('http://www.consolibyte.com/');
+	
+	// Phone #
+	$PrimaryPhone = new QuickBooks_IPP_Object_PrimaryPhone();
+	$PrimaryPhone->setFreeFormNumber('860-532-0089');
+	$Customer->setPrimaryPhone($PrimaryPhone);
+
+	// Bill address
+	$BillAddr = new QuickBooks_IPP_Object_BillAddr();
+	$BillAddr->setLine1('72 E Blue Grass Road');
+	$BillAddr->setLine2('Suite D');
+	$BillAddr->setCity('Mt Pleasant');
+	$BillAddr->setCountrySubDivisionCode('MI');
+	$BillAddr->setPostalCode('48858');
+	$Customer->setBillAddr($BillAddr);
 
 	if ($resp = $CustomerService->add($Context, $realm, $Customer))
 	{
@@ -54,13 +66,14 @@ if ($Context = $IPP->context())
 		print($CustomerService->lastError($Context));
 	}
 
+	/*
 	print('<br><br><br><br>');
 	print("\n\n\n\n\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
 	print('Response [' . $IPP->lastResponse() . ']');
 	print("\n\n\n\n\n\n\n\n\n");
-	
+	*/
 }
 else
 {
