@@ -37,11 +37,11 @@ if ($Context = $IPP->context())
 	$CustomerService = new QuickBooks_IPP_Service_Customer();
 	
 	$Customer = new QuickBooks_IPP_Object_Customer();
-	$Customer->setTitle('Mr');
-	$Customer->setGivenName('Keith');
-	$Customer->setMiddleName('R');
+	$Customer->setTitle('Ms');
+	$Customer->setGivenName('Shannon');
+	$Customer->setMiddleName('B');
 	$Customer->setFamilyName('Palmer');
-	$Customer->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
+	$Customer->setDisplayName('Shannon B Palmer ' . mt_rand(0, 1000));
 	
 	// Phone #
 	$PrimaryPhone = new QuickBooks_IPP_Object_PrimaryPhone();
@@ -56,6 +56,11 @@ if ($Context = $IPP->context())
 	$BillAddr->setCountrySubDivisionCode('MI');
 	$BillAddr->setPostalCode('48858');
 	$Customer->setBillAddr($BillAddr);
+
+	// Email
+	$PrimaryEmailAddr = new QuickBooks_IPP_Object_PrimaryEmailAddr();
+	$PrimaryEmailAddr->setAddress('support@consolibyte.com');
+	$Customer->setPrimaryEmailAddr($PrimaryEmailAddr);
 
 	if ($resp = $CustomerService->add($Context, $realm, $Customer))
 	{
