@@ -12,6 +12,6 @@ $creds = $IntuitAnywhere->load($the_username, $the_tenant);
 $diagnostics = array_merge(array(
 	'check' => $check,
 	'test' => $test,
-	), $creds);
+	), (array) $creds);
 
 print_r($diagnostics);

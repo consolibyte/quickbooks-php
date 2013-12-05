@@ -148,18 +148,25 @@ class QuickBooks_IPP_IntuitAnywhere
 				// Get the base URL if it's QBO
 				if ($creds['qb_flavor'] == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
 				{
-					$IPP->baseURL($IPP->getBaseURL($Context, $creds['qb_realm']));
+					$cur_version = $IPP->version();
+
+					$IPP->version(QuickBooks_IPP_IDS::VERSION_3);		// Need v3 for this 
+
+					$CustomerService = new QuickBooks_IPP_Service_Customer();
+					$customers = $CustomerService->query($Context, $creds['qb_realm'], "SELECT * FROM Customer MAXRESULTS 1");
+
+					$IPP->version($cur_version);		// Revert back to whatever they set 
+
+					//$IPP->baseURL($IPP->getBaseURL($Context, $creds['qb_realm']));
 				}
 				else
 				{
 					$companies = $IPP->getAvailableCompanies($Context);
 				}
 				
-				/*
-				print('[[' . $IPP->lastRequest() . ']]');
-				print('[[' . $IPP->lastResponse() . ']]');
-				print('here we are! [' . $IPP->errorCode() . ']');
-				*/
+				//print('[[' . $IPP->lastRequest() . ']]' . "\n\n");
+				//print('[[' . $IPP->lastResponse() . ']]' . "\n\n");
+				//print('here we are! [' . $IPP->errorCode() . ']');
 				
 				// Check the last error code now... 
 				if ($IPP->errorCode() == 401 or 			// most calls return this
