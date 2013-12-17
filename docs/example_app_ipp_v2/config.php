@@ -27,8 +27,8 @@ $token = '4e9da499ba070b411dbab8abf6d02c616402';
 // 
 // The OAuth request/access tokens will be encrypted and stored for you by the 
 //	PHP DevKit IntuitAnywhere classes automatically. 
-$oauth_consumer_key = 'qyprdRqakgFcwgMY7vXCHr56vqxdCo';
-$oauth_consumer_secret = 'ZIMkNq5cIUKfYqAmv9oKfgvAx7onms8xUDafTEnc';
+$oauth_consumer_key = 'qyprdlGJ4gWv4sMW0syilH2o4KirQe';
+$oauth_consumer_secret = '49ou99QiG47KhvY6AaMPSnHhXXNMAJxLv7QXNm4L';
 
 // This is the URL of your OAuth auth handler page
 $quickbooks_oauth_url = 'http://example.com/trunk/docs/example_app_ipp_v2/oauth.php';
@@ -42,7 +42,7 @@ $quickbooks_menu_url = 'http://example.com/trunk/docs/example_app_ipp_v2/menu.ph
 // This is a database connection string that will be used to store the OAuth credentials 
 // $dsn = 'pgsql://username:password@hostname/database';
 // $dsn = 'mysql://username:password@hostname/database';
-$dsn = 'mysql://example:ar4pT4rUbNsvh67w@localhost/example_app_ipp_intuitanywhere';		
+$dsn = 'mysqli://root:root@localhost/example_app_ipp_v3';		
 
 // You should set this to an encryption key specific to your app
 $encryption_key = 'bcde1234';
