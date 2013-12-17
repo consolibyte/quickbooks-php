@@ -141,6 +141,7 @@ $soap_options = array(			// See http://www.php.net/soap
 
 $handler_options = array(		// See the comments in the QuickBooks/Server/Handlers.php file
 	'deny_concurrent_logins' => false, 
+	'deny_reallyfast_logins' => false, 
 	);		
 
 $driver_options = array(		// See the comments in the QuickBooks/Driver/<YOUR DRIVER HERE>.php file ( i.e. 'Mysql.php', etc. )
