@@ -253,6 +253,18 @@ class QuickBooks_IPP_OAuth
 			$tmp = array();
 			parse_str(substr($url, $pos + 1), $tmp);
 
+			// Bad hack for magic quotes... *sigh* stupid PHP
+			if (get_magic_quotes_gpc())
+			{
+				foreach ($tmp as $key => $value)
+				{
+					if (!is_array($value))
+					{
+						$tmp[$key] = stripslashes($value);
+					}
+				}
+			}
+
 			$params = array_merge($tmp, $params);
 
 			$url = substr($url, 0, $pos);
