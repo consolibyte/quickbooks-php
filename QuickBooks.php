@@ -372,6 +372,10 @@ define('QUICKBOOKS_MOD_CREDITCARDCREDIT', 'CreditCardCreditMod');
 define('QUICKBOOKS_QUERY_CREDITCARDCREDIT', 'CreditCardCreditQuery');
 define('QUICKBOOKS_IMPORT_CREDITCARDCREDIT', 'CreditCardCreditImport');
 
+define('QUICKBOOKS_OBJECT_CREDITCARDREFUND', 'ARRefundCreditCard');
+define('QUICKBOOKS_ADD_CREDITCARDREFUND', 'ARRefundCreditCardAdd');
+define('QUICKBOOKS_QUERY_CREDITCARDREFUND', 'ARRefundCreditCardQuery');
+
 define('QUICKBOOKS_OBJECT_CREDITCARDCHARGE', 'CreditCardCharge');
 define('QUICKBOOKS_ADD_CREDITCARDCHARGE', 'CreditCardChargeAdd');
 define('QUICKBOOKS_MOD_CREDITCARDCHARGE', 'CreditCardChargeMod');
