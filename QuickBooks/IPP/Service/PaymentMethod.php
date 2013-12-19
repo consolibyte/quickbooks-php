@@ -25,4 +25,9 @@ class QuickBooks_IPP_Service_PaymentMethod extends QuickBooks_IPP_Service
 	{
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYMENTMETHOD, $query, null, $page, $size);
 	}
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
+	}
 }
