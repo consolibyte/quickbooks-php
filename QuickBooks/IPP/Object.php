@@ -401,6 +401,10 @@ class QuickBooks_IPP_Object
 						{
 							$svalue = trim($svalue, '{}-');
 						}
+						else if ($key == 'Id' and $svalue{0} == '{')
+						{
+							$svalue = trim($svalue, '{}-');	
+						}
 
 						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
 					}
@@ -431,6 +435,10 @@ class QuickBooks_IPP_Object
 				if (substr($key, -3, 3) == 'Ref' and $value{0} == '{')
 				{
 					$value = trim($value, '{}-');
+				}
+				else if ($key == 'Id' and $value{0} == '{')
+				{
+					$value = trim($value, '{}-');	
 				}
 				
 				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';

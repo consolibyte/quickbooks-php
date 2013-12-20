@@ -544,7 +544,54 @@ abstract class QuickBooks_IPP_Service
 	protected function _update($Context, $realmID, $resource, $Object, $ID)
 	{
 		$IPP = $Context->IPP();
+
+		switch ($IPP->version())
+		{
+			case QuickBooks_IPP_IDS::VERSION_2:
+				return $this->_update_v2($Context, $realmID, $resource, $Object, $ID);
+			case QuickBooks_IPP_IDS::VERSION_3:
+				return $this->_update_v3($Context, $realmID, $resource, $Object, $ID);
+		}
+
+		return false;
+	}
+
+	protected function _update_v3($Context, $realmID, $resource, $Object, $ID)
+	{
+		$IPP = $Context->IPP();
+
+		$unsets = array();
+
+		foreach ($unsets as $unset)
+		{
+			$Object->remove($unset);
+		}
+
+		// Generate the XML 
+		$xml = $Object->asXML(0, null, null, null, QuickBooks_IPP_IDS::VERSION_3);
+
+		//die($xml);
+
+		// Send the data to IPP 
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_MOD, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
 		
+		if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+		{
+			$this->_setError(
+				$IPP->errorCode(), 
+				$IPP->errorText(), 
+				$IPP->errorDetail());
+			
+			return false;
+		}
+		
+		return $return;
+	}
+
+	protected function _update_v2($Context, $realmID, $resource, $Object, $ID)
+	{
 		// Remove crap that we don't want to send to QuickBooks
 		$unsets = array(
 		//	'Id', 

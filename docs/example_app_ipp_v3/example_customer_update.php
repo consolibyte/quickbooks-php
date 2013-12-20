@@ -36,27 +36,43 @@ if ($Context = $IPP->context())
 	
 	$CustomerService = new QuickBooks_IPP_Service_Customer();
 	
-	$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer  ");
+	// Get the existing customer first (you need the latest SyncToken value)
+	$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer WHERE Id = '34' ");
+	$Customer = $customers[0];
 
-	//print_r($customers);
-	
-	foreach ($customers as $Customer)
+	// Change something
+	$Customer->setDisplayName('Updated ' . date('Y-m-d H-i-s'));
+
+	// Update their email address too
+	$PrimaryEmailAddr = $Customer->getPrimaryEmailAddr();
+	$PrimaryEmailAddr->setAddress('support@consolibyte.com');
+
+	// What are we doing?
+	print('Updating the customer name to: ' . $Customer->getDisplayName() . '<br>');
+
+	if ($CustomerService->update($Context, $realm, $Customer->getId(), $Customer))
 	{
-		print('Customer Id=' . $Customer->getId() . ' is named: ' . $Customer->getFullyQualifiedName() . '<br>');
+		print('&nbsp; Updated!<br>');
+	}
+	else
+	{
+		print('&nbsp; Error: ' . $CustomerService->lastError($Context));
 	}
 
 	/*
+	print('<br><br><br><br>');
+	print("\n\n\n\n\n\n\n\n");
+	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
-	print('Request [' . $CustomerService->lastRequest() . ']');
-	print("\n\n\n\n");
-	print('Response [' . $CustomerService->lastResponse() . ']');
-	print("\n\n\n\n");
+	print('Response [' . $IPP->lastResponse() . ']');
+	print("\n\n\n\n\n\n\n\n\n");
 	*/
 }
 else
 {
 	die('Unable to load a context...?');
 }
+
 
 ?>
 
@@ -65,5 +81,3 @@ else
 <?php
 
 require_once dirname(__FILE__) . '/views/footer.tpl.php';
-
-?>

@@ -548,12 +548,16 @@ class QuickBooks_HTTP
 		curl_setopt_array($ch, $params);
 		$response = curl_exec($ch);
 		
-		//print('[[request ' . $request . ']]' . "\n\n\n");
-		//print('[[resonse ' . $response . ']]' . "\n\n\n\n\n");
+		/*
+		print("\n\n\n" . '---------------------' . "\n");
+		print('[[request ' . $request . ']]' . "\n\n\n");
+		print('[[resonse ' . $response . ']]' . "\n\n\n\n\n");
 		
-		//print_r($params);
-		//print_r(curl_getinfo($ch));
-		//print_r($headers);
+		print_r($params);
+		print_r(curl_getinfo($ch));
+		print_r($headers);
+		print("\n" . '---------------------' . "\n\n\n\n");
+		*/
 
 		$this->_last_response = $response;
 		$this->_log('HTTP response: ' . substr($response, 0, 500) . '...', QUICKBOOKS_LOG_VERBOSE);

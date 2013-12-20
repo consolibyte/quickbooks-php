@@ -996,7 +996,7 @@ class QuickBooks_IPP
 		$xml = null;
 		$query = null;
 
-		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD)	
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)	
 		{
 			$post = true;
 			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource);

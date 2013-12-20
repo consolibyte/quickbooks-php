@@ -307,6 +307,8 @@ class QuickBooks_IPP_Parser
 					break;
 				case QuickBooks_IPP_IDS::OPTYPE_ADD:	// Parse an ADD type response
 					return QuickBooks_IPP_IDS::buildIDType('', QuickBooks_XML::extractTagContents('Id', $xml));
+				case QuickBooks_IPP_IDS::OPTYPE_MOD:
+					return true;		// If we got this far, it was a success
 				case QuickBooks_IPP_IDS::OPTYPE_QUERY: 
 
 					$list = array();
