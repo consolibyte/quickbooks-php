@@ -38,6 +38,8 @@ class QuickBooks_IPP_IDS
 
 	const OPTYPE_CDC = 'ChangeDataCapture';
 	
+	const OPTYPE_BATCH = 'Batch';
+	
 	/**
 	 * This is not a real operation type in IDS terms, but is neccessary to distinguish between queries and findById in QuickBooks Online in IDS v2.
 	 */
@@ -84,6 +86,8 @@ class QuickBooks_IPP_IDS
 	const RESOURCE_ACCOUNT = 'Account';
 	
 	const RESOURCE_BILL = 'Bill';
+	
+	const RESOURCE_BATCH = 'Batch';
 	
 	const RESOURCE_BILLPAYMENT = 'BillPayment';
 	
