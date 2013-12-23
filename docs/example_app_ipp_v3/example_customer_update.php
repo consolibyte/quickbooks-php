@@ -59,14 +59,14 @@ if ($Context = $IPP->context())
 		print('&nbsp; Error: ' . $CustomerService->lastError($Context));
 	}
 
-	/*
+	
 	print('<br><br><br><br>');
 	print("\n\n\n\n\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
 	print('Response [' . $IPP->lastResponse() . ']');
 	print("\n\n\n\n\n\n\n\n\n");
-	*/
+	
 }
 else
 {
