@@ -24,9 +24,9 @@ You will find examples in the docs/ folder. There is additional documentation an
 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks     (legacy)  
 	http://www.consolibyte.com/docs/index.php/QuickBooks     (new wiki)  
 
-If you are using the Web Connector, make sure you read the [quick start guide for the Web Connector](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)   
+If you are using the Web Connector (QuickBooks FOR WINDOWS), make sure you read the [quick start guide for the Web Connector](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)   
 
-If you are using the Intuit Partner Platform/Intuit Anywhere, make sure you read the [quick start guide for IPP/IA] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
+If you are using QuickBooks ONLINE (Intuit Partner Platform/Intuit Anywhere), make sure you read the [quick start guide for IPP/IA] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
 
 -------------------------------------
 ###Keith Palmer###
