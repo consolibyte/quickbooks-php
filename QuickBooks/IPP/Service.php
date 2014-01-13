@@ -592,6 +592,8 @@ abstract class QuickBooks_IPP_Service
 
 	protected function _update_v2($Context, $realmID, $resource, $Object, $ID)
 	{
+		$IPP = $Context->IPP();
+		
 		// Remove crap that we don't want to send to QuickBooks
 		$unsets = array(
 		//	'Id', 

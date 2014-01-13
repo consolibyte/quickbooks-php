@@ -48,6 +48,16 @@ if ($Context = $IPP->context())
 	$PrimaryPhone->setFreeFormNumber('860-532-0089');
 	$Customer->setPrimaryPhone($PrimaryPhone);
 
+	// Mobile #
+	$Mobile = new QuickBooks_IPP_Object_Mobile();
+	$Mobile->setFreeFormNumber('860-532-0089');
+	$Customer->setMobile($Mobile);
+    
+    // Fax #
+	$Fax = new QuickBooks_IPP_Object_Fax();
+	$Fax->setFreeFormNumber('860-532-0089');
+	$Customer->setFax($Fax);
+
 	// Bill address
 	$BillAddr = new QuickBooks_IPP_Object_BillAddr();
 	$BillAddr->setLine1('72 E Blue Grass Road');
