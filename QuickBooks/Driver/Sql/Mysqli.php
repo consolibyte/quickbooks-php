@@ -189,6 +189,11 @@ class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
 	 * @var array 
 	 */
 	protected $_hooks;
+
+	/**
+	 * Database name
+	 */
+	protected $_dbname;
 	
 	/**
 	 * Create a new MySQLi back-end driver
@@ -218,6 +223,9 @@ class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
 			
 			$parse = QuickBooks_Utilities::parseDSN($dsn_or_conn, $defaults);
 			
+			// Store this for debugging
+			$this->_dbname = $parse['path'];
+
 			$this->_connect($parse['host'], $parse['port'], $parse['user'], $parse['pass'], substr($parse['path'], 1), $config['new_link'], $config['client_flags']);
 		}
 		
@@ -368,7 +376,7 @@ class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
 			
 			//print($sql);
 			
-			trigger_error('Error Num.: ' . $errnum . "\n" . 'Error Msg.:' . $errmsg . "\n" . 'SQL: ' . $sql, E_USER_ERROR);
+			trigger_error('Error Num.: ' . $errnum . "\n" . 'Error Msg.:' . $errmsg . "\n" . 'SQL: ' . $sql . "\n" . 'Database: ' . $this->_dbname, E_USER_ERROR);
 			return false;
 		}
 		
@@ -427,6 +435,12 @@ class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
 	 */
 	protected function _escape($str)
 	{
+		if (is_array($str))
+		{
+			error_log('Param passed to _escape($str) was an array: ' . print_r($str, true));
+			$str = '';
+		}
+
 		return $this->_conn->real_escape_string($str);
 	}
 
