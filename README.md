@@ -17,12 +17,14 @@ The package you've downloaded contains code and documentation for connecting var
 Almost anything you can do in the QuickBooks GUI, in QuickBooks Online Edition, and with QuickBooks Merchant Service can be accomplished via this framework. 
 
 If you have questions, suggestions, or find a bug, the absolute best way to get support, report bugs, or ask for help is to ask on the forums:  
-	http://www.consolibyte.com/forum/  
-	https://idnforums.intuit.com/  
+
+- http://www.consolibyte.com/forum/  
+- https://intuitpartnerplatform.lc.intuit.com/
 
 You will find examples in the docs/ folder. There is additional documentation and additional examples on our legacy and new wikis:  
-	http://wiki.consolibyte.com/wiki/doku.php/quickbooks     (legacy)  
-	http://www.consolibyte.com/docs/index.php/QuickBooks     (new wiki)  
+
+- http://wiki.consolibyte.com/wiki/doku.php/quickbooks     (legacy)  
+- http://www.consolibyte.com/docs/index.php/QuickBooks     (new wiki)  
 
 If you are using the Web Connector (QuickBooks FOR WINDOWS), make sure you read the [quick start guide for the Web Connector/QuickBooks for Windows](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)   
 
