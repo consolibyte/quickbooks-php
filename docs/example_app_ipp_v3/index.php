@@ -40,6 +40,20 @@ while (false !== ($file = readdir($dh)))
 	</h1>
 
 	<p>
+		This app demos a PHP connection to QuickBooks Online via the v3 REST APIs. 
+	</p>
+	<p>
+		<strong>Please make sure you review the <a target="_blank" href="http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start">quick-start tutorial</a>!</strong>
+	</p>
+	<p>
+		You can get support on the forums:
+	</p>
+	<ul>
+		<li><a target="_blank" href="http://www.consolibyte.com/forum/">ConsoliBYTE forums</a></li>
+		<li><a target="_blank" href="https://intuitpartnerplatform.lc.intuit.com/">Intuit Developer forums</a></li>
+	</ul>
+
+	<p>
 		QuickBooks connection status: 
 
 		<?php if ($quickbooks_is_connected): ?>
@@ -55,7 +69,10 @@ while (false !== ($file = readdir($dh)))
 				<?php endforeach; ?>
 			</ul>
 			<ul>
-				<li><a href="disconnect.php">Disconnect from QuickBooks</a></li>
+				<li><a href="disconnect.php">Disconnect from QuickBooks</a> (If you do this, you'll have to go back through the authorization/connection process to get connected again)</li>
+			</ul>
+			<ul>
+				<li><a href="reconnect.php">Reconnect / refresh connection</a> (QuickBooks connections expire after 6 months, so you have to this roughly every 5 and 1/2 months)</li>
 			</ul>
 			<ul>
 				<li><a href="diagnostics.php">Diagnostics about QuickBooks connection</a></li>

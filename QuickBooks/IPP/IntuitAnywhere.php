@@ -38,7 +38,13 @@ class QuickBooks_IPP_IntuitAnywhere
 	const URL_ACCESS_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_access_token';
 	const URL_CONNECT_BEGIN = 'https://appcenter.intuit.com/Connect/Begin';
 	const URL_CONNECT_DISCONNECT = 'https://appcenter.intuit.com/api/v1/Connection/Disconnect';
+	const URL_CONNECT_RECONNECT = 'https://appcenter.intuit.com/api/v1/Connection/Reconnect';
 	const URL_APP_MENU = 'https://appcenter.intuit.com/api/v1/Account/AppMenu';
+
+	const EXPIRY_EXPIRED = 'expired';
+	const EXPIRY_NOTYET = 'notyet';
+	const EXPIRY_SOON = 'soon';
+	const EXPIRY_UNKNOWN = 'unknown';
 	
 	/**
 	 * 
@@ -203,6 +209,96 @@ class QuickBooks_IPP_IntuitAnywhere
 		return false;
 	}
 	
+	/**
+	 * Check whether a connection is due for refresh/reconnect
+	 * 
+	 * @param string $app_username
+	 * @param string $app_tenant
+	 * @param integer $within
+	 * @return One of the QuickBooks_IPP_IntuitAnywhere::EXPIRY_* constants
+	 */
+	public function expiry($app_username, $app_tenant, $within = 2592000)
+	{
+		$lifetime = 15552000;
+
+		if ($arr = $this->_driver->oauthLoad($this->_key, $app_username, $app_tenant) and 
+			strlen($arr['oauth_access_token']) > 0 and 
+			strlen($arr['oauth_access_token_secret']) > 0)
+		{
+			$expires = $lifetime + strtotime($arr['access_datetime']);
+
+			$diff = $expires - time();
+
+			if ($diff < 0)
+			{
+				// Already expired
+				return QuickBooks_IPP_IntuitAnywhere::EXPIRY_EXPIRED;
+			}
+			else if ($diff < $within)
+			{
+				return QuickBooks_IPP_IntuitAnywhere::EXPIRY_SOON;
+			}
+
+			return QuickBooks_IPP_IntuitAnywhere::EXPIRY_NOTYET;
+		}
+
+		return QuickBooks_IPP_IntuitAnywhere::EXPIRY_UNKNOWN;
+	}
+
+	/**
+	 * Reconnect/refresh the OAuth tokens 
+	 * 
+	 * For this to succeed, the token expiration must be within 30 days of the 
+	 * date that this method is called (6 months after original token was 
+	 * created). This is an Intuit-imposed security restriction. Calls outside 
+	 * of that date range will fail with an error.
+	 * 
+	 * @param string $app_username
+	 * @param string $app_tenant
+	 */
+	public function reconnect($app_username, $app_tenant)
+	{
+		if ($arr = $this->_driver->oauthLoad($this->_key, $app_username, $app_tenant) and 
+			strlen($arr['oauth_access_token']) > 0 and 
+			strlen($arr['oauth_access_token_secret']) > 0)
+		{
+			$arr['oauth_consumer_key'] = $this->_consumer_key;
+			$arr['oauth_consumer_secret'] = $this->_consumer_secret;
+			
+			$retr = $this->_request(QuickBooks_IPP_OAuth::METHOD_GET, 
+				QuickBooks_IPP_IntuitAnywhere::URL_CONNECT_RECONNECT, 
+				array(), 
+				$arr['oauth_access_token'], 
+				$arr['oauth_access_token_secret']);
+			
+			// Extract the error code
+			$code = (int) QuickBooks_XML::extractTagContents('ErrorCode', $retr);
+			$message = QuickBooks_XML::extractTagContents('ErrorMessage', $retr);
+
+			if ($message)
+			{
+				$this->_setError($code, $message);
+				return false;
+			}
+			else
+			{
+				// Success! Update the tokens 
+				$token = QuickBooks_XML::extractTagContents('OAuthToken', $retr);
+				$secret = QuickBooks_XML::extractTagContents('OAuthTokenSecret', $retr);
+
+				$this->_driver->oauthAccessWrite(
+					$this->_key, 
+					$arr['oauth_request_token'], 
+					$token, 
+					$secret,
+					null, 
+					null);
+
+				return true;
+			}
+		}
+	}
+
 	public function disconnect($app_username, $app_tenant, $force = false)
 	{
 		if ($arr = $this->_driver->oauthLoad($this->_key, $app_username, $app_tenant) and
