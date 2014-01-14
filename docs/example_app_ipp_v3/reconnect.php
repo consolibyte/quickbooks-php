@@ -9,7 +9,7 @@ $reconnected = false;
 
 $expiry = $IntuitAnywhere->expiry($the_username, $the_tenant);
 
-if (true or $expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_SOON)
+if ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_SOON)
 {
 	if ($IntuitAnywhere->reconnect($the_username, $the_tenant))
 	{
