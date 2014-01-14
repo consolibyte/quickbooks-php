@@ -26,6 +26,9 @@ while (false !== ($file = readdir($dh)))
 		case 'query.php':
 			$examples[$file] = 'Query for ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
+		case 'count.php':
+			$examples[$file] = 'Count ' . implode(' ', array_slice($tmp, 1, -1));
+			break;
 		case 'cdc.php';
 			$examples[$file] = 'Get objects that have changed since a timestamp';
 			break;
@@ -63,20 +66,55 @@ while (false !== ($file = readdir($dh)))
 
 			<h2>Example QuickBooks Stuff</h2>
 
-			<ul>
+			<table>
 				<?php foreach ($examples as $file => $title): ?>
-					<li><a href="<?php print($file); ?>"><?php print($title); ?></a></li>
+					<tr>
+						<td>
+							<a href="<?php print($file); ?>"><?php print($title); ?></a>
+						</td>
+						<td>
+							<a href="source.php?file=<?php print($file); ?>">(view source)</a>
+						</td>
+					</tr>
 				<?php endforeach; ?>
-			</ul>
-			<ul>
-				<li><a href="disconnect.php">Disconnect from QuickBooks</a> (If you do this, you'll have to go back through the authorization/connection process to get connected again)</li>
-			</ul>
-			<ul>
-				<li><a href="reconnect.php">Reconnect / refresh connection</a> (QuickBooks connections expire after 6 months, so you have to this roughly every 5 and 1/2 months)</li>
-			</ul>
-			<ul>
-				<li><a href="diagnostics.php">Diagnostics about QuickBooks connection</a></li>
-			</ul>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="disconnect.php">Disconnect from QuickBooks</a> 
+					</td>
+					<td>
+						(If you do this, you'll have to go back through the authorization/connection process to get connected again)
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="reconnect.php">Reconnect / refresh connection</a>
+					</td>
+					<td>
+						(QuickBooks connections expire after 6 months, so you have to this roughly every 5 and 1/2 months)
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="diagnostics.php">Diagnostics about QuickBooks connection</a>
+					</td>
+					<td>
+						&nbsp;
+					</td>
+				</tr>
+			</table>
+
 		<?php else: ?>
 			<div style="border: 2px solid red; text-align: center; padding: 8px; color: red;">
 				<b>NOT</b> CONNECTED!<br>

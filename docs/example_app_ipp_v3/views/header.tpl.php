@@ -11,6 +11,24 @@
 		});
 		</script>
 
+		<style>
+
+		table
+		{
+			margin-left: 20px;
+			margin-right: 20px;
+		}
+
+		tr:nth-child(even) {background: #CCC}
+		tr:nth-child(odd) {background: #EEE}
+
+		td
+		{
+			padding: 4px;
+		}
+
+		</style>
+
 	</head>
 	<body>
 

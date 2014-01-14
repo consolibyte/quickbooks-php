@@ -314,20 +314,31 @@ class QuickBooks_IPP_Parser
 					$list = array();
 
 					$List = $Root->getChildAt('IntuitResponse QueryResponse');
-					foreach ($List->children() as $Child)
-					{
-						$class = 'QuickBooks_IPP_Object_' . $Child->name();
-						$Object = new $class();
-						
-						foreach ($Child->children() as $Data)
-						{
-							$this->_push($Data, $Object);
-						}
-						
-						$list[] = $Object;
-					}
 
-					return $list;
+					$attrs = $List->attributes();
+
+					if (array_key_exists('totalCount', $attrs))
+					{
+						return $attrs['totalCount'];
+					}
+					else
+					{
+
+						foreach ($List->children() as $Child)
+						{
+							$class = 'QuickBooks_IPP_Object_' . $Child->name();
+							$Object = new $class();
+							
+							foreach ($Child->children() as $Data)
+							{
+								$this->_push($Data, $Object);
+							}
+							
+							$list[] = $Object;
+						}
+
+						return $list;
+					}
 			}
 		}
 		else
