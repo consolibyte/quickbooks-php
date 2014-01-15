@@ -3528,11 +3528,16 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 		*/
 		
+		//print_r($object);
+
 		foreach ($object as $field => $value)
 		{
 			$fields[] = $field;
 			
-			if (ctype_digit($value) and strlen((float) $value) == strlen($value) and ((float)$value) == $value)
+			if (ctype_digit($value) and 
+				strlen((float) $value) == strlen($value) and 
+				((float)$value) == $value and 
+				strlen($value) < 16)
 			{
 				// Number, cast as float to avoid integer overflow
                 $values[] = (float) $value;
@@ -3552,7 +3557,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
                 array_pop($fields);
             }
 		}
-		
+
 		$sql = "INSERT INTO " . $this->_escape($table) . " ( " . implode(', ', $fields) . " ";
 		
 		if ($discov_and_resync)
