@@ -1,9 +1,9 @@
 <?php
 
 
-$url = 'http://joplinfire.packettide.com/quickbooks/qbwc';
-$username = 'quickbooks';
-$password = 'password';
+$url = 'http://macbookpro.chargeover.com:8888/chargeover/signup/?stage=qbwc/qbwc';
+$username = '2317b8e02e307bcdf75adf4091fb6bc8';
+$password = '67b0016c';
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -42,7 +42,7 @@ print("\n\n" . date('Y-m-d H:i:s: ') . 'TICKET IS: [[' . $ticket . ']]' . "\n\n"
 //exit;
 
 
-$max = 2;
+$max = 1;
 for ($i = 0; $i < $max; $i++)
 {
 	//print(date('Y-m-d H:i:s: ') . tester($url, $ticket, null, 'sendRequestXML'));
