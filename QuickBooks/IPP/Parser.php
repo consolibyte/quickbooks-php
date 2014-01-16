@@ -317,7 +317,8 @@ class QuickBooks_IPP_Parser
 
 					$attrs = $List->attributes();
 
-					if (array_key_exists('totalCount', $attrs))
+					if (!array_key_exists('startPosition', $attrs) and 
+						array_key_exists('totalCount', $attrs))
 					{
 						return $attrs['totalCount'];
 					}
@@ -507,7 +508,9 @@ class QuickBooks_IPP_Parser
 		$name = $Node->name();
 		$data = $Node->data();
 		
-		if (substr($name, -2, 2) == 'Id' or $name == 'ExternalKey')
+		if (substr($name, -2, 2) == 'Id' or 
+			$name == 'ExternalKey' or 
+			substr($name, -3, 3) == 'Ref')
 		{
 			$data = QuickBooks_IPP_IDS::buildIDType($Node->getAttribute('idDomain'), $data);
 		}
