@@ -43,5 +43,10 @@ class QuickBooks_IPP_Service_Employee extends QuickBooks_IPP_Service
 	public function add($Context, $realmID, $Object)
 	{
 		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_EMPLOYEE, $Object);
+	}
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
 	}	
 }
