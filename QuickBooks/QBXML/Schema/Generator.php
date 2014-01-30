@@ -45,8 +45,8 @@ class QuickBooks_QBXML_Schema_Generator
 		$errmsg = '';
 		if ($Doc = $Parser->parse($errnum, $errmsg))
 		{
-			if(!is_dir(__DIR__ . '/Object/tmp/') && !mkdir(__DIR__ . '/Object/tmp/')) {
-				print "Unable to create: " . __DIR__ . "/Object/tmp/\n";
+			if(!is_dir($dir) && !mkdir($dir)) {
+				print "Unable to create: $dir\n";
 				exit;
 			}
 
@@ -155,8 +155,7 @@ class QuickBooks_QBXML_Schema_Generator
 				$contents = str_replace('\'_isRepeatablePaths\'', var_export($paths_isrepeatable, true), $contents);
 				$contents = str_replace('\'_reorderPaths\'', var_export($paths_reorder, true), $contents);
 				
-				// <QuickBooks PHP>/QuickBooks/tmp
-				$fp = fopen(__DIR__ . '/Object/tmp/' . $Action->name() . '.php', 'w+');
+				$fp = fopen($dir . '/' . $Action->name() . '.php', 'w+');
 				fwrite($fp, $contents);
 				fclose($fp);
 				
