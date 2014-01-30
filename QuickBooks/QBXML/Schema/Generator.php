@@ -13,7 +13,7 @@
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/XML.php');
+QuickBooks_Loader::load('/QuickBooks/XML/Parser.php');
 
 /**
  * 
@@ -31,7 +31,7 @@ class QuickBooks_QBXML_Schema_Generator
 	
 	public function saveAll($dir)
 	{
-		$Parser = new QuickBooks_XML($this->_xml);
+		$Parser = new QuickBooks_XML_Parser($this->_xml);
 		
 		$arr_actions_adds = QuickBooks_Utilities::listActions('*Add', false);
 		$arr_actions_mods = QuickBooks_Utilities::listActions('*Mod', false);
@@ -45,6 +45,11 @@ class QuickBooks_QBXML_Schema_Generator
 		$errmsg = '';
 		if ($Doc = $Parser->parse($errnum, $errmsg))
 		{
+			if(!is_dir(__DIR__ . '/Object/tmp/') && !mkdir(__DIR__ . '/Object/tmp/')) {
+				print "Unable to create: " . __DIR__ . "/Object/tmp/\n";
+				exit;
+			}
+
 			$children = $Doc->children();
 			$children = $children[0]->children();
 			
@@ -92,7 +97,7 @@ class QuickBooks_QBXML_Schema_Generator
 				
 				//$curdepth = 0;
 				$lastdepth = 0;
-				$paths = $Action->asArray(QUICKBOOKS_XML_ARRAY_PATHS);
+				$paths = $Action->asArray(QUICKBOOKS_XML::ARRAY_PATHS);
 				foreach ($paths as $path => $datatype)
 				{
 					$tmp = explode(' ', $path);
@@ -139,7 +144,7 @@ class QuickBooks_QBXML_Schema_Generator
 				//print(var_export($paths_isrepeatable));
 				//print(var_export($paths_reorder));
 				
-				$contents = file_get_contents('/home/asdg/QuickBooks/QBXML/Schema/Object/Template.php');
+				$contents = file_get_contents(__DIR__ . '/Object/Template.php');
 				
 				$contents = str_replace('Template', $Action->name(), $contents);
 				$contents = str_replace('\'_qbxmlWrapper\'', var_export($wrapper, true), $contents);
@@ -150,7 +155,8 @@ class QuickBooks_QBXML_Schema_Generator
 				$contents = str_replace('\'_isRepeatablePaths\'', var_export($paths_isrepeatable, true), $contents);
 				$contents = str_replace('\'_reorderPaths\'', var_export($paths_reorder, true), $contents);
 				
-				$fp = fopen('/home/adg/QuickBooks/tmp/' . $Action->name() . '.php', 'w+');
+				// <QuickBooks PHP>/QuickBooks/tmp
+				$fp = fopen(__DIR__ . '/Object/tmp/' . $Action->name() . '.php', 'w+');
 				fwrite($fp, $contents);
 				fclose($fp);
 				
