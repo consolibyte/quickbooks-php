@@ -1012,9 +1012,15 @@ class QuickBooks_IPP
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/cdc?entities=' . implode(',', $xml_or_query[0]) . '&changedSince=' . $xml_or_query[1];
 		}
-
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_DELETE)
+		{
+			$post = true;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?operation=delete';
+			$xml = $xml_or_query;
+		}
+		
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
-
+		
 		//print('URL is [' . $url . ']');
 		//die('RESPONSE IS [' . $response . ']');
 
@@ -1025,7 +1031,7 @@ class QuickBooks_IPP
 		}
 		
 		$data = $this->_stripHTTPHeaders($response);
-
+		
 		if (!$this->_ids_parser)
 		{
 			// If they don't want the responses parsed into objects, then just return the raw XML data
@@ -1399,7 +1405,8 @@ class QuickBooks_IPP
 		
 		if ($Context->IPP()->version() == QuickBooks_IPP_IDS::VERSION_3)
 		{
-			if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD)
+			if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD or
+			    $action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 			{
 				$headers['Content-Type'] = 'application/xml';
 			}

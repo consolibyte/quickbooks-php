@@ -26,4 +26,33 @@ class QuickBooks_IPP_Service_CreditMemo extends QuickBooks_IPP_Service
 		$xml = null;
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CREDITMEMO, $xml);
 	}
+	
+	/** 
+	 * Add a new Credit Memo to IDS/QuickBooks
+	 * 
+	 * @param QuickBooks_IPP_Context $Context
+	 * @param string $realmID
+	 * @param QuickBooks_IPP_Object_CreditMemo $Object			The Credit Memo to add
+	 * @return string											The Id value of the new credit memo
+	 */
+	public function add($Context, $realmID, $Object)
+	{
+		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CREDITMEMO, $Object);
+	}
+	
+	public function delete($Context, $realmID, $ID)
+	{
+		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CREDITMEMO, $ID);
+	}
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
+	}
+
+	public function findById($Context, $realmID, $ID, $domain = null)
+	{
+		$xml = null;
+		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CREDITMEMO, $ID, $domain, $xml);
+	}
 }

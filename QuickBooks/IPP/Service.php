@@ -171,7 +171,88 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 	
+	/** 
+	 * Add an IDS object via IPP
+	 * 
+	 * @param QuickBooks_IPP_Context $Context
+	 * @param integer $realmID
+	 * @param string $resource
+	 * @param object $IDType / $Object
+	 * @param string $xml
+	 * @return integer TODO
+	 */
 	protected function _delete($Context, $realmID, $resource, $IDType, $xml = '')
+	{
+		$IPP = $Context->IPP();
+		
+		switch ($IPP->version())
+		{
+			case QuickBooks_IPP_IDS::VERSION_2:
+				return $this->_delete_v2($Context, $realmID, $resource, $IDType, $xml);
+			case QuickBooks_IPP_IDS::VERSION_3:
+				return $this->_delete_v3($Context, $realmID, $resource, $IDType);
+		}
+	}
+	
+	
+	protected function _delete_v3($Context, $realmID, $resource, $ID)
+	{
+		$IPP = $Context->IPP();
+		
+		//Id is always required. It's the only attribute value that matters.
+		$xml = '<'.$resource.' xmlns="http://schema.intuit.com/finance/v3">'. QUICKBOOKS_CRLF;
+		$xml .= '	<Id>'.$ID.'</Id>' . QUICKBOOKS_CRLF;
+		
+		switch ($resource) {
+			//syncToken, and one split line must be present. Values don't matter: 
+			case QuickBooks_IPP_IDS::RESOURCE_INVOICE:
+			case QuickBooks_IPP_IDS::RESOURCE_CREDITMEMO:
+			case QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT:
+			case QuickBooks_IPP_IDS::RESOURCE_PURCHASEORDER:
+			//case QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT: //not tested
+					$xml .= '	<SyncToken>0</SyncToken>' . QUICKBOOKS_CRLF;
+					$xml .= '	<Line>' . QUICKBOOKS_CRLF;
+					$xml .= '		<Amount>1.00</Amount>' . QUICKBOOKS_CRLF;
+					$xml .= '		<DetailType>SubTotalLineDetail</DetailType>' . QUICKBOOKS_CRLF;
+					$xml .= '		<SubTotalLineDetail/>' . QUICKBOOKS_CRLF;
+					$xml .= '	</Line>' . QUICKBOOKS_CRLF;
+				break;
+			
+			//syncToken must be present. Value doesn't matter:
+			//case QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENT: //not tested
+			case QuickBooks_IPP_IDS::RESOURCE_ESTIMATE:  //not tested
+			//case QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY: //not tested
+					$xml .= '	<SyncToken>0</SyncToken>' . QUICKBOOKS_CRLF;
+				break;
+			//JournalEntry, Bill, 
+			default:
+				break;
+		}
+		
+		$xml .= '</'.$resource.'>';
+		
+		var_dump($xml);
+		
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_DELETE, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
+		
+		if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+		{
+			$this->_setError(
+				$IPP->errorCode(), 
+				$IPP->errorText(), 
+				$IPP->errorDetail());
+			
+			return false;
+		}
+		
+		return $return;
+	}
+	
+	
+	
+	protected function _delete_v2($Context, $realmID, $resource, $IDType, $xml = '')
 	{
 		$IPP = $Context->IPP();
 		
@@ -195,7 +276,7 @@ abstract class QuickBooks_IPP_Service
 		if (count($return))
 		{
 			return $return[0];
-		}
+		} 
 		
 		return null;
 	}
@@ -438,6 +519,9 @@ abstract class QuickBooks_IPP_Service
 
 		// Generate the XML 
 		$xml = $Object->asXML(0, null, null, null, QuickBooks_IPP_IDS::VERSION_3);
+		
+// echo "<br>Service.php - line:".__LINE__."<br>_add_v3() method's xml object:";
+// var_dump($xml);
 
 		// Send the data to IPP 
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_ADD, $xml);

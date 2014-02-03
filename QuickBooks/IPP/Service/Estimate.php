@@ -30,7 +30,12 @@ class QuickBooks_IPP_Service_Estimate extends QuickBooks_IPP_Service
 	public function add($Context, $realmID, $Object)
 	{
 		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ESTIMATE, $Object);
-	}	
+	}
+	
+	public function delete($Context, $realmID, $ID)
+	{
+		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ESTIMATE, $ID);
+	}
 	
 	/**
 	 * Get an estimate by ID 
