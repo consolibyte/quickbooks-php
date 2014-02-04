@@ -80,6 +80,7 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_REPORT_TOPCUSTOMERSBYSALES = 'ReportTopCustomersBySales';
 	
+	const RESOURCE_PURCHASE = 'Purchase';
 	
 	const RESOURCE_ACCOUNT = 'Account';
 	
