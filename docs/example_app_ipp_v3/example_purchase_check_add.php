@@ -54,7 +54,7 @@ if ($Context = $IPP->context())
 
 	$Purchase->setAccountRef('{-58}');
 	$Purchase->setEntityRef('{-137}');
-	$Purchase->setPaymentType('Cash');
+	$Purchase->setPaymentType('Check');
 
 	/*
 	  <Line>
