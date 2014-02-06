@@ -996,6 +996,12 @@ class QuickBooks_IPP
 		$xml = null;
 		$query = null;
 
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_BATCH)
+		{
+			$post = true;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource);
+			$xml = $xml_or_query;
+		}else
 		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)	
 		{
 			$post = true;
@@ -1406,7 +1412,7 @@ class QuickBooks_IPP
 		if ($Context->IPP()->version() == QuickBooks_IPP_IDS::VERSION_3)
 		{
 			if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD or
-			    $action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
+			    $action == QuickBooks_IPP_IDS::OPTYPE_DELETE or $action == QuickBooks_IPP_IDS::OPTYPE_BATCH)
 			{
 				$headers['Content-Type'] = 'application/xml';
 			}

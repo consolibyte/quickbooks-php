@@ -541,6 +541,42 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 
+	protected function _sendBatchRequest($Context, $realmID, $Object)
+	{
+		$IPP = $Context->IPP();
+		
+		switch ($IPP->version())
+		{
+			case QuickBooks_IPP_IDS::VERSION_3:
+				return $this->_sendBatchRequest_v3($Context, $realmID, $Object);
+		}
+	}
+	
+	protected function _sendBatchRequest_v3($Context, $realmID, $Object)
+	{
+		$IPP = $Context->IPP();
+
+		// Generate the XML
+		$xml = $Object->asXML(0, null, null, null, QuickBooks_IPP_IDS::VERSION_3);
+
+		// Send the data to IPP
+		$return = $IPP->IDS($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_BATCH, QuickBooks_IPP_IDS::OPTYPE_BATCH, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
+		
+		if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+		{
+			$this->_setError(
+				$IPP->errorCode(), 
+				$IPP->errorText(), 
+				$IPP->errorDetail());
+			
+			return false;
+		}
+		
+		return $return;
+	}
+
 	protected function _add_v2($Context, $realmID, $resource, $Object)
 	{
 		$IPP = $Context->IPP();

@@ -338,9 +338,27 @@ class QuickBooks_IPP_Parser
 							
 							$list[] = $Object;
 						}
-
 						return $list;
 					}
+				case QuickBooks_IPP_IDS::OPTYPE_BATCH:
+				
+					$list = array();
+					
+					$List = $Root->getChildAt('IntuitResponse');
+					
+					foreach ($List->children() as $Child)
+					{
+						$class = 'QuickBooks_IPP_Object_' . $Child->name();
+						$Object = new $class();
+						
+						foreach ($Child->children() as $Data)
+						{
+							$this->_push($Data, $Object);
+						}
+						
+						$list[] = $Object;
+					}
+					return $list;
 			}
 		}
 		else
