@@ -42,6 +42,9 @@ if ($Context = $IPP->context())
 	$Customer->setMiddleName('B');
 	$Customer->setFamilyName('Palmer');
 	$Customer->setDisplayName('Shannon B Palmer ' . mt_rand(0, 1000));
+
+	// Terms (e.g. Net 30, etc.)
+	$Customer->setSalesTermRef(4);
 	
 	// Phone #
 	$PrimaryPhone = new QuickBooks_IPP_Object_PrimaryPhone();
@@ -74,7 +77,7 @@ if ($Context = $IPP->context())
 
 	if ($resp = $CustomerService->add($Context, $realm, $Customer))
 	{
-		print('Our new customer ID is: [' . $resp . ']');
+		print('Our new customer ID is: [' . $resp . '] (name "' . $Customer->getDisplayName() . '")');
 	}
 	else
 	{
