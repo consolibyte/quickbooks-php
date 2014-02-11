@@ -1029,7 +1029,6 @@ class QuickBooks_IPP
 		
 		//print('URL is [' . $url . ']');
 		//die('RESPONSE IS [' . $response . ']');
-
 		// Check for generic IPP errors and HTTP errors
 		if ($this->_hasErrors($response))
 		{

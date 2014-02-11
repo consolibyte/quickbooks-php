@@ -350,16 +350,32 @@ class QuickBooks_IPP_Object
 	{
 		$data = $this->_data;
 		$data = $this->_reorder($data);
-
-		$xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' xmlns="http://schema.intuit.com/finance/v3">' . QUICKBOOKS_CRLF;
+		
+		if($this->resource() == "BatchItemRequest"){
+			$xml = '';
+			if(isset($data["BatchId"])){
+				$bId = 'bId="'.QuickBooks_XML::encode($data["BatchId"], false).'"';
+				
+				$operation = '';
+				if(isset($data["Operation"])){
+					$operation = 'operation="'.QuickBooks_XML::encode($data["Operation"], false).'"';
+				}
+				$xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' ' . $bId . ' ' . $operation .' >' . QUICKBOOKS_CRLF;
+			}
+		}else{
+			$xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' xmlns="http://schema.intuit.com/finance/v3">' . QUICKBOOKS_CRLF;
+		}
 		
 		// Go through the data, creating XML out of it
 		foreach ($data as $key => $value)
 		{
-			if (is_object($value))
+			if($this->resource() == "BatchItemRequest" && ($key == "BatchId" | $key == "Operation")){
+				continue;
+			}
+			else if (is_object($value))
 			{
 				// If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
-				$xml .= $value->_asXML_v3($indent + 1, null, null, $flavor);
+					$xml .= $value->_asXML_v3($indent + 1, null, null, $flavor);
 			}
 			else if (is_array($value))
 			{

@@ -289,7 +289,7 @@ class QuickBooks_IPP_Parser
 							{
 								$types[$type] = array();
 							}
-
+							
 							$class = 'QuickBooks_IPP_Object_' . $Child->name();
 							$Object = new $class();
 							
@@ -350,6 +350,17 @@ class QuickBooks_IPP_Parser
 					{
 						$class = 'QuickBooks_IPP_Object_' . $Child->name();
 						$Object = new $class();
+						
+						//BatchIds are stored as an XML attribute, not an element.
+						//since there is no node for attributes, we need a special case
+						//to put the bId into the retuned data as a BatchId object
+						if($Child->name() == 'BatchItemResponse'){
+							foreach ($Child->attributes() as $Data){
+								$this->_push(new QuickBooks_XML_Node("BatchId",$Data), $Object);
+								var_dump($Data);
+							}
+						}
+						
 						
 						foreach ($Child->children() as $Data)
 						{
@@ -536,7 +547,7 @@ class QuickBooks_IPP_Parser
 		
 		$adds = array(
 			);
-		
+			
 		if ($Node->hasChildren())
 		{
 			$class = 'QuickBooks_IPP_Object_' . $name;

@@ -558,6 +558,7 @@ abstract class QuickBooks_IPP_Service
 
 		// Generate the XML
 		$xml = $Object->asXML(0, null, null, null, QuickBooks_IPP_IDS::VERSION_3);
+		//var_dump($xml);
 
 		// Send the data to IPP
 		$return = $IPP->IDS($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_BATCH, QuickBooks_IPP_IDS::OPTYPE_BATCH, $xml);

@@ -344,8 +344,12 @@ class QuickBooks_IPP_IntuitAnywhere
 	 *
 	 * 
 	 */
-	public function handle($app_username, $app_tenant)
+	public function handle($app_username, $app_tenant,$get=null)
 	{
+		if(!isset($get)){
+			$get = $_GET;
+		}
+		
 		if ($this->check($app_username, $app_tenant) and 		// We have tokens ...
 			$this->test($app_username, $app_tenant))			// ... and they are valid
 		{
@@ -355,7 +359,7 @@ class QuickBooks_IPP_IntuitAnywhere
 		}
 		else
 		{
-			if (isset($_GET['oauth_token']))
+			if (isset($get['oauth_token']))
 			{
 				// We're in the middle of an OAuth token session
 				
@@ -369,12 +373,12 @@ class QuickBooks_IPP_IntuitAnywhere
 						oauth_request_token = '" . $_REQUEST['oauth_token'] . "' "));
 				*/
 				
-				if ($arr = $this->_driver->oauthRequestResolve($_GET['oauth_token']))
+				if ($arr = $this->_driver->oauthRequestResolve($get['oauth_token']))
 				{
 					$info = $this->_getAccessToken(
 						$arr['oauth_request_token'], 
 						$arr['oauth_request_token_secret'], 
-						$_GET['oauth_verifier']);
+						$get['oauth_verifier']);
 					
 					//print('got back [' . $info . ']');
 					//print_r($info);
@@ -400,8 +404,8 @@ class QuickBooks_IPP_IntuitAnywhere
 							$arr['oauth_request_token'], 
 							$info['oauth_token'], 
 							$info['oauth_token_secret'],
-							$_GET['realmId'], 
-							$_GET['dataSource']);
+							$get['realmId'], 
+							$get['dataSource']);
 						
 						//print_r($_REQUEST);
 						//exit;
