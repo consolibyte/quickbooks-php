@@ -34,15 +34,17 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$ItemService = new QuickBooks_IPP_Service_Term();
+	$BillPaymentService = new QuickBooks_IPP_Service_BillPayment();
 	
-	$items = $ItemService->query($Context, $realm, "SELECT * FROM Item WHERE Metadata.LastUpdatedTime > '2013-01-01T14:50:22-08:00' ORDER BY Metadata.LastUpdatedTime ");
-	
-	foreach ($items as $Item)
-	{
-		//print_r($Item);
+	$billpayments = $BillPaymentService->query($Context, $realm, "SELECT * FROM BillPayment ");
 
-		print('Item Id=' . $Item->getId() . ' is named: ' . $Item->getName() . '<br>');
+	//print_r($customers);
+	
+	foreach ($billpayments as $BillPayment)
+	{
+		print('Bill Payment # ' . $BillPayment->getDocNumber() . ' has a total of $' . $BillPayment->getTotalAmt() . "\n");
+		
+		print_r($BillPayment);
 	}
 
 	/*
