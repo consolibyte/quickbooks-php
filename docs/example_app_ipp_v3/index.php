@@ -17,6 +17,9 @@ while (false !== ($file = readdir($dh)))
 	$tmp = explode('_', $file);
 	switch (end($tmp))
 	{
+		case 'get.php':
+			$examples[$file] = 'Get ' . implode(' ', array_slice($tmp, 1, -1));
+			break;
 		case 'add.php':
 			$examples[$file] = 'Add a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
