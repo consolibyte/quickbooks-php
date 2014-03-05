@@ -36,7 +36,7 @@ if ($Context = $IPP->context())
 	
 	$CustomerService = new QuickBooks_IPP_Service_Customer();
 	
-	$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer ");
+	$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer WHERE FullyQualifiedName LIKE '%Keith O\'Mally%' ");
 
 	//print_r($customers);
 	
