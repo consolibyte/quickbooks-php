@@ -34,24 +34,26 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$ClassService = new QuickBooks_IPP_Service_Class();
+	$CustomerService = new QuickBooks_IPP_Service_Customer();
 	
-	$classes = $ClassService->query($Context, $realm, "SELECT * FROM Class");
+	$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer ");
 
-	print_r($classes);
-	
-	foreach ($classes as $Class)
+	foreach ($customers as $Customer)
 	{
-		print('Class Id=' . $Class->getId() . ' is named: ' . $Class->getName() . '<br>');
+		//print_r($Customer);
+
+		print('Customer #' . $Customer->getXPath('//Customer/Id') . "\n");
+		print('  Phone: ' . $Customer->getXPath('//Customer/PrimaryPhone/FreeFormNumber') . "\n");
+		print('  Email: ' . $Customer->getXPath('//Customer/PrimaryEmailAddr/Address') . "\n\n");
 	}
 
-	
+	/*
 	print("\n\n\n\n");
-	print('Request [' . $ClassService->lastRequest() . ']');
+	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
-	print('Response [' . $ClassService->lastResponse() . ']');
+	print('Response [' . $IPP->lastResponse() . ']');
 	print("\n\n\n\n");
-	
+	*/
 }
 else
 {

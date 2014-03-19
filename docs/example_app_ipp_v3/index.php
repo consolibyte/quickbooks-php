@@ -35,6 +35,9 @@ while (false !== ($file = readdir($dh)))
 		case 'cdc.php';
 			$examples[$file] = 'Get objects that have changed since a timestamp';
 			break;
+		case 'objects.php';
+			$examples[$file] = 'Object ' . implode(' ', array_slice($tmp, 1, -1));
+			break;
 	}
 }
 
