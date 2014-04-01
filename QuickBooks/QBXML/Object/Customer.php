@@ -796,7 +796,7 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
 	{
 		$this->_cleanup();
 		
-		return parent::asQBXML($request, $version = null, $locale = null, $root);
+		return parent::asQBXML($request, $version, $locale, $root);
 	}
 	
 	/**

@@ -27,7 +27,7 @@ class QuickBooks_QBXML_Schema_Object_ClassAddRq extends QuickBooks_QBXML_Schema_
 {
 	protected function &_qbxmlWrapper()
 	{
-		static $wrapper = '';
+		static $wrapper = 'ClassAdd';
 		
 		return $wrapper;
 	}
@@ -120,5 +120,3 @@ class QuickBooks_QBXML_Schema_Object_ClassAddRq extends QuickBooks_QBXML_Schema_
 		return $paths;
 	}
 }
-
-?>
