@@ -362,7 +362,7 @@ class QuickBooks_QBXML_Object_ReceivePayment extends QuickBooks_QBXML_Object
 		return $this->set('DepositToAccountRef FullName', $name);
 	}
 	
-	public function setDepositToAccountFullName()
+	public function setDepositToAccountFullName($name)
 	{
 		return $this->set('DepositToAccountRef FullName', $name);
 	}
