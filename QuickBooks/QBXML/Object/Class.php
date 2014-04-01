@@ -64,7 +64,15 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
 		return $this->get('ParentRef ListID');
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public function setParentName($name)
+	{
+		return $this->set('ParentRef FullName', $name);
+	}
+
+	public function setParentFullName($name)
 	{
 		return $this->set('ParentRef FullName', $name);
 	}
@@ -80,16 +88,6 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
 	public function getParentName()
 	{
 		return $this->get('ParentRef FullName');
-	}
-	
-	public function setParentApplicationID($value)
-	{
-		return $this->set('ParentRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_CLASS, QUICKBOOKS_LISTID, $value));
-	}
-	
-	public function getParentApplicationID()
-	{
-		return $this->get('ParentRef ' . QUICKBOOKS_API_APPLICATIONID);
 	}
 	
 	/**
@@ -180,11 +178,11 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
 	 * @param string $root
 	 * @return string
 	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
+	public function asQBXML($request, $version = null, $locale = null, $root = null)
 	{
 		$this->_cleanup();
 		
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
+		return parent::asQBXML($request, $version = null, $locale = null, $root);
 	}
 	
 	/**
