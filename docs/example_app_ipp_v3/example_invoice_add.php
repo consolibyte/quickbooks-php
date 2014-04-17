@@ -38,12 +38,13 @@ if ($Context = $IPP->context())
 	
 	$Invoice = new QuickBooks_IPP_Object_Invoice();
 	
-	$Invoice->setDocNumber('WEB123');
+	$Invoice->setDocNumber('WEB' . mt_rand(0, 10000));
 	$Invoice->setTxnDate('2013-10-11');
 	
 	$Line = new QuickBooks_IPP_Object_Line();
 	$Line->setDetailType('SalesItemLineDetail');
 	$Line->setAmount(12.95 * 2);
+	$Line->setDescription('Test description goes here.');
 
 	$SalesItemLineDetail = new QuickBooks_IPP_Object_SalesItemLineDetail();
 	$SalesItemLineDetail->setItemRef('8');
@@ -66,14 +67,13 @@ if ($Context = $IPP->context())
 		print($InvoiceService->lastError());
 	}
 
-	/*
 	print('<br><br><br><br>');
 	print("\n\n\n\n\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
 	print('Response [' . $IPP->lastResponse() . ']');
 	print("\n\n\n\n\n\n\n\n\n");
-	*/
+	
 }
 else
 {
