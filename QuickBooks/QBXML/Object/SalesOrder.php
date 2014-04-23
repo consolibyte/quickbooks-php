@@ -671,35 +671,21 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		return $this->set('InvoiceLine', $lines);
 	}
 
+	/**
+	 * Add a Sales Order Line
+	 *
+	 * @param $obj
+	 *
+	 * @return bool
+	 */
 	public function addSalesOrderLine($obj)
 	{
 		return $this->addListItem('SalesOrderLine', $obj);
 	}
-	
-	public function setInvoiceLine($i, $obj)
-	{
-		
-	}
-	
-	public function setInvoiceLineData($i, $key, $value)
-	{
-		$lines = $this->getInvoiceLines();
-		if (isset($lines[$i]))
-		{
-			
-		}
-		
-		return $this->set('InvoiceLine', $lines);
-	}
 
-	public function getInvoiceLineData()
-  {
-    return $this->get('InvoiceLine');
-  }
-
-	public function getInvoiceLine()
+	public function getSalesOrderLine($i)
 	{
-		
+		return $this->getListItem('SalesOrderLine', $i);
 	}
 	
 	public function setOther($other)
@@ -727,19 +713,19 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 	{
 		switch ($request)
 		{
-			case 'InvoiceAddRq':
+			case 'SalesOrderAddRq':
 				
-				if (isset($this->_object['InvoiceLine']))
+				if (isset($this->_object['SalesOrderLine']))
 				{
-					$this->_object['InvoiceLineAdd'] = $this->_object['InvoiceLine'];
+					$this->_object['SalesOrderLineAdd'] = $this->_object['SalesOrderLine'];
 				}
 				
 				break;
-			case 'InvoiceModRq':
+			case 'SalesOrderModRq':
 				
-				if (isset($this->_object['InvoiceLine']))
+				if (isset($this->_object['SalesOrderLine']))
 				{
-					$this->_object['InvoiceLineMod'] = $this->_object['InvoiceLine'];	
+					$this->_object['SalesOrderLineMod'] = $this->_object['SalesOrderLine'];
 				}
 				
 				break;
