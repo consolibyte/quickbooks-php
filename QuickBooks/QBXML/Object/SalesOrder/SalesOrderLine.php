@@ -326,6 +326,6 @@ class QuickBooks_QBXML_Object_SalesOrder_SalesOrderLine extends QuickBooks_QBXML
 	 */
 	public function object()
 	{
-		return 'InvoiceLine';
+		return 'SalesOrderLine';
 	}
 }
