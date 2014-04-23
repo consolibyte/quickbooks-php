@@ -162,7 +162,7 @@ class QuickBooks_QBXML_Object_SalesOrder_SalesOrderLine extends QuickBooks_QBXML
 	
 	public function setAmount($amount)
 	{
-		return $this->setAmountType($amount);
+		return $this->setAmountType('Amount', $amount);
 	}
 	
 	public function setServiceDate($date)
