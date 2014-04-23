@@ -670,6 +670,11 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		
 		return $this->set('InvoiceLine', $lines);
 	}
+
+	public function addSalesOrderLine($obj)
+	{
+		return $this->addListItem('SalesOrderLine', $obj);
+	}
 	
 	public function setInvoiceLine($i, $obj)
 	{
