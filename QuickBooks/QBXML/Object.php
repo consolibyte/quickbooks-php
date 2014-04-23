@@ -581,6 +581,14 @@ abstract class QuickBooks_QBXML_Object
 		
 		// Call any cleanup routines
 		$this->_cleanup();
+
+		// Get the type of request
+		$request_type = '';
+		$res = preg_match('/Add|Mod|Query$/i', $request, $matches);
+		if ($res AND isset($matches[0])) {
+			$request_type = $matches[0];
+			$request_type = ucwords($request_type);
+		}
 		
 		// 
 		if (strtolower(substr($request, -2, 2)) != 'rq')
@@ -663,7 +671,7 @@ abstract class QuickBooks_QBXML_Object
 							}
 						}
 						
-						$tmp2 = new QuickBooks_QBXML_Object_Generic($tmp2, $arr->object());
+						$tmp2 = new QuickBooks_QBXML_Object_Generic($tmp2, $arr->object() . $request_type);
 						
 						$tmp[$path][] = $tmp2;
 					}
