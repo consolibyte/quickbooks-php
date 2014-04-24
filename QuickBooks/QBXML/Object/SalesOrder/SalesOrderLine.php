@@ -284,19 +284,14 @@ class QuickBooks_QBXML_Object_SalesOrder_SalesOrderLine extends QuickBooks_QBXML
 	{
 		$this->_cleanup();
 		
-		if (is_null($object))
-		{
-			$this->_object = $object;
-		}
-		
 		switch ($parent)
 		{
-			case QUICKBOOKS_ADD_INVOICE:
-				$root = 'InvoiceLineAdd';
+			case QUICKBOOKS_ADD_SALESORDER:
+				$root = 'SalesOrderLineAdd';
 				$parent = null;
 				break;
-			case QUICKBOOKS_MOD_INVOICE:
-				$root = 'InvoiceLineMod';
+			case QUICKBOOKS_MOD_SALESORDER:
+				$root = 'SalesOrderLineMod';
 				$parent = null;
 				break;
 		}
