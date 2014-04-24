@@ -614,7 +614,10 @@ abstract class QuickBooks_QBXML_Object
 				$locales = $schema->localePaths();
 			}
 
-			foreach ($schema->reorderPaths(array_keys($this->asList($request))) as $key => $path)
+			$thelist = $this->asList($request);
+			$reordered = $schema->reorderPaths(array_keys($thelist));
+
+			foreach ($reordered as $key => $path)
 			{
 				$value = $this->_object[$path];
 				
