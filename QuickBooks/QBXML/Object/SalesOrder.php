@@ -670,31 +670,22 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		
 		return $this->set('InvoiceLine', $lines);
 	}
-	
-	public function setInvoiceLine($i, $obj)
+
+	/**
+	 * Add a Sales Order Line
+	 *
+	 * @param $obj
+	 *
+	 * @return bool
+	 */
+	public function addSalesOrderLine($obj)
 	{
-		
-	}
-	
-	public function setInvoiceLineData($i, $key, $value)
-	{
-		$lines = $this->getInvoiceLines();
-		if (isset($lines[$i]))
-		{
-			
-		}
-		
-		return $this->set('InvoiceLine', $lines);
+		return $this->addListItem('SalesOrderLine', $obj);
 	}
 
-	public function getInvoiceLineData()
-  {
-    return $this->get('InvoiceLine');
-  }
-
-	public function getInvoiceLine()
+	public function getSalesOrderLine($i)
 	{
-		
+		return $this->getListItem('SalesOrderLine', $i);
 	}
 	
 	public function setOther($other)
@@ -722,19 +713,19 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 	{
 		switch ($request)
 		{
-			case 'InvoiceAddRq':
+			case 'SalesOrderAddRq':
 				
-				if (isset($this->_object['InvoiceLine']))
+				if (isset($this->_object['SalesOrderLine']))
 				{
-					$this->_object['InvoiceLineAdd'] = $this->_object['InvoiceLine'];
+					$this->_object['SalesOrderLineAdd'] = $this->_object['SalesOrderLine'];
 				}
 				
 				break;
-			case 'InvoiceModRq':
+			case 'SalesOrderModRq':
 				
-				if (isset($this->_object['InvoiceLine']))
+				if (isset($this->_object['SalesOrderLine']))
 				{
-					$this->_object['InvoiceLineMod'] = $this->_object['InvoiceLine'];	
+					$this->_object['SalesOrderLineMod'] = $this->_object['SalesOrderLine'];
 				}
 				
 				break;
@@ -752,23 +743,19 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		
 		switch ($root)
 		{
-			case QUICKBOOKS_ADD_INVOICE:
+			case QUICKBOOKS_ADD_SALESORDER:
 				
-				//if (isset($this->_object['InvoiceLine']))
-				//{
-				//	$this->_object['InvoiceLineAdd'] = $this->_object['InvoiceLine'];
-				//}
-				
-				foreach ($object['InvoiceLineAdd'] as $key => $obj)
+				foreach ($object['SalesOrderLineAdd'] as $key => $obj)
 				{
-					$obj->setOverride('InvoiceLineAdd');
+					$obj->setOverride('SalesOrderLineAdd');
 				}
 				
 				break;
-			case QUICKBOOKS_MOD_INVOICE:
-				if (isset($object['InvoiceLine']))
+			
+			case QUICKBOOKS_MOD_SALESORDER:
+				if (isset($object['SalesOrderLine']))
 				{
-					$object['InvoiceLineMod'] = $object['InvoiceLine'];
+					$object['SalesOrderLineMod'] = $object['SalesOrderLine'];
 				}
 				break;
 		}
@@ -787,20 +774,22 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		
 		return parent::asArray($request, $nest);
 	}
-	
+
 	/**
-	 * 
-	 * 
-	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
-	 * @param string $indent
+	 *
+	 *
+	 * @param        $request
+	 * @param null   $version
+	 * @param null   $locale
 	 * @param string $root
+	 *
 	 * @return string
 	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null, $parent = null)
+	public function asQBXML($request, $version = null, $locale = null, $root = null)
 	{
 		$this->_cleanup();
 		
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
+		return parent::asQBXML($request, $version, $locale, $root);
 	}
 	
 	/**
