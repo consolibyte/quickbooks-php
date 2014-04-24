@@ -743,23 +743,19 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		
 		switch ($root)
 		{
-			case QUICKBOOKS_ADD_INVOICE:
+			case QUICKBOOKS_ADD_SALESORDER:
 				
-				//if (isset($this->_object['InvoiceLine']))
-				//{
-				//	$this->_object['InvoiceLineAdd'] = $this->_object['InvoiceLine'];
-				//}
-				
-				foreach ($object['InvoiceLineAdd'] as $key => $obj)
+				foreach ($object['SalesOrderLineAdd'] as $key => $obj)
 				{
-					$obj->setOverride('InvoiceLineAdd');
+					$obj->setOverride('SalesOrderLineAdd');
 				}
 				
 				break;
-			case QUICKBOOKS_MOD_INVOICE:
-				if (isset($object['InvoiceLine']))
+			
+			case QUICKBOOKS_MOD_SALESORDER:
+				if (isset($object['SalesOrderLine']))
 				{
-					$object['InvoiceLineMod'] = $object['InvoiceLine'];
+					$object['SalesOrderLineMod'] = $object['SalesOrderLine'];
 				}
 				break;
 		}
