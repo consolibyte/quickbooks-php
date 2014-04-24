@@ -492,14 +492,7 @@ class QuickBooks_QBXML_Object_ReceivePayment extends QuickBooks_QBXML_Object
 		switch ($root)
 		{
 			case QUICKBOOKS_ADD_RECEIVEPAYMENT:
-				
-				/*
-				if (isset($this->_object['AppliedToTxn']))
-				{
-					$this->_object['AppliedToTxnAdd'] = $this->_object['AppliedToTxn'];
-				}
-				*/
-				
+
 				if ($this->exists('AppliedToTxnAdd'))
 				{
 					foreach ($object['AppliedToTxnAdd'] as $key => $obj)
@@ -510,8 +503,14 @@ class QuickBooks_QBXML_Object_ReceivePayment extends QuickBooks_QBXML_Object
 				
 				break;
 			case QUICKBOOKS_MOD_RECEIVEPAYMENT:
-				
-				// finish me!
+
+				if ($this->exists('AppliedToTxnMod'))
+				{
+					foreach ($object['AppliedToTxnMod'] as $key => $obj)
+					{
+						$obj->setOverride('AppliedToTxnMod');
+					}
+				}
 				
 				break;
 		}

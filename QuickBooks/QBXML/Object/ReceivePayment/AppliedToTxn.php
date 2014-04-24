@@ -110,11 +110,6 @@ class QuickBooks_QBXML_Object_ReceivePayment_AppliedToTxn extends QuickBooks_QBX
 	{
 		$this->_cleanup();
 		
-		if (is_null($object))
-		{
-			$object = $this->_object;
-		}
-		
 		switch ($parent)
 		{
 			case QUICKBOOKS_ADD_RECEIVEPAYMENT:
