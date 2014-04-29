@@ -979,11 +979,15 @@ class QuickBooks_QBXML_Object_Invoice extends QuickBooks_QBXML_Object
 				//{
 				//	$this->_object['InvoiceLineAdd'] = $this->_object['InvoiceLine'];
 				//}
-				
-				foreach ($object['InvoiceLineAdd'] as $key => $obj)
+
+				if (!empty($object['InvoiceLineAdd']))
 				{
-					$obj->setOverride('InvoiceLineAdd');
+					foreach ($object['InvoiceLineAdd'] as $key => $obj)
+					{
+						$obj->setOverride('InvoiceLineAdd');
+					}
 				}
+
 
 				if (!empty($object['ShippingLineAdd']))
 				{
