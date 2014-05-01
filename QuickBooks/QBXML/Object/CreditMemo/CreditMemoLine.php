@@ -77,7 +77,12 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
 	{
 		return $this->getDesc();
 	}
-	
+
+	public function setDesc($value)
+	{
+		return $this->set('Desc', $value);
+	}
+
 	public function setQuantity($quan)
 	{
 		return $this->set('Quantity', (float) $quan);
@@ -86,6 +91,21 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
 	public function getQuantity()
 	{
 		return $this->get('Quantity');
+	}
+
+	public function setRate($value)
+	{
+		return $this->set('Rate', (float) $value);
+	}
+
+	public function getRate()
+	{
+		return $this->get('Rate');
+	}
+
+	public function setClassFullName($value)
+	{
+		return $this->set('ClassRef FullName', $value);
 	}
 
 	public function setAmount($amount)

@@ -750,6 +750,15 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
 		return $this->get('PriceLevelRef FullName');
 	}
 	
+	public function setPreferredDeliveryMethod($value)
+	{
+		return $this->set('PreferredDeliveryMethod', $value);
+	}
+
+	public function getPreferredDeliveryMethod()
+	{
+		return $this->get('PreferredDeliveryMethod');
+	}
 
 	/**
 	 * Get the price level list id.

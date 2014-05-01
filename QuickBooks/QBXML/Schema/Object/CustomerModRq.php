@@ -112,6 +112,7 @@ class QuickBooks_QBXML_Schema_Object_CustomerModRq extends QuickBooks_QBXML_Sche
   'DeliveryMethod' => 'ENUMTYPE',
   'PriceLevelRef ListID' => 'IDTYPE',
   'PriceLevelRef FullName' => 'STRTYPE',
+  'PreferredDeliveryMethod' => 'STRTYPE', 
   'IncludeRetElement' => 'STRTYPE',
 );
 		
@@ -368,6 +369,7 @@ class QuickBooks_QBXML_Schema_Object_CustomerModRq extends QuickBooks_QBXML_Sche
   'DeliveryMethod' => 3,
   'PriceLevelRef ListID' => 999.99,
   'PriceLevelRef FullName' => 999.99,
+  'PreferredDeliveryMethod' => 12, 
   'IncludeRetElement' => 4,
 );
 		
@@ -552,11 +554,10 @@ class QuickBooks_QBXML_Schema_Object_CustomerModRq extends QuickBooks_QBXML_Sche
   'DeliveryMethod',
   'PriceLevelRef ListID',
   'PriceLevelRef FullName',
+  'PreferredDeliveryMethod',
   'IncludeRetElement',
 );
 			
 		return $paths;
 	}
 }
-
-?>
