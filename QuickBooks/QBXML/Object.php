@@ -141,7 +141,7 @@ abstract class QuickBooks_QBXML_Object
 			
 			if ($cast)
 			{
-				$value = QuickBooks_Cast::cast($this->object(), $key, $value);
+				$value = QuickBooks_Cast::cast($this->object(), $key, $value, true, false);
 			}
 			
 			//print('	setting [' . $key . '] to value {' . $value . '}' . "\n");
