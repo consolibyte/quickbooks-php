@@ -1015,10 +1015,22 @@ class QuickBooks_QBXML_Object_Invoice extends QuickBooks_QBXML_Object
 				
 				break;
 			case QUICKBOOKS_MOD_INVOICE:
+				
+				/*
 				if (isset($object['InvoiceLine']))
 				{
 					$object['InvoiceLineMod'] = $object['InvoiceLine'];
 				}
+				*/
+
+				if (!empty($object['InvoiceLineMod']))
+				{
+					foreach ($object['InvoiceLineMod'] as $key => $obj)
+					{
+						$obj->setOverride('InvoiceLineMod');
+					}
+				}
+
 				break;
 		}
 		

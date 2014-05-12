@@ -679,6 +679,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'CustomerSalesTaxCodeRef ListID',
   'CustomerSalesTaxCodeRef FullName',
   'Other',
+  'InvoiceLineMod', 
   'InvoiceLineMod TxnLineID',
   'InvoiceLineMod ItemRef ListID',
   'InvoiceLineMod ItemRef FullName',
