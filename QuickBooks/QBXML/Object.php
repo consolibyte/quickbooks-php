@@ -139,7 +139,7 @@ abstract class QuickBooks_QBXML_Object
 		{
 			//print('set(' . $key . ', ' . $value . ', ' . $cast . ')' . "\n");
 			
-			if ($cast)
+			if ($cast and $value != '__EMPTY__')
 			{
 				$value = QuickBooks_Cast::cast($this->object(), $key, $value, true, false);
 			}
