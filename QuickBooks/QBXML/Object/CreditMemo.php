@@ -82,6 +82,11 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	{
 		return $this->set('ClassRef FullName', $name);
 	}
+
+	public function setClassFullName($name)
+	{
+		return $this->set('ClassRef FullName', $name);
+	}
 	
 	public function getClassListID()
 	{

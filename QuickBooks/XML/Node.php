@@ -471,7 +471,7 @@ class QuickBooks_XML_Node
 	{
 		return $this->_data;
 	}
-	
+
 	/**
 	 * Tell whether or not this XML node contains data
 	 * 
@@ -692,7 +692,11 @@ class QuickBooks_XML_Node
 			}
 			else
 			{
-				if ($node->hasData() or $empty == QuickBooks_XML::XML_PRESERVE)
+				if ($node->data() == '__EMPTY__')		// ick, bad hack 
+				{
+					$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '></' . $node->name() . '>' . "\n";
+				}
+				else if ($node->hasData() or $empty == QuickBooks_XML::XML_PRESERVE)
 				{
 					// Double-encode is *off*
 					//$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '>' . QuickBooks_XML::encode($node->data(), true, false) . '</' . $node->name() . '>' . "\n";
@@ -708,27 +712,7 @@ class QuickBooks_XML_Node
 				}
 			}
 			
-			/*
-			$xml .= str_repeat($indent, $tabs) . '<' . $node->name();
 			
-			foreach ($node->attributes() as $key => $value)
-			{
-				$xml .= ' ' . $key . '="' . htmlentities($value, ENT_QUOTES) . '"';
-			}
-			
-			if ($node->data())
-			{
-				$xml .= '>' . htmlentities($node->data()) . '</' . $node->name() . '>' . "\n";
-			}
-			else if ($compress)
-			{
-				$xml .= ' />' . "\n";
-			}
-			else
-			{
-				$xml .= '></' . $node->name() . '>' . "\n";
-			}
-			*/
 		}
 		
 		return $xml;
@@ -908,4 +892,3 @@ class QuickBooks_XML_Node
 	}
 }
 
-?>
