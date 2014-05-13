@@ -1149,6 +1149,8 @@ class QuickBooks_WebConnector_Handlers
 		// , $requestID, $user, $action, $ident, $extra, &$err, $xml, $qb_identifier
 		// Call the error handler (if one is set)
 		
+		$errmsg = html_entity_decode($errmsg);
+
 		// First, set the status of the item to error
 		/*
 		if ($action and $ident)
