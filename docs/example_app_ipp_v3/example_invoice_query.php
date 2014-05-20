@@ -36,7 +36,8 @@ if ($Context = $IPP->context())
 	
 	$InvoiceService = new QuickBooks_IPP_Service_Invoice();
 	
-	$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice STARTPOSITION 1 MAXRESULTS 10");
+	//$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice STARTPOSITION 1 MAXRESULTS 10");
+	$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice WHERE DocNumber = '1234' ");
 
 	//print_r($customers);
 	
