@@ -36,7 +36,7 @@ if ($Context = $IPP->context())
 	
 	$InvoiceService = new QuickBooks_IPP_Service_Invoice();
 	
-	// Get the existing customer first (you need the latest SyncToken value)
+	// Get the existing invoice first (you need the latest SyncToken value)
 	$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice WHERE Id = '34' ");
 	$Invoice = $invoices[0];
 	

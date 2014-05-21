@@ -174,6 +174,7 @@ $soap_options = array();
 // 
 $handler_options = array(
 	'deny_concurrent_logins' => false,
+	'deny_reallyfast_logins' => false, 
 	);
 
 // 
