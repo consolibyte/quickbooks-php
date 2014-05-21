@@ -14,7 +14,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Require the library code
-require_once dirname(__FILE__) . '/../../QuickBooks.php';
+require_once dirname(__FILE__) . '/../../../QuickBooks.php';
 
 // Your OAuth token (Intuit will give you this when you register an Intuit Anywhere app)
 $token = '83e26868b5134b49beb97d8bd2a3e57755ca';

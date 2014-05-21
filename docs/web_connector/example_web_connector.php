@@ -57,7 +57,7 @@ if (function_exists('date_default_timezone_set'))
 //define('QUICKBOOKS_FRAMEWORKS', QUICKBOOKS_FRAMEWORK_WEBCONNECTOR);
 
 // Require the framework
-require_once '../QuickBooks.php';
+require_once '../../QuickBooks.php';
 
 // A username and password you'll use in: 
 //	a) Your .QWC file
