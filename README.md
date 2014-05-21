@@ -31,22 +31,22 @@ If you have questions, suggestions, or find a bug, the absolute best way to get 
 You will find examples in the docs/ folder. 
 
 
-### QuickBooks ONLINE 
+### Examples for QuickBooks ONLINE 
 
 If you are using *QuickBooks ONLINE*, then you need to look in this folder for examples:
 
 * docs/partner_platform/example_app_ipp_v3/
 
-[Quick start guide for Intuit Partner Platform/QuickBooks Online] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
+Make sure you look at the [quick start guide for Intuit Partner Platform/QuickBooks Online] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
 
 
-### QuickBooks FOR WINDOWS 
+### Examples for QuickBooks FOR WINDOWS 
 
 If you are using *QuickBooks FOR WINDOWS*, then you need to look in this folder for examples:
 
 * docs/web_connector/
 
-[Quick start guide for the Web Connector/QuickBooks for Windows](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)   
+Make sure you look at the [quick start guide for the Web Connector/QuickBooks for Windows](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)   
 
 
 ### Additional Info
