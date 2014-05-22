@@ -49,14 +49,14 @@ if ($Context = $IPP->context())
 	
 	// The line has a LinkedTxn node which links to the actual invoice
 	$LinkedTxn = new QuickBooks_IPP_Object_LinkedTxn();
-	$LinkedTxn->setTxnId('84');
+	$LinkedTxn->setTxnId('{-84}');
 	$LinkedTxn->setTxnType('Invoice');
 
 	$Line->setLinkedTxn($LinkedTxn);
 
 	$Payment->addLine($Line);
 
-	$Payment->setCustomerRef('67');
+	$Payment->setCustomerRef('{-67}');
 
 	// Send payment to QBO 
 	if ($resp = $PaymentService->add($Context, $realm, $Payment))
