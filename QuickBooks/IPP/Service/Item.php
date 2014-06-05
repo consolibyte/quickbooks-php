@@ -71,6 +71,11 @@ class QuickBooks_IPP_Service_Item extends QuickBooks_IPP_Service
 	{
 		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEM, $Object);
 	}
+
+	public function update($Context, $realm, $IDType, $Object)
+	{
+		return parent::_update($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_ITEM, $Object, $IDType);
+	}
 	
 	public function delete($Context, $realmID, $IDType)
 	{
