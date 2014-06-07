@@ -454,7 +454,18 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 	{
 		return $this->_fetch($res);
 	}
-	
+
+	/**
+	 * Rewind the result set
+	 *
+	 * @param resource $res
+	 * @return boolean
+	 */
+  public function rewind($res)
+  {
+    sqlite_rewind($res);
+  }
+
 	/**
 	 * Escape a string for the database
 	 * 
