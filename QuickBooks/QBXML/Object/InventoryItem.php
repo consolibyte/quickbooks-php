@@ -369,11 +369,11 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
 	 * @param string $root
 	 * @return string
 	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
+	public function asQBXML($request, $version = null, $locale = null, $root = null)
 	{
 		$this->_cleanup();
 		
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
+		return parent::asQBXML($request, $version, $locale, $root);
 	}
 	
 	/**
@@ -386,5 +386,3 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
 		return QUICKBOOKS_OBJECT_INVENTORYITEM;
 	}
 }
-
-?>

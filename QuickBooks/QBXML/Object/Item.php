@@ -229,12 +229,12 @@ class QuickBooks_QBXML_Object_Item extends QuickBooks_QBXML_Object
 	 * @param string $root
 	 * @return string
 	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
-	{
-		$this->_cleanup();
-		
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
-	}
+	public function asQBXML($request, $version = null, $locale = null, $root = null)
+  {
+    $this->_cleanup();
+    
+    return parent::asQBXML($request, $version, $locale, $root);
+  }
 	
 	/**
 	 * Tell what type of object this is 
@@ -246,5 +246,3 @@ class QuickBooks_QBXML_Object_Item extends QuickBooks_QBXML_Object
 		return QUICKBOOKS_OBJECT_ITEM;
 	}
 }
-
-?>
