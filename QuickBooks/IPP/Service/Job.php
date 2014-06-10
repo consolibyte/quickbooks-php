@@ -25,4 +25,9 @@ class QuickBooks_IPP_Service_Job extends QuickBooks_IPP_Service
 	{
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_JOB, $query, null, $page, $size, '', $options);
 	}
+	
+	public function add($Context, $realmID, $Object)
+	{
+		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_JOB, $Object);
+	}
 }
