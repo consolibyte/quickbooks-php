@@ -40,6 +40,9 @@ if ($Context = $IPP->context())
 	$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice WHERE Id = '34' ");
 	$Invoice = $invoices[0];
 	
+	$Line = $Invoice->getLine(0);
+	$Line->setDescription('Update of my description on ' . date('r'));
+
 	print_r($Invoice);
 
 	$Invoice->setTxnDate(date('Y-m-d'));  // Update the invoice date to today's date 
