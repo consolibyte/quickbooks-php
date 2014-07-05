@@ -1609,7 +1609,7 @@ class Quickbooks_MerchantService
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;		
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
 		
-		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_CAPTURE, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardRefundRs', $xml, $Card);
+		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_REFUND, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardRefundRs', $xml, $Card);
 	}
 	
 	/**
