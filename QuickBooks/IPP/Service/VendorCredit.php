@@ -21,9 +21,26 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_VendorCredit extends QuickBooks_IPP_Service
 {
+	/*
 	public function findAll($Context, $realmID)
 	{
 		$xml = null;
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT, $xml);
+	}
+	*/
+	
+	public function add($Context, $realmID, $Object)
+	{
+		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT, $Object);
+	}	
+
+	public function update($Context, $realm, $IDType, $Object)
+	{
+		return parent::_update($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT, $Object, $IDType);
+	}
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
 	}
 }

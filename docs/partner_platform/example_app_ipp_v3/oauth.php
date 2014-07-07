@@ -12,7 +12,7 @@
 /**
  * Require the QuickBooks library
  */
-require_once dirname(__FILE__) . '/../../QuickBooks.php';
+require_once dirname(__FILE__) . '/../../../QuickBooks.php';
 
 /**
  * Require some IPP/OAuth configuration data
