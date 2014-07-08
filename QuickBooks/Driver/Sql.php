@@ -2818,7 +2818,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		return $sql;
 	}
 	
-	protected function _generateCreateTable($name, $arr, $primary = array(), $keys = array())
+	protected function _generateCreateTable($name, $arr, $primary = array(), $keys = array(), $uniques = array(), $if_not_exists = true)
 	{
 		$sql = '';
 		
@@ -2828,7 +2828,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 		
 		return array(
-			'CREATE TABLE ' . $name . ' ( ' . "\n" . substr($sql, 0, -3) . ' ); ',
+			'CREATE TABLE ' . ($if_not_exists?"IF NOT EXISTS ":"") . $name . ' ( ' . "\n" . substr($sql, 0, -3) . ' ); ',
 			);
 	}
 	

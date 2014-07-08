@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SQLite backend for the QuickBooks SOAP server
+ * SQLite 3 backend for the QuickBooks SOAP server
  *
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
@@ -18,6 +18,7 @@
  * database.
  *
  * @author Keith Palmer <keith@consolibyte.com>
+ * @contributor Hoang Nguyen <nkahoang@gmail.com>
  * @license LICENSE.txt
  *
  * @package QuickBooks
@@ -44,123 +45,123 @@ require_once 'QuickBooks/Driver/Sql.php';
  */
 require_once 'QuickBooks/Utilities.php';
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_SALT'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_SALT'))
 {
     /**
      * Salt used when hashing to create ticket values
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_SALT', QUICKBOOKS_DRIVER_SQL_SALT);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_SALT', QUICKBOOKS_DRIVER_SQL_SALT);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX'))
 {
     /**
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX', QUICKBOOKS_DRIVER_SQL_PREFIX);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX', QUICKBOOKS_DRIVER_SQL_PREFIX);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_QUEUETABLE'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_QUEUETABLE'))
 {
     /**
      * MySQL table name to store queued requests in
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_QUEUETABLE', QUICKBOOKS_DRIVER_SQL_QUEUETABLE);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_QUEUETABLE', QUICKBOOKS_DRIVER_SQL_QUEUETABLE);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_USERTABLE'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_USERTABLE'))
 {
     /**
      * MySQL table name to store usernames/passwords for the QuickBooks SOAP server
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_USERTABLE', QUICKBOOKS_DRIVER_SQL_USERTABLE);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_USERTABLE', QUICKBOOKS_DRIVER_SQL_USERTABLE);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_TICKETTABLE'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_TICKETTABLE'))
 {
     /**
      * The table name to store session tickets in
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_TICKETTABLE', QUICKBOOKS_DRIVER_SQL_TICKETTABLE);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_TICKETTABLE', QUICKBOOKS_DRIVER_SQL_TICKETTABLE);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_LOGTABLE'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_LOGTABLE'))
 {
     /**
      * The table name to store log data in
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_LOGTABLE', QUICKBOOKS_DRIVER_SQL_LOGTABLE);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_LOGTABLE', QUICKBOOKS_DRIVER_SQL_LOGTABLE);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_RECURTABLE'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_RECURTABLE'))
 {
     /**
      * The table name to store recurring events in
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_RECURTABLE', QUICKBOOKS_DRIVER_SQL_RECURTABLE);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_RECURTABLE', QUICKBOOKS_DRIVER_SQL_RECURTABLE);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_IDENTTABLE'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_IDENTTABLE'))
 {
     /**
      * The table name to store identifiers in
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_IDENTTABLE', QUICKBOOKS_DRIVER_SQL_IDENTTABLE);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_IDENTTABLE', QUICKBOOKS_DRIVER_SQL_IDENTTABLE);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_CONFIGTABLE'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_CONFIGTABLE'))
 {
     /**
      * The table name to store configuration options in
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_CONFIGTABLE', QUICKBOOKS_DRIVER_SQL_CONFIGTABLE);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_CONFIGTABLE', QUICKBOOKS_DRIVER_SQL_CONFIGTABLE);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_NOTIFYTABLE'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_NOTIFYTABLE'))
 {
     /**
      * The table name to store notifications in
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_NOTIFYTABLE', QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_NOTIFYTABLE', QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE);
 }
 
-if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_CONNECTIONTABLE'))
+if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE3_CONNECTIONTABLE'))
 {
     /**
      * The table name to store connection data in
      *
      * @var string
      */
-    define('QUICKBOOKS_DRIVER_SQL_SQLITE_CONNECTIONTABLE', QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE);
+    define('QUICKBOOKS_DRIVER_SQL_SQLITE3_CONNECTIONTABLE', QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE);
 }
 
 /**
  * QuickBooks MySQL back-end driver
  */
-class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
+class QuickBooks_Driver_Sql_Sqlite3 extends QuickBooks_Driver_Sql
 {
     /**
-     * MySQL connection resource
+     * SQLite3 connection resource
      *
-     * @var resource
+     * @var SQLite3
      */
     protected $_conn;
 
@@ -200,15 +201,8 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
         }
         else
         {
-            $trim = false;
-            if (false === strpos($dsn_or_conn, ':///'))
-            {
-                $dsn_or_conn = str_replace('://', '://localhost/', $dsn_or_conn);
-                $trim = true;
-            }
-
             $defaults = array(
-                'scheme' => 'mysql',
+                'scheme' => 'sqlite',
                 'host' => 'localhost',
                 'port' => 3306,
                 'user' => 'root',
@@ -218,10 +212,6 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
 
             $parse = QuickBooks_Utilities::parseDSN($dsn_or_conn, $defaults);
 
-            if ($trim)
-            {
-                $parse['path'] = substr($parse['path'], 1);
-            }
 
             //print_r($parse);
             //exit;
@@ -307,8 +297,12 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
      */
     protected function _connect($host, $port, $user, $pass, $db, $new_link, $client_flags)
     {
-        $this->_conn = sqlite_open($db) or die('db: ' . $db . '');
-
+        try {
+            $this->_conn = new SQLite3($db);
+        }
+        catch(\Exception $ex) {
+            die('db: '. $db . 'ex: ' . $ex->getMessage());
+        }
         return true;
     }
 
@@ -320,7 +314,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
      */
     protected function _fetch($res)
     {
-        return sqlite_fetch_array($res, SQLITE_ASSOC);
+        return $res->fetchArray(SQLITE3_ASSOC);
     }
 
     /**
@@ -347,19 +341,21 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
             // @todo Should this be implemented...?
         }
 
-        $res = sqlite_query($this->_conn, $sql);
+        try {
 
-        if (!$res)
-        {
-            //$errnum = mysql_errno($this->_conn);
-            //$errmsg = mysql_error($this->_conn);
-            $errnum = -99;
-            $errmsg = 'SQLLite Query Error';
+            $res = $this->_conn->query($sql);
 
-            //print($sql);
+            if (!$res)
+            {
+                $errnum = -99;
+                $errmsg = 'SQLLite Query Error';
 
-            trigger_error('Error Num.: ' . $errnum . "\n" . 'Error Msg.:' . $errmsg . "\n" . 'SQL: ' . $sql, E_USER_ERROR);
-            return false;
+                trigger_error('Error Num.: ' . $errnum . "\n" . 'Error Msg.:' . $errmsg . "\n" . 'SQL: ' . $sql, E_USER_ERROR);
+                return false;
+            }
+        }
+        catch(\Exception $e) {
+            trigger_error($e->getMessage());
         }
 
         return $res;
@@ -419,7 +415,8 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
     public function last()
     {
         //return mysql_insert_id($this->_conn);
-        return sqlite_last_insert_rowid($this->_conn);
+        return $this->_conn->lastInsertRowID();
+        //return sqlite_last_insert_rowid($this->_conn);
     }
 
     /**
@@ -475,7 +472,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
     protected function _escape($str)
     {
         //return mysql_real_escape_string($str, $this->_conn);
-        return sqlite_escape_string($str);
+        return SQLite3::escapeString($str);
     }
 
     /**
@@ -575,25 +572,25 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
         switch ($table)
         {
             case QUICKBOOKS_DRIVER_SQL_LOGTABLE:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE_LOGTABLE;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE3_LOGTABLE;
             case QUICKBOOKS_DRIVER_SQL_QUEUETABLE:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE_QUEUETABLE;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE3_QUEUETABLE;
             case QUICKBOOKS_DRIVER_SQL_RECURTABLE:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE_RECURTABLE;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE3_RECURTABLE;
             case QUICKBOOKS_DRIVER_SQL_TICKETTABLE:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE_TICKETTABLE;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE3_TICKETTABLE;
             case QUICKBOOKS_DRIVER_SQL_USERTABLE:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE_USERTABLE;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE3_USERTABLE;
             case QUICKBOOKS_DRIVER_SQL_CONFIGTABLE:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE_CONFIGTABLE;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE3_CONFIGTABLE;
             case QUICKBOOKS_DRIVER_SQL_IDENTTABLE:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE_IDENTTABLE;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE3_IDENTTABLE;
             case QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE_NOTIFYTABLE;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE3_NOTIFYTABLE;
             case QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE_CONNECTIONTABLE;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . QUICKBOOKS_DRIVER_SQL_SQLITE3_CONNECTIONTABLE;
             default:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX . $table;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_PREFIX . $table;
         }
     }
 
@@ -602,7 +599,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
         switch ($salt)
         {
             case QUICKBOOKS_DRIVER_SQL_SALT:
-                return QUICKBOOKS_DRIVER_SQL_SQLITE_SALT;
+                return QUICKBOOKS_DRIVER_SQL_SQLITE3_SALT;
             default:
                 return $salt;
         }
@@ -616,36 +613,6 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
         {
             $primary = current($primary);
         }
-
-        /*
-        if (is_array($primary))
-        {
-            //ALTER TABLE  `quickbooks_ident` ADD PRIMARY KEY (  `qb_action` ,  `unique_id` )
-            $arr_sql[] = 'ALTER TABLE ' . $name . ' ADD PRIMARY KEY ( ' . implode(', ', $primary) . ' ) ';
-        }
-        else if ($primary)
-        {
-            $arr_sql[] = 'ALTER TABLE ' . $name . ' ADD PRIMARY KEY(' . $primary . '); ';
-
-            if ($arr[$primary][0] == QUICKBOOKS_DRIVER_SQL_SERIAL)
-            {
-                // add the auto-increment
-                $arr_sql[] = 'ALTER TABLE ' . $name . ' CHANGE ' . $primary . ' ' . $primary . ' INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;';
-            }
-        }
-
-        foreach ($keys as $key)
-        {
-            if (is_array($key))		// compound key
-            {
-                $arr_sql[] = 'ALTER TABLE ' . $name . ' ADD INDEX(' . implode(', ', $key) . ');';
-            }
-            else
-            {
-                $arr_sql[] = 'ALTER TABLE ' . $name . ' ADD INDEX(' . $key . ');';
-            }
-        }
-        */
 
         return $arr_sql;
     }

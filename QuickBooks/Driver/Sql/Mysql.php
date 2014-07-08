@@ -630,9 +630,9 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 		}
 	}
 	
-	protected function _generateCreateTable($name, $arr, $primary = array(), $keys = array())
+	protected function _generateCreateTable($name, $arr, $primary = array(), $keys = array(), $uniques = array(), $if_not_exists = true)
 	{
-		$arr_sql = parent::_generateCreateTable($name, $arr, $primary, $keys);
+		$arr_sql = parent::_generateCreateTable($name, $arr, $primary, $keys, $uniques, $if_not_exists);
 		
 		if (is_array($primary) and count($primary) == 1)
 		{

@@ -941,9 +941,9 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	 * @param array $keys
 	 * @return array
 	 */
-	protected function _generateCreateTable($name, $arr, $primary = array(), $keys = array())
+	protected function _generateCreateTable($name, $arr, $primary = array(), $keys = array(), $uniques = array(), $if_not_exists = true)
 	{
-		$arr_sql = parent::_generateCreateTable('"' . $name . '"', $arr, $primary, $keys);
+		$arr_sql = parent::_generateCreateTable('"' . $name . '"', $arr, $primary, $keys, $if_not_exists);
 		
 		if (is_array($primary) and count($primary) == 1)
 		{
