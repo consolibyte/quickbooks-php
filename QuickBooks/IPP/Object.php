@@ -334,7 +334,7 @@ class QuickBooks_IPP_Object
 		}
 	}
 	
-	public function asXML($indent = 0, $parent = null, $optype = null, $flavor = null, $version = QuickBooks_IPP_IDS::VERSION_2)
+	public function asXML($indent = 0, $parent = null, $optype = null, $flavor = null, $version = QuickBooks_IPP_IDS::VERSION_3)
 	{
 		if ($version == QuickBooks_IPP_IDS::VERSION_3)
 		{

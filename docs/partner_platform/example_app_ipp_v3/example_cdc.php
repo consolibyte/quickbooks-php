@@ -43,7 +43,7 @@ if ($Context = $IPP->context())
 		);
 
 	// The date they should have been updated after 
-	$timestamp = QuickBooks_Utilities::datetime('-6 months');
+	$timestamp = QuickBooks_Utilities::datetime('-5 years');
 
 	$cdc = $CDCService->cdc($Context, $realm, 
 		$objects,
@@ -72,13 +72,13 @@ if ($Context = $IPP->context())
 		}
 	}
 
-	/*
+	
 	print("\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");
 	print('Response [' . $IPP->lastResponse() . ']');
 	print("\n\n\n\n");
-	*/	
+	
 }
 else
 {

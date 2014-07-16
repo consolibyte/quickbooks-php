@@ -34,23 +34,15 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$InvoiceService = new QuickBooks_IPP_Service_Invoice();
+	$VendorCreditService = new QuickBooks_IPP_Service_VendorCredit();
 	
-	$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice STARTPOSITION 1 MAXRESULTS 10");
-	//$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice WHERE DocNumber = '1002' ");
+	$vcs = $VendorCreditService->query($Context, $realm, "SELECT * FROM VendorCredit");
 
-	//print_r($customers);
+	//print_r($terms);
 	
-	foreach ($invoices as $Invoice)
+	foreach ($vcs as $Vc)
 	{
-		print('Invoice # ' . $Invoice->getDocNumber() . ' has a total of $' . $Invoice->getTotalAmt() . "\n");
-		print('    First line item: ' . $Invoice->getLine(0)->getDescription() . "\n");
-		print('    Internal Id value: ' . $Invoice->getId() . "\n");
-		print("\n");
-
-		//print_r($Invoice);
-		//$Line = $Invoice->getLine(0);
-		//print_r($Line);
+		print_r($Vc);
 	}
 
 	/*

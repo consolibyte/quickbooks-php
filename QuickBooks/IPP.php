@@ -259,7 +259,7 @@ class QuickBooks_IPP
 		$this->_ids_parser = true;
 		
 		// What version of IDS to use
-		$this->_ids_version = QuickBooks_IPP_IDS::VERSION_2;
+		$this->_ids_version = QuickBooks_IPP_IDS::VERSION_3;
 		
 		// Driver class for logging
 		$this->_driver = null;
@@ -1012,6 +1012,12 @@ class QuickBooks_IPP
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/cdc?entities=' . implode(',', $xml_or_query[0]) . '&changedSince=' . $xml_or_query[1];
 		}
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_DELETE)
+		{
+			$post = true;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?operation=delete';
+			$xml = $xml_or_query;
+		}
 
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
 
@@ -1399,7 +1405,9 @@ class QuickBooks_IPP
 		
 		if ($Context->IPP()->version() == QuickBooks_IPP_IDS::VERSION_3)
 		{
-			if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD)
+			if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or 
+				$action == QuickBooks_IPP_IDS::OPTYPE_MOD or 
+				$action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 			{
 				$headers['Content-Type'] = 'application/xml';
 			}

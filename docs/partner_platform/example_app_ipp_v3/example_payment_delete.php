@@ -34,26 +34,23 @@ if ($Context = $IPP->context())
 	// Set the IPP version to v3 
 	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
 	
-	$InvoiceService = new QuickBooks_IPP_Service_Invoice();
+	$PaymentService = new QuickBooks_IPP_Service_Payment();
 	
-	$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice STARTPOSITION 1 MAXRESULTS 10");
-	//$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice WHERE DocNumber = '1002' ");
+	$the_payment_to_delete = '{-12}';
 
-	//print_r($customers);
-	
-	foreach ($invoices as $Invoice)
+	$retr = $PaymentService->delete($Context, $realm, $the_payment_to_delete);
+	if ($retr)
 	{
-		print('Invoice # ' . $Invoice->getDocNumber() . ' has a total of $' . $Invoice->getTotalAmt() . "\n");
-		print('    First line item: ' . $Invoice->getLine(0)->getDescription() . "\n");
-		print('    Internal Id value: ' . $Invoice->getId() . "\n");
-		print("\n");
-
-		//print_r($Invoice);
-		//$Line = $Invoice->getLine(0);
-		//print_r($Line);
+		print('The payment was deleted!');
+	}
+	else
+	{
+		print('Could not delete payment: ' . $PaymentService->lastError());
 	}
 
 	/*
+	// For debugging 
+
 	print("\n\n\n\n");
 	print('Request [' . $IPP->lastRequest() . ']');
 	print("\n\n\n\n");

@@ -68,6 +68,13 @@ while (false !== ($file = readdir($dh)))
 		<?php if ($quickbooks_is_connected): ?>
 			<div style="border: 2px solid green; text-align: center; padding: 8px; color: green;">
 				CONNECTED!<br>
+				<br>
+				<i>
+					Realm: <?php print($realm); ?><br>
+					Company: <?php print($quickbooks_CompanyInfo->getCompanyName()); ?><br>
+					Email: <?php print($quickbooks_CompanyInfo->getEmail()->getAddress()); ?><br>
+					Country: <?php print($quickbooks_CompanyInfo->getCountry()); ?>
+				</i>
 			</div>
 
 			<h2>Example QuickBooks Stuff</h2>

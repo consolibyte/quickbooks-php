@@ -55,7 +55,7 @@ class QuickBooks_IPP_IDS
 	
 	const VERSION_3 = 'v3';
 	
-	const VERSION_LATEST = 'v2';
+	const VERSION_LATEST = 'v3';
 
 	const URL_V3 = 'https://quickbooks.api.intuit.com/v3';
 	

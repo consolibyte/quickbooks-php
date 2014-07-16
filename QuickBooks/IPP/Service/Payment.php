@@ -21,11 +21,6 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_Payment extends QuickBooks_IPP_Service
 {
-	public function findAll($Context, $realmID, $query = null, $page = 1, $size = 50)
-	{
-		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYMENT, $query, null, $page, $size);
-	}
-	
 	public function add($Context, $realmID, $Object)
 	{
 		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYMENT, $Object);
@@ -39,5 +34,10 @@ class QuickBooks_IPP_Service_Payment extends QuickBooks_IPP_Service
 	public function update($Context, $realm, $IDType, $Object)
 	{
 		return parent::_update($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_PAYMENT, $Object, $IDType);
+	}
+
+	public function delete($Context, $realmID, $IDType)
+	{
+		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYMENT, $IDType);
 	}
 }
