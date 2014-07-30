@@ -270,8 +270,4 @@ else
 	print('An error occured during refund: ' . $MS->errorNumber() . ': ' . $MS->errorMessage() . "\n");
 }
 
-/*
-Let's trigger an error, just so we can see how to handle it. We can trigger 
-
-*/
 
