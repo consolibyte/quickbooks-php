@@ -405,6 +405,14 @@ class QuickBooks_IPP_Object
 						{
 							$svalue = trim($svalue, '{}-');	
 						}
+						else if ($key == 'DefinitionId' and $svalue{0} == '{')
+						{
+							$svalue = trim($svalue, '{}-');
+						}
+						else if ($key == 'TxnId' and $svalue{0} == '{')
+						{
+							$svalue = trim($svalue, '{}-');
+						}
 
 						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
 					}
@@ -439,6 +447,14 @@ class QuickBooks_IPP_Object
 				else if ($key == 'Id' and $value{0} == '{')
 				{
 					$value = trim($value, '{}-');	
+				}
+				else if ($key == 'DefinitionId' and $value{0} == '{')
+				{
+					$value = trim($value, '{}-');
+				}
+				else if ($key == 'TxnId' and $value{0} == '{')
+				{
+					$value = trim($value, '{}-');
 				}
 				
 				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';

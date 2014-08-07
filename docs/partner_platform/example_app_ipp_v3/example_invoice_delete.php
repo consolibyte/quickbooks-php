@@ -36,7 +36,7 @@ if ($Context = $IPP->context())
 	
 	$InvoiceService = new QuickBooks_IPP_Service_Invoice();
 	
-	$the_invoice_to_delete = '{-13}';
+	$the_invoice_to_delete = '{-10}';
 
 	$retr = $InvoiceService->delete($Context, $realm, $the_invoice_to_delete);
 	if ($retr)
