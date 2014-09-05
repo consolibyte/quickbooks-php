@@ -32,7 +32,17 @@ class QuickBooks_Encryption_AES extends QuickBooks_Encryption
 		$plain = serialize(array( $plain, $salt ));
 		
 		$crypt = mcrypt_module_open('rijndael-256', '', 'ofb', '');
-		$iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($crypt), MCRYPT_DEV_URANDOM);
+
+		if (false !== stripos(PHP_OS, 'win') and 
+			version_compare(PHP_VERSION, '5.3.0')  == -1) 
+		{
+			$iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($crypt), MCRYPT_RAND);	
+		}
+		else
+		{
+			$iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($crypt), MCRYPT_DEV_URANDOM);
+		}
+
 		$ks = mcrypt_enc_get_key_size($crypt);
 		$key = substr(md5($key), 0, $ks);
 		
