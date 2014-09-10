@@ -21,23 +21,22 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_TimeActivity extends QuickBooks_IPP_Service
 {
+	/*
 	public function findAll($Context, $realmID, $query = null, $page = 1, $size = 50, $options = array())
 	{
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY, $query, null, $page, $size, '', $options);
 	}
 
-	/**
-	 * Get a timeactivity by ID 
-	 * 
-	 * @param QuickBooks_IPP_Context $Context	
-	 * @param string $realmID					
-	 * @param string $ID						The ID of the timeactivity (this expects an IdType, which includes the domain)
-	 * @return QuickBooks_IPP_Object_TimeActivity	The timeactivity object
-	 */
 	public function findById($Context, $realmID, $IDType, $query = null)
 	{
 		$xml = null;
 		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY, $IDType, $xml, $query);
+	}
+	*/
+
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
 	}
 	
 	/**

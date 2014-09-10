@@ -1,9 +1,9 @@
 <?php
 
 
-$url = 'https://secure.bluehost.com/~umbiccom/qb/example_web_connector.php';
-$username = 'quickbooks';
-$password = '1234';
+$url = 'https://qbsandbox.directconnectsolutions.com/quickbooks/qbwc';
+$username = 'keithtest';
+$password = 'password';
 
 if (function_exists('date_default_timezone_set'))
 {

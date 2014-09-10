@@ -458,7 +458,7 @@ class QuickBooks_Cast
 			//$value = htmlspecialchars($value, ENT_QUOTES, null, false);
 			
 			//print($value . "\n\n\n");
-			
+		
 			// UTF8 character handling, decode UTF8 to character decimal codes
 			$value = QuickBooks_Cast::_decodeUTF8($value);
 			
