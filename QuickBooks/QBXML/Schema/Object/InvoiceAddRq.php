@@ -710,6 +710,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
 	'InvoiceLineAdd Other2', 
 	'InvoiceLineAdd LinkToTxn TxnID', 
 	'InvoiceLineAdd LinkToTxn TxnLineID', 
+  'InvoiceLineAdd DataExt', 
 	'InvoiceLineAdd DataExt OwnerID', 
 	'InvoiceLineAdd DataExt DataExtName', 
 	'InvoiceLineAdd DataExt DataExtValue', 
