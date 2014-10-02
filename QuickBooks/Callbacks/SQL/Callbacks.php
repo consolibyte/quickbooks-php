@@ -6395,6 +6395,36 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('deposit', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
+	public static function DepositQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$xml = '';
+
+		if (!QuickBooks_Server_SQL_Callbacks::_requiredVersion(2.0, $version))
+		{
+			return QUICKBOOKS_SKIP;
+		}
+
+		$xml .= '<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="' . $version . '"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+					<DepositQueryRq requestID="' . $requestID . '" ' . QuickBooks_Server_SQL_Callbacks::_buildIterator($extra) . '>
+						' . QuickBooks_Server_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
+						<IncludeLineItems>true</IncludeLineItems>
+						' . Quickbooks_Server_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
+					</DepositQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>';
+
+		return $xml;
+	}
+
+	public static function DepositQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array())
+	{
+	  $extra['is_query_response'] = true;
+	  return QuickBooks_Callbacks_SQL_Callbacks::DepositImportResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
+
 	/**
 	 *
 	 *
