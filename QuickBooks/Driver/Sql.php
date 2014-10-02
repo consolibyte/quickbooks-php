@@ -3367,6 +3367,10 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			}
 		}
 
+		// Wrap the SQL statements in a transaction to reduce open handlers.
+		array_unshift($arr_sql, "START TRANSACTION");
+		array_push($arr_sql, "COMMIT");
+
 		// Run each CREATE TABLE statement...
 		foreach ($arr_sql as $sql)
 		{
