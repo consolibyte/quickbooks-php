@@ -2063,6 +2063,46 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		$extra['is_mod_response'] = true;
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_JOURNALENTRY, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
+	/**
+	 *
+	 *
+	 */
+	public static function JournalEntryQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+	  $xml = '';
+
+	  $xml .= '<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="' . QuickBooks_Server_SQL_Callbacks::_version($version, $locale) . '"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+					<JournalEntryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Server_SQL_Callbacks::_buildIterator($extra) . '>
+						' . QuickBooks_Server_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
+						<IncludeLineItems>true</IncludeLineItems>
+						' . Quickbooks_Server_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>', $locale) . '
+					</JournalEntryQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>';
+
+	  return $xml;
+	}
+
+	/**
+	 *
+	 *
+	 */
+	public static function JournalEntryQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+	  $Parser = new QuickBooks_XML_Parser($xml);
+
+	  $errnum = 0;
+	  $errmsg = '';
+	  $Doc = $Parser->parse($errnum, $errmsg);
+	  $Root = $Doc->getRoot();
+
+	  $List = $Root->getChildAt('QBXML QBXMLMsgsRs JournalEntryQueryRs');
+
+	  QuickBooks_Server_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_JOURNALENTRY, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
 
 	/**
 	 *
@@ -6421,8 +6461,16 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function DepositQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array())
 	{
-	  $extra['is_query_response'] = true;
-	  return QuickBooks_Callbacks_SQL_Callbacks::DepositImportResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+		$Parser = new QuickBooks_XML_Parser($xml);
+
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();
+
+		$List = $Root->getChildAt('QBXML QBXMLMsgsRs DepositQueryRs');
+
+		QuickBooks_Server_SQL_Callbacks::_QueryResponse('deposit', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 
 	/**
