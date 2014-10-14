@@ -21,10 +21,17 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_PaymentMethod extends QuickBooks_IPP_Service
 {
+	public function add($Context, $realmID, $Object)
+	{
+		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYMENTMETHOD, $Object);
+	}
+
+	/*
 	public function findAll($Context, $realmID, $query = null, $page = 1, $size = 50)
 	{
 		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYMENTMETHOD, $query, null, $page, $size);
 	}
+	*/
 
 	public function query($Context, $realm, $query)
 	{
