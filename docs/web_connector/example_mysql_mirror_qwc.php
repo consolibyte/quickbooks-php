@@ -16,7 +16,7 @@ ini_set('display_errors', 1);
 /**
  * Require the utilities class
  */
-require_once '../QuickBooks.php';
+require_once '../../QuickBooks.php';
 
 $name = 'QuickBooks SQL Mirror - ' . $_SERVER['HTTP_HOST'];			// A name for your server (make it whatever you want)
 $descrip = 'QuickBooks SQL Mirror - ' . $_SERVER['HTTP_HOST'];		// A description of your server 
