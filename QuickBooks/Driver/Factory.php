@@ -51,8 +51,14 @@ class QuickBooks_Driver_Factory
 		}
 			
 		// Do not serialize the $hooks because they might contain non-serializeable objects
-		$key = (is_object($dsn_or_conn) ? get_class($dsn_or_conn) : (string) $dsn_or_conn)
-					 . serialize($config) . $log_level;
+		if (is_object($dsn_or_conn))
+		{
+			$key = get_class($dsn_or_conn) . serialize($config) . $log_level;
+		}
+		else
+		{
+			$key = (string) $dsn_or_conn . serialize($config) . $log_level;
+		}
 
 		if (!isset($instances[$key]))
 		{
