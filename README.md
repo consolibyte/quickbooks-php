@@ -17,6 +17,12 @@ The package you've downloaded contains code and documentation for connecting var
 
 Almost anything you can do in the QuickBooks GUI, in QuickBooks Online Edition, and with QuickBooks Merchant Service can be accomplished via this framework. 
 
+## Quick Start Guides
+
+* QuickBooks FOR WINDOWS (via QuickBooks Web Connector) - read the [quick start guide for the Web Connector/QuickBooks for Windows](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)   
+
+* QuickBooks ONLINE (via Intuit Partner Platform/Intuit Anywhere) - read the [quick start guide for Intuit Partner Platform/QuickBooks Online] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
+
 
 ## Support
 
@@ -57,11 +63,6 @@ There is additional documentation and additional examples on our legacy and new 
 - http://www.consolibyte.com/docs/index.php/QuickBooks     (new wiki)  
 
 
-# Quick Start Guides
-
-* QuickBooks FOR WINDOWS (via QuickBooks Web Connector) - read the [quick start guide for the Web Connector/QuickBooks for Windows](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)   
-
-* QuickBooks ONLINE (via Intuit Partner Platform/Intuit Anywhere) - read the [quick start guide for Intuit Partner Platform/QuickBooks Online] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
 
 
 -------------------------------------
