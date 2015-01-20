@@ -243,6 +243,10 @@ class QuickBooks_IPP
 	 * @var string
 	 */
 	protected $_ids_version;
+
+	protected $_urlV3;
+
+	protected $_sandbox;
 	
 	public function __construct($dsn = null, $encryption_key = null, $config = array(), $log_level = QUICKBOOKS_LOG_NORMAL)
 	{
@@ -294,6 +298,8 @@ class QuickBooks_IPP
 		
 		// Default to QuickBooks desktop
 		//$this->flavor(QuickBooks_IPP_IDS::FLAVOR_DESKTOP);
+
+		$this->sandbox();
 	}
 	
 	/**
@@ -990,7 +996,7 @@ class QuickBooks_IPP
 	protected function _IDS_v3($Context, $realm, $resource, $optype, $xml_or_query, $ID)
 	{
 		// All v3 URLs have the same baseURL
-		$this->baseURL(QuickBooks_IPP_IDS::URL_V3);
+		$this->baseURL($this->_urlV3);
 
 		$post = false;
 		$xml = null;
@@ -1735,5 +1741,16 @@ class QuickBooks_IPP
 		}
 		
 		$this->_last_debug[$class] = array_merge($existing, $arr);
+	}
+
+	public function sandbox($isSandbox = true)
+	{
+		$this->_sandbox = $isSandbox;
+
+		if ($this->_sandbox) {
+			$this->_urlV3 = QuickBooks_IPP_IDS::URL_SANDBOX_V3;
+		} else {
+			$this->_urlV3 = QuickBooks_IPP_IDS::URL_PRODUCTION_V3;
+		}
 	}
 }
