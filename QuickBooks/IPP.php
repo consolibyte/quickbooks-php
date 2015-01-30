@@ -972,7 +972,7 @@ class QuickBooks_IPP
 	 */
 	public function sandbox($sandbox = null)
 	{
-		if ($sandbox)
+		if (isset($sandbox))
 		{
 			$this->_sandbox = $sandbox;
 		}
