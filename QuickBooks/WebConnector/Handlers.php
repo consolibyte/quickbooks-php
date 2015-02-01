@@ -320,6 +320,8 @@ class QuickBooks_WebConnector_Handlers
 			'deny_reallyfast_timeout' => 600,
 
 			'masking' => true,
+
+			'status_error_threshold' => 1, // the lowest status code considered an error
 			);
 
 		$config = array_merge($defaults, $config);
@@ -346,6 +348,8 @@ class QuickBooks_WebConnector_Handlers
 
 		$config['deny_reallyfast_logins'] = (boolean) $config['deny_reallyfast_logins'];
 		$config['deny_reallyfast_timeout'] = (int) max(1, $config['deny_reallyfast_timeout']);
+
+		$config['status_error_threshold'] = (int) max(1, $config['status_error_threshold']);
 
 		return $config;
 	}
@@ -1287,8 +1291,9 @@ class QuickBooks_WebConnector_Handlers
 			$this->_log('Incoming XML response: ' . $obj->response, $obj->ticket, QUICKBOOKS_LOG_DEBUG);
 
 			// Check if we got a error message...
-			if (strlen($obj->message) or
-				$this->_extractStatusCode($obj->response)) // or an error code
+			if (strlen($obj->message) or 
+				$this->_extractStatusCode($obj->response)
+					>= $this->_config['status_error_threshold']) // or an error code
 			{
 				//$this->_log('Extracted code[' . $this->_extractStatusCode($obj->response) . ']', $obj->ticket, QUICKBOOKS_LOG_DEBUG);
 
