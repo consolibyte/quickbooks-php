@@ -246,6 +246,13 @@ class QuickBooks_IPP
 	 */
 	protected $_ids_version;
 
+	/**
+	 * Boundary.
+	 *
+	 * @var string
+	 */
+	public $boundary = 'Asrf456BGe4hacebdf13572468';
+
 	public function __construct($dsn, $encryption_key, $config = array(), $log_level = QUICKBOOKS_LOG_NORMAL)
 	{
 		// Are we in sandbox mode?
@@ -1025,14 +1032,30 @@ class QuickBooks_IPP
 		return $this->_log($message, $level);
 	}
 
+	/**
+	 * Request.
+	 *
+	 * @param QuickBooks_IPP_Context $Context Context.
+	 * @param string                 $type    Type.
+	 * @param string                 $url     URL.
+	 * @param string                 $action  Action.
+	 * @param string                 $data    Data.
+	 * @param boolean                $post    Is POST.
+	 *
+	 * @return boolean|string
+	 */
 	protected function _request($Context, $type, $url, $action, $data, $post = true)
 	{
 		$headers = array();
 
-		if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or
-			$action == QuickBooks_IPP_IDS::OPTYPE_MOD or
-			$action == QuickBooks_IPP_IDS::OPTYPE_VOID or
-			$action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
+		if ($this->_isUpload($url))
+		{
+			$headers['Content-Type'] = 'multipart/form-data; boundary=' . $this->boundary;
+		}
+		elseif ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or
+				$action == QuickBooks_IPP_IDS::OPTYPE_MOD or
+				$action == QuickBooks_IPP_IDS::OPTYPE_VOID or
+				$action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 		{
 			$headers['Content-Type'] = 'application/xml';
 		}
@@ -1073,8 +1096,9 @@ class QuickBooks_IPP
 				}
 
 				$signdata = null;
-				if ($data and
-					$data[0] == '<')
+
+				if (($data and
+					$data[0] == '<') || $this->_isUpload($url))
 				{
 					// It's an XML body, we don't sign that
 					$signdata = null;
@@ -1099,7 +1123,7 @@ class QuickBooks_IPP
 					if ($data and $data[0] == '<')
 					{
 						// Do nothing
-					} else
+					} else if ( !$this->_isUpload($url) )
 					{
 						$data = http_build_query($signdata);
 					}
@@ -1311,4 +1335,19 @@ class QuickBooks_IPP
 
 		$this->_last_debug[$class] = array_merge($existing, $arr);
 	}
+
+	/**
+	 * Is upload.
+	 *
+	 * @param string $url URL.
+	 *
+	 * @return boolean
+	 */
+	protected function _isUpload($url)
+	{
+		$url_parts = explode('/', $url);
+
+		return array_pop($url_parts) == 'upload';
+	}
+
 }
