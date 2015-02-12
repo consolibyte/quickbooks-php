@@ -17,7 +17,7 @@ ini_set('display_errors', 1);
 require_once dirname(__FILE__) . '/../../../QuickBooks.php';
 
 // Your OAuth token (Intuit will give you this when you register an Intuit Anywhere app)
-$token = '83e26868b5134b49beb97d8bd2a3e57755ca';
+$token = '95555248baf11b43fbb944ab97de9134ad85';
 
 // Your OAuth consumer key and secret (Intuit will give you both of these when you register an Intuit app)
 // 
@@ -27,8 +27,12 @@ $token = '83e26868b5134b49beb97d8bd2a3e57755ca';
 // 
 // The OAuth request/access tokens will be encrypted and stored for you by the 
 //	PHP DevKit IntuitAnywhere classes automatically. 
-$oauth_consumer_key = 'qyprdlGJ4gWv4sMW0syilH2o4KirQe';
-$oauth_consumer_secret = '49ou99QiG47KhvY6AaMPSnHhXXNMAJxLv7QXNm4L';
+$oauth_consumer_key = 'qyprdfkqo3bikN2vLrLu4FWHv6GbQp';
+$oauth_consumer_secret = 'WDH56afDb1jr0ismQZAwdPuq4oDqpTmrKXc0oORz';
+
+// If you're using DEVELOPMENT TOKENS, you MUST USE SANDBOX MODE!!!  If you're in PRODUCTION, then DO NOT use sandbox.
+$sandbox = true;     // When you're using development tokens
+//$sandbox = false;    // When you're using production tokens
 
 // This is the URL of your OAuth auth handler page
 $quickbooks_oauth_url = 'http://quickbooks.v3.com:8888/quickbooks-php/docs/partner_platform/example_app_ipp_v3/oauth.php';
@@ -89,6 +93,12 @@ if ($IntuitAnywhere->check($the_username, $the_tenant) and
 		QuickBooks_IPP::AUTHMODE_OAUTH, 
 		$the_username, 
 		$creds);
+
+	if ($sandbox)
+	{
+		// Turn on sandbox mode/URLs 
+		$IPP->sandbox(true);
+	}
 
 	// Print the credentials we're using
 	//print_r($creds);

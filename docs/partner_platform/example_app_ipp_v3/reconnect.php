@@ -20,6 +20,12 @@ if ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_SOON)
 		$reconnected = false;
 		$err = $IntuitAnywhere->errorNumber() . ': ' . $IntuitAnywhere->errorMessage();
 	}
+
+	//print_r($IntuitAnywhere->load($the_username, $the_tenant));
+	//print("\n\n\n");
+	//print($IntuitAnywhere->lastRequest());
+	//print("\n\n\n");
+	//print($IntuitAnywhere->lastResponse());
 }
 else if ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_NOTYET)
 {
