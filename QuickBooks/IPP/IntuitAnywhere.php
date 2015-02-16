@@ -33,6 +33,9 @@ class QuickBooks_IPP_IntuitAnywhere
 	protected $_crypt;
 	
 	protected $_key;
+
+	protected $_last_request;
+	protected $_last_response;
 	
 	const URL_REQUEST_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_request_token';
 	const URL_ACCESS_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_access_token';
@@ -110,6 +113,16 @@ class QuickBooks_IPP_IntuitAnywhere
 	{
 		$this->_errnum = $errnum;
 		$this->_errmsg = $errmsg;
+	}
+
+	public function lastRequest()
+	{
+		return $this->_last_request;
+	}
+
+	public function lastResponse()
+	{
+		return $this->_last_response;
 	}
 	
 	/**
@@ -571,6 +584,9 @@ class QuickBooks_IPP_IntuitAnywhere
 		
 		$errnum = $HTTP->errorNumber();
 		$errmsg = $HTTP->errorMessage();
+
+		$this->_last_request = $HTTP->lastRequest();
+		$this->_last_response = $HTTP->lastResponse();
 		
 		if ($errnum)
 		{

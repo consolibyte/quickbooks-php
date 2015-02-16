@@ -206,7 +206,7 @@ class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
 		$config = $this->_defaults($config);
 		$this->_log_level = (int) $config['log_level'];
 		
-		if (is_resource($dsn_or_conn))
+		if (is_resource($dsn_or_conn) || ($dsn_or_conn instanceof mysqli))
 		{
 			$this->_conn = $dsn_or_conn;
 		}

@@ -51,13 +51,24 @@ class QuickBooks_Driver_Factory
 		}
 			
 		// Do not serialize the $hooks because they might contain non-serializeable objects
-		$key = (string) $dsn_or_conn . serialize($config) . $log_level;
-			
+		if (is_object($dsn_or_conn))
+		{
+			$key = get_class($dsn_or_conn) . serialize($config) . $log_level;
+		}
+		else
+		{
+			$key = (string) $dsn_or_conn . serialize($config) . $log_level;
+		}
+
 		if (!isset($instances[$key]))
 		{
 			if (is_resource($dsn_or_conn))
 			{
 				$scheme = current(explode(' ', get_resource_type($dsn_or_conn)));
+			}
+			elseif (is_object($dsn_or_conn))
+			{
+				$scheme = get_class($dsn_or_conn);
 			}
 			else
 			{
@@ -75,7 +86,7 @@ class QuickBooks_Driver_Factory
 				
 			$class = 'QuickBooks_Driver_' . $scheme;
 			$file = '/QuickBooks/Driver/' . str_replace(' ', '/', ucwords(str_replace('_', ' ', strtolower($scheme)))) . '.php';
-			
+
 			//print('class: ' . $class . "\n");
 			//print('file: ' . $file . "\n");
 			
