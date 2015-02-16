@@ -553,5 +553,14 @@ class QuickBooks_IPP_Parser
 				}
 			}*/		
 		}
+		
+		if ($Node->hasAttributes())
+		{
+			//Don't make a new object, just put it as a property of the same one
+			foreach ($Node->attributes() as $attr_name => $attr_value)
+			{
+				$Object->{'add' . $name . '_' . $attr_name}($attr_value);
+			}
+		}
 	}
 }
