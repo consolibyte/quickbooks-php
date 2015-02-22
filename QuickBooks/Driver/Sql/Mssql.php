@@ -760,6 +760,18 @@ select * from (
 	
 	protected function _fields($table)
 	{
-		return array();
+		$sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" . $table . "'";
+		
+		$list = array();
+		
+		$errnum = 0;
+		$errmsg = '';
+		$res = $this->_query($sql, $errnum, $errmsg);
+		while ($arr = $this->_fetch($res))
+		{
+			$list[] = current($arr);
+		}
+
+		return $list;
 	}
 }
