@@ -10,53 +10,23 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-// Set up the IPP instance
-$IPP = new QuickBooks_IPP($dsn);
+$CustomerService = new QuickBooks_IPP_Service_Customer();
 
-// Get our OAuth credentials from the database
-$creds = $IntuitAnywhere->load($the_username, $the_tenant);
+$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer MAXRESULTS 25");
 
-// Tell the framework to load some data from the OAuth store
-$IPP->authMode(
-	QuickBooks_IPP::AUTHMODE_OAUTH, 
-	$the_username, 
-	$creds);
+//print_r($customers);
 
-// Print the credentials we're using
-//print_r($creds);
-
-// This is our current realm
-$realm = $creds['qb_realm'];
-
-// Load the OAuth information from the database
-if ($Context = $IPP->context())
+foreach ($customers as $Customer)
 {
-	// Set the IPP version to v3 
-	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
-	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
-	
-	$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer MAXRESULTS 25");
-
-	//print_r($customers);
-	
-	foreach ($customers as $Customer)
-	{
-		print('Customer Id=' . $Customer->getId() . ' is named: ' . $Customer->getFullyQualifiedName() . '<br>');
-	}
-
-	print("\n\n\n\n");
-	print('Request [' . $CustomerService->lastRequest() . ']');
-	print("\n\n\n\n");
-	print('Response [' . $CustomerService->lastResponse() . ']');
-	print("\n\n\n\n");
-	
-}
-else
-{
-	die('Unable to load a context...?');
+	print('Customer Id=' . $Customer->getId() . ' is named: ' . $Customer->getFullyQualifiedName() . '<br>');
 }
 
+print("\n\n\n\n");
+print('Request [' . $CustomerService->lastRequest() . ']');
+print("\n\n\n\n");
+print('Response [' . $CustomerService->lastResponse() . ']');
+print("\n\n\n\n");
+	
 ?>
 
 </pre>

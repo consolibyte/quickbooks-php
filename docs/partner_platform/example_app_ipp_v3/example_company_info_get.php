@@ -10,50 +10,21 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-// Set up the IPP instance
-$IPP = new QuickBooks_IPP($dsn);
+$CompanyInfoService = new QuickBooks_IPP_Service_CompanyInfo();
 
-// Get our OAuth credentials from the database
-$creds = $IntuitAnywhere->load($the_username, $the_tenant);
+$info = $CompanyInfoService->get($Context, $realm);
 
-// Tell the framework to load some data from the OAuth store
-$IPP->authMode(
-	QuickBooks_IPP::AUTHMODE_OAUTH, 
-	$the_username, 
-	$creds);
+print_r($info);
 
-// Print the credentials we're using
-//print_r($creds);
+/*
+print($IPP->lastError($Context));
 
-// This is our current realm
-$realm = $creds['qb_realm'];
-
-// Load the OAuth information from the database
-if ($Context = $IPP->context())
-{
-	// Set the IPP version to v3 
-	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
-	
-	$CompanyInfoService = new QuickBooks_IPP_Service_CompanyInfo();
-	
-	$info = $CompanyInfoService->get($Context, $realm);
-
-	print_r($info);
-
-	/*
-	print($IPP->lastError($Context));
-
-	print("\n\n\n\n");
-	print('Request [' . $IPP->lastRequest() . ']');
-	print("\n\n\n\n");
-	print('Response [' . $IPP->lastResponse() . ']');
-	print("\n\n\n\n");
-	*/
-}
-else
-{
-	die('Unable to load a context...?');
-}
+print("\n\n\n\n");
+print('Request [' . $IPP->lastRequest() . ']');
+print("\n\n\n\n");
+print('Response [' . $IPP->lastResponse() . ']');
+print("\n\n\n\n");
+*/
 
 ?>
 

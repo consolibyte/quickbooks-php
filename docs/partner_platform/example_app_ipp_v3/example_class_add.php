@@ -10,59 +10,28 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-// Set up the IPP instance
-$IPP = new QuickBooks_IPP($dsn);
+$ClassService = new QuickBooks_IPP_Service_Class();
 
-// Get our OAuth credentials from the database
-$creds = $IntuitAnywhere->load($the_username, $the_tenant);
+$Class = new QuickBooks_IPP_Object_Class();
 
-// Tell the framework to load some data from the OAuth store
-$IPP->authMode(
-	QuickBooks_IPP::AUTHMODE_OAUTH, 
-	$the_username, 
-	$creds);
+$Class->setName('My Class');
 
-// Print the credentials we're using
-//print_r($creds);
-
-// This is our current realm
-$realm = $creds['qb_realm'];
-
-// Load the OAuth information from the database
-if ($Context = $IPP->context())
+if ($resp = $ClassService->add($Context, $realm, $Class))
 {
-	// Set the IPP version to v3 
-	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
-	
-	$ClassService = new QuickBooks_IPP_Service_Class();
-	
-	$Class = new QuickBooks_IPP_Object_Class();
-	
-	$Class->setName('My Class');
-
-	if ($resp = $ClassService->add($Context, $realm, $Class))
-	{
-		print('Our new class ID is: [' . $resp . ']');
-	}
-	else
-	{
-		print($ClassService->lastError());
-	}
-
-	
-	print('<br><br><br><br>');
-	print("\n\n\n\n\n\n\n\n");
-	print('Request [' . $IPP->lastRequest() . ']');
-	print("\n\n\n\n");
-	print('Response [' . $IPP->lastResponse() . ']');
-	print("\n\n\n\n\n\n\n\n\n");
-	
+	print('Our new class ID is: [' . $resp . ']');
 }
 else
 {
-	die('Unable to load a context...?');
+	print($ClassService->lastError());
 }
 
+
+print('<br><br><br><br>');
+print("\n\n\n\n\n\n\n\n");
+print('Request [' . $IPP->lastRequest() . ']');
+print("\n\n\n\n");
+print('Response [' . $IPP->lastResponse() . ']');
+print("\n\n\n\n\n\n\n\n\n");
 
 ?>
 

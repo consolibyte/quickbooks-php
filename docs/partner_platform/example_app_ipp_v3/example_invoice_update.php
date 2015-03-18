@@ -10,66 +10,36 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-// Set up the IPP instance
-$IPP = new QuickBooks_IPP($dsn);
+$InvoiceService = new QuickBooks_IPP_Service_Invoice();
 
-// Get our OAuth credentials from the database
-$creds = $IntuitAnywhere->load($the_username, $the_tenant);
+// Get the existing invoice first (you need the latest SyncToken value)
+$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice WHERE Id = '34' ");
+$Invoice = $invoices[0];
 
-// Tell the framework to load some data from the OAuth store
-$IPP->authMode(
-	QuickBooks_IPP::AUTHMODE_OAUTH, 
-	$the_username, 
-	$creds);
+$Line = $Invoice->getLine(0);
+$Line->setDescription('Update of my description on ' . date('r'));
 
-// Print the credentials we're using
-//print_r($creds);
+print_r($Invoice);
 
-// This is our current realm
-$realm = $creds['qb_realm'];
+$Invoice->setTxnDate(date('Y-m-d'));  // Update the invoice date to today's date 
 
-// Load the OAuth information from the database
-if ($Context = $IPP->context())
+if ($resp = $InvoiceService->update($Context, $realm, $Invoice->getId(), $Invoice))
 {
-	// Set the IPP version to v3 
-	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
-	
-	$InvoiceService = new QuickBooks_IPP_Service_Invoice();
-	
-	// Get the existing invoice first (you need the latest SyncToken value)
-	$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice WHERE Id = '34' ");
-	$Invoice = $invoices[0];
-	
-	$Line = $Invoice->getLine(0);
-	$Line->setDescription('Update of my description on ' . date('r'));
-
-	print_r($Invoice);
-
-	$Invoice->setTxnDate(date('Y-m-d'));  // Update the invoice date to today's date 
-
-	if ($resp = $InvoiceService->update($Context, $realm, $Invoice->getId(), $Invoice))
-	{
-		print('&nbsp; Updated!<br>');
-	}
-	else
-	{
-		print('&nbsp; ' . $InvoiceService->lastError() . '<br>');
-	}
-
-	/*
-	print('<br><br><br><br>');
-	print("\n\n\n\n\n\n\n\n");
-	print('Request [' . $IPP->lastRequest() . ']');
-	print("\n\n\n\n");
-	print('Response [' . $IPP->lastResponse() . ']');
-	print("\n\n\n\n\n\n\n\n\n");
-	*/
+	print('&nbsp; Updated!<br>');
 }
 else
 {
-	die('Unable to load a context...?');
+	print('&nbsp; ' . $InvoiceService->lastError() . '<br>');
 }
 
+/*
+print('<br><br><br><br>');
+print("\n\n\n\n\n\n\n\n");
+print('Request [' . $IPP->lastRequest() . ']');
+print("\n\n\n\n");
+print('Response [' . $IPP->lastResponse() . ']');
+print("\n\n\n\n\n\n\n\n\n");
+*/
 
 ?>
 

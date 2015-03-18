@@ -10,69 +10,39 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-// Set up the IPP instance
-$IPP = new QuickBooks_IPP($dsn);
+$CustomerService = new QuickBooks_IPP_Service_Customer();
 
-// Get our OAuth credentials from the database
-$creds = $IntuitAnywhere->load($the_username, $the_tenant);
+// Get the existing customer first (you need the latest SyncToken value)
+$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer WHERE Id = '34' ");
+$Customer = $customers[0];
 
-// Tell the framework to load some data from the OAuth store
-$IPP->authMode(
-	QuickBooks_IPP::AUTHMODE_OAUTH, 
-	$the_username, 
-	$creds);
+// Change something
+$Customer->setDisplayName('Updated ' . date('Y-m-d H-i-s'));
 
-// Print the credentials we're using
-//print_r($creds);
+// Update their email address too
+$PrimaryEmailAddr = $Customer->getPrimaryEmailAddr();
+$PrimaryEmailAddr->setAddress('support@consolibyte.com');
 
-// This is our current realm
-$realm = $creds['qb_realm'];
+// What are we doing?
+print('Updating the customer name to: ' . $Customer->getDisplayName() . '<br>');
 
-// Load the OAuth information from the database
-if ($Context = $IPP->context())
+if ($CustomerService->update($Context, $realm, $Customer->getId(), $Customer))
 {
-	// Set the IPP version to v3 
-	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
-	
-	$CustomerService = new QuickBooks_IPP_Service_Customer();
-	
-	// Get the existing customer first (you need the latest SyncToken value)
-	$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer WHERE Id = '34' ");
-	$Customer = $customers[0];
-
-	// Change something
-	$Customer->setDisplayName('Updated ' . date('Y-m-d H-i-s'));
-
-	// Update their email address too
-	$PrimaryEmailAddr = $Customer->getPrimaryEmailAddr();
-	$PrimaryEmailAddr->setAddress('support@consolibyte.com');
-
-	// What are we doing?
-	print('Updating the customer name to: ' . $Customer->getDisplayName() . '<br>');
-
-	if ($CustomerService->update($Context, $realm, $Customer->getId(), $Customer))
-	{
-		print('&nbsp; Updated!<br>');
-	}
-	else
-	{
-		print('&nbsp; Error: ' . $CustomerService->lastError($Context));
-	}
-
-	/*
-	print('<br><br><br><br>');
-	print("\n\n\n\n\n\n\n\n");
-	print('Request [' . $IPP->lastRequest() . ']');
-	print("\n\n\n\n");
-	print('Response [' . $IPP->lastResponse() . ']');
-	print("\n\n\n\n\n\n\n\n\n");
-	*/
+	print('&nbsp; Updated!<br>');
 }
 else
 {
-	die('Unable to load a context...?');
+	print('&nbsp; Error: ' . $CustomerService->lastError($Context));
 }
 
+/*
+print('<br><br><br><br>');
+print("\n\n\n\n\n\n\n\n");
+print('Request [' . $IPP->lastRequest() . ']');
+print("\n\n\n\n");
+print('Response [' . $IPP->lastResponse() . ']');
+print("\n\n\n\n\n\n\n\n\n");
+*/
 
 ?>
 
