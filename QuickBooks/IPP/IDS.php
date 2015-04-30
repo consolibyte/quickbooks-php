@@ -33,7 +33,9 @@ class QuickBooks_IPP_IDS
 	const OPTYPE_MOD = 'Mod';
 	
 	const OPTYPE_DELETE = 'Delete';
-	
+
+	const OPTYPE_VOID = 'Void';
+
 	const OPTYPE_QUERY = 'Query';
 
 	const OPTYPE_CDC = 'ChangeDataCapture';

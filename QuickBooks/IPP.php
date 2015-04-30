@@ -1038,6 +1038,12 @@ class QuickBooks_IPP
 			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?operation=delete';
 			$xml = $xml_or_query;
 		}
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_VOID)
+		{
+			$post = true;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?operation=void';
+			$xml = $xml_or_query;
+		}
 
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
 
@@ -1427,6 +1433,7 @@ class QuickBooks_IPP
 		{
 			if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or 
 				$action == QuickBooks_IPP_IDS::OPTYPE_MOD or 
+				$action == QuickBooks_IPP_IDS::OPTYPE_VOID or
 				$action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 			{
 				$headers['Content-Type'] = 'application/xml';
