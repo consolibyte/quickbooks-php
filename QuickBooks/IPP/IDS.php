@@ -138,6 +138,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_PURCHASEORDER = 'PurchaseOrder';
 	
+	const RESOURCE_REFUNDRECEIPT = 'RefundReceipt';
+
 	const RESOURCE_SALESORDER = 'SalesOrder';
 	
 	const RESOURCE_SALESRECEIPT = 'SalesReceipt';
