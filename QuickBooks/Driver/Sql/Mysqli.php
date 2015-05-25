@@ -308,7 +308,7 @@ class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
 	{
 		if ($port)
 		{
-			$this->_conn = new mysqli($host, $user, $pass, $db) or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysqli_error(): ' . mysqli_connect_error());
+			$this->_conn = new mysqli($host, $user, $pass, $db, $port) or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysqli_error(): ' . mysqli_connect_error());
 		}
 		else
 		{
