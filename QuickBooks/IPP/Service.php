@@ -581,7 +581,63 @@ abstract class QuickBooks_IPP_Service
 		
 		return false;
 	}
-	
+
+	protected function _void($Context, $realmID, $resource, $ID)
+	{
+		// v3 only
+		$IPP = $Context->IPP();
+
+		// Get the object first... because IDS is stupid and wants us to send
+		//	the entire object even though we know the Id of the object that we
+		//	want to delete... *sigh*
+		$objects = $this->_query($Context, $realmID, "SELECT * FROM " . $resource . " WHERE Id = '" . QuickBooks_IPP_IDS::usableIDType($ID) . "' ");
+
+		if (isset($objects[0]) and
+			is_object($objects[0]))
+		{
+			$Object = $objects[0];
+
+			$unsets = array();
+
+			foreach ($unsets as $unset)
+			{
+				$Object->remove($unset);
+			}
+
+			// Generate the XML
+			$xml = $Object->asXML(0, null, null, null, QuickBooks_IPP_IDS::VERSION_3);
+
+			//die($xml);
+
+			// Send the data to IPP
+			$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_VOID, $xml);
+			$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+			$this->_setLastDebug($Context->lastDebug());
+
+			//print('erro code: [' . $IPP->errorCode() . ']' . "\n");
+			//print("\n\n\n\n\n" . $Context->lastResponse() . "\n\n\n\n\n");
+
+			if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+			{
+				$this->_setError(
+					$IPP->errorCode(),
+					$IPP->errorText(),
+					$IPP->errorDetail());
+
+				return false;
+			}
+
+			return true;
+		}
+
+		$this->_setError(
+			QuickBooks_IPP::ERROR_INTERNAL,
+			'Could not find ' . $resource . ' ' . QuickBooks_IPP_IDS::usableIDType($ID) . ' to void.',
+			'Could not find ' . $resource . ' ' . QuickBooks_IPP_IDS::usableIDType($ID) . ' to void.');
+
+		return false;
+	}
+
 	/**
 	 * @deprecated 			Use _update() instead
 	 */
