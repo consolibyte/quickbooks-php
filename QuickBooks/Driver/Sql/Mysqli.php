@@ -21,24 +21,19 @@
  */
 
 /**
- * Base QuickBooks constants
- */
-require_once 'QuickBooks.php';
-
-/**
  * QuickBooks driver base class
  */
-require_once 'QuickBooks/Driver.php';
+QuickBooks_Loader::load('/QuickBooks/Driver.php');
 
 /**
  * QuickBooks driver SQL base class
  */
-require_once 'QuickBooks/Driver/Sql.php';
+QuickBooks_Loader::load('/QuickBooks/Driver/Sql.php', false);
 
 /**
  * QuickBooks utilities class
  */
-require_once 'QuickBooks/Utilities.php';
+QuickBooks_Loader::load('/QuickBooks/Utilities.php');
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_SALT'))
 {
