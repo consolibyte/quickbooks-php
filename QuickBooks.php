@@ -614,6 +614,11 @@ define('QUICKBOOKS_IMPORT_SUBTOTALITEM', 'ItemSubtotalImport');
 
 define('QUICKBOOKS_QUERY_ITEMSITES', 'ItemSitesQuery');
 
+define('QUICKBOOKS_ADD_INVENTORYSITE', 'InventorySiteAdd');
+define('QUICKBOOKS_MOD_INVENTORYSITE', 'InventorySiteMod');
+define('QUICKBOOKS_QUERY_INVENTORYSITE', 'InventorySiteQuery');
+define('QUICKBOOKS_IMPORT_INVENTORYSITE', 'InventorySiteImport');
+
 define('QUICKBOOKS_OBJECT_JOBTYPE', 'JobType');
 define('QUICKBOOKS_ADD_JOBTYPE', 'JobTypeAdd');
 define('QUICKBOOKS_QUERY_JOBTYPE', 'JobTypeQuery');
