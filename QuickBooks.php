@@ -614,6 +614,7 @@ define('QUICKBOOKS_IMPORT_SUBTOTALITEM', 'ItemSubtotalImport');
 
 define('QUICKBOOKS_QUERY_ITEMSITES', 'ItemSitesQuery');
 
+define('QUICKBOOKS_OBJECT_INVENTORYSITE', 'InventorySite');
 define('QUICKBOOKS_ADD_INVENTORYSITE', 'InventorySiteAdd');
 define('QUICKBOOKS_MOD_INVENTORYSITE', 'InventorySiteMod');
 define('QUICKBOOKS_QUERY_INVENTORYSITE', 'InventorySiteQuery');
