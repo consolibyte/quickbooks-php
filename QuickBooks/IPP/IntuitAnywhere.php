@@ -174,6 +174,12 @@ class QuickBooks_IPP_IntuitAnywhere
 					$CustomerService = new QuickBooks_IPP_Service_Customer();
 					$customers = $CustomerService->query($Context, $creds['qb_realm'], "SELECT * FROM Customer MAXRESULTS 1");
 
+					if ( !$customers ) {
+						$this->_last_request = $CustomerService->lastRequest();
+						$this->_last_response = $CustomerService->lastResponse();
+						$this->_setError($CustomerService->errorCode(), $CustomerService->errorMessage());
+					}
+
 					$IPP->version($cur_version);		// Revert back to whatever they set 
 
 					//$IPP->baseURL($IPP->getBaseURL($Context, $creds['qb_realm']));
