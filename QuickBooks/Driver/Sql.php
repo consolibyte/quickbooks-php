@@ -135,13 +135,13 @@ define('QUICKBOOKS_DRIVER_SQL_PREFIX', 'quickbooks_');
  * This is the prefix for the SQL mirror tables
  * @var string
  */
-define('QUICKBOOKS_DRIVER_SQL_PREFIX_SQL', 'qb_');
+define('QUICKBOOKS_DRIVER_SQL_PREFIX_SQL', 'qb_server');
 
 /**
  * This is the prefix used for any extra SQL tables needed by the integrators
  * @var string
  */
-define('QUICKBOOKS_DRIVER_SQL_PREFIX_INTEGRATOR', 'qb_');
+define('QUICKBOOKS_DRIVER_SQL_PREFIX_INTEGRATOR', 'qb_server');
 
 /**
  * Default table name for SQL log table
