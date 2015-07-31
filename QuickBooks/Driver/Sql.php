@@ -129,7 +129,7 @@ define('QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT', 'timestamp-on-insert');
  * This is the prefix for the base SQL tables
  * @var string
  */
-define('QUICKBOOKS_DRIVER_SQL_PREFIX', 'qb_server');
+define('QUICKBOOKS_DRIVER_SQL_PREFIX', 'qb_server_');
 
 /**
  * This is the prefix for the SQL mirror tables
