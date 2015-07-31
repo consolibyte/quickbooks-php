@@ -129,19 +129,19 @@ define('QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT', 'timestamp-on-insert');
  * This is the prefix for the base SQL tables
  * @var string
  */
-define('QUICKBOOKS_DRIVER_SQL_PREFIX', 'quickbooks_');
+define('QUICKBOOKS_DRIVER_SQL_PREFIX', 'qb_server');
 
 /**
  * This is the prefix for the SQL mirror tables
  * @var string
  */
-define('QUICKBOOKS_DRIVER_SQL_PREFIX_SQL', 'qb_server');
+define('QUICKBOOKS_DRIVER_SQL_PREFIX_SQL', 'qb_');
 
 /**
  * This is the prefix used for any extra SQL tables needed by the integrators
  * @var string
  */
-define('QUICKBOOKS_DRIVER_SQL_PREFIX_INTEGRATOR', 'qb_server');
+define('QUICKBOOKS_DRIVER_SQL_PREFIX_INTEGRATOR', 'qb_');
 
 /**
  * Default table name for SQL log table
