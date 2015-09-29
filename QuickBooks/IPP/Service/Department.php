@@ -40,4 +40,8 @@ class QuickBooks_IPP_Service_Department extends QuickBooks_IPP_Service
 		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_DEPARTMENT, $ID, $xml);
 	}
 
+	public function query($Context, $realm, $query)
+	{
+		return parent::_query($Context, $realm, $query);
+	}
 }
