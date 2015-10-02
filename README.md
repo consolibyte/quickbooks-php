@@ -67,7 +67,7 @@ There is additional documentation and additional examples on our legacy and new 
 
 -------------------------------------
 ###Keith Palmer###
-- support@consolibyte.com
+- support@consolibyte.com  (the best place for support is our forums, a link is above)
 - aim: consolibyte
 - gtalk: consolibyte
 - Skype: consolibyte
