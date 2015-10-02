@@ -193,15 +193,7 @@ class QuickBooks_WebConnector_Server
 		$this->_callback_config = $callback_options;
 		
 		// Raw input
-		$input = '';
-		if (isset($HTTP_RAW_POST_DATA) and strlen($HTTP_RAW_POST_DATA))
-		{
-			$input = $HTTP_RAW_POST_DATA;	
-		}
-		else
-		{
-			$input = file_get_contents('php://input');
-		}
+		$input = file_get_contents('php://input');
 		
 		$this->_input = $input;
 				
