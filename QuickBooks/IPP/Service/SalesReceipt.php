@@ -50,4 +50,14 @@ class QuickBooks_IPP_Service_SalesReceipt extends QuickBooks_IPP_Service
 		$xml = null;
 		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $ID, $domain, $xml);
 	}
+
+	public function delete($Context, $realmID, $IDType)
+	{
+		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $IDType);
+	}
+
+	public function void($Context, $realmID, $IDType)
+	{
+		return parent::_void($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $IDType);
+	}
 }
