@@ -23,6 +23,9 @@ while (false !== ($file = readdir($dh)))
 		case 'add.php':
 			$examples[$file] = 'Add a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
+		case 'void.php';	
+			$examples[$file] = 'Void a ' . implode(' ', array_slice($tmp, 1, -1));
+			break;
 		case 'update.php':
 			$examples[$file] = 'Update a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;

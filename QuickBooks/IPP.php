@@ -1040,8 +1040,14 @@ class QuickBooks_IPP
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_VOID)
 		{
+			$qs = '?operation=void';        // Used for invoices... 
+			if ($resource == QuickBooks_IPP_IDS::RESOURCE_PAYMENT)    // ... and something different used for payments *sigh*
+			{
+				$qs = '?operation=update&include=void';
+			}
+
 			$post = true;
-			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?operation=void';
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . $qs;
 			$xml = $xml_or_query;
 		}
 
