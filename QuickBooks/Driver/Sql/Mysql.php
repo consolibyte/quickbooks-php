@@ -172,7 +172,14 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	 * @var array 
 	 */
 	protected $_hooks;
-	
+
+	/**
+	 * Last statement run by PDO
+	 * 
+	 * @var \PDOStatement 
+	 */
+    protected $_lastStatement = null;
+
 	/**
 	 * Create a new MySQL back-end driver
 	 * 
@@ -284,7 +291,16 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	 */
 	protected function _connect($host, $port, $user, $pass, $db, $new_link, $client_flags)
 	{
-		if ($port)
+		$dsn = "mysql:dbname={$db};host={$host}";
+        $this->_conn = new PDO($dsn, $user, $pass);
+
+        // Support UTF-8 chars
+        $this->_conn->exec("SET NAMES 'utf8'");
+
+        return $this->_conn;
+
+        /*
+        if ($port)
 		{
 			$this->_conn = mysql_connect($host . ':' . $port, $user, $pass, $new_link, $client_flags) or die('host: ' . $host . ', user: ' . $user . ', pass: XXXX, mysql_error(): ' . mysql_error());
 		}
@@ -298,27 +314,32 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 		
 		// Support UTF-8 chars
 		mysql_query("SET NAMES 'utf8'", $this->_conn);
-		
+		*/
 		/*
 		static $connections = array();
 		$connections[] = $user . ':' . $pass . '@' . $host . ':' . $port . '/' . $db;
 		mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( 'MySQL connection #" . count($connections) . ", " . print_r($connections, true) . "', NOW() )", $this->_conn) or die(mysql_error());
 		*/
 		
-		return $tmp;
+		//return $tmp;
 	}
 	
+
 	/**
 	 * Fetch an array from a database result set
 	 * 
-	 * @param resource $res
+	 * @param resource $stmt
 	 * @return array
 	 */
-	protected function _fetch($res)
+	protected function _fetch($stmt)
 	{
-		return mysql_fetch_assoc($res);
+        return $stmt->fetch();
+
+        //return mysql_fetch_assoc($res);
 	}
 	
+
+
 	/**
 	 * Query the database
 	 * 
@@ -344,8 +365,14 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 		}
 		
 		//print($sql . "\n\n");
-		$res = mysql_query($sql, $this->_conn);
-		//mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( '" . mysql_real_escape_string($sql) . "', NOW() ) ");
+
+
+        //$res = mysql_query($sql, $this->_conn);
+        $result = $this->_conn->query($sql);
+		$this->_lastStatement = $result;
+
+
+        //mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( '" . mysql_real_escape_string($sql) . "', NOW() ) ");
 		
 		/*
 		CREATE TABLE quickbooks_debug (
@@ -372,10 +399,10 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 			)");
 		*/
 		
-		if (!$res)
+		if($result->errorCode() != '00000')
 		{
-			$errnum = mysql_errno($this->_conn);
-			$errmsg = mysql_error($this->_conn);
+			$errnum = $result->errorCode();
+			$errmsg = $result->errorInfo();
 			
 			//print($sql);
 			
@@ -383,7 +410,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 			return false;
 		}
 		
-		return $res;
+		return $result;
 	}
 	
 	/**
@@ -428,7 +455,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	 */
 	public function affected()
 	{
-		return mysql_affected_rows($this->_conn);
+		return $this->_affected;
 	}
 	
 	/**
@@ -438,7 +465,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	 */
 	public function last()
 	{
-		return mysql_insert_id($this->_conn);
+		return $this->_conn->lastInsertId();
 	}
 	
 	/**
@@ -482,7 +509,9 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	 */
 	public function rewind($res)
 	{
-		if (mysql_num_rows($res) > 0)
+		throw new Exception('Implement QuickBooks_Driver_Sql_Mysql::rewind');
+
+        if (mysql_num_rows($res) > 0)
 		{
 			return mysql_data_seek($res, 0);
 		}
@@ -498,7 +527,8 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	 */
 	protected function _escape($str)
 	{
-		return mysql_real_escape_string($str, $this->_conn);
+        return trim($this->_conn->quote($str), "'");
+        //return mysql_real_escape_string($str, $this->_conn);
 	}
 	
 	/**
@@ -509,7 +539,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
 	 */
 	protected function _count($res)
 	{
-		return mysql_num_rows($res);
+		return count($this->_lastStatement->fetchAll());
 	}
 	
 	/**

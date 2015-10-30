@@ -1,6 +1,6 @@
 {
     "version": "2.0-RC4",
-    "name": "consolibyte/quickbooks",
+    "name": "aquaticpond/quickbooks",
     "type": "library",
     "description": "QuickBooks DevKit with support for Intuit Anywhere, Intuit Partner Platform, Web Connector, QuickBooks Merchant Services, and more.",
     "keywords": ["quickbooks","intuit","intuit anywhere","intuit partner platform","quickbooks web connector","qbxml","intuit data services","quickbooks merchant services","intuit merchant services","web connector"],
