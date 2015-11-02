@@ -17,11 +17,17 @@ while (false !== ($file = readdir($dh)))
 	$tmp = explode('_', $file);
 	switch (end($tmp))
 	{
+		case 'fail.php':
+			$examples[$file] = 'Try (and fail) to charge a ' . implode(' ', array_slice($tmp, 1, -1));
+			break;
 		case 'tokenize.php':
 			$examples[$file] = 'Tokenize a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
 		case 'charge.php':
 			$examples[$file] = 'Charge a ' . implode(' ', array_slice($tmp, 1, -1));
+			break;
+		case 'debit.php':
+			$examples[$file] = 'Debit a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
 	}
 }

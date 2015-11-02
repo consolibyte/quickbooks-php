@@ -10,7 +10,10 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-$number = '4111 1111 1111 1111';
+// THIS IS NOT A VALID CREDIT CARD NUMBER, SO IT SHOULD FAIL!
+$number = '4111 1234 1234 1234';    
+// 
+
 $name = 'Keith Palmer';
 $expyear = 2020;
 $expmonth = 10;

@@ -10,33 +10,28 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-$number = '4111 1111 1111 1111';
 $name = 'Keith Palmer';
-$expyear = 2020;
-$expmonth = 10;
-$street = '72 E Blue Grass Road';
-$city = 'Mt Pleasant';
-$region = 'MI';
-$postalcode = '48858';
+$number = '856666';
+$routing = '072403004';
+$type = QuickBooks_Payments_BankAccount::TYPE_PERSONAL_CHECKING;
+$phone = '860-634-1602';
 
 $amount = 50;
 $currency = 'USD';
 
 $Payments = new QuickBooks_Payments($oauth_consumer_key, $oauth_consumer_secret, $sandbox);
 
-$CreditCard = new QuickBooks_Payments_CreditCard($name, $number, $expyear, $expmonth, $street, $city, $region, $postalcode);
+$BankAccount = new QuickBooks_Payments_BankAccount($name, $number, $routing, $type, $phone);
 
-if ($Transaction = $Payments->charge($Context, $CreditCard, $amount, $currency))
+if ($Transaction = $Payments->debit($Context, $BankAccount, $amount, $currency))
 {
 	//print_r($Transaction);
 
-	print('Id: ' . $Transaction->getId() . '<br>');
-	print('Auth Code: ' . $Transaction->getAuthCode() . '<br>');
-	print('Status: ' . $Transaction->getStatus() . '<br>');
+	print_r($Transaction);
 }
 else
 {
-	print('Error while charging credit card: ' . $Payments->lastError());
+	print('Error while debiting a bank account: ' . $Payments->lastError());
 }
 
 print('<br><br><br><br>');

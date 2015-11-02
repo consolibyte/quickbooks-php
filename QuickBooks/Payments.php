@@ -88,6 +88,15 @@ class Quickbooks_Payments
 	protected $_oauth_consumer_key;
 	protected $_oauth_consumer_secret;
 
+	protected $_last_request;
+	protected $_last_response;
+
+	protected $_last_errnum;
+	protected $_last_errmsg;
+	protected $_last_errdetail;
+	protected $_last_errtype;
+	protected $_last_errinfolink;
+
 	public function __construct($oauth_consumer_key, $oauth_consumer_secret, $sandbox = false)
 	{
 		$this->_oauth_consumer_key = $oauth_consumer_key;
@@ -106,6 +115,51 @@ class Quickbooks_Payments
 		{
 			return Quickbooks_Payments::BASE_PRODUCTION;
 		}
+	}
+
+	public function debit($Context, $Object_or_token, $amount, $description = '')
+	{
+		$payload = array(
+			'amount' => sprintf('%01.2f', $amount), 
+			'paymentMode' => 'WEB',
+			);
+
+		if ($Object_or_token instanceof QuickBooks_Payments_CreditCard)
+		{
+			$this->_setError();
+		}
+		else if ($Object_or_token instanceof QuickBooks_Payments_BankAccount)
+		{
+			$payload['bankAccount'] = $Object_or_token->toArray();
+		}
+		else if ($Object_or_token instanceof QuickBooks_Payments_Token)
+		{
+			// It's a token 
+			$payload['token'] = $Object_or_token->toString();
+		}
+		else
+		{
+			// It's a string token 
+			$payload['token'] = $Object_or_token;
+		}
+
+		//print('making request');
+		//print_r($payload);
+
+		// Sign the request 
+		$resp = $this->_http($Context, QuickBooks_Payments::URL_ECHECK, json_encode($payload));
+
+		$data = json_decode($resp, true);
+
+		//print_r($data);
+		//exit;
+
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
+		return new QuickBooks_Payments_Transaction($data);
 	}
 
 	public function charge($Context, $Object_or_token, $amount, $currency = 'USD', $description = '')
@@ -152,6 +206,11 @@ class Quickbooks_Payments
 
 		$data = json_decode($resp, true);
 
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
 		return new QuickBooks_Payments_Transaction($data);
 	}
 
@@ -182,7 +241,28 @@ class Quickbooks_Payments
 			return new QuickBooks_Payments_Token($data['value']);
 		}
 
-		$this->_setError();
+		// Error handling 
+		$this->_handleError($data);
+		return false;
+	}
+
+	protected function _handleError($data)
+	{
+		if (isset($data['errors']))
+		{
+			$err = array_merge(array(
+				'code' => null, 
+				'message' => null, 
+				'type' => null, 
+				'detail' => null, 
+				'infoLink' => null, 
+				), $data['errors'][0]);
+
+			$this->_setError($err['code'], $err['message'], $err['type'], $err['detail'], $err['infoLink']);
+
+			return true;
+		}
+
 		return false;
 	}
 
@@ -208,7 +288,7 @@ class Quickbooks_Payments
 	
 	public function lastError()
 	{
-		return $this->_errnum . ': ' . $this->_errmsg;
+		return $this->_last_errnum . ': ' . $this->_last_errmsg;
 	}
 
 	/**
@@ -218,10 +298,14 @@ class Quickbooks_Payments
 	 * @param string $errmsg	The text error message
 	 * @return void
 	 */
-	protected function _setError($errnum, $errmsg = '')
+	protected function _setError($errnum, $errmsg = '', $type = null, $detail = null, $infolink = null)
 	{
-		$this->_errnum = $errnum;
-		$this->_errmsg = $errmsg;
+		$this->_last_errnum = $errnum;
+		$this->_last_errmsg = $errmsg;
+
+		$this->_last_errtype = $type;
+		$this->_last_errdetail = $detail;
+		$this->_last_errinfolink = $infolink; 
 	}	
 
 	/**
