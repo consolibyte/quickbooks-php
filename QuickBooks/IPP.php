@@ -503,6 +503,11 @@ class QuickBooks_IPP
 		
 		return $this->_baseurl;
 	}
+
+	public function authcreds()
+	{
+		return $this->_authcred;
+	}
 	
 	/**
 	 * Set the authorization mode for HTTP requests (Federated, or OAuth)
