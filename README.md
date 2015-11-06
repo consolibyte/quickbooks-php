@@ -6,12 +6,12 @@ QuickBooks integration support for PHP 5.x+
 The package you've downloaded contains code and documentation for connecting various versions and editions of QuickBooks to PHP, allowing your PHP applications to do fancy things like:
 
 - Automatically send orders placed on your website to QuickBooks Online or QuickBooks for Windows
-- Charge credit cards using the QuickBooks Merchant Service
-- Connect to Intuit Anywhere / the Intuit Partner Platform and the v3 APIs
+- Charge credit cards using Intuit Payments / QuickBooks Merchant Services
+- Connect to QuickBooks v3 APIs via OAuth
 - Get access to QuickBooks reports 
 - Pull information out of QuickBooks and display it online 
 - Connect to all Microsoft Windows versions of QuickBooks
-- Connect to QuickBooks Online Edition
+- Connect to all QuickBooks Online versions
 - Authenticate via OAuth
 - etc. etc. etc.
 
@@ -67,7 +67,4 @@ There is additional documentation and additional examples on our legacy and new 
 
 -------------------------------------
 ###Keith Palmer###
-- support@consolibyte.com  (the best place for support is our forums, a link is above)
-- aim: consolibyte
-- gtalk: consolibyte
-- Skype: consolibyte
+- Follow me on Twitter for updates: https://twitter.com/keith_palmer_jr
