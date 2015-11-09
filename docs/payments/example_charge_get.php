@@ -10,25 +10,19 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-$number = '4111 1111 1111 1111';
-$name = 'Keith Palmer';
-$expyear = 2020;
-$expmonth = 10;
-$street = '72 E Blue Grass Road';
-$city = 'Mt Pleasant';
-$region = 'MI';
+$id = 'EY32QCYC6RTX';
 
 $Payments = new QuickBooks_Payments($oauth_consumer_key, $oauth_consumer_secret, $sandbox);
 
-$CreditCard = new QuickBooks_Payments_CreditCard($name, $number, $expyear, $expmonth, $street, $city, $region);
-
-if ($Token = $Payments->tokenize($Context, $CreditCard))
+if ($Transaction = $Payments->getCharge($Context, $id))
 {
-	print_r($Token);
+	print('Id: ' . $Transaction->getId() . '<br>');
+	print('Auth Code: ' . $Transaction->getAuthCode() . '<br>');
+	print('Status: ' . $Transaction->getStatus() . '<br>');
 }
 else
 {
-	print('Error while tokenizing payment: ' . $Payments->lastResponse());
+	print('Error while getting charge: ' . $Payments->lastResponse());
 }
 
 print('<br><br><br><br>');

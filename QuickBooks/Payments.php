@@ -246,6 +246,40 @@ class Quickbooks_Payments
 		return false;
 	}
 
+	public function getCharge($Context, $id)
+	{
+		$resp = $this->_http($Context, QuickBooks_Payments::URL_CHARGE . '/' . $id, null);
+
+		$data = json_decode($resp, true);
+
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
+		return new QuickBooks_Payments_Transaction($data);
+	}
+
+	public function getDebit($id)
+	{
+
+	}
+
+	public function refund()
+	{
+
+	}
+
+	public function getChargeRefund()
+	{
+
+	}
+
+	public function getDebitRefund()
+	{
+
+	}
+
 	protected function _handleError($data)
 	{
 		if (isset($data['errors']))
@@ -339,7 +373,12 @@ class Quickbooks_Payments
 
 	protected function _http($Context, $url_path, $raw_body)
 	{
-		$method = 'POST';
+		$method = 'GET';
+		if ($raw_body)
+		{
+			$method = 'POST';
+		}
+
 		$url = $this->_getBaseURL() . $url_path;
 
 		$authcreds = $Context->authcreds();
@@ -368,7 +407,18 @@ class Quickbooks_Payments
 		$HTTP->verifyHost(false);
 		$HTTP->verifyPeer(false);
 		
-		$return = $HTTP->POST();
+		if ($method == 'POST')
+		{
+			$return = $HTTP->POST();
+		}
+		else if ($method == 'GET')
+		{
+			$return = $HTTP->GET();
+		}
+		else
+		{
+			$return = null;  // ERROR
+		}
 		
 		$this->_last_request = $HTTP->lastRequest();
 		$this->_last_response = $HTTP->lastResponse();
