@@ -277,8 +277,8 @@ class QuickBooks_WebConnector_Handlers
 		
 		$this->_callback_config = $callback_config;
 		
-		//$this->_driver->log('Handler is starting up...: ' . var_export($this->_config, true), '', QUICKBOOKS_LOG_DEBUG);
-		$this->_log('Handler is starting up...: ' . var_export($this->_config, true), '', QUICKBOOKS_LOG_DEBUG);
+		//$this->_driver->log('Handler is starting up...: ' . print_r($this->_config, true), '', QUICKBOOKS_LOG_DEBUG);
+		$this->_log('Handler is starting up...: ' . print_r($this->_config, true), '', QUICKBOOKS_LOG_DEBUG);
 	}
 	
 	/**
