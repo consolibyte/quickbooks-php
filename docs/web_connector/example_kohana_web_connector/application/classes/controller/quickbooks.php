@@ -36,7 +36,7 @@ class Controller_Quickbooks extends Controller_Website {
 
 	public function action_help() {
 		$this->template->title = __("Help and Documentation");
-		$this->template->content = View::factory('directory/yourview/help')
+		$this->template->content = View::factory('directory/yourview/help');
 		//make this page the target of qwc help link
 	}
 
