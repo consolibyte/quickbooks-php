@@ -74,7 +74,7 @@ class Quickbooks_Payments
 	const URL_CHARGE = '/quickbooks/v4/payments/charges';
 	const URL_TOKEN = '/quickbooks/v4/payments/tokens';
 	//const URL_ACCOUNT = '/quickbooks/v4/customers/<id>/bank-accounts';
-	//const URL_CARD = '/quickbooks/v4/customers/<id>/cards';
+	const URL_CARD = '/quickbooks/v4/customers/<id>/cards';
 	const URL_ECHECK = '/quickbooks/v4/payments/echecks';
 
 	const BASE_SANDBOX = 'https://sandbox.api.intuit.com';
@@ -280,6 +280,43 @@ class Quickbooks_Payments
 
 	}
 
+	public function getCards($Context, $id)
+	{
+		$id = str_replace(array('{', '}', '-'), '', $id);
+
+		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_CARD);
+
+		print "Trying to get gards for: " . $url . "\n";
+		$resp = $this->_http($Context, $url, null);
+
+		print "Request: ";
+		print_r($this->_last_request);
+		print "Response: ";
+		print_r($this->_last_response);
+
+		// error_log($resp);
+
+		$data = json_decode($resp, true);
+
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
+		$list = array();
+
+		foreach ($data as $card)
+		{
+			// How do I stuff this into
+			$creditcard = new QuickBooks_Payments_CreditCard(); 
+			$list[] = $creditcard->fromArray($card);
+		}
+
+		print_r($list);
+
+		return $list;
+	}
+
 	protected function _handleError($data)
 	{
 		if (isset($data['errors']))
@@ -427,6 +464,8 @@ class Quickbooks_Payments
 		$this->log($HTTP->getLog(), QUICKBOOKS_LOG_DEBUG);
 		
 		$info = $HTTP->lastInfo();
+
+		print "Info: ";print_r($info);
 
 		$errnum = $HTTP->errorNumber();
 		$errmsg = $HTTP->errorMessage();
