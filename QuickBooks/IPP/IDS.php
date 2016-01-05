@@ -36,6 +36,8 @@ class QuickBooks_IPP_IDS
 
 	const OPTYPE_VOID = 'Void';
 
+	const OPTYPE_PDF = 'PDF';
+
 	const OPTYPE_QUERY = 'Query';
 
 	const OPTYPE_CDC = 'ChangeDataCapture';
