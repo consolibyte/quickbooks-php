@@ -90,6 +90,7 @@ class Quickbooks_Payments
 
 	protected $_last_request;
 	protected $_last_response;
+	protected $_last_httpinfo;
 
 	protected $_last_errnum;
 	protected $_last_errmsg;
@@ -286,13 +287,13 @@ class Quickbooks_Payments
 
 		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_CARD);
 
-		print "Trying to get gards for: " . $url . "\n";
+		//print "Trying to get gards for: " . $url . "\n";
 		$resp = $this->_http($Context, $url, null);
 
-		print "Request: ";
-		print_r($this->_last_request);
-		print "Response: ";
-		print_r($this->_last_response);
+		//print "Request: ";
+		//print_r($this->_last_request);
+		//print "Response: ";
+		//print_r($this->_last_response);
 
 		// error_log($resp);
 
@@ -360,6 +361,11 @@ class Quickbooks_Payments
 	public function lastError()
 	{
 		return $this->_last_errnum . ': ' . $this->_last_errmsg;
+	}
+
+	public function lastHTTPInfo()
+	{
+		return $this->_last_httpinfo;
 	}
 
 	/**
@@ -464,8 +470,7 @@ class Quickbooks_Payments
 		$this->log($HTTP->getLog(), QUICKBOOKS_LOG_DEBUG);
 		
 		$info = $HTTP->lastInfo();
-
-		print "Info: ";print_r($info);
+		$this->_last_httpinfo = $info;
 
 		$errnum = $HTTP->errorNumber();
 		$errmsg = $HTTP->errorMessage();
