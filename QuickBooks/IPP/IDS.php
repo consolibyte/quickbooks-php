@@ -109,6 +109,8 @@ class QuickBooks_IPP_IDS
 	const RESOURCE_CREDITMEMO = 'CreditMemo';
 	
 	const RESOURCE_CUSTOMER = 'Customer';
+
+	const RESOURCE_DEPARTMENT = 'Department';
 	
 	const RESOURCE_DISCOUNT = 'Discount';
 	
