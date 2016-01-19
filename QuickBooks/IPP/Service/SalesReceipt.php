@@ -21,10 +21,9 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_SalesReceipt extends QuickBooks_IPP_Service
 {
-	public function findAll($Context, $realmID)
+	public function update($Context, $realmID, $IDType, $Object)
 	{
-		$xml = null;
-		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $xml);
+		return parent::_update($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $Object, $IDType);
 	}
 	
 	/**
