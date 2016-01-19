@@ -36,6 +36,8 @@ class QuickBooks_IPP_IDS
 
 	const OPTYPE_VOID = 'Void';
 
+	const OPTYPE_PDF = 'PDF';
+
 	const OPTYPE_QUERY = 'Query';
 
 	const OPTYPE_CDC = 'ChangeDataCapture';
@@ -109,6 +111,8 @@ class QuickBooks_IPP_IDS
 	const RESOURCE_CREDITMEMO = 'CreditMemo';
 	
 	const RESOURCE_CUSTOMER = 'Customer';
+
+	const RESOURCE_DEPARTMENT = 'Department';
 	
 	const RESOURCE_DISCOUNT = 'Discount';
 	

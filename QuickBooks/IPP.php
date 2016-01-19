@@ -1055,6 +1055,11 @@ class QuickBooks_IPP
 			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . $qs;
 			$xml = $xml_or_query;
 		}
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_PDF)
+		{
+			$post = false;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/pdf';
+		}
 
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
 

@@ -638,6 +638,15 @@ abstract class QuickBooks_IPP_Service
 		return false;
 	}
 
+	protected function _pdf($Context, $realmID, $resource, $ID)
+	{
+		// v3 only
+		$IPP = $Context->IPP();
+		$IPP->useIDSParser(false); // We want raw pdf output
+
+		return $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_PDF, null, $ID);
+	}
+
 	/**
 	 * @deprecated 			Use _update() instead
 	 */
