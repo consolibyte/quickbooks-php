@@ -2,20 +2,20 @@
 
 /**
  * QuickBooks XML node - individual tags within an XML document
- * 
+ *
  * Copyright (c) 2010-04-16 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.opensource.org/licenses/eclipse-1.0.php
- * 
+ *
  * @todo YAML exporting *does not* work correctly
  * @todo Array exporting *does not* work correctly
  * @todo JSON exporting *does not* work correctly
- * 
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * @license LICENSE.txt 
- * 
+ * @license LICENSE.txt
+ *
  * @package QuickBooks
  * @subpackage XML
  */
@@ -30,7 +30,7 @@ class QuickBooks_XML_Node
 	 * @var string
 	 */
 	protected $_name;
-	
+
 	/**
 	 * Tag data
 	 * @var string
@@ -42,37 +42,37 @@ class QuickBooks_XML_Node
 	 * @var array
 	 */
 	protected $_attributes;
-	
+
 	/**
 	 * A string containing comments that were found immediately after this tag
 	 * @var string
 	 */
 	protected $_comment;
-	
+
 	/**
 	 * An array of child tags within this tag
-	 * @var array
+	 * @var QuickBooks_XML_Node[]
 	 */
 	protected $_children;
-	
+
 	/**
 	 * Create a new XML node
-	 * 
+	 *
 	 * @param string $name
 	 * @param string $data
 	 */
 	public function __construct($name = null, $data = null)
 	{
 		$this->_name = $name;
-		
+
 		$this->_data = $data;
 		$this->_children = array();
 		$this->_attributes = array();
 	}
-	
+
 	/**
 	 * Add a child tag (another node) to this tag
-	 * 
+	 *
 	 * @param QuickBooks_XML_Node $node
 	 * @param boolean $prepend
 	 * @return boolean
@@ -87,13 +87,13 @@ class QuickBooks_XML_Node
 		{
 			$this->_children[] = $node;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Add an attribute to this XML tag/node
-	 * 
+	 *
 	 * @param string $attr		The attribute name
 	 * @param mixed $value		The attribute value
 	 * @return boolean
@@ -103,22 +103,22 @@ class QuickBooks_XML_Node
 		$this->_attributes[$attr] = $value;
 		return true;
 	}
-	
+
 	/**
 	 * Set an attribute in this XML tag/node
-	 * 
+	 *
 	 * @param string $attr
 	 * @param mixed $value
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function setAttribute($attr, $value)
 	{
 		return $this->addAttribute($attr, $value);
 	}
-	
+
 	/**
 	 * Get an attribute from this XML tag/node
-	 * 
+	 *
 	 * @param string $attr
 	 * @return mixed
 	 */
@@ -128,13 +128,13 @@ class QuickBooks_XML_Node
 		{
 			return $this->_attributes[$attr];
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Tell whether or not an attribute exists
-	 * 
+	 *
 	 * @param string $attr
 	 * @return boolean
 	 */
@@ -142,10 +142,10 @@ class QuickBooks_XML_Node
 	{
 		return isset($this->_attributes[$attr]);
 	}
-	
+
 	/**
 	 * Set the name of this tag/node
-	 * 
+	 *
 	 * @param string $name
 	 * @return boolean
 	 */
@@ -154,10 +154,10 @@ class QuickBooks_XML_Node
 		$this->_name = $name;
 		return true;
 	}
-	
+
 	/**
 	 * Set the data contained by the XML node
-	 * 
+	 *
 	 * @param string
 	 * @return boolean
 	 */
@@ -171,7 +171,7 @@ class QuickBooks_XML_Node
 	 *
 	 * @param <type> $path
 	 * @param <type> $attr
-	 * @param <type> $value 
+	 * @param <type> $value
 	 */
 	public function setChildAttributeAt($path, $attr, $value, $create = false)
 	{
@@ -191,13 +191,13 @@ class QuickBooks_XML_Node
 			$this->setChildDataAt($path, null, true);
 			return $this->setChildAttributeAt($path, $attr, $value, false);
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Recursive helper function - get child at location
-	 * 
+	 *
 	 * @param QuickBooks_XML_Node $root
 	 * @param string $path
 	 * @return QuickBooks_XML_Node
@@ -208,12 +208,12 @@ class QuickBooks_XML_Node
 		{
 			$path = str_replace(' ', '/', $path);
 		}
-		
+
 		$explode = explode('/', $path);
 		//$explode = explode(' ', $path);
 		$current = array_shift($explode);
 		$next = current($explode);
-		
+
 		if ($path == $root->name())
 		{
 			return $root;
@@ -221,7 +221,7 @@ class QuickBooks_XML_Node
 		else if ($current == $root->name())
 		{
 			$path = implode('/', $explode);
-			
+
 			foreach ($root->children() as $child)
 			{
 				if ($child->name() == $next)
@@ -230,13 +230,13 @@ class QuickBooks_XML_Node
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Get the data segment of an XML child node at a particular path
-	 * 
+	 *
 	 * @param string $path
 	 * @return mixed
 	 */
@@ -246,13 +246,13 @@ class QuickBooks_XML_Node
 		{
 			return $child->data();
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Get a child XML node at a particular path
-	 * 
+	 *
 	 * @param string $path
 	 * @return QuickBooks_XML_Node
 	 */
@@ -260,22 +260,22 @@ class QuickBooks_XML_Node
 	{
 		return $this->_getChildAtHelper($this, $path);
 	}
-	
+
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param <type> $path
-	 * @return <type> 
+	 * @return <type>
 	 */
 	public function childExistsAt($path)
 	{
 		$child = $this->getChildAt($path);
 		return is_object($child);
 	}
-	
+
 	/**
 	 * Add a child XML node at a particular path
-	 * 
+	 *
 	 * @param string $path
 	 * @param QuickBooks_XML_Node $child
 	 * @param boolean $create
@@ -285,10 +285,10 @@ class QuickBooks_XML_Node
 	{
 		return $this->_addChildAtHelper($this, $path, $node, $create);
 	}
-	
+
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param QuickBooks_XML_Node $root
 	 * @param string $path
 	 * @param QuickBooks_XML_Node $child
@@ -301,12 +301,12 @@ class QuickBooks_XML_Node
 		{
 			$path = str_replace(' ', '/', $path);
 		}
-		
+
 		$explode = explode('/', $path);
 		/*$explode = explode(' ', $path);*/
 		$current = array_shift($explode);
 		$next = current($explode);
-		
+
 		if ($path == $root->name())
 		{
 			return $root->addChild($node);
@@ -314,7 +314,7 @@ class QuickBooks_XML_Node
 		else
 		{
 			$path = implode('/', $explode);
-			
+
 			foreach ($root->children() as $child)
 			{
 				if ($child->name() == $next)
@@ -323,7 +323,7 @@ class QuickBooks_XML_Node
 				}
 			}
 		}
-		
+
 		if ($create)
 		{
 			$root->addChild(new QuickBooks_XML_Node($next));
@@ -335,48 +335,48 @@ class QuickBooks_XML_Node
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public function setChildDataAt($path, $data, $create = false)
 	{
 		if (false !== strpos($path, ' ') and false === strpos($path, '/'))
 		{
 			$path = str_replace(' ', '/', $path);
 		}
-		
+
 		$explode = explode('/', $path);
 		$allbutend = implode('/', array_slice($explode, 0, -1));
-		
+
 		/*
 		$explode = explode(' ', $path);
 		$allbutend = implode(' ', array_slice($explode, 0, -1));
 		*/
-		
+
 		$end = end($explode);
-		
+
 		$child = $this->getChildAt($path);
-		
+
 		if (!$child and $create)
 		{
 			$this->addChildAt($allbutend, new QuickBooks_XML_Node($end), true);
 			$child = $this->getChildAt($path);
 		}
-		
+
 		if ($child)
 		{
 			$child->setData($data);
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Get a child XML node's attributes (associative array)
-	 * 
+	 *
 	 * @param string $path
-	 * @return array 
+	 * @return array
 	 */
 	public function getChildAttributesAt($path)
 	{
@@ -384,45 +384,45 @@ class QuickBooks_XML_Node
 		{
 			return $child->attributes();
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected function _pathHelper()
 	{
-		
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public function path($path)
 	{
-		
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected function _getChildByTagHelper()
 	{
-		
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public function getChildByTag($name)
 	{
-		
+
 	}
-	
+
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param string $pattern
 	 * @param string $str
 	 * @return boolean
@@ -430,24 +430,24 @@ class QuickBooks_XML_Node
 	static protected function _fnmatch($pattern, $str)
 	{
 		$arr = array(
-			'\*' => '.*', 
+			'\*' => '.*',
 			'\?' => '.'
 			);
 		return preg_match('#^' . strtr(preg_quote($pattern, '#'), $arr) . '$#i', $str);
 	}
-	
+
 	/**
 	 * Get an array of child nodes for this XML node
-	 * 
+	 *
 	 * @param string $pattern
-	 * @return array
+	 * @return QuickBooks_XML_Node[]
 	 */
 	public function children($pattern = null)
 	{
 		if (!is_null($pattern))
 		{
 			$list = array();
-			
+
 			foreach ($this->_children as $Child)
 			{
 				if ($this->_fnmatch($pattern, $Child->name()))
@@ -455,17 +455,17 @@ class QuickBooks_XML_Node
 					$list[] = $Child;
 				}
 			}
-			
+
 			return $list;
 		}
-		
+
 		return $this->_children;
 	}
-	
+
 	/**
 	 * Get the data contained by this XML node
-	 * 
-	 * @return mixed 
+	 *
+	 * @return mixed
 	 */
 	public function data()
 	{
@@ -474,17 +474,17 @@ class QuickBooks_XML_Node
 
 	/**
 	 * Tell whether or not this XML node contains data
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function hasData()
 	{
 		return strlen($this->_data) > 0;
 	}
-	
+
 	/**
 	 * Set a comment for this node
-	 * 
+	 *
 	 * @param string $comment
 	 * @return boolean
 	 */
@@ -493,67 +493,67 @@ class QuickBooks_XML_Node
 		$this->_comment = $comment;
 		return true;
 	}
-	
+
 	/**
 	 * Retrieve any comment set for this XML node
-	 * 
+	 *
 	 * @return string
 	 */
 	public function comment()
 	{
 		return $this->_comment;
 	}
-	
+
 	/**
 	 * Tell whether or not this XML node contains a comment
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function hasComment()
 	{
 		return strlen($this->_comment) > 0;
 	}
-	
+
 	/**
 	 * Tell the name of this XML node/tag
-	 * 
+	 *
 	 * @return string
 	 */
 	public function name()
 	{
 		return $this->_name;
 	}
-	
+
 	/**
 	 * Get an associative array of attributes the XML node contains
-	 * 
+	 *
 	 * @return array
 	 */
 	public function attributes()
 	{
 		return $this->_attributes;
 	}
-	
+
 	/**
 	 * Tell how many child elements this particular XML node has
-	 * 
+	 *
 	 * @return integer
 	 */
 	public function childCount()
 	{
 		return count($this->_children);
 	}
-	
+
 	/**
 	 * Tell whether or not this XML node has any children
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function hasChildNodes()
 	{
 		return $this->childCount() > 0;
 	}
-	
+
 	/**
 	 * Alias of {@link QuickBooks_XML_Node::hasChildNodes()}
 	 */
@@ -561,73 +561,73 @@ class QuickBooks_XML_Node
 	{
 		return $this->hasChildNodes();
 	}
-	
+
 	/**
 	 * Tell how many attributes this particular XML node has
-	 * 
+	 *
 	 * @return integer
 	 */
 	public function attributeCount()
 	{
 		return count($this->_attributes);
 	}
-	
+
 	public function removeChild($which)
 	{
 		if (isset($this->_children[$which]))
 		{
 			unset($this->_children[$which]);
 			$this->_children = array_merge($this->_children);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public function replaceChild($which, $node)
 	{
-		
+
 	}
-	
+
 	public function getChild($which)
 	{
 		if (isset($this->_children[$which]))
 		{
 			return $this->_children[$which];
 		}
-		
+
 		return null;
 	}
-	
+
 	public function normalize()
 	{
-		
+
 	}
-	
+
 	public function equals($node, $recurse = true)
 	{
-		
+
 	}
-	
+
 	public function getElementById()
 	{
-		
+
 	}
-	
+
 	public function getElementByTagName()
 	{
-		
+
 	}
-	
+
 	public function hasAttributes()
 	{
 		return $this->attributeCount() > 0;
 	}
-	
+
 	/**
 	 * Remove an attribute from the XML node
-	 * 
+	 *
 	 * @param string $attr
 	 * @return boolean
 	 */
@@ -638,13 +638,13 @@ class QuickBooks_XML_Node
 			unset($this->_attributes[$attr]);
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Resursive helper function for converting to XML
-	 * 
+	 *
 	 * @param QuickBooks_XML_Node $node
 	 * @param integer $tabs
 	 * @param boolean $empty				A constant, one of: QUICKBOOKS_XML_XML_PRESERVE, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_COMPRESS
@@ -654,18 +654,18 @@ class QuickBooks_XML_Node
 	public function _asXMLHelper($node, $tabs, $empty, $indent)
 	{
 		$xml = '';
-		
+
 		if ($node->childCount())
 		{
 			$xml .= str_repeat($indent, $tabs) . '<' . $node->name();
-			
+
 			foreach ($node->attributes() as $key => $value)
 			{
-				// Make sure double-encode is *off* 
+				// Make sure double-encode is *off*
 				//$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value, true, false) . '"';
 				$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value) . '"';
 			}
-			
+
 			$xml .= '>' . "\n";
 			foreach ($node->children() as $child)
 			{
@@ -678,21 +678,21 @@ class QuickBooks_XML_Node
 			if ($node->hasAttributes())		// if the node has attributes, we'll build the whole thing no matter what
 			{
 				$xml .= str_repeat($indent, $tabs) . '<' . $node->name();
-				
+
 				foreach ($node->attributes() as $key => $value)
 				{
 					// Double-encode is *off*
 					//$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value, true, false) . '"';
 					$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value) . '"';
 				}
-				
+
 				// Double-encode is *off*
 				//$xml .= '>' . QuickBooks_XML::encode($node->data(), true, false) . '</' . $node->name() . '>' . "\n";
 				$xml .= '>' . QuickBooks_XML::encode($node->data()) . '</' . $node->name() . '>' . "\n";
 			}
 			else
 			{
-				if ($node->data() == '__EMPTY__')		// ick, bad hack 
+				if ($node->data() == '__EMPTY__')		// ick, bad hack
 				{
 					$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '></' . $node->name() . '>' . "\n";
 				}
@@ -711,16 +711,16 @@ class QuickBooks_XML_Node
 					; // do nothing, drop the empty element
 				}
 			}
-			
-			
+
+
 		}
-		
+
 		return $xml;
 	}
-	
+
 	/**
 	 * Get an XML representation of this XML node and it's child XML nodes
-	 * 
+	 *
 	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
 	 * @param string $indent					The character to use to indent the XML with
 	 * @return string
@@ -729,54 +729,54 @@ class QuickBooks_XML_Node
 	{
 		return $this->_asXMLHelper($this, 0, $todo_for_empty_elements, $indent);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected function _asJSONHelper($node, $tabs, $indent)
 	{
 		$json = '';
-		
+
 		if ($node->childCount() or $node->attributeCount())	// container elements surrounded with { ... }
 		{
 			$json .= str_repeat($indent, $tabs) . $node->name() . ':{' . "\n";
-			
+
 			$list = array();
 			foreach ($node->children() as $child)
 			{
 				$json .= $this->_asJSONHelper($child, $tabs + 1, $indent);
 			}
-		
+
 			foreach ($node->attributes() as $key => $value)
 			{
 				$json .= str_repeat($indent, $tabs) . '"' . $key . '": "' . $value . '", ' . "\n";
 			}
-			
+
 			$json .= "\n" . str_repeat($indent, $tabs) . '}';
 		}
 		else
 		{
 			$json .= str_repeat($indent, $tabs) . '"' . $node->name() . '": "' . $node->data() . '", ' . "\n";
 		}
-		
+
 		return $json;
 	}
-	
+
 	/**
 	 * Get a JSON representation of this XML node
-	 * 
+	 *
 	 * @return string
 	 */
 	public function asJSON($indent = "\t")
 	{
-		return '{' . "\n" . $this->_asJSONHelper($this, 1, $indent) . '}'; 
+		return '{' . "\n" . $this->_asJSONHelper($this, 1, $indent) . '}';
 	}
-	
+
 	/**
 	 * Get an array represtation of this XML node
-	 * 
+	 *
 	 * @param string $mode
-	 * @return array 
+	 * @return array
 	 */
 	public function asArray($mode = QuickBooks_XML::ARRAY_NOATTRIBUTES)
 	{
@@ -787,21 +787,21 @@ class QuickBooks_XML_Node
 			case QuickBooks_XML::ARRAY_BRANCHED:
 				return $this->_asArrayBranchedHelper($this);
 			case QuickBooks_XML::ARRAY_PATHS:
-				
+
 				$current = '';
 				$paths = array();
 				$this->_asArrayPathsHelper($this, $current, $paths);
-				
+
 				return $paths;
 			case QuickBooks_XML::ARRAY_NOATTRIBUTES:
 			default:
 				return $this->_asArrayNoAttributesHelper($this);
 		}
 	}
-	
+
 	/**
 	 * Helper function for converting to an array mapping paths to tag values
-	 * 
+	 *
 	 * @param QuickBooks_XML_Node $node
 	 * @param string $current
 	 * @param array $paths
@@ -821,74 +821,74 @@ class QuickBooks_XML_Node
 			$paths[trim($current . ' ' . $node->name())] = $node->data();
 		}
 	}
-	
+
 	/**
 	 * Save this XML node structure as an XML file
-	 * 
+	 *
 	 * @param mixed $path_or_resource			The filepath of the file you want write to *or* an opened file resource
 	 * @param string $mode						The mode to open the file in
-	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE 
+	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
 	 * @return integer							The number of bytes written to the file
 	 */
 	public function saveXML($path_or_resource, $mode = 'wb', $todo_for_empty_elements = QuickBooks_XML::XML_COMPRESS)
 	{
 		$xml = $this->asXML($todo_for_empty_elements);
-		
+
 		if (is_resource($path_or_resource))
 		{
 			return fwrite($path_or_resource, $xml);
 		}
-		
+
 		$fp = fopen($path_or_resource, $mode);
 		$bytes = fwrite($fp, $xml);
 		fclose($fp);
-		
+
 		return $bytes;
 	}
-	
+
 	/**
 	 * Save the XML node structure as a JSON document
-	 * 
+	 *
 	 * @param mixed $path_or_resource
 	 * @param string $mode
-	 * @return integer 
+	 * @return integer
 	 */
 	public function saveJSON($path_or_resource, $mode = 'wb')
 	{
 		$json = $this->_root->asJSON();
-		
+
 		if (is_resource($path_or_resource))
 		{
 			return fwrite($path_or_resource, $json);
 		}
-		
+
 		$fp = fopen($path_or_resource, $mode);
 		$bytes = fwrite($fp, $json);
 		fclose($fp);
-		
+
 		return $bytes;
 	}
-	
+
 	/**
 	 * Get a YAML representation of this XML node
-	 * 
+	 *
 	 * @return string
 	 */
 	public function asYAML()
 	{
-		
+
 	}
-	
+
 	/**
-	 * Save a YAML representation of this XML node structure to disk 
-	 * 
+	 * Save a YAML representation of this XML node structure to disk
+	 *
 	 * @param mixed $path_or_resource
 	 * @param string $mode
 	 * @return integer
 	 */
 	public function saveYAML($path_or_resource, $mode = 'wb')
 	{
-		
+
 	}
 }
 
