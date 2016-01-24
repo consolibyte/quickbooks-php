@@ -32,7 +32,9 @@ class QuickBooks_IPP_Object_Item extends QuickBooks_IPP_Object
 			'QtyOnPurchaseOrder' => true, 
 			'QtyOnSalesOrder' => true, 
 			'ReorderPoint' => true, 
-			'ManPartNum' => true, 	
+			'ManPartNum' => true,
+			'TrackQtyOnHand' => true,
+			'InvStartDate' => true
 		);
 	}
 }
