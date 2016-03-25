@@ -21,9 +21,18 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_Entitlements extends QuickBooks_IPP_Service
 {
+	public function info($Context, $realmID)
+	{
+		$list = parent::_entitlements($Context, $realmID);
+
+		return $list['_i'];
+	}
+
 	public function entitlements($Context, $realmID)
 	{
-		return parent::_entitlements($Context, $realmID);
+		$list = parent::_entitlements($Context, $realmID);
+
+		return $list['_e'];
 	}
 	
 }

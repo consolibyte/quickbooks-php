@@ -12,15 +12,31 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $EntitlementsService = new QuickBooks_IPP_Service_Entitlements();
 
+// This gets the entitlements/features of a QBO install 
 $es = $EntitlementsService->entitlements($Context, $realm);
 
+foreach ($es as $e)
+{
+	print($e->getEntitlementId() . '.: ' . $e->getName() . ' => ' . print_r($e->isOn(), true) . '  (' . $e->getTerm() . ')' . "\n");
+}
+
+print("\n\n\n\n");
+
+// This gets a bit more information about the QBO install (trial days, plan type, etc.)
+$is = $EntitlementsService->info($Context, $realm);
+
+print_r($is);
+
+/*
 print_r($es);
+print_r($is);
 
 print($EntitlementsService->lastRequest($Context));
 print($EntitlementsService->lastResponse($Context));
 
 print('ERROR: ');
 print($EntitlementsService->lastError($Context));
+*/
 
 ?>
 
