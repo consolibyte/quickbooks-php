@@ -41,6 +41,8 @@ class QuickBooks_IPP_IDS
 	const OPTYPE_QUERY = 'Query';
 
 	const OPTYPE_CDC = 'ChangeDataCapture';
+
+	const OPTYPE_ENTITLEMENTS = 'Entitlements';
 	
 	/**
 	 * This is not a real operation type in IDS terms, but is neccessary to distinguish between queries and findById in QuickBooks Online in IDS v2.

@@ -38,6 +38,9 @@ while (false !== ($file = readdir($dh)))
 		case 'cdc.php';
 			$examples[$file] = 'Get objects that have changed since a timestamp';
 			break;
+		case 'entitlements.php':
+			$examples[$file] = 'Get entitlement values (e.g. find out what features QBO supports)';
+			break;
 		case 'delete.php';
 			$examples[$file] = 'Delete a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;

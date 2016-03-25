@@ -703,6 +703,7 @@ class QuickBooks_IPP
 		return $response;
 	}
 	
+	/*
 	public function getEntitlementValues($Context)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
@@ -728,7 +729,8 @@ class QuickBooks_IPP
 			
 		return $this->_IPP($Context, $url, $action, $xml);
 	}
-	
+	*/
+
 	public function provisionUser($Context, $email, $fname, $lname, $roleid = null, $udata = null)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
@@ -1036,6 +1038,11 @@ class QuickBooks_IPP
 		{
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/cdc?entities=' . implode(',', $xml_or_query[0]) . '&changedSince=' . $xml_or_query[1];
+		}
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_ENTITLEMENTS)
+		{
+			$post = false;
+			$url = 'https://qbo.sbfinance.intuit.com/manage/entitlements/v3/' . $realm;
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 		{
