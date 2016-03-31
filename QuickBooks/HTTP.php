@@ -46,6 +46,10 @@ define('QUICKBOOKS_HTTP_METHOD_HEAD', 'HEAD');
 
 class QuickBooks_HTTP
 {
+	const HTTP_400 = 400;
+	const HTTP_401 = 401;
+	const HTTP_500 = 500;
+
 	protected $_url;
 	
 	protected $_request_headers;

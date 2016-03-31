@@ -320,6 +320,18 @@ class Quickbooks_Payments
 
 	protected function _handleError($data)
 	{
+		if (!$data)
+		{
+			// Check for 401/other errors 
+			$info = $this->_last_httpinfo;
+
+			if ($info['http_code'] == QuickBooks_HTTP::HTTP_401)
+			{
+				$this->_setError($info['http_code'], 'Unauthorized.');
+				return true;
+			}
+		}
+
 		if (isset($data['errors']))
 		{
 			$err = array_merge(array(
