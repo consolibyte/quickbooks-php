@@ -63,4 +63,9 @@ class QuickBooks_IPP_Context
 	{
 		return $this->_token;
 	}
+
+	public function authcreds()
+	{
+		return $this->_IPP->authcreds();
+	}
 }

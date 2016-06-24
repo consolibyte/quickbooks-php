@@ -10,34 +10,48 @@
  * http://www.opensource.org/licenses/eclipse-1.0.php
  * 
  * @license LICENSE.txt
- * @author Keith Palmer <Keith@ConsoliBYTE.com>
+ * @author Thomas Rientjes
  * 
  * @package QuickBooks
  * @subpackage IPP
  */
 
-// 
+
 QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_Department extends QuickBooks_IPP_Service
 {
-	public function findAll($Context, $realmID, $query = null, $page = 1, $size = 50)
+	public function findAll($Context, $realmID)
 	{
-		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_DEPARTMENT, $query, null, $page, $size);
+		$xml = null;
+		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_DEPARTMENT, $xml);
 	}
 
 	/**
-	 * Get a customer by ID 
-	 * 
-	 * @param QuickBooks_IPP_Context $Context	
-	 * @param string $realmID					
-	 * @param string $ID						The ID of the department (this expects an IdType, which includes the domain)
-	 * @return QuickBooks_IPP_Object_Department	The Department object
+	 * Get a department by ID
+	 *
+	 * @param QuickBooks_IPP_Context $Context
+	 * @param string $realmID
+	 * @param $IDType
+	 * @return QuickBooks_IPP_Object_Department The department object
 	 */
-	public function findById($Context, $realmID, $ID)
+	public function findById($Context, $realmID, $IDType)
 	{
 		$xml = null;
-		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_DEPARTMENT, $ID, $xml);
+		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_DEPARTMENT, $IDType, $xml);
+	}
+	
+	/**
+	 * Add a new department to QuickBooks
+	 *
+	 * @param QuickBooks_IPP_Context $Context
+	 * @param string $realmID
+	 * @param QuickBooks_IPP_Object_Department
+	 * @return string The new ID of the created department
+	 */
+	public function add($Context, $realmID, $Object)
+	{
+		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_DEPARTMENT, $Object);
 	}
 
 	public function query($Context, $realm, $query)

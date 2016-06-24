@@ -490,6 +490,8 @@ define('QUICKBOOKS_MOD_EMPLOYEE', 'EmployeeMod');
 define('QUICKBOOKS_QUERY_EMPLOYEE', 'EmployeeQuery');
 define('QUICKBOOKS_IMPORT_EMPLOYEE', 'EmployeeImport');
 
+define('QUICKBOOKS_QUERY_ENTITY', 'EntityQuery');
+
 define('QUICKBOOKS_OBJECT_ESTIMATE', 'Estimate');
 define('QUICKBOOKS_ADD_ESTIMATE', 'EstimateAdd');
 define('QUICKBOOKS_MOD_ESTIMATE', 'EstimateMod');

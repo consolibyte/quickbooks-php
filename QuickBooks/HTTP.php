@@ -46,6 +46,10 @@ define('QUICKBOOKS_HTTP_METHOD_HEAD', 'HEAD');
 
 class QuickBooks_HTTP
 {
+	const HTTP_400 = 400;
+	const HTTP_401 = 401;
+	const HTTP_500 = 500;
+
 	protected $_url;
 	
 	protected $_request_headers;
@@ -61,6 +65,8 @@ class QuickBooks_HTTP
 	protected $_last_request;
 	
 	protected $_last_duration;
+
+	protected $_last_info;
 	
 	protected $_errnum;
 	
@@ -347,6 +353,11 @@ class QuickBooks_HTTP
 	{
 		return $this->_last_duration;
 	}
+
+	public function lastInfo()
+	{
+		return $this->_last_info;
+	}
 	
 	/**
 	 * Set an error message
@@ -440,7 +451,7 @@ class QuickBooks_HTTP
 		
 		return $return;
 	}
-	
+
 	protected function _requestCurl($method, &$errnum, &$errmsg)
 	{
 		$url = $this->getURL();
@@ -559,6 +570,8 @@ class QuickBooks_HTTP
 		$this->_last_response = $response;
 		$this->_log('HTTP response: ' . substr($response, 0, 500) . '...', QUICKBOOKS_LOG_VERBOSE);
 		
+		$this->_last_info = curl_getinfo($ch);
+
 		if (curl_errno($ch)) 
 		{
 			$errnum = curl_errno($ch);

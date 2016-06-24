@@ -23,6 +23,9 @@ while (false !== ($file = readdir($dh)))
 		case 'add.php':
 			$examples[$file] = 'Add a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
+		case 'void.php';	
+			$examples[$file] = 'Void a ' . implode(' ', array_slice($tmp, 1, -1));
+			break;
 		case 'update.php':
 			$examples[$file] = 'Update a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
@@ -34,6 +37,9 @@ while (false !== ($file = readdir($dh)))
 			break;
 		case 'cdc.php';
 			$examples[$file] = 'Get objects that have changed since a timestamp';
+			break;
+		case 'entitlements.php':
+			$examples[$file] = 'Get entitlement values (e.g. find out what features QBO supports)';
 			break;
 		case 'delete.php';
 			$examples[$file] = 'Delete a ' . implode(' ', array_slice($tmp, 1, -1));

@@ -19,13 +19,13 @@ $Invoice->setTxnDate('2013-10-11');
 
 $Line = new QuickBooks_IPP_Object_Line();
 $Line->setDetailType('SalesItemLineDetail');
-$Line->setAmount(12.95 * 2);
+$Line->setAmount(20.0000 * 1.0000 * 0.516129);
 $Line->setDescription('Test description goes here.');
 
 $SalesItemLineDetail = new QuickBooks_IPP_Object_SalesItemLineDetail();
 $SalesItemLineDetail->setItemRef('8');
-$SalesItemLineDetail->setUnitPrice(12.95);
-$SalesItemLineDetail->setQty(2);
+$SalesItemLineDetail->setUnitPrice(20 * 0.516129);
+$SalesItemLineDetail->setQty(1.00000);
 
 $Line->addSalesItemLineDetail($SalesItemLineDetail);
 

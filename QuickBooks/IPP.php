@@ -503,6 +503,11 @@ class QuickBooks_IPP
 		
 		return $this->_baseurl;
 	}
+
+	public function authcreds()
+	{
+		return $this->_authcred;
+	}
 	
 	/**
 	 * Set the authorization mode for HTTP requests (Federated, or OAuth)
@@ -698,6 +703,7 @@ class QuickBooks_IPP
 		return $response;
 	}
 	
+	/*
 	public function getEntitlementValues($Context)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
@@ -723,7 +729,8 @@ class QuickBooks_IPP
 			
 		return $this->_IPP($Context, $url, $action, $xml);
 	}
-	
+	*/
+
 	public function provisionUser($Context, $email, $fname, $lname, $roleid = null, $udata = null)
 	{
 		$url = 'https://workplace.intuit.com/db/' . $this->_dbid;
@@ -1032,6 +1039,11 @@ class QuickBooks_IPP
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/cdc?entities=' . implode(',', $xml_or_query[0]) . '&changedSince=' . $xml_or_query[1];
 		}
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_ENTITLEMENTS)
+		{
+			$post = false;
+			$url = 'https://qbo.sbfinance.intuit.com/manage/entitlements/v3/' . $realm;
+		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 		{
 			$post = true;
@@ -1040,9 +1052,20 @@ class QuickBooks_IPP
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_VOID)
 		{
+			$qs = '?operation=void';        // Used for invoices... 
+			if ($resource == QuickBooks_IPP_IDS::RESOURCE_PAYMENT)    // ... and something different used for payments *sigh*
+			{
+				$qs = '?operation=update&include=void';
+			}
+
 			$post = true;
-			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?operation=void';
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . $qs;
 			$xml = $xml_or_query;
+		}
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_PDF)
+		{
+			$post = false;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/pdf';
 		}
 
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);

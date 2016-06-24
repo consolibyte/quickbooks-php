@@ -258,6 +258,13 @@ class QuickBooks_IPP_Parser
 
 	protected function _parseIDS_v3($xml, $optype, $flavor, $version, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
+		/*
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ENTITLEMENTS)
+		{
+			$xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><EntitlementsResponse><QboCompany>true</QboCompany><PlanName>QBWEBVAR1MO</PlanName><MaxUsers>3</MaxUsers><CurrentUsers>1</CurrentUsers><DaysRemainingTrial>0</DaysRemainingTrial><Entitlement id="7"><name>PayPal</name><term>Off</term></Entitlement><Entitlement id="8"><name>Merchant Service</name><term>Off</term></Entitlement><Entitlement id="50"><name>Adjusted Trial Balance Report</name><term>Off</term></Entitlement><Entitlement id="51"><name>Adjusting Journal Entries</name><term>Off</term></Entitlement><Entitlement id="52"><name>Accountant Menu</name><term>Off</term></Entitlement><Entitlement id="53"><name>Reconciliation Troubleshooting</name><term>Off</term></Entitlement><Entitlement id="54"><name>Reclassify Transactions</name><term>Off</term></Entitlement><Entitlement id="55"><name>Write Off Invoices</name><term>Off</term></Entitlement><Entitlement id="1"><name>Class Tracking</name><term>Off</term></Entitlement><Entitlement id="3"><name>Expense Tracking by Customer</name><term>Off</term></Entitlement><Entitlement id="4"><name>Time Tracking</name><term>Off</term></Entitlement><Entitlement id="5"><name>Budgets</name><term>Off</term></Entitlement><Entitlement id="6"><name>Custom Invoice Styles</name><term>On</term></Entitlement><Entitlement id="9"><name>1099 Forms for Vendors</name><term>Off</term></Entitlement><Entitlement id="10"><name>Managing Bills to Pay Later</name><term>On</term></Entitlement><Entitlement id="11"><name>Complete Set of Reports</name><term>On</term></Entitlement><Entitlement id="12"><name>Enhanced Reporting</name><term>On</term></Entitlement><Entitlement id="13"><name>Exporting to Excel</name><term>On</term></Entitlement><Entitlement id="15"><name>Delayed Charges</name><term>On</term></Entitlement><Entitlement id="16"><name>Custom Sales Fields</name><term>On</term></Entitlement><Entitlement id="17"><name>More Users -- up to 20</name><term>On</term></Entitlement><Entitlement id="19"><name>Recurring Transactions</name><term>On</term></Entitlement><Entitlement id="20"><name>Closing the Books</name><term>On</term></Entitlement><Entitlement id="21"><name>Location Tracking</name><term>Off</term></Entitlement><Entitlement id="22"><name>More Names</name><term>On</term></Entitlement><Entitlement id="25"><name>Custom Home Page</name><term>On</term></Entitlement><Entitlement id="26"><name>Do-it-yourself Payroll</name><term>Off</term></Entitlement><Entitlement id="28"><name>Online Banking</name><term>On</term></Entitlement><Entitlement id="29"><name>Basic Sales</name><term>On</term></Entitlement><Entitlement id="30"><name>Basic Banking</name><term>On</term></Entitlement><Entitlement id="31"><name>Accounting</name><term>On</term></Entitlement><Entitlement id="33"><name>Reports Only User</name><term>Off</term></Entitlement><Entitlement id="35"><name>Estimates</name><term>On</term></Entitlement><Entitlement id="41"><name>Company Snapshot</name><term>On</term></Entitlement><Entitlement id="42"><name>Purchase Order</name><term>Off</term></Entitlement><Entitlement id="43"><name>Inventory</name><term>Off</term></Entitlement><Entitlement id="44"><name>Do-it-yourself Payroll (Paycycle)</name><term>Off</term></Entitlement><Entitlement id="45"><name>Multi-Currency</name><term>On</term></Entitlement><Entitlement id="46"><name>Trends</name><term>On</term></Entitlement><Entitlement id="47"><name>Hide Employee List</name><term>Off</term></Entitlement><Entitlement id="48"><name>Simple Report List</name><term>Off</term></Entitlement><Entitlement id="49"><name>Global Tax Model</name><term>On</term></Entitlement><Entitlement id="56"><name>Text Messaging</name><term>On</term></Entitlement><Entitlement id="58"><name>Vendor Collaboration</name><term>On</term></Entitlement></EntitlementsResponse>';
+		}
+		*/
+
 		// Parse it 
 		$Parser = new QuickBooks_XML_Parser($xml);
 		
@@ -275,6 +282,34 @@ class QuickBooks_IPP_Parser
 
 			switch ($optype)
 			{
+				case QuickBooks_IPP_IDS::OPTYPE_ENTITLEMENTS:
+
+					$e = array(
+						'_i' => array(), 
+						'_e' => array()
+						);
+
+					$List = $Root->getChildAt('EntitlementsResponse');
+					foreach ($List->children() as $ObjList)
+					{
+						if ($ObjList->name() == 'Entitlement')
+						{
+							$Entitlement = new QuickBooks_IPP_Entitlement(
+								$ObjList->getAttribute('id'), 
+								$ObjList->getChildDataAt('Entitlement/name'),
+								$ObjList->getChildDataAt('Entitlement/term'));
+
+							$e['_e'][] = $Entitlement;
+						}
+						else
+						{
+							$e['_i'][$ObjList->name()] = $ObjList->data();
+						}
+					}
+
+					return $e;
+
+					break;
 				case QuickBooks_IPP_IDS::OPTYPE_CDC:
 
 					$types = array();
@@ -552,6 +587,15 @@ class QuickBooks_IPP_Parser
 					$Object->{'set' . $name}($data);
 				}
 			}*/		
+		}
+		
+		if ($Node->hasAttributes())
+		{
+			//Don't make a new object, just put it as a property of the same one
+			foreach ($Node->attributes() as $attr_name => $attr_value)
+			{
+				$Object->{'add' . $name . '_' . $attr_name}($attr_value);
+			}
 		}
 	}
 }
