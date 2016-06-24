@@ -861,9 +861,10 @@ abstract class QuickBooks_IPP_Service
 	{
 		$IPP = $Context->IPP();
 	
-		// Send the data to IPP 
-		//$return = $IPP->IDS($Context, $realmID, null, QuickBooks_IPP_IDS::OPTYPE_QUERY, str_replace('=', '%3D', $query));
-		$return = $IPP->IDS($Context, $realmID, null, QuickBooks_IPP_IDS::OPTYPE_QUERY, urlencode($query));
+		// jbaldock 2016-06-24 - Add the minor version 4 to the url
+		$query = urlencode($query);
+		$query .= "&minorversion=4";
+		$return = $IPP->IDS($Context, $realmID, null, QuickBooks_IPP_IDS::OPTYPE_QUERY, $query);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		

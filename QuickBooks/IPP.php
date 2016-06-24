@@ -1022,17 +1022,19 @@ class QuickBooks_IPP
 		$post = false;
 		$xml = null;
 		$query = null;
-
-		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)	
+		// jbaldock 2016-06-24 - Add the minor version 4 to the url
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD) 
 		{
 			$post = true;
 			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource);
 			$xml = $xml_or_query;
+			$url .= "?minorversion=4"; // this is the only addition
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
 		{
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/query?query=' . $xml_or_query;
+			$url .= "?minorversion=4"; // this is the only addition
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_CDC)
 		{
