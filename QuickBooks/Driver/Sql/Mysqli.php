@@ -147,7 +147,7 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_CONNECTIONTABLE'))
 /**
  * QuickBooks MySQL back-end driver
  */
-class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
+class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
 {
 	
 	/**
