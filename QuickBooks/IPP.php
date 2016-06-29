@@ -1034,7 +1034,8 @@ class QuickBooks_IPP
 		{
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/query?query=' . $xml_or_query;
-			$url .= "?minorversion=4"; // this is the only addition
+			//$url .= "?minorversion=4"; // this is the only addition
+			// Note: we don't want to pass 'minorversion' here because it'll end up in there twice and Quickbooks API will ignore it completely. 
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_CDC)
 		{
