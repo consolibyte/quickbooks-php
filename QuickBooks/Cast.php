@@ -524,22 +524,30 @@ class QuickBooks_Cast
 		}
 		
 		// decode four byte unicode characters
-		$string = preg_replace(
-			"/([\360-\367])([\200-\277])([\200-\277])([\200-\277])/e",
-			"'&#'.((ord('\\1')-240)*262144+(ord('\\2')-128)*4096+(ord('\\3')-128)*64+(ord('\\4')-128)).';'",
-			$string);
+		$string = preg_replace_callback("/([\360-\367])([\200-\277])([\200-\277])([\200-\277])/",
+		function($arr)
+		{
+		    $val = ((ord($arr[1])-240)*262144+(ord($arr[2])-128)*4096+(ord($arr[3])-128)*64+(ord($arr[4])-128));
+		    return "&#" . $val . ";";
+		}, $string);
+			
 	
 		// decode three byte unicode characters
-		$string = preg_replace(
-			"/([\340-\357])([\200-\277])([\200-\277])/e",
-			"'&#'.((ord('\\1')-224)*4096+(ord('\\2')-128)*64+(ord('\\3')-128)).';'",
-			$string);
+		$string = preg_replace_callback("/([\340-\357])([\200-\277])([\200-\277])/",
+		function($arr)
+		{
+		    $val = ((ord($arr[1])-224)*4096+(ord($arr[2])-128)*64+(ord($arr[3])-128));
+		    return "&#" . $val . ";";
+		}, $string);
+			
 	
 		// decode two byte unicode characters
-		$string = preg_replace(
-			"/([\300-\337])([\200-\277])/e",
-			"'&#'.((ord('\\1')-192)*64+(ord('\\2')-128)).';'",
-			$string);
+		$string = preg_replace_callback("/([\300-\337])([\200-\277])/",
+		function($arr)
+		{
+		    $val = ((ord($arr[1])-192)*64+(ord($arr[2])-128));
+		    return "&#" . $val . ";";
+		}, $string);
 	
 		// remove broken unicode
 		$string = preg_replace("/[\200-\237]|\240|[\241-\377]/", '?', $string);
