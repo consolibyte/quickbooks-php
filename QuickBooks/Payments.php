@@ -445,11 +445,14 @@ class Quickbooks_Payments
 
 		//print_r($signed);
 
-		$HTTP = new QuickBooks_HTTP($signed[2]);
+		//$HTTP = new QuickBooks_HTTP($signed[2]);
+		
+		$HTTP = new QuickBooks_HTTP($url);
 		
 		$headers = array(
 			'Content-Type' => 'application/json',
 			'Request-Id' => QuickBooks_Utilities::GUID(),
+			'Authorization' => $signed[3],
 			);
 		$HTTP->setHeaders($headers);
 		
