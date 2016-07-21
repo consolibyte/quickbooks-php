@@ -623,12 +623,16 @@ class QuickBooks_IPP
 	
 	public function getBaseURL($Context, $realmID)
 	{
+		/*
 		$url = 'https://qbo.intuit.com/qbo1/rest/user/v2/' . $realmID;
 		$action = QuickBooks_IPP::API_GETBASEURL;
 		$xml = null;
 		
 		$post = false;
 		return $this->_IPP($Context, $url, $action, $xml, $post);
+		*/
+	
+		return QuickBooks_IPP_IDS::URL_V3;
 	}
 	
 	public function getIsRealmQBO($Context)
@@ -999,12 +1003,9 @@ class QuickBooks_IPP
 
 		switch ($IPP->version())
 		{
-			case QuickBooks_IPP_IDS::VERSION_2:
-				return $this->_IDS_v2($Context, $realm, $resource, $optype, $xml, $ID);
 			case QuickBooks_IPP_IDS::VERSION_3:
-				return $this->_IDS_v3($Context, $realm, $resource, $optype, $xml, $ID);
 			default:
-				return false;
+				return $this->_IDS_v3($Context, $realm, $resource, $optype, $xml, $ID);
 		}
 	}
 
