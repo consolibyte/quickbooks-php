@@ -84,6 +84,11 @@ class QuickBooks_Payments_Transaction
 		return $this->_get('authCode');
 	}
 
+	public function getType()
+	{
+		return $this->_get('type');
+	}
+
 	protected function _get($key)
 	{
 		if (isset($this->_data[$key]))
