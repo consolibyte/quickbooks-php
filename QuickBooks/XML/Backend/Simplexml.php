@@ -10,7 +10,7 @@ QuickBooks_Loader::load('/QuickBooks/XML/Node.php');
 
 QuickBooks_Loader::load('/QuickBooks/XML/Document.php');
 
-class QuickBooks_XML_Backend_SimpleXML implements QuickBooks_XML_Backend
+class QuickBooks_XML_Backend_Simplexml implements QuickBooks_XML_Backend
 {
 	protected $_xml;
 	protected $_root;
