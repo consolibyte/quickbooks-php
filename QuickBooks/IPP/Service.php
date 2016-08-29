@@ -439,6 +439,7 @@ abstract class QuickBooks_IPP_Service
 	protected function _add($Context, $realmID, $resource, $Object)
 	{
 		$IPP = $Context->IPP();
+		$IPP->setContentType("application/xml");
 		
 		switch ($IPP->version())
 		{
@@ -1028,4 +1029,34 @@ abstract class QuickBooks_IPP_Service
 		$this->_errtext = $errtext;
 		$this->_errdetail = $errdetail;
 	}	
+	/**
+	 * Custom method to pass a JSON formatted request to QB API
+	 * Expects that Object is already formatted correctly and simply encodes it and passes it through
+	 * This is a temporary solution for use with QB API's that do not support XML (ie. TaxService) and should be redone properly
+	 * @author jbaldock 2016-07-28
+	 */
+	protected function _add_json($Context, $realmID, $resource, $Object)
+	{
+		$IPP = $Context->IPP();
+		$xml = json_encode($Object);
+		
+		// Send the data to IPP 
+		$IPP->setContentType("application/json");
+		$IPP->useIDSParser(false); // Do not parse the response because its JSON and will get messed up anyway
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_ADD, $xml);
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
+		
+		if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+		{
+			$this->_setError(
+				$IPP->errorCode(), 
+				$IPP->errorText(), 
+				$IPP->errorDetail());
+			
+			return false;
+		}
+		
+		return json_decode($return);
+	}
 }

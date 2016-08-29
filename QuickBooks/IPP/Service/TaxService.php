@@ -28,6 +28,8 @@ class QuickBooks_IPP_Service_TaxService extends QuickBooks_IPP_Service
 	
 	public function add($Context, $realmID, $Object)
 	{
-		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TAXSERVICE, $Object);
+		// TaxService needs to append the /taxcode as well (ie. taxservice/taxcode) because its special I guess
+		// @author jbaldock 2016-07-28 added to support JSON requests which this method absolutely requires on QB API (they do not support XML for this method)
+		return parent::_add_json($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TAXSERVICE . '/' . QuickBooks_IPP_IDS::RESOURCE_TAXCODE, $Object);
 	}
 }
