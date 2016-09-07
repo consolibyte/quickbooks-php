@@ -70,6 +70,10 @@ class Quickbooks_Payments
 
 	const ERROR_AUTH = -2000;
 	const ERROR_HTTP = -2001;
+
+	const ERROR_DECLINE = -2002;
+
+	const STATUS_DECLINED = 'DECLINED';
 	
 	const URL_CHARGE = '/quickbooks/v4/payments/charges';
 	const URL_TOKEN = '/quickbooks/v4/payments/tokens';
@@ -359,6 +363,14 @@ class Quickbooks_Payments
 				), $data['errors'][0]);
 
 			$this->_setError($err['code'], $err['message'], $err['type'], $err['detail'], $err['infoLink']);
+
+			return true;
+		}
+
+		if (isset($data['status']) and 
+			$data['status'] == self::STATUS_DECLINED)
+		{
+			$this->_setError(self::ERROR_DECLINE, 'This transaction was declined.');
 
 			return true;
 		}
