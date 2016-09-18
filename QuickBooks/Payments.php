@@ -70,12 +70,17 @@ class Quickbooks_Payments
 
 	const ERROR_AUTH = -2000;
 	const ERROR_HTTP = -2001;
+
+	const ERROR_DECLINE = -2002;
+
+	const STATUS_DECLINED = 'DECLINED';
 	
 	const URL_CHARGE = '/quickbooks/v4/payments/charges';
 	const URL_TOKEN = '/quickbooks/v4/payments/tokens';
 	//const URL_ACCOUNT = '/quickbooks/v4/customers/<id>/bank-accounts';
 	const URL_CARD = '/quickbooks/v4/customers/<id>/cards';
 	const URL_ECHECK = '/quickbooks/v4/payments/echecks';
+	const URL_REFUND = '/quickbooks/v4/payments/charges/<id>/refunds';
 
 	const BASE_SANDBOX = 'https://sandbox.api.intuit.com';
 	const BASE_PRODUCTION = 'https://api.intuit.com';
@@ -266,9 +271,24 @@ class Quickbooks_Payments
 
 	}
 
-	public function refund()
+	public function refund($Context, $id, $amount)
 	{
+		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_REFUND);
 
+		$payload = array(
+			'amount' => $amount, 
+			);
+		
+		$resp = $this->_http($Context, $url, json_encode($payload));
+
+		$data = json_decode($resp, true);
+
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
+		return new QuickBooks_Payments_Transaction($data);
 	}
 
 	public function getChargeRefund()
@@ -343,6 +363,14 @@ class Quickbooks_Payments
 				), $data['errors'][0]);
 
 			$this->_setError($err['code'], $err['message'], $err['type'], $err['detail'], $err['infoLink']);
+
+			return true;
+		}
+
+		if (isset($data['status']) and 
+			$data['status'] == self::STATUS_DECLINED)
+		{
+			$this->_setError(self::ERROR_DECLINE, 'This transaction was declined.');
 
 			return true;
 		}
@@ -445,11 +473,14 @@ class Quickbooks_Payments
 
 		//print_r($signed);
 
-		$HTTP = new QuickBooks_HTTP($signed[2]);
+		//$HTTP = new QuickBooks_HTTP($signed[2]);
+		
+		$HTTP = new QuickBooks_HTTP($url);
 		
 		$headers = array(
 			'Content-Type' => 'application/json',
 			'Request-Id' => QuickBooks_Utilities::GUID(),
+			'Authorization' => $signed[3],
 			);
 		$HTTP->setHeaders($headers);
 		

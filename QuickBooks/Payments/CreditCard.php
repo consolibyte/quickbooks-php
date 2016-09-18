@@ -54,6 +54,6 @@ class QuickBooks_Payments_CreditCard
 
 	static public function fromArray($data)
 	{
-		return new QuickBooks_Payments_CreditCard($data['name'], $data['number'], $data['expYear'], $data['expMonth'], $data['address']['streetAddress'], $data['address']['city'], $data['address']['region'], @$data['address']['postalCode'], $data['address']['country']);
+		return new QuickBooks_Payments_CreditCard($data['name'], $data['number'], $data['expYear'], $data['expMonth'], @$data['address']['streetAddress'], @$data['address']['city'], @$data['address']['region'], @$data['address']['postalCode'], @$data['address']['country']);
 	}
 }
