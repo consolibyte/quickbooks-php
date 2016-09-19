@@ -72,7 +72,7 @@ class QuickBooks_Callbacks
 		if ($Driver)
 		{
 			// Log the callback for debugging
-			$Driver->log('Calling auth callback [' . $type . ']: ' . print_r($callback, true), null, QUICKBOOKS_LOG_DEVELOP);
+			$Driver->log('Calling auth callback [' . $type . ']: ' . get_class($callback[0])  . '->' . $callback[1], null, QUICKBOOKS_LOG_DEVELOP);
 		}
 
 		// Backward compat
@@ -128,7 +128,7 @@ class QuickBooks_Callbacks
 		{
 			if ($Driver)
 			{
-				$Driver->log('Unsupported callback type for callback: ' . print_r($callback, true), null, QUICKBOOKS_LOG_VERBOSE);
+				$Driver->log('Unsupported callback type for callback: ' . get_class($callback[0])  . '->' . $callback[1], null, QUICKBOOKS_LOG_VERBOSE);
 			}
 		}
 
@@ -155,7 +155,7 @@ class QuickBooks_Callbacks
 		if ($Driver)
 		{
 			// Log the callback for debugging
-			$Driver->log('Calling SAML callback [' . $type . ']: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_DEVELOP);
+			$Driver->log('Calling SAML callback [' . $type . ']: ' . get_class($callback[0])  . '->' . $callback[1], $ticket, QUICKBOOKS_LOG_DEVELOP);
 		}
 
 		// The 6th (start at 0: 0, 1, 2, 3, 4, 5) param is the error handler
@@ -205,7 +205,7 @@ class QuickBooks_Callbacks
 		}
 		else
 		{
-			$err = 'Unsupported callback type for callback: ' . print_r($callback, true);
+			$err = 'Unsupported callback type for callback: ' . get_class($callback[0])  . '->' . $callback[1];
 			return false;
 		}
 
@@ -370,7 +370,7 @@ class QuickBooks_Callbacks
 		if ($Driver)
 		{
 			// Log this...
-			$Driver->log('Could not determine callback type for: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_NORMAL);
+			$Driver->log('Could not determine callback type for: ', $ticket, QUICKBOOKS_LOG_NORMAL);
 		}
 
 		return false;
@@ -390,7 +390,7 @@ class QuickBooks_Callbacks
 		if ($Driver)
 		{
 			// Log the callback for debugging
-			$Driver->log('Calling callback [' . $type . ']: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_DEVELOP);
+			$Driver->log('Calling callback [' . $type . ']: ' . get_class($callback[0])  . '->' . $callback[1], $ticket, QUICKBOOKS_LOG_DEVELOP);
 		}
 
 		// The 4th (start at 0: 0, 1, 2, 3) param is the error handler
@@ -511,7 +511,7 @@ class QuickBooks_Callbacks
 				if ($Driver)
 				{
 					// Log the callback for debugging
-					$Driver->log('Calling callback [' . $type . ']: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_DEVELOP);
+					$Driver->log('Calling callback [' . $type . ']: ' . get_class($callback[0])  . '->' . $callback[1], $ticket, QUICKBOOKS_LOG_DEVELOP);
 				}
 
 				$vars = array( $requestID, $user, $hook, &$err, $hook_data, $callback_config );
