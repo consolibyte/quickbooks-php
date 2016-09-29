@@ -54,7 +54,7 @@ QuickBooks_Loader::load('/QuickBooks/MerchantService/Transaction.php');
 /**
  * QuickBooks Merchant Service implementation
  */
-class Quickbooks_MerchantService
+class QuickBooks_MerchantService
 {
 	/**
 	 * No error occurred
