@@ -252,6 +252,13 @@ class Quickbooks_Payments
 		return false;
 	}
 
+	/**
+	 * Get information about a charge that was made previously 
+	 * 
+	 * @param  [type] $Context [description]
+	 * @param  [type] $id      [description]
+	 * @return [type]          [description]
+	 */
 	public function getCharge($Context, $id)
 	{
 		$resp = $this->_http($Context, QuickBooks_Payments::URL_CHARGE . '/' . $id, null);
@@ -266,9 +273,24 @@ class Quickbooks_Payments
 		return new QuickBooks_Payments_Transaction($data);
 	}
 
-	public function getDebit($id)
+	/**
+	 * Get information about a debit that was made previously
+	 * 
+	 * @param  [type] $id [description]
+	 * @return [type]     [description]
+	 */
+	public function getDebit($Context, $id)
 	{
+		$resp = $this->_http($Context, QuickBooks_Payments::URL_ECHECK . '/' . $id, null);
 
+		$data = json_decode($resp, true);
+
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
+		return new QuickBooks_Payments_Transaction($data);
 	}
 
 	public function refund($Context, $id, $amount)

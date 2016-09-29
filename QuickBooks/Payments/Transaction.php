@@ -27,16 +27,34 @@ QuickBooks_Loader::load('/QuickBooks/Payments.php');
 class QuickBooks_Payments_Transaction
 {
 	protected $_card;
+	protected $_bank;
 	protected $_data;
 
 	public function __construct($data)
 	{
 		$this->_data = $data;
 
+		$this->_card = null;
+		$this->_bank = null;
+
 		if (isset($data['card']))
 		{
 			$this->_card = QuickBooks_Payments_CreditCard::fromArray($data['card']);
 		}
+		else if (isset($data['bankAccount']))
+		{
+			$this->_bank = QuickBooks_Payments_BankAccount::fromArray($data['bankAccount']);
+		}
+	}
+
+	public function getCreditCard()
+	{
+		return $this->_card;
+	}
+
+	public function getBankAccount()
+	{
+		return $this->_bank;
 	}
 
 	public function toJSON()
@@ -97,5 +115,10 @@ class QuickBooks_Payments_Transaction
 		}
 
 		return null;
+	}
+
+	public function toArray()
+	{
+		return $this->_data;
 	}
 }
