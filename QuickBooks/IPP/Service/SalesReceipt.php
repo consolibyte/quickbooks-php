@@ -59,4 +59,9 @@ class QuickBooks_IPP_Service_SalesReceipt extends QuickBooks_IPP_Service
 	{
 		return parent::_void($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $IDType);
 	}
+
+	public function pdf($Context, $realmID, $IDType)
+	{
+		return parent::_pdf($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $IDType);
+	}
 }
