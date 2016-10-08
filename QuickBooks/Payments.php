@@ -265,7 +265,8 @@ class Quickbooks_Payments
 
 		$data = json_decode($resp, true);
 
-		if ($this->_handleError($data))
+		$ignore_declines = true;
+		if ($this->_handleError($data, $ignore_declines))
 		{
 			return false;
 		}
@@ -285,7 +286,8 @@ class Quickbooks_Payments
 
 		$data = json_decode($resp, true);
 
-		if ($this->_handleError($data))
+		$ignore_declines = true;
+		if ($this->_handleError($data, $ignore_declines))
 		{
 			return false;
 		}
@@ -360,7 +362,7 @@ class Quickbooks_Payments
 		return $list;
 	}
 
-	protected function _handleError($data)
+	protected function _handleError($data, $ignore_declines = false)
 	{
 		if (!$data)
 		{
@@ -389,12 +391,15 @@ class Quickbooks_Payments
 			return true;
 		}
 
-		if (isset($data['status']) and 
-			$data['status'] == self::STATUS_DECLINED)
+		if (!$ignore_declines)
 		{
-			$this->_setError(self::ERROR_DECLINE, 'This transaction was declined.');
+			if (isset($data['status']) and 
+				$data['status'] == self::STATUS_DECLINED)
+			{
+				$this->_setError(self::ERROR_DECLINE, 'This transaction was declined.');
 
-			return true;
+				return true;
+			}
 		}
 
 		return false;
