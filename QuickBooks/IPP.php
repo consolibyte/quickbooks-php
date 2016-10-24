@@ -1070,6 +1070,11 @@ class QuickBooks_IPP
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/pdf?requestid=' . $guid . '&minorversion=6';
 		}
+      else if ($optype == QuickBooks_IPP_IDS::OPTYPE_SEND)
+      {
+         $post = true;
+         $url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/send?requestid=' . $guid . '&minorversion=6';
+      }
 
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
 
