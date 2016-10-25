@@ -629,16 +629,17 @@ class Quickbooks_Payments
 	 */
 	protected function _http($Context, $url_path, $raw_body = null, $operation = null)
 	{
-	if($operation !== null)
+		if($operation !== null)
 		{
-		$method = $operation;
+			$method = $operation;
 		}
-	else
+		else
 		{
-		$method = 'GET';
-		if ($raw_body)
-		{
-			$method = 'POST';
+			$method = 'GET';
+			if ($raw_body)
+			{
+				$method = 'POST';
+			}
 		}
 
 		$url = $this->_getBaseURL() . $url_path;
