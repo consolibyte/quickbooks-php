@@ -46,7 +46,7 @@ $quickbooks_menu_url = 'http://quickbooks.v3.com:8888/quickbooks-php/docs/partne
 // This is a database connection string that will be used to store the OAuth credentials 
 // $dsn = 'pgsql://username:password@hostname/database';
 // $dsn = 'mysql://username:password@hostname/database';
-$dsn = 'mysqli://root:root@localhost/example_app_ipp_v3';		
+$dsn = 'mysqli://quickbooks:password@localhost/quickbooks_php';
 
 // You should set this to an encryption key specific to your app
 $encryption_key = 'bcde1234';
