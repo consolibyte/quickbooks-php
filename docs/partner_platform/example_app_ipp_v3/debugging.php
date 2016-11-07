@@ -24,6 +24,13 @@ if ($id = $BillService->add($Context, $realm, $Bill))
 }
 else
 {
+	// The below lines are helpful for debugging and troubleshooting.
+	//  They will show you the raw XML request that was sent to Intuit, and the 
+	//  raw XML response that Intuit returned. 
+	//  
+	// IF YOU ASK FOR HELP ONLINE, PLEASE PROVIDE THE OUTPUT FROM THESE LINES.
+	// WE WILL NOT BE ABLE TO ASSIST YOU WITHOUT THIS INFORMATION!!!
+
 	print('The bill add failed, and here is why:');
 
 	print('ERROR: ' . $BillService->lastError());
