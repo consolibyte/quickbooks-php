@@ -1040,7 +1040,7 @@ class QuickBooks_IPP
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_CDC)
 		{
 			$post = false;
-			$url = $this->baseURL() . '/company/' . $realm . '/cdc?entities=' . implode(',', $xml_or_query[0]) . '&changedSince=' . $xml_or_query[1] . '&requestid=' . $guid . '&minorversion=6';
+			$url = $this->baseURL() . '/company/' . $realm . '/cdc?entities=' . implode(',', $xml_or_query[0]) . '&changedSince=' . $xml_or_query[1] . '&minorversion=6';
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_ENTITLEMENTS)
 		{
