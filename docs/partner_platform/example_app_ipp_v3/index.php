@@ -64,6 +64,9 @@ while (false !== ($file = readdir($dh)))
 		<strong>Please make sure you review the <a target="_blank" href="http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start">quick-start tutorial</a>!</strong>
 	</p>
 	<p>
+		<strong>If you need help, make sure you post your code AND the request/response!</strong> <a href="debugging.php">Don't know how to get the request/response?</a>
+	</p>
+	<p>
 		You can get support on the forums:
 	</p>
 	<ul>
@@ -130,6 +133,18 @@ while (false !== ($file = readdir($dh)))
 				<tr>
 					<td>
 						<a href="diagnostics.php">Diagnostics about QuickBooks connection</a>
+					</td>
+					<td>
+						&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="debugging.php">Need help debugging/troubleshooting?</a>
 					</td>
 					<td>
 						&nbsp;
