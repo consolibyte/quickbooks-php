@@ -398,9 +398,6 @@ class QuickBooks_IPP_Federator
 		// Now make our HTTP request to get the OAuth tokens 
 		$HTTP = new QuickBooks_HTTP($sign[2]);
 		
-		$HTTP->verifyHost(false);
-		$HTTP->verifyPeer(false);
-		
 		$HTTP->useDebugMode($this->_debug);
 		
 		$data = $HTTP->GET();
