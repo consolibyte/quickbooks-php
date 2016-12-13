@@ -42,6 +42,8 @@ define('QUICKBOOKS_HTTP_METHOD_GET', 'GET');
 
 define('QUICKBOOKS_HTTP_METHOD_POST', 'POST');
 
+define('QUICKBOOKS_HTTP_METHOD_DELETE', 'DELETE');
+
 define('QUICKBOOKS_HTTP_METHOD_HEAD', 'HEAD');
 
 class QuickBooks_HTTP
@@ -265,9 +267,14 @@ class QuickBooks_HTTP
 		return $this->_request(QUICKBOOKS_HTTP_METHOD_POST);
 	}
 	
+	public function DELETE()
+	{
+		return $this->_request(QUICKBOOKS_HTTP_METHOD_DELETE);
+	}
+	
 	public function HEAD()
 	{
-		
+		return $this->_request(QUICKBOOKS_HTTP_METHOD_HEAD);
 	}
 	
 	public function useDebugMode($yes_or_no)
@@ -533,6 +540,15 @@ class QuickBooks_HTTP
 		if ($method == QUICKBOOKS_HTTP_METHOD_POST)
 		{
 			$request .= 'POST ';
+		}
+		elseif ($method == QUICKBOOKS_HTTP_METHOD_DELETE)
+		{
+			$request .= 'DELETE ';
+			$params[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+		}
+		elseif ($method == QUICKBOOKS_HTTP_METHOD_HEAD)
+		{
+			$request .= 'HEAD ';
 		}
 		else
 		{

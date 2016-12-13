@@ -103,12 +103,18 @@ class Quickbooks_Payments
 	protected $_last_errtype;
 	protected $_last_errinfolink;
 
-	public function __construct($oauth_consumer_key, $oauth_consumer_secret, $sandbox = false)
+	public function __construct($oauth_consumer_key, $oauth_consumer_secret, $sandbox = false, $dsn = null, $log_level = QUICKBOOKS_LOG_NORMAL)
 	{
 		$this->_oauth_consumer_key = $oauth_consumer_key;
 		$this->_oauth_consumer_secret = $oauth_consumer_secret;
 
 		$this->_sandbox = (bool) $sandbox;
+
+		if ($dsn)
+		{
+			$this->_driver = QuickBooks_Driver_Factory::create($dsn, array(), $log_level);
+			$this->_driver->setLogLevel($log_level);
+		}
 	}
 
 	protected function _getBaseURL()
@@ -133,6 +139,7 @@ class Quickbooks_Payments
 		if ($Object_or_token instanceof QuickBooks_Payments_CreditCard)
 		{
 			$this->_setError();
+			return false;
 		}
 		else if ($Object_or_token instanceof QuickBooks_Payments_BankAccount)
 		{
@@ -203,8 +210,8 @@ class Quickbooks_Payments
 		}
 		else
 		{
-			// It's a string token 
-			$payload['token'] = $Object_or_token;
+			// It's a string card_id
+			$payload['cardOnFile'] = $Object_or_token;
 		}
 
 		// Sign the request 
@@ -230,7 +237,9 @@ class Quickbooks_Payments
 		}
 		else if ($Object instanceof QuickBooks_Payments_BankAccount)
 		{
-
+			$payload = array(
+				'bankAccount' => $Object->toArray()
+				);
 		}
 		else
 		{
@@ -325,21 +334,28 @@ class Quickbooks_Payments
 
 	}
 
-	public function getCards($Context, $id)
+	/**
+	 * Store a card via the QuickBooks Payments API
+	 * 
+	 * @return QuickBooks_Payments_CreditCard
+	 */
+	public function storeCard($Context, $id, $Object)
 	{
 		$id = str_replace(array('{', '}', '-'), '', $id);
 
 		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_CARD);
 
-		//print "Trying to get gards for: " . $url . "\n";
-		$resp = $this->_http($Context, $url, null);
+		if ($Object instanceof QuickBooks_Payments_CreditCard)
+		{
+			$payload = $Object->toArray();
+		}
+		else
+		{
+			$this->_setError();
+			return false;
+		}
 
-		//print "Request: ";
-		//print_r($this->_last_request);
-		//print "Response: ";
-		//print_r($this->_last_response);
-
-		// error_log($resp);
+		$resp = $this->_http($Context, $url, json_encode($payload));
 
 		$data = json_decode($resp, true);
 
@@ -348,20 +364,118 @@ class Quickbooks_Payments
 			return false;
 		}
 
-		$list = array();
+		return QuickBooks_Payments_CreditCard::fromArray($data);
+	}
+
+	/**
+	 * Store a card from a token via the QuickBooks Payments API
+	 * 
+	 * @return QuickBooks_Payments_CreditCard
+	 */
+	public function storeCardFromToken($Context, $id, $token)
+	{
+		$id = str_replace(array('{', '}', '-'), '', $id);
+
+		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_CARD . '/createFromToken');
+
+		$payload = array(
+			'value' => $token
+			);
+
+		$resp = $this->_http($Context, $url, json_encode($payload));
+
+		$data = json_decode($resp, true);
+
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
+		return QuickBooks_Payments_CreditCard::fromArray($data);
+	}
+
+	/**
+	 * Get a card via the QuickBooks Payments API
+	 * 
+	 * @return QuickBooks_Payments_CreditCard
+	 */
+	public function getCard($Context, $id, $card_id)
+	{
+		$id = str_replace(array('{', '}', '-'), '', $id);
+
+		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_CARD . '/' . $card_id);
+
+		$resp = $this->_http($Context, $url);
+
+		$data = json_decode($resp, true);
+
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
+		return QuickBooks_Payments_CreditCard::fromArray($data);
+	}
+
+	/**
+	 * Get all cards associated with a customer via the 
+	 * QuickBooks Payments API
+	 * 
+	 * @return array of QuickBooks_Payments_CreditCard
+	 */
+	public function getCards($Context, $id)
+	{
+		$id = str_replace(array('{', '}', '-'), '', $id);
+
+		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_CARD);
+
+		$resp = $this->_http($Context, $url, null);
+
+		$data = json_decode($resp, true);
+
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
+		$cards = array();
 
 		foreach ($data as $card)
 		{
-			// How do I stuff this into
-			$creditcard = new QuickBooks_Payments_CreditCard(); 
-			$list[] = $creditcard->fromArray($card);
+			$cards[] = QuickBooks_Payments_CreditCard::fromArray($card);
 		}
 
-		print_r($list);
-
-		return $list;
+		return $cards;
 	}
 
+	/**
+	 * Delete a card via the QuickBooks Payments API
+	 * 
+	 * @return boolean
+	 */
+	public function deleteCard($Context, $id, $card_id)
+	{
+		$id = str_replace(array('{', '}', '-'), '', $id);
+
+		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_CARD . '/' . $card_id);
+
+		$resp = $this->_http($Context, $url, null, 'DELETE');
+
+		$data = json_decode($resp, true);
+
+		if ($this->_handleError($data))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Handle an error, if set in the returned data
+	 * 
+	 * @return boolean
+	 */
 	protected function _handleError($data, $ignore_declines = false)
 	{
 		if (!$data)
@@ -425,11 +539,21 @@ class Quickbooks_Payments
 		return $this->_last_request;
 	}
 	
+	/**
+	 * Get the last raw XML error that was returned
+	 *
+	 * @return string
+	 */
 	public function lastError()
 	{
 		return $this->_last_errnum . ': ' . $this->_last_errmsg;
 	}
 
+	/**
+	 * Get the last raw HTTP info that was used
+	 *
+	 * @return string
+	 */
 	public function lastHTTPInfo()
 	{
 		return $this->_last_httpinfo;
@@ -440,6 +564,9 @@ class Quickbooks_Payments
 	 * 
 	 * @param integer $errnum	The error number/code
 	 * @param string $errmsg	The text error message
+	 * @param string $type		
+	 * @param string $detail	
+	 * @param string $infolink	
 	 * @return void
 	 */
 	protected function _setError($errnum, $errmsg = '', $type = null, $detail = null, $infolink = null)
@@ -460,7 +587,7 @@ class Quickbooks_Payments
 	 * @param integer $level
 	 * @return boolean
 	 */
-	public function log($message)
+	protected function _log($message, $level)
 	{
 		if ($this->_masking)
 		{
@@ -481,12 +608,38 @@ class Quickbooks_Payments
 		return true;
 	}
 
-	protected function _http($Context, $url_path, $raw_body)
+	/**
+	 * Log a message 
+	 *
+	 *
+	 */
+	public function log($message, $level = QUICKBOOKS_LOG_NORMAL)
 	{
-		$method = 'GET';
-		if ($raw_body)
+		return $this->_log($message, $level);
+	}
+
+	/**
+	 * Perform a Quickbooks Payments operation via HTTP
+	 * 
+	 * @param  $Context
+	 * @param  $url_path
+	 * @param  $raw_body
+	 * @param  $operation
+	 * @return boolean
+	 */
+	protected function _http($Context, $url_path, $raw_body = null, $operation = null)
+	{
+		if($operation !== null)
 		{
-			$method = 'POST';
+			$method = $operation;
+		}
+		else
+		{
+			$method = 'GET';
+			if ($raw_body)
+			{
+				$method = 'POST';
+			}
 		}
 
 		$url = $this->_getBaseURL() . $url_path;
@@ -527,6 +680,10 @@ class Quickbooks_Payments
 		else if ($method == 'GET')
 		{
 			$return = $HTTP->GET();
+		}
+		else if ($method == 'DELETE')
+		{
+			$return = $HTTP->DELETE();
 		}
 		else
 		{

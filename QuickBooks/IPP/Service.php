@@ -671,6 +671,29 @@ abstract class QuickBooks_IPP_Service
 		return $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_PDF, null, $ID);
 	}
 
+	protected function _send($Context, $realmID, $resource, $ID)
+	{
+		// v3 only
+		$IPP = $Context->IPP();
+
+		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_SEND, null, $ID);
+
+      $this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+      $this->_setLastDebug($Context->lastDebug());
+
+      if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+      {
+         $this->_setError(
+            $IPP->errorCode(), 
+            $IPP->errorText(), 
+            $IPP->errorDetail());
+
+         return false;
+      }
+
+      return $return;
+   }
+
 	/**
 	 * @deprecated 			Use _update() instead
 	 */
