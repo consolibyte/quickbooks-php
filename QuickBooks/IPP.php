@@ -1621,9 +1621,6 @@ class QuickBooks_IPP
 		// 
 		$HTTP->setRawBody($data);
 		
-		$HTTP->verifyHost(false);
-		$HTTP->verifyPeer(false);
-		
 		if ($this->_certificate)
 		{
 			$HTTP->setCertificate($this->_certificate);

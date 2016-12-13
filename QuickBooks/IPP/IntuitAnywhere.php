@@ -573,9 +573,6 @@ class QuickBooks_IPP_IntuitAnywhere
 		// 
 		$HTTP->setRawBody($data);
 		
-		$HTTP->verifyHost(false);
-		$HTTP->verifyPeer(false);
-		
 		// We need the headers back
 		//$HTTP->returnHeaders(true);
 		

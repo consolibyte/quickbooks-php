@@ -1855,9 +1855,6 @@ class QuickBooks_MerchantService
 		// 
 		$HTTP->setRawBody($xml);
 		
-		$HTTP->verifyHost(false);
-		$HTTP->verifyPeer(false);
-		
 		if ($this->_certificate)
 		{
 			$HTTP->setCertificate($this->_certificate);
