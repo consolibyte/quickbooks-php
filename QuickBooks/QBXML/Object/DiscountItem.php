@@ -72,6 +72,31 @@ class QuickBooks_QBXML_Object_DiscountItem extends QuickBooks_QBXML_Object
 		return $this->get('Name');
 	}
 	
+	/**
+	 * Set the active status of this item
+	 *
+	 * @param boolean $active
+	 * @return boolean
+	 */
+	public function setIsActive($active)
+	{
+		if (strtolower($active) == 'true' or
+				(is_bool($active) and $active))
+		{
+			return $this->set('IsActive', 'true');
+		}
+	
+		return $this->set('IsActive', 'false');
+	}
+	
+	public function getIsActive()
+	{
+		$active = $this->get('IsActive');
+	
+		return strtolower($active) == 'true' or
+		(is_bool($active) and $active);
+	}
+	
 	public function setParentApplicationID($value)
 	{
 		return $this->set('ParentRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_DISCOUNTITEM, QUICKBOOKS_LISTID, $value));
@@ -120,6 +145,11 @@ class QuickBooks_QBXML_Object_DiscountItem extends QuickBooks_QBXML_Object
 	public function getSalesTaxCodeName()
 	{
 		return $this->get('SalesTaxCodeRef FullName');
+	}
+	
+	public function getSalesTaxCodeListID()
+	{
+		return $this->get('SalesTaxCodeRef ListID');
 	}
 	
 	/**
@@ -218,11 +248,11 @@ class QuickBooks_QBXML_Object_DiscountItem extends QuickBooks_QBXML_Object
 	 * @param string $root
 	 * @return string
 	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
+	public function asQBXML($request, $version = null, $locale = null, $root = null)
 	{
 		$this->_cleanup();
 		
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
+		return parent::asQBXML($request, $version, $locale, $root);
 	}
 	
 	/**

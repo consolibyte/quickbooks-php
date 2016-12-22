@@ -81,6 +81,31 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
 	}	
 	
 	/**
+	 * Set the active status of this item
+	 *
+	 * @param boolean $active
+	 * @return boolean
+	 */
+	public function setIsActive($active)
+	{
+		if (strtolower($active) == 'true' or 
+			(is_bool($active) and $active))
+		{
+			return $this->set('IsActive', 'true');
+		}
+		
+		return $this->set('IsActive', 'false');
+	}
+	
+	public function getIsActive()
+	{
+		$active = $this->get('IsActive');
+		
+		return strtolower($active) == 'true' or 
+			(is_bool($active) and $active);
+	}
+	
+	/**
 	 * Set the QuantityOnHand for this item
 	 * 
 	 * @param string $ListID
@@ -99,6 +124,27 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
 	public function getQuantityOnHand()
 	{
 		return $this->get('QuantityOnHand');
+	}
+	
+	/**
+	 * Set the InventoryDate for this item
+	 *
+	 * @param string $ListID
+	 * @return boolean
+	 */
+	public function setInventoryDate($date)
+	{
+		return $this->setDateType('InventoryDate', $date);
+	}
+	
+	/**
+	 * Get the InventoryDate for this item
+	 *
+	 * @return boolean
+	 */
+	public function getInventoryDate($format = 'Y-m-d')
+	{
+		return $this->getDateType('InventoryDate', $format);
 	}
 	
 	/**
@@ -253,6 +299,39 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
 		return $this->get('PurchaseCost');
 	}
 	
+	public function setExpenseAccountListID($ListID)
+	{
+		$this->set('SalesAndPurchaseMod ExpenseAccountRef ListID', $ListID);
+		return $this->set('SalesAndPurchase ExpenseAccountRef ListID', $ListID);
+	}
+	
+	public function setExpenseAccountName($name)
+	{
+		$this->set('SalesAndPurchaseMod ExpenseAccountRef FullName', $name);
+		return $this->set('SalesAndPurchase ExpenseAccountRef FullName', $name);
+	}
+	
+	public function setExpenseAccountApplicationID($value)
+	{
+		$this->set('SalesAndPurchaseMod ExpenseAccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
+		return $this->set('SalesAndPurchase ExpenseAccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
+	}
+	
+	public function getExpenseAccountApplicationID()
+	{
+		return $this->get('SalesAndPurchase ExpenseAccountRef ' . QUICKBOOKS_API_APPLICATIONID);
+	}
+	
+	public function getExpenseAccountListID()
+	{
+		return $this->get('SalesAndPurchase ExpenseAccountRef ListID');
+	}
+	
+	public function getExpenseAccountName()
+	{
+		return $this->get('SalesAndPurchase ExpenseAccountRef FullName');
+	}
+	
 	public function setCOGSAccountListID($ListID)
 	{
 		return $this->set('COGSAccountRef ListID', $ListID);
@@ -339,6 +418,30 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
 		return $this->get('UnitOfMeasureSetRef FullName');
 	}
 	
+	public function setSalesTaxCodeListID($ListID)
+	{
+		return $this->set('SalesTaxCodeRef ListID', $ListID);
+	}
+	
+	public function setSalesTaxCodeName($name)
+	{
+		return $this->set('SalesTaxCodeRef FullName', $name);
+	}
+	
+	public function setSalesTaxCodeApplicationID($value)
+	{
+		return $this->set('SalesTaxCodeRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_SALESTAXCODE, QUICKBOOKS_LISTID, $value));
+	}
+	
+	public function getSalesTaxCodeListID()
+	{
+		return $this->get('SalesTaxCodeRef ListID');
+	}
+	
+	public function getSalesTaxCodeName()
+	{
+		return $this->get('SalesTaxCodeRef FullName');
+	}
 	/**
 	 * 
 	 * 

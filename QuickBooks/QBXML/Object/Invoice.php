@@ -910,6 +910,16 @@ class QuickBooks_QBXML_Object_Invoice extends QuickBooks_QBXML_Object
 		return $this->getAmountType('AppliedAmount');
 	}
 	
+	public function getSalesTaxPercentage()
+	{
+		return $this->getAmountType('SalesTaxPercentage');
+	}
+	
+	public function getSalesTaxTotal()
+	{
+		return $this->getAmountType('SalesTaxTotal');
+	}
+	
 	/**
 	 * 
 	 * 

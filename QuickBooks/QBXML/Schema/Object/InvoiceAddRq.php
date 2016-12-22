@@ -618,7 +618,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
 		static $paths = array(
 			'SalesTaxLineAdd Amount' => array( 'QBUS' ), 
 			'ItemSalesTaxRef FullName' => array( 'QBOE' ), 
-			'InvoiceLineAdd SalesTaxCodeRef FullName' => array( 'QBOE' ), 
+		//	'InvoiceLineAdd SalesTaxCodeRef FullName' => array( 'QBOE' ), // jbaldock WHY ARE YOU STRIPPING THIS OUT!? IT MEANS WE HAVE TO STORE THE LISTID LOCALLY INSTEAD OF USING A NAME!!!!!!
 			);
 		
 		return $paths;

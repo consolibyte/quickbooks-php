@@ -189,6 +189,11 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 	}
 	*/
 	
+	public function setSalesTaxItemListID($ListID)
+	{
+		return $this->set('ItemSalesTaxRef ListID', $ListID);
+	}
+	
 	public function setSalesTaxItemFullName($FullName)
 	{
 		return $this->setItemSalesTaxFullName($FullName);
@@ -197,6 +202,11 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 	public function setItemSalesTaxFullName($FullName)
 	{
 		return $this->setFullNameType('ItemSalesTaxRef FullName', null, null, $FullName);
+	}
+	
+	public function getSalesTaxItemListID()
+	{
+		return $this->get('ItemSalesTaxRef ListID');
 	}
 	
 	public function setClassListID($ListID)
@@ -703,6 +713,21 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 	public function getOther()
 	{
 		return $this->get('Other');
+	}
+	
+	public function getSalesTaxPercentage()
+	{
+		return $this->getAmountType('SalesTaxPercentage');
+	}
+	
+	public function getSalesTaxTotal()
+	{
+		return $this->getAmountType('SalesTaxTotal');
+	}
+	
+	public function getTotalAmount()
+	{
+		return $this->getAmountType('TotalAmount');
 	}
 		
 	/**

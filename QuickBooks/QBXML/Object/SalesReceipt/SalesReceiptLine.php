@@ -178,6 +178,36 @@ class QuickBooks_QBXML_Object_SalesReceipt_SalesReceiptLine extends QuickBooks_Q
 		return $this->get('SalesTaxCodeRef ListID');
 	}
 		
+	public function getRate()
+	{
+		return $this->get('Rate');
+	}
+	
+	public function getAmount()
+	{
+		if ($amount = $this->get('Amount'))
+		{
+			return $this->get('Amount');
+		}
+	
+		return $this->get('Rate') * $this->get('Quantity');
+	}
+	
+	public function getDescription()
+	{
+		return $this->getDesc();
+	}
+	
+	public function getDesc()
+	{
+		return $this->get('Desc');
+	}
+	
+	public function getQuantity()
+	{
+		return $this->get('Quantity');
+	}
+	
 	/**
 	 * 
 	 * 

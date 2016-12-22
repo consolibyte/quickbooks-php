@@ -40,6 +40,11 @@ class QuickBooks_QBXML_Object_Invoice_InvoiceLine extends QuickBooks_QBXML_Objec
 		return $this->get('TxnLineID');
 	}
 	
+	public function setTxnLineID($LineID)
+	{
+		return $this->set('TxnLineID', $LineID);
+	}
+	
 	/**
 	 * Set the Item ListID for this InvoiceLine
 	 * 
@@ -157,7 +162,9 @@ class QuickBooks_QBXML_Object_Invoice_InvoiceLine extends QuickBooks_QBXML_Objec
 	
 	public function setRate($rate)
 	{
-		return $this->set('Rate', (float) $rate);
+		// jbaldock - 2016-12-08 - Need to ensure this is a proper value (ie. $0 or higher) - can't be empty
+		//return $this->set('Rate', (float) $rate);
+		return $this->setAmountType('Rate', $rate);
 	}
 	
 	public function getRate()
@@ -262,9 +269,20 @@ class QuickBooks_QBXML_Object_Invoice_InvoiceLine extends QuickBooks_QBXML_Objec
 		return $this->getDateType('ServiceDate', $format);
 	}
 	
+	/*
 	public function setSalesTaxCodeName($name)
 	{
 		return $this->set('SalesTaxCodeRef FullName', $name);
+	}*/
+	
+	public function setSalesTaxCodeName($name)
+	{
+		return $this->setSalesTaxCodeFullName($name);
+	}
+	
+	public function setSalesTaxCodeFullName($FullName)
+	{
+		return $this->setFullNameType('SalesTaxCodeRef FullName', null, null, $FullName);
 	}
 	
 	public function setSalesTaxCodeListID($ListID)
@@ -284,12 +302,16 @@ class QuickBooks_QBXML_Object_Invoice_InvoiceLine extends QuickBooks_QBXML_Objec
 	
 	public function setTaxable()
 	{
-		return $this->set('SalesTaxCodeRef FullName', QUICKBOOKS_TAXABLE);
+		//$this->setBooleanType('IsTaxable', true); // Not accepted by QB
+		//return $this->set('SalesTaxCodeRef FullName', QUICKBOOKS_TAXABLE);
+		return $this->setSalesTaxCodeFullName(QUICKBOOKS_TAXABLE);
 	}
 	
 	public function setNonTaxable()
 	{
-		return $this->set('SalesTaxCodeRef FullName', QUICKBOOKS_NONTAXABLE);
+		//$this->setBooleanType('IsTaxable', false);  // Not accepted by QB
+		//return $this->set('SalesTaxCodeRef FullName', QUICKBOOKS_NONTAXABLE);
+		return $this->setSalesTaxCodeFullName(QUICKBOOKS_NONTAXABLE);
 	}
 	
 	public function getTaxable()
@@ -406,7 +428,7 @@ class QuickBooks_QBXML_Object_Invoice_InvoiceLine extends QuickBooks_QBXML_Objec
 	 * @param string $root
 	 * @return string
 	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
+	public function asQBXML($request, $todo_for_empty_elements = QuickBooks_QBXML_Object::XML_DROP, $indent = "\t", $root = null)
 	{
 		$this->_cleanup();
 		

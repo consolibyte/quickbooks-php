@@ -39,6 +39,7 @@ class QuickBooks_WebConnector_QWC
 	protected $_appdisplayname;
 	protected $_appuniquename;
 	protected $_appid;
+	protected $_certurl;
 	
 	const SUPPORTED_DEFAULT = '';
 	const SUPPORTED_ALL = '0x0';
@@ -76,6 +77,7 @@ class QuickBooks_WebConnector_QWC
 	 * @param string $appdisplayname
 	 * @param string $appuniquename
 	 * @param string $appid
+	 * @param string $certurl
 	 * @return string
 	 */
 	public function __construct(
@@ -95,7 +97,8 @@ class QuickBooks_WebConnector_QWC
 		$notify = false, 
 		$appdisplayname = '', 
 		$appuniquename = '', 
-		$appid = '')
+		$appid = '',
+		$certurl = '')
 	{
 		$this->_name = $name;
 		$this->_descrip = $descrip;
@@ -114,6 +117,7 @@ class QuickBooks_WebConnector_QWC
 		$this->_appdisplayname = $appdisplayname;
 		$this->_appuniquename = $appuniquename;
 		$this->_appid = $appid;
+		$this->_certurl = $certurl;
 	}
 	
 	public function http($filename = 'quickbooks.qwc')
@@ -153,7 +157,7 @@ class QuickBooks_WebConnector_QWC
 		$appdisplayname = $this->_appdisplayname;
 		$appuniquename = $this->_appuniquename;
 		$appid = $this->_appid;	
-	
+		$certurl = $this->_certurl;
 		/*
 		AppDisplayName
 		AppUniqueName
@@ -253,6 +257,11 @@ class QuickBooks_WebConnector_QWC
 		else
 		{
 			$xml .= "\t" . '<IsReadOnly>false</IsReadOnly>' . QUICKBOOKS_CRLF;
+		}
+		
+		// Certificate URL
+		if ($certurl != '') {
+			$xml .= "\t" . '<CertURL>' . htmlspecialchars($certurl) . '</CertURL>' . QUICKBOOKS_CRLF;
 		}
 			
 		$xml .= '</QBWCXML>';

@@ -469,7 +469,7 @@ class QuickBooks_WebConnector_Server
 		else
 		{
 			$this->_headers();
-
+			exit(); // @jbaldock 2016-11-21 - If one of our customers tries to go to the URL in the QWC file directly we don't want them being confused by this message
 			print(QUICKBOOKS_PACKAGE_NAME . ' Server v' . QUICKBOOKS_PACKAGE_VERSION . ' at ' . $_SERVER['REQUEST_URI'] . "\n");
 			print('   (c) ' . QUICKBOOKS_PACKAGE_AUTHOR . ' ' . "\n");
 			print('   Visit us at: ' . QUICKBOOKS_PACKAGE_WEBSITE . ' ' . "\n");

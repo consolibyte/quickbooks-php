@@ -232,6 +232,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	 */
 	public function setDescription($descrip)
 	{
+		$this->set('SalesOrPurchaseMod Desc', $descrip);
 		return $this->set('SalesOrPurchase Desc', $descrip);
 	}
 
@@ -249,7 +250,9 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	public function setPrice($price)
 	{
 		$this->remove('SalesOrPurchase PricePercent');
+		$this->remove('SalesOrPurchaseMod PricePercent');
 		
+		$this->set('SalesOrPurchaseMod Price', sprintf('%01.2f', (float) $price));
 		return $this->set('SalesOrPurchase Price', sprintf('%01.2f', (float) $price));
 	}
 	
@@ -267,7 +270,9 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	public function setPricePercent($percent)
 	{
 		$this->remove('SalesOrPurchase Price');
+		$this->remove('SalesOrPurchaseMod Price');
 		
+		$this->set('SalesOrPurchaseMod PricePercent', $percent);
 		return $this->set('SalesOrPurchase PricePercent', $percent);
 	}
 	
@@ -289,6 +294,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	 */
 	public function setAccountListID($ListID)
 	{
+		$this->set('SalesOrPurchaseMod AccountRef ListID', $ListID);
 		return $this->set('SalesOrPurchase AccountRef ListID', $ListID);
 	}
 	
@@ -300,11 +306,13 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	 */
 	public function setAccountName($name)
 	{
+		$this->set('SalesOrPurchaseMod AccountRef FullName', $name);
 		return $this->set('SalesOrPurchase AccountRef FullName', $name);
 	}
 	
 	public function setAccountFullName($name)
 	{
+		$this->set('SalesOrPurchaseMod AccountRef FullName', $name);
 		return $this->set('SalesOrPurchase AccountRef FullName', $name);
 	}
 	
@@ -313,6 +321,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	 */
 	public function setAccountApplicationID($value)
 	{
+		$this->set('SalesOrPurchaseMod AccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
 		return $this->set('SalesOrPurchase AccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
 	}
 
@@ -353,6 +362,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	
 	public function setSalesDescription($descrip)
 	{
+		$this->set('SalesAndPurchaseMod SalesDesc', $descrip);
 		return $this->set('SalesAndPurchase SalesDesc', $descrip);
 	}
 	
@@ -363,6 +373,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	
 	public function setSalesPrice($price)
 	{
+		$this->set('SalesAndPurchaseMod SalesPrice', sprintf('%01.2f', (float) $price));
 		return $this->set('SalesAndPurchase SalesPrice', sprintf('%01.2f', (float) $price));
 	}
 	
@@ -373,6 +384,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	
 	public function setIncomeAccountListID($ListID)
 	{
+		$this->set('SalesAndPurchaseMod IncomeAccountRef ListID', $ListID);
 		return $this->set('SalesAndPurchase IncomeAccountRef ListID', $ListID);
 	}
 	
@@ -386,6 +398,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	 */
 	public function setIncomeAccountName($name)
 	{
+		$this->set('SalesAndPurchaseMod IncomeAccountRef FullName', $name);
 		return $this->set('SalesAndPurchase IncomeAccountRef FullName', $name);
 	}
 
@@ -404,6 +417,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	
 	public function setIncomeAccountApplicationID($value)
 	{
+		$this->set('SalesAndPurchaseMod IncomeAccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
 		return $this->set('SalesAndPurchase IncomeAccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
 	}
 
@@ -414,6 +428,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	
 	public function setPurchaseDescription($descrip)
 	{
+		$this->set('SalesAndPurchaseMod PurchaseDesc', $descrip);
 		return $this->set('SalesAndPurchase PurchaseDesc', $descrip);
 	}
 	
@@ -424,6 +439,7 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	
 	public function setPurchaseCost($cost)
 	{
+		$this->set('SalesAndPurchaseMod PurchaseCost', sprintf('%01.2f', (float) $cost));
 		return $this->set('SalesAndPurchase PurchaseCost', sprintf('%01.2f', (float) $cost));
 	}
 	
@@ -434,11 +450,13 @@ class QuickBooks_QBXML_Object_ServiceItem extends QuickBooks_QBXML_Object
 	
 	public function setExpenseAccountListID($ListID)
 	{
+		$this->set('SalesAndPurchaseMod ExpenseAccountRef ListID', $ListID);
 		return $this->set('SalesAndPurchase ExpenseAccountRef ListID', $ListID);
 	}
 	
 	public function setExpenseAccountName($name)
 	{
+		$this->set('SalesAndPurchaseMod ExpenseAccountRef FullName', $name);
 		return $this->set('SalesAndPurchase ExpenseAccountRef FullName', $name);
 	}
 	

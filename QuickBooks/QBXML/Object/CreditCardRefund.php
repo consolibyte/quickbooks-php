@@ -21,7 +21,7 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 /**
 * QuickBooks object class
  */
- class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
+ class QuickBooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
  {
  	/**
 	 * Create a new QuickBooks_Object_Customer object

@@ -27,7 +27,7 @@ class QuickBooks_QBXML_Schema_Object_PaymentMethodAddRq extends QuickBooks_QBXML
 {
 	protected function &_qbxmlWrapper()
 	{
-		static $wrapper = '';
+		static $wrapper = 'PaymentMethodAdd';
 		
 		return $wrapper;
 	}

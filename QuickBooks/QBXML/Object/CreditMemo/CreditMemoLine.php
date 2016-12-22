@@ -52,6 +52,11 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
 	{
 		return $this->setFullNameType('ItemRef FullName', null, null, $FullName);
 	}
+	
+	public function setItemListID($ListID)
+	{
+		return $this->set('ItemRef ListID', $ListID);
+	}
 
 	/**
 	 * Get the name of the item for this invoice line item

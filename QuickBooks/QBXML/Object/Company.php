@@ -1,7 +1,7 @@
 <?php
 
 /**
- * QuickBooks ShipMethod object container
+ * QuickBooks Company object container
  * 
  * @author Keith Palmer <keith@consolibyte.com>
  * @license LICENSE.txt
@@ -18,10 +18,10 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 /**
  * 
  */
-class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
+class QuickBooks_QBXML_Object_Company extends QuickBooks_QBXML_Object
 {
 	/**
-	 * Create a new QuickBooks_Object_PaymentMethod object
+	 * Create a new QuickBooks_Object_Company object
 	 * 
 	 * @param array $arr
 	 */
@@ -30,79 +30,32 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
 		parent::__construct($arr);
 	}
 	
-	/**
-	 * Set the ListID
-	 * 
-	 * @param string $ListID
-	 * @return boolean
-	 */
-	public function setListID($ListID)
-	{
-		return $this->set('ListID', $ListID);
-	}
 	
 	/**
-	 * Get the ListID
+	 * Get the name of the class
 	 * 
 	 * @return string
 	 */
-	public function getListID()
+	public function getCompanyName()
 	{
-		return $this->get('ListID');
+		return $this->get('CompanyName');
 	}
 	
-	/**
-	 * Set the name
-	 * 
-	 * @param string $name
-	 * @return boolean
-	 */
-	public function setName($name)
+	public function getAddress($part = null, $defaults = array())
 	{
-		return $this->set('Name', $name);
+		return $this->_getXYZAddress('', '', $part, $defaults);
 	}
 	
-	/**
-	 * Get the name
-	 * 
-	 * @return string
-	 */
-	public function getName()
+	protected function _getXYZAddress($pre, $post, $part = null, $defaults = array())
 	{
-		return $this->get('Name');
-	}
-	
-	/**
-	 * Set this as active or not
-	 * 
-	 * @param boolean $value
-	 * @return boolean
-	 */
-	public function setIsActive($value)
-	{
-		return $this->setBooleanType('IsActive', $value);
+		if (!is_null($part))
+		{
+			return $this->get($pre . 'Address' . $post . ' ' . $part);
+		}
+		
+		return $this->getArray($pre . 'Address' . $post . ' *', $defaults);
 	}
 
-	/**
-	 * Tell whether or not this is active
-	 * 
-	 * @return boolean
-	 */
-	public function getIsActive()
-	{
-		return $this->getBooleanType('IsActive');
-	}
-	
-	public function getPaymentMethodType()
-	{
-		return $this->get('PaymentMethodType');
-	}
-	
-	public function setPaymentMethodType()
-	{
-		return $this->set('PaymentMethodType');
-	}
-	
 	/**
 	 * Perform any needed clean-up of the object data members
 	 * 
@@ -114,7 +67,7 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
 	}
 	
 	/**
-	 * Get an array representation of this object
+	 * Get an array representation of this Class object
 	 * 
 	 * @param string $request
 	 * @param boolean $nest
@@ -150,8 +103,6 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
 	 */
 	public function object()
 	{
-		return QUICKBOOKS_OBJECT_PAYMENTMETHOD;
+		return QUICKBOOKS_OBJECT_COMPANY;
 	}
 }
-
-?>

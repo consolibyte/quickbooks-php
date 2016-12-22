@@ -1,7 +1,7 @@
 <?php
 
 /**
- * QuickBooks Account object container
+ * QuickBooks Terms object container
  * 
  * @author Keith Palmer <keith@consolibyte.com>
  * @license LICENSE.txt
@@ -18,10 +18,10 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 /**
  * 
  */
-class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
+class QuickBooks_QBXML_Object_Terms extends QuickBooks_QBXML_Object
 {
 	/**
-	 * Create a new QuickBooks_Object_Account object
+	 * Create a new QuickBooks_Object_Terms object
 	 * 
 	 * @param array $arr
 	 */
@@ -81,7 +81,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
 	
 	public function setParentApplicationID($value)
 	{
-		return $this->set('ParentRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
+		return $this->set('ParentRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_TERMS, QUICKBOOKS_LISTID, $value));
 	}
 	
 	public function getParentApplicationID()
@@ -131,7 +131,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
 	 */
 	public function setIsActive($value)
 	{
-		return $this->setBooleanType('IsActive', $value);
+		return $this->set('IsActive', (boolean) $value);
 	}
 	
 	/**
@@ -144,117 +144,36 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
 		return $this->getBooleanType('IsActive');
 	}
 	
-	public function setAccountType($type)
+	public function setStdDueDays($number)
 	{
-		return $this->set('AccountType', $type);
+		return $this->set('StdDueDays', $number);
 	}
 	
-	public function getAccountType()
+	public function getStdDueDays()
 	{
-		return $this->get('AccountType');
+		return $this->get('StdDueDays');
 	}
 	
-	public function setAccountNumber($number)
+	public function setStdDiscountDays($number)
 	{
-		return $this->set('AccountNumber', $number);
+		return $this->set('StdDiscountDays', $number);
 	}
 	
-	public function getAccountNumber()
+	public function getStdDiscountDays()
 	{
-		return $this->get('AccountNumber');
+		return $this->get('StdDiscountDays');
 	}
 	
-	public function setBankNumber($number)
+	public function setDiscountPct($number)
 	{
-		return $this->set('BankNumber', $number);
+		return $this->set('DiscountPct', $number);
 	}
 	
-	public function getBankNumber()
+	public function getDiscountPct()
 	{
-		return $this->get('BankNumber');
+		return $this->get('DiscountPct');
 	}
 	
-	public function setDescription($descrip)
-	{
-		return $this->set('Desc', $descrip);
-	}
-	
-	public function getDescription()
-	{
-		return $this->get('Desc');
-	}
-	
-	public function setOpenBalance($balance)
-	{
-		return $this->set('OpenBalance', (float) $balance);
-	}
-
-	public function getOpenBalance()
-	{
-		return $this->get('OpenBalance');
-	}
-	
-	public function setOpenBalanceDate($date)
-	{
-		return $this->setDateType('OpenBalanceDate', $date);
-	}
-
-	public function getOpenBalanceDate()
-	{
-		return $this->getDateType('OpenBalanceDate');
-	}
-	
-	public function setTaxLineID($value)
-	{
-		return $this->set('TxLineID', $value);
-	}
-
-	public function getTaxLineID()
-	{
-		return $this->get('TxLineID');
-	}
-	
-	public function getBalance()
-	{
-		return $this->get('Balance');
-	}
-
-	public function setBalance($value)
-	{
-		return $this->set('Balance', $value);
-	}
-	
-	public function getTotalBalance()
-	{
-		return $this->get('TotalBalance');
-	}
-
-	public function setTotalBalance($value)
-	{
-		return $this->set('TotalBalance', $value);
-	}
-	
-	public function getSpecialAccountType()
-	{
-		return $this->get('SpecialAccountType');
-	}
-
-	public function setSpecialAccountType($type)
-	{
-		return $this->set('SpecialAccountType', $type);
-	}
-	
-	public function getCashFlowClassification()
-	{
-		return $this->get('CashFlowClassification');
-	}
-
-	public function setCashFlowClassification($type)
-	{
-		return $this->set('CashFlowClassification', $type);
-	}
-
-
 	/**
 	 * Perform any needed clean-up of the object data members
 	 * 
@@ -302,6 +221,6 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
 	 */
 	public function object()
 	{
-		return QUICKBOOKS_OBJECT_ACCOUNT;
+		return QUICKBOOKS_OBJECT_TERMS;
 	}
 }

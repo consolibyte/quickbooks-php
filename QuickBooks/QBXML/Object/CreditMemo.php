@@ -28,7 +28,7 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object/CreditMemo/CreditMemoLine.php'
  * QuickBooks object class
  */
 
-class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
+class QuickBooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 {
  	/**
 	 * Create a new QuickBooks_Object_Customer object
@@ -39,6 +39,43 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	public function __construct($arr = array())
 	{
 		parent::__construct($arr);
+	}
+	
+	/**
+	 * Set the TxnID of the Class
+	 *
+	 * @param string $TxnID
+	 * @return boolean
+	 */
+	public function setTxnID($TxnID)
+	{
+		return $this->set('TxnID', $TxnID);
+	}
+	
+	/**
+	 * Alias of {@link QuickBooks_Object_ReceivePayment::setTxnID()}
+	 */
+	public function setTransactionID($TxnID)
+	{
+		return $this->setTxnID($TxnID);
+	}
+	
+	/**
+	 * Get the ListID of the Class
+	 *
+	 * @return string
+	 */
+	public function getTxnID()
+	{
+		return $this->get('TxnID');
+	}
+	
+	/**
+	 * Alias of {@link QuickBooks_Object_ReceivePayment::getTxnID()}
+	 */
+	public function getTransactionID()
+	{
+		return $this->getTxnID();
 	}
 
 	public function setCustomerListID($ListID)
@@ -246,16 +283,21 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 		switch ($root)
 		{
 			case QUICKBOOKS_ADD_CREDITMEMO:
-
-				foreach ($object['CreditMemoLineAdd'] as $key => $obj)
+				if (!empty($object['CreditMemoLineAdd']))
 				{
-					$obj->setOverride('CreditMemoLineAdd');
+					foreach ($object['CreditMemoLineAdd'] as $key => $obj)
+					{
+						$obj->setOverride('CreditMemoLineAdd');
+					}
 				}
 				break;
 			case QUICKBOOKS_MOD_CREDITMEMO:
-				foreach ($object['CreditMemoLineAdd'] as $key => $obj)
+				if (!empty($object['CreditMemoLineMod']))
 				{
-					$obj->setOverride('CreditMemoLineMod');
+					foreach ($object['CreditMemoLineMod'] as $key => $obj)
+					{
+						$obj->setOverride('CreditMemoLineMod');
+					}
 				}
 				break;
 		}

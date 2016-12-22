@@ -814,7 +814,9 @@ abstract class QuickBooks_QBXML_Object
 		
 		//print('trying to create type: {' . $type . '}' . "\n");
 		
-		$class = 'QuickBooks_QBXML_Object_' . ucfirst(strtolower($type));
+		// jbaldock 2016-11-25 - All the file names are camelcased, you're defining them that way and the files are named that way - why are you lower casing them!? This breaks on Linux!
+		//$class = 'QuickBooks_QBXML_Object_' . ucfirst(strtolower($type));
+		$class = 'QuickBooks_QBXML_Object_' . $type;
 		
 		if (true) 		//class_exists($class, false))
 		{

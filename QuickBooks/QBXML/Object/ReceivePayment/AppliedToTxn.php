@@ -66,7 +66,18 @@ class QuickBooks_QBXML_Object_ReceivePayment_AppliedToTxn extends QuickBooks_QBX
 		
 	}
 	
-	public function getPaymentAmount($amount)
+	// jbaldock 2016-11-28 - Added this as the AppliedToTxn object seems to have Amount, not PaymentAmount
+	public function getAmount()
+	{
+		return $this->getAmountType('Amount');
+	}
+	
+	public function setAmount($amount)
+	{
+		return $this->setAmountType('Amount', $amount);
+	}
+	
+	public function getPaymentAmount()
 	{
 		return $this->getAmountType('PaymentAmount');
 	}
