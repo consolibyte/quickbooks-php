@@ -292,7 +292,7 @@ class QuickBooks_Callbacks
 		if ($Driver)
 		{
 			// Log this...
-			$Driver->log('Could not determine callback type for: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_NORMAL);
+			$Driver->log('Could not determine callback type: ' . gettype($callback), $ticket, QUICKBOOKS_LOG_NORMAL);
 		}
 
 		return false;
@@ -433,7 +433,7 @@ class QuickBooks_Callbacks
 				if ($Driver)
 				{
 					// Log the callback for debugging
-					$Driver->log('Calling callback [' . $type . ']: ' . print_r($callback, true), $ticket, QUICKBOOKS_LOG_DEVELOP);
+					$Driver->log('Calling callback [' . $type . ']: ' . gettype($callback), $ticket, QUICKBOOKS_LOG_DEVELOP);
 				}
 
 				$vars = array( $requestID, $user, $hook, &$err, $hook_data, $callback_config );
