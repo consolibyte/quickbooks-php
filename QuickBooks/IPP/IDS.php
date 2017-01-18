@@ -95,7 +95,9 @@ class QuickBooks_IPP_IDS
 	const RESOURCE_ACCOUNT = 'Account';
 	
 	const RESOURCE_BILL = 'Bill';
-	
+
+    const RESOURCE_DEPOSIT = 'Deposit';
+
 	const RESOURCE_BILLPAYMENT = 'BillPayment';
 	
 	const RESOURCE_BILLPAYMENTCREDITCARD = 'BillPaymentCreditCard';
