@@ -251,7 +251,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 		
 		switch ($parent)
 		{
-			case QUICKBOOKS_ADD_RECEIPTITEM:
+			case QUICKBOOKS_ADD_ITEMRECEIPT:
 				$root = 'ItemLineAdd';
 				$parent = null;
 				break;
