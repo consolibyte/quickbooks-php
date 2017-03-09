@@ -310,6 +310,20 @@ class QuickBooks_IPP_Parser
 					return $e;
 
 					break;
+
+				case QuickBooks_IPP_IDS::OPTYPE_EXCHANGERATE:
+					$exRate = $Root->getChildAt('IntuitResponse ExchangeRate');
+
+					$class = 'QuickBooks_IPP_Object_ExchangeRate';
+					$Object = new $class();
+
+					foreach ($exRate->children() as $Data)
+					{
+						$this->_push($Data, $Object);
+					}
+
+					return $Object;
+					break;
 				case QuickBooks_IPP_IDS::OPTYPE_CDC:
 
 					$types = array();
