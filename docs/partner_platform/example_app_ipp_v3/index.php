@@ -47,6 +47,10 @@ while (false !== ($file = readdir($dh)))
 		case 'objects.php';
 			$examples[$file] = 'Object ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
+
+		case 'send.php';
+			$examples[$file] = 'Send the object ' . implode(' ', array_slice($tmp, 1, -1));
+			break;
 	}
 }
 
