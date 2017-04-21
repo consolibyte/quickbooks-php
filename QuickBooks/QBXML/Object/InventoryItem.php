@@ -57,7 +57,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
 	 */
 	public function setName($name)
 	{
-		return $this->set('Name', $name);
+		return $this->setNameType('Name', $name);
 	}
 	
 	/**

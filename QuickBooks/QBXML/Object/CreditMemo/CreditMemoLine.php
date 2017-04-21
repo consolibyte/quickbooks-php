@@ -126,6 +126,50 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
 		}
 		return $this->get('Rate') * $this->get('Quantity');
 	}
+	
+	public function setSalesTaxCodeName($name)
+	{
+		return $this->setSalesTaxCodeFullName($name);
+	}
+	
+	public function setSalesTaxCodeFullName($FullName)
+	{
+		return $this->setFullNameType('SalesTaxCodeRef FullName', null, null, $FullName);
+	}
+	
+	public function setSalesTaxCodeListID($ListID)
+	{
+		return $this->set('SalesTaxCodeRef ListID', $ListID);
+	}
+	
+	public function getSalesTaxCodeName()
+	{
+		return $this->get('SalesTaxCodeRef FullName');
+	}
+	
+	public function getSalesTaxCodeListID()
+	{
+		return $this->get('SalesTaxCodeRef ListID');
+	}
+	
+	public function setTaxable()
+	{
+		//$this->setBooleanType('IsTaxable', true); // Not accepted by QB
+		//return $this->set('SalesTaxCodeRef FullName', QUICKBOOKS_TAXABLE);
+		return $this->setSalesTaxCodeFullName(QUICKBOOKS_TAXABLE);
+	}
+	
+	public function setNonTaxable()
+	{
+		//$this->setBooleanType('IsTaxable', false);  // Not accepted by QB
+		//return $this->set('SalesTaxCodeRef FullName', QUICKBOOKS_NONTAXABLE);
+		return $this->setSalesTaxCodeFullName(QUICKBOOKS_NONTAXABLE);
+	}
+	
+	public function getTaxable()
+	{
+		return $this->get('SalesTaxCodeRef FullName') == QUICKBOOKS_TAXABLE;
+	}
 
 	public function asXML($root = null, $parent = null, $object = null)
 	{

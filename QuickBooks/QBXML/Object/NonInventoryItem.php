@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Object_NonInventoryItem extends QuickBooks_QBXML_Object
 	 */
 	public function setName($name)
 	{
-		return $this->set('Name', $name);
+		return $this->setNameType('Name', $name);
 	}
 	
 	/**

@@ -272,7 +272,7 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
 	 */
 	public function setName($name)
 	{
-		return $this->set('Name', $name);
+		return $this->setNameType('Name', $name);
 	}
 	
 	/**
@@ -319,7 +319,7 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
 	 */
 	public function setCompanyName($name)
 	{
-		return $this->set('CompanyName', $name);
+		return $this->setNameType('CompanyName', $name);
 	}
 	
 	/**
@@ -340,7 +340,7 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
 	 */
 	public function setFirstName($fname)
 	{
-		return $this->set('FirstName', $fname);
+		return $this->setNameType('FirstName', $fname);
 	}
 	
 	/**
@@ -361,7 +361,7 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
 	 */
 	public function setLastName($lname)
 	{
-		return $this->set('LastName', $lname);
+		return $this->setNameType('LastName', $lname);
 	}
 	
 	/**
@@ -376,7 +376,7 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
 	
 	public function setMiddleName($mname)
 	{
-		return $this->set('MiddleName', $mname);
+		return $this->setNameType('MiddleName', $mname);
 	}
 	
 	public function getMiddleName()
