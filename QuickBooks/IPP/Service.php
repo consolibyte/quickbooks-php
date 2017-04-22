@@ -565,13 +565,6 @@ abstract class QuickBooks_IPP_Service
 		{
 			$Object = $objects[0];
 
-			$unsets = array();
-
-			foreach ($unsets as $unset)
-			{
-				$Object->remove($unset);
-			}
-
 			// Generate the XML 
 			$xml = $Object->asXML(0, null, null, null, QuickBooks_IPP_IDS::VERSION_3);
 
@@ -620,13 +613,6 @@ abstract class QuickBooks_IPP_Service
 			is_object($objects[0]))
 		{
 			$Object = $objects[0];
-
-			$unsets = array();
-
-			foreach ($unsets as $unset)
-			{
-				$Object->remove($unset);
-			}
 
 			// Generate the XML
 			$xml = $Object->asXML(0, null, null, null, QuickBooks_IPP_IDS::VERSION_3);
@@ -729,13 +715,6 @@ abstract class QuickBooks_IPP_Service
 	protected function _update_v3($Context, $realmID, $resource, $Object, $ID)
 	{
 		$IPP = $Context->IPP();
-
-		$unsets = array();
-
-		foreach ($unsets as $unset)
-		{
-			$Object->remove($unset);
-		}
 
 		// Generate the XML 
 		$xml = $Object->asXML(0, null, null, null, QuickBooks_IPP_IDS::VERSION_3);
