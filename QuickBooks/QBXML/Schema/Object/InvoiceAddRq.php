@@ -141,6 +141,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => 'IDTYPE',
   'ShippingLineAdd AccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
+	'SetCredit CreditTxnID' => 'IDTYPE',
+	'SetCredit AppliedAmount' => 'AMTTYPE',
+	'SetCredit Override' => 'BOOLTYPE',
 );
 		
 		return $paths;
@@ -255,6 +258,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => 0,
   'ShippingLineAdd AccountRef FullName' => 209,
   'IncludeRetElement' => 50,
+	'SetCredit CreditTxnID' => 0,
+	'SetCredit AppliedAmount' => 0,
+	'SetCredit Override' => 0,
 );
 		
 		return $paths;
@@ -369,6 +375,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => true,
   'ShippingLineAdd AccountRef FullName' => true,
   'IncludeRetElement' => true,
+  'SetCredit CreditTxnID' => true,
+  'SetCredit AppliedAmount' => true,
+  'SetCredit Override' => true,
 );
 	}
 	
@@ -481,6 +490,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => 999.99,
   'ShippingLineAdd AccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
+	'SetCredit CreditTxnID' => 10,
+	'SetCredit AppliedAmount' => 10,
+	'SetCredit Override' => 10,
 );
 		
 		return $paths;
@@ -595,6 +607,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => false,
   'ShippingLineAdd AccountRef FullName' => false,
   'IncludeRetElement' => true,
+	'SetCredit CreditTxnID' => false,
+	'SetCredit AppliedAmount' => false,
+	'SetCredit Override' => false,
 );
 			
 		return $paths;
@@ -683,7 +698,11 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
 	'CustomerSalesTaxCodeRef ListID', 
 	'CustomerSalesTaxCodeRef FullName', 
 	'Other', 
-	'LinkToTxnID', 
+	'LinkToTxnID',
+	'SetCredit',
+	'SetCredit CreditTxnID',
+	'SetCredit AppliedAmount',
+	'SetCredit Override',
 	'InvoiceLineAdd', 
 	'InvoiceLineAdd ItemRef', 
 	'InvoiceLineAdd ItemRef ListID', 
@@ -739,7 +758,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
 	'ShippingLineAdd Amount', 
 	'ShippingLineAdd AccountRef ListID', 
 	'ShippingLineAdd AccountRef FullName', 
-	'IncludeRetElement', 
+	'IncludeRetElement',
 );
 			
 		return $paths;

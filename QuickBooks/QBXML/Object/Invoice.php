@@ -41,6 +41,16 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Invoice/ShippingLine.php');
 QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Invoice/SalesTaxLine.php');
 
 /**
+ * Invoice Linked Txns
+ */
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Invoice/LinkedTxn.php');
+
+/**
+ * Invoice Set Credit
+ */
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Invoice/SetCreditLine.php');
+
+/**
  * QuickBooks Invoice class definition
  */
 class QuickBooks_QBXML_Object_Invoice extends QuickBooks_QBXML_Object
@@ -919,6 +929,48 @@ class QuickBooks_QBXML_Object_Invoice extends QuickBooks_QBXML_Object
 	{
 		return $this->getAmountType('SalesTaxTotal');
 	}
+	
+	/**
+	 * SetCredit line on Invoice
+	 *
+	 * @param
+	 */
+	public function addSetCredit($obj)
+	{
+		return $this->addListItem('SetCredit', $obj);
+	}
+	
+	public function getSetCredit($i)
+	{
+		return $this->getListItem('SetCredit', $i);
+	}
+	
+	public function listSetCredit()
+	{
+		return $this->getList('SetCredit');
+	}
+	
+	public function getLinkedTxn($i)
+	{
+		return $this->getListItem('LinkedTxn', $i);
+	}
+	
+	public function listLinkedTxn()
+	{
+		return $this->getList('LinkedTxn');
+	}
+	
+	public function getLinkedTxnRow()
+	{
+		return $this->get('LinkedTxn');
+	}
+	
+	public function addLinkedTxn($obj)
+	{
+		return $this->addListItem('LinkedTxn', $obj);
+	}
+	
+	
 	
 	/**
 	 * 

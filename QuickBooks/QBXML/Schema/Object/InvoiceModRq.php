@@ -143,6 +143,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other1' => 'STRTYPE',
   'InvoiceLineGroupMod InvoiceLineMod Other2' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
+	'SetCredit CreditTxnID' => 'IDTYPE',
+	'SetCredit AppliedAmount' => 'AMTTYPE',
+	'SetCredit Override' => 'BOOLTYPE',
 );
 		
 		return $paths;
@@ -259,6 +262,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other1' => 29,
   'InvoiceLineGroupMod InvoiceLineMod Other2' => 29,
   'IncludeRetElement' => 50,
+	'SetCredit CreditTxnID' => 0,
+	'SetCredit AppliedAmount' => 0,
+	'SetCredit Override' => 0,
 );
 		
 		return $paths;
@@ -375,6 +381,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other1' => true,
   'InvoiceLineGroupMod InvoiceLineMod Other2' => true,
   'IncludeRetElement' => true,
+	'SetCredit CreditTxnID' => true,
+	'SetCredit AppliedAmount' => true,
+	'SetCredit Override' => true,
 );
 	}
 	
@@ -489,6 +498,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other1' => 6,
   'InvoiceLineGroupMod InvoiceLineMod Other2' => 6,
   'IncludeRetElement' => 4,
+	'SetCredit CreditTxnID' => 10,
+	'SetCredit AppliedAmount' => 10,
+	'SetCredit Override' => 10,
 );
 		
 		return $paths;
@@ -605,6 +617,9 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other1' => false,
   'InvoiceLineGroupMod InvoiceLineMod Other2' => false,
   'IncludeRetElement' => true,
+	'SetCredit CreditTxnID' => false,
+	'SetCredit AppliedAmount' => false,
+	'SetCredit Override' => false,
 );
 			
 		return $paths;
@@ -679,6 +694,10 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'CustomerSalesTaxCodeRef ListID',
   'CustomerSalesTaxCodeRef FullName',
   'Other',
+	'SetCredit',
+	'SetCredit CreditTxnID',
+	'SetCredit AppliedAmount',
+	'SetCredit Override',
   'InvoiceLineMod', 
   'InvoiceLineMod TxnLineID',
   'InvoiceLineMod ItemRef ListID',

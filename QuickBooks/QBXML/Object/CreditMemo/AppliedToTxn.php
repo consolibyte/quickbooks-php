@@ -17,16 +17,16 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 /**
  * 
  */
-QuickBooks_Loader::load('/QuickBooks/QBXML/Object/ReceivePayment.php');
+QuickBooks_Loader::load('/QuickBooks/QBXML/Object/CreditMemo.php');
 
 /**
  * 
  * 
  */
-class QuickBooks_QBXML_Object_ReceivePayment_AppliedToTxn extends QuickBooks_QBXML_Object
+class QuickBooks_QBXML_Object_CreditMemo_AppliedToTxn extends QuickBooks_QBXML_Object
 {
 	/**
-	 * Create a new QuickBooks ReceivePayment AppliedToTxn object
+	 * Create a new QuickBooks CreditMemo AppliedToTxn object
 	 * 
 	 * @param array $arr
 	 */
@@ -77,56 +77,44 @@ class QuickBooks_QBXML_Object_ReceivePayment_AppliedToTxn extends QuickBooks_QBX
 		return $this->setAmountType('Amount', $amount);
 	}
 	
-	public function getPaymentAmount()
+	public function setTxnType($type)
 	{
-		return $this->getAmountType('PaymentAmount');
+		return $this->set('TxnType', $type);
 	}
 	
-	public function setPaymentAmount($amount)
+	public function getTxnType()
 	{
-		return $this->setAmountType('PaymentAmount', $amount);
+		return $this->get('TxnType');
 	}
 	
-	public function setDiscountAmount($amount)
+	public function setTxnDate($txnDate)
 	{
-		return $this->setAmountType('DiscountAmount', $amount);
+		return $this->setDateType('TxnDate', $txnDate);
 	}
 	
-	public function getDiscountAmount()
+	public function getTxnDate()
 	{
-		return $this->getDiscountAmount('DiscountAmount');
+		return $this->getDateType('TxnDate');
 	}
 	
-	// Methods for setting/getting the Credit Txn associated to this payment
-	
-	public function setCreditTxnID($TxnID)
+	public function setRefNumber($ref)
 	{
-		return $this->set('SetCredit TxnID', $TxnID);
+		return $this->set('RefNumber', $ref);
 	}
 	
-	public function setCreditAmount($amount)
+	public function getRefNumber()
 	{
-		return $this->setAmountType('SetCredit AppliedAmount', $amount);
+		return $this->get('RefNumber');
 	}
 	
-	public function setCreditOverride($override)
+	public function setLinkType($type)
 	{
-		return $this->setBooleanType('SetCredit Override', $override);
+		return $this->set('RefNumber', $type);
 	}
 	
-	public function getCreditTxnID()
+	public function getLinkType()
 	{
-		return $this->get('SetCredit TxnID');
-	}
-	
-	public function getCreditAmount()
-	{
-		return $this->getAmountType('SetCredit AppliedAmount');
-	}
-	
-	public function getCreditOverride()
-	{
-		return $this->getBooleanType('SetCredit Override');
+		return $this->get('RefNumber');
 	}
 	
 	/**
@@ -155,11 +143,11 @@ class QuickBooks_QBXML_Object_ReceivePayment_AppliedToTxn extends QuickBooks_QBX
 		
 		switch ($parent)
 		{
-			case QUICKBOOKS_ADD_RECEIVEPAYMENT:
+			case QUICKBOOKS_ADD_CREDITMEMO:
 				$root = 'AppliedToTxnAdd';
 				$parent = null;
 				break;
-			case QUICKBOOKS_MOD_RECEIVEPAYMENT:
+			case QUICKBOOKS_MOD_CREDITMEMO:
 				$root = 'AppliedToTxnMod';
 				$parent = null;
 				break;

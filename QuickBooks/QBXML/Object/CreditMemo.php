@@ -219,6 +219,16 @@ class QuickBooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	{
 		return $this->addListItem('CreditMemoLine', $obj);
 	}
+	
+	public function getCreditMemoLine($i)
+	{
+		return $this->getListItem('CreditMemoLine', $i);
+	}
+	
+	public function listCreditMemoLines()
+	{
+		return $this->getList('CreditMemoLine');
+	}
 
 	public function setShipMethodName($name)
 	{
@@ -239,6 +249,16 @@ class QuickBooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	{
 		return $this->get('ShipMethodRef ListID');
 	}
+	
+	public function setSalesTaxItemListID($ListID)
+	{
+		return $this->set('ItemSalesTaxRef ListID', $ListID);
+	}
+	
+	public function getSalesTaxItemListID()
+	{
+		return $this->get('ItemSalesTaxRef ListID');
+	}
 
 	public function setSalesTaxItemFullName($name)
 	{
@@ -248,6 +268,92 @@ class QuickBooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	public function getSalesTaxItemName()
 	{
 		return $this->get('ItemSalesTaxRef FullName');
+	}
+	
+	public function getSalesTaxPercentage()
+	{
+		return $this->getAmountType('SalesTaxPercentage');
+	}
+	
+	public function getSalesTaxTotal()
+	{
+		return $this->getAmountType('SalesTaxTotal');
+	}
+	
+	public function setMemo($memo)
+	{
+		return $this->set('Memo', $memo);
+	}
+	
+	public function getMemo()
+	{
+		return $this->get('Memo');
+	}
+	/**
+	 *
+	 *
+	 */
+	public function addAppliedToTxn($obj)
+	{
+		return $this->addListItem('LinkedTxn', $obj);
+	}
+	
+	public function getAppliedToTxn($i)
+	{
+		return $this->getListItem('LinkedTxn', $i);
+	}
+	
+	public function listAppliedToTxns()
+	{
+		return $this->getList('LinkedTxn');
+	}
+	
+	public function getTotalAmount()
+	{
+		return $this->getAmountType('TotalAmount');
+	}
+	
+	public function getCreditRemaining()
+	{
+		return $this->getAmountType('CreditRemaining');
+	}
+	
+	public function getTermsName()
+	{
+		return $this->get('TermsRef FullName');
+	}
+	
+	public function getTermsListID()
+	{
+		return $this->get('TermsRef ListID');
+	}
+	
+	/**
+	 * Set an credit as pending
+	 *
+	 * @param boolean $pending
+	 * @return boolean
+	 */
+	public function setIsPending($pending)
+	{
+		return $this->setBooleanType('IsPending', $pending);
+	}
+	
+	public function getIsPending()
+	{
+		return $this->getBooleanType('IsPending');
+	}
+	
+	/**
+	 * Get the due date for the credit memo
+	 *
+	 * @param string $format	The format to return the date in (as for {@link http://www.php.net/date})
+	 * @return string
+	 */
+	public function getDueDate($format = 'Y-m-d')
+	{
+		//return date($format, strtotime($this->get('DueDate')));
+		return $this->getDateType('DueDate', $format);
 	}
 
 	public function asList($request)

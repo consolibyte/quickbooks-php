@@ -856,6 +856,7 @@ abstract class QuickBooks_QBXML_Object
 					
 					$children = array( 
 						'InvoiceLineRet' => array( 'QuickBooks_QBXML_Object_Invoice_InvoiceLine', 'addInvoiceLine' ), 
+						'LinkedTxn' => array( 'QuickBooks_QBXML_Object_Invoice_LinkedTxn', 'addLinkedTxn' ),
 						);
 					
 					break;

@@ -256,6 +256,14 @@ class QuickBooks_IPP_Object
 		$split = explode('_', get_class($this));
 		return end($split);
 	}
+	public function sparse()
+	{
+		$sparseString = "";
+		if ($this->getSparse() == 'true') {
+			$sparseString = 'sparse="true"';
+		}
+		return $sparseString;
+	}
 	
 	/**
 	 * 
@@ -355,7 +363,7 @@ class QuickBooks_IPP_Object
 		$data = $this->_data;
 		$data = $this->_reorder($data);
 
-		$xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' xmlns="http://schema.intuit.com/finance/v3">' . QUICKBOOKS_CRLF;
+		$xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' xmlns="http://schema.intuit.com/finance/v3" ' . $this->sparse() .'>' . QUICKBOOKS_CRLF;
 		
 		// Go through the data, creating XML out of it
 		foreach ($data as $key => $value)
