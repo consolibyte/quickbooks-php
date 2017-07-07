@@ -37,7 +37,6 @@ If you have questions, suggestions, or find a bug, the absolute best way to get 
 
 - http://stackoverflow.com/ (This is the best place to get support -- *make sure you post your code*)
 - https://intuitpartnerplatform.lc.intuit.com/
-- http://www.consolibyte.com/forum/  
 
 
 ## Examples
