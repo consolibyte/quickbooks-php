@@ -9,9 +9,9 @@ $examples = array();
 $dh = opendir(dirname(__FILE__));
 while (false !== ($file = readdir($dh)))
 {
-	if (substr($file, 0, 7) != 'example') 
-	{ 
-		continue; 
+	if (substr($file, 0, 7) != 'example')
+	{
+		continue;
 	}
 
 	$tmp = explode('_', $file);
@@ -23,7 +23,7 @@ while (false !== ($file = readdir($dh)))
 		case 'add.php':
 			$examples[$file] = 'Add a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
-		case 'void.php';	
+		case 'void.php';
 			$examples[$file] = 'Void a ' . implode(' ', array_slice($tmp, 1, -1));
 			break;
 		case 'update.php':
@@ -58,11 +58,14 @@ while (false !== ($file = readdir($dh)))
 	</h1>
 
 	<p>
-		This app demos a PHP connection to QuickBooks Online via the v3 REST APIs. 
+		This app demos a PHP connection to QuickBooks Online via the v3 REST APIs.
 	</p>
 	<p>
 		<strong>Please make sure you review the <a target="_blank" href="http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start">quick-start tutorial</a>!</strong>
 	</p>
+	<h2>
+		Need Help?
+	</h2>
 	<p>
 		You can get support on the forums:
 	</p>
@@ -70,9 +73,18 @@ while (false !== ($file = readdir($dh)))
 		<li><a target="_blank" href="http://www.consolibyte.com/forum/">ConsoliBYTE forums</a></li>
 		<li><a target="_blank" href="https://intuitpartnerplatform.lc.intuit.com/">Intuit Developer forums</a></li>
 	</ul>
+	<p>
+		When you post, <strong>make sure that you:</strong>
+	</p>
+	<ul>
+		<li>Post your code.</li>
+		<li>Check that all of your OAuth credentials and URLs match between your code and your Intuit account.</li>
+		<li>Post your XML request/response. <a href="debugging.php">Don't know how to get the request/response?</a></li>
+		<li>Post the results of the <a href="troubleshooting.php">troubleshooting script</a>.</li>
+	</ul>
 
 	<p>
-		QuickBooks connection status: 
+		QuickBooks connection status:
 
 		<?php if ($quickbooks_is_connected): ?>
 			<div style="border: 2px solid green; text-align: center; padding: 8px; color: green;">
@@ -105,7 +117,7 @@ while (false !== ($file = readdir($dh)))
 				</tr>
 				<tr>
 					<td>
-						<a href="disconnect.php">Disconnect from QuickBooks</a> 
+						<a href="disconnect.php">Disconnect from QuickBooks</a>
 					</td>
 					<td>
 						(If you do this, you'll have to go back through the authorization/connection process to get connected again)
@@ -135,6 +147,18 @@ while (false !== ($file = readdir($dh)))
 						&nbsp;
 					</td>
 				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="debugging.php">Need help debugging/troubleshooting?</a>
+					</td>
+					<td>
+						&nbsp;
+					</td>
+				</tr>
 			</table>
 
 		<?php else: ?>
@@ -147,13 +171,13 @@ while (false !== ($file = readdir($dh)))
 				You must authenticate to QuickBooks <b>once</b> before you can exchange data with it. <br>
 				<br>
 				<strong>You only have to do this once!</strong> <br><br>
-				
-				After you've authenticated once, you never have to go 
+
+				After you've authenticated once, you never have to go
 				through this connection process again. <br>
-				Click the button above to 
+				Click the button above to
 				authenticate and connect.
-			</div>	
-		<?php endif; ?>		
+			</div>
+		<?php endif; ?>
 
 	</p>
 </div>

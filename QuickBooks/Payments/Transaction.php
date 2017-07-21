@@ -27,16 +27,34 @@ QuickBooks_Loader::load('/QuickBooks/Payments.php');
 class QuickBooks_Payments_Transaction
 {
 	protected $_card;
+	protected $_bank;
 	protected $_data;
 
 	public function __construct($data)
 	{
 		$this->_data = $data;
 
+		$this->_card = null;
+		$this->_bank = null;
+
 		if (isset($data['card']))
 		{
 			$this->_card = QuickBooks_Payments_CreditCard::fromArray($data['card']);
 		}
+		else if (isset($data['bankAccount']))
+		{
+			$this->_bank = QuickBooks_Payments_BankAccount::fromArray($data['bankAccount']);
+		}
+	}
+
+	public function getCreditCard()
+	{
+		return $this->_card;
+	}
+
+	public function getBankAccount()
+	{
+		return $this->_bank;
 	}
 
 	public function toJSON()
@@ -46,41 +64,61 @@ class QuickBooks_Payments_Transaction
 
 	public function getStatus()
 	{
-		return $this->_data['status'];
+		return $this->_get('status');
 	}
 
 	public function getAmount()
 	{
-		return $this->_data['amount'];
+		return $this->_get('amount');
 	}
 
 	public function getCurrency()
 	{
-		return $this->_data['currency'];
+		return $this->_get('currency');
 	}
 
 	public function getAVSStreet()
 	{
-		return $this->_data['avsStreet'];
+		return $this->_get('avsStreet');
 	}
 
 	public function getAVSZip()
 	{
-		return $this->_data['avsZip'];
+		return $this->_get('avsZip');
 	}
 
 	public function getCardSecurityCodeMatch()
 	{
-		return $this->_data['cardSecurityCodeMatch'];
+		return $this->_get('cardSecurityCodeMatch');
 	}
 
 	public function getId()
 	{
-		return $this->_data['id'];
+		return $this->_get('id');
 	}
 
 	public function getAuthCode()
 	{
-		return $this->_data['authCode'];
+		return $this->_get('authCode');
+	}
+
+	public function getType()
+	{
+		return $this->_get('type');
+	}
+
+	protected function _get($key)
+	{
+		if (isset($this->_data[$key]))
+		{
+			return $this->_data[$key];
+		}
+
+		return null;
+	}
+
+	public function toArray()
+	{
+		return $this->_data;
 	}
 }

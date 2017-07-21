@@ -1,7 +1,7 @@
 <?php
 
 
-$url = 'https://your-domain.com/path/to/qbwc.php';
+$url = '';
 $username = 'keithtest';
 $password = 'password';
 

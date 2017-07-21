@@ -47,21 +47,42 @@ class QuickBooks_Payments_CreditCard
 		return json_encode($this->_data);
 	}
 
-	public function toArray()
+	public function toArray($remove_empty_keys = false)
 	{
-		return $this->_data;
+		$retr = $this->_data;
+
+		if ($remove_empty_keys)
+		{
+			// Remove the empty keys, because it ends up triggering validation on empty keys
+			/*
+			if (empty($retr['address']['region']) or
+				empty($retr['address']['postalCode']) or
+				empty($retr['address']['streetAddress']) or
+				empty($retr['address']['city']) or
+				empty($retr['address']['country']))
+			{
+				unset($retr['address']);
+			}
+			*/
+
+			if (empty($retr['address']['region']) and
+				empty($retr['address']['postalCode']))
+			{
+				unset($retr['address']);
+			}
+			else
+			{
+				$retr['address'] = array_filter($retr['address'], function($value) { return $value != ''; });
+			}
+
+			$retr = array_filter($retr, function($value) { return $value != ''; });
+		}
+
+		return $retr;
 	}
 
 	static public function fromArray($data)
 	{
-		$arr = array(
-			'streetAddress' => '',
-			'city' => '',
-			'region' => ''
-		);
-
-		$data['address'] = array_merge($arr, $data['address']);
-
-		return new QuickBooks_Payments_CreditCard($data['name'], $data['number'], $data['expYear'], $data['expMonth'], $data['address']['streetAddress'], $data['address']['city'], $data['address']['region'], @$data['address']['postalCode'], $data['address']['country']);
+		return new QuickBooks_Payments_CreditCard($data['name'], $data['number'], $data['expYear'], $data['expMonth'], @$data['address']['streetAddress'], @$data['address']['city'], @$data['address']['region'], @$data['address']['postalCode'], @$data['address']['country']);
 	}
 }

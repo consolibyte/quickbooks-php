@@ -154,7 +154,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 		
 		switch ($parent)
 		{
-			case QUICKBOOKS_ADD_RECEIPTITEM:
+			case QUICKBOOKS_ADD_ITEMRECEIPT:
 				$root = 'ExpenseLineAdd';
 				$parent = null;
 				break;

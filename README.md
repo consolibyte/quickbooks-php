@@ -35,7 +35,7 @@ Please follow me on Twitter to be notified about updates/improvements:
 
 If you have questions, suggestions, or find a bug, the absolute best way to get support, report bugs, or ask for help is to ask on the forums:  
 
-- http://www.consolibyte.com/forum/  
+- http://stackoverflow.com/ (This is the best place to get support -- *make sure you post your code*)
 - https://intuitpartnerplatform.lc.intuit.com/
 
 
