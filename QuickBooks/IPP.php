@@ -1056,6 +1056,7 @@ class QuickBooks_IPP
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_VOID)
 		{
 			$qs = '?operation=void&requestid=' . $guid . '&minorversion=6';        // Used for invoices...
+
 			if ($resource == QuickBooks_IPP_IDS::RESOURCE_PAYMENT)    // ... and something different used for payments *sigh*
 			{
 				$qs = '?operation=update&include=void&requestid=' . $guid . '&minorversion=6';
@@ -1070,15 +1071,20 @@ class QuickBooks_IPP
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/pdf?requestid=' . $guid . '&minorversion=6';
 		}
-      else if ($optype == QuickBooks_IPP_IDS::OPTYPE_SEND)
-      {
-         $post = true;
-         $url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/send?requestid=' . $guid . '&minorversion=6';
-      }
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_DOWNLOAD)
+		{
+			$post = false;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID;
+		}
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_SEND)
+		{
+			$post = true;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/send?requestid=' . $guid . '&minorversion=6';
+		}
 
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
 
-		//print('URL is [' . $url . ']');
+		// print('URL is [' . $url . ']');
 		//die('RESPONSE IS [' . $response . ']');
 
 		// Check for generic IPP errors and HTTP errors
@@ -1637,6 +1643,7 @@ class QuickBooks_IPP
 
 		//
 		$HTTP->setRawBody($data);
+
 
 		if ($this->_certificate)
 		{
