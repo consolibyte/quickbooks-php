@@ -44,7 +44,7 @@ class QuickBooks_IPP_Object_Upload extends QuickBooks_IPP_Object
 		$indent = 0, $parent = null, $optype = null, $flavor = null, $version = QuickBooks_IPP_IDS::VERSION_3
 	) {
 		$ret = '--Asrf456BGe4hacebdf13572468' . QUICKBOOKS_CRLF;
-		$file = pathinfo($this->getFileName(), PATHINFO_FILENAME);
+		$file = pathinfo($this->getFileName(), PATHINFO_BASENAME);
 		$ret .= 'Content-Disposition: form-data; name="file_content_02"; filename="' . $file . '"' . QUICKBOOKS_CRLF;
 		$ret .= 'Content-Type: ' . $this->getContentType() . QUICKBOOKS_CRLF . QUICKBOOKS_CRLF;
 		$file = file_get_contents($this->getFileName());
