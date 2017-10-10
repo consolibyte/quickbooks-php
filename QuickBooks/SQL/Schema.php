@@ -2828,4 +2828,104 @@ class QuickBooks_SQL_Schema
 			
 		return array( $type, $length, $default );
 	}
+
+	/**
+	 * Get the columns that a table's SortOrder column is sorting within
+	 * 
+	 * @param string $table
+	 * @return array 
+	 */
+	static public function getSortOrderColumns($table)
+	{
+		static $sortOrderColumns = array(
+			'bill_expenseline' =>												array( 'Bill_TxnID' ),
+			'bill_itemline' =>													array( 'Bill_TxnID' ),
+			'bill_itemgroupline' =>												array( 'Bill_TxnID' ),
+			'bill_itemgroupline_item_line' =>									array( 'Bill_TxnID', 'Bill_ItemGroupLine_TxnLineID' ),
+			'check_expenseline' =>												array( 'Check_TxnID' ),
+			'check_itemline' =>													array( 'Check_TxnID' ),
+			'check_itemgroupline' =>											array( 'Check_TxnID' ),
+			'check_itemgroupline_itemline' =>									array( 'Check_TxnID', 'Check_ItemGroupLine_TxnLineID' ),
+			'creditcardcharge_expenseline' =>									array( 'CreditCardCharge_TxnID' ),
+			'creditcardcharge_itemline' =>										array( 'CreditCardCharge_TxnID' ),
+			'creditcardcharge_itemgroupline' =>									array( 'CreditCardCharge_TxnID' ),
+			'creditcardcharge_itemgroupline_itemline' =>						array( 'CreditCardCharge_TxnID', 'CreditCardCharge_ItemGroupLine_TxnLineID' ),
+			'creditcardcredit_expenseline' =>									array( 'CreditCardCredit_TxnID' ),
+			'creditcardcredit_itemline' =>										array( 'CreditCardCredit_TxnID' ),
+			'creditcardcredit_itemgroupline' =>									array( 'CreditCardCredit_TxnID' ),
+			'creditcardcredit_itemgroupline_itemline' =>						array( 'CreditCardCredit_TxnID', 'CreditCardCredit_ItemGroupLine_TxnLineID' ),
+			'creditmemo_creditmemoline' =>										array( 'CreditMemo_TxnID' ),
+			'creditmemo_creditmemolinegroup' =>									array( 'CreditMemo_TxnID' ),
+			'creditmemo_creditmemolinegroup_creditmemoline' =>					array( 'CreditMemo_TxnID', 'CreditMemo_CreditMemoLineGroup_TxnLineID' ),
+			'deposit_depositline' =>											array( 'Deposit_TxnID' ),
+			'estimate_estimateline' =>											array( 'Estimate_TxnID' ),
+			'estimate_estimatelinegroup' =>										array( 'Estimate_TxnID' ),
+			'estimate_estimatelinegroup_estimateline' =>						array( 'Estimate_TxnID', 'Estimate_EstimateLineGroup_TxnLineID' ),
+			'inventoryadjustment_inventoryadjustmentline' =>					array( 'InventoryAdjustment_TxnID' ),
+			'invoice_invoiceline' =>											array( 'Invoice_TxnID' ),
+			'invoice_invoicelinegroup' =>										array( 'Invoice_TxnID' ),
+			'invoice_invoicelinegroup_invoice_line' =>							array( 'Invoice_TxnID', 'Invoice_InvoiceLineGroup_TxnLineID' ),
+			'itemgroup_itemgroupline' =>										array( 'ItemGroup_ListID' ),
+			'iteminventoryassembly_iteminventoryassemblyline' =>				array( 'ItemInventoryAssembly_ListID' ),
+			'itemreceipt_expenseline' =>										array( 'ItemReceipt_TxnID' ),
+			'itemreceipt_itemline' =>											array( 'ItemReceipt_TxnID' ),
+			'itemreceipt_itemgroupline' =>										array( 'ItemReceipt_TxnID' ),
+			'itemreceipt_itemgroupline_itemline' =>								array( 'ItemReceipt_TxnID', 'ItemReceipt_ItemGroupLine_TxnLineID' ),
+			'journalentry_journaldebitline' =>									array( 'JournalEntry_TxnID' ),
+			'journalentry_journalcreditline' =>									array( 'JournalEntry_TxnID' ),
+			'purchaseorder_purchaseorderline' =>								array( 'PurchaseOrder_TxnID' ),
+			'purchaseorder_purchaseorderlinegroup' =>							array( 'PurchaseOrder_TxnID' ),
+			'purchaseorder_purchaseorderlinegroup_purchaseorderline' =>			array( 'PurchaseOrder_TxnID', 'PurchaseOrder_PurchaseOrderLineGroup_TxnLineID' ),
+			'salesorder_salesorderline' =>										array( 'SalesOrder_TxnID' ),
+			'salesorder_salesorderlinegroup' =>									array( 'SalesOrder_TxnID' ),
+			'salesorder_salesorderlinegroup_salesorderline' =>					array( 'SalesOrder_TxnID', 'SalesOrder_SalesOrderLineGroup_TxnLineID' ),
+			'salesreceipt_salesreceiptline' =>									array( 'SalesReceipt_TxnID' ),
+			'salesreceipt_salesreceiptlinegroup' =>								array( 'SalesReceipt_TxnID' ),
+			'salesreceipt_salesreceiptlinegroup_salesreceiptline' =>			array( 'SalesReceipt_TxnID', 'SalesReceipt_SalesReceiptLineGroup_TxnLineID' ),
+			'vendorcredit_expenseline' =>										array( 'VendorCredit_TxnID' ),
+			'vendorcredit_itemline' =>											array( 'VendorCredit_TxnID' ),
+			'vendorcredit_itemgroupline' =>										array( 'VendorCredit_TxnID' ),
+			'vendorcredit_itemgroupline_itemline' =>							array( 'VendorCredit_TxnID', 'VendorCredit_ItemGroupLine_TxnLineID' ),
+		);
+
+		$key = strtolower($table);
+		if (array_key_exists($key, $sortOrderColumns)) {
+			return $sortOrderColumns[$key];
+		}
+
+		return array();
+	}
+
+	/**
+	 * Check if the table has a SortOrder column
+	 * 
+	 * @param string $table
+	 * @return boolean 
+	 */
+	static public function hasSortOrder($table)
+	{
+		$columns = self::getSortOrderColumns($table);
+		return count($columns) > 0;
+	}
+
+	/**
+	* Check if the table has a TxnLineID column
+	* 
+	* @param string $table
+	* @return boolean 
+	*/
+	static public function hasTxnLineID($table)
+	{
+		$key = strtolower($table);
+		// all tables with sort order have a TxnLineID, except the following:
+		if ($key == 'itemgroup_itemgroupline' || $key == 'iteminventoryassembly_iteminventoryassemblyline')
+		{
+			return false;
+		}
+		else
+		{
+			return self::hasSortOrder($table);
+		}
+	}
 }
+ 
