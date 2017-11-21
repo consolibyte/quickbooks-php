@@ -20,7 +20,7 @@ QuickBooks_Loader::load('/QuickBooks/Encryption.php');
 /**
  * 
  */
-class QuickBooks_Encryption_AES extends QuickBooks_Encryption
+class QuickBooks_Encryption_Aes extends QuickBooks_Encryption
 {
 	static function encrypt($key, $plain, $salt = null)
 	{
