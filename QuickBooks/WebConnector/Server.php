@@ -312,6 +312,10 @@ class QuickBooks_WebConnector_Server
 	 */
 	protected function _headers()
 	{
+		// php > 5.6 automatically adds charset=UTF-8 to content-type header which breaks web connector
+		// We need to make sure default_charset is null
+		$defaultCharset = ini_get('default_charset');
+		ini_set('default_charset', null);
 		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			header('Content-Type: text/xml');
@@ -324,6 +328,9 @@ class QuickBooks_WebConnector_Server
 		{
 			header('Content-Type: text/plain');
 		}
+		
+		ini_set('default_charset', $defaultCharset);
+
 		
 		return true;
 	}
