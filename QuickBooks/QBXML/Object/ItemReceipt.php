@@ -302,7 +302,7 @@ class QuickBooks_QBXML_Object_ItemReceipt extends QuickBooks_QBXML_Object
 	{
 		switch ($request)
 		{
-			case QUICKBOOKS_ADD_RECEIPTITEM . 'Rq':
+			case QUICKBOOKS_ADD_ITEMRECEIPT . 'Rq':
 				if (isset($this->_object['ItemLine']))
 				{
 					$this->_object['ItemLineAdd'] = $this->_object['ItemLine'];
@@ -370,7 +370,7 @@ class QuickBooks_QBXML_Object_ItemReceipt extends QuickBooks_QBXML_Object
 		
 		switch ($root)
 		{
-			case QUICKBOOKS_ADD_RECEIPTITEM:
+			case QUICKBOOKS_ADD_ITEMRECEIPT:
 				if (isset($object['ItemLineAdd']))
 				{
 					foreach ($object['ItemLineAdd'] as $key => $obj)
