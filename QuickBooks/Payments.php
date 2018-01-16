@@ -175,24 +175,59 @@ class Quickbooks_Payments
 		return new QuickBooks_Payments_Transaction($data);
 	}
 
-	public function charge($Context, $Object_or_token, $amount, $currency = 'USD', $description = '')
+	/**
+	 * Charge a credit card
+	 *
+	 * See also:
+	 * https://developer.intuit.com/docs/api/payments/charges
+	 * 
+	 * @param  [type] $Context         [description]
+	 * @param  [type] $Object_or_token [description]
+	 * @param  [type] $amount          [description]
+	 * @param  string $currency        [description]
+	 * @param  string $description     [description]
+	 * @param  array  $context         [description]
+	 * @return [type]                  [description]
+	 */
+	public function charge($Context, $Object_or_token, $amount, $currency = 'USD', $description = '', array $context = array())
 	{
 		$capture = true;
-		return $this->_chargeOrAuth($Context, $Object_or_token, $amount, $currency, $capture, $description);
+		return $this->_chargeOrAuth($Context, $Object_or_token, $amount, $currency, $capture, $description, $context);
 	}
 
-	public function authorize($Context, $Object_or_token, $amount, $currency = 'USD', $description = '')
+	/**
+	 * Authorize (but don't do a full charge/capture) a credit card 
+	 *
+ 	 * See also:
+	 * https://developer.intuit.com/docs/api/payments/charges
+	 * 
+	 * @param  [type] $Context         [description]
+	 * @param  [type] $Object_or_token [description]
+	 * @param  [type] $amount          [description]
+	 * @param  string $currency        [description]
+	 * @param  string $description     [description]
+	 * @param  array  $context         [description]
+	 * @return [type]                  [description]
+	 */
+	public function authorize($Context, $Object_or_token, $amount, $currency = 'USD', $description = '', array $context = array())
 	{
 		$capture = false;
-		return $this->_chargeOrAuth($Context, $Object_or_token, $amount, $currency, $capture, $description);
+		return $this->_chargeOrAuth($Context, $Object_or_token, $amount, $currency, $capture, $description, $context);
 	}
 
-	public function _chargeOrAuth($Context, $Object_or_token, $amount, $currency, $capture, $description)
+	public function _chargeOrAuth($Context, $Object_or_token, $amount, $currency, $capture, $description, array $context)
 	{
 		$payload = array(
 			'amount' => sprintf('%01.2f', $amount),
 			'currency' => $currency,
+			'context' => array(
+				'mobile' => false, 
+				'isEcommerce' => false, 
+				'recurring' => false, 
+				)
 			);
+
+		$payload['context'] = array_merge($payload['context'], $context);
 
 		if ($Object_or_token instanceof QuickBooks_Payments_CreditCard)
 		{
@@ -305,12 +340,26 @@ class Quickbooks_Payments
 		return new QuickBooks_Payments_Transaction($data);
 	}
 
-	public function refund($Context, $id, $amount)
+	/**
+	 * Refund a transaction 
+	 * 
+	 * @param  [type] $Context [description]
+	 * @param  [type] $id      [description]
+	 * @param  [type] $amount  [description]
+	 * @param  array  $context [description]
+	 * @return [type]          [description]
+	 */
+	public function refund($Context, $id, $amount, $context = array())
 	{
 		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_REFUND);
 
 		$payload = array(
 			'amount' => $amount,
+			'context' => array(
+				'mobile' => false, 
+				'isEcommerce' => false, 
+				'recurring' => false, 
+				),
 			);
 
 		$resp = $this->_http($Context, $url, json_encode($payload));
