@@ -886,7 +886,7 @@ class QuickBooks_MerchantService
 		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '		<CustomerCreditCardWalletAddRq>' . QUICKBOOKS_CRLF;
 		$xml .= '			<CustomerID>' . QuickBooks_XML::encode($customerID) . '</CustomerID>' . QUICKBOOKS_CRLF;
-		$xml .= $this->_createCreditCardXML($Card, null, null, false, false, false, $include_address_data, $include_amounts, $include_card_number, $include_card_cvv);
+		$xml .= $this->_createCreditCardXML($Card, null, null, false, false, false, false, $include_address_data, $include_amounts, $include_card_number, $include_card_cvv);
 		$xml .= '		</CustomerCreditCardWalletAddRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
@@ -934,7 +934,7 @@ class QuickBooks_MerchantService
 		$xml .= '		<CustomerCreditCardWalletModRq>' . QUICKBOOKS_CRLF;
 		$xml .= '			<WalletEntryID>' . $walletID . '</WalletEntryID>' . QUICKBOOKS_CRLF;
 		$xml .= '			<CustomerID>' . QuickBooks_XML::encode($customerID) . '</CustomerID>' . QUICKBOOKS_CRLF;
-		$xml .= $this->_createCreditCardXML($Card, null, null, false, false, false, $include_address_data, $include_amounts, $include_card_number, $include_card_cvv);
+		$xml .= $this->_createCreditCardXML($Card, null, null, false, false, false, false, $include_address_data, $include_amounts, $include_card_number, $include_card_cvv);
 		$xml .= '		</CustomerCreditCardWalletModRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
@@ -972,7 +972,7 @@ class QuickBooks_MerchantService
 		return $this->_doQBMS(QuickBooks_MerchantService::TYPE_WALLETDEL, 'QBMSXML/QBMSXMLMsgsRs/CustomerCreditCardWalletDelRs', $xml);
 	}
 	
-	public function authorizeWallet($customerID, $walletID, $amount, $salestax = null, $comment = null, $cvv = null, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true)
+	public function authorizeWallet($customerID, $walletID, $amount, $salestax = null, $comment = null, $cvv = null, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true, $is_mobile)
 	{
 		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('authorizeWallet()', QUICKBOOKS_LOG_VERBOSE);
@@ -1011,7 +1011,7 @@ class QuickBooks_MerchantService
 		$xml .= '			<CustomerID>' . QuickBooks_XML::encode($customerID) . '</CustomerID>' . QUICKBOOKS_CRLF;
 		
 		// 				_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true
-		$xml .= $this->_createCreditCardXML(null, $amount, $salestax, false, $is_ecommerce, $is_recurring, false, true, false, true, false);
+		$xml .= $this->_createCreditCardXML(null, $amount, $salestax, false, $is_ecommerce, $is_recurring, $is_mobile, false, true, false, true, false);
 		
 		if ($cvv)
 		{
@@ -1136,7 +1136,7 @@ class QuickBooks_MerchantService
 	 * 
 	 * 
 	 */
-	public function authorize($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true)
+	public function authorize($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true, $is_mobile = false)
 	{
 		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('authorize()', QUICKBOOKS_LOG_VERBOSE);
@@ -1173,7 +1173,7 @@ class QuickBooks_MerchantService
 		$xml .= '	<QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '		<CustomerCreditCardAuthRq>' . QUICKBOOKS_CRLF;
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
-		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring);
+		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $is_mobile);
 		$xml .= '		</CustomerCreditCardAuthRq>' . QUICKBOOKS_CRLF;
 		$xml .= '	</QBMSXMLMsgsRq>' . QUICKBOOKS_CRLF;
 		$xml .= '</QBMSXML>' . QUICKBOOKS_CRLF;
@@ -1348,7 +1348,7 @@ class QuickBooks_MerchantService
 		return $xml;
 	}
 	
-	protected function _createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true)
+	protected function _createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $is_mobile, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true)
 	{
 		$xml = '';
 		
@@ -1374,8 +1374,13 @@ class QuickBooks_MerchantService
 			}
 			
 			//$xml .= '			<IsCardPresent>BOOLTYPE</IsCardPresent>' . QUICKBOOKS_CRLF;
-			//$xml .= '			<IsECommerce >BOOLTYPE</IsECommerce>' . QUICKBOOKS_CRLF;
 			//$xml .= '			<IsRecurring >BOOLTYPE</IsRecurring>' . QUICKBOOKS_CRLF;
+
+            $is_ecommerce_value = $is_ecommerce ? '1' : '0';
+            $is_mobile_value = $is_mobile ? '1' : '0';
+
+            $xml .= '			<IsECommerce >' . $is_ecommerce_value . '</IsECommerce>' . QUICKBOOKS_CRLF;
+            $xml .= '			<IsMobile >' . $is_mobile_value . '</IsMobile>' . QUICKBOOKS_CRLF;
 		}
 		
 		if ($include_amounts)
@@ -1442,7 +1447,7 @@ class QuickBooks_MerchantService
 	 * 
 	 * 
 	 */
-	public function charge($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true)
+	public function charge($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $is_recurring = false, $force_new_transaction = true, $is_mobile = false)
 	{
 		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('charge()', QUICKBOOKS_LOG_VERBOSE);
@@ -1468,7 +1473,7 @@ class QuickBooks_MerchantService
 		$xml .= '		<CustomerCreditCardChargeRq>' . QUICKBOOKS_CRLF;
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
 		
-		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring);
+		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $is_mobile);
 
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
 
@@ -1556,7 +1561,7 @@ class QuickBooks_MerchantService
 	 * 
 	 * 
 	 */
-	public function refund($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $force_new_transaction = true)
+	public function refund($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $force_new_transaction = true, $is_mobile)
 	{
 		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('refund()', QUICKBOOKS_LOG_VERBOSE);
@@ -1596,7 +1601,7 @@ class QuickBooks_MerchantService
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
 		
 		//                                  $Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true
-		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, false,         false,                        true,                    true,                        false);
+		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, false, $is_mobile,false,                        true,                    true,                        false);
 		
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
 
