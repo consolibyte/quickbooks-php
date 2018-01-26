@@ -1382,7 +1382,7 @@ class QuickBooks_MerchantService
 				$xml .= '			<IsECommerce>false</IsECommerce>' . QUICKBOOKS_CRLF;
 			}
 
-			if (is_null($mobile))
+			if (is_null($is_mobile))
 			{
 
 			}
