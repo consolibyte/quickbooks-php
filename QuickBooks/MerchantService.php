@@ -1382,7 +1382,11 @@ class QuickBooks_MerchantService
 				$xml .= '			<IsECommerce>false</IsECommerce>' . QUICKBOOKS_CRLF;
 			}
 
-			if ($is_mobile)
+			if (is_null($mobile))
+			{
+
+			}
+			else if ($is_mobile)
 			{
 				$xml .= '			<IsMobile>true</IsMobile>' . QUICKBOOKS_CRLF;
 			}
@@ -1579,7 +1583,7 @@ class QuickBooks_MerchantService
 	 * 
 	 * 
 	 */
-	public function refund($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $is_mobile = false, $force_new_transaction = true)
+	public function refund($Card, $amount, $salestax = null, $comment = null, $is_card_present = false, $is_ecommerce = true, $force_new_transaction = true)
 	{
 		$this->_setError(QuickBooks_MerchantService::ERROR_OK);
 		$this->_log('refund()', QUICKBOOKS_LOG_VERBOSE);
@@ -1619,7 +1623,7 @@ class QuickBooks_MerchantService
 		$xml .= '			<TransRequestID>' . $transRequestID . '</TransRequestID>' . QUICKBOOKS_CRLF;
 		
 		//                                  $Card, $amount, $salestax, $is_card_present, $is_ecommerce, $is_recurring, $is_mobile, $include_address_data = true, $include_amounts = true, $include_card_number = true, $include_card_cvv = true, $include_card_dates = true
-		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, false,         $is_mobile, false,                        true,                    true,                        false);
+		$xml .= $this->_createCreditCardXML($Card, $amount, $salestax, $is_card_present, $is_ecommerce, false,         null, false,                        true,                    true,                        false);
 		
 		//<BatchID >STRTYPE</BatchID> <!-- optional -->
 
