@@ -26,9 +26,15 @@ $token = '95555248baf11b43fbb944ab97de9134ad85';
 //	store them somewhere safe. 
 // 
 // The OAuth request/access tokens will be encrypted and stored for you by the 
-//	PHP DevKit IntuitAnywhere classes automatically. 
+//	PHP DevKit IntuitAnywhere classes automatically.
+// NOTE: OAuth1 is deprecated method. Applications registered after 17th July 2017 should use OAuth2
 $oauth_consumer_key = 'qyprdfkqo3bikN2vLrLu4FWHv6GbQp';
 $oauth_consumer_secret = 'WDH56afDb1jr0ismQZAwdPuq4oDqpTmrKXc0oORz';
+
+// OAuth2 is method for all applications registered after 17th July 2017.
+// You may want to change those Ids
+$oauth2_client_id = 'Q0yebRJgPF0R5DqdZVzOpeAe4B1pFgdmBSaFcD0eVLHDMDH7r9';
+$oauth2_client_secret = 'OInt0KjDeruNFAnah0kPzkwzmtElo36FvhBUSUv2';
 
 // If you're using DEVELOPMENT TOKENS, you MUST USE SANDBOX MODE!!!  If you're in PRODUCTION, then DO NOT use sandbox.
 $sandbox = true;     // When you're using development tokens
@@ -72,16 +78,36 @@ if (!QuickBooks_Utilities::initialized($dsn))
 //	$oauth_consumer_secret	Intuit will give this to you too
 //	$this_url				This is the full URL (e.g. http://path/to/this/file.php) of THIS SCRIPT
 //	$that_url				After the user authenticates, they will be forwarded to this URL
-// 
-$IntuitAnywhere = new QuickBooks_IPP_IntuitAnywhere($dsn, $encryption_key, $oauth_consumer_key, $oauth_consumer_secret, $quickbooks_oauth_url, $quickbooks_success_url);
+//
+$oauth_version = QuickBooks_IPP::AUTHMODE_OAUTH;
+if (empty($oauth2_client_id))
+{
+    $IntuitAnywhere = new QuickBooks_IPP_IntuitAnywhere($dsn, $encryption_key, $oauth_consumer_key, $oauth_consumer_secret, $quickbooks_oauth_url, $quickbooks_success_url);
+}
+else
+{
+    $oauth_version = QuickBooks_IPP::AUTHMODE_OAUTH2;
+
+    $token = new QuickBooks_IPP_OAuth2($oauth2_client_id, $oauth2_client_secret);
+    $helper = new QuickBooks_IPP_OAuth2Helper($token);
+
+    $IntuitAnywhere = new QuickBooks_IPP_IntuitAnywhereOAuth2($dsn, $encryption_key, $oauth2_client_id, $oauth2_client_secret, $quickbooks_oauth_url, $quickbooks_success_url);
+    // Refresh token if expired
+    $IntuitAnywhere->refresh_expired_token($the_username, $the_tenant);
+
+    if ($IntuitAnywhere->errorNumber())
+    {
+        echo 'Unable to refresh access token: ' . $IntuitAnywhere->errorMessage();
+    }
+
+    $quickbooks_oauth_url = $helper->getAuthorizationURL($quickbooks_oauth_url);
+}
+
+$quickbooks_is_connected = false;
 
 // Are they connected to QuickBooks right now? 
-if ($IntuitAnywhere->check($the_username, $the_tenant) and 
-	$IntuitAnywhere->test($the_username, $the_tenant))
+if ($IntuitAnywhere->check($the_username, $the_tenant))
 {
-	// Yes, they are 
-	$quickbooks_is_connected = true;
-
 	// Set up the IPP instance
 	$IPP = new QuickBooks_IPP($dsn);
 
@@ -90,7 +116,7 @@ if ($IntuitAnywhere->check($the_username, $the_tenant) and
 
 	// Tell the framework to load some data from the OAuth store
 	$IPP->authMode(
-		QuickBooks_IPP::AUTHMODE_OAUTH, 
+        $oauth_version,
 		$the_username, 
 		$creds);
 
@@ -112,9 +138,10 @@ if ($IntuitAnywhere->check($the_username, $the_tenant) and
 	// Get some company info
 	$CompanyInfoService = new QuickBooks_IPP_Service_CompanyInfo();
 	$quickbooks_CompanyInfo = $CompanyInfoService->get($Context, $realm);
-}
-else
-{
-	// No, they are not
-	$quickbooks_is_connected = false;
+
+	if (!empty($quickbooks_CompanyInfo))
+    {
+        // Yes, they are
+        $quickbooks_is_connected = true;
+    }
 }

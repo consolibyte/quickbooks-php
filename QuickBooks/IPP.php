@@ -34,6 +34,9 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Federator.php');
 // OAuth
 QuickBooks_Loader::load('/QuickBooks/IPP/OAuth.php');
 
+// OAuth2
+QuickBooks_Loader::load('/QuickBooks/IPP/OAuth2.php');
+
 // IntuitAnywhere widgets
 QuickBooks_Loader::load('/QuickBooks/IPP/IntuitAnywhere.php');
 
@@ -88,7 +91,8 @@ class QuickBooks_IPP
 	const API_GETENTITLEMENTVALUESANDUSERROLE = 'API_GetEntitlementValuesAndUserRole';
 
 	const AUTHMODE_FEDERATED = 'federated';
-	const AUTHMODE_OAUTH = 'oauth';
+	const AUTHMODE_OAUTH  = 'oauth';
+	const AUTHMODE_OAUTH2 = 'oauth2';
 
 	/**
 	 *
@@ -381,6 +385,11 @@ class QuickBooks_IPP
 
 			// @todo Support for checking if it's valid or not
 		}
+		elseif ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTH2)
+		{
+			$Context = new QuickBooks_IPP_Context($this, null, $token);
+
+		}
 		else
 		{
 			if (is_null($ticket))
@@ -510,7 +519,7 @@ class QuickBooks_IPP
 	}
 
 	/**
-	 * Set the authorization mode for HTTP requests (Federated, or OAuth)
+	 * Set the authorization mode for HTTP requests (Federated, or OAuth, OAuth2)
 	 *
 	 * @param string $authmode		The new auth mode
 	 * @return string				The currently set auth mode
@@ -1616,6 +1625,30 @@ class QuickBooks_IPP
 					// Replace the URL with the signed URL
 					//$url = $signed[2];
 				}
+			}
+		}
+		elseif ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTH2)
+		{
+			// If we have credentials, sign the request
+			if ($this->_authcred['oauth2_access_token'] and
+				$this->_authcred['oauth2_refresh_token'])
+			{
+				// Sign the request
+				$OAuth = new QuickBooks_IPP_OAuth2($this->_authcred['oauth2_client_id'], $this->_authcred['oauth2_client_secret'], $this->_authcred['qb_realm'], $this->_authcred['oauth2_access_token'], $this->_authcred['oauth2_refresh_token']);
+
+				if ($post)
+				{
+					$action = QuickBooks_IPP_OAuth2::METHOD_POST;
+				}
+				else
+				{
+					$action = QuickBooks_IPP_OAuth2::METHOD_GET;
+				}
+
+				$sign = $OAuth->sign($action, $url);
+
+				// Always use the header, regardless of POST or GET
+				$headers['Authorization'] = $sign;
 			}
 		}
 		else if (is_object($Context))
