@@ -171,7 +171,7 @@ class QuickBooks_IPP_IntuitAnywhereOAuth2 extends QuickBooks_IPP_IntuitAnywhereB
                 $oauth2Helper = new QuickBooks_IPP_OAuth2Helper($oauth2Token);
                 $newToken = $oauth2Helper->refreshToken();
 
-                $this->_driver->oauth2->oauth2AccessDelete($app_username, $app_tenant);
+                $this->_driver->oauth2AccessDelete($app_username, $app_tenant);
 
                 $this->_driver->oauth2AccessWrite(
                     $this->_key,
@@ -247,7 +247,7 @@ class QuickBooks_IPP_IntuitAnywhereOAuth2 extends QuickBooks_IPP_IntuitAnywhereB
      *
      * @throws \Exception
      */
-    public function handle($app_username, $app_tenant, $scope = QuickBooks_IPP_OAuth2Helper::SCOPE_PAYMENTS, $status = '')
+    public function handle($app_username, $app_tenant, $scope = QuickBooks_IPP_OAuth2Helper::SCOPE_ACCOUNTING, $status = '')
     {
         if ($this->check($app_username, $app_tenant) and 		// We have tokens ...
             $this->test($app_username, $app_tenant))			// ... and they are valid
@@ -264,7 +264,7 @@ class QuickBooks_IPP_IntuitAnywhereOAuth2 extends QuickBooks_IPP_IntuitAnywhereB
             );
             $oauth2Helper = new QuickBooks_IPP_OAuth2Helper($oauth2Token);
 
-            $realmId = filter_input(INPUT_GET, 'realmId', FILTER_VALIDATE_INT);
+            $realmId = filter_input(INPUT_GET, 'realmId', FILTER_SANITIZE_NUMBER_INT);
 
             if (isset($_GET['code']) && $realmId)
             {
