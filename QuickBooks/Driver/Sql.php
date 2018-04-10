@@ -2297,8 +2297,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$errnum = 0;
 		$errmsg = '';
 
+		$dateTime = date('Y-m-d H:i:s');
 		// Check if it exists or not first
-        $vars = array($app_username, $app_tenant, $access_token, $refresh_token, $access_token_expire, $refresh_token_expire, $realm, date('Y-m-d H:i:s') );
+        $vars = array( $app_username, $app_tenant, $access_token, $refresh_token, $access_token_expire, $refresh_token_expire, $realm, $dateTime, $dateTime );
 
         $more = "";
 
@@ -2319,6 +2320,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
                 oauth2_access_token_expires = '%s',
                 oauth2_refresh_token_expires = '%s',
                 qb_realm = '%s',
+                request_datetime = '%s',
                 access_datetime = '%s'
         ";
         if (!$this->_oauth2RequestResolve($app_username, $app_tenant))
