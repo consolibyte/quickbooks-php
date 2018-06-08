@@ -180,7 +180,7 @@ class Quickbooks_Payments
 	 *
 	 * See also:
 	 * https://developer.intuit.com/docs/api/payments/charges
-	 * 
+	 *
 	 * @param  [type] $Context         [description]
 	 * @param  [type] $Object_or_token [description]
 	 * @param  [type] $amount          [description]
@@ -196,11 +196,11 @@ class Quickbooks_Payments
 	}
 
 	/**
-	 * Authorize (but don't do a full charge/capture) a credit card 
+	 * Authorize (but don't do a full charge/capture) a credit card
 	 *
  	 * See also:
 	 * https://developer.intuit.com/docs/api/payments/charges
-	 * 
+	 *
 	 * @param  [type] $Context         [description]
 	 * @param  [type] $Object_or_token [description]
 	 * @param  [type] $amount          [description]
@@ -221,9 +221,9 @@ class Quickbooks_Payments
 			'amount' => sprintf('%01.2f', $amount),
 			'currency' => $currency,
 			'context' => array(
-				'mobile' => false, 
-				'isEcommerce' => false, 
-				'recurring' => false, 
+				'mobile' => false,
+				'isEcommerce' => false,
+				'recurring' => false,
 				)
 			);
 
@@ -254,6 +254,15 @@ class Quickbooks_Payments
 		$resp = $this->_http($Context, QuickBooks_Payments::URL_CHARGE, json_encode($payload));
 
 		$data = json_decode($resp, true);
+
+		if (empty($data))
+		{
+			// If we didn't get anything back at all, it could be an HTTP
+			// time-out which we will report as failure
+
+			$this->_setError(self::ERROR_HTTP, 'Communication error while processing request.');
+			return false;
+		}
 
 		if ($this->_handleError($data))
 		{
@@ -341,8 +350,8 @@ class Quickbooks_Payments
 	}
 
 	/**
-	 * Refund a transaction 
-	 * 
+	 * Refund a transaction
+	 *
 	 * @param  [type] $Context [description]
 	 * @param  [type] $id      [description]
 	 * @param  [type] $amount  [description]
@@ -356,9 +365,9 @@ class Quickbooks_Payments
 		$payload = array(
 			'amount' => $amount,
 			'context' => array(
-				'mobile' => false, 
-				'isEcommerce' => false, 
-				'recurring' => false, 
+				'mobile' => false,
+				'isEcommerce' => false,
+				'recurring' => false,
 				),
 			);
 
@@ -536,6 +545,16 @@ class Quickbooks_Payments
 			if ($info['http_code'] == QuickBooks_HTTP::HTTP_401)
 			{
 				$this->_setError($info['http_code'], 'Unauthorized.');
+				return true;
+			}
+			else if ($info['http_code'] == QuickBooks_HTTP::HTTP_404)
+			{
+				$this->_setError($info['http_code'], 'Not Found.');
+				return true;
+			}
+			else if ($info['http_code'] == QuickBooks_HTTP::HTTP_500)
+			{
+				$this->_setError($info['http_code'], 'Internal Server Error.');
 				return true;
 			}
 		}
