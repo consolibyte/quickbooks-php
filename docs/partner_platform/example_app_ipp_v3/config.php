@@ -27,8 +27,8 @@ $token = '___';
 // 
 // The OAuth request/access tokens will be encrypted and stored for you by the 
 //	PHP DevKit IntuitAnywhere classes automatically. 
-$oauth_consumer_key = 'qyprdiMJt3f8fDtK1veHzRJyCzWkib';
-$oauth_consumer_secret = 'jPBVhKDMJGhtuvDAioF3Cjgzfey0aXcNaUts2tg9';
+$oauth_consumer_key = '__';
+$oauth_consumer_secret = '__';
 
 // If you're using DEVELOPMENT TOKENS, you MUST USE SANDBOX MODE!!!  If you're in PRODUCTION, then DO NOT use sandbox.
 $sandbox = true;     // When you're using development tokens
@@ -46,13 +46,13 @@ $quickbooks_menu_url = 'http://quickbooks.v3.com:8888/quickbooks-php/docs/partne
 // This is a database connection string that will be used to store the OAuth credentials 
 // $dsn = 'pgsql://username:password@hostname/database';
 // $dsn = 'mysql://username:password@hostname/database';
-$dsn = 'mysqli://root:sokamelo@localhost/mission_v2';
+$dsn = 'mysqli://:@localhost/';
 
 // You should set this to an encryption key specific to your app
-$encryption_key = '88e9ed884b191e08f87505e9594c15d2';
+$encryption_key = '';
 
 // Do not change this unless you really know what you're doing!!!  99% of apps will not require a change to this.
-$the_username = 'ribilio_croatia';
+$the_username = '';
 
 // The tenant that user is accessing within your own app
 $the_tenant = 67234;
