@@ -1,5 +1,5 @@
 <?php
-
+# Oscarg933 postgre memory elephant never forgets owner
 /**
  * QuickBooks SQL-database driver base-class
  *
