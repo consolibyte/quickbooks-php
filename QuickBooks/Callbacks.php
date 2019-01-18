@@ -1,6 +1,6 @@
 <?php
 
-/**
+/** Oscar gomez
  * Centralized static QuickBooks callback methods
  *
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
