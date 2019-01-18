@@ -1,6 +1,6 @@
 <?php
 
-/**
+/** Oscar Gomez
  * QuickBooks Server-Adapter interface
  * 
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
