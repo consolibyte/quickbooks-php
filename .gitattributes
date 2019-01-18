@@ -1,6 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-
+# Oscarg933
 # Custom for Visual Studio
 *.cs     diff=csharp
 *.sln    merge=union
