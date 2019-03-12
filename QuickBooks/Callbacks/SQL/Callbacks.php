@@ -511,14 +511,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
 			$converted = QuickBooks_Utilities::actionToObject($action);
 			//print('stepping 2... [' . (microtime(true) - $start) . ']' . "\n");
 			
-			if (count($only_do) and
+			if (is_array($only_do) && count($only_do) and
 				(false === array_search($action, $only_do) and 
 				 false === array_search($converted, $only_do)))
 			{
 				unset($action_to_priority[$action]);
 			}
 			
-			if (count($dont_do) and
+			if (is_array($dont_do) && count($dont_do) and
 				(false !== array_search($action, $dont_do) or
 				false !== array_search($converted, $dont_do)))
 			{
@@ -4699,7 +4699,7 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		//print_r($nodes);
 		//exit;
 		
-		if (count($nodes))
+		if (is_array($nodes) && count($nodes))
 		{
 			foreach ($nodes as $nd)
 			{
@@ -4779,29 +4779,34 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					$part = preg_replace("/mod/i", "", $action);
 					$part .= "LineMod";
 				}
+
+				$nodesCount = 0;
+				if (is_array($nodes) || is_object($nodes)) {
+				    $nodesCount = count($nodes);
+                }
 				
 				if ($schema_object->exists($usePath . 'LinkToTxnID'))
 				{
 					$Node = new QuickBooks_XML_Node("LinkToTxnID", $child['data']->get("ToTxnID"));
-					$nodes[count($nodes)] = $Node;
+					$nodes[$nodesCount] = $Node;
 					continue;
 				}
 				else if ($schema_object->exists($action . ' ' . $part . ' ' . 'LinkToTxn'))
 				{
 					$Node = new QuickBooks_XML_Node("LinkToTxnID", $child['data']->get("ToTxnID"));
-					$nodes[count($nodes)] = $Node;
+					$nodes[$nodesCount] = $Node;
 					continue;
 				}
 				else if ($schema_object->exists($usePath . 'LinkedTxn'))
 				{
 					$Node = new QuickBooks_XML_Node("LinkToTxnID", $child['data']->get("ToTxnID"));
-					$nodes[count($nodes)] = $Node;
+					$nodes[$nodesCount] = $Node;
 					continue;
 				}
 				else if ($schema_object->exists($action . ' ' . $part . ' ' . 'LinkedTxn'))
 				{
 					$Node = new QuickBooks_XML_Node("LinkToTxnID", $child['data']->get("ToTxnID"));
-					$nodes[count($nodes)] = $Node;
+					$nodes[$nodesCount] = $Node;
 					continue;
 				}
 				else if ($schema_object->exists($usePath . 'ApplyCheckToTxnAdd'))
@@ -4809,7 +4814,7 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					$Node = new QuickBooks_XML_Node("ApplyCheckToTxnAdd");
 					$Node->setChildDataAt($Node->name() . ' ' . 'TxnID', $child['data']->get("ToTxnID"));
 					$Node->setChildDataAt($Node->name() . ' ' . 'Amount', $child['data']->get("ToTxnID"));
-					$nodes[count($nodes)] = $Node;
+					$nodes[$nodesCount] = $Node;
 					continue;
 				}
 				else if ($schema_object->exists($usePath . 'ApplyCheckToTxnMod'))
@@ -4817,7 +4822,7 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					$Node = new QuickBooks_XML_Node("ApplyCheckToTxnMod");
 					$Node->setChildDataAt($Node->name() . ' ' . 'TxnID', $child['data']->get("ToTxnID"));
 					$Node->setChildDataAt($Node->name() . ' ' . 'Amount', $child['data']->get("ToTxnID"));
-					$nodes[count($nodes)] = $Node;
+					$nodes[$nodesCount] = $Node;
 					continue;
 				}
 				else
@@ -5030,8 +5035,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			{
 				$Node->addChild($tn);
 			}
-			
-			$nodes[count($nodes)] = $Node;
+
+			$nodesCount = 0;
+			if (is_array($nodes) || is_object($nodes)) {
+                $nodesCount = count($nodes);
+            }
+			$nodes[$nodesCount] = $Node;
 		}
 		
 		return $nodes;

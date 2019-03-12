@@ -357,7 +357,7 @@ class QuickBooks_Utilities
 	{
 		$allowed = true;
 		
-		if (count($arr_allow))
+		if (is_array($arr_allow) && count($arr_allow))
 		{
 			// only allow these addresses
 			$allowed = false;
@@ -392,7 +392,7 @@ class QuickBooks_Utilities
 			}
 		}
 		
-		if (count($arr_deny))
+		if (is_array($arr_deny) && count($arr_deny))
 		{
 			// do *not* allow these addresses
 			foreach ($arr_deny as $deny)
@@ -1069,7 +1069,11 @@ class QuickBooks_Utilities
 		
 		if (!$wiggled)
 		{
-			$count = count($priorities);
+		    $count = 0;
+		    if (is_array($priorities)) {
+                $count = count($priorities);
+            }
+
 			for ($i = $count - 1; $i >= 0; $i--)
 			{
 				$priorities[$i * $wiggle] = $priorities[$i];

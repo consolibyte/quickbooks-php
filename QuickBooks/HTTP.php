@@ -244,7 +244,7 @@ class QuickBooks_HTTP
 		{
 			return $this->_body;
 		}
-		else if (count($this->_post))
+		else if ((is_array($this->_post) || is_object($this->_post)) && count($this->_post))
 		{
 			return http_build_query($this->_post);
 		}
@@ -478,7 +478,7 @@ class QuickBooks_HTTP
 		}
 
 		$query = '';
-		if (count($this->_get))
+		if ((is_array($this->_get) || is_object($this->_get)) && count($this->_get))
 		{
 			$query = '?' . http_build_query($this->_get);
 		}

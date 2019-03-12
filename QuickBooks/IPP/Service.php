@@ -444,7 +444,7 @@ abstract class QuickBooks_IPP_Service
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		
-		if (count($return))
+		if (is_array($return) && count($return))
 		{
 			return $return[0];
 		}
