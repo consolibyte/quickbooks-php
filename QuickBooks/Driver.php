@@ -1435,8 +1435,64 @@ abstract class QuickBooks_Driver
 	}
 	
 	abstract protected function _oauthRequestResolve($token);
-	
-	/**
+
+    /**
+     * OAuth2 functions
+     */
+
+    public function oauth2Load($key, $app_username, $app_tenant)
+    {
+        if ($data = $this->_oauth2Load($app_username, $app_tenant))
+        {
+            if (!empty($data['oauth2_access_token']))
+            {
+                if (strlen($key) > 0)
+                {
+                    $AES = QuickBooks_Encryption_Factory::create('aes');
+
+                    $data['oauth2_access_token'] = $AES->decrypt($key, $data['oauth2_access_token']);
+                    $data['oauth2_refresh_token'] = $AES->decrypt($key, $data['oauth2_refresh_token']);
+                }
+            }
+
+            return $data;
+        }
+
+        return false;
+    }
+
+    abstract protected function _oauth2Load($app_username, $app_tenant);
+
+    public function oauth2AccessWrite($key, $app_username, $app_tenant, $access_token, $refresh_token, $access_token_expire, $refresh_token_expire, $realm, $flavor = '')
+    {
+        if (strlen($key) > 0)
+        {
+            $AES = QuickBooks_Encryption_Factory::create('aes');
+
+            $encrypted_access_token = $AES->encrypt($key, $access_token);
+            $encrypted_refresh_token = $AES->encrypt($key, $refresh_token);
+        }
+        else
+        {
+            $encrypted_access_token  = $access_token;
+            $encrypted_refresh_token = $refresh_token;
+        }
+
+        return $this->_oauth2AccessWrite($app_username, $app_tenant, $encrypted_access_token, $encrypted_refresh_token, $access_token_expire, $refresh_token_expire, $realm, $flavor);
+    }
+
+    abstract protected function _oauth2AccessWrite($app_username, $app_tenant, $access_token, $refresh_token, $access_token_expire, $refresh_token_expire, $realm, $flavor = '');
+
+    public function oauth2AccessDelete($app_username, $app_tenant)
+    {
+        return $this->_oauth2AccessDelete($app_username, $app_tenant);
+    }
+
+    abstract protected function _oauth2AccessDelete($app_username, $app_tenant);
+
+    abstract protected function _oauth2RequestResolve($app_username, $app_tenant);
+
+    /**
 	 * Log a message to the QuickBooks log
 	 * 
 	 * @param string $msg		The message to place in the log
