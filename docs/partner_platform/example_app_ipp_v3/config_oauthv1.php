@@ -73,7 +73,15 @@ if (!QuickBooks_Utilities::initialized($dsn))
 //	$this_url				This is the full URL (e.g. http://path/to/this/file.php) of THIS SCRIPT
 //	$that_url				After the user authenticates, they will be forwarded to this URL
 // 
-$IntuitAnywhere = new QuickBooks_IPP_IntuitAnywhere($dsn, $encryption_key, $oauth_consumer_key, $oauth_consumer_secret, $quickbooks_oauth_url, $quickbooks_success_url);
+$IntuitAnywhere = new QuickBooks_IPP_IntuitAnywhere(
+	QuickBooks_IPP_IntuitAnywhere::OAUTH_V1,
+	$sandbox,
+	$dsn,
+	$encryption_key,
+	$oauth_consumer_key,
+	$oauth_consumer_secret,
+	$quickbooks_oauth_url,
+	$quickbooks_success_url);
 
 // Are they connected to QuickBooks right now? 
 if ($IntuitAnywhere->check($the_username, $the_tenant) and 

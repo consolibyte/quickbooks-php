@@ -201,7 +201,13 @@ define('QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE', 'connection');
  * Default table name for OAuth stuff
  * @var string
  */
-define('QUICKBOOKS_DRIVER_SQL_OAUTHTABLE', 'oauth');
+define('QUICKBOOKS_DRIVER_SQL_OAUTHV1TABLE', 'oauthv1');
+
+/**
+ * Default table name for OAuth stuff
+ * @var string
+ */
+define('QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE', 'oauthv2');
 
 /**
  *
@@ -2117,7 +2123,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		return;
 	}
 
-	protected function _oauthRequestResolve($request_token)
+	protected function _oauthRequestResolveV1($request_token)
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -2126,12 +2132,27 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			SELECT
 				*
 			FROM
-				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV1TABLE) . "
 			WHERE
 				oauth_request_token = '%s' ", $errnum, $errmsg, null, null, array( $request_token )));
 	}
 
-	protected function _oauthLoad($app_username, $app_tenant)
+	protected function _oauthRequestResolveV2($state)
+	{
+		$errnum = 0;
+		$errmsg = '';
+
+		return $this->fetch($this->query("
+			SELECT
+				*
+			FROM
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
+			WHERE
+				oauth_state = '%s' ", $errnum, $errmsg, null, null, array( $state )));
+	}
+
+
+	protected function _oauthLoadV1($app_tenant)
 	{
 		$errnum = 0;
 		$errmsg = '';
@@ -2140,17 +2161,17 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			SELECT
 				*
 			FROM
-				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV1TABLE) . "
 			WHERE
-				app_username = '%s' AND app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $app_username, $app_tenant ))))
+				app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $app_tenant ))))
 		{
 			$this->query("
 				UPDATE
-					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV1TABLE) . "
 				SET
 					touch_datetime = '%s'
 				WHERE
-					app_username = '%s' AND app_tenant = '%s' ", $errnum, $errmsg, null, null, array( date('Y-m-d H:i:s'), $app_username, $app_tenant ));
+					app_tenant = '%s' ", $errnum, $errmsg, null, null, array( date('Y-m-d H:i:s'), $app_tenant ));
 
 			return $arr;
 		}
@@ -2158,24 +2179,94 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		return false;
 	}
 
-	protected function _oauthRequestWrite($app_username, $app_tenant, $token, $token_secret)
+	/**
+	 * Load OAuth v2 tokens from MySQL
+	 *
+	 * @param string       $app_tenant   The tenant to load tokens for
+	 *
+	 * @return array|bool
+	 */
+	protected function _oauthLoadV2($app_tenant)
+	{
+		$errnum = 0;
+		$errmsg = '';
+
+		if ($arr = $this->fetch($this->query("
+			SELECT
+				*
+			FROM
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
+			WHERE
+				app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $app_tenant ))))
+		{
+			$this->query("
+				UPDATE
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
+				SET
+					touch_datetime = '%s'
+				WHERE
+					app_tenant = '%s' ", $errnum, $errmsg, null, null, array( date('Y-m-d H:i:s'), $app_tenant ));
+
+			return $arr;
+		}
+
+		return false;
+	}
+
+	protected function _oauthRequestWriteV2($app_tenant, $state)
 	{
 		$errnum = 0;
 		$errmsg = '';
 
 		// Check if it exists or not first
-		if ($arr = $this->_oauthLoad($app_username, $app_tenant))
+		if ($arr = $this->_oauthLoadV2($app_tenant))
 		{
 			// Exists... UPDATE!
 			return $this->query("
 				UPDATE
-					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
+				SET
+					oauth_state = '%s',
+					request_datetime = '%s'
+				WHERE
+					app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $state, date('Y-m-d H:i:s'), $app_tenant ));
+		}
+		else
+		{
+			// Insert it
+			return $this->query("
+				INSERT INTO
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
+				(
+					app_tenant,
+					oauth_state,
+					request_datetime
+				) VALUES (
+					'%s',
+					'%s',
+					'%s'
+				)", $errnum, $errmsg, null, null, array( $app_tenant, $state, date('Y-m-d H:i:s') ));
+		}
+	}
+
+	protected function _oauthRequestWriteV1($app_tenant, $token, $token_secret)
+	{
+		$errnum = 0;
+		$errmsg = '';
+
+		// Check if it exists or not first
+		if ($arr = $this->_oauthLoadV1($app_tenant))
+		{
+			// Exists... UPDATE!
+			return $this->query("
+				UPDATE
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV1TABLE) . "
 				SET
 					oauth_request_token = '%s',
 					oauth_request_token_secret = '%s',
 					request_datetime = '%s'
 				WHERE
-					app_username = '%s' AND app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $token, $token_secret, date('Y-m-d H:i:s'), $app_username, $app_tenant ));
+					app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $token, $token_secret, date('Y-m-d H:i:s'), $app_tenant ));
 		}
 		else
 		{
@@ -2195,7 +2286,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 					'%s',
 					'%s',
 					'%s'
-				)", $errnum, $errmsg, null, null, array( $app_username, $app_tenant, $token, $token_secret, date('Y-m-d H:i:s') ));
+				)", $errnum, $errmsg, null, null, array( $app_tenant, $token, $token_secret, date('Y-m-d H:i:s') ));
 		}
 	}
 
@@ -3026,9 +3117,10 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
 		*/
 
-		$table = $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE);
+		// OAuth1
+		$table = $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV1TABLE);
 		$def = array(
-			'quickbooks_oauth_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
+			'quickbooks_oauthv1_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
 			'app_username' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ),
 			'app_tenant' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ),
 			'oauth_request_token' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' ),
@@ -3042,9 +3134,27 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			'access_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
 			'touch_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
 			);
-		$primary = 'quickbooks_oauth_id';
+		$primary = 'quickbooks_oauthv1_id';
 		$keys = array(  );
 		$uniques = array( array( 'app_username', 'app_tenant' ) );
+
+		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
+
+		// OAuth2
+		$table = $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE);
+		$def = array(
+			'quickbooks_oauthv2_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
+			'app_tenant' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ),
+
+			'oauth_access_token' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' ),
+			'qb_realm' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 32, 'null' ),
+			'request_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ),
+			'access_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
+			'touch_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
+		);
+		$primary = 'quickbooks_oauthv2_id';
+		$keys = array(  );
+		$uniques = array( array( 'app_tenant' ) );
 
 		$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
 

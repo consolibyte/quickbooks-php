@@ -14,13 +14,15 @@
  */
 require_once dirname(__FILE__) . '/../../../QuickBooks.php';
 
-/**
- * Require some IPP/OAuth configuration data
- */
-require_once dirname(__FILE__) . '/config.php';
+
+// For OAuth2 (all new application, and what you should be migrating to)
+require_once dirname(__FILE__) . '/config_oauthv2.php';
+
+// For old/legacy applications
+//require_once dirname(__FILE__) . '/config_oauthv1.php';
 
 // Try to handle the OAuth request 
-if ($IntuitAnywhere->handle($the_username, $the_tenant))
+if ($IntuitAnywhere->handle($the_tenant))
 {
 	; // The user has been connected, and will be redirected to $that_url automatically. 
 }
