@@ -2148,7 +2148,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			FROM
 				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
 			WHERE
-				oauth_state = '%s' ", $errnum, $errmsg, null, null, array( $state )));
+				oauth_state = '%s' AND
+				request_datetime >= '%s'  
+				", $errnum, $errmsg, null, null, array( $state, date('Y-m-d H:i:s', strtotime('-30 minutes')) )));
 	}
 
 
@@ -2290,13 +2292,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 	}
 
-	protected function _oauthAccessWrite($request_token, $token, $token_secret, $realm, $flavor)
+	protected function _oauthAccessWriteV1($request_token, $token, $token_secret, $realm, $flavor)
 	{
 		$errnum = 0;
 		$errmsg = '';
 
 		// Check if it exists or not first
-		if ($arr = $this->_oauthRequestResolve($request_token))
+		if ($arr = $this->_oauthRequestResolveV1($request_token))
 		{
 			$vars = array( $token, $token_secret, date('Y-m-d H:i:s') );
 
@@ -2327,6 +2329,54 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 					" . $more . "
 				WHERE
 					oauth_request_token = '%s' ", $errnum, $errmsg, null, null, $vars);
+		}
+
+		return false;
+	}
+
+	protected function _oauthAccessWriteV2($state, $encrypted_access_token, $encrypted_refresh_token, $access_expiry, $refresh_expiry, $qb_realm)
+	{
+		$errnum = 0;
+		$errmsg = '';
+
+		// Check if it exists or not first
+		if ($arr = $this->_oauthRequestResolveV2($state))
+		{
+			$vars = array(
+				$encrypted_access_token,
+				$encrypted_refresh_token,
+				date('Y-m-d H:i:s', strtotime($access_expiry)),
+				date('Y-m-d H:i:s', strtotime($refresh_expiry)),
+				date('Y-m-d H:i:s'),
+				date('Y-m-d H:i:s'),
+				date('Y-m-d H:i:s')
+				);
+
+			$more = "";
+
+			if ($qb_realm)
+			{
+				$more .= ", qb_realm = '%s' ";
+				$vars[] = $qb_realm;
+			}
+
+			$vars[] = $state;
+
+			// Exists... UPDATE!
+			return $this->query("
+				UPDATE
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
+				SET
+					oauth_access_token = '%s',
+					oauth_refresh_token = '%s',
+					oauth_access_expiry = '%s',
+					oauth_refresh_expiry = '%s',
+					access_datetime = '%s', 
+					last_access_datetime = '%s',
+					last_refresh_datetime = '%s' 
+					" . $more . "
+				WHERE
+					oauth_state = '%s' ", $errnum, $errmsg, null, null, $vars);
 		}
 
 		return false;
@@ -3145,8 +3195,11 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$def = array(
 			'quickbooks_oauthv2_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
 			'app_tenant' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ),
-
-			'oauth_access_token' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' ),
+			'oauth_scope' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ),
+			'oauth_access_token' => array( QUICKBOOKS_DRIVER_SQL_TEXT, null ),
+			'oauth_refresh_token' => array( QUICKBOOKS_DRIVER_SQL_TEXT, null ),
+			'oauth_access_expiry' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
+			'oauth_refresh_expiry' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
 			'qb_realm' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 32, 'null' ),
 			'request_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ),
 			'access_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),

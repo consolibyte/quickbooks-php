@@ -410,7 +410,7 @@ class QuickBooks_IPP_IntuitAnywhere
 					
 					if ($info)
 					{
-						$this->_driver->oauthAccessWrite(
+						$this->_driver->oauthAccessWriteV1(
 							$this->_key, 
 							$arr['oauth_request_token'], 
 							$info['oauth_token'], 
@@ -439,9 +439,6 @@ class QuickBooks_IPP_IntuitAnywhere
 			{
 				// Try to get an access/refresh token here
 
-				print_r($_GET);
-				print_r($info);
-
 				if ($discover = $this->_discover())
 				{
 					$ch = curl_init($discover['token_endpoint']);
@@ -452,9 +449,6 @@ class QuickBooks_IPP_IntuitAnywhere
 						'grant_type' => 'authorization_code',
 						)));
 
-					//curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					//	'Authorization: Basic ' . base64_encode($this->_client_id . ': ' . $this->_client_secret),
-					//	));
 					curl_setopt($ch, CURLOPT_USERPWD, $this->_client_id . ':' . $this->_client_secret);
 
 					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -462,20 +456,26 @@ class QuickBooks_IPP_IntuitAnywhere
 					$retr = curl_exec($ch);
 					$info = curl_getinfo($ch);
 
-					error_log('user/pass: [' . $this->_client_id . ':' . $this->_client_secret . ']');
-					error_log('RETURNED: [' . $retr . ']');
-					error_log(print_r($info, true));
-
 					if ($info['http_code'] == 200)
 					{
-						print_r($info);
-						print_r($retr);
+						$json = json_decode($retr, true);
 
-						error_log('TOKENS: ' . print_r($retr, true));
+						$this->_driver->oauthAccessWriteV2(
+							$this->_key,
+							$_GET['state'],
+							$json['access_token'],
+							$json['refresh_token'],
+							date('Y-m-d H:i:s', time() + (int) $json['expires_in']),
+							date('Y-m-d H:i:s', time() + (int) $json['x_refresh_token_expires_in']),
+							$_GET['realmId']);
+
+						header('Location: ' . $this->_that_url);
+						exit;
 					}
 					else
 					{
-
+						print('An error occurred fetching the access/refresh token.');
+						return false;
 					}
 				}
 
