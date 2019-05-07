@@ -88,7 +88,8 @@ class QuickBooks_IPP
 	const API_GETENTITLEMENTVALUESANDUSERROLE = 'API_GetEntitlementValuesAndUserRole';
 
 	const AUTHMODE_FEDERATED = 'federated';
-	const AUTHMODE_OAUTH = 'oauth';
+	const AUTHMODE_OAUTHV1 = 'oauthv1';
+	const AUTHMODE_OAUTHV2 = 'oauthv2';
 
 	/**
 	 *
@@ -375,11 +376,15 @@ class QuickBooks_IPP
 	{
 		$Context = null;
 
-		if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTH)
+		if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV1)
 		{
 			$Context = new QuickBooks_IPP_Context($this, null, $token);
 
 			// @todo Support for checking if it's valid or not
+		}
+		else if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2)
+		{
+			$Context = new QuickBooks_IPP_Context($this, null, $token);
 		}
 		else
 		{
@@ -1521,7 +1526,16 @@ class QuickBooks_IPP
 		}
 
 		// Authorization stuff
-		if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTH)
+		if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2)
+		{
+			print_r($this);
+
+			if ($this->_authcred['oauth_access_token'])
+			{
+				$headers['Authorization'] = 'Bearer ' . $this->_authcred['oauth_access_token'];
+			}
+		}
+		else if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV1)
 		{
 			// If we have credentials, sign the request
 			if ($this->_authcred['oauth_access_token'] and
@@ -1626,8 +1640,9 @@ class QuickBooks_IPP
 			$headers['Cookie'] = $this->cookies(true);
 		}
 
-		//print_r($headers);
-		//exit;
+		print('AUTH: ' . $this->_authmode . ']');
+		print_r($headers);
+		exit;
 
 		//$url = str_replace("SELECT * FROM customer", "SELECT+*+FROM+customer", $url);
 		//print('NEW URL [' . $url . ']' . "\n\n");

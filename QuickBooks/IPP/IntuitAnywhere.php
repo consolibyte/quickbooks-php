@@ -171,9 +171,18 @@ class QuickBooks_IPP_IntuitAnywhere
 		if ($creds = $this->load($app_tenant))
 		{
 			$IPP = new QuickBooks_IPP();
-			
+
+			if ($this->_oauth_version == self::OAUTH_V1)
+			{
+				$authmode = QuickBooks_IPP::AUTHMODE_OAUTHV1;
+			}
+			else if ($this->_oauth_version == self::OAUTH_V2)
+			{
+				$authmode = QuickBooks_IPP::AUTHMODE_OAUTHV2;
+			}
+
 			$IPP->authMode(
-				QuickBooks_IPP::AUTHMODE_OAUTH, 
+				$authmode,
 				$creds);
 			
 			if ($Context = $IPP->context())
@@ -236,10 +245,12 @@ class QuickBooks_IPP_IntuitAnywhere
 		{
 			if ($arr = $this->_driver->oauthLoadV2($this->_key, $app_tenant) and
 				strlen($arr['oauth_access_token']) > 0 and
-				strlen($arr['oauth_access_token_secret']) > 0)
+				strlen($arr['oauth_refresh_token']) > 0)
 			{
-				$arr['oauth_consumer_key'] = $this->_consumer_key;
-				$arr['oauth_consumer_secret'] = $this->_consumer_secret;
+				$arr['oauth_client_id'] = $this->_client_id;
+				$arr['oauth_client_secret'] = $this->_client_secret;
+
+				$arr['qb_flavor'] = QuickBooks_IPP_IDS::FLAVOR_ONLINE;
 
 				return $arr;
 			}
