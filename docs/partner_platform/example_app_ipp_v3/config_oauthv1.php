@@ -98,8 +98,7 @@ if ($IntuitAnywhere->check($the_username, $the_tenant) and
 
 	// Tell the framework to load some data from the OAuth store
 	$IPP->authMode(
-		QuickBooks_IPP::AUTHMODE_OAUTH, 
-		$the_username, 
+		QuickBooks_IPP::AUTHMODE_OAUTHV1,
 		$creds);
 
 	if ($sandbox)

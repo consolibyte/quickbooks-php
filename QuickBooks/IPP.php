@@ -302,72 +302,6 @@ class QuickBooks_IPP
 	}
 
 	/**
-	 * Authenticate to the IPP web service
-	 *
-	 * IMPORTANT NOTE:
-	 * Intuit disallows this method within live applications! You can use it to
-	 * test your application, but when you go live you'll need to instead use
-	 * a SAML gateway for single-sign-on authentication. Take a look at the
-	 * QuickBooks_IPP_Federator class for a working SAML gateway.
-	 *
-	 * @param string $username
-	 * @param string $password
-	 * @param string $token
-	 * @return boolean
-	 */
-	public function authenticate($username, $password, $token)
-	{
-		$this->_username = $username;
-		$this->_password = $password;
-		$this->_token = $token;
-
-		$url = 'https://workplace.intuit.com/db/main?act=API_Authenticate';
-		$action = 'API_Authenticate';
-
-		$xml = '<?xml version="1.0" encoding="UTF-8" ?>
-			<qdbapi>
-				<username>' . $username . '</username>
-				<password>' . $password . '</password>
-				<apptoken>' . $token . '</apptoken>
-			</qdbapi>';
-
-		$Context = null;
-		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
-
-		if (!$this->_hasErrors($response) and
-			$ticket = QuickBooks_XML::extractTagContents('ticket', $response))
-		{
-			$this->_ticket = $ticket;
-
-			$cookies = array(
-				'scache',
-				'ptest',
-				'stest',
-				'luid',
-				'TICKET',
-				'qbn.ticket',
-				'qbn.tkt',
-				'qbn.authid',
-				'qbn.gauthid',
-				'qbn.agentid',
-				'iamValidationTime'
-				);
-
-			foreach ($cookies as $cookie)
-			{
-				if ($value = $this->_extractCookie($cookie, $response))
-				{
-					$this->_cookies[$cookie] = $value;
-				}
-			}
-
-			return new QuickBooks_IPP_Context($this, $ticket, $token);
-		}
-
-		return false;
-	}
-
-	/**
 	 * Create a Context object (used for session management) for a given ticket and token
 	 *
 	 *
@@ -448,28 +382,6 @@ class QuickBooks_IPP
 		return $this->_password;
 	}
 
-	/*
-	public function ticket($ticket = null)
-	{
-		if ($ticket)
-		{
-			$this->_ticket = $ticket;
-		}
-
-		return $this->_ticket;
-	}
-
-	public function token($token = null)
-	{
-		if ($token)
-		{
-			$this->_token = $token;
-		}
-
-		return $this->_token;
-	}
-	*/
-
 	/**
 	 *
 	 *
@@ -520,12 +432,11 @@ class QuickBooks_IPP
 	 * @param string $authmode		The new auth mode
 	 * @return string				The currently set auth mode
 	 */
-	public function authMode($authmode = null, $authuser = null, $authcred = null, $authsign = null, $authkey = null)
+	public function authMode($authmode = null, $authcred = null, $authsign = null, $authkey = null)
 	{
 		if ($authmode)
 		{
 			$this->_authmode = $authmode;
-			$this->_authuser = $authuser;
 			$this->_authcred = $authcred;
 
 			$this->_authsign = $authsign;
@@ -1528,8 +1439,6 @@ class QuickBooks_IPP
 		// Authorization stuff
 		if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2)
 		{
-			print_r($this);
-
 			if ($this->_authcred['oauth_access_token'])
 			{
 				$headers['Authorization'] = 'Bearer ' . $this->_authcred['oauth_access_token'];
@@ -1639,13 +1548,6 @@ class QuickBooks_IPP
 			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $Context->token() . '", intuit-token="' . $Context->ticket() . '"';
 			$headers['Cookie'] = $this->cookies(true);
 		}
-
-		print('AUTH: ' . $this->_authmode . ']');
-		print_r($headers);
-		exit;
-
-		//$url = str_replace("SELECT * FROM customer", "SELECT+*+FROM+customer", $url);
-		//print('NEW URL [' . $url . ']' . "\n\n");
 
 		// Our HTTP requestor
 		$HTTP = new QuickBooks_HTTP($url);

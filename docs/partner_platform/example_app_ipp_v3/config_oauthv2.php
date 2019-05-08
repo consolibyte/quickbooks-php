@@ -118,9 +118,6 @@ if ($IntuitAnywhere->check($the_tenant) and
 	// Get some company info
 	$CompanyInfoService = new QuickBooks_IPP_Service_CompanyInfo();
 	$quickbooks_CompanyInfo = $CompanyInfoService->get($Context, $realm);
-
-	print($CompanyInfoService->lastRequest());
-	print($CompanyInfoService->lastResponse());
 }
 else
 {
