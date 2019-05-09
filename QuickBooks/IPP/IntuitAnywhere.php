@@ -35,7 +35,8 @@ class QuickBooks_IPP_IntuitAnywhere
 	protected $_errmsg;
 	
 	protected $_debug;
-	
+
+	protected $_dsn;
 	protected $_driver;
 	
 	protected $_crypt;
@@ -73,6 +74,7 @@ class QuickBooks_IPP_IntuitAnywhere
 	 */
 	public function __construct($oauth_version, $sandbox, $scope, $dsn, $encryption_key, $consumer_key_or_client_id, $consumer_secret_or_client_secret, $this_url = null, $that_url = null)
 	{
+		$this->_dsn = $dsn;
 		$this->_driver = QuickBooks_Driver_Factory::create($dsn);
 		
 		$this->_key = $encryption_key;
@@ -170,7 +172,7 @@ class QuickBooks_IPP_IntuitAnywhere
 	{
 		if ($creds = $this->load($app_tenant))
 		{
-			$IPP = new QuickBooks_IPP();
+			$IPP = new QuickBooks_IPP($this->_dsn, $this->_key);
 
 			if ($this->_oauth_version == self::OAUTH_V1)
 			{
@@ -184,6 +186,11 @@ class QuickBooks_IPP_IntuitAnywhere
 			$IPP->authMode(
 				$authmode,
 				$creds);
+
+			if ($this->_sandbox)
+			{
+				$IPP->sandbox(true);
+			}
 			
 			if ($Context = $IPP->context())
 			{
@@ -200,15 +207,21 @@ class QuickBooks_IPP_IntuitAnywhere
 					$CustomerService = new QuickBooks_IPP_Service_Customer();
 					$customers = $CustomerService->query($Context, $creds['qb_realm'], "SELECT * FROM Customer MAXRESULTS 1");
 
+					error_log($CustomerService->lastRequest());
+					error_log($CustomerService->lastResponse());
+
+					print($CustomerService->lastResponse());
+
 					$IPP->version($cur_version);		// Revert back to whatever they set
 				}
 				else
 				{
 					$companies = $IPP->getAvailableCompanies($Context);
 				}
-				
+
 				// Check the last error code now...
 				if ($IPP->errorCode() == 401 or 			// most calls return this
+					$IPP->errorCode() == 3100 or            // OAuth token error
 					$IPP->errorCode() == 3200)				// but for some stupid reason the getAvailableCompanies call returns this
 				{
 					return false;
@@ -542,8 +555,13 @@ class QuickBooks_IPP_IntuitAnywhere
 
 	protected function _discover()
 	{
+		return self::discover($this->_sandbox);
+	}
+
+	static public function discover($sandbox)
+	{
 		$url = self::URL_DISCOVERY_PRODUCTION;
-		if ($this->_sandbox)
+		if ($sandbox)
 		{
 			$url = self::URL_DISCOVERY_SANDBOX;
 		}

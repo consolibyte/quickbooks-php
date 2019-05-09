@@ -90,7 +90,7 @@ if ($IntuitAnywhere->check($the_tenant) and
 	$quickbooks_is_connected = true;
 
 	// Set up the IPP instance
-	$IPP = new QuickBooks_IPP($dsn);
+	$IPP = new QuickBooks_IPP($dsn, $encryption_key);
 
 	// Get our OAuth credentials from the database
 	$creds = $IntuitAnywhere->load($the_tenant);

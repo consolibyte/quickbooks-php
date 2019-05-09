@@ -246,7 +246,7 @@ class QuickBooks_IPP
 	 */
 	protected $_ids_version;
 
-	public function __construct($dsn = null, $encryption_key = null, $config = array(), $log_level = QUICKBOOKS_LOG_NORMAL)
+	public function __construct($dsn, $encryption_key, $config = array(), $log_level = QUICKBOOKS_LOG_NORMAL)
 	{
 		// Are we in sandbox mode?
 		$this->_sandbox = false;
@@ -296,9 +296,6 @@ class QuickBooks_IPP
 
 		// Encryption key (used for database storage)
 		$this->_key = $encryption_key;
-
-		// Default to QuickBooks desktop
-		//$this->flavor(QuickBooks_IPP_IDS::FLAVOR_DESKTOP);
 	}
 
 	/**
@@ -306,80 +303,20 @@ class QuickBooks_IPP
 	 *
 	 *
 	 */
-	public function context($ticket = null, $token = null, $check_if_valid = true)
+	public function context()
 	{
 		$Context = null;
 
 		if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV1)
 		{
-			$Context = new QuickBooks_IPP_Context($this, null, $token);
-
-			// @todo Support for checking if it's valid or not
+			$Context = new QuickBooks_IPP_Context($this, null, null);
 		}
 		else if ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2)
 		{
-			$Context = new QuickBooks_IPP_Context($this, null, $token);
+			$Context = new QuickBooks_IPP_Context($this, null, null);
 		}
-		else
-		{
-			if (is_null($ticket))
-			{
-				$ticket = QuickBooks_IPP_Federator::getCookie();
-			}
-
-			$Context = new QuickBooks_IPP_Context($this, $ticket, $token);
-
-			//print('check if valid [' . $check_if_valid . ']');
-
-			if ($check_if_valid)
-			{
-				// Now, let's check to make sure the context is valid
-				$User = $this->getUserInfo($Context);
-
-				if (!$User or
-					!is_object($User) or
-					$User->isAnonymous())
-				{
-					return null;
-				}
-			}
-		}
-
-		//print_r($Context);
 
 		return $Context;
-	}
-
-	/**
-	 *
-	 *
-	 * @deprecated
-	 *
-	 */
-	public function cookies($glob_them_together = false)
-	{
-		if ($glob_them_together)
-		{
-			$tmp = array();
-			foreach ($this->_cookies as $cookie => $value)
-			{
-				$tmp[] = $cookie . '=' . $value;
-			}
-
-			return implode('; ', $tmp);
-		}
-
-		return $this->_cookies;
-	}
-
-	public function username()
-	{
-		return $this->_username;
-	}
-
-	public function password()
-	{
-		return $this->_password;
 	}
 
 	/**
@@ -917,12 +854,82 @@ class QuickBooks_IPP
 	{
 		$IPP = $Context->IPP();
 
+		// Do any renewals we need to do first
+		$this->_handleRenewal();
+
 		switch ($IPP->version())
 		{
 			case QuickBooks_IPP_IDS::VERSION_3:
 			default:
 				return $this->_IDS_v3($Context, $realm, $resource, $optype, $xml, $ID);
 		}
+	}
+
+	/**
+	 * Do we need to renew the OAuth access token? If so, renew it
+	 */
+	protected function _handleRenewal()
+	{
+		static $attempted_renew = false;
+
+		error_log('in function, but not actualy renewaing  ');
+
+		if (!$attempted_renew and
+			is_object($this->_driver) and
+			$this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
+			strtotime($this->_authcred['oauth_access_expiry']) + 60 < time())
+		{
+			$attempted_renew = true;
+
+			error_log('attempting renew... ' . $this->_authcred['oauth_access_expiry'] . ' vs. ' . date('Y-m-d H:i:s'));
+
+			error_log('  discovering...');
+
+			if ($discover = QuickBooks_IPP_IntuitAnywhere::discover($this->_sandbox))
+			{
+				error_log('    discovered');
+
+				$ch = curl_init($discover['token_endpoint']);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);   // Do not follow; security risk here
+
+				curl_setopt($ch, CURLOPT_USERPWD, $this->_authcred['oauth_client_id'] . ':' . $this->_authcred['oauth_client_secret']);
+
+				curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array(
+					'grant_type' => 'refresh_token',
+					'refresh_token' => $this->_authcred['oauth_refresh_token']
+					)));
+
+				$retr = curl_exec($ch);
+				$info = curl_getinfo($ch);
+
+				if ($info['http_code'] == 200)
+				{
+					$json = json_decode($retr, true);
+
+					error_log('         RENEWED!');
+
+					$this->_driver->oauthAccessWriteV2(
+						$this->_key,
+						$this->_authcred['oauth_state'],
+						$json['access_token'],
+						$json['refresh_token'],
+						date('Y-m-d H:i:s', time() + (int) $json['expires_in']),
+						date('Y-m-d H:i:s', time() + (int) $json['x_refresh_token_expires_in']));
+
+					// Replace our auth creds with the new ones
+					$this->_authcred = $this->_driver->oauthLoadV2($this->_key, $this->_authcred['app_tenant']);
+
+					// Successfully renewed!
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		// No renewal needed
+		return true;
 	}
 
 	protected function _IDS_v3($Context, $realm, $resource, $optype, $xml_or_query, $ID)
@@ -1450,23 +1457,6 @@ class QuickBooks_IPP
 			if ($this->_authcred['oauth_access_token'] and
 				$this->_authcred['oauth_access_token_secret'])
 			{
-				/*
-				//// **** TEST STUFF **** ////
-				$url = 'https://api.twitter.com/1/statuses/update.json?include_entities=true';
-
-				$this->_authcred['oauth_consumer_key'] = 'xvz1evFS4wEEPTGEFPHBog';
-				$this->_authcred['oauth_consumer_secret'] = 'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw';
-
-				$this->_authcred['oauth_access_token'] = '370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb';
-				$this->_authcred['oauth_access_token_secret'] = 'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE';
-
-				$data = http_build_query(array('status' => 'Hello Ladies + Gentlemen, a signed OAuth request!'));
-				$post = true;
-				*/
-
-				//print('URL [' . $url . ']' . "\n");
-				//print('what is POST [' . $post . ']' . "\n");
-
 				// Sign the request
 				$OAuth = new QuickBooks_IPP_OAuth($this->_authcred['oauth_consumer_key'], $this->_authcred['oauth_consumer_secret']);
 
@@ -1475,8 +1465,6 @@ class QuickBooks_IPP
 				{
 					$OAuth->signature($this->_authsign, $this->_authkey);
 				}
-
-				//print('signing with method and key ' . $this->_authsign . ', ' . $this->_authkey);
 
 				if ($post)
 				{
@@ -1501,27 +1489,13 @@ class QuickBooks_IPP
 					parse_str($data, $signdata);
 				}
 
-				/*
-				print('signing [');
-				print($action . "\n");
-				print($url . "\n");
-				print_r($this->_authcred);
-				print('[[' . $signdata . ']]');
-				print(' all done ]');
-				*/
-
 				$signed = $OAuth->sign($action, $url, $this->_authcred['oauth_access_token'], $this->_authcred['oauth_access_token_secret'], $signdata);
-
-				//print_r($signed);
 
 				// Always use the header, regardless of POST or GET
 				$headers['Authorization'] = $signed[3];
 
 				if ($post)
 				{
-					// Add the OAuth headers
-					//$headers['Authorization'] = $signed[3];
-
 					// Remove any whitespace padding before checking
 					$data = trim($data);
 
@@ -1536,8 +1510,7 @@ class QuickBooks_IPP
 				}
 				else
 				{
-					// Replace the URL with the signed URL
-					//$url = $signed[2];
+					;
 				}
 			}
 		}
@@ -1582,19 +1555,6 @@ class QuickBooks_IPP
 
 		$this->_setLastRequestResponse($HTTP->lastRequest(), $HTTP->lastResponse());
 		$this->_setLastDebug(__CLASS__, array( 'http_request_response_duration' => $HTTP->lastDuration() ));
-		//$this->_last_request = $HTTP->lastRequest();
-		//$this->_last_response = $HTTP->lastResponse();
-
-		//print($HTTP->getLog());
-
-		/*
-		print("\n\n\n\n");
-		print($this->_last_request);
-		print("\n\n\n\n");
-		print($this->_last_response);
-		print("\n\n\n\n");
-		exit;
-		*/
 
 		//
 		$this->_log($HTTP->getLog(), QUICKBOOKS_LOG_DEBUG);

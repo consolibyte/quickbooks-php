@@ -42,6 +42,22 @@ CHANGE `quickbooks_oauth_id` `quickbooks_oauthv1_id` int(10) unsigned NOT NULL A
   
   
   
+  // Set up the IPP instance
+  	$IPP = new QuickBooks_IPP($dsn);
+  	to
+  	// Set up the IPP instance
+    	$IPP = new QuickBooks_IPP($dsn, $encryption_key);
+  
+  
+  
+  
+  can they turn off logging if they don't want the logging? 
+  
+  
+  
+  is the reconect script even necessary anymore? 
+  
+  
   
   TODO KEITH
   
@@ -49,4 +65,6 @@ CHANGE `quickbooks_oauth_id` `quickbooks_oauthv1_id` int(10) unsigned NOT NULL A
   
   test v2 from scratch 
   
-  make sure the STATE nonce gets validated 
+  make sure the STATE nonce gets validated
+  
+  minor version change  
