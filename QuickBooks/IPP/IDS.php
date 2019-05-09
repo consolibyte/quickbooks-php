@@ -47,8 +47,12 @@ class QuickBooks_IPP_IDS
 	const OPTYPE_ENTITLEMENTS = 'Entitlements';
 	
 	const OPTYPE_SEND = 'Send';
-	
-	/**
+
+	const OPTYPE_DOWNLOAD = 'DOWNLOAD';
+
+    const RESOURCE_DOWNLOAD = 'Download';
+
+    /**
 	 * This is not a real operation type in IDS terms, but is neccessary to distinguish between queries and findById in QuickBooks Online in IDS v2.
 	 */
 	const OPTYPE_FINDBYID = '_findById_';
