@@ -1426,7 +1426,7 @@ abstract class QuickBooks_Driver
 
 	abstract protected function _oauthAccessWriteV1($request_token, $token, $token_secret, $realm, $flavor);
 
-	public function oauthAccessWriteV2($encryption_key, $state, $access_token, $refresh_token, $access_expiry, $refresh_expiry, $qb_realm = null)
+	public function oauthAccessWriteV2($encryption_key, $state, $access_token, $refresh_token, $access_expiry, $refresh_expiry, $qb_realm)
 	{
 		$AES = QuickBooks_Encryption_Factory::create('aes');
 
@@ -1436,8 +1436,20 @@ abstract class QuickBooks_Driver
 		return $this->_oauthAccessWriteV2($state, $encrypted_access_token, $encrypted_refresh_token, $access_expiry, $refresh_expiry, $qb_realm);
 	}
 
-	abstract protected function _oauthAccessWriteV2($state, $access_token, $refresh_token, $access_expiry, $refresh_expiry, $qb_realm = null);
+	abstract protected function _oauthAccessWriteV2($state, $access_token, $refresh_token, $access_expiry, $refresh_expiry, $qb_realm);
 
+
+	public function oauthAccessRefreshV2($encryption_key, $oauthv2_id, $access_token, $refresh_token, $access_expiry, $refresh_expiry)
+	{
+		$AES = QuickBooks_Encryption_Factory::create('aes');
+
+		$encrypted_access_token = $AES->encrypt($encryption_key, $access_token);
+		$encrypted_refresh_token = $AES->encrypt($encryption_key, $refresh_token);
+
+		return $this->_oauthAccessRefreshV2($oauthv2_id, $encrypted_access_token, $encrypted_refresh_token, $access_expiry, $refresh_expiry);
+	}
+
+	abstract protected function _oauthAccessRefreshV2($oauthv2_id, $access_token, $refresh_token, $access_expiry, $refresh_expiry);
 
 	public function oauthAccessDelete($app_username, $app_tenant)
 	{

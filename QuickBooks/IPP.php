@@ -872,8 +872,6 @@ class QuickBooks_IPP
 	{
 		static $attempted_renew = false;
 
-		error_log('in function, but not actualy renewaing  ');
-
 		if (!$attempted_renew and
 			is_object($this->_driver) and
 			$this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
@@ -881,14 +879,8 @@ class QuickBooks_IPP
 		{
 			$attempted_renew = true;
 
-			error_log('attempting renew... ' . $this->_authcred['oauth_access_expiry'] . ' vs. ' . date('Y-m-d H:i:s'));
-
-			error_log('  discovering...');
-
 			if ($discover = QuickBooks_IPP_IntuitAnywhere::discover($this->_sandbox))
 			{
-				error_log('    discovered');
-
 				$ch = curl_init($discover['token_endpoint']);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);   // Do not follow; security risk here
@@ -907,11 +899,9 @@ class QuickBooks_IPP
 				{
 					$json = json_decode($retr, true);
 
-					error_log('         RENEWED!');
-
-					$this->_driver->oauthAccessWriteV2(
+					$this->_driver->oauthAccessRefreshV2(
 						$this->_key,
-						$this->_authcred['oauth_state'],
+						$this->_authcred['quickbooks_oauthv2_id'],
 						$json['access_token'],
 						$json['refresh_token'],
 						date('Y-m-d H:i:s', time() + (int) $json['expires_in']),
@@ -1058,164 +1048,6 @@ class QuickBooks_IPP
 		return $parsed;
 	}
 
-	protected function _IDS_v2($Context, $realmID, $resource, $optype, $xml, $ID)
-	{
-		if (substr($resource, 0, 6) == 'Report')
-		{
-			$resource = substr($resource, 6);
-		}
-
-		// This is because IDS v2 with QuickBooks Online is retarded
-		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_PAYMENTMETHOD)
-		{
-			$resource = 'payment-method';
-		}
-		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT)
-		{
-			$resource = 'sales-receipt';
-		}
-		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY)
-		{
-			$resource = 'time-activity';
-		}
-		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY)
-		{
-			$resource = 'journal-entries';
-		}
-		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENT)
-		{
-			$resource = 'bill-payment';
-		}
-
-		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
-		{
-			// Make the resource plural... (unless it's the changedatadeleted) *sigh*
-			if ($resource == QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY)
-			{
-			    $resource = 'time-activities';
-			}
-			else if ($resource == QuickBooks_IPP_IDS::RESOURCE_CLASS)
-			{
-				$resource .= 'es';
-			}
-			else if ($resource != QuickBooks_IPP_IDS::RESOURCE_CHANGEDATADELETED)
-			{
-			    $resource .= 's';
-            }
-		}
-
-		$post = true;
-		if ($resource == QuickBooks_IPP_IDS::RESOURCE_COMPANY or 		// QuickBooks desktop
-			$resource == QuickBooks_IPP_IDS::RESOURCE_COMPANYMETADATA)	// QuickBooks online
-		{
-			$post = false;
-			$xml = '';
-		}
-
-		//$url = 'https://services.intuit.com/sb/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
-
-		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
-		{
-			if ($optype == QuickBooks_IPP_IDS::OPTYPE_FINDBYID)
-			{
-				$parse = QuickBooks_IPP_IDS::parseIDType($xml);
-
-				$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID . '/' . $parse[1];
-
-				$post = false;
-				$xml = null;
-			}
-			else if ($optype == QuickBooks_IPP_IDS::OPTYPE_MOD)
-			{
-				$parse = QuickBooks_IPP_IDS::parseIDType($ID);
-
-				$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID . '/' . $parse[1];
-			}
-			else
-			{
-				$url = $this->_baseurl . '/' . strtolower($resource) . '/' . $this->_ids_version . '/' . $realmID;
-			}
-		}
-
-		if ($optype == QuickBooks_IPP_IDS::OPTYPE_SYNCSTATUS)
-		{
-			$url = $this->_baseurl . '/status/v2/' . $realmID;
-		}
-		else
-		{
-		    // Case matters on "syncActivity" #fun (everything else is lower cased)
-		    if (strtolower($resource) == 'syncactivity')
-		    {
-		    	$resource = 'syncActivity';
-		    }
-		    else
-		    {
-		    	$resource = strtolower($resource); // everything else should be lowercase
-		    }
-
-			$url = $this->_baseurl . '/' . $resource . '/' . $this->_ids_version . '/' . $realmID;
-		}
-
-		//print('hitting URL [' . $url . ']');
-		//print($xml);
-		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
-		//print($response);
-
-		// Check for generic IPP errors and HTTP errors
-		if ($this->_hasErrors($response))
-		{
-			return false;
-		}
-
-		$data = $this->_stripHTTPHeaders($response);
-
-		if (!$this->_ids_parser)
-		{
-			// If they don't want the responses parsed into objects, then just return the raw XML data
-			return $data;
-		}
-
-		$start = microtime(true);
-
-		//$Parser = new QuickBooks_IPP_Parser();
-		$Parser = $this->_parserInstance();
-
-		$xml_errnum = null;
-		$xml_errmsg = null;
-		$err_code = null;
-		$err_desc = null;
-		$err_db = null;
-
-		// Try to parse the responses into QuickBooks_IPP_Object_* classes
-		$parsed = $Parser->parseIDS($data, $optype, $this->flavor(), QuickBooks_IPP_IDS::VERSION_2, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
-
-		$this->_setLastDebug(__CLASS__, array( 'ids_parser_duration' => microtime(true) - $start ));
-
-		if ($xml_errnum != QuickBooks_XML::ERROR_OK)
-		{
-			// Error parsing the returned XML?
-			$this->_setError(QuickBooks_IPP::ERROR_XML, 'XML parser said: ' . $xml_errnum . ': ' . $xml_errmsg);
-
-			return false;
-		}
-		else if ($err_code != QuickBooks_IPP::ERROR_OK)
-		{
-			// Some other IPP error
-			$this->_setError($err_code, $err_desc, 'Database error code: ' . $err_db);
-
-			return false;
-		}
-
-		// Return the parsed response
-		return $parsed;
-	}
-
 	/**
 	 *
 	 *
@@ -1236,25 +1068,6 @@ class QuickBooks_IPP
 		}
 
 		return $stripped;
-	}
-
-	protected function _extractCookie($name, $response)
-	{
-		$lines = explode("\r\n", $response);
-
-		foreach ($lines as $line)
-		{
-			// Set-Cookie: qbn.ticket=V1-47-U2v1RYBuM02GHgOYfulVmQ; expires=Tue, 19-Jan-2038 00:00:00 GMT; path=/; domain=.intuit.com; secure; HttpOnly
-			$line = substr($line, 12);
-
-			if (substr($line, 0, strlen($name)) == $name and
-				false !== ($pos = strpos($line, ';')))
-			{
-				return substr($line, strlen($name) + 1, $pos - strlen($name) - 1);
-			}
-		}
-
-		return null;
 	}
 
 	protected function _parserInstance()
@@ -1399,48 +1212,16 @@ class QuickBooks_IPP
 		$headers = array(
 			);
 
-		//print('[' . $this->_flavor . '], ACTION [' . $action . ']');
-
-		if ($Context->IPP()->version() == QuickBooks_IPP_IDS::VERSION_3)
+		if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or
+			$action == QuickBooks_IPP_IDS::OPTYPE_MOD or
+			$action == QuickBooks_IPP_IDS::OPTYPE_VOID or
+			$action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 		{
-			if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or
-				$action == QuickBooks_IPP_IDS::OPTYPE_MOD or
-				$action == QuickBooks_IPP_IDS::OPTYPE_VOID or
-				$action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
-			{
-				$headers['Content-Type'] = 'application/xml';
-			}
-			else
-			{
-				$headers['Content-Type'] = 'text/plain';
-			}
+			$headers['Content-Type'] = 'application/xml';
 		}
 		else
 		{
-			// Old v2 stuff
-			if ($type == QuickBooks_IPP::REQUEST_IPP)
-			{
-				$headers['Content-Type'] = 'application/xml';
-				$headers['QUICKBASE-ACTION'] = $action;
-			}
-			else if ($type == QuickBooks_IPP::REQUEST_IDS)
-			{
-				if ($this->_flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
-				{
-					$headers['Content-Type'] = 'text/xml';
-				}
-				else if ($this->_flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
-				{
-					if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD or $action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
-					{
-						$headers['Content-Type'] = 'application/xml';
-					}
-					else
-					{
-						$headers['Content-Type'] = 'application/x-www-form-urlencoded';
-					}
-				}
-			}
+			$headers['Content-Type'] = 'text/plain';
 		}
 
 		// Authorization stuff
@@ -1514,13 +1295,6 @@ class QuickBooks_IPP
 				}
 			}
 		}
-		else if (is_object($Context))
-		{
-			// FEDERATED authentication
-
-			$headers['Authorization'] = 'INTUITAUTH intuit-app-token="' . $Context->token() . '", intuit-token="' . $Context->ticket() . '"';
-			$headers['Cookie'] = $this->cookies(true);
-		}
 
 		// Our HTTP requestor
 		$HTTP = new QuickBooks_HTTP($url);
@@ -1533,12 +1307,6 @@ class QuickBooks_IPP
 
 		//
 		$HTTP->setRawBody($data);
-
-
-		if ($this->_certificate)
-		{
-			$HTTP->setCertificate($this->_certificate);
-		}
 
 		// We need the headers back
 		$HTTP->returnHeaders(true);

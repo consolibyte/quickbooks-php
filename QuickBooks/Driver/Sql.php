@@ -2334,7 +2334,38 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		return false;
 	}
 
-	protected function _oauthAccessWriteV2($state, $encrypted_access_token, $encrypted_refresh_token, $access_expiry, $refresh_expiry, $qb_realm = null)
+	protected function _oauthAccessRefreshV2($oauthv2_id, $encrypted_access_token, $encrypted_refresh_token, $access_expiry, $refresh_expiry)
+	{
+		$errnum = 0;
+		$errmsg = '';
+
+		$vars = array(
+			$encrypted_access_token,
+			$encrypted_refresh_token,
+			date('Y-m-d H:i:s', strtotime($access_expiry)),
+			date('Y-m-d H:i:s', strtotime($refresh_expiry)),
+			date('Y-m-d H:i:s'),
+			date('Y-m-d H:i:s')
+		);
+
+		$vars[] = (int) $oauthv2_id;
+
+		// Exists... UPDATE!
+		return $this->query("
+			UPDATE
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
+			SET
+				oauth_access_token = '%s',
+				oauth_refresh_token = '%s',
+				oauth_access_expiry = '%s',
+				oauth_refresh_expiry = '%s',
+				last_access_datetime = '%s',
+				last_refresh_datetime = '%s'
+			WHERE
+				quickbooks_oauthv2_id = %d ", $errnum, $errmsg, null, null, $vars);
+	}
+
+	protected function _oauthAccessWriteV2($state, $encrypted_access_token, $encrypted_refresh_token, $access_expiry, $refresh_expiry, $qb_realm)
 	{
 		$errnum = 0;
 		$errmsg = '';
