@@ -3226,7 +3226,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$def = array(
 			'quickbooks_oauthv2_id' => array( QUICKBOOKS_DRIVER_SQL_SERIAL ),
 			'app_tenant' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ),
-			'oauth_scope' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ),
+			'oauth_state' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255 ),
 			'oauth_access_token' => array( QUICKBOOKS_DRIVER_SQL_TEXT, null ),
 			'oauth_refresh_token' => array( QUICKBOOKS_DRIVER_SQL_TEXT, null ),
 			'oauth_access_expiry' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
@@ -3234,6 +3234,8 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			'qb_realm' => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 32, 'null' ),
 			'request_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME ),
 			'access_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
+			'last_access_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
+			'last_refresh_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
 			'touch_datetime' => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
 		);
 		$primary = 'quickbooks_oauthv2_id';

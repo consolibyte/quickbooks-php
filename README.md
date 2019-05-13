@@ -24,6 +24,12 @@ Almost anything you can do in the QuickBooks GUI, in QuickBooks Online Edition, 
 * QuickBooks ONLINE (via Intuit Partner Platform/Intuit Anywhere) - read the [quick start guide for Intuit Partner Platform/QuickBooks Online] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
 
 
+## OAuth 1.0 to OAuth 2.0 migration 
+
+This is a _work in progress_. You can find some initial information at the link below. More information to follow this week: 
+
+* <https://github.com/consolibyte/quickbooks-php/blob/master/README_OAUTHV1_TO_OAUTHV2.md>
+
 ## Updates and Improvements
 
 Please follow me on Twitter to be notified about updates/improvements: 
