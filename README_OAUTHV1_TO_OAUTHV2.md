@@ -60,21 +60,50 @@ CREATE TABLE `quickbooks_oauthv2` (
 ```  
   
 ## Code change - IntuitAnywhere->load(...)  
+
+The `->load(...)` method has changed, dropping the `$the_username` parameter. Where you see this: 
   
 ```  
-  $creds = $IntuitAnywhere->load($the_username, $the_tenant);
- to
-    $creds = $IntuitAnywhere->load($the_tenant);  
-  ```
+$creds = $IntuitAnywhere->load($the_username, $the_tenant);
+```
+
+Change it to this: 
+ 
+ ```
+$creds = $IntuitAnywhere->load($the_tenant);  
+```
+
+## Code change - IntuitAnywhere->check(...)  
   
+The `->check(...)` method has changed, dropping the `$the_username` parameter. Change:
   
-  ```
-  if ($IntuitAnywhere->check($the_tenant) and
+```
+if ($IntuitAnywhere->check($the_username, $the_tenant)
+```  
   
+To this:
+
+```
+if ($IntuitAnywhere->check($the_username, $the_tenant)
+```  
+
+## Code change - IntuitAnywhere->test(...)
+
+The `->test(...)` method has changed, dropping the `$the_username` parameter. Change:
   
-  	$IntuitAnywhere->test($the_tenant))
-  ```
-  
+```
+$IntuitAnywhere->test($the_tenant))
+```
+
+To this: 
+
+```
+$IntuitAnywhere->test($the_tenant))
+```
+
+## Code change - IPP->authMode(...)
+
+@todo 
   
   ```
   $IPP->authMode(
@@ -82,6 +111,9 @@ CREATE TABLE `quickbooks_oauthv2` (
   		$creds);
   ```
   
+## Code change - QuickBooks_IPP(...) constructor
+
+@todo 
   
   ```
   // Set up the IPP instance
@@ -91,22 +123,3 @@ CREATE TABLE `quickbooks_oauthv2` (
     	$IPP = new QuickBooks_IPP($dsn, $encryption_key);
   ```
   
-  
-  
-  can they turn off logging if they don't want the logging? 
-  
-  
-  
-  is the reconect script even necessary anymore? 
-  
-  
-  
-  TODO KEITH
-  
-  test oauth v1 example 
-  
-  test v2 from scratch 
-  
-  make sure the STATE nonce gets validated
-  
-  minor version change  
