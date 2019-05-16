@@ -2149,7 +2149,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
 			WHERE
 				oauth_state = '%s' AND
-				request_datetime >= '%s'  
+				request_datetime >= '%s'
 				", $errnum, $errmsg, null, null, array( $state, date('Y-m-d H:i:s', strtotime('-30 minutes')) )));
 	}
 
@@ -2275,15 +2275,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			// Insert it
 			return $this->query("
 				INSERT INTO
-					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV1TABLE) . "
 				(
-					app_username,
 					app_tenant,
 					oauth_request_token,
 					oauth_request_token_secret,
 					request_datetime
 				) VALUES (
-					'%s',
 					'%s',
 					'%s',
 					'%s',
@@ -2321,7 +2319,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			// Exists... UPDATE!
 			return $this->query("
 				UPDATE
-					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV1TABLE) . "
 				SET
 					oauth_access_token = '%s',
 					oauth_access_token_secret = '%s',
@@ -2402,9 +2400,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 					oauth_refresh_token = '%s',
 					oauth_access_expiry = '%s',
 					oauth_refresh_expiry = '%s',
-					access_datetime = '%s', 
+					access_datetime = '%s',
 					last_access_datetime = '%s',
-					last_refresh_datetime = '%s' 
+					last_refresh_datetime = '%s'
 					" . $more . "
 				WHERE
 					oauth_state = '%s' ", $errnum, $errmsg, null, null, $vars);
@@ -2421,7 +2419,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		// Exists... DELETE!
 		$this->query("
 			DELETE FROM
-				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHTABLE) . "
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV1TABLE) . "
 			WHERE
 			app_username = '%s' AND
 			app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $app_username, $app_tenant ));

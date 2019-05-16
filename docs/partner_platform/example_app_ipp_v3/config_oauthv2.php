@@ -24,21 +24,21 @@ require_once dirname(__FILE__) . '/../../../QuickBooks.php';
 //
 // The OAuth request/access tokens will be encrypted and stored for you by the
 //	PHP DevKit IntuitAnywhere classes automatically.
-$oauth_client_id = 'Q0ql65UCww8oAoiXfNdVyZ5WHoZ0kJ43XqstMhxGtM2UuA5WKu';
-$oauth_client_secret = 'S60VXMXFygEOcb08DleS8iePUFyH81i4FhVrKaAB';
+$oauth_client_id = 'Q0x59iTo9LmlBSd4CnfLRUO4ZTzjuuGpnPfZQRfcFIkGnES5no';
+$oauth_client_secret = 'c7PpJ37XjKfJOisVb3hct0KFV8iP3MrGXt8Dy2bw';
 
 // If you're using DEVELOPMENT TOKENS, you MUST USE SANDBOX MODE!!!  If you're in PRODUCTION, then DO NOT use sandbox.
 $sandbox = true;     // When you're using development tokens
 //$sandbox = false;    // When you're using production tokens
 
 // This is the URL of your OAuth auth handler page
-$quickbooks_oauth_url = 'http://sandbox.test/quickbooks-php/docs/partner_platform/example_app_ipp_v3/oauth.php';
+$quickbooks_oauth_url = 'http://sandbox.com/quickbooks-php/docs/partner_platform/example_app_ipp_v3/oauth.php';
 
 // This is the URL to forward the user to after they have connected to IPP/IDS via OAuth
-$quickbooks_success_url = 'http://sandbox.test/quickbooks-php/docs/partner_platform/example_app_ipp_v3/success.php';
+$quickbooks_success_url = 'http://sandbox.com/quickbooks-php/docs/partner_platform/example_app_ipp_v3/success.php';
 
 // This is the menu URL script
-$quickbooks_menu_url = 'http://sandbox.test/quickbooks-php/docs/partner_platform/example_app_ipp_v3/menu.php';
+$quickbooks_menu_url = 'http://sandbox.com/quickbooks-php/docs/partner_platform/example_app_ipp_v3/menu.php';
 
 // This is a database connection string that will be used to store the OAuth credentials
 // $dsn = 'pgsql://username:password@hostname/database';

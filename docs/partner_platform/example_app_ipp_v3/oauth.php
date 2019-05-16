@@ -2,9 +2,9 @@
 
 /**
  * Example of OAuth authentication for an Intuit Anywhere application
- * 
- * 
- * 
+ *
+ *
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
@@ -21,10 +21,10 @@ require_once dirname(__FILE__) . '/config_oauthv2.php';
 // For old/legacy applications
 //require_once dirname(__FILE__) . '/config_oauthv1.php';
 
-// Try to handle the OAuth request 
+// Try to handle the OAuth request
 if ($IntuitAnywhere->handle($the_tenant))
 {
-	; // The user has been connected, and will be redirected to $that_url automatically. 
+	; // The user has been connected, and will be redirected to $that_url automatically.
 }
 else
 {

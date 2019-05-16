@@ -1239,7 +1239,7 @@ class QuickBooks_IPP
 				$this->_authcred['oauth_access_token_secret'])
 			{
 				// Sign the request
-				$OAuth = new QuickBooks_IPP_OAuth($this->_authcred['oauth_consumer_key'], $this->_authcred['oauth_consumer_secret']);
+				$OAuth = new QuickBooks_IPP_OAuthv1($this->_authcred['oauth_consumer_key'], $this->_authcred['oauth_consumer_secret']);
 
 				// Different than default signature method?
 				if ($this->_authsign)
@@ -1249,11 +1249,11 @@ class QuickBooks_IPP
 
 				if ($post)
 				{
-					$action = QuickBooks_IPP_OAuth::METHOD_POST;
+					$action = QuickBooks_IPP_OAuthv1::METHOD_POST;
 				}
 				else
 				{
-					$action = QuickBooks_IPP_OAuth::METHOD_GET;
+					$action = QuickBooks_IPP_OAuthv1::METHOD_GET;
 				}
 
 				$signdata = null;
