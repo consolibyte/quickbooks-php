@@ -891,4 +891,3 @@ class QuickBooks_XML_Node
 
 	}
 }
-

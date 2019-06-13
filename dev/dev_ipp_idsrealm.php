@@ -76,4 +76,3 @@ $realm = $IPP->getIDSRealm($Context);
 print('realm is: {' . $realm . '}');
 
 print("\n\n");
-

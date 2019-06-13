@@ -231,4 +231,3 @@ class QuickBooks_QBXML_Object_Deposit_DepositLine extends QuickBooks_QBXML_Objec
 		return 'DepositLine';
 	}
 }
-

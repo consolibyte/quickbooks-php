@@ -310,4 +310,3 @@ class QuickBooks_QBXML_Object_FixedAssetItem extends QuickBooks_QBXML_Object
 		return QUICKBOOKS_OBJECT_FIXEDASSETITEM;
 	}
 }
-

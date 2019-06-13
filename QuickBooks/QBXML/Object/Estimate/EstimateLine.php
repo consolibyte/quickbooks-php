@@ -350,4 +350,3 @@ class QuickBooks_QBXML_Object_Estimate_EstimateLine extends QuickBooks_QBXML_Obj
 		return 'EstimateLine';
 	}
 }
-

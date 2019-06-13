@@ -288,4 +288,3 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 		return QUICKBOOKS_OBJECT_BILL;
 	}
 }
-

@@ -472,4 +472,3 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
 		return 'ItemLine';
 	}
 }
-

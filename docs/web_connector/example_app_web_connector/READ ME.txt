@@ -31,6 +31,3 @@ THAT SAME URL.
 
 * Check QuickBooks for the customer. If you see it, good. If you don't see it,
   check the quickbooks_* fields in the SQL 'my_customer_table' table.
-
-
-

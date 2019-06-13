@@ -269,5 +269,3 @@ else
 {
 	print('An error occured during refund: ' . $MS->errorNumber() . ': ' . $MS->errorMessage() . "\n");
 }
-
-

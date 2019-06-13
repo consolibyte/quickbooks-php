@@ -53,4 +53,3 @@ interface QuickBooks_XML_Backend
 	 */
 	public function load($str);
 }
-

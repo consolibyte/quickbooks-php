@@ -68,4 +68,3 @@ for ($i = 0; $i < $Report->getRowCount(); $i++)
 print("\n\n\n");
 
 print($Service->lastResponse());
-

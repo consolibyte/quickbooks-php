@@ -35,4 +35,3 @@ class QuickBooks_ErrorHandler
 		exit(1);
 	}
 }
-

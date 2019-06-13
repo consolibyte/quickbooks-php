@@ -258,4 +258,3 @@ class QuickBooks_QBXML_Schema_Object_InventoryAdjustmentQueryRq extends QuickBoo
 		return $paths;
 	}
 }
-

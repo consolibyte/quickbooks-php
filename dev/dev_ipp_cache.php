@@ -24,6 +24,3 @@ $options = array(
 	);
 
 $Cache = new QuickBooks_IPP_Cache($Context, $dsn, $map, $options);
-
-
-

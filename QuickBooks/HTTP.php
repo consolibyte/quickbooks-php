@@ -605,4 +605,3 @@ class QuickBooks_HTTP
 		return $response;
 	}
 }
-

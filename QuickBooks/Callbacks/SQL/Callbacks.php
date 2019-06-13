@@ -11831,4 +11831,3 @@ $idents = array();
 $tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
 print(QuickBooks_Callbacks_SQL_Callbacks::InventoryLevelsResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() ));
 */
-

@@ -77,5 +77,3 @@ foreach ($invoice as $key => $value)
 {
 	print($key . ' => ' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_INVOICE, $field, $value) . "\n");
 }
-
-

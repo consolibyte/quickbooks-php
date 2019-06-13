@@ -54,4 +54,3 @@ abstract class QuickBooks_Encryption
 		return $salt;
 	}
 }
-

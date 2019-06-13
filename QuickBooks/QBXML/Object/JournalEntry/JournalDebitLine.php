@@ -360,4 +360,3 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 	}
 
 }
-

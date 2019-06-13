@@ -44,4 +44,3 @@ class QuickBooks_IPP_Object_Employee extends QuickBooks_IPP_Object
 			);
 	}
 }
-

@@ -651,4 +651,3 @@ function QuickBooks_Cast_unicodetoutf8($var)
 
 	return $ret;
 }
-

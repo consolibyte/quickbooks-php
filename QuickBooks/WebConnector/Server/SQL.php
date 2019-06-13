@@ -333,4 +333,3 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
 		return array_merge($defaults, $config);
 	}
 }
-

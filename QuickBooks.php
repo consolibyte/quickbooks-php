@@ -1108,4 +1108,3 @@ if (QUICKBOOKS_FRAMEWORK_QBXML & QUICKBOOKS_FRAMEWORKS)
 	// Objects for the API
 	QuickBooks_Loader::import('/QuickBooks/QBXML/Object');
 }
-

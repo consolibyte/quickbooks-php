@@ -160,4 +160,3 @@ $server = new QuickBooks_Server_SQL(
 	$sql_options,
 	$callback_options);
 $server->handle(true, true);
-

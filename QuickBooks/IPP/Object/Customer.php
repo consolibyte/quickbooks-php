@@ -68,4 +68,3 @@ class QuickBooks_IPP_Object_Customer extends QuickBooks_IPP_Object
 			);
 	}
 }
-

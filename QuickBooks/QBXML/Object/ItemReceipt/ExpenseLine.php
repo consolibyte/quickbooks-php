@@ -195,4 +195,3 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 		return "ExpenseLine";
 	}
 }
-

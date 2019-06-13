@@ -235,4 +235,3 @@ class QuickBooks_QBXML_Object_DiscountItem extends QuickBooks_QBXML_Object
 		return QUICKBOOKS_OBJECT_DISCOUNTITEM;
 	}
 }
-

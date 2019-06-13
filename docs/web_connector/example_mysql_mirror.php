@@ -255,4 +255,3 @@ $Server = new QuickBooks_WebConnector_Server_SQL(
 	$sql_options,
 	$callback_options);
 $Server->handle(true, true);
-

@@ -369,4 +369,3 @@ abstract class QuickBooks_QBXML_Schema_Object
 		return array_merge($tmp);
 	}
 }
-

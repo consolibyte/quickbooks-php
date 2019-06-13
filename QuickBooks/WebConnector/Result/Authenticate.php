@@ -54,4 +54,3 @@ class QuickBooks_WebConnector_Result_Authenticate extends QuickBooks_WebConnecto
 		}
 	}
 }
-

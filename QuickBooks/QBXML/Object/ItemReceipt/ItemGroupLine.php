@@ -142,4 +142,3 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemGroupLine extends QuickBooks_QBXML
 		return "ItemGroupLine";
 	}
 }
-

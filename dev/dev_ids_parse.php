@@ -122,7 +122,3 @@ foreach ($list as $Customer)
 {
 	print($Customer->getName() . ' has an ID of: ' . $Customer->getId() . ', ' . $Customer->getAddress(0)->getId() . "\n");
 }
-
-
-
-

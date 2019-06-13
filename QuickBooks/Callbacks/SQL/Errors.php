@@ -283,7 +283,3 @@ $config = array();
 $tmp = QuickBooks_Driver_Singleton::getInstance('mysql://root:root@localhost/quickbooks_sql', array(), array(), QUICKBOOKS_LOG_DEVELOP);
 QuickBooks_Callbacks_SQL_Errors::catchall($requestID, $user, $action, $ident, $extra, $err, $xml, $errnum, $errmsg, $config);
 */
-
-
-
-

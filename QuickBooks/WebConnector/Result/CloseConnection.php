@@ -43,4 +43,3 @@ class QuickBooks_WebConnector_Result_CloseConnection extends QuickBooks_WebConne
 		$this->closeConnectionResult = $result;
 	}
 }
-

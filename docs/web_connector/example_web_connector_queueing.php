@@ -48,4 +48,3 @@ if (isset($_POST['customer']))
 	// Queue it up!
 	$Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $id_value);
 }
-

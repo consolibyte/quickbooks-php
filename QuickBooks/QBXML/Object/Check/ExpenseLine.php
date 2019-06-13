@@ -355,4 +355,3 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
 		return 'ExpenseLine';
 	}
 }
-
