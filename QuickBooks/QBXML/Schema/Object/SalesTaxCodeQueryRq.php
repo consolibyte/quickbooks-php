@@ -156,5 +156,3 @@ class QuickBooks_QBXML_Schema_Object_SalesTaxCodeQueryRq extends QuickBooks_QBXM
 		return $paths;
 	}
 }
-
-?>

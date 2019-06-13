@@ -359,5 +359,3 @@ class QuickBooks_QBXML_Schema_Object_VendorCreditAddRq extends QuickBooks_QBXML_
 		return $paths;
 	}
 }
-
-?>

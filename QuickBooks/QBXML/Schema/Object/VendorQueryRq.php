@@ -174,5 +174,3 @@ class QuickBooks_QBXML_Schema_Object_VendorQueryRq extends QuickBooks_QBXML_Sche
 		return $paths;
 	}
 }
-
-?>

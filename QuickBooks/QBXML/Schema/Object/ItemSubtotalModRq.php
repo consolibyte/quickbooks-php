@@ -126,5 +126,3 @@ class QuickBooks_QBXML_Schema_Object_ItemSubtotalModRq extends QuickBooks_QBXML_
 		return $paths;
 	}
 }
-
-?>

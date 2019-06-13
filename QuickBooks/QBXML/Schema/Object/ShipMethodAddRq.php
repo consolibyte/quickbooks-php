@@ -108,5 +108,3 @@ class QuickBooks_QBXML_Schema_Object_ShipMethodAddRq extends QuickBooks_QBXML_Sc
 		return $paths;
 	}
 }
-
-?>

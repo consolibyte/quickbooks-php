@@ -162,5 +162,3 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryQueryRq extends QuickBooks_QBX
 		return $paths;
 	}
 }
-
-?>

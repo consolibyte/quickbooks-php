@@ -156,5 +156,3 @@ class QuickBooks_QBXML_Schema_Object_JobTypeQueryRq extends QuickBooks_QBXML_Sch
 		return $paths;
 	}
 }
-
-?>

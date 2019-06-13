@@ -246,5 +246,3 @@ class QuickBooks_QBXML_Schema_Object_BillQueryRq extends QuickBooks_QBXML_Schema
 		return $paths;
 	}
 }
-
-?>

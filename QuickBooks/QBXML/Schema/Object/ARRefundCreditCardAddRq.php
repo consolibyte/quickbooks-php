@@ -377,5 +377,3 @@ class QuickBooks_QBXML_Schema_Object_ARRefundCreditCardAddRq extends QuickBooks_
 		return $paths;
 	}
 }
-
-?>

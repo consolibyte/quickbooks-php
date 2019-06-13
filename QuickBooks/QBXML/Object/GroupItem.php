@@ -310,5 +310,3 @@ class QuickBooks_QBXML_Object_GroupItem extends QuickBooks_QBXML_Object
 		return QUICKBOOKS_OBJECT_GROUPITEM;
 	}
 }
-
-?>

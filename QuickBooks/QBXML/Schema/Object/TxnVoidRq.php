@@ -102,5 +102,3 @@ class QuickBooks_QBXML_Schema_Object_TxnVoidRq extends QuickBooks_QBXML_Schema_O
 		return $paths;
 	}
 }
-
-?>

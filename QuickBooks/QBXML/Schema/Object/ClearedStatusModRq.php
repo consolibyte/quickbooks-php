@@ -108,5 +108,3 @@ class QuickBooks_QBXML_Schema_Object_ClearedStatusModRq extends QuickBooks_QBXML
 		return $paths;
 	}
 }
-
-?>

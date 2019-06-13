@@ -212,5 +212,3 @@ class QuickBooks_QBXML_Schema_Object_ChargeAddRq extends QuickBooks_QBXML_Schema
 		return $paths;
 	}
 }
-
-?>

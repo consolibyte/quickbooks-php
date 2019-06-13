@@ -400,5 +400,3 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
 		return QUICKBOOKS_OBJECT_VENDOR;
 	}
 }
-
-?>

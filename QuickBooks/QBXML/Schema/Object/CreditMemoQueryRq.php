@@ -240,5 +240,3 @@ class QuickBooks_QBXML_Schema_Object_CreditMemoQueryRq extends QuickBooks_QBXML_
 		return $paths;
 	}
 }
-
-?>

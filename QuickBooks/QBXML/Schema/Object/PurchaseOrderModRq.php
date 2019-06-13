@@ -708,5 +708,3 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderModRq extends QuickBooks_QBXML
 		return $paths;
 	}
 }
-
-?>

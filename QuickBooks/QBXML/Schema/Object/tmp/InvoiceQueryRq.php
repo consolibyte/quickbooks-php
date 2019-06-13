@@ -246,5 +246,3 @@ class QuickBooks_QBXML_Schema_Object_InvoiceQueryRq extends QuickBooks_QBXML_Sch
 		return $paths;
 	}
 }
-
-?>

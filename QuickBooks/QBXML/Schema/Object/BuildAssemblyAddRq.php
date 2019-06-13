@@ -140,5 +140,3 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyAddRq extends QuickBooks_QBXML
 		return $paths;
 	}
 }
-
-?>

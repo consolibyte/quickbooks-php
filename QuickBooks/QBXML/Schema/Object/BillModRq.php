@@ -558,5 +558,3 @@ class QuickBooks_QBXML_Schema_Object_BillModRq extends QuickBooks_QBXML_Schema_O
 		return $paths;
 	}
 }
-
-?>

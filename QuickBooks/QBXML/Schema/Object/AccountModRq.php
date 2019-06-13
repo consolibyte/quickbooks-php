@@ -186,5 +186,3 @@ class QuickBooks_QBXML_Schema_Object_AccountModRq extends QuickBooks_QBXML_Schem
 		return $paths;
 	}
 }
-
-?>

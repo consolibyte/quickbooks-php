@@ -102,5 +102,3 @@ class QuickBooks_QBXML_Schema_Object_SpecialItemAddRq extends QuickBooks_QBXML_S
 		return $paths;
 	}
 }
-
-?>

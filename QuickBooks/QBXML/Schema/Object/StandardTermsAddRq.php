@@ -126,5 +126,3 @@ class QuickBooks_QBXML_Schema_Object_StandardTermsAddRq extends QuickBooks_QBXML
 		return $paths;
 	}
 }
-
-?>

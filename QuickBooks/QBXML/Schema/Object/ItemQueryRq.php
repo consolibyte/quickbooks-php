@@ -171,5 +171,3 @@ class QuickBooks_QBXML_Schema_Object_ItemQueryRq extends QuickBooks_QBXML_Schema
 		return $paths;
 	}
 }
-
-?>

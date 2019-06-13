@@ -240,5 +240,3 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptQueryRq extends QuickBooks_QBXML
 		return $paths;
 	}
 }
-
-?>

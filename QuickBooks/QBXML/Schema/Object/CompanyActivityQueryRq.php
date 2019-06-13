@@ -96,5 +96,3 @@ class QuickBooks_QBXML_Schema_Object_CompanyActivityQueryRq extends QuickBooks_Q
 		return $paths;
 	}
 }
-
-?>

@@ -234,5 +234,3 @@ class QuickBooks_UnitTest
 		return;
 	}
 }
-
-?>

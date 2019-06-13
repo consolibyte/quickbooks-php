@@ -216,5 +216,3 @@ class QuickBooks_QBXML_Schema_Object_SalesOrderQueryRq extends QuickBooks_QBXML_
 		return $paths;
 	}
 }
-
-?>

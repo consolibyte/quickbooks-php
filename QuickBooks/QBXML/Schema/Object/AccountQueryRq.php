@@ -168,5 +168,3 @@ class QuickBooks_QBXML_Schema_Object_AccountQueryRq extends QuickBooks_QBXML_Sch
 		return $paths;
 	}
 }
-
-?>

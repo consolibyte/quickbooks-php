@@ -264,5 +264,3 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAddRq extends QuickBooks_QBXML
 		return $paths;
 	}
 }
-
-?>

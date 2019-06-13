@@ -411,5 +411,3 @@ class QuickBooks_QBXML_Schema_Object_EmployeeModRq extends QuickBooks_QBXML_Sche
 		return $paths;
 	}
 }
-
-?>

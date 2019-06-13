@@ -240,5 +240,3 @@ class QuickBooks_QBXML_Schema_Object_EstimateQueryRq extends QuickBooks_QBXML_Sc
 		return $paths;
 	}
 }
-
-?>

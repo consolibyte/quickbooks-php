@@ -180,5 +180,3 @@ class QuickBooks_QBXML_Schema_Object_ItemDiscountModRq extends QuickBooks_QBXML_
 		return $paths;
 	}
 }
-
-?>

@@ -96,5 +96,3 @@ class QuickBooks_QBXML_Schema_Object_PreferencesQueryRq extends QuickBooks_QBXML
 		return $paths;
 	}
 }
-
-?>

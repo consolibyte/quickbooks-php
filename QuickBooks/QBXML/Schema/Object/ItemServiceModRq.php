@@ -288,5 +288,3 @@ class QuickBooks_QBXML_Schema_Object_ItemServiceModRq extends QuickBooks_QBXML_S
 		return $paths;
 	}
 }
-
-?>

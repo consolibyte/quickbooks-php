@@ -120,5 +120,3 @@ class QuickBooks_QBXML_Schema_Object_SalesRepAddRq extends QuickBooks_QBXML_Sche
 		return $paths;
 	}
 }
-
-?>

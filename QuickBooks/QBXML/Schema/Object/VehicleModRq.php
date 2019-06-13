@@ -126,5 +126,3 @@ class QuickBooks_QBXML_Schema_Object_VehicleModRq extends QuickBooks_QBXML_Schem
 		return $paths;
 	}
 }
-
-?>

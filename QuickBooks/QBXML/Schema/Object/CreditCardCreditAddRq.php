@@ -359,5 +359,3 @@ class QuickBooks_QBXML_Schema_Object_CreditCardCreditAddRq extends QuickBooks_QB
 		return $paths;
 	}
 }
-
-?>

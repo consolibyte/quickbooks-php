@@ -234,5 +234,3 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentQueryRq extends QuickBooks_QB
 		return $paths;
 	}
 }
-
-?>

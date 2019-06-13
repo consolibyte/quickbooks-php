@@ -618,5 +618,3 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
 		return $paths;
 	}
 }
-
-?>

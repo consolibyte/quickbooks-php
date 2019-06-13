@@ -506,5 +506,3 @@ class QuickBooks_QBXML_Object_OtherChargeItem extends QuickBooks_QBXML_Object
 		return QUICKBOOKS_OBJECT_OTHERCHARGEITEM;
 	}
 }
-
-?>

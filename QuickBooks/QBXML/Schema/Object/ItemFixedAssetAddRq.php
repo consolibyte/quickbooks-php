@@ -234,5 +234,3 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetAddRq extends QuickBooks_QBXM
 		return $paths;
 	}
 }
-
-?>

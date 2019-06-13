@@ -216,5 +216,3 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyQueryRq extends QuickBooks_QBX
 		return $paths;
 	}
 }
-
-?>

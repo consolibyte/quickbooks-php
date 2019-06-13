@@ -156,5 +156,3 @@ class QuickBooks_QBXML_Schema_Object_CustomerMsgQueryRq extends QuickBooks_QBXML
 		return $paths;
 	}
 }
-
-?>

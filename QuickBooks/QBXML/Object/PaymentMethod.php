@@ -148,5 +148,3 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
 		return QUICKBOOKS_OBJECT_PAYMENTMETHOD;
 	}
 }
-
-?>

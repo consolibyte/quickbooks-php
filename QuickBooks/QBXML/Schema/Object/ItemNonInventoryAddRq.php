@@ -258,5 +258,3 @@ class QuickBooks_QBXML_Schema_Object_ItemNonInventoryAddRq extends QuickBooks_QB
 		return $paths;
 	}
 }
-
-?>

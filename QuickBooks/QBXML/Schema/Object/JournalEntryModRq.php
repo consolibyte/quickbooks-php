@@ -204,5 +204,3 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryModRq extends QuickBooks_QBXML_
 		return $paths;
 	}
 }
-
-?>

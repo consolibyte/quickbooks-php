@@ -234,5 +234,3 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
 		return $paths;
 	}
 }
-
-?>

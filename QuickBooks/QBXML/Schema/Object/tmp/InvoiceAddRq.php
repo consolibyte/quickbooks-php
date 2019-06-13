@@ -693,5 +693,3 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
 		return $paths;
 	}
 }
-
-?>

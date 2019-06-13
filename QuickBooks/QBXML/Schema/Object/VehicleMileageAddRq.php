@@ -186,5 +186,3 @@ class QuickBooks_QBXML_Schema_Object_VehicleMileageAddRq extends QuickBooks_QBXM
 		return $paths;
 	}
 }
-
-?>

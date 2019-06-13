@@ -429,5 +429,3 @@ class QuickBooks_QBXML_Schema_Object_EmployeeAddRq extends QuickBooks_QBXML_Sche
 		return $paths;
 	}
 }
-
-?>

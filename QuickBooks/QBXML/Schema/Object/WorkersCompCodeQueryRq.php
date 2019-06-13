@@ -168,5 +168,3 @@ class QuickBooks_QBXML_Schema_Object_WorkersCompCodeQueryRq extends QuickBooks_Q
 		return $paths;
 	}
 }
-
-?>

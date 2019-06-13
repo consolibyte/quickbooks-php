@@ -234,5 +234,3 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeQueryRq extends QuickBooks_
 		return $paths;
 	}
 }
-
-?>
