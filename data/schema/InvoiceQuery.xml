@@ -244,7 +244,7 @@
 	</SalesTaxCodeRef>
 	<Other1 >STRTYPE</Other1> <!-- optional -->
 	<Other2 >STRTYPE</Other2> <!-- optional -->
-	
+
 	<DataExtRet> <!-- optional, may repeat -->
 		<OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
 		<DataExtName >STRTYPE</DataExtName> <!-- required -->

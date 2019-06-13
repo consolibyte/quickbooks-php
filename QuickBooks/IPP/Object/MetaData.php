@@ -8,16 +8,16 @@ class QuickBooks_IPP_Object_MetaData extends QuickBooks_IPP_Object
 	{
 		return $this->getDateType('LastUpdatedTime', $format);
 	}
-	
+
 	protected function _order()
 	{
 		return array(
-			'CreatedBy' => true, 
-			'CreatedById' => true, 
-			'CreateTime' => true, 
-			'LastModifiedBy' => true, 
-			'LastModifiedById' => true, 
-			'LastUpdatedTime' => true, 
+			'CreatedBy' => true,
+			'CreatedById' => true,
+			'CreateTime' => true,
+			'LastModifiedBy' => true,
+			'LastModifiedById' => true,
+			'LastUpdatedTime' => true,
 			);
 	}
 }

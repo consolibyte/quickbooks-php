@@ -2,23 +2,23 @@
 
 /**
  * Bank account class
- * 
+ *
  * Copyright (c) {2010-04-16} {Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.opensource.org/licenses/eclipse-1.0.php
- * 
+ *
  *
  * @author Keith Palmer Jr. <keith@ConsoliBYTE.com>
  *
  * @package QuickBooks
- * @subpackage MerchantService 
+ * @subpackage MerchantService
  */
 
 /**
- * 
- * 
+ *
+ *
  */
 class QuickBooks_Payments_BankAccount
 {
@@ -30,10 +30,10 @@ class QuickBooks_Payments_BankAccount
 	public function __construct($name, $number, $routing, $type, $phone)
 	{
 		$this->_data = array(
-			'name' => $name, 
-			'routingNumber' => $routing, 
-			'accountNumber' => $number, 
-			'accountType' => $type, 
+			'name' => $name,
+			'routingNumber' => $routing,
+			'accountNumber' => $number,
+			'accountType' => $type,
 			'phone' => trim(str_replace(array('-', ' ', '(', ')'), '', $phone))
 			);
 	}

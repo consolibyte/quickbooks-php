@@ -19,7 +19,7 @@ $employees = $EmployeeService->query($Context, $realm, "SELECT * FROM Employee "
 foreach ($employees as $Employee)
 {
 	print('Employee id=' . $Employee->getId() . ' has a name of ' . $Employee->getGivenName() . ' ' . $Employee->getFamilyName() . "\n");
-	
+
 }
 
 

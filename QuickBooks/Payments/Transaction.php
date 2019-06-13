@@ -2,16 +2,16 @@
 
 /**
  * QuickBooks Merchant Service transaction class
- * 
+ *
  * Copyright (c) {2010-04-16} {Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.opensource.org/licenses/eclipse-1.0.php
- * 
- * This class represents a transaction returned by the QuickBooks Merchant 
- * Service web gateway. 
- * 
+ *
+ * This class represents a transaction returned by the QuickBooks Merchant
+ * Service web gateway.
+ *
  * @package QuickBooks
  * @subpackage MerchantService
  */

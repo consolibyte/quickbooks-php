@@ -9,13 +9,13 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalm
 
 require_once '../QuickBooks.php';
 
-// 
+//
 $username = 'keith@consolibyte.com';
 $password = '';
 $token = '';
 $realmID = 192848234;
 
-// 
+//
 $IPP = new QuickBooks_IPP();
 $Context = $IPP->authenticate($username, $password, $token);
 
@@ -33,7 +33,7 @@ foreach ($list as $UOM)
 	for ($i = 0; $i < $UOM->countConvUnit(); $i++)
 	{
 		$ConvUnit = $UOM->getConvUnit($i);
-		
+
 		print("\t" . $ConvUnit->getName() . ', ' . $ConvUnit->getConvRatio() . "\n");
 	}
 	print("\n");

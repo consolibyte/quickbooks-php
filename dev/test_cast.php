@@ -2,7 +2,7 @@
 
 require_once '../QuickBooks.php';
 
-header('Content-Type: text/html; charset=utf-8'); 
+header('Content-Type: text/html; charset=utf-8');
 
 
 print('null date: ' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_SALESORDER, 'ShipDate', null)); print("\n");
@@ -13,12 +13,12 @@ print("\n\n\n");
 
 
 $arr = array(
-	'Keith Palmer, Shannon Daniels, Kurtis & Karli', 
+	'Keith Palmer, Shannon Daniels, Kurtis & Karli',
 	'Test of some UTF8 chars- Á, Æ, Ë, ¾, Õ, ä, ß, ú, ñ',
-	'Test & Then Some',  
-	'Test of already encoded &amp; data.', 
+	'Test & Then Some',
+	'Test of already encoded &amp; data.',
 	'Tapio Törmänen',
-	'Here is the £ pound sign for you British gents...', 
+	'Here is the £ pound sign for you British gents...',
 	);
 
 $fields = array(
@@ -44,20 +44,20 @@ $fields = array(
 	'AltPhone',
 	'Fax',
 	'Email',
-	'Contact', 
+	'Contact',
 	'AltContact',
 	);
 
 print("\n");
 foreach ($fields as $field)
-{	
+{
 	foreach ($arr as $key => $value)
 	{
 		$cast = QuickBooks_Cast::cast(QUICKBOOKS_ADD_CUSTOMER, str_replace('_', ' ', $field), ucfirst($value));
 
 		print("\t" . $field . ': {' . $cast . '} (length: ' . strlen($cast) . ')' . "\n");
 	}
-	
+
 	print("\n");
 }
 print("\n");
@@ -72,7 +72,7 @@ $invoice = array(
 	'IsFinanceCharge' => false,
 	'IsPending' => true,
 	);
-	
+
 foreach ($invoice as $key => $value)
 {
 	print($key . ' => ' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_INVOICE, $field, $value) . "\n");

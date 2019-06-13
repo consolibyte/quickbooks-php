@@ -1,14 +1,14 @@
 <?php
- 
+
 /**
- * Check class for QuickBooks 
- * 
+ * Check class for QuickBooks
+ *
  * @author Keith Palmer Jr. <keith@ConsoliBYTE.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage Object
- */ 
+ */
 
 /**
  * QuickBooks object base class
@@ -16,13 +16,13 @@
 QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_Check_ItemGroupLine object
-	 * 
+	 *
 	 * @param array $arr
 	 */
 	public function __construct($arr = array())
@@ -30,11 +30,11 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 		parent::__construct($arr);
 	}
 
-	// Path: ItemGroupRef ListID, datatype: 
-	
+	// Path: ItemGroupRef ListID, datatype:
+
 	/**
 	 * Set the ItemGroupRef ListID for the Check
-	 * 
+	 *
 	 * @param string $ListID		The ListID of the record to reference
 	 * @return boolean
 	 */
@@ -45,7 +45,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 
 	/**
 	 * Get the ItemGroupRef ListID for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getItemGroupListID()
@@ -55,7 +55,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 
 	/**
 	 * Set the primary key for the related record within your own application for the Check
-	 * 
+	 *
 	 * @param mixed $value			The primary key within your own application
 	 * @return string
 	 */
@@ -64,11 +64,11 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 		return $this->set('ItemGroupRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ITEMGROUP, QUICKBOOKS_LISTID, $value));
 	}
 
-	// Path: ItemGroupRef FullName, datatype: 
-	
+	// Path: ItemGroupRef FullName, datatype:
+
 	/**
 	 * Set the ItemGroupRef FullName for the Check
-	 * 
+	 *
 	 * @param string $FullName		The FullName of the record to reference
 	 * @return boolean
 	 */
@@ -79,7 +79,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 
 	/**
 	 * Get the ItemGroupRef FullName for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getItemGroupName()
@@ -87,11 +87,11 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 		return $this->get('ItemGroupRef FullName');
 	}
 
-	// Path: Desc, datatype: 
-	
+	// Path: Desc, datatype:
+
 	/**
 	 * Set the Desc for the Check
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -102,7 +102,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 
 	/**
 	 * Get the Desc for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getDesc()
@@ -115,7 +115,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 	 */
 	public function setDescription($value)
 	{
-		$this->setDesc($value); 
+		$this->setDesc($value);
 	}
 
 	/**
@@ -125,11 +125,11 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 	{
 		$this->getDesc();
 	}
-	// Path: Quantity, datatype: 
-	
+	// Path: Quantity, datatype:
+
 	/**
 	 * Set the Quantity for the Check
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -140,7 +140,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 
 	/**
 	 * Get the Quantity for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getQuantity()
@@ -148,11 +148,11 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 		return $this->get('Quantity');
 	}
 
-	// Path: UnitOfMeasure, datatype: 
-	
+	// Path: UnitOfMeasure, datatype:
+
 	/**
 	 * Set the UnitOfMeasure for the Check
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -163,7 +163,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 
 	/**
 	 * Get the UnitOfMeasure for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getUnitOfMeasure()

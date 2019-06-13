@@ -1,13 +1,13 @@
-<?php 
+<?php
 /**
- * JournalEntry class for QuickBooks 
- * 
+ * JournalEntry class for QuickBooks
+ *
  * @author Keith Palmer Jr. <keith@ConsoliBYTE.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage Object
- */ 
+ */
 
 /**
  * QuickBooks object base class
@@ -25,13 +25,13 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object/JournalEntry/JournalCreditLine
 QuickBooks_Loader::load('/QuickBooks/QBXML/Object/JournalEntry/JournalDebitLine.php');
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_JournalEntry object
-	 * 
+	 *
 	 * @param array $arr
 	 */
 	public function __construct($arr = array())
@@ -40,10 +40,10 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 	}
 
 	// Path: TxnDate, datatype: DATETYPE
-	
+
 	/**
 	 * Set the TxnDate for the JournalEntry
-	 * 
+	 *
 	 * @param string $date
 	 * @return boolean
 	 */
@@ -54,7 +54,7 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the TxnDate for the JournalEntry
-	 * 
+	 *
 	 * @param ? $format = null
 	 * @return string
 	 */
@@ -68,7 +68,7 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 	 */
 	public function setTransactionDate($date)
 	{
-		return $this->setTxnDate($date); 
+		return $this->setTxnDate($date);
 	}
 
 	/**
@@ -79,10 +79,10 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 		$this->getTxnDate($format = null);
 	}
 	// Path: RefNumber, datatype: STRTYPE
-	
+
 	/**
 	 * Set the RefNumber for the JournalEntry
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -93,7 +93,7 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the RefNumber for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getRefNumber()
@@ -102,10 +102,10 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 	}
 
 	// Path: Memo, datatype: STRTYPE
-	
+
 	/**
 	 * Set the Memo for the JournalEntry
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -116,7 +116,7 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the Memo for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getMemo()
@@ -125,10 +125,10 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 	}
 
 	// Path: IsAdjustment, datatype: BOOLTYPE
-	
+
 	/**
 	 * Set the IsAdjustment for the JournalEntry
-	 * 
+	 *
 	 * @param boolean $bool
 	 * @return boolean
 	 */
@@ -139,42 +139,42 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the IsAdjustment for the JournalEntry
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function getIsAdjustment()
 	{
 		return $this->getBooleanType('IsAdjustment');
 	}
-	
+
 	public function addDebitLine($obj)
 	{
 		return $this->addListItem('JournalDebitLine', $obj);
 	}
-	
+
 	public function addJournalDebitLine($obj)
 	{
 		return $this->addDebitLine($obj);
 	}
-	
+
 	public function addCreditLine($obj)
 	{
-		return $this->addListItem('JournalCreditLine', $obj);	
+		return $this->addListItem('JournalCreditLine', $obj);
 	}
-	
+
 	public function addJournalCreditLine($obj)
 	{
 		return $this->addCreditLine($obj);
 	}
-	
+
 	/**
 	 * Tell the type of object this is
-	 * 
+	 *
 	 * @return string
 	 */
 	public function object()
 	{
 		return QUICKBOOKS_OBJECT_JOURNALENTRY;
-	}		
+	}
 }
 
