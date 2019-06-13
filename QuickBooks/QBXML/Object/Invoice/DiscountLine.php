@@ -59,27 +59,6 @@ class QuickBooks_QBXML_Object_Invoice_DiscountLine extends QuickBooks_QBXML_Obje
 		return $this->set('AccountRef FullName', $name);
 	}
 
-	/**
-	 *
-	 *
-	 * @return boolean
-	 */
-	protected function _cleanup()
-	{
-
-		return true;
-	}
-
-	/**
-	 *
-	 */
-	public function asArray($request, $nest = true)
-	{
-		$this->_cleanup();
-
-		return parent::asArray($request, $nest);
-	}
-
 	public function asXML($root = null, $parent = null, $object = null)
 	{
 		switch ($parent)
@@ -95,23 +74,6 @@ class QuickBooks_QBXML_Object_Invoice_DiscountLine extends QuickBooks_QBXML_Obje
 		}
 
 		return parent::asXML($root, $parent, $object);
-	}
-
-	/**
-	 *
-	 *
-	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
-	 * @param string $indent
-	 * @param string $root
-	 * @return string
-	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
-	{
-		$this->_cleanup();
-
-
-
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
 	}
 
 	/**

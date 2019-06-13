@@ -705,17 +705,6 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 		return $this->get('Other');
 	}
 
-	/**
-	 *
-	 *
-	 * @return boolean
-	 */
-	protected function _cleanup()
-	{
-
-		return true;
-	}
-
 	public function asList($request)
 	{
 		switch ($request)
@@ -817,31 +806,6 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 		//print_r($this->_object);
 
 		return parent::asXML($root, $parent, $object);
-	}
-
-	/**
-	 *
-	 */
-	public function asArray($request, $nest = true)
-	{
-		$this->_cleanup();
-
-		return parent::asArray($request, $nest);
-	}
-
-	/**
-	 *
-	 *
-	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
-	 * @param string $indent
-	 * @param string $root
-	 * @return string
-	 */
-	public function asQBXML($request, $version = null, $locale = null, $root = null, $parent = null)
-	{
-		$this->_cleanup();
-
-		return parent::asQBXML($request, $version, $locale, $root);
 	}
 
 	/**

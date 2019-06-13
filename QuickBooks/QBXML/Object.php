@@ -553,27 +553,41 @@ abstract class QuickBooks_QBXML_Object
 		return $Node;
 	}
 
-	public function asArray($request, $nest = false)
+	/**
+	 * Get an array representation of this Class object
+	 *
+	 * @param string $request
+	 * @param boolean $nest
+	 * @return array
+	 */
+	public function asArray($request, $nest = true)
 	{
+		$this->_cleanup();
 
-	}
-
-	protected function _cleanup()
-	{
-
+		return [];
 	}
 
 	/**
-	 * Convert this object to a valid qbXML request/response
+	 * Perform any needed clean-up of the object data members
+	 *
+	 * @return boolean
+	 */
+	protected function _cleanup()
+	{
+		return true;
+	}
+
+	/**
+	 * Convert this object to a valid qbXML request
 	 *
 	 * @todo Support for qbXML versions
 	 *
-	 * @param boolean $compress_empty_elements
-	 * @param string $indent
-	 * @param string $root
+	 * @param string $request	The type of request to convert this to (examples: "{Object}AddRq", "{Object}ModRq", "{Object}QueryRq")
+	 * @param float  $version	The required qbXML version  ***[unused - does nothing and subclasses default to QuickBooks_XML::XML_DROP]
+	 * @param string $locale	The QuickBooks locale ('OE', 'AU', 'CA', 'UK', 'US')  ***[unused - subclasses default to "\t"]
+	 * @param string $root		The node to use as the root node of the XML node structure  ***[unused in function]
 	 * @return string
 	 */
-	//public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_XML_XML_DROP, $indent = "\t", $root = null)
 	public function asQBXML($request, $version = null, $locale = null, $root = null)
 	{
 		$todo_for_empty_elements = QuickBooks_XML::XML_DROP;

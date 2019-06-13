@@ -52,12 +52,6 @@ class QuickBooks_QBXML_Object_SalesTaxGroupItem_ItemSalesTaxRef extends QuickBoo
 		return $this->get('FullName');
 	}
 
-	/*public function asXML($root = null, $parent = null, $object = null)
-	{
-		$parent = null;
-		return parent::asXML($root, $parent, $object);
-	}*/
-
 	/**
 	 * Tell the type of object this is
 	 *

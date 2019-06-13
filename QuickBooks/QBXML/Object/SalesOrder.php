@@ -698,17 +698,6 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		return $this->get('Other');
 	}
 
-	/**
-	 *
-	 *
-	 * @return boolean
-	 */
-	protected function _cleanup()
-	{
-
-		return true;
-	}
-
 	public function asList($request)
 	{
 		switch ($request)
@@ -763,33 +752,6 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		//print_r($this->_object);
 
 		return parent::asXML($root, $parent, $object);
-	}
-
-	/**
-	 *
-	 */
-	public function asArray($request, $nest = true)
-	{
-		$this->_cleanup();
-
-		return parent::asArray($request, $nest);
-	}
-
-	/**
-	 *
-	 *
-	 * @param        $request
-	 * @param null   $version
-	 * @param null   $locale
-	 * @param string $root
-	 *
-	 * @return string
-	 */
-	public function asQBXML($request, $version = null, $locale = null, $root = null)
-	{
-		$this->_cleanup();
-
-		return parent::asQBXML($request, $version, $locale, $root);
 	}
 
 	/**

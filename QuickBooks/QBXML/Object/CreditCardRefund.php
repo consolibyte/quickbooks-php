@@ -359,34 +359,6 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 		return $this->getDateType('TxnDate', $format);
 	}
 
-
-	protected function _cleanup()
-	{
-		return true;
-	}
-
-	public function asArray($request, $nest = true)
-	{
-		$this->_cleanup();
-		return parent::asArray($request, $nest);
-	}
-
-	/**
-	 * Convert this object to a valid qbXML request
-	 *
-	 * @param string $request						The type of request to convert this to (ARRefundCreditCardAddRq, or ARRefundCreditCardQuery)
-	 * @param boolean $todo_for_empty_elements		A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
-	 * @param string $indent
-	 * @param string $root
-	 * @return string
-	 */
-	public function asQBXML($request, $todo_for_empty_elements = NULL, $indent = "\t", $root = null)
-	{
-		$this->_cleanup();
-
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
-	}
-
 	public function object()
 	{
 		return QUICKBOOKS_OBJECT_CREDITCARDREFUND;

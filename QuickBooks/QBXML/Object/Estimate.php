@@ -570,17 +570,6 @@ class QuickBooks_QBXML_Object_Estimate extends QuickBooks_QBXML_Object
 		return $this->get('Other');
 	}
 
-	/**
-	 *
-	 *
-	 * @return boolean
-	 */
-	protected function _cleanup()
-	{
-
-		return true;
-	}
-
 	public function asList($request)
 	{
 		switch ($request)
@@ -632,31 +621,6 @@ class QuickBooks_QBXML_Object_Estimate extends QuickBooks_QBXML_Object
 		}
 
 		return parent::asXML($root, $parent, $object);
-	}
-
-	/**
-	 *
-	 */
-	public function asArray($request, $nest = true)
-	{
-		$this->_cleanup();
-
-		return parent::asArray($request, $nest);
-	}
-
-	/**
-	 *
-	 *
-	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
-	 * @param string $indent
-	 * @param string $root
-	 * @return string
-	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null, $parent = null)
-	{
-		$this->_cleanup();
-
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
 	}
 
 	/**

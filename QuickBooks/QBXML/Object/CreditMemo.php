@@ -218,7 +218,6 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 		switch ($request)
 		{
 			case 'CreditMemoAddRq':
-
 				if (isset($this->_object['CreditMemoLine']))
 				{
 					$this->_object['CreditMemoLineAdd'] = $this->_object['CreditMemoLine'];
@@ -226,7 +225,6 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 				break;
 
 			case 'CreditMemoModRq':
-
 				if (isset($this->_object['CreditMemoLine']))
 				{
 					$this->_object['CreditMemoLineMod'] = $this->_object['CreditMemoLine'];
@@ -260,33 +258,6 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 				break;
 		}
 		return parent::asXML($root, $parent, $object);
-	}
-
-	protected function _cleanup()
-	{
-		return true;
-	}
-
-	public function asArray($request, $nest = true)
-	{
-		$this->_cleanup();
-
-		return parent::asArray($request, $nest);
-	}
-
-	/**
-	 *
-	 *
-	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
-	 * @param string $indent
-	 * @param string $root
-	 * @return string
-	 */
-	public function asQBXML($request, $todo_for_empty_elements = QuickBooks_QBXML_Object::XML_DROP, $indent = "\t", $root = null, $parent = null)
-	{
-		$this->_cleanup();
-
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
 	}
 
 	public function object() {

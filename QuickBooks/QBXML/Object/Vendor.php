@@ -308,86 +308,46 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
 		return $this->get('Salutation');
 	}
 
-    	/**
-  	 *
-  	 *
-  	 * @return string
-  	 */
-  	public function getNameOnCheck()
-  	{
-  		return $this->get('NameOnCheck');
-  	}
-
-  	/**
-  	 * Set the payee name for this vendor
-  	 *
-  	 * @param string $name
-  	 * @return boolean
-  	 */
-  	public function setNameOnCheck($name)
-  	{
-  		return $this->set('NameOnCheck', $name);
-  	}
-
-      	/**
-    	 * Set the VendorTypeRef FullName for the vendor
-    	 *
-    	 * @param string $type
-    	 * @return boolean
-    	 */
-    	public function setVendorTypeRef($type)
-    	{
-    		return $this->set('VendorTypeRef FullName', $type);
-    	}
-
-    	/**
-    	 * Get the VendorTypeRef FullName for the vendor
-    	 *
-    	 * @return string
-    	 */
-    	public function getVendorTypeRef()
-    	{
-    		return $this->get('VendorTypeRef FullName');
-    	}
-
 	/**
-	 * Perform any needed clean-up of the object data members
 	 *
-	 * @return boolean
-	 */
-	protected function _cleanup()
-	{
-		return true;
-	}
-
-	/**
-	 * Get an array representation of this Class object
 	 *
-	 * @param string $request
-	 * @param boolean $nest
-	 * @return array
-	 */
-	public function asArray($request, $nest = true)
-	{
-		$this->_cleanup();
-
-		return parent::asArray($request, $nest);
-	}
-
-	/**
-	 * Convert this object to a valid qbXML request
-	 *
-	 * @param string $request					The type of request to convert this to (examples: CustomerAddRq, CustomerModRq, CustomerQueryRq)
-	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
-	 * @param string $indent
-	 * @param string $root
 	 * @return string
 	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
+	public function getNameOnCheck()
 	{
-		$this->_cleanup();
+		return $this->get('NameOnCheck');
+	}
 
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
+	/**
+	 * Set the payee name for this vendor
+	 *
+	 * @param string $name
+	 * @return boolean
+	 */
+	public function setNameOnCheck($name)
+	{
+		return $this->set('NameOnCheck', $name);
+	}
+
+	/**
+	 * Set the VendorTypeRef FullName for the vendor
+	 *
+	 * @param string $type
+	 * @return boolean
+	 */
+	public function setVendorTypeRef($type)
+	{
+		return $this->set('VendorTypeRef FullName', $type);
+	}
+
+	/**
+	 * Get the VendorTypeRef FullName for the vendor
+	 *
+	 * @return string
+	 */
+	public function getVendorTypeRef()
+	{
+		return $this->get('VendorTypeRef FullName');
 	}
 
 	/**
