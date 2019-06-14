@@ -90,5 +90,3 @@ class QuickBooks_QBXML_Object_Generic extends QuickBooks_QBXML_Object
 		return $this->getOverride();
 	}
 }
-
-?>
