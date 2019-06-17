@@ -348,9 +348,9 @@ class QuickBooks_Utilities
 	/**
 	 * Check if a given remote address (IP address) is allowed based on allow and deny arrays
 	 *
-	 * @param string $remoteaddr
-	 * @param array $allow
-	 * @param array $deny
+	 * @param string $remoteaddr    The remote IP address to check
+	 * @param array $arr_allow      An array of allowed ip addresses and/or CIDR blocks
+	 * @param array $arr_deny       An array of denied ip addresses and/or CIDR blocks
 	 * @return boolean
 	 */
 	static public function checkRemoteAddress($remoteaddr, $arr_allow, $arr_deny)
@@ -374,9 +374,9 @@ class QuickBooks_Utilities
 						break;
 					}
 				}
-				else if (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $allow))
+				else if (filter_var($allow, FILTER_VALIDATE_IP) !== false)
 				{
-					// IPv4 address
+					// IP address (IPv4 or IPv6)
 
 					if ($remoteaddr == $allow)
 					{
@@ -406,9 +406,9 @@ class QuickBooks_Utilities
 						return false;
 					}
 				}
-				else if (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $deny))
+				else if (filter_var($deny, FILTER_VALIDATE_IP) !== false)
 				{
-					// IPv4 address
+					// IP address (IPv4 or IPv6)
 
 					if ($remoteaddr == $deny)
 					{

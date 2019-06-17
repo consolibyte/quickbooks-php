@@ -423,15 +423,6 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 	 */
 	public function setTxnDate($date)
 	{
-		/*
-		if (!ereg('([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})', $date))
-		{
-			$date = date('Y-m-d', strtotime($date));
-		}
-
-		return $this->set('TxnDate', $date);
-		*/
-
 		return $this->setDateType('TxnDate', $date);
 	}
 
@@ -461,15 +452,6 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 	 */
 	public function setShipDate($date)
 	{
-		/*
-		if (!ereg('([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})', $date))
-		{
-			$date = date('Y-m-d', strtotime($date));
-		}
-
-		return $this->set('ShipDate', $date);
-		*/
-
 		return $this->setDateType('ShipDate', $date);
 	}
 
