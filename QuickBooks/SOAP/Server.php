@@ -217,5 +217,4 @@ class QuickBooks_SOAP_Server
 	{
 		return get_class_methods($this->_class);
 	}
-
 }

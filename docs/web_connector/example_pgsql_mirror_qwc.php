@@ -62,5 +62,3 @@ header('Content-type: text/xml');
 header('Content-Disposition: attachment; filename="QuickBooks-PostgreSQL-Mirror_' . $_SERVER['HTTP_HOST'] . '.qwc"');
 print($xml);
 exit;
-
-?>
