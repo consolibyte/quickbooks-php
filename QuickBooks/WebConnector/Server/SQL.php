@@ -148,13 +148,13 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
 	 *
 	 *
 	 * You can run this server in one of three modes:
-	 * 	- QUICKBOOKS_SERVER_SQL_MODE_READONLY: Data will only be read from
+	 * 	- QuickBooks_WebConnector_Server_SQL::MODE_READONLY: Data will only be read from
 	 * 		QuickBooks; changes to data in the SQL database will never be
 	 * 		pushed back to QuickBooks.
-	 * 	- QUICKBOOKS_SERVER_SQL_MODE_WRITEONLY: Data will only be pushed to
+	 * 	- QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY: Data will only be pushed to
 	 * 		QuickBooks, and nothing that already exists in QuickBooks will be
 	 * 		imported into the SQL database.
-	 * 	- QUICKBOOKS_SERVER_SQL_MODE_READWRITE: The server will do it's best to
+	 * 	- QuickBooks_WebConnector_Server_SQL::READWRITE: The server will do it's best to
 	 * 		try to import all QuickBooks data into the SQL database, and then
 	 * 		push changes that occur in either location to the other location.
 	 * 		The server will try to syncronise the two locations as much as is
