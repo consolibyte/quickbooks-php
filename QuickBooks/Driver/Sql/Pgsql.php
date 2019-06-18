@@ -60,7 +60,7 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_PGSQL_PREFIX'))
 if (!defined('QUICKBOOKS_DRIVER_SQL_PGSQL_QUEUETABLE'))
 {
 	/**
-	 * MySQL table name to store queued requests in
+	 * PgSQL table name to store queued requests in
 	 *
 	 * @var string
 	 */
@@ -70,7 +70,7 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_PGSQL_QUEUETABLE'))
 if (!defined('QUICKBOOKS_DRIVER_SQL_PGSQL_USERTABLE'))
 {
 	/**
-	 * MySQL table name to store usernames/passwords for the QuickBooks SOAP server
+	 * PgSQL table name to store usernames/passwords for the QuickBooks SOAP server
 	 *
 	 * @var string
 	 */
@@ -183,9 +183,9 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     protected $last_insert_table;
 
 	/**
-	 * Create a new MySQL back-end driver
+	 * Create a new PgSQL back-end driver
 	 *
-	 * @param string $dsn		A DSN-style connection string (i.e.: "mysql://your-mysql-username:your-mysql-password@your-mysql-host:port/your-mysql-database")
+	 * @param string $dsn		A DSN-style connection string (i.e.: "pgsql://your-pgsql-username:your-pgsql-password@your-pgsql-host:port/your-pgsql-database")
 	 * @param array $config		Configuration options for the driver (not currently supported)
 	 */
 	public function __construct($dsn_or_conn, $config)
@@ -284,7 +284,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	 * @param string $pass				Password for connecting
 	 * @param string $db				The database name
 	 * @param boolean $new_link			TRUE for establishing a new link to the database, FALSE to re-use an existing one
-	 * @param integer $client_flags		Database connection flags (see the PHP/MySQL documentation)
+	 * @param integer $client_flags		Database connection flags (see the PHP/PgSQL documentation)
 	 * @return boolean
 	 */
 	protected function _connect($host, $port, $user, $pass, $db, $new_link, $client_flags = null)
@@ -645,7 +645,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	 * @return string
 	 */
 	/**
-	 * Map a default SQL table name to a MySQL table name
+	 * Map a default SQL table name to a PgSQL table name
 	 *
 	 * @param string
 	 * @return string
