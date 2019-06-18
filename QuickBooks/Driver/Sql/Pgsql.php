@@ -826,27 +826,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 					$sql .= ' NOT NULL ';
 				}
 
-
-			/*case QUICKBOOKS_DRIVER_SQL_BOOLEAN:
-				$sql = $name . ' tinyint(1) ';
-
-				if (isset($def[2]))
-				{
-					if (strtolower($def[2]) == 'null')
-					{
-						$sql .= ' DEFAULT NULL ';
-					}
-					else if ($def[2])
-					{
-						$sql .= ' DEFAULT 1 ';
-					}
-					else
-					{
-						$sql .= ' DEFAULT 0 ';
-					}
-				}
-
-				return $sql;*/
+				break;
             case QUICKBOOKS_DRIVER_SQL_VARCHAR:
 				$sql = '"' . $name . '" VARCHAR';
 
