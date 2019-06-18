@@ -802,6 +802,22 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 				$sql = '"' . $name . '" SERIAL NOT NULL '; // AUTO_INCREMENT
 
 				break;
+			case QUICKBOOKS_DRIVER_SQL_DATE:
+				$sql = '"' . $name . '" DATE ';
+
+				if (isset($def[2]))
+				{
+					if (strtolower($def[2]) == 'null')
+					{
+						$sql .= ' DEFAULT NULL ';
+					}
+				}
+				else
+				{
+					$sql .= ' NOT NULL ';
+				}
+
+				break;
 			case QUICKBOOKS_DRIVER_SQL_TIMESTAMP:
 			case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT_OR_UPDATE:
 			case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_UPDATE:
