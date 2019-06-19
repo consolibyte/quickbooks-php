@@ -10405,14 +10405,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 			if ($qb_bool !== false)
 			{
-				if ($qb_bool == 'true')
-				{
-					$object->set($qb_field_boolean, 1);
+				if ($Driver->hasTrueBoolean()) {
+					$qb_bool_val_sql = filter_var($qb_bool, FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
+				} else {
+					$qb_bool_val_sql = filter_var($qb_bool, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
 				}
-				else
-				{
-					$object->set($qb_field_boolean, 0);
-				}
+				$object->set($qb_field_boolean, $qb_bool_val_sql);
 			}
 		}
 

@@ -1004,6 +1004,15 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 		return true;
 	}
 
+	/**
+	 * Boolean datatype is a true boolean (true/false) and not 1/0
+	 *
+	 * @return boolean
+	 */
+	public function hasTrueBoolean()
+	{
+		return true;
+	}
 
     /**
 	 * Insert a new record into an SQL table

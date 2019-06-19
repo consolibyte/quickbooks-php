@@ -3833,4 +3833,14 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	{
 		return false;
 	}
+
+	/**
+	 * Boolean datatype is a true boolean (true/false) and not 1/0
+	 *
+	 * @return boolean
+	 */
+	public function hasTrueBoolean()
+	{
+		return false;
+	}
 }
