@@ -66,16 +66,16 @@ if (!QuickBooks_Utilities::initialized($dsn))
 }
 
 // What mode do we want to run the mirror in?
-//$mode = QuickBooks_WebConnector_Server_SQL::MODE_READONLY;    // Read from QuickBooks only (no data will be pushed back to QuickBooks)
-//$mode = QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY;   // Write to QuickBooks only (no data will be copied into the SQL database)
-$mode = QuickBooks_WebConnector_Server_SQL::MODE_READWRITE;     // Keep both QuickBooks and the database in sync, reading and writing changes back and forth)
+//$mode = QuickBooks_WebConnector_Server_SQL::MODE_READONLY;		// Read from QuickBooks only (no data will be pushed back to QuickBooks)
+//$mode = QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY;		// Write to QuickBooks only (no data will be copied into the SQL database)
+$mode = QuickBooks_WebConnector_Server_SQL::MODE_READWRITE;		// Keep both QuickBooks and the database in sync, reading and writing changes back and forth)
 
 // What should we do if a conflict is found? (a record has been changed by another user or process that we're trying to update)
 $conflicts = QuickBooks_WebConnector_Server_SQL::CONFLICT_LOG;
 
 // What should we do with records deleted from QuickBooks?
-$delete = QuickBooks_WebConnector_Server_SQL::DELETE_REMOVE;		// Delete the record from the database too
-//$delete = QUICKBOOKS_SERVER_SQL_DELETE_FLAG; 		// Just flag it as deleted
+//$delete = QuickBooks_WebConnector_Server_SQL::DELETE_REMOVE;		// Delete the record from the database too
+$delete = QuickBooks_WebConnector_Server_SQL::DELETE_FLAG; 		// Just flag it as deleted
 
 $hooks = array(
 
