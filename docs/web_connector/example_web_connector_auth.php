@@ -58,10 +58,13 @@ $soap_options = array();
 $dsn = 'mysql://root:root@localhost/quickbooks_auth';
 
 // Handler options
-$handler_options = array(
+$handler_options = array(	// See available options in the _defaults method of QuickBooks/WebConnector/Handlers.php
 	'authenticate' => '_quickbooks_custom_auth',
 	//'authenticate' => '_QuickBooksClass::theStaticMethod',
 	'deny_concurrent_logins' => false,
+	'deny_reallyfast_logins' => false,
+	// Array of allowed IP Addresses or CIDR Blocks
+	'allow_remote_addr' => array(),
 	);
 
 if (!QuickBooks_Utilities::initialized($dsn))

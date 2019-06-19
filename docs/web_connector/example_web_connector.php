@@ -210,13 +210,15 @@ $soapserver = QUICKBOOKS_SOAPSERVER_BUILTIN;		// A pure-PHP SOAP server (no PHP 
 $soap_options = array(		// See http://www.php.net/soap
 	);
 
-$handler_options = array(
+$handler_options = array(	// See available options in the _defaults method of QuickBooks/WebConnector/Handlers.php
 	//'authenticate' => ' *** YOU DO NOT NEED TO PROVIDE THIS CONFIGURATION VARIABLE TO USE THE DEFAULT AUTHENTICATION METHOD FOR THE DRIVER YOU'RE USING (I.E.: MYSQL) *** '
 	//'authenticate' => 'your_function_name_here',
 	//'authenticate' => array( 'YourClassName', 'YourStaticMethod' ),
 	'deny_concurrent_logins' => false,
 	'deny_reallyfast_logins' => false,
-	);		// See the comments in the QuickBooks/Server/Handlers.php file
+	// Array of allowed IP Addresses or CIDR Blocks
+	'allow_remote_addr' => array(),
+	);
 
 $driver_options = array(		// See the comments in the QuickBooks/Driver/<YOUR DRIVER HERE>.php file ( i.e. 'Mysql.php', etc. )
 	//'max_log_history' => 1024,	// Limit the number of quickbooks_log entries to 1024
