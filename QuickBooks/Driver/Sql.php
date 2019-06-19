@@ -3815,7 +3815,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	}
 
 	/**
+	 * Table and field names are folded to lowercase
 	 *
+	 * @return boolean
 	 */
 	public function foldsToLower()
 	{
@@ -3823,7 +3825,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	}
 
 	/**
+	 * Table and field names are folded to uppercase
 	 *
+	 * @return boolean
 	 */
 	public function foldsToUpper()
 	{

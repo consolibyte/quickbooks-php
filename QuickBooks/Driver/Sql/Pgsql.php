@@ -703,6 +703,11 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	 */
 	protected function _generateFieldSchema($name, $def)
 	{
+		if ($this->foldsToLower())
+		{
+			$name = strtolower($name);
+		}
+
 		switch ($def[0])
 		{
             case QUICKBOOKS_DRIVER_SQL_INTEGER:
@@ -939,6 +944,11 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 	 */
 	protected function _generateCreateTable($name, $arr, $primary = array(), $keys = array(), $uniques = array(), $if_not_exists = true)
 	{
+		if ($this->foldsToLower())
+		{
+			$name = strtolower($name);
+		}
+
 		$arr_sql = parent::_generateCreateTable('"' . $name . '"', $arr, $primary, $keys, $if_not_exists);
 
 		if (is_array($primary) and count($primary) == 1)
@@ -953,6 +963,10 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 		}
 		else if ($primary)
 		{
+			if ($this->foldsToLower())
+			{
+				$primary = strtolower($primary);
+			}
 			$arr_sql[] = 'ALTER TABLE ONLY "' . $name . '"
 				ADD CONSTRAINT "' . $name . '_pkey" PRIMARY KEY ("' . $primary . '");';
 		}
@@ -961,10 +975,18 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 		{
 			if (is_array($key))		// compound key
 			{
+				if ($this->foldsToLower())
+				{
+					$key = array_map('strtolower', $key);
+				}
 				$arr_sql[] = 'CREATE INDEX "' . implode('_', $key) . '_' . $name . '_index" ON "' . $name . '" USING btree ("' . implode('", "', $key) . '")';
 			}
 			else
 			{
+				if ($this->foldsToLower())
+				{
+					$key = strtolower($key);
+				}
 				$arr_sql[] = 'CREATE INDEX "' . $key . '_' . $name . '_index" ON "' . $name . '" USING btree ("' . $key . '")';
 			}
 		}
@@ -972,6 +994,11 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 		return $arr_sql;
 	}
 
+	/**
+	 * Table and field names are folded to lowercase
+	 *
+	 * @return boolean
+	 */
 	public function foldsToLower()
 	{
 		return true;
