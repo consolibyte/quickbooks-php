@@ -1374,9 +1374,9 @@ abstract class QuickBooks_Driver
 	 */
 	abstract protected function _initialized();
 	
-	public function oauthLoad($key, $app_username, $app_tenant)
+	public function oauthLoadV1($key, $app_tenant)
 	{
-		if ($data = $this->_oauthLoad($app_username, $app_tenant))
+		if ($data = $this->_oauthLoadV1($app_tenant))
 		{
 			if (strlen($data['oauth_access_token']) > 0)
 			{
@@ -1392,49 +1392,99 @@ abstract class QuickBooks_Driver
 		return false;
 	}
 	
-	abstract protected function _oauthLoad($app_username, $app_tenant);
-	
-	public function oauthAccessWrite($key, $request_token, $token, $token_secret, $realm, $flavor)
+	abstract protected function _oauthLoadV1($app_tenant);
+
+	public function oauthLoadV2($key, $app_tenant)
+	{
+		if ($data = $this->_oauthLoadV2($app_tenant))
+		{
+			if (strlen($data['oauth_access_token']) > 0)
+			{
+				$AES = QuickBooks_Encryption_Factory::create('aes');
+
+				$data['oauth_access_token'] = $AES->decrypt($key, $data['oauth_access_token']);
+				$data['oauth_refresh_token'] = $AES->decrypt($key, $data['oauth_refresh_token']);
+			}
+
+			return $data;
+		}
+
+		return false;
+	}
+
+	abstract protected function _oauthLoadV2($app_tenant);
+
+	public function oauthAccessWriteV1($key, $request_token, $token, $token_secret, $realm, $flavor)
 	{
 		$AES = QuickBooks_Encryption_Factory::create('aes');
-		
+
 		$encrypted_token = $AES->encrypt($key, $token);
 		$encrypted_token_secret = $AES->encrypt($key, $token_secret);
-		
-		return $this->_oauthAccessWrite($request_token, $encrypted_token, $encrypted_token_secret, $realm, $flavor);
+
+		return $this->_oauthAccessWriteV1($request_token, $encrypted_token, $encrypted_token_secret, $realm, $flavor);
 	}
-	
-	abstract protected function _oauthAccessWrite($request_token, $token, $token_secret, $realm, $flavor);
-	
-	
+
+	abstract protected function _oauthAccessWriteV1($request_token, $token, $token_secret, $realm, $flavor);
+
+	public function oauthAccessWriteV2($encryption_key, $state, $access_token, $refresh_token, $access_expiry, $refresh_expiry, $qb_realm)
+	{
+		$AES = QuickBooks_Encryption_Factory::create('aes');
+
+		$encrypted_access_token = $AES->encrypt($encryption_key, $access_token);
+		$encrypted_refresh_token = $AES->encrypt($encryption_key, $refresh_token);
+
+		return $this->_oauthAccessWriteV2($state, $encrypted_access_token, $encrypted_refresh_token, $access_expiry, $refresh_expiry, $qb_realm);
+	}
+
+	abstract protected function _oauthAccessWriteV2($state, $access_token, $refresh_token, $access_expiry, $refresh_expiry, $qb_realm);
+
+
+	public function oauthAccessRefreshV2($encryption_key, $oauthv2_id, $access_token, $refresh_token, $access_expiry, $refresh_expiry)
+	{
+		$AES = QuickBooks_Encryption_Factory::create('aes');
+
+		$encrypted_access_token = $AES->encrypt($encryption_key, $access_token);
+		$encrypted_refresh_token = $AES->encrypt($encryption_key, $refresh_token);
+
+		return $this->_oauthAccessRefreshV2($oauthv2_id, $encrypted_access_token, $encrypted_refresh_token, $access_expiry, $refresh_expiry);
+	}
+
+	abstract protected function _oauthAccessRefreshV2($oauthv2_id, $access_token, $refresh_token, $access_expiry, $refresh_expiry);
+
 	public function oauthAccessDelete($app_username, $app_tenant)
 	{
 		return $this->_oauthAccessDelete($app_username, $app_tenant);
 	}
 	
 	abstract protected function _oauthAccessDelete($app_username, $app_tenant);
-	
-	
-	public function oauthRequestWrite($app_username, $app_tenant, $token, $token_secret)
+
+	public function oauthRequestWriteV2($app_tenant, $state)
 	{
-		/*
-		$AES = QuickBooks_Encryption_Factory::create('aes');
-		
-		$token = $AES->encrypt($key, $token);
-		$token_secret = $AES->encrypt($key, $token_secret);
-		*/
-		
-		return $this->_oauthRequestWrite($app_username, $app_tenant, $token, $token_secret);
+		return $this->_oauthRequestWriteV2($app_tenant, $state);
+	}
+
+	abstract protected function _oauthRequestWriteV2($app_tenant, $state);
+
+	public function oauthRequestWriteV1($app_tenant, $token, $token_secret)
+	{
+		return $this->_oauthRequestWriteV1($app_tenant, $token, $token_secret);
 	}
 	
-	abstract protected function _oauthRequestWrite($app_username, $app_tenant, $token, $token_secret);
-	
-	public function oauthRequestResolve($token)
+	abstract protected function _oauthRequestWriteV1($app_tenant, $token, $token_secret);
+
+	public function oauthRequestResolveV1($token)
 	{
-		return $this->_oauthRequestResolve($token);
+		return $this->_oauthRequestResolveV1($token);
+	}
+
+	abstract protected function _oauthRequestResolveV1($token);
+
+	public function oauthRequestResolveV2($state)
+	{
+		return $this->_oauthRequestResolveV2($state);
 	}
 	
-	abstract protected function _oauthRequestResolve($token);
+	abstract protected function _oauthRequestResolveV2($state);
 	
 	/**
 	 * Log a message to the QuickBooks log

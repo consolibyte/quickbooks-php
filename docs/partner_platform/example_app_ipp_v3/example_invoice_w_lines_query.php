@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/config.php';
+require_once dirname(__FILE__) . '/config_oauthv2.php';
 
 require_once dirname(__FILE__) . '/views/header.tpl.php';
 
@@ -41,13 +41,13 @@ foreach ($invoices as $Invoice)
 	print("\n\n\n");
 }
 
-/*
-print("\n\n\n\n");
-print('Request [' . $IPP->lastRequest() . ']');
-print("\n\n\n\n");
-print('Response [' . $IPP->lastResponse() . ']');
-print("\n\n\n\n");
-*/
+
+//print("\n\n\n\n");
+//print('Request [' . $IPP->lastRequest() . ']');
+//print("\n\n\n\n");
+//print('Response [' . $IPP->lastResponse() . ']');
+//print("\n\n\n\n");
+
 
 ?>
 
