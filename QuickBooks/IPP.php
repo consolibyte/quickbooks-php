@@ -1345,7 +1345,7 @@ class QuickBooks_IPP
 	 */
 	protected function _isUpload($url)
 	{
-		$url_parts = explode('/', $url);
+		$url_parts = explode('/', parse_url($url, PHP_URL_PATH));
 
 		return array_pop($url_parts) == 'upload';
 	}
