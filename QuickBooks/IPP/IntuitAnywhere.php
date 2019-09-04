@@ -386,6 +386,38 @@ class QuickBooks_IPP_IntuitAnywhere
 		return false;
 	}
 
+	//! Revoke token/Disconnect 
+	public function disconnectV2($app_tenant, $force = false) {
+		if ($this->_oauth_version == self::OAUTH_V2) {
+			if ($arr = $this->_driver->oauthLoadV2($this->_key, $app_tenant) and
+				strlen($arr['oauth_access_token']) > 0 and
+				strlen($arr['oauth_refresh_token']) > 0) {
+		
+				if ($discover = $this->_discover()) {
+					$ch = curl_init($discover['revocation_endpoint']);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);   // Do not follow; security risk here
+	
+					curl_setopt($ch, CURLOPT_USERPWD, $this->_client_id . ':' . $this->_client_secret);
+	
+					curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array(
+						'token' => $arr['oauth_access_token']
+						)));
+	
+					$retr = curl_exec($ch);
+					$info = curl_getinfo($ch);
+	
+					if ($info['http_code'] == 200) {
+						return $this->_driver->oauthAccessDeleteV2($arr['app_tenant']);
+					}
+				}
+			}
+		}
+
+		return false;
+	
+	}
+
 	public function fudge($request_token, $access_token, $access_token_secret, $realm, $flavor)
 	{
 		$this->_driver->oauthAccessWrite(
