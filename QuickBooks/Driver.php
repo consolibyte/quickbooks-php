@@ -1458,6 +1458,13 @@ abstract class QuickBooks_Driver
 	
 	abstract protected function _oauthAccessDelete($app_username, $app_tenant);
 
+	public function oauthAccessDeleteV2($app_tenant)
+	{
+		return $this->_oauthAccessDeleteV2($app_tenant);
+	}
+	
+	abstract protected function _oauthAccessDeleteV2($app_tenant);
+
 	public function oauthRequestWriteV2($app_tenant, $state)
 	{
 		return $this->_oauthRequestWriteV2($app_tenant, $state);
