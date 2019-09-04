@@ -2427,6 +2427,21 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		return $this->affected() > 0;
 	}
 
+	protected function _oauthAccessDeleteV2($app_tenant)
+	{
+		$errnum = 0;
+		$errmsg = '';
+
+		// Exists... DELETE!
+		$this->query("
+			DELETE FROM
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_OAUTHV2TABLE) . "
+			WHERE
+			app_tenant = '%s' ", $errnum, $errmsg, null, null, array( $app_tenant ));
+
+		return $this->affected() > 0;
+	}
+
 	/**
 	 * Write a message to the log file
 	 *
