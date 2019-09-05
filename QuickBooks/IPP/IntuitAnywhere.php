@@ -45,6 +45,8 @@ class QuickBooks_IPP_IntuitAnywhere
 
 	protected $_last_request;
 	protected $_last_response;
+	
+	protected $_state_prefix = '';
 
 	const URL_REQUEST_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_request_token';
 	const URL_ACCESS_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_access_token';
@@ -134,6 +136,10 @@ class QuickBooks_IPP_IntuitAnywhere
 	{
 		$this->_errnum = $errnum;
 		$this->_errmsg = $errmsg;
+	}
+
+	public function setStatePrefix( $prefix ) {
+		$this->_state_prefix = $prefix;
 	}
 
 	public function lastRequest()
@@ -563,6 +569,10 @@ class QuickBooks_IPP_IntuitAnywhere
 		{
 			// Write the request to the database
 			$state = md5(mt_rand() . microtime(true));
+
+			if( $this->_state_prefix <> '' ) {
+				$state = $this->_state_prefix.'+'.$state;
+			}
 
 			$this->_driver->oauthRequestWriteV2($app_tenant, $state);
 
