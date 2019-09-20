@@ -413,10 +413,15 @@ class QuickBooks_IPP_IntuitAnywhere
 					$retr = curl_exec($ch);
 					$info = curl_getinfo($ch);
 	
-					if ($info['http_code'] == 200) {
+					// 200 = ok, 400 the token was unrecognized (likely already revoked)
+					if (in_array($info['http_code'], array(200, 400) ) ) {
 						return $this->_driver->oauthAccessDeleteV2($arr['app_tenant']);
+					} else {
+						$this->_setError($info['http_code'], 'Error disconnecting');
 					}
 				}
+			} else {
+				$this->_setError(0, 'You are not connected');
 			}
 		}
 
