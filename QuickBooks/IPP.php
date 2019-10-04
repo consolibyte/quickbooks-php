@@ -875,7 +875,7 @@ class QuickBooks_IPP
 		if (!$attempted_renew and
 			is_object($this->_driver) and
 			$this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
-			strtotime($this->_authcred['oauth_access_expiry']) + 60 < time())
+			strtotime($this->_authcred['oauth_access_expiry']) - 60 < time())
 		{
 			$attempted_renew = true;
 
