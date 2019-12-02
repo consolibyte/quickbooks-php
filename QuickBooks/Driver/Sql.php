@@ -676,7 +676,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				status = '" . QUICKBOOKS_USER_ENABLED . "',
 				touch_datetime = '" . date('Y-m-d H:i:s') . "'
 			WHERE
-				qb_username = '" . $this->_escape($username) . "' ");
+				qb_username = '" . $this->_escape($username) . "' ", $errnum, $errmsg);
 	}
 
 	/**
@@ -697,7 +697,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				status = '" . QUICKBOOKS_USER_DISABLED . "',
 				touch_datetime = '" . date('Y-m-d H:i:s') . "'
 			WHERE
-				qb_username = '" . $this->_escape($username) . "' ");
+				qb_username = '" . $this->_escape($username) . "' ", $errnum, $errmsg);
 	}
 
 	/**
