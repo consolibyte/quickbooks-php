@@ -31,5 +31,3 @@ else
 	// If this happens, something went wrong with the OAuth handshake
 	die('Oh no, something bad happened: ' . $IntuitAnywhere->errorNumber() . ': ' . $IntuitAnywhere->errorMessage());
 }
-
-

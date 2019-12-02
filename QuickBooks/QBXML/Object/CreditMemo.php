@@ -2,14 +2,14 @@
 
 /**
  * QuickBooks CreditCardMemo object container
- * 
+ *
  * @author Jayson Lindsley <jay.lindsley@gmail.com>
  * @author Keith Palmer <keith@consolibyte.com>
  *
  * TODO: Add support for items as per the QBXML spec
  *
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage Object
  */
@@ -32,7 +32,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 {
  	/**
 	 * Create a new QuickBooks_Object_Customer object
-	 * 
+	 *
 	 * @param array $arr
 	 */
 
@@ -61,9 +61,9 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 		return $this->get('CustomerRef FullName');
 	}
 
-	/** 
+	/**
 	 * Set the class ListID for this creditmemo line item
-	 * 
+	 *
 	 * @param string $ListID
 	 * @return boolean
 	 */
@@ -72,9 +72,9 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 		return $this->set('ClassRef ListID', $ListID);
 	}
 
-	/** 
+	/**
 	 * Set the class name for this invoice line item
-	 * 
+	 *
 	 * @param string $name
 	 * @return boolean
 	 */
@@ -87,12 +87,12 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	{
 		return $this->set('ClassRef FullName', $name);
 	}
-	
+
 	public function getClassListID()
 	{
 		return $this->get('ClassRef ListID');
 	}
-	
+
 	public function getClassName()
 	{
 		return $this->get('ClassRef FullName');
@@ -100,7 +100,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 
 	/**
 	 * Set the reference number
-	 * 
+	 *
 	 * @param string $str
 	 * @return boolean
 	 */
@@ -108,7 +108,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	{
 		return $this->set('RefNumber', $str);
 	}
-	
+
 	/**
 	 * Alias of {@link QuickBooks_Object_Invoice::setRefNumber()}
 	 */
@@ -116,10 +116,10 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	{
 		return $this->setRefNumber($str);
 	}
-	
+
 	/**
 	 * Get the reference number
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getRefNumber()
@@ -134,7 +134,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	{
 		return $this->getRefNumber();
 	}
-	
+
 	public function setSalesRepName($name)
 	{
 		return $this->set('SalesRepRef FullName', $name);
@@ -157,7 +157,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 
 	/**
 	 * Set the transaction date
-	 * 
+	 *
 	 * @param string $date
 	 * @return boolean
 	 */
@@ -168,7 +168,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the transaction date
-	 * 
+	 *
 	 * @param string $format	The format you want the date in (as for {@link http://www.php.net/date})
 	 * @return string
 	 */
@@ -187,17 +187,17 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	{
 		return $this->set('ShipMethodRef FullName', $name);
 	}
-	
+
 	public function setShipMethodListID($ListID)
 	{
 		return $this->set('ShipMethodRef ListID', $ListID);
 	}
-	
+
 	public function getShipMethodName()
 	{
 		return $this->get('ShipMethodRef FullName');
 	}
-	
+
 	public function getShipMethodListID()
 	{
 		return $this->get('ShipMethodRef ListID');
@@ -207,7 +207,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	{
 		return $this->set('ItemSalesTaxRef FullName', $name);
 	}
-	
+
 	public function getSalesTaxItemName()
 	{
 		return $this->get('ItemSalesTaxRef FullName');
@@ -218,11 +218,11 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 		switch ($request)
 		{
 			case 'CreditMemoAddRq':
-				
+
 				if (isset($this->_object['CreditMemoLine']))
 				{
 					$this->_object['CreditMemoLineAdd'] = $this->_object['CreditMemoLine'];
-				}		
+				}
 				break;
 
 			case 'CreditMemoModRq':
@@ -230,7 +230,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 				if (isset($this->_object['CreditMemoLine']))
 				{
 					$this->_object['CreditMemoLineMod'] = $this->_object['CreditMemoLine'];
-				}		
+				}
 				break;
 		}
 		return parent::asList($request);
@@ -242,7 +242,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 		{
 			$object = $this->_object;
 		}
-		
+
 		switch ($root)
 		{
 			case QUICKBOOKS_ADD_CREDITMEMO:
@@ -270,13 +270,13 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	public function asArray($request, $nest = true)
 	{
 		$this->_cleanup();
-		
+
 		return parent::asArray($request, $nest);
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
 	 * @param string $indent
 	 * @param string $root
@@ -285,7 +285,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
 	public function asQBXML($request, $todo_for_empty_elements = QuickBooks_QBXML_Object::XML_DROP, $indent = "\t", $root = null, $parent = null)
 	{
 		$this->_cleanup();
-		
+
 		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
 	}
 

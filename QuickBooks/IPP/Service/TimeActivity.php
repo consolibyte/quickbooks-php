@@ -1,17 +1,17 @@
 <?php
 
 /**
- * 
- * 
+ *
+ *
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.opensource.org/licenses/eclipse-1.0.php
- * 
+ *
  * @license LICENSE.txt
  * @author Jared Cheney <jared@tsheets.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage IPP
  */
@@ -38,7 +38,7 @@ class QuickBooks_IPP_Service_TimeActivity extends QuickBooks_IPP_Service
 	{
 		return parent::_query($Context, $realm, $query);
 	}
-	
+
 	/**
 	 * Delete a timeactivity from IDS/QuickBooks
 	 *
@@ -48,12 +48,12 @@ class QuickBooks_IPP_Service_TimeActivity extends QuickBooks_IPP_Service
 	{
 		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY, $IDType);
 	}
-	
+
 	public function add($Context, $realmID, $Object)
 	{
 		return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY, $Object);
 	}
-	
+
 	public function update($Context, $realmID, $IDType, $Object)
 	{
 		return parent::_update($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY, $Object, $IDType);

@@ -35,4 +35,3 @@
 		<?php if ($quickbooks_is_connected): ?>
 			<ipp:blueDot></ipp:blueDot>
 		<?php endif; ?>
-

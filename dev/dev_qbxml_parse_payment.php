@@ -72,4 +72,3 @@ foreach ($list as $AppliedToTxn)
 {
 	print_r($AppliedToTxn);
 }
-

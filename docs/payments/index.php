@@ -9,9 +9,9 @@ $examples = array();
 $dh = opendir(dirname(__FILE__));
 while (false !== ($file = readdir($dh)))
 {
-	if (substr($file, 0, 7) != 'example') 
-	{ 
-		continue; 
+	if (substr($file, 0, 7) != 'example')
+	{
+		continue;
 	}
 
 	$tmp = explode('_', $file);
@@ -43,7 +43,7 @@ while (false !== ($file = readdir($dh)))
 	</h1>
 
 	<p>
-		This app demos a PHP connection to QuickBooks Payments. 
+		This app demos a PHP connection to QuickBooks Payments.
 	</p>
 	<p>
 		<strong>Please make sure you review the <a target="_blank" href="http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start">quick-start tutorial</a>!</strong>
@@ -57,7 +57,7 @@ while (false !== ($file = readdir($dh)))
 	</ul>
 
 	<p>
-		QuickBooks connection status: 
+		QuickBooks connection status:
 
 		<?php if ($quickbooks_is_connected): ?>
 			<div style="border: 2px solid green; text-align: center; padding: 8px; color: green;">
@@ -90,7 +90,7 @@ while (false !== ($file = readdir($dh)))
 				</tr>
 				<tr>
 					<td>
-						<a href="disconnect.php">Disconnect from QuickBooks</a> 
+						<a href="disconnect.php">Disconnect from QuickBooks</a>
 					</td>
 					<td>
 						(If you do this, you'll have to go back through the authorization/connection process to get connected again)
@@ -132,13 +132,13 @@ while (false !== ($file = readdir($dh)))
 				You must authenticate to QuickBooks <b>once</b> before you can exchange data with it. <br>
 				<br>
 				<strong>You only have to do this once!</strong> <br><br>
-				
-				After you've authenticated once, you never have to go 
+
+				After you've authenticated once, you never have to go
 				through this connection process again. <br>
-				Click the button above to 
+				Click the button above to
 				authenticate and connect.
-			</div>	
-		<?php endif; ?>		
+			</div>
+		<?php endif; ?>
 
 	</p>
 </div>

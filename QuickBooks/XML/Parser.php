@@ -148,9 +148,9 @@ class QuickBooks_XML_Parser
 		}
 		else if (substr(trim($mixed), 0, 6) == '{"warn')
 		{
-			// Intuit has a bug where some of their services return JSON erors 
-			// instead of XML, so we catch these here... 
-			
+			// Intuit has a bug where some of their services return JSON erors
+			// instead of XML, so we catch these here...
+
 			return '';
 		}
 		else if (substr(trim($mixed), 0, 1) != '<')

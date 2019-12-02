@@ -693,8 +693,8 @@ abstract class QuickBooks_IPP_Service
       if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
       {
          $this->_setError(
-            $IPP->errorCode(), 
-            $IPP->errorText(), 
+            $IPP->errorCode(),
+            $IPP->errorText(),
             $IPP->errorDetail());
 
          return false;

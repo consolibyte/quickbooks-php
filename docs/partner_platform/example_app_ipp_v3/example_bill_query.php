@@ -19,7 +19,7 @@ $bills = $BillService->query($Context, $realm, "SELECT * FROM Bill ");
 foreach ($bills as $Bill)
 {
 	print('Bill # ' . $Bill->getDocNumber() . ' has a total of $' . $Bill->getTotalAmt() . "\n");
-	
+
 	$num_line = $Bill->countLine();
 	for ($i = 0; $i < $num_line; $i++)
 	{

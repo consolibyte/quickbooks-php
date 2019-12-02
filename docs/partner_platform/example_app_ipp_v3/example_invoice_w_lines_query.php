@@ -23,7 +23,7 @@ foreach ($invoices as $Invoice)
 	for ($i = 0; $i < $num_lines; $i++)
 	{
 		$Line = $Invoice->getLine($i);
-		
+
 		// Let's find out what item this uses
 		if ($Line->getDetailType() == 'SalesItemLineDetail')
 		{

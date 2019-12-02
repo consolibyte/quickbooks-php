@@ -18,4 +18,3 @@ $err_db = null;
 $parsed = $Parser->parseIDS($response, QuickBooks_IPP_IDS::OPTYPE_FINDBYID, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
 
 print_r($parsed);
-

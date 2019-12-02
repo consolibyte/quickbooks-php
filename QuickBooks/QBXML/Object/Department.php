@@ -2,21 +2,21 @@
 
 /**
  * QuickBooks Department object container
- * 
+ *
  * @author Thomas Rientjes
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage Object
  */
 
 /**
- * 
+ *
  */
 QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
 {
@@ -29,10 +29,10 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
 	{
 		parent::__construct($arr);
 	}
-	
+
 	/**
 	 * Set the ListID of the department
-	 * 
+	 *
 	 * @param string $ListID
 	 * @return boolean
 	 */
@@ -40,17 +40,17 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
 	{
 		return $this->set('ListID', $ListID);
 	}
-	
+
 	/**
 	 * Get the ListID of the department
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getListID()
 	{
 		return $this->get('ListID');
 	}
-	
+
 	/**
 	 * @param string $ListID
 	 * @return boolean
@@ -70,7 +70,7 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
 
 	/**
 	 * Set the name of the department
-	 * 
+	 *
 	 * @param string $name
 	 * @return boolean
 	 */
@@ -78,10 +78,10 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
 	{
 		return $this->set('Name', $name);
 	}
-	
+
 	/**
 	 * Get the name of the department
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getName()
@@ -109,10 +109,10 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
 	{
 		return $this->set('FullName', $name);
 	}
-	
+
 	/**
 	 * Set this department active or not
-	 * 
+	 *
 	 * @param boolean $value
 	 * @return boolean
 	 */
@@ -120,30 +120,30 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
 	{
 		return $this->set('IsActive', (boolean) $value);
 	}
-	
+
 	/**
 	 * Tell whether or not this department object is active
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function getIsActive()
 	{
 		return $this->get('IsActive');
 	}
-	
+
 	/**
 	 * Perform any needed clean-up of the object data members
-	 * 
+	 *
 	 * @return boolean
 	 */
 	protected function _cleanup()
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Get an array representation of this department object
-	 * 
+	 *
 	 * @param string $request
 	 * @param boolean $nest
 	 * @return array
@@ -168,13 +168,13 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
 	public function asQBXML($request, $version = null, $locale = null, $root = null)
 	{
 		$this->_cleanup();
-		
+
 		return parent::asQBXML($request, $version, $locale, $root);
 	}
-	
+
 	/**
-	 * Tell what type of object this is 
-	 * 
+	 * Tell what type of object this is
+	 *
 	 * @return string
 	 */
 	public function object()
