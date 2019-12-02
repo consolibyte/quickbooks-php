@@ -23,11 +23,13 @@ Anywhere you see this:
 new QuickBooks_IPP_IntuitAnywhere($dsn, $encryption_key, $oauth_consumer_key, $oauth_consumer_secret, $quickbooks_oauth_url, $quickbooks_success_url);
 ```
 
-Needs to change to this (note hte new parameters):
+Needs to change to this (note the new parameters):
 
 ```
 new QuickBooks_IPP_IntuitAnywhere(QuickBooks_IPP_IntuitAnywhere::OAUTH_V2, $sandbox, $scope, $dsn, $encryption_key, $oauth_client_id, $oauth_client_secret, $quickbooks_oauth_url, $quickbooks_success_url);
 ```
+
+`$scope` can be 'com.intuit.quickbooks.accounting', 'com.intuit.quickbooks.payment', or 'com.intuit.quickbooks.accounting com.intuit.quickbooks.payment' for access to both.
 
 ## Database changes
 
@@ -85,7 +87,7 @@ if ($IntuitAnywhere->check($the_username, $the_tenant)
 To this:
 
 ```
-if ($IntuitAnywhere->check($the_username, $the_tenant)
+if ($IntuitAnywhere->check($the_tenant)
 ```
 
 ## Code change - IntuitAnywhere->test(...)
@@ -93,7 +95,7 @@ if ($IntuitAnywhere->check($the_username, $the_tenant)
 The `->test(...)` method has changed, dropping the `$the_username` parameter. Change:
 
 ```
-$IntuitAnywhere->test($the_tenant))
+$IntuitAnywhere->test($the_username, $the_tenant))
 ```
 
 To this:
@@ -101,6 +103,24 @@ To this:
 ```
 $IntuitAnywhere->test($the_tenant))
 ```
+
+## Code change - IntuitAnywhere->handle(...)
+
+The `->handle(...)` method has changed, dropping the `$the_username` parameter. Change:
+
+```
+$IntuitAnywhere->handle($the_username, $the_tenant))
+```
+
+To this:
+
+```
+$IntuitAnywhere->handle($the_tenant))
+```
+
+## Code change - IntuitAnywhere->expiry(...), IntuitAnywhere->reconnect(...), IntuitAnywhere->disconnect(...)
+
+Calls to the `->expiry(...)`, `->reconnect(...)`, and `->disconnect(...)` methods are no longer necessary. OAuthV2 token refreshes are done automatically before every API call if the time-to-live of the Access Token is less than 60 seconds. Also, calls to these methods will fail, as they call the old `->oauthLoad(...)` method, which no longer exists in the drivers (it has been updated to `->oauthLoadV1(...)` and `->oauthLoadV2(...)`). See #269 and #271 for discussion.
 
 ## Code change - IPP->authMode(...)
 
