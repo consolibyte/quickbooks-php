@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Example of generating QuickBooks *.QWC files 
- * 
+ * Example of generating QuickBooks *.QWC files
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
 
-// Error reporting... 
+// Error reporting...
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
@@ -19,7 +19,7 @@ ini_set('display_errors', 1);
 require_once '../QuickBooks.php';
 
 $name = 'My QuickBooks SOAP Server';				// A name for your server (make it whatever you want)
-$descrip = 'An example QuickBooks SOAP Server';		// A description of your server 
+$descrip = 'An example QuickBooks SOAP Server';		// A description of your server
 
 $appurl = 'https://your-domain-name/path/to/soap/server.php';		// This *must* be httpS:// (path to your QuickBooks SOAP server)
 $appsupport = 'https://your-domain-name/get-help-here.php'; 		// This *must* be httpS:// and the domain name must match the domain name above

@@ -54,4 +54,3 @@ print('php version: ' . phpversion() . "\n");
 print('mcrypt extension? ' . var_export(function_exists('mcrypt_module_open'), true) . "\n");
 print('  mcrypt module rijndael-256? ' . var_export(mcrypt_module_open('rijndael-256', '', 'ofb', ''), true) . "\n");
 print('curl extension? ' . var_export(function_exists('curl_init'), true) . "\n");
-

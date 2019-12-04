@@ -117,7 +117,7 @@ class QuickBooks_QBXML_Object_InventoryAdjustment_InventoryAdjustmentLine extend
 		{
 			$object = $this->_object;
 		}
-		
+
 		switch ($parent)
 		{
 			case QUICKBOOKS_ADD_INVENTORYADJUSTMENT:

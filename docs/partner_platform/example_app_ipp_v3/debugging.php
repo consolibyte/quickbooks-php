@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <pre>
 
 <?php
-	
+
 $BillService = new QuickBooks_IPP_Service_Bill();
 
 $Bill = new QuickBooks_IPP_Object_Bill();
@@ -25,9 +25,9 @@ if ($id = $BillService->add($Context, $realm, $Bill))
 else
 {
 	// The below lines are helpful for debugging and troubleshooting.
-	//  They will show you the raw XML request that was sent to Intuit, and the 
-	//  raw XML response that Intuit returned. 
-	//  
+	//  They will show you the raw XML request that was sent to Intuit, and the
+	//  raw XML response that Intuit returned.
+	//
 	// IF YOU ASK FOR HELP ONLINE, PLEASE PROVIDE THE OUTPUT FROM THESE LINES.
 	// WE WILL NOT BE ABLE TO ASSIST YOU WITHOUT THIS INFORMATION!!!
 

@@ -42,7 +42,7 @@
 		<StdDiscountDays >INTTYPE</StdDiscountDays> <!-- optional -->
 		<DiscountPct >PERCENTTYPE</DiscountPct> <!-- optional -->
 	</StandardTermsRet>
-	
+
 <!-- OR -->
 	<DateDrivenTermsRet> <!-- optional -->
 		<ListID >IDTYPE</ListID> <!-- required -->
@@ -56,7 +56,7 @@
 		<DiscountDayOfMonth >INTTYPE</DiscountDayOfMonth> <!-- optional -->
 		<DiscountPct >PERCENTTYPE</DiscountPct> <!-- optional -->
 	</DateDrivenTermsRet>
-	
+
 <!-- END OR -->
 </TermsQueryRs>
 </QBXMLMsgsRq>

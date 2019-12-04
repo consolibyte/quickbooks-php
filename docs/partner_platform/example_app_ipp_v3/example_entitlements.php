@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <br>
 
 <h1>
-	DUE TO AN INTUIT BUG, THIS DOES NOT WORK WITH SANDBOX COMPANIES! 
+	DUE TO AN INTUIT BUG, THIS DOES NOT WORK WITH SANDBOX COMPANIES!
 </h1>
 
 <br>
@@ -27,7 +27,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $EntitlementsService = new QuickBooks_IPP_Service_Entitlements();
 
-// This gets the entitlements/features of a QBO install 
+// This gets the entitlements/features of a QBO install
 $es = $EntitlementsService->entitlements($Context, $realm);
 
 if ($es)
