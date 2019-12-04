@@ -439,7 +439,36 @@ class QuickBooks_Utilities
 		
 		return $driver->authCreate($username, $password, $company_file, $wait_before_next_update, $min_run_every_n_seconds);
 	}
-	
+
+	/**
+	 * Check if a user exists for the QuickBooks Web Connector SOAP server
+	 *
+	 * @param string $dsn		A DSN-style connection string for the back-end driver
+	 * @param string $username	The username to check if exists
+	 * @return boolean
+	 */
+	static public function userExists($dsn, $username)
+	{
+		$driver = QuickBooks_Utilities::driverFactory($dsn);
+
+		return $driver->authExists($username);
+	}
+
+	/**
+	 * Update the password for a user for the QuickBooks Web Connector Soap server
+	 *
+	 * @param string $dsn		A DSN-style connection string for the back-end driver
+	 * @param string $username	The username for the user to update
+	 * @param string $password	The new password for the user
+	 * @return boolean
+	 */
+	static public function updateUserPassword($dsn, $username, $password)
+	{
+		$driver = QuickBooks_Utilities::driverFactory($dsn);
+
+		return $driver->authUpdatePassword($username, $password);
+	}
+
 	/**
 	 * Disable a user for the QuickBooks Web Connector SOAP server
 	 * 

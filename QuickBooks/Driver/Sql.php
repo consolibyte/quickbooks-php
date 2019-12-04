@@ -616,6 +616,19 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		return '';
 	}
 
+	/**
+	 * Check if a user exists in the SOAP server
+	 *
+	 * @param string $username
+	 * @param string $password
+	 * @return boolean
+	 */
+	protected function _authExists($username) {
+		$errnum = 0;
+		$errmsg = '';
+
+		return $this->_count($this->_query("SELECT qb_username FROM " . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_USERTABLE) . " WHERE qb_username = '" . $this->_escape($username) . "' ", $errnum, $errmsg, 0, 1));
+	}
 
 	/**
 	 * Create a new user for the SOAP server
@@ -629,7 +642,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$errnum = 0;
 		$errmsg = '';
 
-		if (!$this->_count($this->_query("SELECT qb_username FROM " . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_USERTABLE) . " WHERE qb_username = '" . $this->_escape($username) . "' ", $errnum, $errmsg, 0, 1)))
+		if (!$this->_authExists($username))
 		{
 			return $this->_query("
 				INSERT INTO
@@ -656,6 +669,27 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		}
 
 		return false;
+	}
+
+	/**
+	 * Update the password
+	 *
+	 * @param string $username
+	 * @return boolean
+	 */
+	protected function _authUpdatePassword($username, $password)
+	{
+		$errnum = 0;
+		$errmsg = '';
+
+		return $this->_query("
+			UPDATE
+				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_USERTABLE) . "
+			SET
+				touch_datetime = '" . date('Y-m-d H:i:s') . "',
+				qb_password = '" . $this->_escape($this->_hash($password)) . "'
+			WHERE
+				qb_username = '" . $this->_escape($username) . "' ", $errnum, $errmsg);
 	}
 
 	/**

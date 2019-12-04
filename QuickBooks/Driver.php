@@ -63,6 +63,12 @@ define('QUICKBOOKS_DRIVER_HOOK_AUTHRESOLVE', 'QuickBooks_Driver::authResolve');
 define('QUICKBOOKS_DRIVER_HOOK_AUTHDISABLE', 'QuickBooks_Driver::authDisable');
 
 /**
+ * Hook called by the ->authUpdatePassword() method
+ * @var string
+ */
+define('QUICKBOOKS_DRIVER_HOOK_AUTHUPDATE', 'QuickBooks_Driver::authUpdatePassword');
+
+/**
  * Hook called by the ->authEnable() method
  * @var string
  */
@@ -1288,11 +1294,53 @@ abstract class QuickBooks_Driver
 	 * @see QuickBooks_Driver::authCreate()
 	 */
 	abstract protected function _authCreate($username, $password, $company_file = null, $wait_before_next_update = null, $min_run_every_n_seconds = null);
-	
+
+	/**
+	 * @see Quickbooks_Driver::authExists
+	 */
+	abstract protected function _authExists($username);
+
+	/**
+	 * Check if a user exists
+	 *
+	 * @param string username
+	 * @return boolean
+	 */
+	final public function authExists($username)
+	{
+		return $this->_authExists($username);
+	}
+
+	/**
+	 * @see QuickBooks_Driver::authUpdatePassword()
+	 */
+	abstract protected function _authUpdatePassword($username, $password);
+
+	/**
+	 * Update the password of a user
+	 *
+	 * @param string username
+	 * @param string password
+	 * @return boolean
+	 */
+	final public function authUpdatePassword($username, $password)
+	{
+		$hookdata = array(
+			'username' => $username,
+			'password' => $password,
+		);
+
+		$err = '';
+		$this->_callHook(QUICKBOOKS_DRIVER_HOOK_AUTHUPDATE, null, $err, $hookdata);
+
+		return $this->_authUpdatePassword($username, $password);
+	}
+
 	/**
 	 * @see QuickBooks_Driver::authEnable()
 	 */
 	abstract protected function _authEnable($username);
+	
 	
 	/** 
 	 * Enable a username
