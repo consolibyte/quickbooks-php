@@ -1,21 +1,21 @@
 <?php
 
-/** 
- * 
- * 
+/**
+ *
+ *
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.opensource.org/licenses/eclipse-1.0.php
- * 
+ *
  */
 
-// 
+//
 QuickBooks_Loader::load('/QuickBooks/Encryption.php');
 
 /**
- * 
+ *
  */
 class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
 {
@@ -24,16 +24,16 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
 	 *
 	 * @param string $key
 	 * @param string $data		Content to be encrypted
-	 * @param bool $hex 	
+	 * @param bool $hex
 	 * @return string
 	 */
 	public function encrypt($key, $data, $hex = false)
 	{
 		if ($hex)
 		{
-			$key = pack('H*', $key); 
+			$key = pack('H*', $key);
 		}
-		
+
 		$keys[] = '';
 		$boxs[] = '';
 		$cipher = '';
@@ -46,7 +46,7 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
 			$keys[$i] = ord($key[$i % $key_length]);
 			$boxs[$i] = $i;
 		}
-		
+
 		$j = 0;
 		for ($i = 0; $i < 256; $i++)
 		{
@@ -55,8 +55,8 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
 			$boxs[$i] = $boxs[$j];
 			$boxs[$j] = $tmp;
 		}
-		
-		$a = 0; 
+
+		$a = 0;
 		$j = 0;
 		for ($i = 0; $i < $data_length; $i++)
 		{
@@ -68,10 +68,10 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
 			$k = $boxs[(($boxs[$a] + $boxs[$j]) % 256)];
 			$cipher .= chr(ord($data[$i]) ^ $k);
 		}
-		
+
 		return $cipher;
 	}
-	
+
 	public function decrypt($key, $data, $hex = false)
 	{
 		return $this->encrypt($key, $data, $hex);

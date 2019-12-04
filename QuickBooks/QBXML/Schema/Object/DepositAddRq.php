@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: DepositAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'DepositAdd';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -58,10 +58,10 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'DepositLineAdd Amount' => 'AMTTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -88,10 +88,10 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'DepositLineAdd Amount' => 0,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -119,7 +119,7 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -146,10 +146,10 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'DepositLineAdd Amount' => 999.99,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -176,22 +176,22 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'DepositLineAdd Amount' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
@@ -205,7 +205,7 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
 			'CashBackInfoAdd AccountRef FullName',
 			'CashBackInfoAdd Memo',
 			'CashBackInfoAdd Amount',
-			'DepositLineAdd', 
+			'DepositLineAdd',
 			'DepositLineAdd PaymentTxnID',
 			'DepositLineAdd PaymentTxnLineID',
 
@@ -213,7 +213,7 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
 			'DepositLineAdd OverrideCheckNumber',
 			'DepositLineAdd ClassRef ListID',
 			'DepositLineAdd ClassRef FullName',
-			
+
 			'DepositLineAdd EntityRef ListID',
 			'DepositLineAdd EntityRef FullName',
 			'DepositLineAdd AccountRef ListID',
@@ -227,7 +227,7 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
 			'DepositLineAdd Amount',
 			'IncludeRetElement',
 			);
-			
+
 		return $paths;
 	}
 }

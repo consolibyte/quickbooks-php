@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: DepartmentQueryRq
- * 
+ *
  * @author Thomas Rientjes
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_DepartmentQueryRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = '';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -47,10 +47,10 @@ class QuickBooks_QBXML_Schema_Object_DepartmentQueryRq extends QuickBooks_QBXML_
 			'NameRangeFilter ToName' => 'STRTYPE',
 			'IncludeRetElement' => 'STRTYPE',
 		);
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -66,10 +66,10 @@ class QuickBooks_QBXML_Schema_Object_DepartmentQueryRq extends QuickBooks_QBXML_
 			'NameRangeFilter ToName' => 0,
 			'IncludeRetElement' => 50,
 		);
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -88,7 +88,7 @@ class QuickBooks_QBXML_Schema_Object_DepartmentQueryRq extends QuickBooks_QBXML_
 
 		return $paths;
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -104,10 +104,10 @@ class QuickBooks_QBXML_Schema_Object_DepartmentQueryRq extends QuickBooks_QBXML_
 			'NameRangeFilter ToName' => 999.99,
 			'IncludeRetElement' => 4,
 		);
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -123,7 +123,7 @@ class QuickBooks_QBXML_Schema_Object_DepartmentQueryRq extends QuickBooks_QBXML_
 			'NameRangeFilter ToName' => false,
 			'IncludeRetElement' => true,
 		);
-			
+
 		return $paths;
 	}
 
@@ -142,7 +142,7 @@ class QuickBooks_QBXML_Schema_Object_DepartmentQueryRq extends QuickBooks_QBXML_
 			9 => 'NameRangeFilter ToName',
 			10 => 'IncludeRetElement',
 		);
-			
+
 		return $paths;
 	}
 }

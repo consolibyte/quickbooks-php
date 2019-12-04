@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion> 
+  <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>com.intuit.code.build</groupId>
@@ -23,7 +23,7 @@
     <developerConnection>scm:svn:https://code.intuit.com/svn/repos/php_devkit/trunk</developerConnection>
     <url>https://code.intuit.com/integration/viewvc/viewvc.cgi/?root=php_devkit&amp;system=exsy1003</url>
   </scm>
-  
+
   <build>
     <plugins>
       <plugin>

@@ -25,7 +25,7 @@ else
 }
 
 /*
-// For debugging 
+// For debugging
 
 print("\n\n\n\n");
 print('Request [' . $IPP->lastRequest() . ']');

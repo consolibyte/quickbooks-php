@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <pre>
 
 <?php
-	
+
 $CustomerService = new QuickBooks_IPP_Service_Customer();
 
 $customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer WHERE FullyQualifiedName LIKE '%Keith O\'Mally%' ");
@@ -26,7 +26,7 @@ print('Request [' . $CustomerService->lastRequest() . ']');
 print("\n\n\n\n");
 print('Response [' . $CustomerService->lastResponse() . ']');
 print("\n\n\n\n");
-	
+
 ?>
 
 </pre>
