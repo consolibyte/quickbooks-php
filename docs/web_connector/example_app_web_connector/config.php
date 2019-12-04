@@ -2,16 +2,16 @@
 
 /**
  * Example Web Connector application
- * 
- * This is a very simple application that allows someone to enter a customer 
+ *
+ * This is a very simple application that allows someone to enter a customer
  * name into a web form, and then adds the customer to QuickBooks.
- * 
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
- 
+
 // We need to make sure the correct timezone is set, or some PHP installations will complain
 if (function_exists('date_default_timezone_set'))
 {
@@ -20,7 +20,7 @@ if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('America/New_York');
 }
 
-// I always program in E_STRICT error mode... 
+// I always program in E_STRICT error mode...
 error_reporting(E_ALL | E_STRICT);
 
 // Require the framework
@@ -37,10 +37,10 @@ if (!QuickBooks_Utilities::initialized($dsn))
 {
 	// Initialize creates the neccessary database schema for queueing up requests and logging
 	QuickBooks_Utilities::initialize($dsn);
-	
+
 	// This creates a username and password which is used by the Web Connector to authenticate
 	QuickBooks_Utilities::createUser($dsn, $qbwc_user, $qbwc_pass);
-	
+
 	// Create our test table
 	mysql_query("CREATE TABLE my_customer_table (
 	  id int(10) unsigned NOT NULL AUTO_INCREMENT,

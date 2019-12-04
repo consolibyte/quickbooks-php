@@ -712,5 +712,3 @@ class QuickBooks_IPP_IntuitAnywhere
 		return $return;
 	}
 }
-
-

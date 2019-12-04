@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: ReceivePaymentAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ReceivePaymentAddRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'ReceivePaymentAdd';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -83,10 +83,10 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentAddRq extends QuickBooks_QBXM
   'AppliedToTxnAdd DiscountAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -138,10 +138,10 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentAddRq extends QuickBooks_QBXM
   'AppliedToTxnAdd DiscountAccountRef FullName' => 209,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -194,7 +194,7 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentAddRq extends QuickBooks_QBXM
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -246,10 +246,10 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentAddRq extends QuickBooks_QBXM
   'AppliedToTxnAdd DiscountAccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -301,22 +301,22 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentAddRq extends QuickBooks_QBXM
   'AppliedToTxnAdd DiscountAccountRef FullName' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
@@ -356,8 +356,8 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentAddRq extends QuickBooks_QBXM
   33 => 'CreditCardTxnInfo CreditCardTxnResultInfo TxnAuthorizationStamp',
   34 => 'CreditCardTxnInfo CreditCardTxnResultInfo ClientTransID',
   35 => 'IsAutoApply',
-  36 => 'AppliedToTxnAdd', 
-  37 => 'AppliedToTxnAdd APIApplicationID', 
+  36 => 'AppliedToTxnAdd',
+  37 => 'AppliedToTxnAdd APIApplicationID',
   38 => 'AppliedToTxnAdd TxnID',
   39 => 'AppliedToTxnAdd PaymentAmount',
   40 => 'AppliedToTxnAdd TxnLineDetail TxnLineID',
@@ -370,7 +370,7 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentAddRq extends QuickBooks_QBXM
   47 => 'AppliedToTxnAdd DiscountAccountRef FullName',
   48 => 'IncludeRetElement',
 );
-			
+
 		return $paths;
 	}
 }

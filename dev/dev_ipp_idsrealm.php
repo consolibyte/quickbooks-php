@@ -5,7 +5,7 @@ error_reporting(E_ALL | E_STRICT);
 
 require_once '../QuickBooks.php';
 
-// 
+//
 $username = 'keith@consolibyte.com';
 $password = 'password42';
 $token = 'tex3r7hwifx6cci3zk43ibmnd';
@@ -76,4 +76,3 @@ $realm = $IPP->getIDSRealm($Context);
 print('realm is: {' . $realm . '}');
 
 print("\n\n");
-
