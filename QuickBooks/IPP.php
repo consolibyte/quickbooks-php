@@ -868,7 +868,7 @@ class QuickBooks_IPP
 	/**
 	 * Do we need to renew the OAuth access token? If so, renew it
 	 */
-	protected function _handleRenewal()
+	public function _handleRenewal()
 	{
 		static $attempted_renew = false;
 
