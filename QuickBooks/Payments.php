@@ -103,11 +103,8 @@ class Quickbooks_Payments
 	protected $_last_errtype;
 	protected $_last_errinfolink;
 
-	public function __construct($oauth_consumer_key, $oauth_consumer_secret, $sandbox = false, $dsn = null, $log_level = QUICKBOOKS_LOG_NORMAL)
+	public function __construct($sandbox = false, $dsn = null, $log_level = QUICKBOOKS_LOG_NORMAL)
 	{
-		$this->_oauth_consumer_key = $oauth_consumer_key;
-		$this->_oauth_consumer_secret = $oauth_consumer_secret;
-
 		$this->_sandbox = (bool) $sandbox;
 
 		if ($dsn)
@@ -698,6 +695,8 @@ class Quickbooks_Payments
 	 */
 	protected function _http($Context, $url_path, $raw_body = null, $operation = null)
 	{
+		$Context->IPP()->_handleRenewal();
+
 		if($operation !== null)
 		{
 			$method = $operation;
@@ -717,19 +716,12 @@ class Quickbooks_Payments
 
 		$params = array();
 
-		$OAuth = new QuickBooks_IPP_OAuth($this->_oauth_consumer_key, $this->_oauth_consumer_secret);
-		$signed = $OAuth->sign($method, $url, $authcreds['oauth_access_token'], $authcreds['oauth_access_token_secret'], $params);
-
-		//print_r($signed);
-
-		//$HTTP = new QuickBooks_HTTP($signed[2]);
-
 		$HTTP = new QuickBooks_HTTP($url);
 
 		$headers = array(
 			'Content-Type' => 'application/json',
 			'Request-Id' => QuickBooks_Utilities::GUID(),
-			'Authorization' => $signed[3],
+			'Authorization' => 'Bearer ' . $authcreds['oauth_access_token'],
 			);
 		$HTTP->setHeaders($headers);
 
