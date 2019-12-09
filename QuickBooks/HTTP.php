@@ -71,6 +71,8 @@ class QuickBooks_HTTP
 
 	protected $_last_info;
 
+	protected $_last_responseheaders;
+
 	protected $_errnum;
 
 	protected $_errmsg;
@@ -119,7 +121,9 @@ class QuickBooks_HTTP
 		$this->_sync = true;
 
 		$this->_request_headers = array();
+
 		$this->_return_headers = false;
+		$this->_last_responseheaders = array();
 
 		$this->_last_request = null;
 		$this->_last_response = null;
@@ -368,6 +372,16 @@ class QuickBooks_HTTP
 	}
 
 	/**
+	 * Get an array of the last response headers
+	 *
+	 * @return array
+	 */
+	public function lastResponseHeaders()
+	{
+		return $this->_last_responseheaders;
+	}
+
+	/**
 	 * Set an error message
 	 *
 	 * @param integer $errnum	The error number/code
@@ -571,6 +585,23 @@ class QuickBooks_HTTP
 
 		$ch = curl_init();
 		curl_setopt_array($ch, $params);
+
+		$response_headers = array();
+		curl_setopt($ch, CURLOPT_HEADERFUNCTION,
+			function($curl, $header) use (&$response_headers)
+			{
+				$len = strlen($header);
+				$header = explode(':', $header, 2);
+				if (count($header) < 2) // ignore invalid headers
+					return $len;
+
+				$response_headers[strtolower(trim($header[0]))] = trim($header[1]);
+
+				return $len;
+			}
+		);
+		$this->_last_responseheaders = $response_headers;
+
 		$response = curl_exec($ch);
 
 		/*

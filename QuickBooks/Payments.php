@@ -629,6 +629,16 @@ class Quickbooks_Payments
 	}
 
 	/**
+	 * Get the last "intuit_tid" HTTP header returned
+	 *
+	 * @return string
+	 */
+	public function lastIntuitTid()
+	{
+		return $this->_last_intuittid;
+	}
+
+	/**
 	 * Set an error message
 	 *
 	 * @param integer $errnum	The error number/code
@@ -714,22 +724,34 @@ class Quickbooks_Payments
 		$url = $this->_getBaseURL() . $url_path;
 
 		$authcreds = $Context->authcreds();
+		$authmode = $Context->authmode();
 
-		$params = array();
+		$auth_str = '';
+		if ($authmode == QuickBooks_IPP::AUTHMODE_OAUTHV1)
+		{
+			$params = array();
 
-		$OAuth = new QuickBooks_IPP_OAuth($this->_oauth_consumer_key, $this->_oauth_consumer_secret);
-		$signed = $OAuth->sign($method, $url, $authcreds['oauth_access_token'], $authcreds['oauth_access_token_secret'], $params);
+			$OAuth = new QuickBooks_IPP_OAuthv1($this->_oauth_consumer_key, $this->_oauth_consumer_secret);
+			$signed = $OAuth->sign($method, $url, $authcreds['oauth_access_token'], $authcreds['oauth_access_token_secret'], $params);
 
-		//print_r($signed);
+			$auth_str = $signed[3];
+		}
+		else if ($authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2)
+		{
+			// Do we need to renew OAuth tokens?
+			$Context->IPP()->handleRenewal();
 
-		//$HTTP = new QuickBooks_HTTP($signed[2]);
+			$authcreds = $Context->IPP()->authcreds();
+
+			$auth_str = 'Bearer ' . $authcreds['oauth_access_token'];
+		}
 
 		$HTTP = new QuickBooks_HTTP($url);
 
 		$headers = array(
 			'Content-Type' => 'application/json',
 			'Request-Id' => QuickBooks_Utilities::GUID(),
-			'Authorization' => $signed[3],
+			'Authorization' => $auth_str,
 			);
 		$HTTP->setHeaders($headers);
 
@@ -768,6 +790,13 @@ class Quickbooks_Payments
 		$info = $HTTP->lastInfo();
 		$this->_last_httpinfo = $info;
 
+		$this->_last_intuittid = '';
+		$response_headers = $HTTP->lastResponseHeaders();
+		if (!empty($response_headers['intuit_tid']))
+		{
+			$this->_last_intuittid = $response_headers['intuit_tid'];
+		}
+		
 		$errnum = $HTTP->errorNumber();
 		$errmsg = $HTTP->errorMessage();
 
