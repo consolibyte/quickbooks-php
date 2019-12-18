@@ -870,15 +870,36 @@ class QuickBooks_IPP
 	 */
 	public function handleRenewal()
 	{
-		static $attempted_renew = false;
+		for ($i = 0; $i < 3; $i++)
+		{
+			$renewed = $this->_handleRenewal();
 
-		if (!$attempted_renew and
+			if ($renewed)
+			{
+				break;
+			}
+		}
+
+		return $renewed;
+	}
+
+	/**
+	 * Attempt a renewal
+	 *
+	 * @return bool
+	 */
+	protected function _handleRenewal()
+	{
+		static $was_renewed_during_this_session = false;
+		static $renewal_attempts = 0;
+
+		$renewal_attempts++;
+
+		if (!$was_renewed_during_this_session and
 			is_object($this->_driver) and
 			$this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
 			strtotime($this->_authcred['oauth_access_expiry']) - 60 < time())
 		{
-			$attempted_renew = true;
-
 			if ($discover = QuickBooks_IPP_IntuitAnywhere::discover($this->_sandbox))
 			{
 				$ch = curl_init($discover['token_endpoint']);
@@ -897,6 +918,8 @@ class QuickBooks_IPP
 
 				if ($info['http_code'] == 200)
 				{
+					$was_renewed_during_this_session = true;
+
 					$json = json_decode($retr, true);
 
 					$this->_driver->oauthAccessRefreshV2(
