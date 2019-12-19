@@ -49,7 +49,7 @@ class QuickBooks_IPP_IntuitAnywhere
 	const URL_REQUEST_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_request_token';
 	const URL_ACCESS_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_access_token';
 	const URL_CONNECT_BEGIN = 'https://appcenter.intuit.com/Connect/Begin';
-	const URL_CONNECT_DISCONNECT = 'https://appcenter.intuit.com/api/v1/Connection/Disconnect';
+	const URL_CONNECT_DISCONNECT = 'https://developer.api.intuit.com/v2/oauth2/tokens/revoke';
 	const URL_CONNECT_RECONNECT = 'https://appcenter.intuit.com/api/v1/Connection/Reconnect';
 	const URL_APP_MENU = 'https://appcenter.intuit.com/api/v1/Account/AppMenu';
 
@@ -268,118 +268,64 @@ class QuickBooks_IPP_IntuitAnywhere
 	}
 
 	/**
-	 * Check whether a connection is due for refresh/reconnect
+	 * Disconnect from QuickBooks
 	 *
-	 * @param string $app_username
-	 * @param string $app_tenant
-	 * @param integer $within
-	 * @return One of the QuickBooks_IPP_IntuitAnywhere::EXPIRY_* constants
+	 * @param  string $app_tenant    The tenant/connection point to disconnect
+	 * @param  bool   $force         TRUE to remove the OAuth tokens from _your_ database regardless of the response from Intuit
+	 * @return bool                  TRUE on disconnect, FALSE on failure
 	 */
-	public function expiry($app_username, $app_tenant, $within = 2592000)
+	public function disconnect($app_tenant, $force = false)
 	{
-		$lifetime = 15552000;
-
-		if ($arr = $this->_driver->oauthLoadV1($this->_key, $app_username, $app_tenant) and
-			strlen($arr['oauth_access_token']) > 0 and
-			strlen($arr['oauth_access_token_secret']) > 0)
+		if ($creds = $this->_driver->oauthLoadV2($this->_key, $app_tenant))
 		{
-			$expires = $lifetime + strtotime($arr['access_datetime']);
+			$IPP = new QuickBooks_IPP($this->_dsn, $this->_key);
 
-			$diff = $expires - time();
+			$IPP->authMode(
+				QuickBooks_IPP::AUTHMODE_OAUTHV2,
+				$creds);
 
-			if ($diff < 0)
+			if ($this->_sandbox)
 			{
-				// Already expired
-				return QuickBooks_IPP_IntuitAnywhere::EXPIRY_EXPIRED;
-			}
-			else if ($diff < $within)
-			{
-				return QuickBooks_IPP_IntuitAnywhere::EXPIRY_SOON;
+				$IPP->sandbox(true);
 			}
 
-			return QuickBooks_IPP_IntuitAnywhere::EXPIRY_NOTYET;
-		}
-
-		return QuickBooks_IPP_IntuitAnywhere::EXPIRY_UNKNOWN;
-	}
-
-	/**
-	 * Reconnect/refresh the OAuth tokens
-	 *
-	 * For this to succeed, the token expiration must be within 30 days of the
-	 * date that this method is called (6 months after original token was
-	 * created). This is an Intuit-imposed security restriction. Calls outside
-	 * of that date range will fail with an error.
-	 *
-	 * @param string $app_username
-	 * @param string $app_tenant
-	 */
-	public function reconnect($app_username, $app_tenant)
-	{
-		if ($arr = $this->_driver->oauthLoadV1($this->_key, $app_username, $app_tenant) and
-			strlen($arr['oauth_access_token']) > 0 and
-			strlen($arr['oauth_access_token_secret']) > 0)
-		{
-			$arr['oauth_consumer_key'] = $this->_consumer_key;
-			$arr['oauth_consumer_secret'] = $this->_consumer_secret;
-
-			$retr = $this->_request(QuickBooks_IPP_OAuthv1::METHOD_GET,
-				QuickBooks_IPP_IntuitAnywhere::URL_CONNECT_RECONNECT,
-				array(),
-				$arr['oauth_access_token'],
-				$arr['oauth_access_token_secret']);
-
-			// Extract the error code
-			$code = (int) QuickBooks_XML::extractTagContents('ErrorCode', $retr);
-			$message = QuickBooks_XML::extractTagContents('ErrorMessage', $retr);
-
-			if ($message)
+			// Do we need to refresh?
+			if ($IPP->handleRenewal())
 			{
-				$this->_setError($code, $message);
-				return false;
+				// Reload creds
+				$creds = $this->_driver->oauthLoadV2($this->_key, $app_tenant);
 			}
-			else
+
+			if ($creds['oauth_refresh_token'])
 			{
-				// Success! Update the tokens
-				$token = QuickBooks_XML::extractTagContents('OAuthToken', $retr);
-				$secret = QuickBooks_XML::extractTagContents('OAuthTokenSecret', $retr);
-
-				$this->_driver->oauthAccessWrite(
-					$this->_key,
-					$arr['oauth_request_token'],
-					$token,
-					$secret,
-					null,
-					null);
-
-				return true;
+				// Remove the access token
+				$ch = curl_init(self::URL_CONNECT_DISCONNECT);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array( 'token' => $creds['oauth_refresh_token'] )));
+				curl_setopt($ch, CURLOPT_USERPWD, $this->_client_id . ':' . $this->_client_secret);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'Content-Type: application/json',
+					));
+				curl_exec($ch);
+				$info = curl_getinfo($ch);
+				curl_close($ch);
 			}
-		}
-	}
 
-	public function disconnect($app_username, $app_tenant, $force = false)
-	{
-		if ($arr = $this->_driver->oauthLoadV1($this->_key, $app_username, $app_tenant) and
-			strlen($arr['oauth_access_token']) > 0 and
-			strlen($arr['oauth_access_token_secret']) > 0)
-		{
-			$arr['oauth_consumer_key'] = $this->_consumer_key;
-			$arr['oauth_consumer_secret'] = $this->_consumer_secret;
+			// Also try to revoke the refresh token
+			$ch = curl_init(self::URL_CONNECT_DISCONNECT);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array( 'token' => $creds['oauth_access_token'] )));
+			curl_setopt($ch, CURLOPT_USERPWD, $this->_client_id . ':' . $this->_client_secret);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/json',
+				));
+			$retr = curl_exec($ch);
+			$info = curl_getinfo($ch);
+			curl_close($ch);
 
-			$retr = $this->_request(QuickBooks_IPP_OAuthv1::METHOD_GET,
-				QuickBooks_IPP_IntuitAnywhere::URL_CONNECT_DISCONNECT,
-				array(),
-				$arr['oauth_access_token'],
-				$arr['oauth_access_token_secret']);
-
-			// Extract the error code
-			$code = (int) QuickBooks_XML::extractTagContents('ErrorCode', $retr);
-
-			if ($code == 0 or
-				$code == 270 or 	// Sometimes it returns "270: OAuth Token rejected" for some reason?
-				$force)
+			if ($info['http_code'] == 200 or $force)
 			{
-				return $this->_driver->oauthAccessDelete($arr['app_username'], $arr['app_tenant']);
+				return $this->_driver->oauthAccessDelete($app_tenant);
 			}
 		}
 
