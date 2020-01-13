@@ -1121,7 +1121,7 @@ class QuickBooks_IPP
 		// If we got back a 401, indicating an expired token, we can renew and retry!
 		$info = $HTTP->lastInfo();
 		if ($info['http_code'] == QuickBooks_HTTP::HTTP_401 and
-			false !== stripos($return, 'expired') and         // Expired OAuth token
+			( false !== stripos($return, 'expired') or false !== stripos($return, 'AuthenticationFailed') ) and         // Expired OAuth token
 			$this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
 			$this->_authcred['oauth_access_token'])
 		{
