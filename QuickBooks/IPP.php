@@ -677,7 +677,8 @@ class QuickBooks_IPP
 
 		if ($needs_renewal)
 		{
-			if ($discover = QuickBooks_IPP_IntuitAnywhere::discover($this->_sandbox))
+			if ($discover = QuickBooks_IPP_IntuitAnywhere::discover($this->_sandbox) and
+				!empty($this->_authcred['oauth_client_id']))
 			{
 				$ch = curl_init($discover['token_endpoint']);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
