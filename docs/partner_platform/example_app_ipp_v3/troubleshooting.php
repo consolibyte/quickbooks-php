@@ -8,8 +8,8 @@ header('Content-Type: text/plain');
 require_once dirname(__FILE__) . '/../../../QuickBooks.php';
 
 $urls = array(
-	QuickBooks_IPP_IntuitAnywhere::URL_REQUEST_TOKEN,
-	QuickBooks_IPP_IntuitAnywhere::URL_CONNECT_RECONNECT,
+	QuickBooks_IPP_IntuitAnywhere::URL_DISCOVERY_SANDBOX,
+	QuickBooks_IPP_IntuitAnywhere::URL_DISCOVERY_PRODUCTION,
 	);
 
 for ($i = 0; $i <= 1; $i++)
