@@ -600,20 +600,9 @@ class QuickBooks_HTTP
 				return $len;
 			}
 		);
-		$this->_last_responseheaders = $response_headers;
 
 		$response = curl_exec($ch);
-
-		/*
-		print("\n\n\n" . '---------------------' . "\n");
-		print('[[request ' . $request . ']]' . "\n\n\n");
-		print('[[resonse ' . $response . ']]' . "\n\n\n\n\n");
-
-		print_r($params);
-		print_r(curl_getinfo($ch));
-		print_r($headers);
-		print("\n" . '---------------------' . "\n\n\n\n");
-		*/
+		$this->_last_responseheaders = $response_headers;
 
 		$this->_last_response = $response;
 		$this->_log('HTTP response: ' . substr($response, 0, 500) . '...', QUICKBOOKS_LOG_VERBOSE);
