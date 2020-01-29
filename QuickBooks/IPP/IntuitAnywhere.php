@@ -351,7 +351,8 @@ class QuickBooks_IPP_IntuitAnywhere
 	 */
 	public function handle($app_tenant, $state = '')
 	{
-		if ($this->check($app_tenant) and 		// We have tokens ...
+		if ($app_tenant and
+			$this->check($app_tenant) and 		// We have tokens ...
 			$this->test($app_tenant))			// ... and they are valid
 		{
 			// They are already logged in, send them on to exchange data
