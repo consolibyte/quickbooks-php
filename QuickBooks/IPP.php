@@ -996,16 +996,18 @@ class QuickBooks_IPP
 		return $this->_ids_version;
 	}
 
-	/**
-	 * Make an IDS request (Intuit Data Services) to the remote server
-	 *
-	 * @param QuickBooks_IPP_Context $Context		The context (token and ticket) to use
-	 * @param integer $realmID						The realm to query against
-	 * @param string $resource						A QuickBooks_IDS::RESOURCE_* constant
-	 * @param string $optype
-	 * @param string $xml
-	 * @return QuickBooks_IPP_Object
-	 */
+    /**
+     * Make an IDS request (Intuit Data Services) to the remote server
+     *
+     * @param QuickBooks_IPP_Context $Context The context (token and ticket) to use
+     * @param $realm
+     * @param string $resource A QuickBooks_IDS::RESOURCE_* constant
+     * @param string $optype
+     * @param string $xml
+     * @param null $ID
+     * @param int $minVersion
+     * @return QuickBooks_IPP_Object
+     */
 	public function IDS($Context, $realm, $resource, $optype, $xml = '', $ID = null, $minVersion = 6)
 	{
 		$IPP = $Context->IPP();
@@ -1064,7 +1066,7 @@ class QuickBooks_IPP
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_VOID)
 		{
-			$qs = '?operation=void&requestid=' . $guid . '&minorversion=6';        // Used for invoices...
+			$qs = '?operation=void&requestid=' . $guid . '&minorversion='.$minVersion;        // Used for invoices...
 
 			if ($resource == QuickBooks_IPP_IDS::RESOURCE_PAYMENT)    // ... and something different used for payments *sigh*
 			{
