@@ -1006,7 +1006,7 @@ class QuickBooks_IPP
 	 * @param string $xml
 	 * @return QuickBooks_IPP_Object
 	 */
-	public function IDS($Context, $realm, $resource, $optype, $xml = '', $ID = null)
+	public function IDS($Context, $realm, $resource, $optype, $xml = '', $ID = null, $minVersion = 6)
 	{
 		$IPP = $Context->IPP();
 
@@ -1014,11 +1014,11 @@ class QuickBooks_IPP
 		{
 			case QuickBooks_IPP_IDS::VERSION_3:
 			default:
-				return $this->_IDS_v3($Context, $realm, $resource, $optype, $xml, $ID);
+				return $this->_IDS_v3($Context, $realm, $resource, $optype, $xml, $ID, $minVersion);
 		}
 	}
 
-	protected function _IDS_v3($Context, $realm, $resource, $optype, $xml_or_query, $ID)
+	protected function _IDS_v3($Context, $realm, $resource, $optype, $xml_or_query, $ID, $minVersion = 6)
 	{
 		// All v3 URLs have the same baseURL
 		$this->baseURL(QuickBooks_IPP_IDS::URL_V3);
@@ -1038,18 +1038,18 @@ class QuickBooks_IPP
 		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)
 		{
 			$post = true;
-			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?requestid=' . $guid . '&minorversion=6';
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?requestid=' . $guid . '&minorversion='.$minVersion;
 			$xml = $xml_or_query;
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
 		{
 			$post = false;
-			$url = $this->baseURL() . '/company/' . $realm . '/query?query=' . $xml_or_query . '&requestid=' . $guid . '&minorversion=6';
+			$url = $this->baseURL() . '/company/' . $realm . '/query?query=' . $xml_or_query . '&requestid=' . $guid . '&minorversion='.$minVersion;
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_CDC)
 		{
 			$post = false;
-			$url = $this->baseURL() . '/company/' . $realm . '/cdc?entities=' . implode(',', $xml_or_query[0]) . '&changedSince=' . $xml_or_query[1] . '&minorversion=6';
+			$url = $this->baseURL() . '/company/' . $realm . '/cdc?entities=' . implode(',', $xml_or_query[0]) . '&changedSince=' . $xml_or_query[1] . '&minorversion='.$minVersion;
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_ENTITLEMENTS)
 		{
@@ -1059,7 +1059,7 @@ class QuickBooks_IPP
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 		{
 			$post = true;
-			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?operation=delete&requestid=' . $guid . '&minorversion=6';
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?operation=delete&requestid=' . $guid . '&minorversion='.$minVersion;
 			$xml = $xml_or_query;
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_VOID)
@@ -1068,7 +1068,7 @@ class QuickBooks_IPP
 
 			if ($resource == QuickBooks_IPP_IDS::RESOURCE_PAYMENT)    // ... and something different used for payments *sigh*
 			{
-				$qs = '?operation=update&include=void&requestid=' . $guid . '&minorversion=6';
+				$qs = '?operation=update&include=void&requestid=' . $guid . '&minorversion='.$minVersion;
 			}
 
 			$post = true;
@@ -1078,7 +1078,7 @@ class QuickBooks_IPP
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_PDF)
 		{
 			$post = false;
-			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/pdf?requestid=' . $guid . '&minorversion=6';
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/pdf?requestid=' . $guid . '&minorversion='.$minVersion;
 		}
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_DOWNLOAD)
 		{
@@ -1088,7 +1088,7 @@ class QuickBooks_IPP
 		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_SEND)
 		{
 			$post = true;
-			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/send?requestid=' . $guid . '&minorversion=6';
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/send?requestid=' . $guid . '&minorversion='.$minVersion;
 		}
 
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);

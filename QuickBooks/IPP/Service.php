@@ -913,13 +913,13 @@ abstract class QuickBooks_IPP_Service
 		return null;
 	}
 
-	protected function _query($Context, $realmID, $query)
+	protected function _query($Context, $realmID, $query, $minVersion = 6)
 	{
 		$IPP = $Context->IPP();
 	
 		// Send the data to IPP 
 		//$return = $IPP->IDS($Context, $realmID, null, QuickBooks_IPP_IDS::OPTYPE_QUERY, str_replace('=', '%3D', $query));
-		$return = $IPP->IDS($Context, $realmID, null, QuickBooks_IPP_IDS::OPTYPE_QUERY, urlencode($query));
+		$return = $IPP->IDS($Context, $realmID, null, QuickBooks_IPP_IDS::OPTYPE_QUERY, urlencode($query), $minVersion);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 		
