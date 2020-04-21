@@ -54,7 +54,8 @@ class QuickBooks_IPP_Object_Line extends QuickBooks_IPP_Object
 			'SalesTaxCodeName' => true, 
 			'Custom1' => true, 
 			'Custom2' => true, 
-			'ServiceDate' => true, 
+			'ServiceDate' => true,
+            'Received' => true,
 		);
 	}
 }
