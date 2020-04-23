@@ -613,6 +613,122 @@ class QuickBooks_IPP
 		}
 	}
 
+    /**
+     * Do we need to renew the OAuth access token? If so, renew it
+     *
+     * @return bool
+     */
+    public function handleRenewal()
+    {
+        for ($i = 0; $i < 3; $i++)
+        {
+            $renewed = $this->_handleRenewal();
+
+            if ($renewed)
+            {
+                break;
+            }
+        }
+
+        return $renewed;
+    }
+
+    /**
+     * Force renewal of an OAuth access token, even if we don't think we need to
+     *
+     * @return bool
+     */
+    public function forceRenewal()
+    {
+        for ($i = 0; $i < 3; $i++)
+        {
+            $renewed = $this->_handleRenewal(true);
+
+            if ($renewed)
+            {
+                break;
+            }
+        }
+
+        return $renewed;
+    }
+
+    /**
+     * Attempt to renew the OAuth v2 tokens... if a renewal is required
+     *
+     * @return bool
+     */
+    protected function _handleRenewal($force_renewal = false)
+    {
+        static $was_renewed_during_this_session = false;
+        static $renewal_attempts = 0;
+
+        $renewal_attempts++;
+
+        $needs_renewal = false;
+
+        if (is_object($this->_driver) and
+            $this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
+            $force_renewal)
+        {
+            $needs_renewal = true;
+        }
+        else if (!$was_renewed_during_this_session and
+            is_object($this->_driver) and
+            $this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
+            strtotime($this->_authcred['oauth_access_expiry']) - 60 < time())
+        {
+            $needs_renewal = true;
+        }
+
+        if ($needs_renewal)
+        {
+            if ($discover = QuickBooks_IPP_IntuitAnywhere::discover($this->_sandbox) and
+                !empty($this->_authcred['oauth_client_id']))
+            {
+                $ch = curl_init($discover['token_endpoint']);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);   // Do not follow; security risk here
+
+                curl_setopt($ch, CURLOPT_USERPWD, $this->_authcred['oauth_client_id'] . ':' . $this->_authcred['oauth_client_secret']);
+
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array(
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $this->_authcred['oauth_refresh_token']
+                )));
+
+                $retr = curl_exec($ch);
+                $info = curl_getinfo($ch);
+
+                if ($info['http_code'] == 200)
+                {
+                    $was_renewed_during_this_session = true;
+
+                    $json = json_decode($retr, true);
+
+                    $this->_driver->oauthAccessRefreshV2(
+                        $this->_key,
+                        $this->_authcred['quickbooks_oauthv2_id'],
+                        $json['access_token'],
+                        $json['refresh_token'],
+                        date('Y-m-d H:i:s', time() + (int) $json['expires_in']),
+                        date('Y-m-d H:i:s', time() + (int) $json['x_refresh_token_expires_in']));
+
+                    // Replace our auth creds with the new ones
+                    $this->_authcred = array_merge($this->_authcred, $this->_driver->oauthLoadV2($this->_key, $this->_authcred['app_tenant']));
+
+                    // Successfully renewed!
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // No renewal needed
+        return true;
+    }
+
 	protected function _IDS_v3($Context, $realm, $resource, $optype, $xml_or_query, $ID, $minVersion = 6)
 	{
 		// All v3 URLs have the same baseURL
