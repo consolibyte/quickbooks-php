@@ -250,11 +250,11 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
 	}
 	
 	// Make sure the requests get queued up
-	//$Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, 1, QB_PRIORITY_SALESORDER);
-	//$Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, 1, QB_PRIORITY_INVOICE);
-	$Queue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, 1, QB_PRIORITY_PURCHASEORDER);
-	$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1, QB_PRIORITY_CUSTOMER);
-	//$Queue->enqueue(QUICKBOOKS_IMPORT_ITEM, 1, QB_PRIORITY_ITEM);
+	//$Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, 1, QB_PRIORITY_SALESORDER, null, $user);
+	//$Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, 1, QB_PRIORITY_INVOICE, null, $user);
+	$Queue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, 1, QB_PRIORITY_PURCHASEORDER, null, $user);
+	$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1, QB_PRIORITY_CUSTOMER, null, $user);
+	//$Queue->enqueue(QUICKBOOKS_IMPORT_ITEM, 1, QB_PRIORITY_ITEM, null, $user);
 }
 
 /**
@@ -370,7 +370,7 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 		// Queue up another request
 		
 		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, null, QB_PRIORITY_INVOICE, array( 'iteratorID' => $idents['iteratorID'] ));
+		$Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, null, QB_PRIORITY_INVOICE, array( 'iteratorID' => $idents['iteratorID'] ), $user);
 	}
 	
 	// This piece of the response from QuickBooks is now stored in $xml. You 
@@ -518,7 +518,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 		// Queue up another request
 		
 		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, null, QB_PRIORITY_CUSTOMER, array( 'iteratorID' => $idents['iteratorID'] ));
+		$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, null, QB_PRIORITY_CUSTOMER, array( 'iteratorID' => $idents['iteratorID'] ), $user);
 	}
 	
 	// This piece of the response from QuickBooks is now stored in $xml. You 
@@ -634,7 +634,7 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 		// Queue up another request
 		
 		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, null, QB_PRIORITY_SALESORDER, array( 'iteratorID' => $idents['iteratorID'] ));
+		$Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, null, QB_PRIORITY_SALESORDER, array( 'iteratorID' => $idents['iteratorID'] ), $user);
 	}
 	
 	// This piece of the response from QuickBooks is now stored in $xml. You 
@@ -782,7 +782,7 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 		// Queue up another request
 		
 		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_ITEM, null, QB_PRIORITY_ITEM, array( 'iteratorID' => $idents['iteratorID'] ));
+		$Queue->enqueue(QUICKBOOKS_IMPORT_ITEM, null, QB_PRIORITY_ITEM, array( 'iteratorID' => $idents['iteratorID'] ), $user);
 	}
 	
 	// Import all of the records
@@ -922,7 +922,7 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 		// Queue up another request
 		
 		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, null, QB_PRIORITY_PURCHASEORDER, array( 'iteratorID' => $idents['iteratorID'] ));
+		$Queue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, null, QB_PRIORITY_PURCHASEORDER, array( 'iteratorID' => $idents['iteratorID'] ), $user);
 	}
 	
 	// This piece of the response from QuickBooks is now stored in $xml. You 
