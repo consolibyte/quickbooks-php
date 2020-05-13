@@ -493,7 +493,7 @@ class QuickBooks_HTTP
 		}
 
 		$query = '';
-		if (count($this->_get))
+		if (isset($this->_get) && count($this->_get))
 		{
 			$query = '?' . http_build_query($this->_get);
 		}
