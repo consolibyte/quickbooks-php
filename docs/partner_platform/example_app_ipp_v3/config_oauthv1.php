@@ -1,3 +1,5 @@
+<<<<<<< HEAD:docs/partner_platform/example_app_ipp_v3/config.php
+=======
 <?php
 
 /**

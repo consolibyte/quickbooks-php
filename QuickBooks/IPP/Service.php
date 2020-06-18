@@ -108,6 +108,31 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 
+	protected function _setExchangeRate($Context, $realmID, $Object) {
+
+		$IPP = $Context->IPP();
+		// Send the data to IPP
+		//                  $Context, $realm, $resource, $optype, $xml = '', $ID = null
+
+		//$newObject = [QuickBooks_IPP_IDS::OPTYPE_EXCHANGERATE => $Object];
+		$return = $IPP->JSONRequest($Context, $realmID, QuickBooks_IPP_IDS::OPTYPE_EXCHANGERATE, $Object);
+
+		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
+		$this->_setLastDebug($Context->lastDebug());
+
+		if ($IPP->errorCode() != QuickBooks_IPP::ERROR_OK)
+		{
+			$this->_setError(
+				$IPP->errorCode(),
+				$IPP->errorText(),
+				$IPP->errorDetail());
+
+			return false;
+		}
+
+		return $return;
+	}
+
 	protected function _cdc($Context, $realmID, $entities, $timestamp, $page, $size)
 	{
 		$IPP = $Context->IPP();
@@ -419,7 +444,7 @@ abstract class QuickBooks_IPP_Service
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 
-		if (count($return))
+		if (is_array($return) && count($return))
 		{
 			return $return[0];
 		}
@@ -606,6 +631,14 @@ abstract class QuickBooks_IPP_Service
 		return false;
 	}
 
+    protected function _download($Context, $realmID, $resource, $ID)
+    {
+        // v3 only
+        $IPP = $Context->IPP();
+        $IPP->useIDSParser(false); // We want raw pdf output
+        return $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_DOWNLOAD, null, $ID);
+    }
+
 	protected function _void($Context, $realmID, $resource, $ID)
 	{
 		// v3 only
@@ -669,15 +702,6 @@ abstract class QuickBooks_IPP_Service
 		$IPP->useIDSParser(false); // We want raw pdf output
 
 		return $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_PDF, null, $ID);
-	}
-
-	protected function _download($Context, $realmID, $resource, $ID)
-	{
-		// v3 only
-		$IPP = $Context->IPP();
-		$IPP->useIDSParser(false); // We want raw pdf output
-
-		return $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_DOWNLOAD, null, $ID);
 	}
 
 	protected function _send($Context, $realmID, $resource, $ID)
@@ -889,13 +913,13 @@ abstract class QuickBooks_IPP_Service
 		return null;
 	}
 
-	protected function _query($Context, $realmID, $query)
+	protected function _query($Context, $realmID, $query, $minVersion = 6)
 	{
 		$IPP = $Context->IPP();
 
 		// Send the data to IPP
 		//$return = $IPP->IDS($Context, $realmID, null, QuickBooks_IPP_IDS::OPTYPE_QUERY, str_replace('=', '%3D', $query));
-		$return = $IPP->IDS($Context, $realmID, null, QuickBooks_IPP_IDS::OPTYPE_QUERY, urlencode($query));
+		$return = $IPP->IDS($Context, $realmID, null, QuickBooks_IPP_IDS::OPTYPE_QUERY, urlencode($query), null, $minVersion);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 

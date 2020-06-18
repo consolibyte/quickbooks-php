@@ -44,11 +44,15 @@ class QuickBooks_IPP_IDS
 
 	const OPTYPE_CDC = 'ChangeDataCapture';
 
+	const OPTYPE_EXCHANGERATE = 'ExchangeRate';
+
 	const OPTYPE_ENTITLEMENTS = 'Entitlements';
 	
 	const OPTYPE_SEND = 'Send';
-	
-	/**
+
+    const RESOURCE_DOWNLOAD = 'Download';
+
+    /**
 	 * This is not a real operation type in IDS terms, but is neccessary to distinguish between queries and findById in QuickBooks Online in IDS v2.
 	 */
 	const OPTYPE_FINDBYID = '_findById_';
@@ -124,11 +128,11 @@ class QuickBooks_IPP_IDS
 
 	const RESOURCE_DISCOUNT = 'Discount';
 
-	const RESOURCE_DOWNLOAD = 'Download';
-
 	const RESOURCE_EMPLOYEE = 'Employee';
 
 	const RESOURCE_ESTIMATE = 'Estimate';
+
+	const RESOURCE_EXCHANGERATE = 'ExchangeRate';
 
 	const RESOURCE_INVOICE = 'Invoice';
 
@@ -213,6 +217,7 @@ class QuickBooks_IPP_IDS
 			QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT,
 			QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY,
 			QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT,
+			QuickBooks_IPP_IDS::RESOURCE_EXCHANGERATE,
 			);
 
 		if (in_array($resource, $txns))
