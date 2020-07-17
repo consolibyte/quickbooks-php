@@ -10299,7 +10299,7 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 		// Find out if we need to iterate further to get more results
 		$matches = array();
-		//$iterator_count = ereg('iteratorRemainingCount="([0-9]*)" iteratorID="([^"]*)"', $xml, $matches);
+		//$iterator_count = preg_match('@iteratorRemainingCount="([0-9]*)" iteratorID="([^"]*)"@s', $xml, $matches);
 		$matched_iteratorID = QuickBooks_XML::extractTagAttribute('iteratorID', $xml);
 		$matched_iteratorRemainingCount = QuickBooks_XML::extractTagAttribute('iteratorRemainingCount', $xml);
 
