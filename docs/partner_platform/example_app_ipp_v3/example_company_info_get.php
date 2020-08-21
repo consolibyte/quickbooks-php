@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/config.php';
+require_once dirname(__FILE__) . '/config_oauthv2.php';
 
 require_once dirname(__FILE__) . '/views/header.tpl.php';
 
@@ -10,50 +10,51 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-// Set up the IPP instance
-$IPP = new QuickBooks_IPP($dsn);
+$CompanyInfoService = new QuickBooks_IPP_Service_CompanyInfo();
 
-// Get our OAuth credentials from the database
-$creds = $IntuitAnywhere->load($the_username, $the_tenant);
+$Info = $CompanyInfoService->get($Context, $realm);
 
-// Tell the framework to load some data from the OAuth store
-$IPP->authMode(
-	QuickBooks_IPP::AUTHMODE_OAUTH, 
-	$the_username, 
-	$creds);
+// Let's get some data! 
+$company_type = $Info->getXPath('//CompanyInfo/NameValue[Name="CompanyType"]/Value');
+print('Company type: ' . $company_type . "\n");
 
-// Print the credentials we're using
-//print_r($creds);
+$company_name = $Info->getCompanyName();
+print('Company name (method): ' . $company_name . "\n");
 
-// This is our current realm
-$realm = $creds['qb_realm'];
+$company_name = $Info->getXPath('//CompanyInfo/CompanyName');
+print('Company name (XPath): ' . $company_name . "\n");
 
-// Load the OAuth information from the database
-if ($Context = $IPP->context())
+$country = $Info->getCountry();
+print('Country: ' . $country . "\n");
+
+$email = $Info->getEmail()->getAddress();
+print('Address: ' . $email . "\n");
+
+$count = $Info->countNameValue();
+for ($i = 0; $i < $count; $i++)
 {
-	// Set the IPP version to v3 
-	$IPP->version(QuickBooks_IPP_IDS::VERSION_3);
-	
-	$CompanyInfoService = new QuickBooks_IPP_Service_CompanyInfo();
-	
-	$info = $CompanyInfoService->get($Context, $realm);
+	$NameValue = $Info->getNameValue($i);
+	//print_r($NameValue);
 
-	print_r($info);
-
-	/*
-	print($IPP->lastError($Context));
-
-	print("\n\n\n\n");
-	print('Request [' . $IPP->lastRequest() . ']');
-	print("\n\n\n\n");
-	print('Response [' . $IPP->lastResponse() . ']');
-	print("\n\n\n\n");
-	*/
+	print('NameValue: ' . $NameValue->getName() . ' = ' . $NameValue->getValue() . "\n");
 }
-else
-{
-	die('Unable to load a context...?');
-}
+
+print("\n\n\n");
+
+// Here's a dump of all the data 
+print('Dump of all data: ' . "\n");
+print_r($Info);
+
+
+/*
+print($IPP->lastError($Context));
+
+print("\n\n\n\n");
+print('Request [' . $IPP->lastRequest() . ']');
+print("\n\n\n\n");
+print('Response [' . $IPP->lastResponse() . ']');
+print("\n\n\n\n");
+*/
 
 ?>
 

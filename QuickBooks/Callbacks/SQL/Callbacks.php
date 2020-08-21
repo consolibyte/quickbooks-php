@@ -10811,6 +10811,9 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					$extra['EntityListID'] = $extra['ListID'];
 					$extra['EntityType'] = 'Employee';
 					break;
+				case 'employeeret employeepayrollinfo earnings':
+					$extra['EntityType'] = 'Earnings';
+					break;
 				case 'estimateret':
 					if (!isset($extra['TxnID']))
 					{
@@ -11133,11 +11136,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					case 'Service':
 					case 'SubscribedServices':
 					case 'TaxLineInfoRet':
-
-						// * * * WARNING WARNING WARNING * * *
-						// The next line of code causes problems with some responses
-						//	because it converts our associative array to turn into a
-						//	numeric array. This causes objects to get cut into multiple
+					case 'EmployeePayrollInfo':
+					case 'Earnings':
+						
+						// * * * WARNING WARNING WARNING * * * 
+						// The next line of code causes problems with some responses 
+						//	because it converts our associative array to turn into a 
+						//	numeric array. This causes objects to get cut into multiple 
 						//	pieces:
 						//
 						// array(

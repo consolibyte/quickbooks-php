@@ -101,7 +101,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemGroupLine extends QuickBooks_QBXML
 		
 		switch ($parent)
 		{
-			case QUICKBOOKS_ADD_RECEIPTITEM:
+			case QUICKBOOKS_ADD_ITEMRECEIPT:
 				$root = 'ItemGroupLineAdd';
 				$parent = null;
 				break;

@@ -277,8 +277,8 @@ class QuickBooks_WebConnector_Handlers
 
 		$this->_callback_config = $callback_config;
 
-		//$this->_driver->log('Handler is starting up...: ' . var_export($this->_config, true), '', QUICKBOOKS_LOG_DEBUG);
-		$this->_log('Handler is starting up...: ' . var_export($this->_config, true), '', QUICKBOOKS_LOG_DEBUG);
+		//$this->_driver->log('Handler is starting up...: ' . print_r($this->_config, true), '', QUICKBOOKS_LOG_DEBUG);
+		$this->_log('Handler is starting up...: ' . print_r($this->_config, true), '', QUICKBOOKS_LOG_DEBUG);
 	}
 
 	/**
@@ -848,7 +848,7 @@ class QuickBooks_WebConnector_Handlers
 					{
 						// They are sending this request with an INVALID requestID! Error this out and warn them!
 
-						$err = 'This request contains an invalid embedded requestID="..." attribute; either embed the $requestID parameter, or leave out the requestID="..." attribute entirely, found [' . $requestID . ' => ' . $embedded_action . ', ' . $embedded_ident . ']!';
+						$err = 'This request contains an invalid embedded requestID="..." attribute; either embed the $requestID parameter, or leave out the requestID="..." attribute entirely, found [' . $requestID . ' vs. expected ' . $next['quickbooks_queue_id'] . ']!';
 					}
 				}
 
@@ -1092,11 +1092,11 @@ class QuickBooks_WebConnector_Handlers
 	{
 		if ($which == 0)
 		{
-			return QuickBooks_Callbacks::callRequestHandler($this->_driver, $this->_map, $requestID, $action, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml_or_version, $qb_identifier_or_locale, $this->_callback_config, $qbxml);
+			return QuickBooks_Callbacks::callRequestHandler($this->_driver, $this->_map, $requestID, $action, $user, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml_or_version, $qb_identifier_or_locale, $this->_callback_config, $qbxml);
 		}
 		else if ($which == 1)
 		{
-			return QuickBooks_Callbacks::callResponseHandler($this->_driver, $this->_map, $requestID, $action, $user, $action, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml_or_version, $qb_identifier_or_locale, $this->_callback_config, $qbxml);
+			return QuickBooks_Callbacks::callResponseHandler($this->_driver, $this->_map, $requestID, $action, $user, $ident, $extra, $err, $last_action_time, $last_actionident_time, $xml_or_version, $qb_identifier_or_locale, $this->_callback_config, $qbxml);
 		}
 
 		$err = 'Request for a mapped function could not be fulfilled, invalid $which parameter.';

@@ -43,7 +43,7 @@ class QuickBooks_QBXML_Object_Invoice_SalesTaxLine extends QuickBooks_QBXML_Obje
 	
 	public function setRate($rate)
 	{
-		return $this->setRate('Rate', $rate);
+		return $this->set('Rate', $rate);
 	}	
 	
 	public function setAccountListID($ListID)
