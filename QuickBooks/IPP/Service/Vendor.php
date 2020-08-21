@@ -35,4 +35,20 @@ class QuickBooks_IPP_Service_Vendor extends QuickBooks_IPP_Service
 	{
 		return parent::_query($Context, $realm, $query);
 	}
+
+	/**
+	 * Updates vendor.
+	 *
+	 * @param object $Context Context.
+	 * @param string $realm   Company Id.
+	 * @param string $IDType  Resource.
+	 * @param object $Object  Object.
+	 *
+	 * @return boolean
+	 */
+	public function update($Context, $realm, $IDType, $Object)
+	{
+		return parent::_update($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_VENDOR, $Object, $IDType);
+	}
+
 }

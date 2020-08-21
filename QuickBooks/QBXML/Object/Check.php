@@ -387,6 +387,24 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
 		return $this->addListItem('AddCheckToTxn', $obj);
 	}
 	
+	public function setAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $postalcode = '', $country = '', $note = '')
+	{
+		return $this->_setAddress('', $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note);
+	}
+
+	protected function _setAddress($post, $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note)
+	{
+		for ($i = 1; $i <= 5; $i++)
+		{
+			$this->set('Address' . $post . ' Addr' . $i, ${'addr' . $i});
+		}
+
+		$this->set('Address' . $post . ' City', $city);
+		$this->set('Address' . $post . ' State', $state);
+		$this->set('Address' . $post . ' PostalCode', $postalcode);
+		$this->set('Address' . $post . ' Country', $country);
+		$this->set('Address' . $post . ' Note', $note);
+	}
 	public function asList($request)
 	{
 		switch ($request)

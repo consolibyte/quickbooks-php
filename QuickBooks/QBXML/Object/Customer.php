@@ -118,6 +118,18 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
 	{
 		return $this->get('ParentRef ' . QUICKBOOKS_API_APPLICATIONID);
 	}
+
+	public function setCurrencyListID($lid)
+	{
+		return $this->set('CurrencyRef ListID', $lid);
+	}
+	
+	public function setCurrencyFullName($FullName)
+	{
+		return $this->setFullNameType('CurrencyRef FullName', null, null, $FullName);
+	}
+
+
 	
 	/**
 	 * Set the customer type list id

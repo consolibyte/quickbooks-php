@@ -121,7 +121,7 @@ class QuickBooks_WebConnector_Server
 	 * @param mixed $dsn_or_conn		Either a DSN-style connection string *or* a database resource (if reusing an existing connection)
 	 * @param array $map				An associative array mapping queued commands to function/method calls
 	 * @param array $onerror			An associative array mapping error codes to function/method calls
-	 * @param arary $hooks				An associative array mapping events to hook function/method calls
+	 * @param array $hooks				An associative array mapping events to hook function/method calls
 	 * @param string $wsdl				The path to the WSDL file to use for the SOAP server methods
 	 * @param array $soap_options		Options to pass to the SOAP server (these mirror the default PHP SOAP server options)
 	 * @param array $handler_options	Options to pass to the handler class
@@ -193,15 +193,7 @@ class QuickBooks_WebConnector_Server
 		$this->_callback_config = $callback_options;
 		
 		// Raw input
-		$input = '';
-		if (isset($HTTP_RAW_POST_DATA) and strlen($HTTP_RAW_POST_DATA))
-		{
-			$input = $HTTP_RAW_POST_DATA;	
-		}
-		else
-		{
-			$input = file_get_contents('php://input');
-		}
+		$input = file_get_contents('php://input');
 		
 		$this->_input = $input;
 				

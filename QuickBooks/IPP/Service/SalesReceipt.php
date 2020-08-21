@@ -21,10 +21,9 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Service.php');
 
 class QuickBooks_IPP_Service_SalesReceipt extends QuickBooks_IPP_Service
 {
-	public function findAll($Context, $realmID)
+	public function update($Context, $realmID, $IDType, $Object)
 	{
-		$xml = null;
-		return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $xml);
+		return parent::_update($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $Object, $IDType);
 	}
 	
 	/**
@@ -49,5 +48,25 @@ class QuickBooks_IPP_Service_SalesReceipt extends QuickBooks_IPP_Service
 	{
 		$xml = null;
 		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $ID, $domain, $xml);
+	}
+
+	public function delete($Context, $realmID, $IDType)
+	{
+		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $IDType);
+	}
+
+	public function void($Context, $realmID, $IDType)
+	{
+		return parent::_void($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $IDType);
+	}
+
+	public function pdf($Context, $realmID, $IDType)
+	{
+		return parent::_pdf($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $IDType);
+	}
+
+	public function send($Context, $realmID, $IDType)
+	{
+		return parent::_send($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $IDType);
 	}
 }

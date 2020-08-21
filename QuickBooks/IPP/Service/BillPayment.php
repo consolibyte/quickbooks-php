@@ -51,4 +51,10 @@ class QuickBooks_IPP_Service_BillPayment extends QuickBooks_IPP_Service
 	{
 		return parent::_query($Context, $realm, $query);
 	}
+
+	public function delete($Context, $realmID, $IDType)
+	{
+		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENT, $IDType);
+	}
+
 }

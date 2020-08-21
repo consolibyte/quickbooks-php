@@ -21,24 +21,19 @@
  */
 
 /**
- * Base QuickBooks constants
- */
-require_once 'QuickBooks.php';
-
-/**
  * QuickBooks driver base class
  */
-require_once 'QuickBooks/Driver.php';
+QuickBooks_Loader::load('/QuickBooks/Driver.php');
 
 /**
  * QuickBooks driver SQL base class
  */
-require_once 'QuickBooks/Driver/Sql.php';
+QuickBooks_Loader::load('/QuickBooks/Driver/Sql.php', false);
 
 /**
  * QuickBooks utilities class
  */
-require_once 'QuickBooks/Utilities.php';
+QuickBooks_Loader::load('/QuickBooks/Utilities.php');
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_SALT'))
 {
@@ -152,7 +147,7 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_CONNECTIONTABLE'))
 /**
  * QuickBooks MySQL back-end driver
  */
-class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
+class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
 {
 	
 	/**
@@ -206,7 +201,7 @@ class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
 		$config = $this->_defaults($config);
 		$this->_log_level = (int) $config['log_level'];
 		
-		if (is_resource($dsn_or_conn))
+		if (is_resource($dsn_or_conn) or ($dsn_or_conn instanceof mysqli))
 		{
 			$this->_conn = $dsn_or_conn;
 		}
@@ -308,7 +303,7 @@ class QuickBooks_Driver_SQL_Mysqli extends QuickBooks_Driver_Sql
 	{
 		if ($port)
 		{
-			$this->_conn = new mysqli($host, $user, $pass, $db) or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysqli_error(): ' . mysqli_connect_error());
+			$this->_conn = new mysqli($host, $user, $pass, $db, $port) or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysqli_error(): ' . mysqli_connect_error());
 		}
 		else
 		{

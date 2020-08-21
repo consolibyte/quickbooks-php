@@ -43,4 +43,19 @@ class QuickBooks_IPP_Service_VendorCredit extends QuickBooks_IPP_Service
 	{
 		return parent::_query($Context, $realm, $query);
 	}
+
+	/**
+	 * Deletes vendor credit.
+	 *
+	 * @param object $Context Context.
+	 * @param string $realmID Company Id.
+	 * @param string $IDType  Resource.
+	 *
+	 * @return boolean
+	 */
+	public function delete($Context, $realmID, $IDType)
+	{
+		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT, $IDType);
+	}
+
 }

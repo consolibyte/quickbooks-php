@@ -490,6 +490,8 @@ define('QUICKBOOKS_MOD_EMPLOYEE', 'EmployeeMod');
 define('QUICKBOOKS_QUERY_EMPLOYEE', 'EmployeeQuery');
 define('QUICKBOOKS_IMPORT_EMPLOYEE', 'EmployeeImport');
 
+define('QUICKBOOKS_QUERY_ENTITY', 'EntityQuery');
+
 define('QUICKBOOKS_OBJECT_ESTIMATE', 'Estimate');
 define('QUICKBOOKS_ADD_ESTIMATE', 'EstimateAdd');
 define('QUICKBOOKS_MOD_ESTIMATE', 'EstimateMod');
@@ -614,6 +616,12 @@ define('QUICKBOOKS_IMPORT_SUBTOTALITEM', 'ItemSubtotalImport');
 
 define('QUICKBOOKS_QUERY_ITEMSITES', 'ItemSitesQuery');
 
+define('QUICKBOOKS_OBJECT_INVENTORYSITE', 'InventorySite');
+define('QUICKBOOKS_ADD_INVENTORYSITE', 'InventorySiteAdd');
+define('QUICKBOOKS_MOD_INVENTORYSITE', 'InventorySiteMod');
+define('QUICKBOOKS_QUERY_INVENTORYSITE', 'InventorySiteQuery');
+define('QUICKBOOKS_IMPORT_INVENTORYSITE', 'InventorySiteImport');
+
 define('QUICKBOOKS_OBJECT_JOBTYPE', 'JobType');
 define('QUICKBOOKS_ADD_JOBTYPE', 'JobTypeAdd');
 define('QUICKBOOKS_QUERY_JOBTYPE', 'JobTypeQuery');
@@ -671,6 +679,7 @@ define('QUICKBOOKS_OBJECT_OTHERNAME', 'OtherName');
 define('QUICKBOOKS_ADD_OTHERNAME', 'OtherNameAdd');
 define('QUICKBOOKS_MOD_OTHERNAME', 'OtherNameMod');
 define('QUICKBOOKS_QUERY_OTHERNAME', 'OtherNameQuery');
+define('QUICKBOOKS_IMPORT_OTHERNAME', 'OtherNameImport');
 
 define('QUICKBOOKS_OBJECT_PAYMENTMETHOD', 'PaymentMethod');
 define('QUICKBOOKS_ADD_PAYMENTMETHOD', 'PaymentMethodAdd');

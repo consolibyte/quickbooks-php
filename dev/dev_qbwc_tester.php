@@ -1,7 +1,7 @@
 <?php
 
 
-$url = 'https://qbsandbox.directconnectsolutions.com/quickbooks/qbwc';
+$url = '';
 $username = 'keithtest';
 $password = 'password';
 

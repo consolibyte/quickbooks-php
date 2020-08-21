@@ -53,9 +53,13 @@ class QuickBooks_IPP_Object
 		$XML = new SimpleXMLElement($str);
 		
 		$retr = $XML->xpath($xpath);
+
+		//print_r($retr);
 		
 		// This is our node value
 		$cur = current($retr);
+
+		//print_r($cur);
 		
 		if (is_object($cur))
 		{

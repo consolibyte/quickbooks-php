@@ -153,6 +153,16 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_CONNECTIONTABLE'))
 	define('QUICKBOOKS_DRIVER_SQL_MSSQL_CONNECTIONTABLE', QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE);
 }
 
+if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_OAUTHTABLE'))
+{
+	/**
+	 * The table name to store oauth data in 
+	 *
+	 * @var string
+	 */
+	define('QUICKBOOKS_DRIVER_SQL_MSSQL_OAUTHTABLE', QUICKBOOKS_DRIVER_SQL_OAUTHTABLE);
+}
+
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_MESSAGE_LEVEL'))
 {
 	/**
@@ -729,7 +739,9 @@ select * from (
 			case QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE:
 				return QUICKBOOKS_DRIVER_SQL_MSSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MSSQL_NOTIFYTABLE;
 			case QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE:
-				return QUICKBOOKS_DRIVER_SQL_MSSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MSSQL_CONNECTIONTABLE;				
+				return QUICKBOOKS_DRIVER_SQL_MSSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MSSQL_CONNECTIONTABLE;
+			case QUICKBOOKS_DRIVER_SQL_OAUTHTABLE:
+				return QUICKBOOKS_DRIVER_SQL_MSSQL_PREFIX . QUICKBOOKS_DRIVER_SQL_MSSQL_OAUTHTABLE;
 			default:
 				return $table;
 		}
@@ -748,6 +760,18 @@ select * from (
 	
 	protected function _fields($table)
 	{
-		return array();
+		$sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" . $table . "'";
+		
+		$list = array();
+		
+		$errnum = 0;
+		$errmsg = '';
+		$res = $this->_query($sql, $errnum, $errmsg);
+		while ($arr = $this->_fetch($res))
+		{
+			$list[] = current($arr);
+		}
+
+		return $list;
 	}
 }

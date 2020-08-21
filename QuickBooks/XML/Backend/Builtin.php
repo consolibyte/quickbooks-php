@@ -1,6 +1,6 @@
 <?php
 
-class QuickBooks_XML_Backend_BuiltIn implements QuickBooks_XML_Backend
+class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
 {
 	protected $_xml;
 	

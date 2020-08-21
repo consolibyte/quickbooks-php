@@ -37,4 +37,8 @@ class QuickBooks_IPP_Service_JournalEntry extends QuickBooks_IPP_Service
 		return parent::_add($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY, $Object);
 	}
 	
+	public function delete($Context, $realmID, $IDType)
+	{
+		return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY, $IDType);
+	}
 }
