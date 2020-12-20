@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/config.php';
+require_once dirname(__FILE__) . '/config_oauthv2.php';
 
 $InvoiceService = new QuickBooks_IPP_Service_Invoice();
 

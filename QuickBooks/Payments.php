@@ -629,6 +629,16 @@ class Quickbooks_Payments
 	}
 
 	/**
+	 * Get the last "intuit_tid" HTTP header returned
+	 *
+	 * @return string
+	 */
+	public function lastIntuitTid()
+	{
+		return $this->_last_intuittid;
+	}
+
+	/**
 	 * Set an error message
 	 *
 	 * @param integer $errnum	The error number/code
@@ -698,7 +708,7 @@ class Quickbooks_Payments
 	 */
 	protected function _http($Context, $url_path, $raw_body = null, $operation = null)
 	{
-		if($operation !== null)
+		if ($operation !== null)
 		{
 			$method = $operation;
 		}
@@ -714,22 +724,25 @@ class Quickbooks_Payments
 		$url = $this->_getBaseURL() . $url_path;
 
 		$authcreds = $Context->authcreds();
+		$authmode = $Context->authmode();
 
-		$params = array();
+		$auth_str = '';
+		if ($authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2)
+		{
+			// Do we need to renew OAuth tokens?
+			$Context->IPP()->handleRenewal();
 
-		$OAuth = new QuickBooks_IPP_OAuth($this->_oauth_consumer_key, $this->_oauth_consumer_secret);
-		$signed = $OAuth->sign($method, $url, $authcreds['oauth_access_token'], $authcreds['oauth_access_token_secret'], $params);
+			$authcreds = $Context->IPP()->authcreds();
 
-		//print_r($signed);
-
-		//$HTTP = new QuickBooks_HTTP($signed[2]);
+			$auth_str = 'Bearer ' . $authcreds['oauth_access_token'];
+		}
 
 		$HTTP = new QuickBooks_HTTP($url);
 
 		$headers = array(
 			'Content-Type' => 'application/json',
 			'Request-Id' => QuickBooks_Utilities::GUID(),
-			'Authorization' => $signed[3],
+			'Authorization' => $auth_str,
 			);
 		$HTTP->setHeaders($headers);
 
@@ -759,14 +772,49 @@ class Quickbooks_Payments
 			$return = null;  // ERROR
 		}
 
+		$info = $HTTP->lastInfo();
+		$this->_last_httpinfo = $info;
+
+		if ($info['http_code'] == 401)
+		{
+			// Auth tokens expired; automatically refresh and retry
+			$Context->IPP()->forceRenewal();
+			$authcreds = $Context->IPP()->authcreds();
+
+			// Set the new header
+			$headers['Authorization'] = 'Bearer ' . $authcreds['oauth_access_token'];
+			$HTTP->setHeaders($headers);
+
+			// Retry the request
+			if ($method == 'POST')
+			{
+				$return = $HTTP->POST();
+			}
+			else if ($method == 'GET')
+			{
+				$return = $HTTP->GET();
+			}
+			else if ($method == 'DELETE')
+			{
+				$return = $HTTP->DELETE();
+			}
+
+			$info = $HTTP->lastInfo();
+			$this->_last_httpinfo = $info;
+		}
+
 		$this->_last_request = $HTTP->lastRequest();
 		$this->_last_response = $HTTP->lastResponse();
 
 		//
 		$this->log($HTTP->getLog(), QUICKBOOKS_LOG_DEBUG);
 
-		$info = $HTTP->lastInfo();
-		$this->_last_httpinfo = $info;
+		$this->_last_intuittid = '';
+		$response_headers = $HTTP->lastResponseHeaders();
+		if (!empty($response_headers['intuit_tid']))
+		{
+			$this->_last_intuittid = $response_headers['intuit_tid'];
+		}
 
 		$errnum = $HTTP->errorNumber();
 		$errmsg = $HTTP->errorMessage();

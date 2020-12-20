@@ -1,6 +1,10 @@
 <?php
 
-require_once dirname(__FILE__) . '/config.php';
+// For OAuth2 (all new application, and what you should be migrating to)
+require_once dirname(__FILE__) . '/config_oauthv2.php';
+
+// For old/legacy applications
+//require_once dirname(__FILE__) . '/config_oauthv1.php';
 
 require_once dirname(__FILE__) . '/views/header.tpl.php';
 

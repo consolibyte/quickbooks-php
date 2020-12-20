@@ -15,7 +15,7 @@ QuickBooks_Loader::load('/QuickBooks/Map.php');
 
 QuickBooks_Loader::load('/QuickBooks/Driver/Factory.php');
 
-class QuickBooks_Map_QBXML extends QuickBooks_Map
+class QuickBooks_Map_Qbxml extends QuickBooks_Map
 {
 	protected $_driver;
 	

@@ -1,6 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/config.php';
+require_once dirname(__FILE__) . '/config_oauthv2.php';
+//require_once dirname(__FILE__) . '/config_oauthv1.php';
 
 require_once dirname(__FILE__) . '/views/header.tpl.php';
 
@@ -27,7 +28,7 @@ print('Response [' . $CustomerService->lastResponse() . ']');
 print("\n\n\n\n");
 print('Error [' . $CustomerService->lastError() . ']');
 print("\n\n\n\n");
-*/	
+*/
 
 ?>
 
