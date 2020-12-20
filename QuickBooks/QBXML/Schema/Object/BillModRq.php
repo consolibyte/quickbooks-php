@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: BillModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_BillModRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'BillMod';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -114,10 +114,10 @@ class QuickBooks_QBXML_Schema_Object_BillModRq extends QuickBooks_QBXML_Schema_O
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -200,10 +200,10 @@ class QuickBooks_QBXML_Schema_Object_BillModRq extends QuickBooks_QBXML_Schema_O
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 41,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -287,7 +287,7 @@ class QuickBooks_QBXML_Schema_Object_BillModRq extends QuickBooks_QBXML_Schema_O
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -370,10 +370,10 @@ class QuickBooks_QBXML_Schema_Object_BillModRq extends QuickBooks_QBXML_Schema_O
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -456,106 +456,106 @@ class QuickBooks_QBXML_Schema_Object_BillModRq extends QuickBooks_QBXML_Schema_O
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
-  0 => "TxnID"
-  1 => "EditSequence"
-  2 => "VendorRef ListID"
-  3 => "VendorRef FullName"
-  4 => "APAccountRef ListID"
-  5 => "APAccountRef FullName"
-  6 => "TxnDate"
-  7 => "DueDate"
-  8 => "RefNumber"
-  9 => "TermsRef ListID"
-  10 => "TermsRef FullName"
-  11 => "Memo"
-  12 => "IsTaxIncluded"
-  13 => "SalesTaxCodeRef ListID"
-  14 => "SalesTaxCodeRef FullName"
-  15 => "ClearExpenseLines"
-  16 => "ExpenseLineMod"
-  17 => "ExpenseLineMod TxnLineID"
-  18 => "ExpenseLineMod AccountRef ListID"
-  19 => "ExpenseLineMod AccountRef FullName"
-  20 => "ExpenseLineMod Amount"
-  21 => "ExpenseLineMod TaxAmount"
-  22 => "ExpenseLineMod Memo"
-  23 => "ExpenseLineMod CustomerRef ListID"
-  24 => "ExpenseLineMod CustomerRef FullName"
-  25 => "ExpenseLineMod ClassRef ListID"
-  26 => "ExpenseLineMod ClassRef FullName"
-  27 => "ExpenseLineMod SalesTaxCodeRef ListID"
-  28 => "ExpenseLineMod SalesTaxCodeRef FullName"
-  29 => "ExpenseLineMod BillableStatus"
-  30 => "ClearItemLines"
-  31 => "ItemLineMod TxnLineID"
-  32 => "ItemLineMod ItemRef ListID"
-  33 => "ItemLineMod ItemRef FullName"
-  34 => "ItemLineMod Desc"
-  35 => "ItemLineMod Quantity"
-  36 => "ItemLineMod UnitOfMeasure"
-  37 => "ItemLineMod OverrideUOMSetRef ListID"
-  38 => "ItemLineMod OverrideUOMSetRef FullName"
-  39 => "ItemLineMod Cost"
-  40 => "ItemLineMod Amount"
-  41 => "ItemLineMod TaxAmount"
-  42 => "ItemLineMod CustomerRef ListID"
-  43 => "ItemLineMod CustomerRef FullName"
-  44 => "ItemLineMod ClassRef ListID"
-  45 => "ItemLineMod ClassRef FullName"
-  46 => "ItemLineMod SalesTaxCodeRef ListID"
-  47 => "ItemLineMod SalesTaxCodeRef FullName"
-  48 => "ItemLineMod BillableStatus"
-  49 => "ItemLineMod OverrideItemAccountRef ListID"
-  50 => "ItemLineMod OverrideItemAccountRef FullName"
-  51 => "ItemGroupLineMod TxnLineID"
-  52 => "ItemGroupLineMod ItemGroupRef ListID"
-  53 => "ItemGroupLineMod ItemGroupRef FullName"
-  54 => "ItemGroupLineMod Quantity"
-  55 => "ItemGroupLineMod UnitOfMeasure"
-  56 => "ItemGroupLineMod OverrideUOMSetRef ListID"
-  57 => "ItemGroupLineMod OverrideUOMSetRef FullName"
-  58 => "ItemGroupLineMod ItemLineMod TxnLineID"
-  59 => "ItemGroupLineMod ItemLineMod ItemRef ListID"
-  60 => "ItemGroupLineMod ItemLineMod ItemRef FullName"
-  61 => "ItemGroupLineMod ItemLineMod Desc"
-  62 => "ItemGroupLineMod ItemLineMod Quantity"
-  63 => "ItemGroupLineMod ItemLineMod UnitOfMeasure"
-  64 => "ItemGroupLineMod ItemLineMod OverrideUOMSetRef ListID"
-  65 => "ItemGroupLineMod ItemLineMod OverrideUOMSetRef FullName"
-  66 => "ItemGroupLineMod ItemLineMod Cost"
-  67 => "ItemGroupLineMod ItemLineMod Amount"
-  68 => "ItemGroupLineMod ItemLineMod TaxAmount"
-  69 => "ItemGroupLineMod ItemLineMod CustomerRef ListID"
-  70 => "ItemGroupLineMod ItemLineMod CustomerRef FullName"
-  71 => "ItemGroupLineMod ItemLineMod ClassRef ListID"
-  72 => "ItemGroupLineMod ItemLineMod ClassRef FullName"
-  73 => "ItemGroupLineMod ItemLineMod SalesTaxCodeRef ListID"
-  74 => "ItemGroupLineMod ItemLineMod SalesTaxCodeRef FullName"
-  75 => "ItemGroupLineMod ItemLineMod BillableStatus"
-  76 => "ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID"
-  77 => "ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName"
-  78 => "IncludeRetElement"
+  0 => "TxnID",
+  1 => "EditSequence",
+  2 => "VendorRef ListID",
+  3 => "VendorRef FullName",
+  4 => "APAccountRef ListID",
+  5 => "APAccountRef FullName",
+  6 => "TxnDate",
+  7 => "DueDate",
+  8 => "RefNumber",
+  9 => "TermsRef ListID",
+  10 => "TermsRef FullName",
+  11 => "Memo",
+  12 => "IsTaxIncluded",
+  13 => "SalesTaxCodeRef ListID",
+  14 => "SalesTaxCodeRef FullName",
+  15 => "ClearExpenseLines",
+  16 => "ExpenseLineMod",
+  17 => "ExpenseLineMod TxnLineID",
+  18 => "ExpenseLineMod AccountRef ListID",
+  19 => "ExpenseLineMod AccountRef FullName",
+  20 => "ExpenseLineMod Amount",
+  21 => "ExpenseLineMod TaxAmount",
+  22 => "ExpenseLineMod Memo",
+  23 => "ExpenseLineMod CustomerRef ListID",
+  24 => "ExpenseLineMod CustomerRef FullName",
+  25 => "ExpenseLineMod ClassRef ListID",
+  26 => "ExpenseLineMod ClassRef FullName",
+  27 => "ExpenseLineMod SalesTaxCodeRef ListID",
+  28 => "ExpenseLineMod SalesTaxCodeRef FullName",
+  29 => "ExpenseLineMod BillableStatus",
+  30 => "ClearItemLines",
+  31 => "ItemLineMod TxnLineID",
+  32 => "ItemLineMod ItemRef ListID",
+  33 => "ItemLineMod ItemRef FullName",
+  34 => "ItemLineMod Desc",
+  35 => "ItemLineMod Quantity",
+  36 => "ItemLineMod UnitOfMeasure",
+  37 => "ItemLineMod OverrideUOMSetRef ListID",
+  38 => "ItemLineMod OverrideUOMSetRef FullName",
+  39 => "ItemLineMod Cost",
+  40 => "ItemLineMod Amount",
+  41 => "ItemLineMod TaxAmount",
+  42 => "ItemLineMod CustomerRef ListID",
+  43 => "ItemLineMod CustomerRef FullName",
+  44 => "ItemLineMod ClassRef ListID",
+  45 => "ItemLineMod ClassRef FullName",
+  46 => "ItemLineMod SalesTaxCodeRef ListID",
+  47 => "ItemLineMod SalesTaxCodeRef FullName",
+  48 => "ItemLineMod BillableStatus",
+  49 => "ItemLineMod OverrideItemAccountRef ListID",
+  50 => "ItemLineMod OverrideItemAccountRef FullName",
+  51 => "ItemGroupLineMod TxnLineID",
+  52 => "ItemGroupLineMod ItemGroupRef ListID",
+  53 => "ItemGroupLineMod ItemGroupRef FullName",
+  54 => "ItemGroupLineMod Quantity",
+  55 => "ItemGroupLineMod UnitOfMeasure",
+  56 => "ItemGroupLineMod OverrideUOMSetRef ListID",
+  57 => "ItemGroupLineMod OverrideUOMSetRef FullName",
+  58 => "ItemGroupLineMod ItemLineMod TxnLineID",
+  59 => "ItemGroupLineMod ItemLineMod ItemRef ListID",
+  60 => "ItemGroupLineMod ItemLineMod ItemRef FullName",
+  61 => "ItemGroupLineMod ItemLineMod Desc",
+  62 => "ItemGroupLineMod ItemLineMod Quantity",
+  63 => "ItemGroupLineMod ItemLineMod UnitOfMeasure",
+  64 => "ItemGroupLineMod ItemLineMod OverrideUOMSetRef ListID",
+  65 => "ItemGroupLineMod ItemLineMod OverrideUOMSetRef FullName",
+  66 => "ItemGroupLineMod ItemLineMod Cost",
+  67 => "ItemGroupLineMod ItemLineMod Amount",
+  68 => "ItemGroupLineMod ItemLineMod TaxAmount",
+  69 => "ItemGroupLineMod ItemLineMod CustomerRef ListID",
+  70 => "ItemGroupLineMod ItemLineMod CustomerRef FullName",
+  71 => "ItemGroupLineMod ItemLineMod ClassRef ListID",
+  72 => "ItemGroupLineMod ItemLineMod ClassRef FullName",
+  73 => "ItemGroupLineMod ItemLineMod SalesTaxCodeRef ListID",
+  74 => "ItemGroupLineMod ItemLineMod SalesTaxCodeRef FullName",
+  75 => "ItemGroupLineMod ItemLineMod BillableStatus",
+  76 => "ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID",
+  77 => "ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName",
+  78 => "IncludeRetElement",
 );
-			
+
 		return $paths;
 	}
 }
