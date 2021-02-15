@@ -87,7 +87,7 @@ class QuickBooks_Utilities
 		
 		foreach ($masks as $key)
 		{
-			if ($key{0} == '<')
+			if ($key[0] == '<')
 			{
 				// It's an XML tag
 				$contents = QuickBooks_Utilities::_extractTagContents(trim($key, '<> '), $message);
@@ -301,7 +301,7 @@ class QuickBooks_Utilities
 			$count = strlen($interval);
 			for ($i = 0; $i < $count; $i++)
 			{
-				if (ord($interval{$i}) < 97 or ord($interval{$i}) > 122)
+				if (ord($interval[$i]) < 97 or ord($interval[$i]) > 122)
 				{
 					$justletters = false;
 				}
