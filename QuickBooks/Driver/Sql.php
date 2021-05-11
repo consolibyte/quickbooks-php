@@ -3254,7 +3254,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			$dh = opendir($defaults['quickbooks_sql_schema']);
 			while (false !== ($file = readdir($dh)))
 			{
-				if ($file{0} == '.' or is_dir($defaults['quickbooks_sql_schema'] . '/' . $file))
+				if ($file[0] == '.' or is_dir($defaults['quickbooks_sql_schema'] . '/' . $file))
 				{
 					continue;
 				}
