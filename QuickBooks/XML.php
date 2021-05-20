@@ -309,26 +309,26 @@ class QuickBooks_XML
 			
 			for ($i = 0; $i < $length; $i++)
 			{
-				if ($attrs{$i} == '=')
+				if ($attrs[$i] == '=')
 				{
 					$in_key = false;
 					$in_value = false;
 					$expect_value = true;
 				}
 				/*
-				else if ($attrs{$i} == '"' and $expect_value)
+				else if ($attrs[$i] == '"' and $expect_value)
 				{
 					$in_value = true;
 					$expect_value = false;
 				}
 				*/
-				/*else if ($attrs{$i} == '"' and $in_value)*/
-				else if (($attrs{$i} == '"' or $attrs{$i} == '\'') and $expect_value)
+				/*else if ($attrs[$i] == '"' and $in_value)*/
+				else if (($attrs[$i] == '"' or $attrs[$i] == '\'') and $expect_value)
 				{
 					$in_value = true;
 					$expect_value = false;
 				}
-				else if (($attrs{$i} == '"' or $attrs{$i} == '\'') and $in_value)
+				else if (($attrs[$i] == '"' or $attrs[$i] == '\'') and $in_value)
 				{
 					$attributes[trim($key)] = $value;
 					
@@ -338,18 +338,18 @@ class QuickBooks_XML
 					$in_value = false;
 					$expect_key = true;
 				}
-				else if ($attrs{$i} == ' ' and $expect_key)
+				else if ($attrs[$i] == ' ' and $expect_key)
 				{
 					$expect_key = false;
 					$in_key = true;
 				}
 				else if ($in_key)
 				{
-					$key .= $attrs{$i};
+					$key .= $attrs[$i];
 				}
 				else if ($in_value)
 				{
-					$value .= $attrs{$i};
+					$value .= $attrs[$i];
 				}
 			}
 			

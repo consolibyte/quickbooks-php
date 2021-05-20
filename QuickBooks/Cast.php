@@ -96,7 +96,7 @@ class QuickBooks_Cast
 		$count = strlen($str);
 		for ($i = 0; $i < $count; $i++)
 		{
-			$ord = ord($str{$i});
+			$ord = ord($str[$i]);
 			
 			if ($ord != ord("\t") and 
 				$ord != ord("\n") and 
@@ -105,11 +105,11 @@ class QuickBooks_Cast
 			{
 				if (isset($replace[$ord]))
 				{
-					$str{$i} = $replace[$ord];
+					$str[$i] = $replace[$ord];
 				}
 				else
 				{
-					$str{$i} = ' ';
+					$str[$i] = ' ';
 				}
 			}
 		}
@@ -255,7 +255,7 @@ class QuickBooks_Cast
 			$dh = opendir(dirname(__FILE__) . '/QBXML/Schema/Object');
 			while (false !== ($file = readdir($dh)))
 			{
-				if ($file{0} == '.' or substr($file, -6, 6) != 'Rq.php')
+				if ($file[0] == '.' or substr($file, -6, 6) != 'Rq.php')
 				{
 					continue;
 				}
