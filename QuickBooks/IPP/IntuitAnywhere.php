@@ -170,7 +170,8 @@ class QuickBooks_IPP_IntuitAnywhere
 	 */
 	public function test($app_tenant)
 	{
-		if ($creds = $this->load($app_tenant))
+		if ($creds = $this->load($app_tenant) and
+			!empty($creds['oauth_access_token']))
 		{
 			$IPP = new QuickBooks_IPP($this->_dsn, $this->_key);
 
@@ -350,11 +351,22 @@ class QuickBooks_IPP_IntuitAnywhere
 	 */
 	public function handle($app_tenant, $state = '')
 	{
-		if ($this->check($app_tenant) and 		// We have tokens ...
+		if ($app_tenant and
+			$this->check($app_tenant) and 		// We have tokens ...
 			$this->test($app_tenant))			// ... and they are valid
 		{
 			// They are already logged in, send them on to exchange data
-			header('Location: ' . $this->_that_url);
+			$that_url = $this->_that_url;
+			if (false === strpos($that_url, '?'))
+			{
+				$that_url .= '?oauth_testcheck=1&oauth_state=' . @$_GET['state'];
+			}
+			else
+			{
+				$that_url .= '&oauth_testcheck=1&oauth_state=' . @$_GET['state'];
+			}
+
+			header('Location: ' . $that_url);
 			exit;
 		}
 		else
