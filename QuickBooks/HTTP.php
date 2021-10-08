@@ -493,7 +493,8 @@ class QuickBooks_HTTP
 		}
 
 		$query = '';
-		if (count($this->_get))
+		if ($this->_get and
+			count($this->_get))
 		{
 			$query = '?' . http_build_query($this->_get);
 		}
@@ -608,7 +609,7 @@ class QuickBooks_HTTP
 		$this->_log('HTTP response: ' . substr($response, 0, 500) . '...', QUICKBOOKS_LOG_VERBOSE);
 
 		$this->_last_info = curl_getinfo($ch);
-
+		
 		if (curl_errno($ch))
 		{
 			$errnum = curl_errno($ch);
