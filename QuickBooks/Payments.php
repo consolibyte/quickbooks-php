@@ -164,8 +164,14 @@ class Quickbooks_Payments
 
 		$data = json_decode($resp, true);
 
-		//print_r($data);
-		//exit;
+		if (empty($data))
+		{
+			// If we didn't get anything back at all, it could be an HTTP
+			// time-out which we will report as failure
+
+			$this->_setError(self::ERROR_HTTP, 'Communication error while processing request.');
+			return false;
+		}
 
 		if ($this->_handleError($data))
 		{
@@ -781,26 +787,30 @@ class Quickbooks_Payments
 			$Context->IPP()->forceRenewal();
 			$authcreds = $Context->IPP()->authcreds();
 
-			// Set the new header
-			$headers['Authorization'] = 'Bearer ' . $authcreds['oauth_access_token'];
-			$HTTP->setHeaders($headers);
+			if (!empty($authcreds['oauth_access_token']))
+			{
+				// Set the new header
+				$headers['Authorization'] = 'Bearer ' . $authcreds['oauth_access_token'];
+				$headers['Request-Id'] = QuickBooks_Utilities::GUID();                    // Generate a new unique Request-Id
+				$HTTP->setHeaders($headers);
 
-			// Retry the request
-			if ($method == 'POST')
-			{
-				$return = $HTTP->POST();
-			}
-			else if ($method == 'GET')
-			{
-				$return = $HTTP->GET();
-			}
-			else if ($method == 'DELETE')
-			{
-				$return = $HTTP->DELETE();
-			}
+				// Retry the request
+				if ($method == 'POST')
+				{
+					$return = $HTTP->POST();
+				}
+				else if ($method == 'GET')
+				{
+					$return = $HTTP->GET();
+				}
+				else if ($method == 'DELETE')
+				{
+					$return = $HTTP->DELETE();
+				}
 
-			$info = $HTTP->lastInfo();
-			$this->_last_httpinfo = $info;
+				$info = $HTTP->lastInfo();
+				$this->_last_httpinfo = $info;
+			}
 		}
 
 		$this->_last_request = $HTTP->lastRequest();
