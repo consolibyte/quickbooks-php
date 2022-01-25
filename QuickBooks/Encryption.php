@@ -26,6 +26,8 @@ QuickBooks_Loader::load('/QuickBooks/Encryption/Factory.php');
  */
 abstract class QuickBooks_Encryption
 {
+    const CIPHER = 'aes-256-cfb';
+
 	/**
 	 * 
 	 * 
@@ -46,12 +48,21 @@ abstract class QuickBooks_Encryption
 	 */
 	static function salt()
 	{
-		$tmp = array_merge(range('a', 'z'), range('A', 'Z'), range(0, 9));
-		shuffle($tmp);
-			
-		$salt = substr(implode('', $tmp), 0, 32);
-			
-		return $salt;
-	}	
+		return self::iv();
+	}
+
+    /**
+     * Create an initialization vector to be used with our encryption algorithm
+     *
+     * @return string
+     */
+
+    static function iv()
+    {
+        $ivlen = openssl_cipher_iv_length(self::CIPHER);
+        $iv = openssl_random_pseudo_bytes($ivlen);
+
+        return $iv;
+    }
 }
 
