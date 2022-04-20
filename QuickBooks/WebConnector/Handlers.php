@@ -522,14 +522,14 @@ class QuickBooks_WebConnector_Handlers
 			}
 		}
 
-		// Custom authentication backends
-		$override_dsn = $this->_config['authenticate'];
-
 		if (!empty($this->_config['authenticate_dsn']))
 		{
 			// Backwards compat.
 			$override_dsn = $this->_config['authenticate_dsn'];
-		}
+		} else {
+      // Custom authentication backends
+      $override_dsn = $this->_config['authenticate'];
+    }
 
 		$auth = null;
 
@@ -548,7 +548,7 @@ class QuickBooks_WebConnector_Handlers
 		$customauth_wait_before_next_update = null;
 		$customauth_min_run_every_n_seconds = null;
 
-		if (is_array($override_dsn) or strlen($override_dsn)) 	// Custom autj
+		if (is_array($override_dsn) or ($override_dsn !== null and strlen($override_dsn))) 	// Custom autj
 		{
 			//if ($auth->authenticate($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and
 
