@@ -198,7 +198,7 @@ class QuickBooks_WebConnector_Queue
 	 * called. 
 	 * 
 	 * @param string $action		An action to be performed within QuickBooks (see the qbXML and QuickBooks SDK documentation, i.e.: "CustomerAdd", "InvoiceAdd", "CustomerMod", etc.)
-	 * @param mixed $ident			A unique identifier (if required) for a record being operated on (i.e. if you're doing a "CustomerAdd", you'd probaly put a unique customer ID number here, so you're SOAP handler function knows which customer it is supposed to add)
+	 * @param mixed $ident			A unique identifier (if required) for a record being operated on (i.e. if you're doing a "CustomerAdd", you'd probably put a unique customer ID number here, so your SOAP handler function knows which customer it is supposed to add)
 	 * @param integer $priority		The priority of the update (higher priority actions will be pushed to QuickBooks before lower priority actions)
 	 * @param array $extra			If you need to make additional bits of data available to your request/response functions, you can pass an array of extra data here
 	 * @param string $user			The username of the QuickBooks Web Connector user this item should be queued for 
@@ -207,7 +207,8 @@ class QuickBooks_WebConnector_Queue
 	 */	
 	public function enqueue($action, $ident = null, $priority = 0, $extra = null, $user = null, $qbxml = null, $replace = true)
 	{
-		if (!strlen($ident))
+	  // strlen(null) generates depreciation warning in PHP8
+		if ($ident === null || !strlen($ident))
 		{
 			// If they didn't provide an $ident, generate a random, unique one
 			
