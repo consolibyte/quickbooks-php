@@ -139,7 +139,7 @@ if (!defined('QUICKBOOKS_WSDL'))
 	 * Path to the QuickBooks WSDL file (the default WSDL is included with this package, you shouldn't need to override this generally)
 	 * @var string
 	 */
-	define('QUICKBOOKS_WSDL', dirname(__FILE__) . '/QuickBooks/QBWebConnectorSvc.wsdl');
+	define('QUICKBOOKS_WSDL', __DIR__ . '/QuickBooks/QBWebConnectorSvc.wsdl');
 }
 
 if (!defined('QUICKBOOKS_DEBUG'))
