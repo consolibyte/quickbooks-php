@@ -360,7 +360,12 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
 			// @todo Should this be implemented...?
 		}
 
-		$res = $this->_conn->query($sql);
+		try {
+			$res = $this->_conn->query($sql);
+		} catch (Exception $e) {
+			error_log("Failed query: $sql");
+			throw $e;
+		}
 
 		$this->_last_error = '';
 		if (!$res)
