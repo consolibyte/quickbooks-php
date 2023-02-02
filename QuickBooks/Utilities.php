@@ -90,7 +90,7 @@ class QuickBooks_Utilities
 			if (substr($key, 0, 1) == '<')
 			{
 				// It's an XML tag
-				$contents = QuickBooks_Utilities::_extractTagContents(trim($key, '<> '), $message);
+				$contents = QuickBooks_Utilities::_extractTagContents(trim($key, '<> '), $message) ?? '';
 
 				$masked = str_repeat('x', min(strlen($contents), 12)) . substr($contents, 12);
 

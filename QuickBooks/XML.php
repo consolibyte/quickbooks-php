@@ -426,6 +426,8 @@ class QuickBooks_XML
 	 */
 	static public function decode($str, $for_qbxml = true)
 	{
+		if (!$str) return '';
+
 		$transform = array(
 			'&lt;' => '<',
 			'&gt;' => '>',
