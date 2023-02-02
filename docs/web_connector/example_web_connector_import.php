@@ -180,7 +180,8 @@ if (!QuickBooks_Utilities::initialized($dsn))
 				continue;
 			}
 
-			mysql_query($sql) or die(trigger_error(mysql_error()));
+			$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
+			$Driver->query($sql,$errnum,$errmsg) or die(trigger_error($errmsg));
 		}
 	}
 	else
@@ -203,13 +204,15 @@ QuickBooks_WebConnector_Queue_Singleton::initialize($dsn);
 $Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
 $response = $Server->handle(true, true);
 
-/*
-// If you wanted, you could do something with $response here for debugging
+if ($log_level >= QUICKBOOKS_LOG_DEVELOP) {
+	$marker = '===========';
+	$log = "$marker RESPONSE $marker\n".html_entity_decode($response)."\n$marker END $marker\n";
+	file_put_contents('/var/www/qbwc/log/traffic.log',$log,FILE_APPEND);	// for debugging
+}
 
-$fp = fopen('/path/to/file.log', 'a+');
-fwrite($fp, $response);
-fclose($fp);
-*/
+exit;
+
+// ==== CALLBACK FUNCTIONS ====
 
 /**
  * Login success hook - perform an action when a user logs in via the Web Connector
@@ -315,16 +318,10 @@ function _quickbooks_set_current_run($user, $action, $force = null)
 	return QuickBooks_Utilities::configWrite(QB_QUICKBOOKS_DSN, $user, md5(__FILE__), QB_QUICKBOOKS_CONFIG_CURR . '-' . $action, $value);
 }
 
-/**
- * Build a request to import invoices already in QuickBooks into our application
- */
-function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
-{
+function getIterationInfo($user, $action, $extra): array {
 	// Iterator support (break the result set into small chunks)
-	$attr_iteratorID = '';
-	$attr_iterator = ' iterator="Start" ';
-	if (empty($extra['iteratorID']))
-	{
+	$attrs = 'iterator="Start"';
+	if (empty($extra['iteratorID'])) {
 		// This is the first request in a new batch
 		$last = _quickbooks_get_last_run($user, $action);
 		_quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
@@ -332,32 +329,33 @@ function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $ex
 		// Set the current run to $last
 		_quickbooks_set_current_run($user, $action, $last);
 	}
-	else
-	{
+	else {
 		// This is a continuation of a batch
-		$attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
-		$attr_iterator = ' iterator="Continue" ';
-
+		$attrs = 'iterator="Continue" iteratorID="' . $extra['iteratorID'] . '"';
 		$last = _quickbooks_get_current_run($user, $action);
 	}
 
+	return [$attrs,$last];
+}
+
+/**
+ * Build a request to import invoices already in QuickBooks into our application
+ */
+function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+{
+	list($attrs,$last) = getIterationInfo($user,$action,$extra);
+
 	// Build the request
-	$xml = '<?xml version="1.0" encoding="utf-8"?>
-		<?qbxml version="' . $version . '"?>
-		<QBXML>
-			<QBXMLMsgsRq onError="stopOnError">
-				<InvoiceQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
+	$xml = '<InvoiceQueryRq ' . $attrs . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<ModifiedDateRangeFilter>
 						<FromModifiedDate>' . $last . '</FromModifiedDate>
 					</ModifiedDateRangeFilter>
 					<IncludeLineItems>true</IncludeLineItems>
 					<OwnerID>0</OwnerID>
-				</InvoiceQueryRq>
-			</QBXMLMsgsRq>
-		</QBXML>';
+				</InvoiceQueryRq>';
 
-	return $xml;
+	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
 }
 
 /**
@@ -390,6 +388,7 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/InvoiceQueryRs');
 
+		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
 		foreach ($List->children() as $Invoice)
 		{
 			$arr = array(
@@ -409,23 +408,11 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 
 			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing invoice #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
 
-			foreach ($arr as $key => $value)
-			{
-				$arr[$key] = mysql_real_escape_string($value);
-			}
-
 			// Store the invoices in MySQL
-			mysql_query("
-				REPLACE INTO
-					qb_example_invoice
-				(
-					" . implode(", ", array_keys($arr)) . "
-				) VALUES (
-					'" . implode("', '", array_values($arr)) . "'
-				)") or die(trigger_error(mysql_error()));
+			queryWithArray($Driver,'REPLACE','qb_invoice',$arr);
 
 			// Remove any old line items
-			mysql_query("DELETE FROM qb_example_invoice_lineitem WHERE TxnID = '" . mysql_real_escape_string($arr['TxnID']) . "' ") or die(trigger_error(mysql_error()));
+			dbDeleteTxn($Driver,'qb_invoice_lineitem',$arr['TxnID']);
 
 			// Process the line items
 			foreach ($Invoice->children() as $Child)
@@ -444,20 +431,8 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 						'Rate' => $InvoiceLine->getChildDataAt('InvoiceLineRet Rate'),
 						);
 
-					foreach ($lineitem as $key => $value)
-					{
-						$lineitem[$key] = mysql_real_escape_string($value);
-					}
-
 					// Store the lineitems in MySQL
-					mysql_query("
-						INSERT INTO
-							qb_example_invoice_lineitem
-						(
-							" . implode(", ", array_keys($lineitem)) . "
-						) VALUES (
-							'" . implode("', '", array_values($lineitem)) . "'
-						) ") or die(trigger_error(mysql_error()));
+					queryWithArray($Driver, 'INSERT', 'qb_invoice_lineitem', $lineitem);
 				}
 			}
 		}
@@ -471,41 +446,16 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
  */
 function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	// Iterator support (break the result set into small chunks)
-	$attr_iteratorID = '';
-	$attr_iterator = ' iterator="Start" ';
-	if (empty($extra['iteratorID']))
-	{
-		// This is the first request in a new batch
-		$last = _quickbooks_get_last_run($user, $action);
-		_quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
-
-		// Set the current run to $last
-		_quickbooks_set_current_run($user, $action, $last);
-	}
-	else
-	{
-		// This is a continuation of a batch
-		$attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
-		$attr_iterator = ' iterator="Continue" ';
-
-		$last = _quickbooks_get_current_run($user, $action);
-	}
+	list($attrs,$last) = getIterationInfo($user,$action,$extra);
 
 	// Build the request
-	$xml = '<?xml version="1.0" encoding="utf-8"?>
-		<?qbxml version="' . $version . '"?>
-		<QBXML>
-			<QBXMLMsgsRq onError="stopOnError">
-				<CustomerQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
+	$xml = '<CustomerQueryRq ' . $attrs . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<FromModifiedDate>' . $last . '</FromModifiedDate>
 					<OwnerID>0</OwnerID>
-				</CustomerQueryRq>
-			</QBXMLMsgsRq>
-		</QBXML>';
+				</CustomerQueryRq>';
 
-	return $xml;
+	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
 }
 
 /**
@@ -538,6 +488,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/CustomerQueryRs');
 
+		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
 		foreach ($List->children() as $Customer)
 		{
 			$arr = array(
@@ -559,20 +510,8 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 
 			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing customer ' . $arr['FullName'] . ': ' . print_r($arr, true));
 
-			foreach ($arr as $key => $value)
-			{
-				$arr[$key] = mysql_real_escape_string($value);
-			}
-
 			// Store the invoices in MySQL
-			mysql_query("
-				REPLACE INTO
-					qb_example_customer
-				(
-					" . implode(", ", array_keys($arr)) . "
-				) VALUES (
-					'" . implode("', '", array_values($arr)) . "'
-				)") or die(trigger_error(mysql_error()));
+			queryWithArray($Driver,'REPLACE','qb_customer',$arr);
 		}
 	}
 
@@ -584,44 +523,19 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
  */
 function _quickbooks_salesorder_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	// Iterator support (break the result set into small chunks)
-	$attr_iteratorID = '';
-	$attr_iterator = ' iterator="Start" ';
-	if (empty($extra['iteratorID']))
-	{
-		// This is the first request in a new batch
-		$last = _quickbooks_get_last_run($user, $action);
-		_quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
-
-		// Set the current run to $last
-		_quickbooks_set_current_run($user, $action, $last);
-	}
-	else
-	{
-		// This is a continuation of a batch
-		$attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
-		$attr_iterator = ' iterator="Continue" ';
-
-		$last = _quickbooks_get_current_run($user, $action);
-	}
+	list($attrs,$last) = getIterationInfo($user,$action,$extra);
 
 	// Build the request
-	$xml = '<?xml version="1.0" encoding="utf-8"?>
-		<?qbxml version="' . $version . '"?>
-		<QBXML>
-			<QBXMLMsgsRq onError="stopOnError">
-				<SalesOrderQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
+	$xml = '<SalesOrderQueryRq ' . $attrs . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<ModifiedDateRangeFilter>
 						<FromModifiedDate>' . $last . '</FromModifiedDate>
 					</ModifiedDateRangeFilter>
 					<IncludeLineItems>true</IncludeLineItems>
 					<OwnerID>0</OwnerID>
-				</SalesOrderQueryRq>
-			</QBXMLMsgsRq>
-		</QBXML>';
+				</SalesOrderQueryRq>';
 
-	return $xml;
+	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
 }
 
 /**
@@ -654,6 +568,7 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/SalesOrderQueryRs');
 
+		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
 		foreach ($List->children() as $SalesOrder)
 		{
 			$arr = array(
@@ -673,23 +588,11 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 
 			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing sales order #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
 
-			foreach ($arr as $key => $value)
-			{
-				$arr[$key] = mysql_real_escape_string($value);
-			}
-
 			// Store the invoices in MySQL
-			mysql_query("
-				REPLACE INTO
-					qb_example_salesorder
-				(
-					" . implode(", ", array_keys($arr)) . "
-				) VALUES (
-					'" . implode("', '", array_values($arr)) . "'
-				)") or die(trigger_error(mysql_error()));
+			queryWithArray($Driver,'REPLACE','qb_salesorder',$arr);
 
 			// Remove any old line items
-			mysql_query("DELETE FROM qb_example_salesorder_lineitem WHERE TxnID = '" . mysql_real_escape_string($arr['TxnID']) . "' ") or die(trigger_error(mysql_error()));
+			dbDeleteTxn($Driver,'qb_salesorder_lineitem',$arr['TxnID']);
 
 			// Process the line items
 			foreach ($SalesOrder->children() as $Child)
@@ -708,20 +611,8 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 						'Rate' => $SalesOrderLine->getChildDataAt('SalesOrderLineRet Rate'),
 						);
 
-					foreach ($lineitem as $key => $value)
-					{
-						$lineitem[$key] = mysql_real_escape_string($value);
-					}
-
 					// Store the lineitems in MySQL
-					mysql_query("
-						INSERT INTO
-							qb_example_salesorder_lineitem
-						(
-							" . implode(", ", array_keys($lineitem)) . "
-						) VALUES (
-							'" . implode("', '", array_values($lineitem)) . "'
-						) ") or die(trigger_error(mysql_error()));
+					queryWithArray($Driver,'INSERT','qb_salesorder_lineitem',$lineitem);
 				}
 			}
 		}
@@ -735,41 +626,16 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
  */
 function _quickbooks_item_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	// Iterator support (break the result set into small chunks)
-	$attr_iteratorID = '';
-	$attr_iterator = ' iterator="Start" ';
-	if (empty($extra['iteratorID']))
-	{
-		// This is the first request in a new batch
-		$last = _quickbooks_get_last_run($user, $action);
-		_quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
-
-		// Set the current run to $last
-		_quickbooks_set_current_run($user, $action, $last);
-	}
-	else
-	{
-		// This is a continuation of a batch
-		$attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
-		$attr_iterator = ' iterator="Continue" ';
-
-		$last = _quickbooks_get_current_run($user, $action);
-	}
+	list($attrs,$last) = getIterationInfo($user,$action,$extra);
 
 	// Build the request
-	$xml = '<?xml version="1.0" encoding="utf-8"?>
-		<?qbxml version="' . $version . '"?>
-		<QBXML>
-			<QBXMLMsgsRq onError="stopOnError">
-				<ItemQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
+	$xml = '<ItemQueryRq ' . $attrs . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<FromModifiedDate>' . $last . '</FromModifiedDate>
 					<OwnerID>0</OwnerID>
-				</ItemQueryRq>
-			</QBXMLMsgsRq>
-		</QBXML>';
+				</ItemQueryRq>';
 
-	return $xml;
+	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
 }
 
 /**
@@ -794,6 +660,7 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/ItemQueryRs');
 
+		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
 		foreach ($List->children() as $Item)
 		{
 			$type = substr(substr($Item->name(), 0, -3), 4);
@@ -844,23 +711,8 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 
 			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing ' . $type . ' Item ' . $arr['FullName'] . ': ' . print_r($arr, true));
 
-			foreach ($arr as $key => $value)
-			{
-				$arr[$key] = mysql_real_escape_string($value);
-			}
-
-			//print_r(array_keys($arr));
-			//trigger_error(print_r(array_keys($arr), true));
-
 			// Store the customers in MySQL
-			mysql_query("
-				REPLACE INTO
-					qb_example_item
-				(
-					" . implode(", ", array_keys($arr)) . "
-				) VALUES (
-					'" . implode("', '", array_values($arr)) . "'
-				)") or die(trigger_error(mysql_error()));
+			queryWithArray($Driver,'REPLACE','qb_item',$arr);
 		}
 	}
 
@@ -872,44 +724,19 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
  */
 function _quickbooks_purchaseorder_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	// Iterator support (break the result set into small chunks)
-	$attr_iteratorID = '';
-	$attr_iterator = ' iterator="Start" ';
-	if (empty($extra['iteratorID']))
-	{
-		// This is the first request in a new batch
-		$last = _quickbooks_get_last_run($user, $action);
-		_quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
-
-		// Set the current run to $last
-		_quickbooks_set_current_run($user, $action, $last);
-	}
-	else
-	{
-		// This is a continuation of a batch
-		$attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
-		$attr_iterator = ' iterator="Continue" ';
-
-		$last = _quickbooks_get_current_run($user, $action);
-	}
+	list($attrs,$last) = getIterationInfo($user,$action,$extra);
 
 	// Build the request
-	$xml = '<?xml version="1.0" encoding="utf-8"?>
-		<?qbxml version="' . $version . '"?>
-		<QBXML>
-			<QBXMLMsgsRq onError="stopOnError">
-				<PurchaseOrderQueryRq ' . $attr_iterator . ' ' . $attr_iteratorID . ' requestID="' . $requestID . '">
+	$xml = '<PurchaseOrderQueryRq ' . $attrs . ' requestID="' . $requestID . '">
 					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
 					<!--<ModifiedDateRangeFilter>
 						<FromModifiedDate>' . $last . '</FromModifiedDate>
 					</ModifiedDateRangeFilter>-->
 					<IncludeLineItems>true</IncludeLineItems>
 					<OwnerID>0</OwnerID>
-				</PurchaseOrderQueryRq>
-			</QBXMLMsgsRq>
-		</QBXML>';
+				</PurchaseOrderQueryRq>';
 
-	return $xml;
+	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
 }
 
 /**
@@ -942,6 +769,7 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/PurchaseOrderQueryRs');
 
+		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
 		foreach ($List->children() as $PurchaseOrder)
 		{
 			$arr = array(
@@ -957,7 +785,7 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 
 			foreach ($arr as $key => $value)
 			{
-				$arr[$key] = mysql_real_escape_string($value);
+				$arr[$key] = $Driver->escape($value);
 			}
 
 			// Process all child elements of the Purchase Order
@@ -999,6 +827,26 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 	}
 
 	return true;
+}
+
+function queryWithArray($driver, $command, $table, $fields) {
+	foreach ($fields as $key => $value) {
+		if (substr($key,0,4) == 'Time') {
+			$fields[$key] = 'FROM_UNIXTIME('.strtotime($value).')';
+		}
+		else $fields[$key] = "'".$driver->escape($value)."'";
+	}
+
+	$driver->query(
+		"$command INTO $table (".implode(',',array_keys($fields)).") VALUES (".implode(",",$fields).")",
+		$errnum, $errmsg
+	) or die(trigger_error($errmsg));
+}
+function dbDeleteTxn($driver, string $table, string $id) {
+	$driver->query(
+		"DELETE FROM $table WHERE TxnID='".$driver->escape($id)."'",
+		$errnum, $errmsg
+	) or die(trigger_error($errmsg));
 }
 
 /**
