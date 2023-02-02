@@ -585,8 +585,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 * @param string $locale
 	 * @return string
 	 */
-	protected static function _version($version, $locale)
+	protected static function _version($version, string $locale)
 	{
+		$version = number_format($version,1);
 		if ($locale == QUICKBOOKS_LOCALE_US)
 		{
 			return $version;
@@ -628,8 +629,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 	 */
 	protected static function _buildIterator($extra, $version = null, $locale = null)
 	{
-		$xml = "";
-
 		if ($locale == QUICKBOOKS_LOCALE_CA or $locale == QUICKBOOKS_LOCALE_UK or $locale == QUICKBOOKS_LOCALE_AU)
 		{
 			return '';
@@ -638,11 +637,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		if (is_array($extra) and
 			!empty($extra['iteratorID']))
 		{
-			$xml .= ' iterator="Continue" iteratorID="' . $extra['iteratorID'] . '" ';
+			$xml = ' iterator="Continue" iteratorID="' . $extra['iteratorID'] . '" ';
 		}
 		else
 		{
-			$xml .= ' iterator="Start" ';
+			$xml = ' iterator="Start" ';
 		}
 
 		$xml .= '>' . "\n";
@@ -663,28 +662,40 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		return $xml;
 	}
 
+	public static function xml(string $version, string $locale, string $xml, string $onError=null): string {
+		$versionStr = QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale);
+		$end = '?'.'>';	// use this to avoid issues with php code end marker, especially for vim syntax highlighter
+		if ($onError === null) $onError = QUICKBOOKS_SERVER_SQL_ON_ERROR;
+		return <<< END
+<?xml version="1.0" encoding="utf-8"$end
+<?qbxml version="$versionStr"$end
+<QBXML>
+	<QBXMLMsgsRq onError="$onError">
+	$xml
+	</QBXMLMsgsRq>
+</QBXML>
+END;
+	}
+
 	public static function InventoryLevelsRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="8.0"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="stopOnError">
-					<GeneralSummaryReportQueryRq requestID="' . $requestID . '">
+		$xml = <<< END
+	<GeneralSummaryReportQueryRq requestID="' . $requestID . '">
 
-						<GeneralSummaryReportType>InventoryStockStatusByItem</GeneralSummaryReportType>
-						<DisplayReport>false</DisplayReport>
+		<GeneralSummaryReportType>InventoryStockStatusByItem</GeneralSummaryReportType>
+		<DisplayReport>false</DisplayReport>
 
-						<!--
-						<ReportItemFilter>
-							<ItemTypeFilter>Inventory</ItemTypeFilter>
-						</ReportItemFilter>
-						-->
+		<!--
+		<ReportItemFilter>
+			<ItemTypeFilter>Inventory</ItemTypeFilter>
+		</ReportItemFilter>
+		-->
 
-					</GeneralSummaryReportQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+	</GeneralSummaryReportQueryRq>
+END;
 
-		return $xml;
+		// $version=8; ??
+		return self::xml($version,$locale,$xml,'stopOnError');
 	}
 
 	/**
@@ -848,26 +859,22 @@ class QuickBooks_Callbacks_SQL_Callbacks
 		//$Driver->log('Inventory: ' . print_r($items, true), null, QUICKBOOKS_LOG_VERBOSE);
 	}
 
-public static function InventoryAssemblyLevelsRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function InventoryAssemblyLevelsRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="8.0"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="stopOnError">
-					<GeneralSummaryReportQueryRq requestID="' . $requestID . '">
+		$xml = <<< END
+	<GeneralSummaryReportQueryRq requestID="' . $requestID . '">
 
-						<GeneralSummaryReportType>InventoryStockStatusByItem</GeneralSummaryReportType>
-						<DisplayReport>false</DisplayReport>
+		<GeneralSummaryReportType>InventoryStockStatusByItem</GeneralSummaryReportType>
+		<DisplayReport>false</DisplayReport>
 
-						<ReportItemFilter>
-							<ItemTypeFilter>Assembly</ItemTypeFilter>
-						</ReportItemFilter>
+		<ReportItemFilter>
+			<ItemTypeFilter>Assembly</ItemTypeFilter>
+		</ReportItemFilter>
 
-					</GeneralSummaryReportQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+	</GeneralSummaryReportQueryRq>
+END;
 
-		return $xml;
+		return self::xml($version,$locale,$xml,'stopOnError');
 	}
 
 	/**
@@ -1114,18 +1121,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function ListDeletedQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.0, $version, $locale, QUICKBOOKS_DEL_LIST))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ListDeletedQueryRq requestID="' . $requestID . '">
+		$xml = '<ListDeletedQueryRq requestID="' . $requestID . '">
 						<ListDelType>Account</ListDelType>
 						<ListDelType>BillingRate</ListDelType>
 						<ListDelType>Class</ListDelType>
@@ -1162,11 +1163,9 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 						<ListDelType>Vendor</ListDelType>
 						<ListDelType>VendorType</ListDelType>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
-					</ListDeletedQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ListDeletedQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -1214,19 +1213,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function TxnDeletedQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.0, $version, $locale, QUICKBOOKS_DELETE_TRANSACTION))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<TxnDeletedQueryRq requestID="' . $requestID . '">
+		$xml = '<TxnDeletedQueryRq requestID="' . $requestID . '">
 					<TxnDelType>ARRefundCreditCard</TxnDelType>
 					<TxnDelType>Bill</TxnDelType>
 					<TxnDelType>BillPaymentCheck</TxnDelType>
@@ -1255,11 +1247,9 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					<TxnDelType>VehicleMileage</TxnDelType>
 					<TxnDelType>VendorCredit</TxnDelType>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
-					</TxnDeletedQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</TxnDeletedQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -1319,18 +1309,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		{
 			$Object = new QuickBooks_SQL_Object(null, null, $arr);
 
-			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ListDelRq requestID="' . $requestID . '">
+			$xml = '<ListDelRq requestID="' . $requestID . '">
 						<ListDelType>' . $extra['objectType'] . '</ListDelType>
 						<ListID>' . $Object->get('ListID') . '</ListID>
-					</ListDelRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ListDelRq>';
 
-			return $xml;
+			return self::xml($version,$locale,$xml);
 		}
 
 		return '';
@@ -1392,19 +1376,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 		if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . strtolower($extra['object']), array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
 		{
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="stopOnError">
-					<TxnVoidRq requestID="' . $requestID . '">
+			$xml = '<TxnVoidRq requestID="' . $requestID . '">
 						<TxnVoidType>' . $extra['object'] . '</TxnVoidType>
 						<TxnID>' . $arr['TxnID'] . '</TxnID>
-					</TxnVoidRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</TxnVoidRq>';
 
-			return $xml;
+			return self::xml($version,$locale,$xml,'stopOnError');
 		}
 
 		return '';
@@ -1462,19 +1439,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		{
 			$Object = new QuickBooks_SQL_Object(null, null, $arr);
 
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-				<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-				<QBXML>
-					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-						<TxnDelRq requestID="' . $requestID . '">
+			$xml = '<TxnDelRq requestID="' . $requestID . '">
 							<TxnDelType>' . $extra['objectType'] . '</TxnDelType>
 							<TxnID>' . $Object->get('TxnID') . '</TxnID>
-						</TxnDelRq>
-					</QBXMLMsgsRq>
-				</QBXML>';
+						</TxnDelRq>';
 
-			return $xml;
+			return self::xml($version,$locale,$xml);
 		}
 
 		return '';
@@ -1547,33 +1517,19 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	{
 		if (!empty($extra['ListID']))
 		{
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-				<?qbxml version="' . $version . '"?>
-				<QBXML>
-					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-						<CustomerQueryRq requestID="' . $requestID . '">
+			$xml = '<CustomerQueryRq requestID="' . $requestID . '">
 							<ListID>' . $extra['ListID'] . '</ListID>
-						</CustomerQueryRq>
-					</QBXMLMsgsRq>
-				</QBXML>';
+						</CustomerQueryRq>';
 
-			return $xml;
+			return self::xml($version,$locale,$xml);
 		}
 		else if (!empty($extra['FullName']))
 		{
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-				<?qbxml version="' . $version . '"?>
-				<QBXML>
-					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-						<CustomerQueryRq requestID="' . $requestID . '">
+			$xml = '<CustomerQueryRq requestID="' . $requestID . '">
 							<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_CUSTOMER, 'FullName', $extra['FullName']) . '</FullName>
-						</CustomerQueryRq>
-					</QBXMLMsgsRq>
-				</QBXML>';
+						</CustomerQueryRq>';
 
-			return $xml;
+			return self::xml($version,$locale,$xml);
 		}
 
 		$err = '' . __METHOD__ . ' called without a proper $extra array: ' . print_r($extra, true);
@@ -1590,19 +1546,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ItemDeriveRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ItemQueryRq requestID="' . $requestID . '">
+		$xml = '<ItemQueryRq requestID="' . $requestID . '">
 						<ListID>' . $extra['ListID'] . '</ListID>
-					</ItemQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ItemQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function ItemDeriveResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -1620,33 +1568,19 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 		if (!empty($extra['TxnID']))
 		{
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-				<?qbxml version="' . $version . '"?>
-				<QBXML>
-					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-						<InvoiceQueryRq requestID="' . $requestID . '">
+			$xml = '<InvoiceQueryRq requestID="' . $requestID . '">
 							<TxnID>' . $extra['TxnID'] . '</TxnID>
-						</InvoiceQueryRq>
-					</QBXMLMsgsRq>
-				</QBXML>';
+						</InvoiceQueryRq>';
 
-			return $xml;
+			return self::xml($version,$locale,$xml);
 		}
 		else if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', array( QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID )))
 		{
-			$xml = '';
-			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-				<?qbxml version="' . $version . '"?>
-				<QBXML>
-					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-						<InvoiceQueryRq requestID="' . $requestID . '">
+			$xml = '<InvoiceQueryRq requestID="' . $requestID . '">
 							<TxnID>' . $arr['TxnID'] . '</TxnID>
-						</InvoiceQueryRq>
-					</QBXMLMsgsRq>
-				</QBXML>';
+						</InvoiceQueryRq>';
 
-			return $xml;
+			return self::xml($version,$locale,$xml);
 		}
 
 		$err = '' . __METHOD__ . ' called without a proper $extra array: ' . print_r($extra, true);
@@ -2221,11 +2155,7 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		{
 			$DataExt = new QuickBooks_SQL_Object('dataext', null, $arr);
 
-			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<DataExtAddRq requestID="' . $requestID . '">
+			$xml = '<DataExtAddRq requestID="' . $requestID . '">
 						<DataExtAdd>
 							<OwnerID>' . $DataExt->get("OwnerID") . '</OwnerID>
 							<DataExtName>' . $DataExt->get("DataExtName") . '</DataExtName>
@@ -2263,12 +2193,10 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			}
 			$xml .= '<DataExtValue>' . $DataExt->get("DataExtValue") . '</DataExtValue>
 				  </DataExtAdd>
-				</DataExtAddRq>
-		      </QBXMLMsgsRq>
-			</QBXML>';
+				</DataExtAddRq>';
 		}
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -2304,11 +2232,7 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		{
 			$DataExt = new QuickBooks_SQL_Object('dataext', null, $arr);
 
-			$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<DataExtModRq requestID="' . $requestID . '">
+			$xml = '<DataExtModRq requestID="' . $requestID . '">
 						<DataExtMod>
 							<OwnerID>' . $DataExt->get("OwnerID") . '</OwnerID>
 							<DataExtName>' . $DataExt->get("DataExtName") . '</DataExtName>
@@ -2346,12 +2270,10 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			}
 			$xml .= '<DataExtValue>' . $DataExt->get("DataExtValue") . '</DataExtValue>
 				  </DataExtMod>
-				</DataExtModRq>
-		      </QBXMLMsgsRq>
-			</QBXML>';
+				</DataExtModRq>';
 		}
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -4408,13 +4330,7 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			$Object = new QuickBooks_SQL_Object(null, null, $Object);
 		}
 
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
-		$xml .= '<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<QBXML>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . "\t" . '<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . "\t" . "\t" . '<' . QuickBooks_Utilities::actionToRequest($action) . ' requestID="' . $requestID . '">' . QUICKBOOKS_CRLF;
+		$xml = '<' . QuickBooks_Utilities::actionToRequest($action) . ' requestID="' . $requestID . '">' . QUICKBOOKS_CRLF;
 
 		$file = '/QuickBooks/QBXML/Schema/Object/' . QuickBooks_Utilities::actionToRequest($action) . '.php';
 		$class = 'QuickBooks_QBXML_Schema_Object_' . QuickBooks_Utilities::actionToRequest($action);
@@ -4770,11 +4686,9 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		$xml = str_replace('&amp;amp;', '&amp;', $xml);
 		$xml = str_replace('&amp;quot;', '&quot;', $xml);
 
-		$xml .= '</' . QuickBooks_Utilities::actionToRequest($action) .'>
-				</QBXMLMsgsRq>
-			</QBXML>';
+		$xml .= '</' . QuickBooks_Utilities::actionToRequest($action) .'>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5080,19 +4994,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function AccountImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<AccountQueryRq requestID="' . $requestID . '">
+		$xml = '<AccountQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</AccountQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</AccountQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function AccountImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -5143,17 +5049,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<AccountQueryRq>
+		$xml = '<AccountQueryRq>
 						' . $tag . '
-					</AccountQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</AccountQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function AccountQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -5168,26 +5068,18 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function BillPaymentCheckImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.0, $version, $locale, QUICKBOOKS_QUERY_BILLPAYMENTCHECK))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<BillPaymentCheckQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<BillPaymentCheckQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</BillPaymentCheckQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</BillPaymentCheckQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5216,26 +5108,18 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function BillPaymentCreditCardImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.0, $version, $locale, QUICKBOOKS_QUERY_BILLPAYMENTCREDITCARD))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<BillPaymentCreditCardQueryRq requestID="' . $requestID  . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<BillPaymentCreditCardQueryRq requestID="' . $requestID  . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</BillPaymentCreditCardQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</BillPaymentCreditCardQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5286,17 +5170,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml = '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<BillQueryRq>
+		$xml = '<BillQueryRq>
 						' . $tag . '
-					</BillQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</BillQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function BillQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array())
@@ -5307,8 +5185,6 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function BillImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		$iterator = QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra, $version, $locale);
 		if (!$iterator)
 		{
@@ -5316,20 +5192,14 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<BillQueryRq requestID="' . $requestID . '" ' . $iterator . '>
+		$xml = '<BillQueryRq requestID="' . $requestID . '" ' . $iterator . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						<IncludeLinkedTxns>true</IncludeLinkedTxns>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</BillQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</BillQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5364,18 +5234,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		}
 
 		// We pass a blank ListID, because it was discovered that this will get ALL the BillToPay entries rather than only a few.
-		$xml = '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<BillToPayQueryRq requestID="' . $requestID . '">
+		$xml = '<BillToPayQueryRq requestID="' . $requestID . '">
 						<PayeeEntityRef>
 							<ListID></ListID>
 						</PayeeEntityRef>
-					</BillToPayQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
-		return $xml;
+					</BillToPayQueryRq>';
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function BillToPayQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -5399,24 +5263,16 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function BillingRateQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(6.0, $version, $locale, QUICKBOOKS_QUERY_BILLINGRATE))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<BillingRateQueryRq requestID="' . $requestID . '">
+		$xml = '<BillingRateQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</BillingRateQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</BillingRateQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5444,26 +5300,18 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function BuildAssemblyQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(5.0, $version, $locale, QUICKBOOKS_QUERY_BUILDASSEMBLY))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<BuildAssemblyQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<BuildAssemblyQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(5.0, $version, '<IncludeComponentLineItems>true</IncludeLineItems>') . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</BuildAssemblyQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</BuildAssemblyQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5584,22 +5432,14 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function CheckImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CheckQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<CheckQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(7.0, $version, '<IncludeLinkedTxns>true</IncludeLinkedTxns>', $locale) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>', $locale) . '
-					</CheckQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</CheckQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5631,21 +5471,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function JournalEntryImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<JournalEntryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<JournalEntryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>', $locale) . '
-					</JournalEntryQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</JournalEntryQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5673,26 +5505,18 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ChargeImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.0, $version))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ChargeQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<ChargeQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(3.0, $version, '<IncludeLinkedTxns>true</IncludeLinkedTxns>', $locale) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>', $locale) . '
-					</ChargeQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ChargeQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5720,19 +5544,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ClassImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ClassQueryRq requestID="' . $requestID . '">
+		$xml = '<ClassQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</ClassQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ClassQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5760,21 +5576,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function HostImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<HostQueryRq requestID="' . $requestID . '">
+		$xml = '<HostQueryRq requestID="' . $requestID . '">
 						<IncludeListMetaData>
 							<IncludeMaxCapacity>true</IncludeMaxCapacity>
 						</IncludeListMetaData>
-					</HostQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</HostQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5801,17 +5609,9 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function PreferencesImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
+		$xml = '<PreferencesQueryRq requestID="' . $requestID . '"></PreferencesQueryRq>';
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<PreferencesQueryRq requestID="' . $requestID . '"></PreferencesQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
-
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5840,19 +5640,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function CompanyImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CompanyQueryRq requestID="' . $requestID . '">
+		$xml = '<CompanyQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>', $locale) . '
-					</CompanyQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</CompanyQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5882,21 +5674,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function CreditCardChargeImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CreditCardChargeQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<CreditCardChargeQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</CreditCardChargeQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</CreditCardChargeQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5924,21 +5708,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function CreditCardCreditImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CreditCardCreditQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<CreditCardCreditQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</CreditCardCreditQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</CreditCardCreditQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -5967,22 +5743,14 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function CreditMemoImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CreditMemoQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<CreditMemoQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(1.1, $version, '<IncludeLinkedTxns>true</IncludeLinkedTxns>') . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</CreditMemoQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</CreditMemoQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -6010,19 +5778,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function CustomerMsgImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CustomerMsgQueryRq requestID="' . $requestID . '">
+		$xml = '<CustomerMsgQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</CustomerMsgQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</CustomerMsgQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -6096,20 +5856,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml = '';
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CustomerQueryRq requestID="' . $requestID . '" ' . $iterator . '>
+		$xml = '<CustomerQueryRq requestID="' . $requestID . '" ' . $iterator . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</CustomerQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</CustomerQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -6159,17 +5912,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml = '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CustomerQueryRq>
+		$xml = '<CustomerQueryRq>
 						' . $tag . '
-					</CustomerQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</CustomerQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function CustomerQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array())
@@ -6180,19 +5927,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function CustomerTypeImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<CustomerTypeQueryRq requestID="' . $requestID . '">
+		$xml = '<CustomerTypeQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</CustomerTypeQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</CustomerTypeQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -6227,22 +5966,14 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function DataExtDefQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.0, $version, $locale, QUICKBOOKS_QUERY_DATAEXTDEF))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<DataExtDefQueryRq requestID="' . $requestID . '">
+		$xml = '<DataExtDefQueryRq requestID="' . $requestID . '">
 						<OwnerID>0</OwnerID>
-					</DataExtDefQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</DataExtDefQueryRq>';
 		/*
 						<AssignToObject>Customer</AssignToObject>
 						<AssignToObject>Employee</AssignToObject>
@@ -6251,7 +5982,7 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 		 */
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function DataExtDefQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6277,19 +6008,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function DateDrivenTermsQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<DateDrivenTermsQueryRq requestID="' . $requestID . '">
+		$xml = '<DateDrivenTermsQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</DateDrivenTermsQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</DateDrivenTermsQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -6390,26 +6113,18 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function DepositImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.0, $version))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<DepositQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<DepositQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</DepositQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</DepositQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -6480,20 +6195,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function EmployeeImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<EmployeeQueryRq requestID="' . $requestID . '">
+		$xml = '<EmployeeQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</EmployeeQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</EmployeeQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -6526,30 +6233,20 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function EstimateImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		$iterator = QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra, $version, $locale);
 		if (!$iterator)
 		{
-
-
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<EstimateQueryRq requestID="' . $requestID . '" ' . $iterator . '>
+		$xml = '<EstimateQueryRq requestID="' . $requestID . '" ' . $iterator . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(3.0, $version, '<IncludeLinkedTxns>true</IncludeLinkedTxns>') . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</EstimateQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</EstimateQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -6579,27 +6276,19 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function InventoryAdjustmentImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.0, $version))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
 		// min version 2.0
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<InventoryAdjustmentQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<InventoryAdjustmentQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</InventoryAdjustmentQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</InventoryAdjustmentQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function InventoryAdjustmentImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6625,8 +6314,6 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function InvoiceImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		$iterator = QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra, $version, $locale);
 		if (!$iterator)
 		{
@@ -6637,20 +6324,14 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<InvoiceQueryRq requestID="' . $requestID . '" ' . $iterator . '>
+		$xml = '<InvoiceQueryRq requestID="' . $requestID . '" ' . $iterator . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(1.1, $version, '<IncludeLinkedTxns>true</IncludeLinkedTxns>') . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</InvoiceQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</InvoiceQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function InvoiceImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6674,8 +6355,6 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function InvoiceQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		$tag1 = '';
 		$tag2 = '';
 
@@ -6724,21 +6403,15 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 		//  ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<InvoiceQueryRq requestID="' . $requestID . '">
+		$xml = '<InvoiceQueryRq requestID="' . $requestID . '">
 						' . $tag1 . '
 						' . $tag2 . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(1.1, $version, '<IncludeLinkedTxns>true</IncludeLinkedTxns>') . '
 						' . Quickbooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</InvoiceQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</InvoiceQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function InvoiceQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6752,21 +6425,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ItemServiceImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ItemServiceQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<ItemServiceQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</ItemServiceQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ItemServiceQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function ItemServiceImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6790,21 +6455,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ItemNonInventoryImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ItemNonInventoryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<ItemNonInventoryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</ItemNonInventoryQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ItemNonInventoryQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function ItemNonInventoryImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6828,21 +6485,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ItemInventoryImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ItemInventoryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<ItemInventoryQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</ItemInventoryQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ItemInventoryQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function ItemInventoryImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6866,21 +6515,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ItemInventoryAssemblyImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ItemInventoryAssemblyQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<ItemInventoryAssemblyQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</ItemInventoryAssemblyQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ItemInventoryAssemblyQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function ItemInventoryAssemblyImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6904,21 +6545,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ItemSalesTaxImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ItemSalesTaxQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<ItemSalesTaxQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</ItemSalesTaxQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ItemSalesTaxQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function ItemSalesTaxImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6942,21 +6575,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ItemSalesTaxGroupImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ItemSalesTaxGroupQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<ItemSalesTaxGroupQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</ItemSalesTaxGroupQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ItemSalesTaxGroupQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function ItemSalesTaxGroupImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -6985,21 +6610,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function ItemImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ItemQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<ItemQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</ItemQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ItemQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function ItemImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -7024,21 +6641,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ItemReceiptImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ItemReceiptQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<ItemReceiptQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						<IncludeLinkedTxns>true</IncludeLinkedTxns>
-					</ItemReceiptQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ItemReceiptQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function ItemReceiptImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -7063,19 +6672,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function JobTypeQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<JobTypeQueryRq requestID="' . $requestID . '">
+		$xml = '<JobTypeQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</JobTypeQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</JobTypeQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7108,20 +6709,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function PaymentMethodImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<PaymentMethodQueryRq requestID="' . $requestID . '">
+		$xml = '<PaymentMethodQueryRq requestID="' . $requestID . '">
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</PaymentMethodQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</PaymentMethodQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7149,19 +6742,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function PayrollItemWageImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<PayrollItemWageQueryRq requestID="' . $requestID . '">
+		$xml = '<PayrollItemWageQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</PayrollItemWageQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</PayrollItemWageQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7186,19 +6771,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function PayrollItemNonWageImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<PayrollItemNonWageQueryRq requestID="' . $requestID . '">
+		$xml = '<PayrollItemNonWageQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</PayrollItemNonWageQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</PayrollItemNonWageQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7227,24 +6804,16 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function PriceLevelImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(4.0, $version))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<PriceLevelQueryRq requestID="' . $requestID . '">
+		$xml = '<PriceLevelQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</PriceLevelQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</PriceLevelQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7276,8 +6845,6 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function PurchaseOrderImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		$iterator = QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra, $version, $locale);
 		if (!$iterator)
 		{
@@ -7286,20 +6853,14 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<PurchaseOrderQueryRq requestID="' . $requestID . '" ' . $iterator . '>
+		$xml = '<PurchaseOrderQueryRq requestID="' . $requestID . '" ' . $iterator . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(3.0, $version, '<IncludeLinkedTxns>true</IncludeLinkedTxns>') . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</PurchaseOrderQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</PurchaseOrderQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7349,17 +6910,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml = '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<PurchaseOrderQueryRq>
+		$xml = '<PurchaseOrderQueryRq>
 						' . $tag . '
-					</PurchaseOrderQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</PurchaseOrderQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function PurchaseOrderQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array())
@@ -7374,8 +6929,6 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function ReceivePaymentImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		$iterator = QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra);
 
 		if (!$iterator)
@@ -7390,19 +6943,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ReceivePaymentQueryRq requestID="' . $requestID . '" ' . $iterator . '>
+		$xml = '<ReceivePaymentQueryRq requestID="' . $requestID . '" ' . $iterator . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</ReceivePaymentQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ReceivePaymentQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7430,8 +6977,6 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ReceivePaymentQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		//$iterator = QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra);
 
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(1.1, $version))
@@ -7483,20 +7028,14 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			return QUICKBOOKS_NOOP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ReceivePaymentQueryRq>
+		$xml = '<ReceivePaymentQueryRq>
 						' . $tag1 . '
 						' . $tag2 . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</ReceivePaymentQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ReceivePaymentQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7511,8 +7050,6 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function SalesOrderImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.1, $version))
 		{
 			return QUICKBOOKS_SKIP;
@@ -7522,20 +7059,14 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		//	since this entire action is qbXML versions 2.1 or greater, we can
 		//	just assume it'll be present.
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<SalesOrderQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<SalesOrderQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						<IncludeLinkedTxns>true</IncludeLinkedTxns>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</SalesOrderQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</SalesOrderQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function SalesOrderImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -7559,21 +7090,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function SalesReceiptImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<SalesReceiptQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<SalesReceiptQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</SalesReceiptQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</SalesReceiptQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7597,19 +7120,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function SalesRepImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<SalesRepQueryRq requestID="' . $requestID . '">
+		$xml = '<SalesRepQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</SalesRepQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</SalesRepQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7639,19 +7154,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function SalesTaxCodeImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<SalesTaxCodeQueryRq requestID="' . $requestID . '">
+		$xml = '<SalesTaxCodeQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</SalesTaxCodeQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</SalesTaxCodeQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7681,20 +7188,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function ShipMethodImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<ShipMethodQueryRq requestID="' . $requestID . '">
+		$xml = '<ShipMethodQueryRq requestID="' . $requestID . '">
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</ShipMethodQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</ShipMethodQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7729,20 +7228,12 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	 */
 	public static function TermsImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<TermsQueryRq requestID="' . $requestID . '">
+		$xml = '<TermsQueryRq requestID="' . $requestID . '">
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</TermsQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</TermsQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7773,19 +7264,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function TimeTrackingImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<TimeTrackingQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<TimeTrackingQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
-					</TimeTrackingQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</TimeTrackingQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7813,24 +7296,16 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function UnitOfMeasureSetQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(7.0, $version))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<UnitOfMeasureSetQueryRq requestID="' . $requestID . '">
+		$xml = '<UnitOfMeasureSetQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</UnitOfMeasureSetQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</UnitOfMeasureSetQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7860,24 +7335,16 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function VehicleMileageQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(6.0, $version))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<VehicleMileageQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<VehicleMileageQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
-					</VehicleMileageQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</VehicleMileageQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7908,24 +7375,16 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function VehicleImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(6.0, $version))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<VehicleQueryRq requestID="' . $requestID . '">
+		$xml = '<VehicleQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</VehicleQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</VehicleQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -7956,22 +7415,14 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function VendorCreditImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<VendorCreditQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<VendorCreditQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 						<IncludeLineItems>true</IncludeLineItems>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<IncludeLinkedTxns>true</IncludeLinkedTxns>') . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</VendorCreditQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</VendorCreditQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	public static function VendorCreditImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
@@ -7997,19 +7448,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function VendorTypeImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<VendorTypeQueryRq requestID="' . $requestID . '">
+		$xml = '<VendorTypeQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</VendorTypeQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</VendorTypeQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -8039,21 +7482,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function VendorImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<VendorQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
+		$xml = '<VendorQueryRq requestID="' . $requestID . '" ' . QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra) . '>
 						<ActiveStatus>All</ActiveStatus>
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
-					</VendorQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</VendorQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -8085,24 +7520,16 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 
 	public static function WorkersCompCodeQueryRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '';
-
 		if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(7.0, $version))
 		{
 			return QUICKBOOKS_SKIP;
 		}
 
-		$xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . $version . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<WorkersCompCodeQueryRq requestID="' . $requestID . '">
+		$xml = '<WorkersCompCodeQueryRq requestID="' . $requestID . '">
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</WorkersCompCodeQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+					</WorkersCompCodeQueryRq>';
 
-		return $xml;
+		return self::xml($version,$locale,$xml);
 	}
 
 	/**
@@ -9298,34 +8725,34 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 				)
 			),
 
-					"billingrate" => array( "id_field" => "ListID",
+			"billingrate" => array( "id_field" => "ListID",
+									"children" => array(
+											"billingrate_billingrateperitem" => "BillingRate_ListID"
+									)
+			),
+
+			"billpaymentcheck" => array( "id_field" => "ListID",
 											"children" => array(
-												"billingrate_billingrateperitem" => "BillingRate_ListID"
-												)
-										),
-
-					"billpaymentcheck" => array( "id_field" => "ListID",
-													"children" => array(
-															"billpaymentcheck_appliedtotxn" => "FromTxnID",
-															"dataext" => "Entity_ListID"
-																)
-												),
-
-					"billpaymentcreditcard" => array( "id_field" => "ListID",
-														 "children" => array(
-																"billpaymentcreditcard_appliedtotxn" => "FromTxnID",
-																"dataext" => "Entity_ListID"
-															)
-												),
-
-					"charge" => array( "id_field" => "TxnID",
-									  "children" => array(
-											"dataext" => "Txn_TxnID"
+													"billpaymentcheck_appliedtotxn" => "FromTxnID",
+													"dataext" => "Entity_ListID"
 											)
-									),
+			),
 
-					"check" => array( "id_field" => "TxnID",
-									  "children" => array(
+			"billpaymentcreditcard" => array( "id_field" => "ListID",
+												 "children" => array(
+													"billpaymentcreditcard_appliedtotxn" => "FromTxnID",
+													"dataext" => "Entity_ListID"
+												)
+			),
+
+			"charge" => array( "id_field" => "TxnID",
+							   "children" => array(
+									"dataext" => "Txn_TxnID"
+								)
+			),
+
+			"check" => array( "id_field" => "TxnID",
+								  "children" => array(
 											"check_expenseline" => "Check_TxnID",
 											"check_itemgroupline" => "Check_TxnID",
 											"check_itemgroupline_itemline" => "Check_TxnID",
@@ -9335,53 +8762,53 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 											)
 									),
 
-					"company" => array( "id_field" => "CompanyName",
+			"company" => array( "id_field" => "CompanyName",
 									  "children" => array(
 											"company_subscribedservices_service" => "Company_CompanyName"
 											)
 									),
 
-					"creditcardcharge" => array( "id_field" => "TxnID",
-												 "children" => array(
-														"creditcardcharge_expenseline" => "CreditCardCharge_TxnID",
-														"creditcardcharge_itemgroupline" => "CreditCardCharge_TxnID",
-														"creditcardcharge_itemgroupline_itemline" => "CreditCardCharge_TxnID",
-														"creditcardcharge_itemline" => "CreditCardCharge_TxnID",
-														"dataext" => "Txn_TxnID"
-													)
-												),
+			"creditcardcharge" => array( "id_field" => "TxnID",
+										 "children" => array(
+												"creditcardcharge_expenseline" => "CreditCardCharge_TxnID",
+												"creditcardcharge_itemgroupline" => "CreditCardCharge_TxnID",
+												"creditcardcharge_itemgroupline_itemline" => "CreditCardCharge_TxnID",
+												"creditcardcharge_itemline" => "CreditCardCharge_TxnID",
+												"dataext" => "Txn_TxnID"
+											)
+									),
 
-					"creditcardcredit" => array( "id_field" => "TxnID",
-												 "children" => array(
-														"creditcardcredit_expenseline" => "CreditCardCredit_TxnID",
-														"creditcardcredit_itemgroupline" => "CreditCardCredit_TxnID",
-														"creditcardcredit_itemgroupline_itemline" => "CreditCardCredit_TxnID",
-														"creditcardcredit_itemline" => "CreditCardCredit_TxnID",
-														"dataext" => "Txn_TxnID"
-													)
-												),
+			"creditcardcredit" => array( "id_field" => "TxnID",
+										 "children" => array(
+												"creditcardcredit_expenseline" => "CreditCardCredit_TxnID",
+												"creditcardcredit_itemgroupline" => "CreditCardCredit_TxnID",
+												"creditcardcredit_itemgroupline_itemline" => "CreditCardCredit_TxnID",
+												"creditcardcredit_itemline" => "CreditCardCredit_TxnID",
+												"dataext" => "Txn_TxnID"
+											)
+										),
 
-					"creditmemo" => array( "id_field" => "TxnID",
-												 "children" => array(
-														"creditmemo_creditmemoline" => "CreditMemo_TxnID",
-														"creditmemo_creditmemolinegroup" => "CreditMemo_TxnID",
-														"creditmemo_creditmemolinegroup_creditmemoline" => "CreditMemo_TxnID",
-														"creditmemo_linkedtxn" => "FromTxnID",
-														"dataext" => "Txn_TxnID"
-													)
-												),
+			"creditmemo" => array( "id_field" => "TxnID",
+										 "children" => array(
+												"creditmemo_creditmemoline" => "CreditMemo_TxnID",
+												"creditmemo_creditmemolinegroup" => "CreditMemo_TxnID",
+												"creditmemo_creditmemolinegroup_creditmemoline" => "CreditMemo_TxnID",
+												"creditmemo_linkedtxn" => "FromTxnID",
+												"dataext" => "Txn_TxnID"
+											)
+										),
 
-					"creditmemolinegroup" => array( "id_field" => "TxnLineID",
-												"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-											),
+			"creditmemolinegroup" => array( "id_field" => "TxnLineID",
+										"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+									),
 
-					"creditmemolinegroup_creditmemoline" => array( "id_field" => "TxnLineID",
-												"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-											),
+			"creditmemolinegroup_creditmemoline" => array( "id_field" => "TxnLineID",
+										"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+									),
 
 			'customer' => array(
 				'id_field' => 'ListID',
@@ -9390,19 +8817,19 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					)
 				),
 
-					"deposit" => array( "id_field" => "TxnID",
-												 "children" => array(
-												"deposit_depositline" => "Deposit_TxnID",
-													"dataext" => "Txn_TxnID"
-													)
-												),
+			"deposit" => array( "id_field" => "TxnID",
+										 "children" => array(
+										"deposit_depositline" => "Deposit_TxnID",
+											"dataext" => "Txn_TxnID"
+											)
+										),
 
-					"employee" => array( "id_field" => "ListID",
-												 "children" => array(
-														"employee_earnings" => "Employee_ListID",
-														"dataext" => "Entity_ListID"
-													)
-												),
+			"employee" => array( "id_field" => "ListID",
+										 "children" => array(
+												"employee_earnings" => "Employee_ListID",
+												"dataext" => "Entity_ListID"
+											)
+										),
 
 			'estimate' => array(
 				'id_field' => 'TxnID',
@@ -9415,280 +8842,280 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 				)
 			),
 
-					"estimate_estimatelinegroup" => array( "id_field" => "TxnLineID",
-												"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-											),
-
-					"estimate_estimateline" => array( "id_field" => "TxnLineID",
-												"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-											),
-
-					"estimate_estimatelinegroup" => array( "id_field" => "TxnLineID",
-												"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-											),
-
-					"estimate_estimatelinegroup_estimateline" => array( "id_field" => "TxnLineID",
-												"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-											),
-
-					"inventoryadjustment" => array( "id_field" => "TxnID",
+			"estimate_estimatelinegroup" => array( "id_field" => "TxnLineID",
 										"children" => array(
-												"inventoryadjustment_inventoryadjustmentline" => "InventoryAdjustment_TxnID",
-													"dataext" => "Txn_TxnID"
-												)
+											"dataext" => "Txn_TxnID"
+										)
 									),
 
-					"invoice" => array( "id_field" => "TxnID",
+			"estimate_estimateline" => array( "id_field" => "TxnLineID",
 										"children" => array(
-												"invoice_invoiceline" => "Invoice_TxnID",
-												"invoice_invoicelinegroup" => "Invoice_TxnID",
-												"invoice_invoicelinegroup_invoiceline" => "Invoice_TxnID",
-												"invoice_linkedtxn" => "FromTxnID",
-													"dataext" => "Txn_TxnID"
-												)
+											"dataext" => "Txn_TxnID"
+										)
 									),
 
-					"invoice_invoiceline" => array( "id_field" => "TxnLineID",
+			"estimate_estimatelinegroup" => array( "id_field" => "TxnLineID",
 										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
+											"dataext" => "Txn_TxnID"
+										)
 									),
 
-
-					"invoice_invoicelinegroup" => array( "id_field" => "TxnLineID",
+			"estimate_estimatelinegroup_estimateline" => array( "id_field" => "TxnLineID",
 										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
+											"dataext" => "Txn_TxnID"
+										)
 									),
 
-					"invoice_invoicelinegroup_invoiceline" => array( "id_field" => "TxnLineID",
+			"inventoryadjustment" => array( "id_field" => "TxnID",
+								"children" => array(
+										"inventoryadjustment_inventoryadjustmentline" => "InventoryAdjustment_TxnID",
+											"dataext" => "Txn_TxnID"
+										)
+							),
+
+			"invoice" => array( "id_field" => "TxnID",
+								"children" => array(
+										"invoice_invoiceline" => "Invoice_TxnID",
+										"invoice_invoicelinegroup" => "Invoice_TxnID",
+										"invoice_invoicelinegroup_invoiceline" => "Invoice_TxnID",
+										"invoice_linkedtxn" => "FromTxnID",
+											"dataext" => "Txn_TxnID"
+										)
+							),
+
+			"invoice_invoiceline" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
+
+
+			"invoice_invoicelinegroup" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
+
+			"invoice_invoicelinegroup_invoiceline" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
+
+			"itemgroup" => array( "id_field" => "ListID",
+								"children" => array(
+										"itemgroup_itemgroupline" => "ItemGroup_ListID",
+											"dataext" => "Entity_ListID"
+										)
+							),
+
+			"iteminventory" => array( "id_field" => "ListID",
+								"children" => array(
+											"dataext" => "Entity_ListID"
+										)
+							),
+
+			"iteminventoryassembly" => array( "id_field" => "ListID",
+								"children" => array(
+										"iteminventoryassembly_iteminventoryassemblyline" => "ItemInventoryAssembly_ListID",
+											"dataext" => "Txn_TxnID"
+										)
+							),
+
+			"itemnoninventory" => array( "id_field" => "ListID",
+								"children" => array(
+											"dataext" => "Entity_ListID"
+										)
+							),
+
+			"itemdiscount" => array( "id_field" => "ListID",
+								"children" => array(
+											"dataext" => "Entity_ListID"
+										)
+							),
+
+			"itemfixedasset" => array( "id_field" => "ListID",
+								"children" => array(
+											"dataext" => "Entity_ListID"
+										)
+							),
+
+			"itemothercharge" => array( "id_field" => "ListID",
+								"children" => array(
+											"dataext" => "Entity_ListID"
+										)
+							),
+
+			"itempayment" => array( "id_field" => "ListID",
+								"children" => array(
+											"dataext" => "Entity_ListID"
+										)
+							),
+
+			"itemreceipt" => array( "id_field" => "TxnID",
+								"children" => array(
+										"itemreceipt_expenseline" => "ItemReceipt_TxnID",
+										"itemreceipt_itemgroupline" => "ItemReceipt_TxnID",
+										"itemreceipt_itemgroupline_itemline" => "ItemReceipt_TxnID",
+										"itemreceipt_itemline" => "ItemReceipt_TxnID",
+										"itemreceipt_linkedtxn" => "FromTxnID",
+											"dataext" => "Entity_ListID"
+										)
+								),
+
+			"itemsalestaxgroup" => array( "id_field" => "ListID",
+								"children" => array(
+										"itemsalestaxgroup_itemsalestax" => "ItemSalesTaxGroup_ListID",
+											"dataext" => "Entity_ListID"
+										)
+								),
+
+			"itemservice" => array( "id_field" => "ListID",
+								"children" => array(
+											"dataext" => "Entity_ListID"
+										)
+								),
+
+			"itemsubtotal" => array( "id_field" => "ListID",
+								"children" => array(
+											"dataext" => "Entity_ListID"
+										)
+								),
+
+			"journalentry" => array( "id_field" => "TxnID",
 										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
+										"journalentry_journalcreditline" => "JournalEntry_TxnID",
+										"journalentry_journaldebitline" => "JournalEntry_TxnID",
+											"dataext" => "Entity_ListID"
+										)
+							),
 
-					"itemgroup" => array( "id_field" => "ListID",
+			"pricelevel" => array( "id_field" => "ListID",
 										"children" => array(
-												"itemgroup_itemgroupline" => "ItemGroup_ListID",
-													"dataext" => "Entity_ListID"
-												)
-									),
+										"pricelevel_pricelevelperitem" => "PriceLevel_ListID"
+										)
+							),
 
-					"iteminventory" => array( "id_field" => "ListID",
-										"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-									),
+			"purchaseorder" => array( "id_field" => "TxnID",
+								"children" => array(
+										"purchaseorder_purchaseorderline" => "PurchaseOrder_TxnID",
+										"purchaseorder_purchaseorderlinegroup" => "PurchaseOrder_TxnID",
+										"purchaseorder_purchaseorderlinegroup_purchaseorderline" => "PurchaseOrder_TxnID",
+										"purchaseorder_linkedtxn" => "FromTxnID",
+											"dataext" => "Entity_ListID"
+										)
+							),
 
-					"iteminventoryassembly" => array( "id_field" => "ListID",
-										"children" => array(
-												"iteminventoryassembly_iteminventoryassemblyline" => "ItemInventoryAssembly_ListID",
-													"dataext" => "Txn_TxnID"
-												)
-									),
+			"purchaseorder_purchaseorderline" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"itemnoninventory" => array( "id_field" => "ListID",
-										"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-									),
+			"purchaseorder_purchaseorderlinegroup" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"itemdiscount" => array( "id_field" => "ListID",
-										"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-									),
+			"purchaseorder_purchaseorderlinegroup_purchaseorderline" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"itemfixedasset" => array( "id_field" => "ListID",
-										"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-									),
+			"receievepayment" => array( "id_field" => "TxnID",
+								"children" => array(
+										"receivepayment_appliedtotxn" => "FromTxnID",
+										'receivepayment_appliedtotxn' => 'ReceivePayment_TxnID',
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"itemothercharge" => array( "id_field" => "ListID",
-										"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-									),
+			"salesorder" => array( "id_field" => "TxnID",
+								"children" => array(
+										"salesorder_salesorderline" => "SalesOrder_TxnID",
+										"salesorder_salesorderlinegroup" => "SalesOrder_TxnID",
+										"salesorder_salesorderlinegroup_salesorderline" => "SalesOrder_TxnID",
+										"salesorder_linkedtxn" => "FromTxnID",
+											"dataext" => "Entity_ListID"
+										)
+							),
 
-					"itempayment" => array( "id_field" => "ListID",
-										"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-									),
+			"salesorder_salesorderline" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"itemreceipt" => array( "id_field" => "TxnID",
-										"children" => array(
-												"itemreceipt_expenseline" => "ItemReceipt_TxnID",
-												"itemreceipt_itemgroupline" => "ItemReceipt_TxnID",
-												"itemreceipt_itemgroupline_itemline" => "ItemReceipt_TxnID",
-												"itemreceipt_itemline" => "ItemReceipt_TxnID",
-												"itemreceipt_linkedtxn" => "FromTxnID",
-													"dataext" => "Entity_ListID"
-												)
-										),
+			"salesorder_salesorderlinegroup" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"itemsalestaxgroup" => array( "id_field" => "ListID",
-										"children" => array(
-												"itemsalestaxgroup_itemsalestax" => "ItemSalesTaxGroup_ListID",
-													"dataext" => "Entity_ListID"
-												)
-										),
+			"salesorder_salesorderlinegroup_salesorderline" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"itemservice" => array( "id_field" => "ListID",
-										"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-										),
+			"salesreceipt" => array( "id_field" => "TxnID",
+								"children" => array(
+										"salesreceipt_salesreceiptline" => "SalesReceipt_TxnID",
+										"salesreceipt_salesreceiptlinegroup" => "SalesReceipt_TxnID",
+										"salesreceipt_salesreceiptlinegroup_salesreceiptline" => "SalesReceipt_TxnID",
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"itemsubtotal" => array( "id_field" => "ListID",
-										"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-										),
+			"salesreceipt_salesreceiptline" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"journalentry" => array( "id_field" => "TxnID",
-												"children" => array(
-												"journalentry_journalcreditline" => "JournalEntry_TxnID",
-												"journalentry_journaldebitline" => "JournalEntry_TxnID",
-													"dataext" => "Entity_ListID"
-												)
-									),
+			"salereceipt_salesreceiptlinegroup" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"pricelevel" => array( "id_field" => "ListID",
-												"children" => array(
-												"pricelevel_pricelevelperitem" => "PriceLevel_ListID"
-												)
-									),
+			"salesreceipt_salesreceiptlinegroup_salesreceiptline" => array( "id_field" => "TxnLineID",
+								"children" => array(
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"purchaseorder" => array( "id_field" => "TxnID",
-										"children" => array(
-												"purchaseorder_purchaseorderline" => "PurchaseOrder_TxnID",
-												"purchaseorder_purchaseorderlinegroup" => "PurchaseOrder_TxnID",
-												"purchaseorder_purchaseorderlinegroup_purchaseorderline" => "PurchaseOrder_TxnID",
-												"purchaseorder_linkedtxn" => "FromTxnID",
-													"dataext" => "Entity_ListID"
-												)
-									),
+			"unitofmeasureset" => array( "id_field" => "ListID",
+								"children" => array(
+										"unitofmeasureset_defaultunit" => "UnitOfMeasureSet_ListID",
+										"unitofmeasureset_relatedunit" => "UnitOfMeasureSet_ListID"
+										)
+							),
 
-					"purchaseorder_purchaseorderline" => array( "id_field" => "TxnLineID",
-										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
+			"vendor" => array( "id_field" => "ListID",
+								"children" => array(
+											"dataext" => "Entity_ListID"
+										)
+							),
 
-					"purchaseorder_purchaseorderlinegroup" => array( "id_field" => "TxnLineID",
-										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
+			"vendorcredit" => array( "id_field" => "TxnID",
+								"children" => array(
+										"vendorcredit_expenseline" => "VendorCredit_TxnID",
+										"vendorcredit_itemline" => "VendorCredit_TxnID",
+										"vendorcredit_itemgroupline" => "VendorCredit_TxnID",
+										"vendorcredit_itemgroupline_itemline" => "VendorCredit_TxnID",
+										"vendorcredit_linkedtxn" => "FromTxnID",
+											"dataext" => "Txn_TxnID"
+										)
+							),
 
-					"purchaseorder_purchaseorderlinegroup_purchaseorderline" => array( "id_field" => "TxnLineID",
-										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"receievepayment" => array( "id_field" => "TxnID",
-										"children" => array(
-												"receivepayment_appliedtotxn" => "FromTxnID",
-												'receivepayment_appliedtotxn' => 'ReceivePayment_TxnID',
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"salesorder" => array( "id_field" => "TxnID",
-										"children" => array(
-												"salesorder_salesorderline" => "SalesOrder_TxnID",
-												"salesorder_salesorderlinegroup" => "SalesOrder_TxnID",
-												"salesorder_salesorderlinegroup_salesorderline" => "SalesOrder_TxnID",
-												"salesorder_linkedtxn" => "FromTxnID",
-													"dataext" => "Entity_ListID"
-												)
-									),
-
-					"salesorder_salesorderline" => array( "id_field" => "TxnLineID",
-										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"salesorder_salesorderlinegroup" => array( "id_field" => "TxnLineID",
-										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"salesorder_salesorderlinegroup_salesorderline" => array( "id_field" => "TxnLineID",
-										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"salesreceipt" => array( "id_field" => "TxnID",
-										"children" => array(
-												"salesreceipt_salesreceiptline" => "SalesReceipt_TxnID",
-												"salesreceipt_salesreceiptlinegroup" => "SalesReceipt_TxnID",
-												"salesreceipt_salesreceiptlinegroup_salesreceiptline" => "SalesReceipt_TxnID",
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"salesreceipt_salesreceiptline" => array( "id_field" => "TxnLineID",
-										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"salereceipt_salesreceiptlinegroup" => array( "id_field" => "TxnLineID",
-										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"salesreceipt_salesreceiptlinegroup_salesreceiptline" => array( "id_field" => "TxnLineID",
-										"children" => array(
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"unitofmeasureset" => array( "id_field" => "ListID",
-										"children" => array(
-												"unitofmeasureset_defaultunit" => "UnitOfMeasureSet_ListID",
-												"unitofmeasureset_relatedunit" => "UnitOfMeasureSet_ListID"
-												)
-									),
-
-					"vendor" => array( "id_field" => "ListID",
-										"children" => array(
-													"dataext" => "Entity_ListID"
-												)
-									),
-
-					"vendorcredit" => array( "id_field" => "TxnID",
-										"children" => array(
-												"vendorcredit_expenseline" => "VendorCredit_TxnID",
-												"vendorcredit_itemline" => "VendorCredit_TxnID",
-												"vendorcredit_itemgroupline" => "VendorCredit_TxnID",
-												"vendorcredit_itemgroupline_itemline" => "VendorCredit_TxnID",
-												"vendorcredit_linkedtxn" => "FromTxnID",
-													"dataext" => "Txn_TxnID"
-												)
-									),
-
-					"workerscompcode" => array( "id_field" => "ListID",
-										"children" => array(
-												"workerscompcode_ratehistory" => "WorkersCompCode_ListID"
-												)
-									)
+			"workerscompcode" => array( "id_field" => "ListID",
+								"children" => array(
+										"workerscompcode_ratehistory" => "WorkersCompCode_ListID"
+										)
+							)
 
 				);
 
@@ -11191,7 +10618,7 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			QuickBooks_SQL_Schema::mapToSchema(trim($curpath . ' ' . $Node->name()), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
 
 			//Okay so if the first element is a child element that is custom mapped, it'll end up creating the object with an incorrect path.
-			//print('map for: {' . $curpath . ' ' . $Node->name() . "} [" . $map[0] . "]\n");
+			//print('map for: {' . $curpath . ' ' . $Node->name() . '} [' . $map[0] . "]\n");
 			//print_r($map);
 
 			if ($map[0] and !isset($objects[$map[0]]))
@@ -11550,7 +10977,6 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 	protected static function _buildFilter($user, $action, $extra, $filter_wrap = false)
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-		$xml = '';
 		$type = '';
 
 		$key_prev = QuickBooks_Callbacks_SQL_Callbacks::_keySyncPrev($action);
@@ -11586,48 +11012,31 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 			// Store when we started to do this iterator (this will become the $prev_sync_datetime after we finish with this iterator)
 			$curr_sync_datetime = date('Y-m-d') . 'T' . date('H:i:s');
 			$Driver->configWrite($user, $module, $key_curr, $curr_sync_datetime, null);
-
-			if ($filter_wrap)
-			{
-				if ($action == QUICKBOOKS_QUERY_DELETEDLISTS or $action == QUICKBOOKS_QUERY_DELETEDTXNS)
-				{
-					$xml .= '<DeletedDateRangeFilter>' . "\n";
-					$xml .= '	<FromDeletedDate>' . $prev_sync_datetime . '</FromDeletedDate>' . "\n";
-					$xml .= '</DeletedDateRangeFilter>' . "\n";
-				}
-				else
-				{
-					$xml .= '<ModifiedDateRangeFilter>' . "\n";
-					$xml .= '	<FromModifiedDate>' . $prev_sync_datetime . '</FromModifiedDate>' . "\n";
-					$xml .= '</ModifiedDateRangeFilter>' . "\n";
-				}
-			}
-			else
-			{
-				$xml .= '<FromModifiedDate>' . $prev_sync_datetime . '</FromModifiedDate>';
-			}
+			$time = $curr_sync_datetime;
 		}
 		else 	// ... otherwise use what we found in previous time stamp
 		{
-			if ($filter_wrap)
+			$time = $prev_sync_datetime;
+		}
+
+		if ($filter_wrap)
+		{
+			if ($action == QUICKBOOKS_QUERY_DELETEDLISTS or $action == QUICKBOOKS_QUERY_DELETEDTXNS)
 			{
-				if ($action == QUICKBOOKS_QUERY_DELETEDLISTS or $action == QUICKBOOKS_QUERY_DELETEDTXNS)
-				{
-					$xml .= '<DeletedDateRangeFilter>' . "\n";
-					$xml .= '	<FromDeletedDate>' . $prev_sync_datetime . '</FromDeletedDate>' . "\n";
-					$xml .= '</DeletedDateRangeFilter>' . "\n";
-				}
-				else
-				{
-					$xml .= '<ModifiedDateRangeFilter>' . "\n";
-					$xml .= '	<FromModifiedDate>' . $prev_sync_datetime . '</FromModifiedDate>' . "\n";
-					$xml .= '</ModifiedDateRangeFilter>' . "\n";
-				}
+				$xml = '<DeletedDateRangeFilter>' . "\n";
+				$xml .= '	<FromDeletedDate>' . $time . '</FromDeletedDate>' . "\n";
+				$xml .= '</DeletedDateRangeFilter>' . "\n";
 			}
 			else
 			{
-				$xml .= '<FromModifiedDate>' . $prev_sync_datetime . '</FromModifiedDate>';
+				$xml .= '<ModifiedDateRangeFilter>' . "\n";
+				$xml .= '	<FromModifiedDate>' . $time . '</FromModifiedDate>' . "\n";
+				$xml .= '</ModifiedDateRangeFilter>' . "\n";
 			}
+		}
+		else
+		{
+			$xml = '<FromModifiedDate>' . $time . '</FromModifiedDate>';
 		}
 
 		return $xml;
