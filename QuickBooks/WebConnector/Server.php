@@ -194,6 +194,11 @@ class QuickBooks_WebConnector_Server
 
 		// Raw input
 		$input = file_get_contents('php://input');
+		if ($log_level >= QUICKBOOKS_LOG_DEVELOP) {
+			$marker = '===========';
+			$log = "$marker REQUEST $marker\n".$input."\n$marker END $marker\n";
+			file_put_contents('/var/www/qbwc/log/traffic.log',$log,FILE_APPEND);	// for debugging
+		}
 
 		$this->_input = $input;
 
