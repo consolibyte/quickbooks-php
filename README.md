@@ -1,3 +1,5 @@
+Forked from [consolibyte/quickbooks-php](https://github.com/consolibyte/quickbooks-php) to fix issues in PHP 8 and improve the code.
+
 QuickBooks PHP DevKit
 =====================
 
