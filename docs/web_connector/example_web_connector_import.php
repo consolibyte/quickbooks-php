@@ -373,6 +373,58 @@ function queueRequest($action, $priority, $user, $idents): void {
 	}
 }
 
+function processQuickBooksData($xml, string $type, callable $buildArrayFn, callable $buildLineItemArrayFn=null, bool $useDataExt=false) {
+	// This piece of the response from QuickBooks is now stored in $xml. You
+	//	can process the qbXML response in $xml in any way you like. Save it to
+	//	a file, stuff it in a database, parse it and stuff the records in a
+	//	database, etc. etc. etc.
+	//
+	// The following example shows how to use the built-in XML parser to parse
+	//	the response and stuff it into a database.
+
+	// Import all of the records
+	$errnum = 0;
+	$errmsg = '';
+	$Parser = new QuickBooks_XML_Parser($xml);
+	if ($Doc = $Parser->parse($errnum, $errmsg)) {
+		$Root = $Doc->getRoot();
+		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/'.$type.'QueryRs');
+
+		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
+		$table = 'qb_example_'.strtolower($type);
+
+		foreach ($List->children() as $child) {
+			$arr = $buildArrayFn($child);
+			queryWithArray($Driver,'REPLACE',$table,$arr);
+
+			if ($buildLineItemArrayFn) {
+				$li_table = $table.'_lineitem';
+				$txnId = $arr['TxnID'];
+
+				// Remove any old line items
+				dbDeleteTxn($Driver,$li_table,$txnId);
+
+				// Process the line items
+				$search = $type.'LineRet';
+				foreach ($child->children() as $grandchild) {
+					if ($grandchild->name() == $search) {
+						$lineitem = $buildLineItemArrayFn($grandchild,$txnId);
+						queryWithArray($Driver,'INSERT',$li_table, $lineitem);
+					}
+					elseif ($useDataExt && $grandchild->name() == 'DataExtRet') {
+						// custom fields
+						$dataext = [
+							'DataExtName' => $grandchild->getChildDataAt('DataExtRet DataExtName'),
+							'DataExtValue' => $grandchild->getChildDataAt('DataExtRet DataExtValue'),
+						];
+						QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - custom field "' . $dataext['DataExtName'] . '": ' . $dataext['DataExtValue']);
+					}
+				}
+			}
+		}
+	}
+}
+
 /**
  * Build a request to import invoices already in QuickBooks into our application
  */
@@ -390,72 +442,34 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 {
 	queueRequest($action,QB_PRIORITY_INVOICE, $user,$idents);
 
-	// This piece of the response from QuickBooks is now stored in $xml. You
-	//	can process the qbXML response in $xml in any way you like. Save it to
-	//	a file, stuff it in a database, parse it and stuff the records in a
-	//	database, etc. etc. etc.
-	//
-	// The following example shows how to use the built-in XML parser to parse
-	//	the response and stuff it into a database.
-
-	// Import all of the records
-	$errnum = 0;
-	$errmsg = '';
-	$Parser = new QuickBooks_XML_Parser($xml);
-	if ($Doc = $Parser->parse($errnum, $errmsg))
-	{
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/InvoiceQueryRs');
-
-		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
-		foreach ($List->children() as $Invoice)
-		{
-			$arr = array(
-				'TxnID' => $Invoice->getChildDataAt('InvoiceRet TxnID'),
-				'TimeCreated' => $Invoice->getChildDataAt('InvoiceRet TimeCreated'),
-				'TimeModified' => $Invoice->getChildDataAt('InvoiceRet TimeModified'),
-				'RefNumber' => $Invoice->getChildDataAt('InvoiceRet RefNumber'),
-				'Customer_ListID' => $Invoice->getChildDataAt('InvoiceRet CustomerRef ListID'),
-				'Customer_FullName' => $Invoice->getChildDataAt('InvoiceRet CustomerRef FullName'),
-				'ShipAddress_Addr1' => $Invoice->getChildDataAt('InvoiceRet ShipAddress Addr1'),
-				'ShipAddress_Addr2' => $Invoice->getChildDataAt('InvoiceRet ShipAddress Addr2'),
-				'ShipAddress_City' => $Invoice->getChildDataAt('InvoiceRet ShipAddress City'),
-				'ShipAddress_State' => $Invoice->getChildDataAt('InvoiceRet ShipAddress State'),
-				'ShipAddress_PostalCode' => $Invoice->getChildDataAt('InvoiceRet ShipAddress PostalCode'),
-				'BalanceRemaining' => $Invoice->getChildDataAt('InvoiceRet BalanceRemaining'),
-				);
-
-			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing invoice #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
-
-			// Store the invoices in MySQL
-			queryWithArray($Driver,'REPLACE','qb_invoice',$arr);
-
-			// Remove any old line items
-			dbDeleteTxn($Driver,'qb_invoice_lineitem',$arr['TxnID']);
-
-			// Process the line items
-			foreach ($Invoice->children() as $Child)
-			{
-				if ($Child->name() == 'InvoiceLineRet')
-				{
-					$InvoiceLine = $Child;
-
-					$lineitem = array(
-						'TxnID' => $arr['TxnID'],
-						'TxnLineID' => $InvoiceLine->getChildDataAt('InvoiceLineRet TxnLineID'),
-						'Item_ListID' => $InvoiceLine->getChildDataAt('InvoiceLineRet ItemRef ListID'),
-						'Item_FullName' => $InvoiceLine->getChildDataAt('InvoiceLineRet ItemRef FullName'),
-						'Descrip' => $InvoiceLine->getChildDataAt('InvoiceLineRet Desc'),
-						'Quantity' => $InvoiceLine->getChildDataAt('InvoiceLineRet Quantity'),
-						'Rate' => $InvoiceLine->getChildDataAt('InvoiceLineRet Rate'),
-						);
-
-					// Store the lineitems in MySQL
-					queryWithArray($Driver, 'INSERT', 'qb_invoice_lineitem', $lineitem);
-				}
-			}
-		}
-	}
+	processQuickBooksData($xml, 'Invoice', function($Invoice){
+		$arr = [
+			'TxnID' => $Invoice->getChildDataAt('InvoiceRet TxnID'),
+			'TimeCreated' => $Invoice->getChildDataAt('InvoiceRet TimeCreated'),
+			'TimeModified' => $Invoice->getChildDataAt('InvoiceRet TimeModified'),
+			'RefNumber' => $Invoice->getChildDataAt('InvoiceRet RefNumber'),
+			'Customer_ListID' => $Invoice->getChildDataAt('InvoiceRet CustomerRef ListID'),
+			'Customer_FullName' => $Invoice->getChildDataAt('InvoiceRet CustomerRef FullName'),
+			'ShipAddress_Addr1' => $Invoice->getChildDataAt('InvoiceRet ShipAddress Addr1'),
+			'ShipAddress_Addr2' => $Invoice->getChildDataAt('InvoiceRet ShipAddress Addr2'),
+			'ShipAddress_City' => $Invoice->getChildDataAt('InvoiceRet ShipAddress City'),
+			'ShipAddress_State' => $Invoice->getChildDataAt('InvoiceRet ShipAddress State'),
+			'ShipAddress_PostalCode' => $Invoice->getChildDataAt('InvoiceRet ShipAddress PostalCode'),
+			'BalanceRemaining' => $Invoice->getChildDataAt('InvoiceRet BalanceRemaining'),
+		];
+		QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing invoice #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
+		return $arr;
+	}, function($InvoiceLine,$txnId) {
+		return [
+			'TxnID' => $txnId,
+			'TxnLineID' => $InvoiceLine->getChildDataAt('InvoiceLineRet TxnLineID'),
+			'Item_ListID' => $InvoiceLine->getChildDataAt('InvoiceLineRet ItemRef ListID'),
+			'Item_FullName' => $InvoiceLine->getChildDataAt('InvoiceLineRet ItemRef FullName'),
+			'Descrip' => $InvoiceLine->getChildDataAt('InvoiceLineRet Desc'),
+			'Quantity' => $InvoiceLine->getChildDataAt('InvoiceLineRet Quantity'),
+			'Rate' => $InvoiceLine->getChildDataAt('InvoiceLineRet Rate'),
+		];
+	});
 
 	return true;
 }
@@ -477,49 +491,26 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 {
 	queueRequest($action,QB_PRIORITY_CUSTOMER, $user,$idents);
 
-	// This piece of the response from QuickBooks is now stored in $xml. You
-	//	can process the qbXML response in $xml in any way you like. Save it to
-	//	a file, stuff it in a database, parse it and stuff the records in a
-	//	database, etc. etc. etc.
-	//
-	// The following example shows how to use the built-in XML parser to parse
-	//	the response and stuff it into a database.
-
-	// Import all of the records
-	$errnum = 0;
-	$errmsg = '';
-	$Parser = new QuickBooks_XML_Parser($xml);
-	if ($Doc = $Parser->parse($errnum, $errmsg))
-	{
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/CustomerQueryRs');
-
-		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
-		foreach ($List->children() as $Customer)
-		{
-			$arr = array(
-				'ListID' => $Customer->getChildDataAt('CustomerRet ListID'),
-				'TimeCreated' => $Customer->getChildDataAt('CustomerRet TimeCreated'),
-				'TimeModified' => $Customer->getChildDataAt('CustomerRet TimeModified'),
-				'Name' => $Customer->getChildDataAt('CustomerRet Name'),
-				'FullName' => $Customer->getChildDataAt('CustomerRet FullName'),
-				'FirstName' => $Customer->getChildDataAt('CustomerRet FirstName'),
-				'MiddleName' => $Customer->getChildDataAt('CustomerRet MiddleName'),
-				'LastName' => $Customer->getChildDataAt('CustomerRet LastName'),
-				'Contact' => $Customer->getChildDataAt('CustomerRet Contact'),
-				'ShipAddress_Addr1' => $Customer->getChildDataAt('CustomerRet ShipAddress Addr1'),
-				'ShipAddress_Addr2' => $Customer->getChildDataAt('CustomerRet ShipAddress Addr2'),
-				'ShipAddress_City' => $Customer->getChildDataAt('CustomerRet ShipAddress City'),
-				'ShipAddress_State' => $Customer->getChildDataAt('CustomerRet ShipAddress State'),
-				'ShipAddress_PostalCode' => $Customer->getChildDataAt('CustomerRet ShipAddress PostalCode'),
-				);
-
-			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing customer ' . $arr['FullName'] . ': ' . print_r($arr, true));
-
-			// Store the invoices in MySQL
-			queryWithArray($Driver,'REPLACE','qb_customer',$arr);
-		}
-	}
+	processQuickBooksData($xml, 'Customer', function($Customer){
+		$arr = [
+			'ListID' => $Customer->getChildDataAt('CustomerRet ListID'),
+			'TimeCreated' => $Customer->getChildDataAt('CustomerRet TimeCreated'),
+			'TimeModified' => $Customer->getChildDataAt('CustomerRet TimeModified'),
+			'Name' => $Customer->getChildDataAt('CustomerRet Name'),
+			'FullName' => $Customer->getChildDataAt('CustomerRet FullName'),
+			'FirstName' => $Customer->getChildDataAt('CustomerRet FirstName'),
+			'MiddleName' => $Customer->getChildDataAt('CustomerRet MiddleName'),
+			'LastName' => $Customer->getChildDataAt('CustomerRet LastName'),
+			'Contact' => $Customer->getChildDataAt('CustomerRet Contact'),
+			'ShipAddress_Addr1' => $Customer->getChildDataAt('CustomerRet ShipAddress Addr1'),
+			'ShipAddress_Addr2' => $Customer->getChildDataAt('CustomerRet ShipAddress Addr2'),
+			'ShipAddress_City' => $Customer->getChildDataAt('CustomerRet ShipAddress City'),
+			'ShipAddress_State' => $Customer->getChildDataAt('CustomerRet ShipAddress State'),
+			'ShipAddress_PostalCode' => $Customer->getChildDataAt('CustomerRet ShipAddress PostalCode')
+		];
+		QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, "Importing customer " . $arr['FullName'] . ': ' . print_r($arr, true));
+		return $arr;
+	});
 
 	return true;
 }
@@ -628,43 +619,30 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 {
 	queueRequest($action,QB_PRIORITY_ITEM, $user,$idents);
 
-	// Import all of the records
-	$errnum = 0;
-	$errmsg = '';
-	$Parser = new QuickBooks_XML_Parser($xml);
-	if ($Doc = $Parser->parse($errnum, $errmsg))
-	{
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/ItemQueryRs');
-
-		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
-		foreach ($List->children() as $Item)
-		{
-			$type = substr(substr($Item->name(), 0, -3), 4);
-			$ret = $Item->name();
-
-			$arr = array(
-				'ListID' => $Item->getChildDataAt($ret . ' ListID'),
-				'TimeCreated' => $Item->getChildDataAt($ret . ' TimeCreated'),
-				'TimeModified' => $Item->getChildDataAt($ret . ' TimeModified'),
-				'Name' => $Item->getChildDataAt($ret . ' Name'),
-				'FullName' => $Item->getChildDataAt($ret . ' FullName'),
-				'Type' => $type,
-				'Parent_ListID' => $Item->getChildDataAt($ret . ' ParentRef ListID'),
-				'Parent_FullName' => $Item->getChildDataAt($ret . ' ParentRef FullName'),
-				'ManufacturerPartNumber' => $Item->getChildDataAt($ret . ' ManufacturerPartNumber'),
-				'SalesTaxCode_ListID' => $Item->getChildDataAt($ret . ' SalesTaxCodeRef ListID'),
-				'SalesTaxCode_FullName' => $Item->getChildDataAt($ret . ' SalesTaxCodeRef FullName'),
-				'BuildPoint' => $Item->getChildDataAt($ret . ' BuildPoint'),
-				'ReorderPoint' => $Item->getChildDataAt($ret . ' ReorderPoint'),
-				'QuantityOnHand' => $Item->getChildDataAt($ret . ' QuantityOnHand'),
-				'AverageCost' => $Item->getChildDataAt($ret . ' AverageCost'),
-				'QuantityOnOrder' => $Item->getChildDataAt($ret . ' QuantityOnOrder'),
-				'QuantityOnSalesOrder' => $Item->getChildDataAt($ret . ' QuantityOnSalesOrder'),
-				'TaxRate' => $Item->getChildDataAt($ret . ' TaxRate'),
-				);
-
-			$look_for = array(
+	processQuickBooksData($xml, 'Item', function($Item){
+		$type = substr(substr($Item->name(), 0, -3), 4);
+		$ret = $Item->name();
+		$arr = [
+			'ListID' => $Item->getChildDataAt($ret . ' ListID'),
+			'TimeCreated' => $Item->getChildDataAt($ret . ' TimeCreated'),
+			'TimeModified' => $Item->getChildDataAt($ret . ' TimeModified'),
+			'Name' => $Item->getChildDataAt($ret . ' Name'),
+			'FullName' => $Item->getChildDataAt($ret . ' FullName'),
+			'Type' => $type,
+			'Parent_ListID' => $Item->getChildDataAt($ret . ' ParentRef ListID'),
+			'Parent_FullName' => $Item->getChildDataAt($ret . ' ParentRef FullName'),
+			'ManufacturerPartNumber' => $Item->getChildDataAt($ret . ' ManufacturerPartNumber'),
+			'SalesTaxCode_ListID' => $Item->getChildDataAt($ret . ' SalesTaxCodeRef ListID'),
+			'SalesTaxCode_FullName' => $Item->getChildDataAt($ret . ' SalesTaxCodeRef FullName'),
+			'BuildPoint' => $Item->getChildDataAt($ret . ' BuildPoint'),
+			'ReorderPoint' => $Item->getChildDataAt($ret . ' ReorderPoint'),
+			'QuantityOnHand' => $Item->getChildDataAt($ret . ' QuantityOnHand'),
+			'AverageCost' => $Item->getChildDataAt($ret . ' AverageCost'),
+			'QuantityOnOrder' => $Item->getChildDataAt($ret . ' QuantityOnOrder'),
+			'QuantityOnSalesOrder' => $Item->getChildDataAt($ret . ' QuantityOnSalesOrder'),
+			'TaxRate' => $Item->getChildDataAt($ret . ' TaxRate'),
+		];
+		$look_for = array(
 				'SalesPrice' => array( 'SalesOrPurchase Price', 'SalesAndPurchase SalesPrice', 'SalesPrice' ),
 				'SalesDesc' => array( 'SalesOrPurchase Desc', 'SalesAndPurchase SalesDesc', 'SalesDesc' ),
 				'PurchaseCost' => array( 'SalesOrPurchase Price', 'SalesAndPurchase PurchaseCost', 'PurchaseCost' ),
@@ -673,25 +651,15 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 				'PrefVendor_FullName' => array( 'SalesAndPurchase PrefVendorRef FullName', 'PrefVendorRef FullName' ),
 				);
 
-			foreach ($look_for as $field => $look_here)
-			{
-				if (!empty($arr[$field]))
-				{
-					break;
-				}
-
-				foreach ($look_here as $look)
-				{
-					$arr[$field] = $Item->getChildDataAt($ret . ' ' . $look);
-				}
+		foreach ($look_for as $field => $look_here) {
+			if (!empty($arr[$field])) break;
+			foreach ($look_here as $look) {
+				$arr[$field] = $Item->getChildDataAt($ret . ' ' . $look);
 			}
-
-			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing ' . $type . ' Item ' . $arr['FullName'] . ': ' . print_r($arr, true));
-
-			// Store the customers in MySQL
-			queryWithArray($Driver,'REPLACE','qb_item',$arr);
 		}
-	}
+		QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing ' . $type . ' Item ' . $arr['FullName'] . ': ' . print_r($arr, true));
+		return $arr;
+	});
 
 	return true;
 }
@@ -713,79 +681,30 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 {
 	queueRequest($action,QB_PRIORITY_PURCHASEORDER, $user,$idents);
 
-	// This piece of the response from QuickBooks is now stored in $xml. You
-	//	can process the qbXML response in $xml in any way you like. Save it to
-	//	a file, stuff it in a database, parse it and stuff the records in a
-	//	database, etc. etc. etc.
-	//
-	// The following example shows how to use the built-in XML parser to parse
-	//	the response and stuff it into a database.
-
-	// Import all of the records
-	$errnum = 0;
-	$errmsg = '';
-	$Parser = new QuickBooks_XML_Parser($xml);
-	if ($Doc = $Parser->parse($errnum, $errmsg))
-	{
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/PurchaseOrderQueryRs');
-
-		$Driver = QuickBooks_Utilities::driverFactory(QB_QUICKBOOKS_DSN);
-		foreach ($List->children() as $PurchaseOrder)
-		{
-			$arr = array(
-				'TxnID' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TxnID'),
-				'TimeCreated' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TimeCreated'),
-				'TimeModified' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TimeModified'),
-				'RefNumber' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet RefNumber'),
-				'Customer_ListID' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet CustomerRef ListID'),
-				'Customer_FullName' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet CustomerRef FullName'),
-				);
-
-			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing purchase order #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
-
-			foreach ($arr as $key => $value)
-			{
-				$arr[$key] = $Driver->escape($value);
-			}
-
-			// Process all child elements of the Purchase Order
-			foreach ($PurchaseOrder->children() as $Child)
-			{
-				if ($Child->name() == 'PurchaseOrderLineRet')
-				{
-					// Loop through line items
-
-					$PurchaseOrderLine = $Child;
-
-					$lineitem = array(
-						'TxnID' => $arr['TxnID'],
-						'TxnLineID' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet TxnLineID'),
-						'Item_ListID' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet ItemRef ListID'),
-						'Item_FullName' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet ItemRef FullName'),
-						'Descrip' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Desc'),
-						'Quantity' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Quantity'),
-						'Rate' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Rate'),
-						);
-
-					QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - line item #' . $lineitem['TxnLineID'] . ': ' . print_r($lineitem, true));
-				}
-				else if ($Child->name() == 'DataExtRet')
-				{
-					// Loop through custom fields
-
-					$DataExt = $Child;
-
-					$dataext = array(
-						'DataExtName' => $Child->getChildDataAt('DataExtRet DataExtName'),
-						'DataExtValue' => $Child->getChildDataAt('DataExtRet DataExtValue'),
-						);
-
-					QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - custom field "' . $dataext['DataExtName'] . '": ' . $dataext['DataExtValue']);
-				}
-			}
-		}
-	}
+	processQuickBooksData($xml, 'PurchaseOrder', function($PurchaseOrder){
+		$arr = [
+			'TxnID' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TxnID'),
+			'TimeCreated' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TimeCreated'),
+			'TimeModified' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TimeModified'),
+			'RefNumber' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet RefNumber'),
+			'Customer_ListID' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet CustomerRef ListID'),
+			'Customer_FullName' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet CustomerRef FullName'),
+		];
+		QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing purchase order #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
+		return $arr;
+	}, function($PurchaseOrderLine,$txnId){
+		$lineitem = [
+			'TxnID' => $txnId,
+			'TxnLineID' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet TxnLineID'),
+			'Item_ListID' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet ItemRef ListID'),
+			'Item_FullName' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet ItemRef FullName'),
+			'Descrip' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Desc'),
+			'Quantity' => 0+$PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Quantity'),
+			'Rate' => 0+$PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Rate'),
+		];
+		QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - line item #' . $lineitem['TxnLineID'] . ': ' . print_r($lineitem, true));
+		return $lineitem;
+	}, true);
 
 	return true;
 }
@@ -795,6 +714,7 @@ function queryWithArray($driver, $command, $table, $fields) {
 		if (substr($key,0,4) == 'Time') {
 			$fields[$key] = 'FROM_UNIXTIME('.strtotime($value).')';
 		}
+		elseif (is_numeric($value)) $fields[$key] = $value;
 		else $fields[$key] = "'".$driver->escape($value)."'";
 	}
 
