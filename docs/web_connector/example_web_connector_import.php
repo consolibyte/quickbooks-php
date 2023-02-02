@@ -363,6 +363,16 @@ function wrapRequestXML(string $type, string $customXML, int $dateType, $request
 	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
 }
 
+// Queue a request to QuickBooks (which is a response, from this script's perspective)
+function queueRequest($action, $priority, $user, $idents): void {
+	if (!empty($idents['iteratorRemainingCount']))
+	{
+		// Queue up another request
+		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
+		$Queue->enqueue($action, null, $priority, ['iteratorID' => $idents['iteratorID']], $user);
+	}
+}
+
 /**
  * Build a request to import invoices already in QuickBooks into our application
  */
@@ -378,13 +388,7 @@ function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $ex
  */
 function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-	if (!empty($idents['iteratorRemainingCount']))
-	{
-		// Queue up another request
-
-		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, null, QB_PRIORITY_INVOICE, array( 'iteratorID' => $idents['iteratorID'] ), $user);
-	}
+	queueRequest($action,QB_PRIORITY_INVOICE, $user,$idents);
 
 	// This piece of the response from QuickBooks is now stored in $xml. You
 	//	can process the qbXML response in $xml in any way you like. Save it to
@@ -471,13 +475,7 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
  */
 function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-	if (!empty($idents['iteratorRemainingCount']))
-	{
-		// Queue up another request
-
-		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, null, QB_PRIORITY_CUSTOMER, array( 'iteratorID' => $idents['iteratorID'] ), $user);
-	}
+	queueRequest($action,QB_PRIORITY_CUSTOMER, $user,$idents);
 
 	// This piece of the response from QuickBooks is now stored in $xml. You
 	//	can process the qbXML response in $xml in any way you like. Save it to
@@ -541,13 +539,7 @@ function _quickbooks_salesorder_import_request($requestID, $user, $action, $ID, 
  */
 function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-	if (!empty($idents['iteratorRemainingCount']))
-	{
-		// Queue up another request
-
-		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, null, QB_PRIORITY_SALESORDER, array( 'iteratorID' => $idents['iteratorID'] ), $user);
-	}
+	queueRequest($action,QB_PRIORITY_SALESORDER, $user,$idents);
 
 	// This piece of the response from QuickBooks is now stored in $xml. You
 	//	can process the qbXML response in $xml in any way you like. Save it to
@@ -634,13 +626,7 @@ function _quickbooks_item_import_request($requestID, $user, $action, $ID, $extra
  */
 function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-	if (!empty($idents['iteratorRemainingCount']))
-	{
-		// Queue up another request
-
-		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_ITEM, null, QB_PRIORITY_ITEM, array( 'iteratorID' => $idents['iteratorID'] ), $user);
-	}
+	queueRequest($action,QB_PRIORITY_ITEM, $user,$idents);
 
 	// Import all of the records
 	$errnum = 0;
@@ -725,13 +711,7 @@ function _quickbooks_purchaseorder_import_request($requestID, $user, $action, $I
  */
 function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-	if (!empty($idents['iteratorRemainingCount']))
-	{
-		// Queue up another request
-
-		$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-		$Queue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, null, QB_PRIORITY_PURCHASEORDER, array( 'iteratorID' => $idents['iteratorID'] ), $user);
-	}
+	queueRequest($action,QB_PRIORITY_PURCHASEORDER, $user,$idents);
 
 	// This piece of the response from QuickBooks is now stored in $xml. You
 	//	can process the qbXML response in $xml in any way you like. Save it to
