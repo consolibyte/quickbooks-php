@@ -23,6 +23,10 @@
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
+const REQ_DATE_NONE = 0;
+const REQ_DATE_SIMPLE = 1;
+const REQ_DATE_WRAPPED = 2;
+
 // Support URL
 if (!empty($_GET['support']))
 {
@@ -338,24 +342,35 @@ function getIterationInfo($user, $action, $extra): array {
 	return [$attrs,$last];
 }
 
+function wrapRequestXML(string $type, string $customXML, int $dateType, $requestID, $user, $action, $extra, $version, $locale) {
+	list($attrs,$last) = getIterationInfo($user,$action,$extra);
+	if ($dateType) {
+		$xml = "<FromModifiedDate>$last</FromModifiedDate>";
+		if ($dateType == REQ_DATE_WRAPPED) {
+			$xml = "<ModifiedDateRangeFilter>$xml</ModifiedDateRangeFilter>";
+		}
+		$customXML .= $xml;
+	}
+
+	// Build the request
+	$tag = $type.'Rq';
+	$xml = "<$tag $attrs requestID=\"$requestID\">".'
+			<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
+			'.$customXML.'
+			<OwnerID>0</OwnerID>
+		</'.$tag.'>';
+
+	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
+}
+
 /**
  * Build a request to import invoices already in QuickBooks into our application
  */
 function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	list($attrs,$last) = getIterationInfo($user,$action,$extra);
-
-	// Build the request
-	$xml = '<InvoiceQueryRq ' . $attrs . ' requestID="' . $requestID . '">
-					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
-					<ModifiedDateRangeFilter>
-						<FromModifiedDate>' . $last . '</FromModifiedDate>
-					</ModifiedDateRangeFilter>
-					<IncludeLineItems>true</IncludeLineItems>
-					<OwnerID>0</OwnerID>
-				</InvoiceQueryRq>';
-
-	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
+	$type = 'InvoiceQuery';
+	$xml = '<IncludeLineItems>true</IncludeLineItems>';
+	return wrapRequestXML($type,$xml,REQ_DATE_WRAPPED, $requestID,$user,$action,$extra,$version,$locale);
 }
 
 /**
@@ -446,16 +461,9 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
  */
 function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	list($attrs,$last) = getIterationInfo($user,$action,$extra);
-
-	// Build the request
-	$xml = '<CustomerQueryRq ' . $attrs . ' requestID="' . $requestID . '">
-					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
-					<FromModifiedDate>' . $last . '</FromModifiedDate>
-					<OwnerID>0</OwnerID>
-				</CustomerQueryRq>';
-
-	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
+	$type = 'CustomerQuery';
+	$xml = '';
+	return wrapRequestXML($type,$xml,REQ_DATE_SIMPLE, $requestID,$user,$action,$extra,$version,$locale);
 }
 
 /**
@@ -523,19 +531,9 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
  */
 function _quickbooks_salesorder_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	list($attrs,$last) = getIterationInfo($user,$action,$extra);
-
-	// Build the request
-	$xml = '<SalesOrderQueryRq ' . $attrs . ' requestID="' . $requestID . '">
-					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
-					<ModifiedDateRangeFilter>
-						<FromModifiedDate>' . $last . '</FromModifiedDate>
-					</ModifiedDateRangeFilter>
-					<IncludeLineItems>true</IncludeLineItems>
-					<OwnerID>0</OwnerID>
-				</SalesOrderQueryRq>';
-
-	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
+	$type = 'SalesOrderQuery';
+	$xml = '<IncludeLineItems>true</IncludeLineItems>';
+	return wrapRequestXML($type,$xml,REQ_DATE_WRAPPED, $requestID,$user,$action,$extra,$version,$locale);
 }
 
 /**
@@ -626,16 +624,9 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
  */
 function _quickbooks_item_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	list($attrs,$last) = getIterationInfo($user,$action,$extra);
-
-	// Build the request
-	$xml = '<ItemQueryRq ' . $attrs . ' requestID="' . $requestID . '">
-					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
-					<FromModifiedDate>' . $last . '</FromModifiedDate>
-					<OwnerID>0</OwnerID>
-				</ItemQueryRq>';
-
-	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
+	$type = 'ItemQuery';
+	$xml = '';
+	return wrapRequestXML($type,$xml,REQ_DATE_SIMPLE, $requestID,$user,$action,$extra,$version,$locale);
 }
 
 /**
@@ -724,19 +715,9 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
  */
 function _quickbooks_purchaseorder_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	list($attrs,$last) = getIterationInfo($user,$action,$extra);
-
-	// Build the request
-	$xml = '<PurchaseOrderQueryRq ' . $attrs . ' requestID="' . $requestID . '">
-					<MaxReturned>' . QB_QUICKBOOKS_MAX_RETURNED . '</MaxReturned>
-					<!--<ModifiedDateRangeFilter>
-						<FromModifiedDate>' . $last . '</FromModifiedDate>
-					</ModifiedDateRangeFilter>-->
-					<IncludeLineItems>true</IncludeLineItems>
-					<OwnerID>0</OwnerID>
-				</PurchaseOrderQueryRq>';
-
-	return QuickBooks_Callbacks_SQL_Callbacks::xml($version,$locale,$xml,'stopOnError');
+	$type = 'PurchaseOrderQuery';
+	$xml = '<IncludeLineItems>true</IncludeLineItems>';
+	return wrapRequestXML($type,$xml,REQ_DATE_NONE, $requestID,$user,$action,$extra,$version,$locale);
 }
 
 /**
