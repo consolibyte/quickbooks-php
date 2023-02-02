@@ -658,4 +658,7 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
 		return $arr_sql;
 	}
 
+	public function error() {
+		return $this->_last_error;
+	}
 }
