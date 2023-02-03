@@ -2484,26 +2484,25 @@ class QuickBooks_SQL_Schema
 
 		if ($mode == QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL)
 		{
-
 			if ($options['uppercase_tables'])
 			{
-				$path_or_arrtablefield[0] = strtoupper($path_or_arrtablefield[0]);
+				$path_or_arrtablefield[0] = strtoupper($path_or_arrtablefield[0] ?? '');
 				$applied++;
 			}
 			else if ($options['lowercase_tables'])
 			{
-				$path_or_arrtablefield[0] = strtolower($path_or_arrtablefield[0]);
+				$path_or_arrtablefield[0] = strtolower($path_or_arrtablefield[0] ?? '');
 				$applied++;
 			}
 
 			if ($options['uppercase_fields'])
 			{
-				$path_or_arrtablefield[1] = strtoupper($path_or_arrtablefield[1]);
+				$path_or_arrtablefield[1] = strtoupper($path_or_arrtablefield[1] ?? '');
 				$applied++;
 			}
 			else if ($options['lowercase_fields'])
 			{
-				$path_or_arrtablefield[1] = strtolower($path_or_arrtablefield[1]);
+				$path_or_arrtablefield[1] = strtolower($path_or_arrtablefield[1] ?? '');
 				$applied++;
 			}
 
