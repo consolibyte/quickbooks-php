@@ -680,7 +680,7 @@ END;
 	public static function InventoryLevelsRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = <<< END
-	<GeneralSummaryReportQueryRq requestID="' . $requestID . '">
+	<GeneralSummaryReportQueryRq requestID="$requestID">
 
 		<GeneralSummaryReportType>InventoryStockStatusByItem</GeneralSummaryReportType>
 		<DisplayReport>false</DisplayReport>
@@ -862,7 +862,7 @@ END;
 	public static function InventoryAssemblyLevelsRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
 		$xml = <<< END
-	<GeneralSummaryReportQueryRq requestID="' . $requestID . '">
+	<GeneralSummaryReportQueryRq requestID="$requestID">
 
 		<GeneralSummaryReportType>InventoryStockStatusByItem</GeneralSummaryReportType>
 		<DisplayReport>false</DisplayReport>
