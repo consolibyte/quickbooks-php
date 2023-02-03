@@ -538,7 +538,7 @@ abstract class QuickBooks_Driver
 	 */
 	final public function queueEnqueue($user, $action, $ident, $replace = true, $priority = 0, $extra = null, $qbxml = null)
 	{
-		if (!strlen($ident))
+		if (!$ident)
 		{
 			// If they didn't provide an $ident, generate a random, unique one
 

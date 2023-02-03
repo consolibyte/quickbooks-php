@@ -11019,24 +11019,12 @@ END;
 			$time = $prev_sync_datetime;
 		}
 
-		if ($filter_wrap)
-		{
-			if ($action == QUICKBOOKS_QUERY_DELETEDLISTS or $action == QUICKBOOKS_QUERY_DELETEDTXNS)
-			{
-				$xml = '<DeletedDateRangeFilter>' . "\n";
-				$xml .= '	<FromDeletedDate>' . $time . '</FromDeletedDate>' . "\n";
-				$xml .= '</DeletedDateRangeFilter>' . "\n";
-			}
-			else
-			{
-				$xml .= '<ModifiedDateRangeFilter>' . "\n";
-				$xml .= '	<FromModifiedDate>' . $time . '</FromModifiedDate>' . "\n";
-				$xml .= '</ModifiedDateRangeFilter>' . "\n";
-			}
-		}
-		else
-		{
-			$xml = '<FromModifiedDate>' . $time . '</FromModifiedDate>';
+		if ($action == QUICKBOOKS_QUERY_DELETEDLISTS or $action == QUICKBOOKS_QUERY_DELETEDTXNS) $key = 'Deleted';
+		else $key = 'Modified';
+		$xml = "<From{$key}Date>$time</From{$key}Date>";
+		if ($filter_wrap) {
+			$wrapTag = $key.'DateRangeFilter';
+			$xml = "<$wrapTag>\n$xml\n</$wrapTag>\n";
 		}
 
 		return $xml;
