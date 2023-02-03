@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <pre>
 
 <?php
-	
+
 $BillService = new QuickBooks_IPP_Service_Bill();
 
 $Bill = new QuickBooks_IPP_Object_Bill();

@@ -34,7 +34,7 @@ $Payment->addLine($Line);
 
 $Payment->setCustomerRef('{-67}');
 
-// Send payment to QBO 
+// Send payment to QBO
 if ($resp = $PaymentService->add($Context, $realm, $Payment))
 {
 	print('Our new Payment ID is: [' . $resp . ']');
@@ -51,7 +51,7 @@ print('Request [' . $IPP->lastRequest() . ']');
 print("\n\n\n\n");
 print('Response [' . $IPP->lastResponse() . ']');
 print("\n\n\n\n\n\n\n\n\n");
-*/	
+*/
 
 ?>
 

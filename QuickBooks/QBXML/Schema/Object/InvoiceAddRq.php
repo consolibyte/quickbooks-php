@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: InvoiceAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'InvoiceAdd';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -52,8 +52,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'BillAddress Addr5' => 'STRTYPE',
   'BillAddress City' => 'STRTYPE',
   'BillAddress State' => 'STRTYPE',
-  'BillAddress County' => 'STRTYPE', 
-  'BillAddress Province' => 'STRTYPE', 
+  'BillAddress County' => 'STRTYPE',
+  'BillAddress Province' => 'STRTYPE',
   'BillAddress PostalCode' => 'STRTYPE',
   'BillAddress Country' => 'STRTYPE',
   'BillAddress Note' => 'STRTYPE',
@@ -64,8 +64,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShipAddress Addr5' => 'STRTYPE',
   'ShipAddress City' => 'STRTYPE',
   'ShipAddress State' => 'STRTYPE',
-  'ShipAddress County' => 'STRTYPE', 
-  'ShipAddress Province' => 'STRTYPE', 
+  'ShipAddress County' => 'STRTYPE',
+  'ShipAddress Province' => 'STRTYPE',
   'ShipAddress PostalCode' => 'STRTYPE',
   'ShipAddress Country' => 'STRTYPE',
   'ShipAddress Note' => 'STRTYPE',
@@ -104,8 +104,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'InvoiceLineAdd ClassRef ListID' => 'IDTYPE',
   'InvoiceLineAdd ClassRef FullName' => 'STRTYPE',
   'InvoiceLineAdd Amount' => 'AMTTYPE',
-  'InvoiceLineAdd InventorySiteRef ListID' => 'IDTYPE', 
-  'InvoiceLineAdd InventorySiteRef FullName' => 'STRTYPE', 
+  'InvoiceLineAdd InventorySiteRef ListID' => 'IDTYPE',
+  'InvoiceLineAdd InventorySiteRef FullName' => 'STRTYPE',
   'InvoiceLineAdd ServiceDate' => 'DATETYPE',
   'InvoiceLineAdd SalesTaxCodeRef ListID' => 'IDTYPE',
   'InvoiceLineAdd SalesTaxCodeRef FullName' => 'STRTYPE',
@@ -142,10 +142,10 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -166,8 +166,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'BillAddress Addr5' => 41,
   'BillAddress City' => 31,
   'BillAddress State' => 21,
-  'BillAddress County' => 21, 
-  'BillAddress Province' => 21, 
+  'BillAddress County' => 21,
+  'BillAddress Province' => 21,
   'BillAddress PostalCode' => 13,
   'BillAddress Country' => 31,
   'BillAddress Note' => 41,
@@ -178,8 +178,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShipAddress Addr5' => 41,
   'ShipAddress City' => 31,
   'ShipAddress State' => 21,
-  'ShipAddress County' => 21, 
-  'ShipAddress Province' => 21, 
+  'ShipAddress County' => 21,
+  'ShipAddress Province' => 21,
   'ShipAddress PostalCode' => 13,
   'ShipAddress Country' => 31,
   'ShipAddress Note' => 41,
@@ -256,10 +256,10 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef FullName' => 209,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -280,8 +280,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'BillAddress Addr5' => true,
   'BillAddress City' => true,
   'BillAddress State' => true,
-  'BillAddress County' => true, 
-  'BillAddress Province' => true, 
+  'BillAddress County' => true,
+  'BillAddress Province' => true,
   'BillAddress PostalCode' => true,
   'BillAddress Country' => true,
   'BillAddress Note' => true,
@@ -293,7 +293,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShipAddress City' => true,
   'ShipAddress State' => true,
   'ShipAddress County' => true,
-  'ShipAddress Province' => true, 
+  'ShipAddress Province' => true,
   'ShipAddress PostalCode' => true,
   'ShipAddress Country' => true,
   'ShipAddress Note' => true,
@@ -371,7 +371,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -392,8 +392,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'BillAddress Addr5' => 6,
   'BillAddress City' => 999.99,
   'BillAddress State' => 999.99,
-  'BillAddress County' => 999.99, 
-  'BillAddress Province' => 999.99, 
+  'BillAddress County' => 999.99,
+  'BillAddress Province' => 999.99,
   'BillAddress PostalCode' => 999.99,
   'BillAddress Country' => 999.99,
   'BillAddress Note' => 6,
@@ -405,7 +405,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShipAddress City' => 999.99,
   'ShipAddress State' => 999.99,
   'ShipAddress County' => 999.99,
-  'ShipAddress Province' => 999.99, 
+  'ShipAddress Province' => 999.99,
   'ShipAddress PostalCode' => 999.99,
   'ShipAddress Country' => 999.99,
   'ShipAddress Note' => 6,
@@ -482,10 +482,10 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -506,8 +506,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'BillAddress Addr5' => false,
   'BillAddress City' => false,
   'BillAddress State' => false,
-  'BillAddress County' => false, 
-  'BillAddress Province' => false, 
+  'BillAddress County' => false,
+  'BillAddress Province' => false,
   'BillAddress PostalCode' => false,
   'BillAddress Country' => false,
   'BillAddress Note' => false,
@@ -518,8 +518,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShipAddress Addr5' => false,
   'ShipAddress City' => false,
   'ShipAddress State' => false,
-  'ShipAddress County' => false, 
-  'ShipAddress Province' => false, 
+  'ShipAddress County' => false,
+  'ShipAddress Province' => false,
   'ShipAddress PostalCode' => false,
   'ShipAddress Country' => false,
   'ShipAddress Note' => false,
@@ -596,7 +596,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef FullName' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
 
@@ -604,144 +604,144 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
 	protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'SalesTaxLineAdd Amount' => array( 'QBUS' ), 
-			'ItemSalesTaxRef FullName' => array( 'QBOE' ), 
-			'InvoiceLineAdd SalesTaxCodeRef FullName' => array( 'QBOE' ), 
+			'SalesTaxLineAdd Amount' => array( 'QBUS' ),
+			'ItemSalesTaxRef FullName' => array( 'QBOE' ),
+			'InvoiceLineAdd SalesTaxCodeRef FullName' => array( 'QBOE' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'SalesTaxLineAdd Amount' => array( 'QBUS' ), 
-			'ItemSalesTaxRef FullName' => array( 'QBOE' ), 
-			'InvoiceLineAdd SalesTaxCodeRef FullName' => array( 'QBOE' ), 
+			'SalesTaxLineAdd Amount' => array( 'QBUS' ),
+			'ItemSalesTaxRef FullName' => array( 'QBOE' ),
+			'InvoiceLineAdd SalesTaxCodeRef FullName' => array( 'QBOE' ),
 			);
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
-	'CustomerRef ListID', 
-	'CustomerRef FullName', 
-	'ClassRef ListID', 
-	'ClassRef FullName', 
-	'ARAccountRef ListID', 
-	'ARAccountRef FullName', 
-	'TemplateRef ListID', 
-	'TemplateRef FullName', 
-	'TxnDate', 
-	'RefNumber', 
-	'BillAddress Addr1', 
-	'BillAddress Addr2', 
-	'BillAddress Addr3', 
-	'BillAddress Addr4', 
-	'BillAddress Addr5', 
-	'BillAddress City', 
-	'BillAddress State', 
-	'BillAddress County', 
-	'BillAddress Province', 
-	'BillAddress PostalCode', 
-	'BillAddress Country', 
-	'BillAddress Note', 
-	'ShipAddress Addr1', 
-	'ShipAddress Addr2', 
-	'ShipAddress Addr3', 
-	'ShipAddress Addr4', 
-	'ShipAddress Addr5', 
-	'ShipAddress City', 
-	'ShipAddress State', 
-	'ShipAddress County', 
-	'ShipAddress Province', 
-	'ShipAddress PostalCode', 
-	'ShipAddress Country', 
-	'ShipAddress Note', 
-	'IsPending', 
-	'PONumber', 
-	'TermsRef ListID', 
-	'TermsRef FullName', 
-	'DueDate', 
-	'SalesRepRef ListID', 
-	'SalesRepRef FullName', 
-	'FOB', 
-	'ShipDate', 
-	'ShipMethodRef ListID', 
-	'ShipMethodRef FullName', 
-	'ItemSalesTaxRef ListID', 
-	'ItemSalesTaxRef FullName', 
-	'Memo', 
-	'CustomerMsgRef ListID', 
-	'CustomerMsgRef FullName', 
-	'IsToBePrinted', 
-	'IsToBeEmailed', 
-	'IsTaxIncluded', 
-	'CustomerSalesTaxCodeRef ListID', 
-	'CustomerSalesTaxCodeRef FullName', 
-	'Other', 
-	'LinkToTxnID', 
-	'InvoiceLineAdd', 
-	'InvoiceLineAdd ItemRef', 
-	'InvoiceLineAdd ItemRef ListID', 
-	'InvoiceLineAdd ItemRef FullName', 
-	'InvoiceLineAdd Desc', 
-	'InvoiceLineAdd Quantity', 
-	'InvoiceLineAdd UnitOfMeasure', 
-	'InvoiceLineAdd Rate', 
-	'InvoiceLineAdd RatePercent', 
-	'InvoiceLineAdd PriceLevelRef ListID', 
-	'InvoiceLineAdd PriceLevelRef FullName', 
-	'InvoiceLineAdd ClassRef ListID', 
-	'InvoiceLineAdd ClassRef FullName', 
-	'InvoiceLineAdd Amount', 
-	'InvoiceLineAdd InventorySiteRef ListID', 
-	'InvoiceLineAdd InventorySiteRef FullName', 
-	'InvoiceLineAdd ServiceDate', 
-	'InvoiceLineAdd SalesTaxCodeRef ListID', 
-	'InvoiceLineAdd SalesTaxCodeRef FullName', 
-	'InvoiceLineAdd IsTaxable', 
-	'InvoiceLineAdd OverrideItemAccountRef ListID', 
-	'InvoiceLineAdd OverrideItemAccountRef FullName', 
-	'InvoiceLineAdd Other1', 
-	'InvoiceLineAdd Other2', 
-	'InvoiceLineAdd LinkToTxn TxnID', 
-	'InvoiceLineAdd LinkToTxn TxnLineID', 
-  'InvoiceLineAdd DataExt', 
-	'InvoiceLineAdd DataExt OwnerID', 
-	'InvoiceLineAdd DataExt DataExtName', 
-	'InvoiceLineAdd DataExt DataExtValue', 
-	'InvoiceLineGroupAdd', 
-	'InvoiceLineGroupAdd ItemGroupRef ListID', 
-	'InvoiceLineGroupAdd ItemGroupRef FullName', 
-	'InvoiceLineGroupAdd Desc', 
-	'InvoiceLineGroupAdd Quantity', 
-	'InvoiceLineGroupAdd UnitOfMeasure', 
-	'InvoiceLineGroupAdd ServiceDate', 
-	'InvoiceLineGroupAdd DataExt OwnerID', 
-	'InvoiceLineGroupAdd DataExt DataExtName', 
-	'InvoiceLineGroupAdd DataExt DataExtValue', 
-	'DiscountLineAdd', 
-	'DiscountLineAdd Amount', 
-	'DiscountLineAdd RatePercent', 
-	'DiscountLineAdd IsTaxable', 
-	'DiscountLineAdd AccountRef ListID', 
-	'DiscountLineAdd AccountRef FullName', 
-	'SalesTaxLineAdd', 
-	'SalesTaxLineAdd Amount', 
-	'SalesTaxLineAdd RatePercent', 
-	'SalesTaxLineAdd AccountRef ListID', 
-	'SalesTaxLineAdd AccountRef FullName', 
-	'ShippingLineAdd', 
-	'ShippingLineAdd Amount', 
-	'ShippingLineAdd AccountRef ListID', 
-	'ShippingLineAdd AccountRef FullName', 
-	'IncludeRetElement', 
+	'CustomerRef ListID',
+	'CustomerRef FullName',
+	'ClassRef ListID',
+	'ClassRef FullName',
+	'ARAccountRef ListID',
+	'ARAccountRef FullName',
+	'TemplateRef ListID',
+	'TemplateRef FullName',
+	'TxnDate',
+	'RefNumber',
+	'BillAddress Addr1',
+	'BillAddress Addr2',
+	'BillAddress Addr3',
+	'BillAddress Addr4',
+	'BillAddress Addr5',
+	'BillAddress City',
+	'BillAddress State',
+	'BillAddress County',
+	'BillAddress Province',
+	'BillAddress PostalCode',
+	'BillAddress Country',
+	'BillAddress Note',
+	'ShipAddress Addr1',
+	'ShipAddress Addr2',
+	'ShipAddress Addr3',
+	'ShipAddress Addr4',
+	'ShipAddress Addr5',
+	'ShipAddress City',
+	'ShipAddress State',
+	'ShipAddress County',
+	'ShipAddress Province',
+	'ShipAddress PostalCode',
+	'ShipAddress Country',
+	'ShipAddress Note',
+	'IsPending',
+	'PONumber',
+	'TermsRef ListID',
+	'TermsRef FullName',
+	'DueDate',
+	'SalesRepRef ListID',
+	'SalesRepRef FullName',
+	'FOB',
+	'ShipDate',
+	'ShipMethodRef ListID',
+	'ShipMethodRef FullName',
+	'ItemSalesTaxRef ListID',
+	'ItemSalesTaxRef FullName',
+	'Memo',
+	'CustomerMsgRef ListID',
+	'CustomerMsgRef FullName',
+	'IsToBePrinted',
+	'IsToBeEmailed',
+	'IsTaxIncluded',
+	'CustomerSalesTaxCodeRef ListID',
+	'CustomerSalesTaxCodeRef FullName',
+	'Other',
+	'LinkToTxnID',
+	'InvoiceLineAdd',
+	'InvoiceLineAdd ItemRef',
+	'InvoiceLineAdd ItemRef ListID',
+	'InvoiceLineAdd ItemRef FullName',
+	'InvoiceLineAdd Desc',
+	'InvoiceLineAdd Quantity',
+	'InvoiceLineAdd UnitOfMeasure',
+	'InvoiceLineAdd Rate',
+	'InvoiceLineAdd RatePercent',
+	'InvoiceLineAdd PriceLevelRef ListID',
+	'InvoiceLineAdd PriceLevelRef FullName',
+	'InvoiceLineAdd ClassRef ListID',
+	'InvoiceLineAdd ClassRef FullName',
+	'InvoiceLineAdd Amount',
+	'InvoiceLineAdd InventorySiteRef ListID',
+	'InvoiceLineAdd InventorySiteRef FullName',
+	'InvoiceLineAdd ServiceDate',
+	'InvoiceLineAdd SalesTaxCodeRef ListID',
+	'InvoiceLineAdd SalesTaxCodeRef FullName',
+	'InvoiceLineAdd IsTaxable',
+	'InvoiceLineAdd OverrideItemAccountRef ListID',
+	'InvoiceLineAdd OverrideItemAccountRef FullName',
+	'InvoiceLineAdd Other1',
+	'InvoiceLineAdd Other2',
+	'InvoiceLineAdd LinkToTxn TxnID',
+	'InvoiceLineAdd LinkToTxn TxnLineID',
+  'InvoiceLineAdd DataExt',
+	'InvoiceLineAdd DataExt OwnerID',
+	'InvoiceLineAdd DataExt DataExtName',
+	'InvoiceLineAdd DataExt DataExtValue',
+	'InvoiceLineGroupAdd',
+	'InvoiceLineGroupAdd ItemGroupRef ListID',
+	'InvoiceLineGroupAdd ItemGroupRef FullName',
+	'InvoiceLineGroupAdd Desc',
+	'InvoiceLineGroupAdd Quantity',
+	'InvoiceLineGroupAdd UnitOfMeasure',
+	'InvoiceLineGroupAdd ServiceDate',
+	'InvoiceLineGroupAdd DataExt OwnerID',
+	'InvoiceLineGroupAdd DataExt DataExtName',
+	'InvoiceLineGroupAdd DataExt DataExtValue',
+	'DiscountLineAdd',
+	'DiscountLineAdd Amount',
+	'DiscountLineAdd RatePercent',
+	'DiscountLineAdd IsTaxable',
+	'DiscountLineAdd AccountRef ListID',
+	'DiscountLineAdd AccountRef FullName',
+	'SalesTaxLineAdd',
+	'SalesTaxLineAdd Amount',
+	'SalesTaxLineAdd RatePercent',
+	'SalesTaxLineAdd AccountRef ListID',
+	'SalesTaxLineAdd AccountRef FullName',
+	'ShippingLineAdd',
+	'ShippingLineAdd Amount',
+	'ShippingLineAdd AccountRef ListID',
+	'ShippingLineAdd AccountRef FullName',
+	'IncludeRetElement',
 );
-			
+
 		return $paths;
 	}
 }

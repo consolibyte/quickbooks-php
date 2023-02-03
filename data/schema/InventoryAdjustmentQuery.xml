@@ -105,15 +105,15 @@
 <ListID >IDTYPE</ListID> <!-- optional -->
 <FullName >STRTYPE</FullName> <!-- optional -->
 </ItemRef>
-	
+
 	<QuantityDifference >QUANTYPE</QuantityDifference> <!-- required -->
 	<ValueDifference >AMTTYPE</ValueDifference> <!-- required -->
 
 	<QuantityAdjustment>
-		<NewQuantity>QUANTYPE</NewQuantity> 
+		<NewQuantity>QUANTYPE</NewQuantity>
 		<QuantityDifference>QUANTYPE</QuantityDifference>
 	</QuantityAdjustment>
-	
+
 	<ValueAdjustment>
 		<NewQuantity >QUANTYPE</NewQuantity> <!-- optional -->
 		<!-- OR -->
@@ -124,7 +124,7 @@
 		<!-- OR -->
 		<ValueDifference >AMTTYPE</ValueDifference> <!-- optional -->
 	</ValueAdjustment>
-	
+
 </InventoryAdjustmentLineRet>
 <DataExtRet> <!-- optional, may repeat -->
 <OwnerID >GUIDTYPE</OwnerID> <!-- optional -->

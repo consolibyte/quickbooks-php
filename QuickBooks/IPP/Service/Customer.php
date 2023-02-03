@@ -1,17 +1,17 @@
 <?php
 
 /**
- * 
- * 
+ *
+ *
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.opensource.org/licenses/eclipse-1.0.php
- * 
+ *
  * @license LICENSE.txt
  * @author Keith Palmer <Keith@ConsoliBYTE.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage IPP
  */
@@ -27,10 +27,10 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
 	}
 
 	/**
-	 * Get a customer by ID 
-	 * 
-	 * @param QuickBooks_IPP_Context $Context	
-	 * @param string $realm					
+	 * Get a customer by ID
+	 *
+	 * @param QuickBooks_IPP_Context $Context
+	 * @param string $realm
 	 * @param string $ID						The ID of the customer (this expects an IdType, which includes the domain)
 	 * @return QuickBooks_IPP_Object_Customer	The customer object
 	 */
@@ -39,13 +39,13 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
 		$xml = null;
 		return parent::_findById($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $IDType, $xml, $query);
 	}
-	
+
 	/**
 	 * Get a customer by name
-	 * 
-	 * @param QuickBooks_IPP_Context $Context	
-	 * @param string $realm					
-	 * @param string $name						The name of the customer 
+	 *
+	 * @param QuickBooks_IPP_Context $Context
+	 * @param string $realm
+	 * @param string $name						The name of the customer
 	 * @return QuickBooks_IPP_Object_Customer	The customer object
 	 */
 	public function findByName($Context, $realm, $name)
@@ -53,7 +53,7 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
 		$xml = null;
 		return parent::_findByName($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $name, $xml);
 	}
-	
+
 	/**
 	 * Delete a customer from IDS/QuickBooks
 	 *
@@ -63,12 +63,12 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
 	{
 		return parent::_delete($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $IDType);
 	}
-	
+
 	public function add($Context, $realm, $Object)
 	{
 		return parent::_add($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $Object);
 	}
-	
+
 	public function update($Context, $realm, $IDType, $Object)
 	{
 		return parent::_update($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $Object, $IDType);

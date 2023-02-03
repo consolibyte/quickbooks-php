@@ -11138,11 +11138,11 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					case 'TaxLineInfoRet':
 					case 'EmployeePayrollInfo':
 					case 'Earnings':
-						
-						// * * * WARNING WARNING WARNING * * * 
-						// The next line of code causes problems with some responses 
-						//	because it converts our associative array to turn into a 
-						//	numeric array. This causes objects to get cut into multiple 
+
+						// * * * WARNING WARNING WARNING * * *
+						// The next line of code causes problems with some responses
+						//	because it converts our associative array to turn into a
+						//	numeric array. This causes objects to get cut into multiple
 						//	pieces:
 						//
 						// array(

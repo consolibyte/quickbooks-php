@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <pre>
 
 <?php
-	
+
 $JournalEntryService = new QuickBooks_IPP_Service_JournalEntry();
 
 $list = $JournalEntryService->query($Context, $realm, "SELECT * FROM JournalEntry STARTPOSITION 1 MAXRESULTS 10");

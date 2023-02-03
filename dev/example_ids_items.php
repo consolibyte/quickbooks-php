@@ -5,13 +5,13 @@ error_reporting(E_ALL | E_STRICT);
 
 require_once '../QuickBooks.php';
 
-// 
+//
 $username = 'support@consolibyte.com';
 $password = '';
 $token = 'bf8cp2mihs6vsdibgqsybinugvj12346';
 $realmID = 18293819223456;
 
-// 
+//
 $IPP = new QuickBooks_IPP();
 $Context = $IPP->authenticate($username, $password, $token);
 $IPP->application($Context, 'bfrccpnge');

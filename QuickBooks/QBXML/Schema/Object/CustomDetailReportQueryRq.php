@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: CustomDetailReportQueryRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = '';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -71,10 +71,10 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'ReportOpenBalanceAsOf' => 'ENUMTYPE',
   'ReportBasis' => 'ENUMTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -114,10 +114,10 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'ReportOpenBalanceAsOf' => 0,
   'ReportBasis' => 0,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -158,7 +158,7 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'ReportBasis' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -198,10 +198,10 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'ReportOpenBalanceAsOf' => 999.99,
   'ReportBasis' => 2.1,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -241,22 +241,22 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'ReportOpenBalanceAsOf' => false,
   'ReportBasis' => false,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
@@ -296,7 +296,7 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   33 => 'ReportOpenBalanceAsOf',
   34 => 'ReportBasis',
 );
-			
+
 		return $paths;
 	}
 }

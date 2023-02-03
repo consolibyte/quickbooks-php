@@ -41,7 +41,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 	{
 		return $this->set('AccountRef ListID', $ListID);
 	}
-	
+
 	public function getAccountName()
 	{
 		return $this->get('AccountRef FullName');
@@ -51,7 +51,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 	{
 		return $this->set('AccountRef FullName', $name);
 	}
-	
+
 	public function getAmount()
 	{
 		return $this->get('Amount');
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 	{
 		return $this->set('Memo', $memo);
 	}
-	
+
 	public function getCustomerListID()
 	{
 		return $this->get('CustomerRef ListID');
@@ -81,7 +81,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 	{
 		return $this->set('CustomerRef ListID', $ListID);
 	}
-	
+
 	public function getCustomerName()
 	{
 		return $this->get('CustomerRef FullName');
@@ -91,7 +91,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 	{
 		return $this->set('CustomerRef FullName', $name);
 	}
-	
+
 	public function getClassListID()
 	{
 		return $this->get('ClassRef ListID');
@@ -101,7 +101,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 	{
 		return $this->set('ClassRef ListID', $ListID);
 	}
-	
+
 	public function getClassName()
 	{
 		return $this->get('ClassRef FullName');
@@ -111,7 +111,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 	{
 		return $this->set('ClassRef FullName', $name);
 	}
-	
+
 	public function getBillableStatus()
 	{
 		return $this->get('BillableStatus');
@@ -151,7 +151,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ExpenseLine extends QuickBooks_QBXML_O
 		{
 			$object = $this->_object;
 		}
-		
+
 		switch ($parent)
 		{
 			case QUICKBOOKS_ADD_ITEMRECEIPT:

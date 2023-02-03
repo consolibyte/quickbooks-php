@@ -1,14 +1,14 @@
-<?php 
+<?php
 
 /**
- * Check ExpenseLine class for QuickBooks 
- * 
+ * Check ExpenseLine class for QuickBooks
+ *
  * @author Keith Palmer Jr. <keith@ConsoliBYTE.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage Object
- */ 
+ */
 
 /**
  * QuickBooks object base class
@@ -16,13 +16,13 @@
 QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_Check_ExpenseLine object
-	 * 
+	 *
 	 * @param array $arr
 	 */
 	public function __construct($arr = array())
@@ -30,11 +30,11 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 		parent::__construct($arr);
 	}
 
-	// Path: AccountRef ListID, datatype: 
-	
+	// Path: AccountRef ListID, datatype:
+
 	/**
 	 * Set the AccountRef ListID for the Check
-	 * 
+	 *
 	 * @param string $ListID		The ListID of the record to reference
 	 * @return boolean
 	 */
@@ -45,7 +45,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the AccountRef ListID for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getAccountListID()
@@ -55,7 +55,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Set the primary key for the related record within your own application for the Check
-	 * 
+	 *
 	 * @param mixed $value			The primary key within your own application
 	 * @return string
 	 */
@@ -64,11 +64,11 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 		return $this->set('AccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
 	}
 
-	// Path: AccountRef FullName, datatype: 
-	
+	// Path: AccountRef FullName, datatype:
+
 	/**
 	 * Set the AccountRef FullName for the Check
-	 * 
+	 *
 	 * @param string $FullName		The FullName of the record to reference
 	 * @return boolean
 	 */
@@ -79,7 +79,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the AccountRef FullName for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getAccountFullName()
@@ -87,11 +87,11 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 		return $this->get('AccountRef FullName');
 	}
 
-	// Path: Amount, datatype: 
-	
+	// Path: Amount, datatype:
+
 	/**
 	 * Set the Amount for the Check
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -102,7 +102,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the Amount for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getAmount()
@@ -111,10 +111,10 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 	}
 
 	// Path: Memo, datatype: STRTYPE
-	
+
 	/**
 	 * Set the Memo for the Check
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -125,7 +125,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the Memo for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getMemo()
@@ -133,11 +133,11 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 		return $this->get('Memo');
 	}
 
-	// Path: CustomerRef ListID, datatype: 
-	
+	// Path: CustomerRef ListID, datatype:
+
 	/**
 	 * Set the CustomerRef ListID for the Check
-	 * 
+	 *
 	 * @param string $ListID		The ListID of the record to reference
 	 * @return boolean
 	 */
@@ -148,7 +148,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the CustomerRef ListID for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getCustomerListID()
@@ -158,7 +158,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Set the primary key for the related record within your own application for the Check
-	 * 
+	 *
 	 * @param mixed $value			The primary key within your own application
 	 * @return string
 	 */
@@ -167,11 +167,11 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 		return $this->set('CustomerRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_CUSTOMER, QUICKBOOKS_LISTID, $value));
 	}
 
-	// Path: CustomerRef FullName, datatype: 
-	
+	// Path: CustomerRef FullName, datatype:
+
 	/**
 	 * Set the CustomerRef FullName for the Check
-	 * 
+	 *
 	 * @param string $FullName		The FullName of the record to reference
 	 * @return boolean
 	 */
@@ -182,7 +182,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the CustomerRef FullName for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getCustomerFullName()
@@ -190,11 +190,11 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 		return $this->get('CustomerRef FullName');
 	}
 
-	// Path: ClassRef ListID, datatype: 
-	
+	// Path: ClassRef ListID, datatype:
+
 	/**
 	 * Set the ClassRef ListID for the Check
-	 * 
+	 *
 	 * @param string $ListID		The ListID of the record to reference
 	 * @return boolean
 	 */
@@ -205,7 +205,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the ClassRef ListID for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getClassListID()
@@ -215,7 +215,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Set the primary key for the related record within your own application for the Check
-	 * 
+	 *
 	 * @param mixed $value			The primary key within your own application
 	 * @return string
 	 */
@@ -224,11 +224,11 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 		return $this->set('ClassRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_CLASS, QUICKBOOKS_LISTID, $value));
 	}
 
-	// Path: ClassRef FullName, datatype: 
-	
+	// Path: ClassRef FullName, datatype:
+
 	/**
 	 * Set the ClassRef FullName for the Check
-	 * 
+	 *
 	 * @param string $FullName		The FullName of the record to reference
 	 * @return boolean
 	 */
@@ -239,7 +239,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the ClassRef FullName for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getClassName()
@@ -247,11 +247,11 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 		return $this->get('ClassRef FullName');
 	}
 
-	// Path: BillableStatus, datatype: 
-	
+	// Path: BillableStatus, datatype:
+
 	/**
 	 * Set the BillableStatus for the Check
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -262,7 +262,7 @@ class QuickBooks_QBXML_Object_Bill_ExpenseLine extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the BillableStatus for the Check
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getBillableStatus()
