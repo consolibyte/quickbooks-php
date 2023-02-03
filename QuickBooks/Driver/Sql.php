@@ -2638,6 +2638,8 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 
 	protected abstract function _fetch($res);
 
+	protected abstract function _escape($str);
+
 	/**
 	 * Escape a string
 	 *
@@ -3584,23 +3586,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		//
 		foreach ($object as $field => $value)
 		{
-			// Commented out because doing this to very large integers (i.e. ItemRef/FullName is a large integer SKU) causes integer overflow
-			/*if (strlen((int) $value) == strlen($value))
-			{
-				$set[] = $field . ' = ' . (int) $value;
-			}
-			else
-			{*/
-			//	$set[] = $field . " = '" . $this->_escape($value) . "' ";
-			//}
-
 			if (is_null($value))
 			{
 				$set[] = $field . " = NULL ";
 			}
 			else
 			{
-				$set[] = $field . " = '" . $this->_escape($value) . "' ";
+				$set[] = $field . " = " . $this->fmtValue($field,$value);
 			}
 		}
 
@@ -3700,59 +3692,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		// Merge by keys to make sure we don't INSERT any fields that don't exist in this schema
 		$object = array_intersect_key($object, $avail);
 
-		/*
 		foreach ($object as $field => $value)
 		{
+			// Omit empty fields
+			if ($value === null || !strlen($value)) continue;
+
 			$fields[] = $field;
-
-			////
-			//// * POSSIBLE FIX FOR BELOW CODE *
-			////
-////if ( strlen((int) $value) == strlen($value) and
-////((int)$value) == $value and
-////ctype_digit($value) )
-			////
-
-			//// Commented out because doing this to very large integers (i.e. ItemRef/FullName is a large integer SKU) causes integer overflow
-			////if (strlen((int) $value) == strlen($value))
-			////{
-			////	$values[] = (int) $value;
-			////}
-			////else
-			////{
-				$values[] = " '" . $this->_escape($value) . "' ";
-			////}
-		}
-		*/
-
-		//print_r($object);
-
-		foreach ($object as $field => $value)
-		{
-			$fields[] = $field;
-
-			if (ctype_digit($value) and
-				strlen((float) $value) == strlen($value) and
-				((float)$value) == $value and
-				strlen($value) < 16)
-			{
-				// Number, cast as float to avoid integer overflow
-                $values[] = (float) $value;
-			}
-		    else if ($value != '')
-            {
-                // String value, put it in quotes.
-                $values[] = " '" . $this->_escape($value) . "' ";
-            }
-            else if ($value === 0)
-            {
-            	$values[] = $value;
-            }
-            else
-            {
-                // Empty string value, don't insert
-                array_pop($fields);
-            }
+			$values[] = $this->fmtValue($field,$value);
 		}
 
 		$sql = "INSERT INTO " . $this->_escape($table) . " ( " . implode(', ', $fields) . " ";
@@ -3786,6 +3732,26 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$errnum = 0;
 		$errmsg = '';
 		return $this->_query($sql, $errnum, $errmsg);
+	}
+
+	/**
+	 * Format value for use in query.
+	 */
+	protected function fmtValue($field,$value) {
+		if (is_numeric($value)) {
+			$sql = $value;
+		}
+		elseif (!strncmp($field,'Time',4)) {
+			// Reformat time to avoid mysqli_sql_exception for
+			// "Incorrect datetime value: '2007-12-15T16:21:52-07:00'".
+			$sql = 'FROM_UNIXTIME('.strtotime($value).')';
+		}
+		else {
+			// String value, put it in quotes.
+			$sql = "'" . $this->_escape($value) . "'";
+		}
+
+		return $sql;
 	}
 
 	/**
