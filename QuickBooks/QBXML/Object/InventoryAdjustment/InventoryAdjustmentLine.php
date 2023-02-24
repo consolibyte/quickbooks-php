@@ -136,22 +136,6 @@ class QuickBooks_QBXML_Object_InventoryAdjustment_InventoryAdjustmentLine extend
 	}
 
 	/**
-	 * Convert this object to a valid qbXML request
-	 *
-	 * @param string $request					The type of request to convert this to (examples: CustomerAddRq, CustomerModRq, CustomerQueryRq)
-	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
-	 * @param string $indent
-	 * @param string $root
-	 * @return string
-	 */
-	public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
-	{
-		$this->_cleanup();
-
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
-	}
-
-	/**
 	 * Tell what type of object this is
 	 *
 	 * @return string

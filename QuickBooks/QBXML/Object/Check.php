@@ -506,20 +506,6 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
 	}
 	
 	/**
-	 * 
-	 * 
-	 * @param boolean $todo_for_empty_elements	A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
-	 * @param string $indent
-	 * @param string $root
-	 * @return string
-	 */
-	public function asQBXML($request, $todo_for_empty_elements = QuickBooks_QBXML_Object::XML_DROP, $indent = "\t", $root = null, $parent = null)
-	{
-		$this->_cleanup();
-		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
-	}
-	
-	/**
 	 *
 	 */
 	protected function _cleanup()

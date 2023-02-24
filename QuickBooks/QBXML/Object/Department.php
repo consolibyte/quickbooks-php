@@ -155,22 +155,6 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
 		// @TODO implement parent::asArray
 		return array();
 	}
-
-	/**
-	 * Convert this object to a valid qbXML request
-	 *
-	 * @param string $request The type of request to convert this to (examples: CustomerAddRq, CustomerModRq, CustomerQueryRq)
-	 * @param string $version
-	 * @param string $locale
-	 * @param string $root
-	 * @return string
-	 */
-	public function asQBXML($request, $version = null, $locale = null, $root = null)
-	{
-		$this->_cleanup();
-		
-		return parent::asQBXML($request, $version, $locale, $root);
-	}
 	
 	/**
 	 * Tell what type of object this is 
