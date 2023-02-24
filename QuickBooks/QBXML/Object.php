@@ -572,11 +572,9 @@ abstract class QuickBooks_QBXML_Object
 	 *   @todo Support for qbXML versions
 	 * @param $locale
 	 *   Restrict it to a specific qbXML locale?
-	 * @param $root
-	 *   Unused - @todo: remove this.
 	 * @return string
 	 */
-	public function asQBXML($request, $version = null, $locale = null, $root = null)
+	public function asQBXML($request, $version = null, $locale = null)
 	{
 		$todo_for_empty_elements = QuickBooks_XML::XML_DROP;
 		$indent = "\t";
