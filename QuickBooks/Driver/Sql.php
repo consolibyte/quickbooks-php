@@ -1175,27 +1175,26 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$errnum = 0;
 		$errmsg = '';
 
-		if ($replace)
-		{
-			$this->_query("
-				DELETE FROM
-					" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . "
-				WHERE
-					qb_username = '" . $this->_escape($user) . "' AND
-					qb_action = '" . $this->_escape($action) . "' AND
-					ident = '" . $this->_escape($ident) . "' AND
-					qb_status = '" . QUICKBOOKS_STATUS_QUEUED . "' ", $errnum, $errmsg);
+		$table = $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE);
+		$user = $this->_escape($user);
+		$action = $this->_escape($action);
+		$ident = $this->_escape($ident);
+		$status = QUICKBOOKS_STATUS_QUEUED;
+
+		if ($replace) {
+			$q = "DELETE FROM $table WHERE qb_username='$user' AND qb_action='$action'";
+			$this->_query("$q AND ident='$ident' AND qb_status='$status'", $errnum, $errmsg);
+			// remove hanging items that are duplicates of this one, which resulted in
+			// an error: "The iteratorID ... is not valid".
+			$this->_query("$q AND quickbooks_ticket_id IS NULL", $errnum, $errmsg);
 		}
 
-		if ($extra)
-		{
+		if ($extra) {
 			$extra = serialize($extra);
 		}
 
 		return $this->_query("
-			INSERT INTO
-				" . $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) . "
-			(
+			INSERT INTO $table (
 				qb_username,
 				qb_action,
 				ident,
@@ -1205,13 +1204,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				qb_status,
 				enqueue_datetime
 			) VALUES (
-				'" . $this->_escape($user) . "',
-				'" . $this->_escape($action) . "',
-				'" . $this->_escape($ident) . "',
+				'$user',
+				'$action',
+				'$ident',
 				'" . $this->_escape($extra) . "',
 				'" . $this->_escape($qbxml) . "',
 				" . (int) $priority . ",
-				'" . QUICKBOOKS_STATUS_QUEUED . "',
+				'$status',
 				'" . date('Y-m-d H:i:s') . "'
 			) ", $errnum, $errmsg);
 	}

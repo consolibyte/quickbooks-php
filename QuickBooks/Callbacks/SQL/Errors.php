@@ -214,6 +214,9 @@ class QuickBooks_Callbacks_SQL_Errors
 				// There's nothing we can do about this, if they don't grant the user permission, just skip it
 
 				return true;
+			case 3391:
+				// Invalid iteratorID; this indicates a bug in our queue management
+				break;
 			case 3100: // Name of List Element is already in use.
 
 
