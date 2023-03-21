@@ -1164,53 +1164,15 @@ class QuickBooks_Utilities
 
 		$constants = array();
 
-		//$inter_key = 'QUICKBOOKS_INTERACTIVE_MODE';
-		//$inter_val = QUICKBOOKS_INTERACTIVE_MODE;
-		/*
-		if (is_null($filter))
-		{
-			if ($return_keys)
-			{
-				$constants[] = $inter_key;
-			}
-			else
-			{
-				$constants[] = $inter_val;
-			}
-		}
-		*/
-		/*
-		else if ($return_keys and QuickBooks_Utilities::fnmatch($filter, $inter_key))
-		{
-			$constants[] = $inter_key;
-		}
-		else if (!$return_keys and QuickBooks_Utilities::fnmatch($filter, $inter_val))
-		{
-			$constants[] = $inter_val;
-		}
-		*/
-
 		foreach (get_defined_constants() as $constant => $value)
 		{
 			foreach ($startswith as $start)
 			{
 				if (substr($constant, 0, strlen($start)) == $start)
 				{
-					if (!$return_keys)
+					if ($filter === null || QuickBooks_Utilities::fnmatch($filter, $constant))
 					{
-						$constant = $value;
-					}
-
-					if (!is_null($filter))
-					{
-						if (QuickBooks_Utilities::fnmatch($filter, $constant))
-						{
-							$constants[] = $constant;
-						}
-					}
-					else
-					{
-						$constants[] = $constant;
+						$constants[] = $return_keys ? $constant:$value;
 					}
 				}
 			}

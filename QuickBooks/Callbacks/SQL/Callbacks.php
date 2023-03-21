@@ -10977,14 +10977,12 @@ END;
 	protected static function _buildFilter($user, $action, $extra, $filter_wrap = false)
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-		$type = '';
 
 		$key_prev = QuickBooks_Callbacks_SQL_Callbacks::_keySyncPrev($action);
 		$key_curr = QuickBooks_Callbacks_SQL_Callbacks::_keySyncCurr($action);
 
 		$module = __CLASS__;
 
-		//$action = null;
 		$type = null;
 		$opts = null;
 		// 					configRead($user, $module, $key, &$type, &$opts)
@@ -10993,16 +10991,13 @@ END;
 		if (!$prev_sync_datetime)
 		{
 			// If this query has *never* run before, let's get *all* of the records
-			$timestamp = time() - (60 * 60 * 24 * 365 * 25);
-			$prev_sync_datetime = date('Y-m-d', $timestamp) . 'T' . date('H:i:s', $timestamp);
+			// ASSUME: No records before 1970-01-01
+			$prev_sync_datetime = date('Y-m-d\TH:i:s', 0);
 			$extra = array();			// If an iterator exists, get rid of it (this should *never* happen... how could it?)
 
 			//			configWrite($user, $module, $key, $value, $type, $opts
 			$Driver->configWrite($user, $module, $key_prev, $prev_sync_datetime, null);
 		}
-
-		// @TODO MAKE SURE THIS DOESN'T BREAK ANYTHING!
-		$prev_sync_datetime = date('Y-m-d', strtotime($prev_sync_datetime) - 600) . 'T' . date('H:i:s', strtotime($prev_sync_datetime) - 600);
 
 		if (!is_array($extra) or
 			empty($extra['iteratorID'])) 	// Checks to see if this is the first iteration or not
@@ -11010,18 +11005,13 @@ END;
 			// Start of a new iterator!
 
 			// Store when we started to do this iterator (this will become the $prev_sync_datetime after we finish with this iterator)
-			$curr_sync_datetime = date('Y-m-d') . 'T' . date('H:i:s');
+			$curr_sync_datetime = date('Y-m-d\TH:i:s');
 			$Driver->configWrite($user, $module, $key_curr, $curr_sync_datetime, null);
-			$time = $curr_sync_datetime;
-		}
-		else 	// ... otherwise use what we found in previous time stamp
-		{
-			$time = $prev_sync_datetime;
 		}
 
 		if ($action == QUICKBOOKS_QUERY_DELETEDLISTS or $action == QUICKBOOKS_QUERY_DELETEDTXNS) $key = 'Deleted';
 		else $key = 'Modified';
-		$xml = "<From{$key}Date>$time</From{$key}Date>";
+		$xml = "<From{$key}Date>$prev_sync_datetime</From{$key}Date>";
 		if ($filter_wrap) {
 			$wrapTag = $key.'DateRangeFilter';
 			$xml = "<$wrapTag>\n$xml\n</$wrapTag>\n";
