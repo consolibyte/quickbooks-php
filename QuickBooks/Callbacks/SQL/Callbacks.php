@@ -1175,14 +1175,7 @@ END;
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ListDeletedQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ListDeletedQueryRs');
 
 		foreach ($List->children() as $Node)
 		{
@@ -1261,14 +1254,7 @@ END;
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs TxnDeletedQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs TxnDeletedQueryRs');
 
 		foreach($List->children() as $Node)
 		{
@@ -1328,14 +1314,7 @@ END;
 	public static function ListDelResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = QUICKBOOKS_XML_OK;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ListDelRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ListDelRs');
 		$Node = $List;
 
 		if ($errnum == QUICKBOOKS_XML_OK)
@@ -1458,14 +1437,7 @@ END;
 	public static function TxnDelResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs TxnDelRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs TxnDelRs');
 		$Node = $List;
 
 		if ($errnum == 0)
@@ -1606,14 +1578,7 @@ END;
 		// CreditMemo.	IsPending, CreditRemaining
 
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt($path);
+		$List = self::_parseXML($xml, $path);
 		foreach ($List->children() as $Node)
 		{
 			switch ($type)
@@ -1832,14 +1797,7 @@ END;
 	 */
 	public static function CustomerAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CustomerAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -1867,14 +1825,7 @@ END;
 	 */
 	public static function InventoryAdjustmentAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs InventoryAdjustmentAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs InventoryAdjustmentAddRs');
 
 		$extra['is_add_response'] = true;
 		QuickBooks_Callbacks_SQL_Callbacks::_addResponse(QUICKBOOKS_OBJECT_INVENTORYADJUSTMENT, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
@@ -1903,14 +1854,7 @@ END;
 	 */
 	public static function CustomerMsgAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerMsgAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CustomerMsgAddRs');
 
 		$extra['is_add_response'] = true;
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_CUSTOMERMSG, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
@@ -1945,14 +1889,7 @@ END;
 	 */
 	public static function JournalEntryAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs JournalEntryAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs JournalEntryAddRs');
 
 		$extra['is_add_response'] = true;
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_JOURNALENTRY, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
@@ -1984,14 +1921,7 @@ END;
 	 */
 	public static function JournalEntryModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs JournalEntryModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs JournalEntryModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2026,14 +1956,7 @@ END;
 	 */
 	public static function JournalEntryQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-	  $Parser = new QuickBooks_XML_Parser($xml);
-
-	  $errnum = 0;
-	  $errmsg = '';
-	  $Doc = $Parser->parse($errnum, $errmsg);
-	  $Root = $Doc->getRoot();
-
-	  $List = $Root->getChildAt('QBXML QBXMLMsgsRs JournalEntryQueryRs');
+	  $List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs JournalEntryQueryRs');
 
 	  QuickBooks_Server_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_JOURNALENTRY, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
@@ -2094,14 +2017,7 @@ END;
 	 */
 	public static function CustomerModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CustomerModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2129,14 +2045,7 @@ END;
 	 */
 	public static function ClassAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ClassAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ClassAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2206,14 +2115,7 @@ END;
 	 */
 	public static function DataExtAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs DataExtAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs DataExtAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2283,14 +2185,7 @@ END;
 	 */
 	public static function DataExtModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs DataExtModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs DataExtModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2318,14 +2213,7 @@ END;
 	 */
 	public static function ShipMethodAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ShipMethodAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ShipMethodAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2353,14 +2241,7 @@ END;
 	 */
 	public static function PaymentMethodAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PaymentMethodAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs PaymentMethodAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2390,14 +2271,7 @@ END;
 	 */
 	public static function AccountAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs AccountAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs AccountAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2427,14 +2301,7 @@ END;
 	 */
 	public static function AccountModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs AccountModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs AccountModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2464,14 +2331,7 @@ END;
 	 */
 	public static function ItemDiscountAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemDiscountAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemDiscountAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2501,14 +2361,7 @@ END;
 	 */
 	public static function ItemDiscountModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemDiscountModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemDiscountModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2538,14 +2391,7 @@ END;
 	 */
 	public static function ItemFixedAssetAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemFixedAssetAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemFixedAssetAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2575,14 +2421,7 @@ END;
 	 */
 	public static function ItemFixedAssetModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemFixedAssetModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemFixedAssetModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2613,14 +2452,7 @@ END;
     public static function ItemInventoryAssemblyAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
     {
     	$Driver = QuickBooks_Driver_Singleton::getInstance();
-    	$Parser = new QuickBooks_XML_Parser($xml);
-
-    	$errnum = 0;
-    	$errmsg = '';
-    	$Doc = $Parser->parse($errnum, $errmsg);
-    	$Root = $Doc->getRoot();
-
-    	$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAssemblyAddRs');
+    	$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemInventoryAssemblyAddRs');
 
     	$extra['IsAddResponse'] = true;
     	$extra['is_add_response'] = true;
@@ -2652,14 +2484,7 @@ END;
      */
     public static function ItemInventoryAssemblyModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
     {
-    	$Parser = new QuickBooks_XML_Parser($xml);
-
-    	$errnum = 0;
-    	$errmsg = '';
-    	$Doc = $Parser->parse($errnum, $errmsg);
-    	$Root = $Doc->getRoot();
-
-    	$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAssemblyModRs');
+    	$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemInventoryAssemblyModRs');
 
     	$extra['IsModResponse'] = true;
     	$extra['is_mod_response'] = true;
@@ -2690,14 +2515,7 @@ END;
 	public static function ItemInventoryAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemInventoryAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2729,14 +2547,7 @@ END;
 	 */
 	public static function ItemInventoryModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemInventoryModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2767,14 +2578,7 @@ END;
 	 */
 	public static function ItemNonInventoryAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemNonInventoryAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemNonInventoryAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2804,14 +2608,7 @@ END;
 	 */
 	public static function ItemNonInventoryModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemNonInventoryModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemNonInventoryModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2841,14 +2638,7 @@ END;
 	 */
 	public static function ItemOtherChargeAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemOtherChargeAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemOtherChargeAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2878,14 +2668,7 @@ END;
 	 */
 	public static function ItemOtherChargeModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemOtherChargeModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemOtherChargeModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2915,14 +2698,7 @@ END;
 	 */
 	public static function ItemPaymentAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemPaymentAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemPaymentAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -2952,14 +2728,7 @@ END;
 	 */
 	public static function ItemPaymentModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemPaymentModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemPaymentModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -2989,14 +2758,7 @@ END;
 	 */
 	public static function ItemSalesTaxAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSalesTaxAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemSalesTaxAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3026,14 +2788,7 @@ END;
 	 */
 	public static function ItemSalesTaxModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSalesTaxModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemSalesTaxModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3063,14 +2818,7 @@ END;
 	 */
 	public static function ItemServiceAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemServiceAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemServiceAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3100,14 +2848,7 @@ END;
 	 */
 	public static function ItemServiceModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemServiceModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemServiceModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3137,14 +2878,7 @@ END;
 	 */
 	public static function ItemSubtotalAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSubtotalAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemSubtotalAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3190,14 +2924,7 @@ END;
 	 */
 	public static function EmployeeAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs EmployeeAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs EmployeeAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3227,14 +2954,7 @@ END;
 	 */
 	public static function EmployeeModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs EmployeeModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs EmployeeModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3248,14 +2968,7 @@ END;
 	 */
 	public static function ItemSubtotalModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSubtotalModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemSubtotalModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3285,14 +2998,7 @@ END;
 	 */
 	public static function EstimateAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs EstimateAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs EstimateAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3322,14 +3028,7 @@ END;
 	 */
 	public static function EstimateModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs EstimateModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs EstimateModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3359,14 +3058,7 @@ END;
 	 */
 	public static function PurchaseOrderAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PurchaseOrderAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs PurchaseOrderAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3396,14 +3088,7 @@ END;
 	 */
 	public static function PurchaseOrderModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PurchaseOrderModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs PurchaseOrderModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3433,14 +3118,7 @@ END;
 	 */
 	public static function ReceivePaymentAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ReceivePaymentAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ReceivePaymentAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3474,14 +3152,7 @@ END;
 	 */
 	public static function ReceivePaymentModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ReceivePaymentModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ReceivePaymentModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3511,14 +3182,7 @@ END;
 	 */
 	public static function InvoiceAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs InvoiceAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs InvoiceAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3548,14 +3212,7 @@ END;
 	 */
 	public static function InvoiceModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs InvoiceModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs InvoiceModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3585,14 +3242,7 @@ END;
 	 */
 	public static function SalesReceiptAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesReceiptAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesReceiptAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3618,14 +3268,7 @@ END;
 	 */
 	public static function SalesReceiptModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesReceiptModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesReceiptModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3656,14 +3299,7 @@ END;
 	 */
 	public static function CreditMemoAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditMemoAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CreditMemoAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3693,14 +3329,7 @@ END;
 	 */
 	public static function CreditMemoModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditMemoModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CreditMemoModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3726,14 +3355,7 @@ END;
 	 */
 	public static function JobTypeAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs JobTypeAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs JobTypeAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3759,14 +3381,7 @@ END;
 	 */
 	public static function SalesOrderAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesOrderAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesOrderAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3796,14 +3411,7 @@ END;
 	 */
 	public static function SalesOrderModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesOrderModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesOrderModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3833,14 +3441,7 @@ END;
 	 */
 	public static function SalesRepAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesRepAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesRepAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3870,14 +3471,7 @@ END;
 	 */
 	public static function SalesRepModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesRepModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesRepModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3907,14 +3501,7 @@ END;
 	 */
 	public static function SalesTaxCodeAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesTaxCodeAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesTaxCodeAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -3944,14 +3531,7 @@ END;
 	 */
 	public static function SalesTaxCodeModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesTaxCodeModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesTaxCodeModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -3981,14 +3561,7 @@ END;
 	 */
 	public static function BillAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillAddRs');
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(QUICKBOOKS_OBJECT_BILL, $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
@@ -4012,14 +3585,7 @@ END;
 	 */
 	public static function BillModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -4061,14 +3627,7 @@ END;
 	 */
 	public static function BillPaymentCheckAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCheckAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillPaymentCheckAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -4098,14 +3657,7 @@ END;
 	 */
 	public static function BillPaymentCheckModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCheckModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillPaymentCheckModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -4135,14 +3687,7 @@ END;
 	 */
 	public static function BillPaymentCreditCardAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCreditCardAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillPaymentCreditCardAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -4172,14 +3717,7 @@ END;
 	 */
 	public static function VendorAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs VendorAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -4209,14 +3747,7 @@ END;
 	 */
 	public static function VendorModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs VendorModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -4247,14 +3778,7 @@ END;
 	 */
 	public static function VendorCreditAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorCreditAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs VendorCreditAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -4284,14 +3808,7 @@ END;
 	 */
 	public static function VendorCreditModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorCreditModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs VendorCreditModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -5003,16 +4520,7 @@ END;
 
 	public static function AccountImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs AccountQueryRs');
-
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs AccountQueryRs');
 		if (!isset($extra['is_query_response']))
 		{
 			$extra['is_import_response'] = true;
@@ -5089,14 +4597,7 @@ END;
 	 */
 	public static function BillPaymentCheckImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCheckQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillPaymentCheckQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5129,14 +4630,7 @@ END;
 	 */
 	public static function BillPaymentCreditCardImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCreditCardQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillPaymentCreditCardQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5208,14 +4702,7 @@ END;
 	 */
 	public static function BillImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5244,14 +4731,7 @@ END;
 
 	public static function BillToPayQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillToPayQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillToPayQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5281,14 +4761,7 @@ END;
 	 */
 	public static function BillingRateQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BillingRateQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BillingRateQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5320,14 +4793,7 @@ END;
 	 */
 	public static function BuildAssemblyQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs BuildAssemblyQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs BuildAssemblyQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5372,14 +4838,7 @@ END;
 	 */
 	public static function CheckAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CheckAddRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CheckAddRs');
 
 		$extra['IsAddResponse'] = true;
 		$extra['is_add_response'] = true;
@@ -5416,14 +4875,7 @@ END;
 	 */
 	public static function CheckModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CheckModRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CheckModRs');
 
 		$extra['IsModResponse'] = true;
 		$extra['is_mod_response'] = true;
@@ -5448,14 +4900,7 @@ END;
 	 */
 	public static function CheckImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CheckQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CheckQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5486,14 +4931,7 @@ END;
 	 */
 	public static function JournalEntryImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs JournalEntryQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs JournalEntryQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5525,14 +4963,7 @@ END;
 	 */
 	public static function ChargeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ChargeQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ChargeQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5557,14 +4988,7 @@ END;
 	 */
 	public static function ClassImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ClassQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ClassQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5593,14 +5017,7 @@ END;
 	 */
 	public static function HostImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs HostQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs HostQueryRs');
 
 		$extra['is_import_response'] = true;
 
@@ -5622,14 +5039,7 @@ END;
 	 */
 	public static function PreferencesImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PreferencesQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs PreferencesQueryRs');
 
 		//print_r($List);
 
@@ -5655,14 +5065,7 @@ END;
 	 */
 	public static function CompanyImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CompanyQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CompanyQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5689,14 +5092,7 @@ END;
 	 */
 	public static function CreditCardChargeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditCardChargeQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CreditCardChargeQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5723,14 +5119,7 @@ END;
 	 */
 	public static function CreditCardCreditImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditCardCreditQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CreditCardCreditQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5759,14 +5148,7 @@ END;
 	 */
 	public static function CreditMemoImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditMemoQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CreditMemoQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5793,14 +5175,7 @@ END;
 	 */
 	public static function CustomerMsgImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerMsgQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CustomerMsgQueryRs');
 
 		$extra['is_import_response'] = true;
 
@@ -5873,14 +5248,7 @@ END;
 	 */
 	public static function CustomerImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CustomerQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5941,14 +5309,7 @@ END;
 	 */
 	public static function CustomerTypeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerTypeQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CustomerTypeQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -5987,14 +5348,7 @@ END;
 
 	public static function DataExtDefQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs DataExtDefQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs DataExtDefQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6022,14 +5376,7 @@ END;
 	 */
 	public static function DateDrivenTermsQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs DateDrivenTermsQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs DateDrivenTermsQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6059,14 +5406,7 @@ END;
 	 */
 	public static function DepositAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-	  $Parser = new QuickBooks_XML_Parser($xml);
-
-	  $errnum = 0;
-	  $errmsg = '';
-	  $Doc = $Parser->parse($errnum, $errmsg);
-	  $Root = $Doc->getRoot();
-
-	  $List = $Root->getChildAt('QBXML QBXMLMsgsRs DepositAddRs');
+	  $List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs DepositAddRs');
 
 	  $extra['IsAddResponse'] = true;
 	  $extra['is_add_response'] = true;
@@ -6096,14 +5436,7 @@ END;
 	 */
 	public static function DepositModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-	  $Parser = new QuickBooks_XML_Parser($xml);
-
-	  $errnum = 0;
-	  $errmsg = '';
-	  $Doc = $Parser->parse($errnum, $errmsg);
-	  $Root = $Doc->getRoot();
-
-	  $List = $Root->getChildAt('QBXML QBXMLMsgsRs DepositModRs');
+	  $List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs DepositModRs');
 
 	  $extra['IsModResponse'] = true;
 	  $extra['is_mod_response'] = true;
@@ -6133,14 +5466,7 @@ END;
 	 */
 	public static function DepositImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs DepositQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs DepositQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6176,14 +5502,7 @@ END;
 
 	public static function DepositQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array())
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs DepositQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs DepositQueryRs');
 
 		QuickBooks_Server_SQL_Callbacks::_QueryResponse('deposit', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
@@ -6209,14 +5528,7 @@ END;
 	 */
 	public static function EmployeeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs EmployeeQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs EmployeeQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6255,14 +5567,7 @@ END;
 	 */
 	public static function EstimateImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs EstimateQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs EstimateQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6293,14 +5598,7 @@ END;
 
 	public static function InventoryAdjustmentImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs InventoryAdjustmentQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs InventoryAdjustmentQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6336,14 +5634,7 @@ END;
 
 	public static function InvoiceImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs InvoiceQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs InvoiceQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6436,14 +5727,7 @@ END;
 
 	public static function ItemServiceImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemServiceQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemServiceQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6466,14 +5750,7 @@ END;
 
 	public static function ItemNonInventoryImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemNonInventoryQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemNonInventoryQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6496,14 +5773,7 @@ END;
 
 	public static function ItemInventoryImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemInventoryQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6526,14 +5796,7 @@ END;
 
 	public static function ItemInventoryAssemblyImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAssemblyQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemInventoryAssemblyQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6556,14 +5819,7 @@ END;
 
 	public static function ItemSalesTaxImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSalesTaxQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemSalesTaxQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6586,14 +5842,7 @@ END;
 
 	public static function ItemSalesTaxGroupImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-
-		$Root = $Doc->getRoot();
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSalesTaxGroupQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemSalesTaxGroupQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6621,14 +5870,7 @@ END;
 
 	public static function ItemImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6652,14 +5894,7 @@ END;
 
 	public static function ItemReceiptImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemReceiptQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ItemReceiptQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6685,14 +5920,7 @@ END;
 	 */
 	public static function JobTypeQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs JobTypeQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs JobTypeQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6723,14 +5951,7 @@ END;
 	 */
 	public static function PaymentMethodImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PaymentMethodQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs PaymentMethodQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6755,14 +5976,7 @@ END;
 	 */
 	public static function PayrollItemWageImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PayrollItemWageQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs PayrollItemWageQueryRs');
 
 		$extra['is_import_response'] = true;
 
@@ -6784,14 +5998,7 @@ END;
 	 */
 	public static function PayrollItemNonWageImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PayrollItemNonWageQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs PayrollItemNonWageQueryRs');
 
 		$extra['is_import_response'] = true;
 
@@ -6822,14 +6029,7 @@ END;
 	 */
 	public static function PriceLevelImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PriceLevelQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs PriceLevelQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6869,14 +6069,7 @@ END;
 	 */
 	public static function PurchaseOrderImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs PurchaseOrderQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs PurchaseOrderQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -6958,14 +6151,7 @@ END;
 	 */
 	public static function ReceivePaymentImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ReceivePaymentQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ReceivePaymentQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7071,14 +6257,7 @@ END;
 
 	public static function SalesOrderImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesOrderQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesOrderQueryRs');
 
 		$extra['is_import_response'] = true;
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('salesorder', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
@@ -7105,14 +6284,7 @@ END;
 	 */
 	public static function SalesReceiptImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesReceiptQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesReceiptQueryRs');
 
 		$extra['is_import_response'] = true;
 		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('salesreceipt', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
@@ -7133,14 +6305,7 @@ END;
 	 */
 	public static function SalesRepImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesRepQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesRepQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7167,14 +6332,7 @@ END;
 	 */
 	public static function SalesTaxCodeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesTaxCodeQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs SalesTaxCodeQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7202,14 +6360,7 @@ END;
 	 */
 	public static function ShipMethodImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs ShipMethodQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ShipMethodQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7242,14 +6393,7 @@ END;
 	 */
 	public static function TermsImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs TermsQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs TermsQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7277,14 +6421,7 @@ END;
 	 */
 	public static function TimeTrackingImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs TimeTrackingQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs TimeTrackingQueryRs');
 
 		$extra['is_import_response'] = true;
 
@@ -7314,14 +6451,7 @@ END;
 	 */
 	public static function UnitOfMeasureSetQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs UnitOfMeasureSetQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs UnitOfMeasureSetQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7353,14 +6483,7 @@ END;
 	 */
 	public static function VehicleMileageQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs VehicleMileageQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs VehicleMileageQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7393,14 +6516,7 @@ END;
 	 */
 	public static function VehicleImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs VehicleQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs VehicleQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7427,14 +6543,7 @@ END;
 
 	public static function VendorCreditImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorCreditQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs VendorCreditQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7461,14 +6570,7 @@ END;
 	 */
 	public static function VendorTypeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorTypeQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs VendorTypeQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7497,14 +6599,7 @@ END;
 	 */
 	public static function VendorImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs VendorQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -7538,14 +6633,7 @@ END;
 	 */
 	public static function WorkersCompCodeQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Parser = new QuickBooks_XML_Parser($xml);
-
-		$errnum = 0;
-		$errmsg = '';
-		$Doc = $Parser->parse($errnum, $errmsg);
-		$Root = $Doc->getRoot();
-
-		$List = $Root->getChildAt('QBXML QBXMLMsgsRs WorkersCompCodeQueryRs');
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs WorkersCompCodeQueryRs');
 
 		if (!isset($extra['is_query_response']))
 		{
@@ -11018,6 +10106,18 @@ END;
 		}
 
 		return $xml;
+	}
+
+	protected static function _parseXML(string $xml, string $xpath) {
+		$Parser = new QuickBooks_XML_Parser($xml);
+
+		$errnum = 0;
+		$errmsg = '';
+		$Doc = $Parser->parse($errnum, $errmsg);
+		$Root = $Doc->getRoot();
+		$List = $Root->getChildAt($xpath);
+
+		return $List;
 	}
 }
 
