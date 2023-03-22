@@ -10021,7 +10021,11 @@ END;
 					}
 				}
 
-				$objects[$map[0]]->set($map[1], $Node->data());
+				$value = $Node->data();
+				if ($map[1] == 'Rate' && substr($value,-1) == '%') {
+					$value = floatval($value)/100;
+				}
+				$objects[$map[0]]->set($map[1], $value);
 			}
 		}
 	}
