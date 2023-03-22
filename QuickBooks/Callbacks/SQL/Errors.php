@@ -186,18 +186,13 @@ class QuickBooks_Callbacks_SQL_Errors
 					$db_errnum = null;
 					$db_errmsg = null;
 
-					$Driver->query("
-						UPDATE
-							" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "receivepayment_appliedtotxn
-						SET
-							qbsql_to_skip = 1
-						WHERE
-							ReceivePayment_TxnID = '%s' ",
-						$db_errnum,
-						$db_errmsg,
-						null,
-						null,
-						array( $existing['TxnID'] ));
+					$pKey = QUICKBOOKS_DRIVER_SQL_FIELD_ID;
+					$table = QUICKBOOKS_DRIVER_SQL_PREFIX_SQL."receivepayment_appliedtotxn";
+					$id = $Driver->escape($existing['TxnID']);
+					$sql = "SELECT $pKey FROM $table WHERE ReceivePayment_TxnID = '$id'";
+					$ids = $Driver->get_col($sql, $db_errnum, $db_errmsg);
+					$Driver->query("UPDATE quickbooks_qbsql SET qbsql_to_skip = 1 WHERE $pKey IN (".implode(',',$ids).")",
+						$db_errnum, $db_errmsg);
 
 					return true;
 				}

@@ -2630,6 +2630,32 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		return $this->_query($sql, $errnum, $errmsg, $offset, $limit);
 	}
 
+	public function get_results($sql, &$errnum, &$errmsg, $offset = 0, $limit = null, $vars = array()) {
+		$res = $this->query($sql, $errnum, $errmsg, $offset, $limit, $vars);
+		$results = [];
+		while ($arr = $this->fetch($res)) $results[] = $arr;
+		return $results;
+	}
+
+	public function get_col($sql, &$errnum, &$errmsg, $offset = 0, $limit = null, $vars = array()) {
+		$res = $this->query($sql, $errnum, $errmsg, $offset, $limit, $vars);
+		$results = [];
+		while ($arr = $this->fetch($res)) $results[] = reset($arr);
+		return $results;
+	}
+
+	public function get_row($sql, &$errnum, &$errmsg, $offset = 0, $vars = array()) {
+		$res = $this->query($sql, $errnum, $errmsg, $offset, 1, $vars);
+		if ($arr = $this->fetch($res)) return $arr;
+		return null;
+	}
+
+	public function get_var($sql, &$errnum, &$errmsg, $offset = 0, $vars = array()) {
+		$res = $this->query($sql, $errnum, $errmsg, $offset, 1, $vars);
+		if ($arr = $this->fetch($res)) return reset($arr);
+		return null;
+	}
+
 	/**
 	 * @see QuickBooks_Driver_Sql::query()
 	 */
@@ -3249,6 +3275,40 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		// Support for mirroring the QuickBooks database in an SQL database
 		if ($config['quickbooks_sql_enabled'])
 		{
+			$idfield = array( QUICKBOOKS_DRIVER_SQL_SERIAL, null, 0 );
+
+			$table = 'quickbooks_qbsql';
+			$def = array(
+				QUICKBOOKS_DRIVER_SQL_FIELD_ID => $idfield,
+				QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID => array( QUICKBOOKS_DRIVER_SQL_INTEGER, null, 'null' ),
+				QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID => array( QUICKBOOKS_DRIVER_SQL_INTEGER, null, 'null' ),
+				QUICKBOOKS_DRIVER_SQL_FIELD_DISCOVER => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
+				QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
+				QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY => array( QUICKBOOKS_DRIVER_SQL_TIMESTAMP, null, 'null' ), //local change to be pushed to QB
+				QUICKBOOKS_DRIVER_SQL_FIELD_HASH => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' ),
+				QUICKBOOKS_DRIVER_SQL_FIELD_QBXML => array( QUICKBOOKS_DRIVER_SQL_TEXT, null, 'null' ),
+
+				QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 32, 'null' ), // Add/mod error number
+				QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE => array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' ), // Add/mod error message
+				QUICKBOOKS_DRIVER_SQL_FIELD_ENQUEUE_TIME => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ), // Add/mod enqueue date/time
+				QUICKBOOKS_DRIVER_SQL_FIELD_DEQUEUE_TIME => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ), // Add/mod dequeue date/time
+
+				QUICKBOOKS_DRIVER_SQL_FIELD_AUDIT_AMOUNT => array( QUICKBOOKS_DRIVER_SQL_DECIMAL, null, 'null' ),
+				QUICKBOOKS_DRIVER_SQL_FIELD_AUDIT_MODIFIED => array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' ),
+
+				QUICKBOOKS_DRIVER_SQL_FIELD_TO_SYNC => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 ),
+				QUICKBOOKS_DRIVER_SQL_FIELD_TO_DELETE => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 ), // Flag it for deletion
+				QUICKBOOKS_DRIVER_SQL_FIELD_TO_SKIP => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 ), // Flag it for skipping
+				QUICKBOOKS_DRIVER_SQL_FIELD_TO_VOID => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 ),
+				QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_DELETED => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 ), // This has been deleted within QuickBooks
+				QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_SKIPPED => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 ), // This has been skipped within the sync to QuickBooks
+                QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_VOIDED => array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 )
+			);
+			$primary = QUICKBOOKS_DRIVER_SQL_FIELD_ID;
+			$keys = [];
+			$uniques = [];
+			$arr_sql = array_merge($arr_sql, $this->_generateCreateTable($table, $def, $primary, $keys, $uniques));
+
 			$tables = array();
 
 			// Use the QuickBooks_SQL_Schema class
@@ -3276,79 +3336,12 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 				// @TODO Support other transformations (table names to uppercase, field names to lowercase, etc.)
 				$name = strtolower($config['quickbooks_sql_prefix'] . $table[0]);
 
-				$idfield = array( QUICKBOOKS_DRIVER_SQL_SERIAL, null, 0 );
-
-				$username_field = array( QUICKBOOKS_DRIVER_SQL_INTEGER, null, 'null' );
-				$external_field = array( QUICKBOOKS_DRIVER_SQL_INTEGER, null, 'null' );
-
-				$ifield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Date/time when first inserted
-				$ufield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Date/time when updated (re-sync from QuickBooks)
-				$mfield = array( QUICKBOOKS_DRIVER_SQL_TIMESTAMP, null, 'null' );		// Date/time when modified by a user (needs to be pushed to QB)
-				$hfield = array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 40, 'null' );
-				$qfield = array( QUICKBOOKS_DRIVER_SQL_TEXT, null, 'null' );
-				//$dfield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Date/time when deleted by a user (needs to be deleted from QB)
-				//$cfield = array( QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT, null, 'NOW()' );
-				//$mfield = array( QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT_OR_UPDATE, null, 'NOW()' );
-
-				// This should be an VARCHAR, QuickBooks errors are sometimes in the format "0x12341234"
-				$enfield = array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 32, 'null' );			// Add/mod error number
-				$emfield = array( QUICKBOOKS_DRIVER_SQL_VARCHAR, 255, 'null' );			// Add/mod error message
-				$enqfield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Add/mod enqueue date/time
-				$deqfield = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );		// Add/mod dequeue date/time
-
-				$audit_modified_field = array( QUICKBOOKS_DRIVER_SQL_DATETIME, null, 'null' );
-				$audit_amount_field = array( QUICKBOOKS_DRIVER_SQL_DECIMAL, null, 'null' );
-
-				$to_delete_field = array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 );		// Flag it for deletion
-				$to_void_field = array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 );
-				$to_skip_field = array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 );		// Flag it for skipping
-				$to_sync_field = array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 );
-
-				$flag_deleted_field = array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 );	// This has been deleted within QuickBooks
-				$flag_voided_field = array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 );
-				$flag_skipped_field = array( QUICKBOOKS_DRIVER_SQL_BOOLEAN, null, 0 );	// This has been skipped within the sync to QuickBooks
-
 				$fields = $table[1];
 
-				$prepend = array(
-					QUICKBOOKS_DRIVER_SQL_FIELD_ID => $idfield,
-					QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID => $username_field,
-					QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID => $external_field,
-					);
-
+				$prepend = [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $idfield ];
 				$fields = array_merge( $prepend, $fields );
 
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_DISCOVER] = $ifield;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC] = $ufield;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY] = $mfield;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_HASH] = $hfield;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_QBXML] = $qfield;
-				//$fields[QUICKBOOKS_DRIVER_SQL_FIELD_DELETE] = $dfield;
-
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER] = $enfield;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE] = $emfield;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_ENQUEUE_TIME] = $enqfield;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_DEQUEUE_TIME] = $deqfield;
-
-				//$fields[QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG] = $delflagfield;
-
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_AUDIT_AMOUNT] = $audit_amount_field;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_AUDIT_MODIFIED] = $audit_modified_field;
-
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_TO_SYNC] = $to_sync_field;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_TO_DELETE] = $to_delete_field;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_TO_SKIP] = $to_skip_field;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_TO_VOID] = $to_void_field;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_DELETED] = $flag_deleted_field;
-				$fields[QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_SKIPPED] = $flag_skipped_field;
-                $fields[QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_VOIDED] = $flag_voided_field;
-
 				$primary = QUICKBOOKS_DRIVER_SQL_FIELD_ID;
-				//$keys = array();
-				//$uniques = array( $table[2] );
-				//$uniques = array();
-
-
 				$keys = $table[3];
 				$uniques = $table[4];
 
@@ -3409,12 +3402,14 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		{
 			foreach ($restrict as $field => $value)
 			{
+				if ($field == QUICKBOOKS_DRIVER_SQL_FIELD_ID) $field = "a.$field";
 				$where[] = $field . " = '" . $this->_escape($value) . "' ";
 			}
 
 			$errnum = 0;
 			$errmsg = '';
-			if ($res = $this->_query("SELECT * FROM " . $this->_escape($table) . " WHERE " . implode(' AND ', $where) . " ", $errnum, $errmsg, 0, 1) and
+			$table = $this->_escape($table);
+			if ($res = $this->_query("SELECT * FROM $table a JOIN quickbooks_qbsql WHERE " . implode(' AND ', $where) . " ", $errnum, $errmsg, 0, 1) and
 				$arr = $this->_fetch($res))
 			{
 				return $this->_unfold($arr);
@@ -3559,73 +3554,66 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 */
 	public function update($table, $object, $where = array(), $resync = true, $discov = null, $derive = true)	// @todo Is that the correct default for $derive?
 	{
-		$sql = '';
-		$set = array();
+		$table = $this->_escape($table);
+		if (is_object($object)) $object = $object->asArray();
 
-		if (is_object($object))
-		{
-			$object = $object->asArray();
-		}
+		// Case folding support
+		if ($this->foldsToLower()) $object = array_change_key_case($object, CASE_LOWER);
+		elseif ($this->foldsToUpper()) $object = array_change_key_case($object, CASE_UPPER);
 
 		$avail = $this->fields($table, true);		// List of available fields
 
-		// Case folding support
-		if ($this->foldsToLower())
-		{
-			$object = array_change_key_case($object, CASE_LOWER);
-		}
-		else if ($this->foldsToUpper())
-		{
-			$object = array_change_key_case($object, CASE_UPPER);
-		}
-
-		// Merge by keys to make sure we don't INSERT any fields that don't exist in this schema
-		$object = array_intersect_key($object, $avail);
-
-		//
-		foreach ($object as $field => $value)
-		{
-			if (is_null($value))
-			{
-				$set[] = $field . " = NULL ";
-			}
-			else
-			{
-				$set[] = $field . " = " . $this->fmtValue($field,$value);
-			}
+		// Build queries
+		$set = [];
+		$qbsql_set = [];
+		foreach ($object as $field => $value) {
+			if (is_null($value)) $s = $field . " = NULL ";
+			else $s = $field . " = " . $this->fmtValue($field,$value);
+			if (!strncmp($field,'qbsql_',6)) $qbsql_set[] = $s;
+			elseif (array_key_exists($field,$avail)) $set[] = $s;
 		}
 
-		$wheres = array();
-		foreach ($where as $part)
-		{
-			foreach ($part as $field => $value)
-			{
-				$wheres[] = $field . " = '" . $this->_escape($value) . "' ";
+		$wheres = [];
+		$qbsql_wheres = [];
+		foreach ($where as $part) {
+			foreach ($part as $field => $value) {
+				$w = $field . " = '" . $this->_escape($value) . "' ";
+				if (!strncmp($field,'qbsql_',6)) {
+					if ($field == QUICKBOOKS_DRIVER_SQL_FIELD_ID) $qbsql_wheres[] = $w;
+					else {
+						error_log("ERROR: Cannot query by qbsql_ fields in update($table, ".
+							json_encode($object).", ".json_encode($where).")");
+						return false;
+					}
+				}
+				elseif (array_key_exists($field,$avail)) $wheres[] = $w;
 			}
 		}
 
-		$sql = "UPDATE " . $this->_escape($table) . " SET " . implode(', ', $set);
-
-		if ($resync)
-		{
-			$sql .= ", " . QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC . " = '" . date('Y-m-d H:i:s') . "' ";
-		}
-
-		$sql .= " WHERE " . implode(' AND ', $wheres);
-
-		//print($sql);
+		if ($resync) $qbsql_set[] = QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC . " = '" . date('Y-m-d H:i:s') . "' ";
 
 		$errnum = 0;
 		$errmsg = '';
-		$return = $this->_query($sql, $errnum, $errmsg);
 
-		if (is_null($discov))
-		{
-			$discov = $resync;
+		if ($wheres) $w = " WHERE ".implode(' AND ',$wheres);
+		else $w = '';
+		if ($qbsql_set && $w) {
+			$pKey = QUICKBOOKS_DRIVER_SQL_FIELD_ID;
+			$sql = "SELECT $pKey FROM $table $w";
+			$ids = $this->get_col($sql,$errnum,$errmsg);
+			if ($ids) $qbsql_wheres[] = "$pKey IN (".implode(',',$ids).")";
 		}
 
-		if ($discov)
-		{
+		$sql = "UPDATE $table SET " . implode(', ', $set) . $w;
+		//print($sql);
+		$return = $this->_query($sql, $errnum, $errmsg);
+
+		if ($qbsql_set) {
+			$sql = "UPDATE quickbooks_qbsql SET ".implode(',',$qbsql_set)." WHERE ".implode(' AND ',$qbsql_wheres);
+			$this->_query($sql, $errnum, $errmsg);
+		}
+
+		if ($discov || ($discov === null && $resync)) {
 			// Update the discover datetime *IF THE DISCOVER DATETIME IS NULL*
 			//	This happens when an AddResponse is received, and we need to
 			//	update a record that has just been added to QuickBooks. If we
@@ -3635,15 +3623,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			$errnum = 0;
 			$errmsg = '';
 
-			$wheres[] = QUICKBOOKS_DRIVER_SQL_FIELD_DISCOVER . " IS NULL ";
+			$qbsql_wheres[] = QUICKBOOKS_DRIVER_SQL_FIELD_DISCOVER . " IS NULL ";
 
-			$this->_query("
-				UPDATE
-					" . $this->_escape($table) . "
+			$this->_query("UPDATE quickbooks_qbsql
 				SET
 					" . QUICKBOOKS_DRIVER_SQL_FIELD_DISCOVER . " = " . QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC . "
 				WHERE
-					" . implode(' AND ', $wheres), $errnum, $errmsg);
+					" . implode(' AND ', $qbsql_wheres), $errnum, $errmsg);
 		}
 
 		return $return;
@@ -3658,26 +3644,10 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 */
 	public function insert($table, $object, $discov_and_resync = true)
 	{
-		$sql = '';
+		$table = $this->_escape($table);
 		$avail = $this->fields($table, true);		// List of available fields
-		$fields = array();
-		$values = array();
 
-		if (is_object($object))
-		{
-			$object = $object->asArray();
-		}
-
-		// Case folding support
-		if ($this->foldsToLower())
-		{
-			$object = array_change_key_case($object, CASE_LOWER);
-		}
-		else if ($this->foldsToUpper())
-		{
-			$object = array_change_key_case($object, CASE_UPPER);
-		}
-
+		if (is_object($object)) $object = $object->asArray();
 		if (!is_array($object) or !is_array($avail))
 		{
 			print('ERROR SAVING [[' . "\n");
@@ -3688,48 +3658,52 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			exit;
 		}
 
-		// Merge by keys to make sure we don't INSERT any fields that don't exist in this schema
-		$object = array_intersect_key($object, $avail);
+		// Case folding support
+		if ($this->foldsToLower()) $object = array_change_key_case($object, CASE_LOWER);
+		elseif ($this->foldsToUpper()) $object = array_change_key_case($object, CASE_UPPER);
 
-		foreach ($object as $field => $value)
-		{
+		// Build queries
+		$fields = [];
+		$values = [];
+		$qbsql_fields = [];
+		$qbsql_values = [];
+		foreach ($object as $field => $value) {
 			// Omit empty fields
 			if ($value === null || !strlen($value)) continue;
 
-			$fields[] = $field;
-			$values[] = $this->fmtValue($field,$value);
+			if (!strncmp($field,'qbsql_',6)) {
+				$qbsql_fields[] = $field;
+				$qbsql_values[] = $this->fmtValue($field,$value);
+				if ($field == QUICKBOOKS_DRIVER_SQL_FIELD_ID) {
+					$fields[] = $field;
+					$values[] = $this->fmtValue($field,$value);
+				}
+			}
+			elseif (array_key_exists($field,$avail)) {
+				$fields[] = $field;
+				$values[] = $this->fmtValue($field,$value);
+			}
 		}
 
-		$sql = "INSERT INTO " . $this->_escape($table) . " ( " . implode(', ', $fields) . " ";
-
-		if ($discov_and_resync)
-		{
-			$sql .= ", " . QUICKBOOKS_DRIVER_SQL_FIELD_DISCOVER . ", " . QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC . " ";
+		if ($discov_and_resync) {
+			$nowSql = "'".date('Y-m-d H:i:s')."'";
+			$qbsql_fields[] = QUICKBOOKS_DRIVER_SQL_FIELD_DISCOVER;
+			$qbsql_values[] = $nowSql;
+			$qbsql_fields[] = QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC;
+			$qbsql_values[] = $nowSql;
 		}
-
-		$sql .= " ) VALUES ( " . implode(', ', $values) . " ";
-
-		if ($discov_and_resync)
-		{
-			$sql .= ", '" . date('Y-m-d H:i:s') . "', '" . date('Y-m-d H:i:s') . "' ";
-		}
-
-		$sql .= " ); ";
-
-		//print_r($object);
-		//die($sql);
-
-		/*
-		if ($table == 'pricemodel_tierset')
-		{
-			print_r($object);
-			print($sql);
-			exit;
-		}
-		*/
 
 		$errnum = 0;
 		$errmsg = '';
+
+		$sql = "INSERT INTO quickbooks_qbsql (".implode(',',$qbsql_fields).") VALUES (".implode(',',$qbsql_values).")";
+		if (!$this->_query($sql, $errnum, $errmsg)) return false;
+		$qbsql_id = $this->last();
+
+		$fields[] = 'qbsql_id';
+		$values[] = $qbsql_id;
+		$sql = "INSERT INTO $table (".implode(',',$fields).") VALUES (".implode(',',$values).")";
+
 		return $this->_query($sql, $errnum, $errmsg);
 	}
 
@@ -3737,7 +3711,8 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 * Format value for use in query.
 	 */
 	protected function fmtValue($field,$value) {
-		if (is_numeric($value)) {
+		if (is_null($value)) $sql = 'NULL';
+		elseif (is_numeric($value)) {
 			$sql = $value;
 		}
 		elseif (!strncmp($field,'Time',4)) {

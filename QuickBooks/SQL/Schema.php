@@ -98,7 +98,7 @@ class QuickBooks_SQL_Schema
 		// This is a list of field names that will *always* be assigned
 		//	indexes, regardless of what table they are in
 		$always_index_fields = array(
-			'qbsql_external_id',
+			//'qbsql_external_id',
 			'Name',
 			'FullName',
 			'EntityType',
@@ -336,7 +336,7 @@ class QuickBooks_SQL_Schema
 			'CompanyRet SubscribedServices Services' =>													array( 'Company_SubscribedServices_Services', array('Company_CompanyName', 'Name') ),
 			'CompanyRet DataExtRet' => 																	array( 'DataExt', array( 'EntityType', 'TxnType', 'Entity_ListID', 'Txn_TxnID' ) ),
 			'HostRet' => 																				array( 'Host', 'ProductName' ),
-			'PreferencesRet' => 																		array( 'Preferences', 'qbsql_external_id' ),
+			'PreferencesRet' => 																		array( 'Preferences', 'qbsql_id'/*'qbsql_external_id'*/ ),
 			'CreditCardChargeRet' =>																	array( 'CreditCardCharge', 'TxnID' ),
 			'CreditCardChargeRet ExpenseLineRet' =>														array( 'CreditCardCharge_ExpenseLine', array( 'CreditCardCharge_TxnID', 'TxnLineID' ) ),
 			'CreditCardChargeRet ItemLineRet' =>														array( 'CreditCardCharge_ItemLine', array( 'CreditCardCharge_TxnID', 'TxnLineID' ) ),
@@ -2005,15 +2005,6 @@ class QuickBooks_SQL_Schema
 			'WorkersCompCodeRet *' => 				array( 'WorkersCompCode', '*' ),
 			);
 
-		static $sql_to_xml = null;
-		if (is_null($sql_to_xml))
-		{
-			foreach ($xml_to_sql as $xml => $sql)
-			{
-				$sql_to_xml[$sql[0] . '.' . $sql[1]] = $xml;
-			}
-		}
-
 		// Mapping of:
 		//	XPATH => array(
 		//		array( table => extra field ),
@@ -2427,6 +2418,15 @@ class QuickBooks_SQL_Schema
 
 			$underscores = substr_count($tablefield, '_');
 			$map = '';
+
+			static $sql_to_xml = null;
+			if (is_null($sql_to_xml))
+			{
+				foreach ($xml_to_sql as $xml => $sql)
+				{
+					$sql_to_xml[$sql[0] . '.' . $sql[1]] = $xml;
+				}
+			}
 
 			foreach ($sql_to_xml as $pattern => $path)
 			{

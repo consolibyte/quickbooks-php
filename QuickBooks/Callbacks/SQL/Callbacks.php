@@ -376,11 +376,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
 				if (!empty($table_and_field[0]))
 				{
-					$sql = "
-						SELECT
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . "
-						FROM
-							" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0] . "
+					$pKey = QUICKBOOKS_DRIVER_SQL_FIELD_ID;
+					$table = QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0];
+					$sql = "SELECT a.$pKey FROM quickbooks_qbsql a JOIN $table b ON a.$pKey=b.$pKey
 						WHERE
 							" . QUICKBOOKS_DRIVER_SQL_FIELD_DISCOVER . " IS NOT NULL AND
 							" . QUICKBOOKS_DRIVER_SQL_FIELD_TO_DELETE . " != 1 AND
@@ -426,11 +424,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				// Delete if it's marked for deletion and it hasn't been deleted already
 				if (!empty($table_and_field[0]))
 				{
-					$sql = "
-						SELECT
-							" . QUICKBOOKS_DRIVER_SQL_FIELD_ID . "
-						FROM
-							" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0] . "
+					$pKey = QUICKBOOKS_DRIVER_SQL_FIELD_ID;
+					$table = QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0];
+					$sql = "SELECT a.$pKey FROM quickbooks_qbsql a JOIN $table b ON a.$pKey=b.$pKey
 						WHERE
 							 " . QUICKBOOKS_DRIVER_SQL_FIELD_TO_DELETE . " = 1 AND
 							 " . QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_DELETED . " != 1 AND
@@ -701,7 +697,7 @@ END;
 	/**
 	 * Handle an inventory stock status report from QuickBooks
 	 */
-	public static function InventoryLevelsResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = array())
+	public static function InventoryLevelsResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = array(), bool $isAssembly=false)
 	{
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 
@@ -769,95 +765,71 @@ END;
 			/*
 			Inventory for "another inventory": Array
 			(
-			    [FullName] => another inventory
-			    [Blank] => another inventory
-			    [ItemDesc] =>
-			    [ItemVendor] =>
-			    [ReorderPoint] => 5
-			    [QuantityOnHand] => 35
-			    [SuggestedReorder] => false
-			    [QuantityOnOrder] => 0
-			    [EarliestReceiptDate] =>
-			    [SalesPerWeek] => 0
+				[FullName] => another inventory
+				[Blank] => another inventory
+				[ItemDesc] =>
+				[ItemVendor] =>
+				[ReorderPoint] => 5
+				[QuantityOnHand] => 35
+				[SuggestedReorder] => false
+				[QuantityOnOrder] => 0
+				[EarliestReceiptDate] =>
+				[SalesPerWeek] => 0
 			)
 			*/
 
-			$Driver->log('Inventory for "' . $item['FullName'] . '": ' . print_r($item, true), null, QUICKBOOKS_LOG_DEBUG);
-			//$errnum = null;
-			//$errmsg = null;
-			//mysql_query("INSERT INTO quickbooks_log VALUES ( msg, log_datetime) VALUES ( '" . mysql_real_escape_string(print_r($item, true)) . "', NOW() ) ");
-			// UPDATE item SET QuantityOnHand = x WHERE FullName = y, resync = NOW() AND qbsql_resync_datetime = qbsql_modify_timestamp
-			// if (!affected_rows)
-			// 	UPDATE item SET QuantityOnHand = x WHERE FullName = y 		// this was a modified item, so it needs to stay modified
+			$label = 'Inventory';
+			$tableId = 'iteminventory';
+			$hook = QuickBooks_SQL::HOOK_SQL_INVENTORY;
+			if ($isAssembly) {
+				$label .= ' Assembly';
+				$tableId .= 'assembly';
+				$hook = QuickBooks_SQL::HOOK_SQL_INVENTORYASSEMBLY;
+			}
+			$Driver->log($label.' for "' . $item['FullName'] . '": ' . print_r($item, true), null, QUICKBOOKS_LOG_DEBUG);
 
-			$sql1 = "
-				UPDATE
-					" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "iteminventory
+			$table = QUICKBOOKS_DRIVER_SQL_PREFIX_SQL.$tableId;
+			$pKey = QUICKBOOKS_DRIVER_SQL_FIELD_ID;
+			$sql = "SELECT $pKey FROM $table WHERE FullName = '".$item['FullName']."'";
+			$sqlA = "$sql AND qbsql_resync_datetime = qbsql_modify_timestamp";
+			$update_qbsql = true;
+			$qbsql_id = $Driver->get_var($sqlA, $errnum, $errmsg);
+			if (!$qbsql_id) {
+				$update_qbsql = false;
+				$qbsql_id = $Driver->get_var($sql, $errnum, $errmsg);
+			}
+
+			$where = "WHERE $pKey=$qbsql_id";
+			$sql1 = "UPDATE $table
 				SET
-					QuantityOnHand = " . (float) $item['QuantityOnHand'] . ",
-					QuantityOnOrder = " . (float) $item['QuantityOnOrder'] . ",
-					QuantityOnSalesOrder = " . (float) $item['QuantityOnSalesOrder'] . ",
-					qbsql_resync_datetime = '%s',
-					qbsql_modify_timestamp = '%s'
-				WHERE
-					FullName = '%s' AND
-					qbsql_resync_datetime = qbsql_modify_timestamp ";
+				QuantityOnHand = " . (float) $item['QuantityOnHand'] . ",
+				QuantityOnOrder = " . (float) $item['QuantityOnOrder'] . ",
+				QuantityOnSalesOrder = " . (float) $item['QuantityOnSalesOrder'] . "
+				$where";
+			$sql2 = "UPDATE quickbooks_qbsql SET qbsql_resync_datetime = '%s', qbsql_modify_timestamp = '%s' $where";
 
 			$datetime = date('Y-m-d H:i:s');
 
-			$vars1 = array( $datetime, $datetime, $item['FullName'] );
-
 			$errnum = null;
 			$errmsg = null;
-			$Driver->query($sql1, $errnum, $errmsg, 0, 1, $vars1);
-
+			$Driver->query($sql1, $errnum, $errmsg, 0, 1, [$datetime,$datetime]);
 			//$Driver->log($sql1, null, QUICKBOOKS_LOG_DEBUG);
-
-			if (!$Driver->affected())
-			{
-				$sql2 = "
-					UPDATE
-						" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "iteminventory
-					SET
-						QuantityOnHand = " . (float) $item['QuantityOnHand'] . ",
-						QuantityOnOrder = " . (float) $item['QuantityOnOrder'] . ",
-						QuantityOnSalesOrder = " . (float) $item['QuantityOnSalesOrder'] . "
-					WHERE
-						FullName = '%s' ";
-
-				$vars2 = array( $item['FullName'] );
-
-				$errnum = null;
-				$errmsg = null;
-				$Driver->query($sql2, $errnum, $errmsg, 0, 1, $vars2);
-
-				//$Driver->log($sql2, null, QUICKBOOKS_LOG_DEBUG);
+			if ($update_qbsql) {
+				$Driver->query($sql2, $errnum, $errmsg, 0, 1);
 			}
-
-			$hooks = array();
-			if (isset($callback_config['hooks']))
-			{
-				$hooks = $callback_config['hooks'];
-			}
-
-			$Driver->log('CALLING THE HOOKS! ' . print_r($hooks, true), null, QUICKBOOKS_LOG_VERBOSE);
 
 			// Call any hooks that occur when a record is updated
-			$hook_data = array(
-				'hook' => QuickBooks_SQL::HOOK_SQL_INVENTORY,
-				'user' => $user,
-				'table' => QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventory',
-				'data' => $item,
-				);
-
+			$Driver->log('CALLING THE HOOKS! ' . print_r($hooks, true), null, QUICKBOOKS_LOG_VERBOSE);
+			$hooks = $callback_config['hooks'] ?? [];
+			$hook_data = ['hook' => $hook, 'user' => $user, 'table' => $table, 'data' => $item];
 			$err = null;
-			QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_SQL_INVENTORY, $requestID, $user, $err, $hook_data, $callback_config);
+			QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, $hook, $requestID, $user, $err, $hook_data, $callback_config);
 		}
 
 		//print_r($items);
-
-		//$Driver->log('Inventory: ' . print_r($items, true), null, QUICKBOOKS_LOG_VERBOSE);
+		//$Driver->log("$label: " . print_r($items, true), null, QUICKBOOKS_LOG_VERBOSE);
 	}
+
 
 	public static function InventoryAssemblyLevelsRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
@@ -882,160 +854,8 @@ END;
 	 */
 	public static function InventoryAssemblyLevelsResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = array())
 	{
-		$Driver = QuickBooks_Driver_Singleton::getInstance();
-
-		$col_defs = array();
-
-		//mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( 'TESTING', NOW() ) ") or die(mysql_error());
-
-		// First, find the column definitions
-		$tmp = $xml;
-		$find = 'ColDesc';
-		while ($inner = QuickBooks_Callbacks_SQL_Callbacks::_reportNextXML($tmp, $find))
-		{
-			$colID = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColID($inner);
-			$type = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColType($inner);
-
-			$col_defs[$colID] = $type;
-		}
-
-		//print_r($col_defs);
-		//exit;
-
-		$items = array();
-
-		// Now, find the actual data
-		$tmp = $xml;
-		$find = 'DataRow';
-		while ($inner = QuickBooks_Callbacks_SQL_Callbacks::_reportNextXML($tmp, $find))
-		{
-			$item = array(
-				'FullName' => null,
-				'Blank' => null, 					//
-				'ItemDesc' => null, 				//
-				'ItemVendor' => null, 				// Pref Vendor
-				'ReorderPoint' => null, 			// Reorder Pt
-				'QuantityOnHand' => null, 			// On Hand
-				'SuggestedReorder' => null, 		// Order
-				'QuantityOnOrder' => null, 			// On PO
-				'QuantityOnSalesOrder' => null, 	// On Sales Order
-				'EarliestReceiptDate' => null, 		// Next Deliv
-				'SalesPerWeek' => null, 			// Sales/Week
-				);
-
-			$find2 = 'RowData';
-			if ($tag = QuickBooks_Callbacks_SQL_Callbacks::_reportNextTag($inner, $find2))
-			{
-				$value = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColValue($tag);
-
-				$item['FullName'] = $value;
-			}
-
-			$find3 = 'ColData';
-			while ($tag = QuickBooks_Callbacks_SQL_Callbacks::_reportNextTag($inner, $find3))
-			{
-				$colID = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColID($tag);
-				$value = QuickBooks_Callbacks_SQL_Callbacks::_reportExtractColValue($tag);
-
-				if (array_key_exists($colID, $col_defs))
-				{
-					$item[$col_defs[$colID]] = $value;
-				}
-			}
-
-			//$items[] = $item;
-
-			/*
-			Inventory for "another inventory": Array
-			(
-			    [FullName] => another inventory
-			    [Blank] => another inventory
-			    [ItemDesc] =>
-			    [ItemVendor] =>
-			    [ReorderPoint] => 5
-			    [QuantityOnHand] => 35
-			    [SuggestedReorder] => false
-			    [QuantityOnOrder] => 0
-			    [EarliestReceiptDate] =>
-			    [SalesPerWeek] => 0
-			)
-			*/
-
-			$Driver->log('Inventory Assembly for "' . $item['FullName'] . '": ' . print_r($item, true), null, QUICKBOOKS_LOG_DEBUG);
-			//$errnum = null;
-			//$errmsg = null;
-			//mysql_query("INSERT INTO quickbooks_log VALUES ( msg, log_datetime) VALUES ( '" . mysql_real_escape_string(print_r($item, true)) . "', NOW() ) ");
-			// UPDATE item SET QuantityOnHand = x WHERE FullName = y, resync = NOW() AND qbsql_resync_datetime = qbsql_modify_timestamp
-			// if (!affected_rows)
-			// 	UPDATE item SET QuantityOnHand = x WHERE FullName = y 		// this was a modified item, so it needs to stay modified
-
-			$sql1 = "
-				UPDATE
-					" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "iteminventoryassembly
-				SET
-					QuantityOnHand = " . (float) $item['QuantityOnHand'] . ",
-					QuantityOnOrder = " . (float) $item['QuantityOnOrder'] . ",
-					QuantityOnSalesOrder = " . (float) $item['QuantityOnSalesOrder'] . ",
-					qbsql_resync_datetime = '%s',
-					qbsql_modify_timestamp = '%s'
-				WHERE
-					FullName = '%s' AND
-					qbsql_resync_datetime = qbsql_modify_timestamp ";
-
-			$datetime = date('Y-m-d H:i:s');
-
-			$vars1 = array( $datetime, $datetime, $item['FullName'] );
-
-			$errnum = null;
-			$errmsg = null;
-			$Driver->query($sql1, $errnum, $errmsg, 0, 1, $vars1);
-
-			//$Driver->log($sql1, null, QUICKBOOKS_LOG_DEBUG);
-
-			if (!$Driver->affected())
-			{
-				$sql2 = "
-					UPDATE
-						" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . "iteminventoryassembly
-					SET
-						QuantityOnHand = " . (float) $item['QuantityOnHand'] . ",
-						QuantityOnOrder = " . (float) $item['QuantityOnOrder'] . ",
-						QuantityOnSalesOrder = " . (float) $item['QuantityOnSalesOrder'] . "
-					WHERE
-						FullName = '%s' ";
-
-				$vars2 = array( $item['FullName'] );
-
-				$errnum = null;
-				$errmsg = null;
-				$Driver->query($sql2, $errnum, $errmsg, 0, 1, $vars2);
-
-				//$Driver->log($sql2, null, QUICKBOOKS_LOG_DEBUG);
-			}
-
-			$hooks = array();
-			if (isset($callback_config['hooks']))
-			{
-				$hooks = $callback_config['hooks'];
-			}
-
-			$Driver->log('CALLING THE HOOKS! ' . print_r($hooks, true), null, QUICKBOOKS_LOG_VERBOSE);
-
-			// Call any hooks that occur when a record is updated
-			$hook_data = array(
-				'hook' => QuickBooks_SQL::HOOK_SQL_INVENTORYASSEMBLY,
-				'user' => $user,
-				'table' => QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventoryassembly',
-				'data' => $item,
-				);
-
-			$err = null;
-			QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_SQL_INVENTORYASSEMBLY, $requestID, $user, $err, $hook_data, $callback_config);
-		}
-
-		//print_r($items);
-
-		//$Driver->log('Inventory: ' . print_r($items, true), null, QUICKBOOKS_LOG_VERBOSE);
+		$err = null;
+		self::InventoryLevelsResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config, true);
 	}
 
 	static protected function _reportExtractColID($xml)
@@ -1173,32 +993,31 @@ END;
 	 */
 	public static function ListDeletedQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
+		self::markDeleted('List',$xml);
+		return true;
+	}
+
+	protected static function markDeleted(string $type, string $xml) {
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
 
-		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs ListDeletedQueryRs');
+		$List = self::_parseXML($xml, "QBXML QBXMLMsgsRs {$type}DeletedQueryRs");
 
 		foreach ($List->children() as $Node)
 		{
 			$map = array();
 			$others = array();
 
-			QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt('ListDeletedRet ListDelType'))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
+			QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt("{$type}DeletedRet {$type}DelType"))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
 
-			if (isset($map[0]))
-			{
-				$table = $map[0];
-
-				$data = array(
-					'qbsql_flag_deleted' => 1,
-					);
-
-				$multipart = array( 'ListID' => $Node->getChildDataAt('ListDeletedRet ListID') );
-
-				$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, array( $multipart ));
+			$table = $map[0] ?? null;
+			if ($table) {
+				$pKey = QUICKBOOKS_DRIVER_SQL_FIELD_ID;
+				$id = $Driver->escape($Node->getChildDataAt("{$type}DeletedRet {$type}ID"));
+				$where = [[ "{$type}ID" => $id ]];
+				$updates = [ 'qbsql_flag_deleted' => 1 ];
+				$Driver->update($table, $updates, $where);
 			}
 		}
-
-		return true;
 	}
 
 	/**
@@ -1252,34 +1071,7 @@ END;
 	 */
 	public static function TxnDeletedQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$Driver = QuickBooks_Driver_Singleton::getInstance();
-
-		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs TxnDeletedQueryRs');
-
-		foreach($List->children() as $Node)
-		{
-			$map = array();
-			$others = array();
-
-			QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt("TxnDeletedRet TxnDelType"))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
-
-			/*
-			$sqlObject = new QuickBooks_SQL_Object($map[0], trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt("TxnDeletedRet TxnDelType"))));
-			$table = $sqlObject->table();
-			*/
-
-			if (!empty($map[0]))
-			{
-				$table = $map[0];
-				$data = array(
-					'qbsql_flag_deleted' => 1,
-					);
-				$multipart = array( 'TxnID' => $Node->getChildDataAt('TxnDeletedRet TxnID') );
-
-				$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, array( $multipart ));
-			}
-
-		}
+		self::markDeleted('Txn',$xml);
 		return true;
 	}
 
@@ -8420,7 +8212,7 @@ END;
 				// Special hack for preferences
 				if ($Object->table() == 'preferences')
 				{
-					$map = array( 'qb_preferences', 'qbsql_external_id' );
+					$map = array( 'qb_preferences', 'qbsql_id'/*'qbsql_external_id'*/ );
 				}
 
 				//print_r($Object);

@@ -277,11 +277,10 @@ class QuickBooks_Status_Report
 			if (!empty($table_and_field[0]) and
 				!empty($table_and_field[1]))
 			{
-				$sql = "
-					SELECT
-						*
-					FROM
-						" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0] . "
+				$pKey = QUICKBOOKS_DRIVER_SQL_FIELD_ID;
+				$table = QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0];
+				$sql = "SELECT *
+					FROM $table a JOIN quickbooks_qbsql b ON a.$pKey=b.$pKey
 					WHERE ";
 
 				if ($mode == QuickBooks_Status_Report::MODE_MIRROR_ERRORS)
@@ -305,7 +304,7 @@ class QuickBooks_Status_Report
 					$sql .= " AND TimeCreated <= '" . date('Y-m-d H:i:s', $timestamp) . "' ";
 				}
 
-				$sql .= " ORDER BY qbsql_id DESC ";
+				$sql .= " ORDER BY a.qbsql_id DESC ";
 
 				//print($sql);
 
@@ -427,16 +426,9 @@ class QuickBooks_Status_Report
 		foreach ($report as $record)
 		{
 			$html .= '		<tr>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[0] . '</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[1] . '</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[2] . '</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[3] . '</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[4] . '</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[5] . '</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[6] . '</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[7] . '</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[8] . '</td>' . QUICKBOOKS_CRLF;
-			$html .= '			<td>' . $record[9] . '</td>' . QUICKBOOKS_CRLF;
+			for ($i=0; $i<=9; $i++) {
+				$html .= '			<td>' . $record[$i] . '</td>' . QUICKBOOKS_CRLF;
+			}
 			$html .= '		</tr>' . QUICKBOOKS_CRLF;
 		}
 
@@ -480,15 +472,9 @@ class QuickBooks_Status_Report
 			foreach ($records as $record)
 			{
 				$html .= '		<tr>' . QUICKBOOKS_CRLF;
-				$html .= '			<td>' . $record[0] . '</td>' . QUICKBOOKS_CRLF;
-				$html .= '			<td>' . $record[1] . '</td>' . QUICKBOOKS_CRLF;
-				$html .= '			<td>' . $record[2] . '</td>' . QUICKBOOKS_CRLF;
-				$html .= '			<td>' . $record[3] . '</td>' . QUICKBOOKS_CRLF;
-				$html .= '			<td>' . $record[4] . '</td>' . QUICKBOOKS_CRLF;
-				$html .= '			<td>' . $record[5] . '</td>' . QUICKBOOKS_CRLF;
-				$html .= '			<td>' . $record[6] . '</td>' . QUICKBOOKS_CRLF;
-				$html .= '			<td>' . $record[7] . '</td>' . QUICKBOOKS_CRLF;
-				$html .= '			<td>' . $record[8] . '</td>' . QUICKBOOKS_CRLF;
+				for ($i=0; $i<=8; $i++) {
+					$html .= '			<td>' . $record[$i] . '</td>' . QUICKBOOKS_CRLF;
+				}
 				$html .= '		</tr>' . QUICKBOOKS_CRLF;
 			}
 
