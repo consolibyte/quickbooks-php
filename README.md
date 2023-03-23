@@ -26,14 +26,14 @@ Almost anything you can do in the QuickBooks GUI, in QuickBooks Online Edition, 
   - Examples: docs/web_connector/
 
 * QuickBooks ONLINE (via Intuit Partner Platform/Intuit Anywhere)
-  - Read the [quick start guide for Intuit Partner Platform/QuickBooks Online] (https://github.com/mc2contributor/quickbooks-php/blob/master/QuickStart-Online.md)
+  - Read the [quick start guide for Intuit Partner Platform/QuickBooks Online](https://github.com/mc2contributor/quickbooks-php/blob/master/QuickStart-Online.md)
   - Examples: docs/partner_platform/example_app_ipp_v3/
 
 See the docs/ folder for more examples.
 
 ## OAuth 1.0 to OAuth 2.0 migration
 
-You can find information on how to migrate your app from OAuth v1.0 to OAuth v2.0 below. We are also working on getting OpenID Connect and an automated token migration process ready -- coming soon.
+You can find information on how to migrate your app from OAuth v1.0 to OAuth v2.0 below. Consolibyte was also working on getting OpenID Connect and an automated token migration process ready.
 
 * <https://github.com/consolibyte/quickbooks-php/blob/master/README_OAUTHV1_TO_OAUTHV2.md>
 
@@ -51,13 +51,9 @@ You can find information on how to migrate your app from OAuth v1.0 to OAuth v2.
 - StackOverflow: <https://stackoverflow.com/questions/tagged/quickbooks> (This is the best place to get support)
 - Intuit Dev Forums: <https://help.developer.intuit.com/s/>
 
-### Bugs/pull requests 
-
-- GitHub: <https://github.com/consolibyte/quickbooks-php>
-
 ### Additional Info
 
-There is additional documentation and additional examples on our legacy and new wikis:
+There is additional documentation and additional examples on the legacy and new wikis:
 
 - https://web.archive.org/web/20221209200524/http://wiki.consolibyte.com/wiki/doku.php/quickbooks     (legacy)
 - https://web.archive.org/web/20221129185859/http://www.consolibyte.com/docs/index.php/QuickBooks     (new wiki)
