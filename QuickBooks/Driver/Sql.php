@@ -1059,7 +1059,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 
 		if ($extra)
 		{
-			$extra = serialize($extra);
+			$extra = json_encode($extra);
 		}
 
 		return $this->_query("
@@ -1189,7 +1189,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 
 		if ($extra)
 		{
-			$extra = serialize($extra);
+			$extra = json_encode($extra);
 		}
 
 		return $this->_query("
