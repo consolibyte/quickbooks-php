@@ -316,13 +316,13 @@ class QuickBooks_XML
 					$expect_value = true;
 				}
 				/*
-				else if ($attrs{$i} == '"' and $expect_value)
+				else if ($attrs[$i] == '"' and $expect_value)
 				{
 					$in_value = true;
 					$expect_value = false;
 				}
 				*/
-				/*else if ($attrs{$i} == '"' and $in_value)*/
+				/*else if ($attrs[$i] == '"' and $in_value)*/
 				else if (($attrs[$i] == '"' or $attrs[$i] == '\'') and $expect_value)
 				{
 					$in_value = true;
