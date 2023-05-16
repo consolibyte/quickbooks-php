@@ -125,7 +125,7 @@ define('QUICKBOOKS_HANDLERS_HOOK_INTERACTIVEREJECTED', 'QuickBooks_Handlers::int
  *
  *
  */
-define('QUICKBOOKS_HANDLERS_HOOK_RECEIVERESPONSEXML', 'QuickBooks_HandlersS::receiveResponseXML');
+define('QUICKBOOKS_HANDLERS_HOOK_RECEIVERESPONSEXML', 'QuickBooks_Handlers::receiveResponseXML');
 
 /**
  *
