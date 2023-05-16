@@ -2645,14 +2645,20 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	}
 
 	public function get_row($sql, &$errnum, &$errmsg, $offset = 0, $vars = array()) {
-		$res = $this->query($sql, $errnum, $errmsg, $offset, 1, $vars);
+		$res = $this->query($sql, $errnum, $errmsg, $offset, null, $vars);
 		if ($arr = $this->fetch($res)) return $arr;
 		return null;
 	}
 
-	public function get_var($sql, &$errnum, &$errmsg, $offset = 0, $vars = array()) {
-		$res = $this->query($sql, $errnum, $errmsg, $offset, 1, $vars);
-		if ($arr = $this->fetch($res)) return reset($arr);
+	public function get_var($sql, &$errnum, &$errmsg, $offset = 0, $fieldOffset = 0, $vars = array()) {
+		$res = $this->query($sql, $errnum, $errmsg, $offset, null, $vars);
+		if ($arr = $this->fetch($res)) {
+			if ($fieldOffset) {
+				$val = array_values($arr)[$fieldOffset];
+				return $val;
+			}
+			else return reset($arr);
+		}
 		return null;
 	}
 
