@@ -87,7 +87,7 @@ class QuickBooks_Utilities
 		
 		foreach ($masks as $key)
 		{
-			if ($key{0} == '<')
+			if (substr($key, 0, 1) == '<')
 			{
 				// It's an XML tag
 				$contents = QuickBooks_Utilities::_extractTagContents(trim($key, '<> '), $message);
@@ -301,7 +301,7 @@ class QuickBooks_Utilities
 			$count = strlen($interval);
 			for ($i = 0; $i < $count; $i++)
 			{
-				if (ord($interval{$i}) < 97 or ord($interval{$i}) > 122)
+				if (ord($interval[$i]) < 97 or ord($interval[$i]) > 122)
 				{
 					$justletters = false;
 				}
@@ -695,8 +695,6 @@ class QuickBooks_Utilities
 	/**
 	 * List all of the QuickBooks object types supported by the framework
 	 * 
-	 * @todo 	We might be able to optimize this a bit to not use create_function()
-	 * 
 	 * @param string $filter
 	 * @param boolean $return_keys
 	 * @param boolean $order_for_mapping
@@ -742,9 +740,7 @@ class QuickBooks_Utilities
 		if ($order_for_mapping)
 		{
 			// Sort with the very longest values first, to the shortest values last
-			
-			$func = create_function('$a, $b', ' if (strlen($a) > strlen($b)) { return -1; } return 1; ');
-			usort($constants, $func);
+			usort($constants, function($a, $b){ return strlen($a) > strlen($b) ? -1 : 1; });
 		}
 		else
 		{

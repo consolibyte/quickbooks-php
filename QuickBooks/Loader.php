@@ -98,7 +98,7 @@ class QuickBooks_Loader
 	 */
 	static public function __autoload($name)
 	{
-		if (substr($name, 0, 10) == 'QuickBooks')
+		if (substr($name, 0, 10) == 'QuickBooks' && substr($name, 0, 16) != 'QuickBooksOnline')
 		{
 			$file = '/' . str_replace('_', DIRECTORY_SEPARATOR, $name) . '.php';
 			QuickBooks_Loader::load($file, false);

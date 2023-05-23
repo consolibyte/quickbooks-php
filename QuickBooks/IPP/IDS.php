@@ -170,6 +170,8 @@ class QuickBooks_IPP_IDS
 
 	const RESOURCE_TIMEACTIVITY = 'TimeActivity';
 
+	const RESOURCE_TAXAGENCY = 'TaxAgency';
+
 	/**
 	 * IDS v2 - QuickBooks Desktop
 	 */

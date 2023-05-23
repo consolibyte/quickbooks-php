@@ -308,6 +308,48 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
 		return $this->get('Salutation');
 	}
 	
+    	/**
+  	 * 
+  	 * 
+  	 * @return string
+  	 */
+  	public function getNameOnCheck()
+  	{
+  		return $this->get('NameOnCheck');
+  	}
+  
+  	/**
+  	 * Set the payee name for this vendor
+  	 *
+  	 * @param string $name
+  	 * @return boolean
+  	 */
+  	public function setNameOnCheck($name)
+  	{
+  		return $this->set('NameOnCheck', $name);
+  	}
+  
+      	/**
+    	 * Set the VendorTypeRef FullName for the vendor
+    	 *
+    	 * @param string $type
+    	 * @return boolean
+    	 */
+    	public function setVendorTypeRef($type)
+    	{
+    		return $this->set('VendorTypeRef FullName', $type);
+    	}
+  
+    	/**
+    	 * Get the VendorTypeRef FullName for the vendor
+    	 *
+    	 * @return string
+    	 */
+    	public function getVendorTypeRef()
+    	{
+    		return $this->get('VendorTypeRef FullName');
+    	}
+	
 	/**
 	 * Perform any needed clean-up of the object data members
 	 * 

@@ -10644,6 +10644,9 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					$extra['EntityListID'] = $extra['ListID'];
 					$extra['EntityType'] = 'Employee';
 					break;
+				case 'employeeret employeepayrollinfo earnings':
+					$extra['EntityType'] = 'Earnings';
+					break;
 				case 'estimateret':
 					if (!isset($extra['TxnID']))
 					{
@@ -10966,6 +10969,8 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					case 'Service':
 					case 'SubscribedServices':
 					case 'TaxLineInfoRet':
+					case 'EmployeePayrollInfo':
+					case 'Earnings':
 						
 						// * * * WARNING WARNING WARNING * * * 
 						// The next line of code causes problems with some responses 
