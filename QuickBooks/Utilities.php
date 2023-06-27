@@ -678,7 +678,7 @@ class QuickBooks_Utilities
 	 * @param string $str
 	 * @return boolean
 	 */
-	static public function fnmatch($pattern, $str)
+	static public function fnmatch(string $pattern, string $str): bool
 	{
 		if (function_exists('fnmatch'))
 		{
