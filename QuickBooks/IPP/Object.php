@@ -455,6 +455,7 @@ class QuickBooks_IPP_Object
 				if ($value and
 					substr($key, -3, 3) == 'Ref' and
 					strlen($value[0]) > 0 and
+					is_string($value) and
 					$value[0] == '{')
 				{
 					$value = trim($value . '', '{}-');
@@ -462,6 +463,7 @@ class QuickBooks_IPP_Object
 				else if ($value and
 					$key == 'Id' and
 					strlen($value[0]) > 0 and
+					is_string($value) and
 					$value[0] == '{')
 				{
 					$value = trim($value . '', '{}-');
@@ -469,6 +471,7 @@ class QuickBooks_IPP_Object
 				else if ($value and
 					$key == 'DefinitionId' and
 					strlen($value[0]) > 0 and
+					is_string($value) and
 					$value[0] == '{')
 				{
 					$value = trim($value . '', '{}-');
@@ -476,6 +479,7 @@ class QuickBooks_IPP_Object
 				else if ($value and
 					$key == 'TxnId' and
 					strlen($value[0]) > 0 and
+					is_string($value) and
 					$value[0] == '{')
 				{
 					$value = trim($value . '', '{}-');
