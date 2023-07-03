@@ -454,27 +454,27 @@ class QuickBooks_IPP_Object
 
 				if ($value and
 					substr($key, -3, 3) == 'Ref' and
-					$value[0] == '{')
+					($value[0] . '') == '{')
 				{
-					$value = trim($value, '{}-');
+					$value = trim($value . '', '{}-');
 				}
 				else if ($value and
 					$key == 'Id' and
-					$value[0] == '{')
+					($value[0] . '') == '{')
 				{
-					$value = trim($value, '{}-');
+					$value = trim($value . '', '{}-');
 				}
 				else if ($value and
 					$key == 'DefinitionId' and
-					$value[0] == '{')
+					($value[0] . '') == '{')
 				{
-					$value = trim($value, '{}-');
+					$value = trim($value . '', '{}-');
 				}
 				else if ($value and
 					$key == 'TxnId' and
-					$value[0] == '{')
+					($value[0] . '') == '{')
 				{
-					$value = trim($value, '{}-');
+					$value = trim($value . '', '{}-');
 				}
 
 				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
