@@ -51,6 +51,8 @@ for ($i = 0; $i <= 1; $i++)
 }
 
 print('php version: ' . phpversion() . "\n");
+print('openssl extension? ' . var_export(extension_loaded('openssl'), true) . "\n");
+print('  openssl module aes-256-ecb ?' . var_export(in_array('aes-256-ecb', openssl_get_cipher_methods()), true) . "\n");
 print('mcrypt extension? ' . var_export(function_exists('mcrypt_module_open'), true) . "\n");
 print('  mcrypt module rijndael-256? ' . var_export(mcrypt_module_open('rijndael-256', '', 'ofb', ''), true) . "\n");
 print('curl extension? ' . var_export(function_exists('curl_init'), true) . "\n");
