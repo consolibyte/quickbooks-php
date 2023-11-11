@@ -424,7 +424,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 	public function setTxnDate($date)
 	{
 		/*
-		if (!ereg('([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})', $date))
+		if (!preg_match('@([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})@s', $date))
 		{
 			$date = date('Y-m-d', strtotime($date));
 		}
@@ -462,7 +462,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 	public function setShipDate($date)
 	{
 		/*
-		if (!ereg('([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})', $date))
+		if (!preg_match('@([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})@s', $date))
 		{
 			$date = date('Y-m-d', strtotime($date));
 		}
