@@ -8489,17 +8489,9 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		foreach ($children as $child)
 		{
 			$sort = QUICKBOOKS_DRIVER_SQL_FIELD_ID . " ASC ";
-			switch (strtolower($child['table']))
+			if (QuickBooks_SQL_Schema::hasSortOrder($child['table']))
 			{
-				case 'invoice_invoiceline':					// @TODO There are a whole lot of other line item tables missing the SortOrder field still...
-				case 'salesreceipt_salesreceiptline':
-				case 'purchaseorder_purchaseorderline':
-				case 'estimate_estimateline':
-				case 'bill_itemline':
-				case 'bill_expenseline':
-				case 'iteminventoryassembly_iteminventoryassemblyline':
-					$sort = ' SortOrder ASC ';
-					break;
+				$sort = ' SortOrder ASC ';
 			}
 			
 			$table = $child['table'];
@@ -9575,14 +9567,13 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					$multipart = array( $value => $TxnID_or_ListID );
 					
 					$order = array();
-					if (substr($key, -4, 4) == 'line')
+					if (QuickBooks_SQL_Schema::hasSortOrder($key))
 					{
-						$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
-						
-						if ($key == 'iteminventoryassembly_iteminventoryassemblyline')
-						{
-							unset($order['TxnLineID']);
-						}
+						$order['SortOrder'] = 'ASC';
+					}
+					if (QuickBooks_SQL_Schema::hasTxnLineID($key))
+					{
+						$order['TxnLineID'] = 'ASC';
 					}
 					
 					$obj = new QuickBooks_SQL_Object($table, null);
@@ -9615,16 +9606,15 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 					}
 					
 					$multipart = array( $value => $TxnID_or_ListID );
-					
+
 					$order = array();
-					if (substr($key, -4, 4) == 'line')
+					if (QuickBooks_SQL_Schema::hasSortOrder($key))
 					{
-						$order = array( 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' );
-						
-						if ($key == 'iteminventoryassembly_iteminventoryassemblyline')
-						{
-							unset($order['TxnLineID']);
-						}
+						$order['SortOrder'] = 'ASC';
+					}
+					if (QuickBooks_SQL_Schema::hasTxnLineID($key))
+					{
+						$order['TxnLineID'] = 'ASC';
 					}
 					
 					//print_r($multipart);
@@ -10417,48 +10407,40 @@ public static function InventoryAssemblyLevelsRequest($requestID, $user, $action
 		}		
 		
 		// Some types of objects need some special custom field handling 
-		
-		$map = array(
-			'invoice_invoiceline' => 'Invoice_TxnID', 
-			'purchaseorder_purchaseorderline' => 'PurchaseOrder_TxnID', 
-			'salesreceipt_salesreceiptline' => 'SalesReceipt_TxnID', 
-			'estimate_estimateline' => 'Estimate_TxnID', 
-			'bill_itemline' => 'Bill_TxnID', 
-			'bill_expenseline' => 'Bill_TxnID', 
-			);
-		
-		switch ($table)
+		$sortOrderColumns = QuickBooks_SQL_Schema::getSortOrderColumns($table);
+		if (count($sortOrderColumns) > 0)
 		{
-			case 'invoice_invoiceline':
-			case 'purchaseorder_purchaseorderline':
-			case 'salesreceipt_salesreceiptline':
-			case 'estimate_estimateline':
-			case 'bill_itemline':
-			case 'bill_expenseline':
-				
-				// Set the SortOrder for the line items
-				if (isset($map[$table]))
+			$ids = array();
+			foreach ($sortOrderColumns as $col)
+			{
+				$id = $object->get($col);
+				if ($id)
 				{
-					$TxnID = $object->get($map[$table]);
-					
-					if ($TxnID)
-					{	
-						$errnum = 0;
-						$errmsg = '';
-						$res = $Driver->query("
-							SELECT 
-								MAX(SortOrder) AS max_sort_order
-							FROM 
-								" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table . " 
-							WHERE 
-								" . $map[$table] . " = '" . $TxnID . "' ", $errnum, $errmsg);
-						$arr = $Driver->fetch($res);
-						
-						$object->set('SortOrder', (int) $arr['max_sort_order'] + 1);
-					}
+					$ids[$col] = $id;
 				}
+			}
+
+			if (count($ids) == count($sortOrderColumns))
+			{
+				$sql = "
+					SELECT 
+						MAX(SortOrder) AS max_sort_order
+					FROM 
+						" . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table;
+				$prefix = " WHERE ";
+				foreach ($ids as $col => $id)
+				{
+					$sql .= $prefix . $col . " = '" . $id . "'";
+					$prefix = " AND ";
+				}
+
+				$errnum = 0;
+				$errmsg = '';
+				$res = $Driver->query($sql, $errnum, $errmsg);
+				$arr = $Driver->fetch($res);
 				
-				break;
+				$object->set('SortOrder', (int) $arr['max_sort_order'] + 1);
+			}
 		}
 		
 		return true;
