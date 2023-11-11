@@ -320,6 +320,8 @@ class QuickBooks_WebConnector_Handlers
 			'deny_reallyfast_timeout' => 600,
 
 			'masking' => true,
+
+      'status_error_threshold' => 500, // the lowest status code considered an error
 			);
 
 		$config = array_merge($defaults, $config);
@@ -346,6 +348,8 @@ class QuickBooks_WebConnector_Handlers
 
 		$config['deny_reallyfast_logins'] = (boolean) $config['deny_reallyfast_logins'];
 		$config['deny_reallyfast_timeout'] = (int) max(1, $config['deny_reallyfast_timeout']);
+
+    $config['status_error_threshold'] = (int) max(1, $config['status_error_threshold']);
 
 		return $config;
 	}
@@ -518,14 +522,14 @@ class QuickBooks_WebConnector_Handlers
 			}
 		}
 
-		// Custom authentication backends
-		$override_dsn = $this->_config['authenticate'];
-
 		if (!empty($this->_config['authenticate_dsn']))
 		{
 			// Backwards compat.
 			$override_dsn = $this->_config['authenticate_dsn'];
-		}
+		} else {
+      // Custom authentication backends
+      $override_dsn = $this->_config['authenticate'];
+    }
 
 		$auth = null;
 
@@ -544,7 +548,7 @@ class QuickBooks_WebConnector_Handlers
 		$customauth_wait_before_next_update = null;
 		$customauth_min_run_every_n_seconds = null;
 
-		if (is_array($override_dsn) or strlen($override_dsn)) 	// Custom autj
+		if (is_array($override_dsn) or ($override_dsn !== null and strlen($override_dsn))) 	// Custom autj
 		{
 			//if ($auth->authenticate($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and
 
@@ -1288,7 +1292,8 @@ class QuickBooks_WebConnector_Handlers
 
 			// Check if we got a error message...
 			if (strlen($obj->message) or
-				$this->_extractStatusCode($obj->response)) // or an error code
+          $this->_extractStatusCode($obj->response)
+          >= $this->_config['status_error_threshold']) // or an error code
 			{
 				//$this->_log('Extracted code[' . $this->_extractStatusCode($obj->response) . ']', $obj->ticket, QUICKBOOKS_LOG_DEBUG);
 

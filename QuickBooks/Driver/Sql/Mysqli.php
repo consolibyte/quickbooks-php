@@ -430,8 +430,9 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
 	 */
 	protected function _escape($str)
 	{
-		if (is_array($str))
-		{
+	  if ($str === null) {
+      $str = '';
+    } elseif (is_array($str)) {
 			error_log('Param passed to _escape($str) was an array: ' . print_r($str, true));
 			$str = '';
 		}
