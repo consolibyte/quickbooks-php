@@ -565,16 +565,16 @@ abstract class QuickBooks_QBXML_Object
 	
 	/**
 	 * Convert this object to a valid qbXML request/response
-	 * 
-	 * @todo Support for qbXML versions
-	 * 
-	 * @param boolean $compress_empty_elements
-	 * @param string $indent
-	 * @param string $root
+	 *
+	 * @param $request
+	 *   The type of request to convert this to (examples: CustomerAddRq, CustomerModRq, CustomerQueryRq)
+	 * @param $version
+	 *   @todo Support for qbXML versions
+	 * @param $locale
+	 *   Restrict it to a specific qbXML locale?
 	 * @return string
 	 */
-	//public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_XML_XML_DROP, $indent = "\t", $root = null)
-	public function asQBXML($request, $version = null, $locale = null, $root = null)
+	public function asQBXML($request, $version = null, $locale = null)
 	{
 		$todo_for_empty_elements = QuickBooks_XML::XML_DROP;
 		$indent = "\t";
