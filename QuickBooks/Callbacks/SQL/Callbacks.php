@@ -8097,8 +8097,8 @@ END;
 						{
 							$deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = array(
 								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID],
-								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID],
-								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] );
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID] ?? null,
+								$arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] ?? null);
 						}
 					}
 

@@ -3680,10 +3680,6 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			if (!strncmp($field,'qbsql_',6)) {
 				$qbsql_fields[] = $field;
 				$qbsql_values[] = $this->fmtValue($field,$value);
-				if ($field == QUICKBOOKS_DRIVER_SQL_FIELD_ID) {
-					$fields[] = $field;
-					$values[] = $this->fmtValue($field,$value);
-				}
 			}
 			elseif (array_key_exists($field,$avail)) {
 				$fields[] = $field;
@@ -3702,13 +3698,13 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 		$errnum = 0;
 		$errmsg = '';
 
-		$sql = "INSERT INTO quickbooks_qbsql (".implode(',',$qbsql_fields).") VALUES (".implode(',',$qbsql_values).")";
+		$updatesSql = implode(',',array_map(function($s){return "$s=values($s)";}, $qbsql_fields));
+		$sql = "INSERT INTO quickbooks_qbsql (".implode(',',$qbsql_fields).") VALUES (".implode(',',$qbsql_values).") ON DUPLICATE KEY UPDATE $updatesSql";
 		if (!$this->_query($sql, $errnum, $errmsg)) return false;
 		$qbsql_id = $this->last();
 
-		$fields[] = 'qbsql_id';
-		$values[] = $qbsql_id;
-		$sql = "INSERT INTO $table (".implode(',',$fields).") VALUES (".implode(',',$values).")";
+		$updatesSql = implode(',',array_map(function($s){return "$s=values($s)";}, $fields));
+		$sql = "INSERT INTO $table (".QUICKBOOKS_DRIVER_SQL_FIELD_ID.",".implode(',',$fields).") VALUES ($qbsql_id,".implode(',',$values).") ON DUPLICATE KEY UPDATE $updatesSql";
 
 		return $this->_query($sql, $errnum, $errmsg);
 	}

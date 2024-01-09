@@ -762,6 +762,8 @@ class QuickBooks_Utilities
 	{
 		static $cache = array();
 
+		if ($action === null) return null;
+
 		if (isset($cache[$action]))
 		{
 			//print('returning cached [' . $action . ']' . "\n");
