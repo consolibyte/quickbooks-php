@@ -212,6 +212,10 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
 					'QuickBooks_Callbacks_SQL_Callbacks::' . $action . 'Response' );
 			}
 		}
+		$sql_map['CurrencyImport'] = [
+			'QuickBooks_Callbacks_SQL_Callbacks::GenericImportRequest',
+			'QuickBooks_Callbacks_SQL_Callbacks::GenericImportResponse'
+		];
 
 		/*
 		$sql_map[QUICKBOOKS_DERIVE_ITEM] = array(

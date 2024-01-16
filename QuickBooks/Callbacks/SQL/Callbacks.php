@@ -9872,24 +9872,30 @@ END;
 		return $List;
 	}
 
-	public static function CurrencyImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	public static function GenericImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
 	{
-		$xml = '<CurrencyQueryRq requestID="' . $requestID . '">
-						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
-					</CurrencyQueryRq>';
+		// Remove 'Import' from the end of the action
+		$type = substr($action,0,-6);
+		$element = $type.'QueryRq';
+		$xml = "<$element requestID=\"$requestID\">" .
+					QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) .
+				"</$element>";
 
 		return self::xml($version,$locale,$xml);
 	}
 
-	public static function CurrencyImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	public static function GenericImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
 	{
-		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CurrencyQueryRs');
+		// Remove 'Import' from the end of the action
+		$type = substr($action,0,-6);
+		$element = $type.'QueryRs';
+		$List = self::_parseXML($xml, "QBXML QBXMLMsgsRs $element");
 		if (!isset($extra['is_query_response']))
 		{
 			$extra['is_import_response'] = true;
 		}
 
-		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('currency', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse(strtolower($type), $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
 	}
 }
 
