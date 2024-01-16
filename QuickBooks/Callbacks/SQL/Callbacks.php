@@ -3820,20 +3820,9 @@ END;
 
 							break;
 						case 'BOOLTYPE':
-
-							if ($value == 1)
-							{
-								$value = 'true';
-							}
-							else if ($value == 0)
-							{
-								$value = 'false';
-							}
-							else
-							{
+							if ($value != 0 && $value != 1) {
 								$use_in_request = false;
 							}
-
 							break;
 						default:
 							break;
@@ -3914,20 +3903,9 @@ END;
 
 							break;
 						case 'BOOLTYPE':
-
-							if ($value == 1)
-							{
-								$value = 'true';
-							}
-							else if ($value == 0)
-							{
-								$value = 'false';
-							}
-							else
-							{
+							if ($value != 0 && $value != 1) {
 								$use_in_request = false;
 							}
-
 							break;
 						default:
 							break;
@@ -4209,20 +4187,9 @@ END;
 
 								break;
 							case 'BOOLTYPE':
-
-								if ($value == 1)
-								{
-									$value = 'true';
-								}
-								else if ($value == 0)
-								{
-									$value = 'false';
-								}
-								else
-								{
+								if ($value != 0 && $value != 1) {
 									$use_in_request = false;
 								}
-
 								break;
 							default:
 								break;
@@ -4260,20 +4227,9 @@ END;
 
 								break;
 							case 'BOOLTYPE':
-
-								if ($value == 1)
-								{
-									$value = 'true';
-								}
-								else if ($value == 0)
-								{
-									$value = 'false';
-								}
-								else
-								{
+								if ($value != 0 && $value != 1) {
 									$use_in_request = false;
 								}
-
 								break;
 							default:
 								break;

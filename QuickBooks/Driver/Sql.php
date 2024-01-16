@@ -3714,7 +3714,9 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 	 */
 	protected function fmtValue($field,$value) {
 		if (is_null($value)) $sql = 'NULL';
-		elseif (is_numeric($value)) {
+		elseif (is_numeric($value) ||
+			(!strncmp($field,'Is',2) && ($value == 'true' || $value == 'false')))
+		{
 			$sql = $value;
 		}
 		elseif (!strncmp($field,'Time',4)) {
