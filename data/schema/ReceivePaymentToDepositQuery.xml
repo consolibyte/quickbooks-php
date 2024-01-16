@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <ReceivePaymentToDepositQueryRq metaData="ENUMTYPE">
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </ReceivePaymentToDepositQueryRq>
+
+                <ReceivePaymentToDepositQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+                        <ReceivePaymentToDepositRet> <!-- optional, may repeat -->
+                                <TxnID >IDTYPE</TxnID> <!-- required -->
+                                <TxnLineID >IDTYPE</TxnLineID> <!-- optional -->
+                                <!-- TxnType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+                                <TxnType >ENUMTYPE</TxnType> <!-- required -->
+                                <CustomerRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </CustomerRef>
+                                <TxnDate >DATETYPE</TxnDate> <!-- required -->
+                                <RefNumber >STRTYPE</RefNumber> <!-- optional -->
+                                <Amount >AMTTYPE</Amount> <!-- required -->
+                                <CurrencyRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </CurrencyRef>
+                                <ExchangeRate >FLOATTYPE</ExchangeRate> <!-- optional -->
+                                <AmountInHomeCurrency >AMTTYPE</AmountInHomeCurrency> <!-- optional -->
+                        </ReceivePaymentToDepositRet>
+                </ReceivePaymentToDepositQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

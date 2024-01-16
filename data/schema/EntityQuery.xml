@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <EntityQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+                        <!-- BEGIN OR -->
+                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+                                <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+                                <ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+                                <FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+                                <ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <NameFilter> <!-- optional -->
+                                                <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+                                                <MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+                                                <Name >STRTYPE</Name> <!-- required -->
+                                        </NameFilter>
+                                <!-- OR -->
+                                        <NameRangeFilter> <!-- optional -->
+                                                <FromName >STRTYPE</FromName> <!-- optional -->
+                                                <ToName >STRTYPE</ToName> <!-- optional -->
+                                        </NameRangeFilter>
+                                <!-- END OR -->
+                        <!-- END OR -->
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </EntityQueryRq>
+
+                <EntityQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+                        <!-- BEGIN OR -->
+                                <CustomerRet> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- required -->
+                                        <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                        <TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+                                        <EditSequence >STRTYPE</EditSequence> <!-- required -->
+                                        <Name >STRTYPE</Name> <!-- required -->
+                                        <FullName >STRTYPE</FullName> <!-- required -->
+                                        <IsActive >BOOLTYPE</IsActive> <!-- optional -->
+                                        <ClassRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </ClassRef>
+                                        <ParentRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </ParentRef>
+                                        <Sublevel >INTTYPE</Sublevel> <!-- required -->
+                                        <CompanyName >STRTYPE</CompanyName> <!-- optional -->
+                                        <Salutation >STRTYPE</Salutation> <!-- optional -->
+                                        <FirstName >STRTYPE</FirstName> <!-- optional -->
+                                        <MiddleName >STRTYPE</MiddleName> <!-- optional -->
+                                        <LastName >STRTYPE</LastName> <!-- optional -->
+                                        <JobTitle >STRTYPE</JobTitle> <!-- optional -->
+                                        <BillAddress> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                                <City >STRTYPE</City> <!-- optional -->
+                                                <State >STRTYPE</State> <!-- optional -->
+                                                <PostalCode >STRTYPE</PostalCode> <!-- optional -->
+                                                <Country >STRTYPE</Country> <!-- optional -->
+                                                <Note >STRTYPE</Note> <!-- optional -->
+                                        </BillAddress>
+                                        <BillAddressBlock> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                        </BillAddressBlock>
+                                        <ShipAddress> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                                <City >STRTYPE</City> <!-- optional -->
+                                                <State >STRTYPE</State> <!-- optional -->
+                                                <PostalCode >STRTYPE</PostalCode> <!-- optional -->
+                                                <Country >STRTYPE</Country> <!-- optional -->
+                                                <Note >STRTYPE</Note> <!-- optional -->
+                                        </ShipAddress>
+                                        <ShipAddressBlock> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                        </ShipAddressBlock>
+                                        <ShipToAddress> <!-- must occur 0 - 50 times -->
+                                                <Name >STRTYPE</Name> <!-- required -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                                <City >STRTYPE</City> <!-- optional -->
+                                                <State >STRTYPE</State> <!-- optional -->
+                                                <PostalCode >STRTYPE</PostalCode> <!-- optional -->
+                                                <Country >STRTYPE</Country> <!-- optional -->
+                                                <Note >STRTYPE</Note> <!-- optional -->
+                                                <DefaultShipTo >BOOLTYPE</DefaultShipTo> <!-- optional -->
+                                        </ShipToAddress>
+                                        <Phone >STRTYPE</Phone> <!-- optional -->
+                                        <AltPhone >STRTYPE</AltPhone> <!-- optional -->
+                                        <Fax >STRTYPE</Fax> <!-- optional -->
+                                        <Email >STRTYPE</Email> <!-- optional -->
+                                        <Cc >STRTYPE</Cc> <!-- optional -->
+                                        <Contact >STRTYPE</Contact> <!-- optional -->
+                                        <AltContact >STRTYPE</AltContact> <!-- optional -->
+                                        <AdditionalContactRef> <!-- must occur 0 - 8 times -->
+                                                <ContactName >STRTYPE</ContactName> <!-- required -->
+                                                <ContactValue >STRTYPE</ContactValue> <!-- required -->
+                                        </AdditionalContactRef>
+                                        <ContactsRet> <!-- optional, may repeat -->
+                                                <ListID >IDTYPE</ListID> <!-- required -->
+                                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                                <TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+                                                <EditSequence >STRTYPE</EditSequence> <!-- required -->
+                                                <Contact >STRTYPE</Contact> <!-- optional -->
+                                                <Salutation >STRTYPE</Salutation> <!-- optional -->
+                                                <FirstName >STRTYPE</FirstName> <!-- required -->
+                                                <MiddleName >STRTYPE</MiddleName> <!-- optional -->
+                                                <LastName >STRTYPE</LastName> <!-- optional -->
+                                                <JobTitle >STRTYPE</JobTitle> <!-- optional -->
+                                                <AdditionalContactRef> <!-- must occur 0 - 5 times -->
+                                                        <ContactName >STRTYPE</ContactName> <!-- required -->
+                                                        <ContactValue >STRTYPE</ContactValue> <!-- required -->
+                                                </AdditionalContactRef>
+                                        </ContactsRet>
+                                        <CustomerTypeRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </CustomerTypeRef>
+                                        <TermsRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </TermsRef>
+                                        <SalesRepRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </SalesRepRef>
+                                        <Balance >AMTTYPE</Balance> <!-- optional -->
+                                        <TotalBalance >AMTTYPE</TotalBalance> <!-- optional -->
+                                        <SalesTaxCodeRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </SalesTaxCodeRef>
+                                        <ItemSalesTaxRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </ItemSalesTaxRef>
+                                        <!-- SalesTaxCountry may have one of the following values: Australia, Canada [DEFAULT], UK, US -->
+                                        <SalesTaxCountry >ENUMTYPE</SalesTaxCountry> <!-- optional -->
+                                        <ResaleNumber >STRTYPE</ResaleNumber> <!-- optional -->
+                                        <AccountNumber >STRTYPE</AccountNumber> <!-- optional -->
+                                        <CreditLimit >AMTTYPE</CreditLimit> <!-- optional -->
+                                        <PreferredPaymentMethodRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </PreferredPaymentMethodRef>
+                                        <CreditCardInfo> <!-- optional -->
+                                                <CreditCardNumber >STRTYPE</CreditCardNumber> <!-- optional -->
+                                                <ExpirationMonth >INTTYPE</ExpirationMonth> <!-- optional -->
+                                                <ExpirationYear >INTTYPE</ExpirationYear> <!-- optional -->
+                                                <NameOnCard >STRTYPE</NameOnCard> <!-- optional -->
+                                                <CreditCardAddress >STRTYPE</CreditCardAddress> <!-- optional -->
+                                                <CreditCardPostalCode >STRTYPE</CreditCardPostalCode> <!-- optional -->
+                                        </CreditCardInfo>
+                                        <!-- JobStatus may have one of the following values: Awarded, Closed, InProgress, None [DEFAULT], NotAwarded, Pending -->
+                                        <JobStatus >ENUMTYPE</JobStatus> <!-- optional -->
+                                        <JobStartDate >DATETYPE</JobStartDate> <!-- optional -->
+                                        <JobProjectedEndDate >DATETYPE</JobProjectedEndDate> <!-- optional -->
+                                        <JobEndDate >DATETYPE</JobEndDate> <!-- optional -->
+                                        <JobDesc >STRTYPE</JobDesc> <!-- optional -->
+                                        <JobTypeRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </JobTypeRef>
+                                        <Notes >STRTYPE</Notes> <!-- optional -->
+                                        <AdditionalNotesRet> <!-- optional, may repeat -->
+                                                <NoteID >INTTYPE</NoteID> <!-- required -->
+                                                <Date >DATETYPE</Date> <!-- required -->
+                                                <Note >STRTYPE</Note> <!-- required -->
+                                        </AdditionalNotesRet>
+                                        <!-- PreferredDeliveryMethod may have one of the following values: None [Default], Email, Fax -->
+                                        <PreferredDeliveryMethod >ENUMTYPE</PreferredDeliveryMethod> <!-- optional -->
+                                        <PriceLevelRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </PriceLevelRef>
+                                        <ExternalGUID >GUIDTYPE</ExternalGUID> <!-- optional -->
+                                        <TaxRegistrationNumber >STRTYPE</TaxRegistrationNumber> <!-- optional -->
+                                        <CurrencyRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </CurrencyRef>
+                                        <DataExtRet> <!-- optional, may repeat -->
+                                                <OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+                                                <DataExtName >STRTYPE</DataExtName> <!-- required -->
+                                                <!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+                                                <DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+                                                <DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+                                        </DataExtRet>
+                                </CustomerRet>
+                        <!-- OR -->
+                                <EmployeeRet> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- required -->
+                                        <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                        <TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+                                        <EditSequence >STRTYPE</EditSequence> <!-- required -->
+                                        <Name >STRTYPE</Name> <!-- required -->
+                                        <IsActive >BOOLTYPE</IsActive> <!-- optional -->
+                                        <Salutation >STRTYPE</Salutation> <!-- optional -->
+                                        <FirstName >STRTYPE</FirstName> <!-- optional -->
+                                        <MiddleName >STRTYPE</MiddleName> <!-- optional -->
+                                        <LastName >STRTYPE</LastName> <!-- optional -->
+                                        <JobTitle >STRTYPE</JobTitle> <!-- optional -->
+                                        <SupervisorRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </SupervisorRef>
+                                        <Department >STRTYPE</Department> <!-- optional -->
+                                        <Description >STRTYPE</Description> <!-- optional -->
+                                        <TargetBonus >AMTTYPE</TargetBonus> <!-- optional -->
+                                        <EmployeeAddress> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <City >STRTYPE</City> <!-- optional -->
+                                                <State >STRTYPE</State> <!-- optional -->
+                                                <PostalCode >STRTYPE</PostalCode> <!-- optional -->
+                                        </EmployeeAddress>
+                                        <PrintAs >STRTYPE</PrintAs> <!-- optional -->
+                                        <Phone >STRTYPE</Phone> <!-- optional -->
+                                        <Mobile >STRTYPE</Mobile> <!-- optional -->
+                                        <Pager >STRTYPE</Pager> <!-- optional -->
+                                        <PagerPIN >STRTYPE</PagerPIN> <!-- optional -->
+                                        <AltPhone >STRTYPE</AltPhone> <!-- optional -->
+                                        <Fax >STRTYPE</Fax> <!-- optional -->
+                                        <SSN >STRTYPE</SSN> <!-- optional -->
+                                        <Email >STRTYPE</Email> <!-- optional -->
+                                        <AdditionalContactRef> <!-- must occur 0 - 8 times -->
+                                                <ContactName >STRTYPE</ContactName> <!-- required -->
+                                                <ContactValue >STRTYPE</ContactValue> <!-- required -->
+                                        </AdditionalContactRef>
+                                        <EmergencyContacts> <!-- optional -->
+                                                <PrimaryContact> <!-- optional -->
+                                                        <ContactName >STRTYPE</ContactName> <!-- required -->
+                                                        <ContactValue >STRTYPE</ContactValue> <!-- required -->
+                                                        <!-- Relation may have one of the following values: Spouse, Partner, Mother, Father, Sister, Brother, Son, Daughter, Friend, Other -->
+                                                        <Relation >ENUMTYPE</Relation> <!-- optional -->
+                                                </PrimaryContact>
+                                                <SecondaryContact> <!-- optional -->
+                                                        <ContactName >STRTYPE</ContactName> <!-- required -->
+                                                        <ContactValue >STRTYPE</ContactValue> <!-- required -->
+                                                        <!-- Relation may have one of the following values: Spouse, Partner, Mother, Father, Sister, Brother, Son, Daughter, Friend, Other -->
+                                                        <Relation >ENUMTYPE</Relation> <!-- optional -->
+                                                </SecondaryContact>
+                                        </EmergencyContacts>
+                                        <!-- EmployeeType may have one of the following values: Officer, Owner, Regular [DEFAULT], Statutory -->
+                                        <EmployeeType >ENUMTYPE</EmployeeType> <!-- optional -->
+                                        <!-- PartOrFullTime may have one of the following values: PartTime, FullTime -->
+                                        <PartOrFullTime >ENUMTYPE</PartOrFullTime> <!-- optional -->
+                                        <!-- Exempt may have one of the following values: Exempt, NonExempt -->
+                                        <Exempt >ENUMTYPE</Exempt> <!-- optional -->
+                                        <!-- KeyEmployee may have one of the following values: Yes, No -->
+                                        <KeyEmployee >ENUMTYPE</KeyEmployee> <!-- optional -->
+                                        <!-- Gender may have one of the following values: Male, Female -->
+                                        <Gender >ENUMTYPE</Gender> <!-- optional -->
+                                        <HiredDate >DATETYPE</HiredDate> <!-- optional -->
+                                        <OriginalHireDate >DATETYPE</OriginalHireDate> <!-- optional -->
+                                        <AdjustedServiceDate >DATETYPE</AdjustedServiceDate> <!-- optional -->
+                                        <ReleasedDate >DATETYPE</ReleasedDate> <!-- optional -->
+                                        <BirthDate >DATETYPE</BirthDate> <!-- optional -->
+                                        <!-- USCitizen may have one of the following values: Yes, No -->
+                                        <USCitizen >ENUMTYPE</USCitizen> <!-- optional -->
+                                        <!-- Ethnicity may have one of the following values: AmericianIndian, Asian, Black, Hawaiian, Hispanic, White, TwoOrMoreRaces -->
+                                        <Ethnicity >ENUMTYPE</Ethnicity> <!-- optional -->
+                                        <!-- Disabled may have one of the following values: Yes, No -->
+                                        <Disabled >ENUMTYPE</Disabled> <!-- optional -->
+                                        <DisabilityDesc >STRTYPE</DisabilityDesc> <!-- optional -->
+                                        <!-- OnFile may have one of the following values: Yes, No -->
+                                        <OnFile >ENUMTYPE</OnFile> <!-- optional -->
+                                        <WorkAuthExpireDate >DATETYPE</WorkAuthExpireDate> <!-- optional -->
+                                        <!-- USVeteran may have one of the following values: Yes, No -->
+                                        <USVeteran >ENUMTYPE</USVeteran> <!-- optional -->
+                                        <!-- MilitaryStatus may have one of the following values: Active, Reserve -->
+                                        <MilitaryStatus >ENUMTYPE</MilitaryStatus> <!-- optional -->
+                                        <AccountNumber >STRTYPE</AccountNumber> <!-- optional -->
+                                        <Notes >STRTYPE</Notes> <!-- optional -->
+                                        <AdditionalNotesRet> <!-- optional, may repeat -->
+                                                <NoteID >INTTYPE</NoteID> <!-- required -->
+                                                <Date >DATETYPE</Date> <!-- required -->
+                                                <Note >STRTYPE</Note> <!-- required -->
+                                        </AdditionalNotesRet>
+                                        <BillingRateRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </BillingRateRef>
+                                        <EmployeePayrollInfo> <!-- optional -->
+                                                <!-- PayPeriod may have one of the following values: Daily, Weekly, Biweekly, Semimonthly, Monthly, Quarterly, Yearly -->
+                                                <PayPeriod >ENUMTYPE</PayPeriod> <!-- optional -->
+                                                <ClassRef> <!-- optional -->
+                                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                                </ClassRef>
+                                                <!-- BEGIN OR -->
+                                                        <ClearEarnings >BOOLTYPE</ClearEarnings> <!-- optional -->
+                                                <!-- OR -->
+                                                        <Earnings> <!-- optional, may repeat -->
+                                                                <PayrollItemWageRef> <!-- required -->
+                                                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                                                </PayrollItemWageRef>
+                                                                <!-- BEGIN OR -->
+                                                                        <Rate >PRICETYPE</Rate> <!-- optional -->
+                                                                <!-- OR -->
+                                                                        <RatePercent >PERCENTTYPE</RatePercent> <!-- optional -->
+                                                                <!-- END OR -->
+                                                        </Earnings>
+                                                <!-- END OR -->
+                                                <IsUsingTimeDataToCreatePaychecks >BOOLTYPE</IsUsingTimeDataToCreatePaychecks> <!-- optional -->
+                                                <!-- UseTimeDataToCreatePaychecks may have one of the following values: NotSet, UseTimeData, DoNotUseTimeData -->
+                                                <UseTimeDataToCreatePaychecks >ENUMTYPE</UseTimeDataToCreatePaychecks> <!-- optional -->
+                                                <SickHours> <!-- optional -->
+                                                        <HoursAvailable >TIMEINTERVALTYPE</HoursAvailable> <!-- optional -->
+                                                        <!-- AccrualPeriod may have one of the following values: BeginningOfYear, EveryHourOnPaycheck, EveryPaycheck -->
+                                                        <AccrualPeriod >ENUMTYPE</AccrualPeriod> <!-- optional -->
+                                                        <HoursAccrued >TIMEINTERVALTYPE</HoursAccrued> <!-- optional -->
+                                                        <MaximumHours >TIMEINTERVALTYPE</MaximumHours> <!-- optional -->
+                                                        <IsResettingHoursEachNewYear >BOOLTYPE</IsResettingHoursEachNewYear> <!-- optional -->
+                                                        <HoursUsed >TIMEINTERVALTYPE</HoursUsed> <!-- optional -->
+                                                        <AccrualStartDate >DATETYPE</AccrualStartDate> <!-- optional -->
+                                                </SickHours>
+                                                <VacationHours> <!-- optional -->
+                                                        <HoursAvailable >TIMEINTERVALTYPE</HoursAvailable> <!-- optional -->
+                                                        <!-- AccrualPeriod may have one of the following values: BeginningOfYear, EveryHourOnPaycheck, EveryPaycheck -->
+                                                        <AccrualPeriod >ENUMTYPE</AccrualPeriod> <!-- optional -->
+                                                        <HoursAccrued >TIMEINTERVALTYPE</HoursAccrued> <!-- optional -->
+                                                        <MaximumHours >TIMEINTERVALTYPE</MaximumHours> <!-- optional -->
+                                                        <IsResettingHoursEachNewYear >BOOLTYPE</IsResettingHoursEachNewYear> <!-- optional -->
+                                                        <HoursUsed >TIMEINTERVALTYPE</HoursUsed> <!-- optional -->
+                                                        <AccrualStartDate >DATETYPE</AccrualStartDate> <!-- optional -->
+                                                </VacationHours>
+                                        </EmployeePayrollInfo>
+                                        <ExternalGUID >GUIDTYPE</ExternalGUID> <!-- optional -->
+                                        <DataExtRet> <!-- optional, may repeat -->
+                                                <OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+                                                <DataExtName >STRTYPE</DataExtName> <!-- required -->
+                                                <!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+                                                <DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+                                                <DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+                                        </DataExtRet>
+                                </EmployeeRet>
+                        <!-- OR -->
+                                <OtherNameRet> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- required -->
+                                        <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                        <TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+                                        <EditSequence >STRTYPE</EditSequence> <!-- required -->
+                                        <Name >STRTYPE</Name> <!-- required -->
+                                        <IsActive >BOOLTYPE</IsActive> <!-- optional -->
+                                        <CompanyName >STRTYPE</CompanyName> <!-- optional -->
+                                        <Salutation >STRTYPE</Salutation> <!-- optional -->
+                                        <FirstName >STRTYPE</FirstName> <!-- optional -->
+                                        <MiddleName >STRTYPE</MiddleName> <!-- optional -->
+                                        <LastName >STRTYPE</LastName> <!-- optional -->
+                                        <OtherNameAddress> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                                <City >STRTYPE</City> <!-- optional -->
+                                                <State >STRTYPE</State> <!-- optional -->
+                                                <PostalCode >STRTYPE</PostalCode> <!-- optional -->
+                                                <Country >STRTYPE</Country> <!-- optional -->
+                                                <Note >STRTYPE</Note> <!-- optional -->
+                                        </OtherNameAddress>
+                                        <OtherNameAddressBlock> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                        </OtherNameAddressBlock>
+                                        <Phone >STRTYPE</Phone> <!-- optional -->
+                                        <AltPhone >STRTYPE</AltPhone> <!-- optional -->
+                                        <Fax >STRTYPE</Fax> <!-- optional -->
+                                        <Email >STRTYPE</Email> <!-- optional -->
+                                        <Contact >STRTYPE</Contact> <!-- optional -->
+                                        <AltContact >STRTYPE</AltContact> <!-- optional -->
+                                        <AccountNumber >STRTYPE</AccountNumber> <!-- optional -->
+                                        <Notes >STRTYPE</Notes> <!-- optional -->
+                                        <ExternalGUID >GUIDTYPE</ExternalGUID> <!-- optional -->
+                                        <DataExtRet> <!-- optional, may repeat -->
+                                                <OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+                                                <DataExtName >STRTYPE</DataExtName> <!-- required -->
+                                                <!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+                                                <DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+                                                <DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+                                        </DataExtRet>
+                                </OtherNameRet>
+                        <!-- OR -->
+                                <VendorRet> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- required -->
+                                        <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                        <TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+                                        <EditSequence >STRTYPE</EditSequence> <!-- required -->
+                                        <Name >STRTYPE</Name> <!-- required -->
+                                        <IsActive >BOOLTYPE</IsActive> <!-- optional -->
+                                        <ClassRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </ClassRef>
+                                        <IsTaxAgency >BOOLTYPE</IsTaxAgency> <!-- optional -->
+                                        <CompanyName >STRTYPE</CompanyName> <!-- optional -->
+                                        <Salutation >STRTYPE</Salutation> <!-- optional -->
+                                        <FirstName >STRTYPE</FirstName> <!-- optional -->
+                                        <MiddleName >STRTYPE</MiddleName> <!-- optional -->
+                                        <LastName >STRTYPE</LastName> <!-- optional -->
+                                        <JobTitle >STRTYPE</JobTitle> <!-- optional -->
+                                        <VendorAddress> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                                <City >STRTYPE</City> <!-- optional -->
+                                                <State >STRTYPE</State> <!-- optional -->
+                                                <PostalCode >STRTYPE</PostalCode> <!-- optional -->
+                                                <Country >STRTYPE</Country> <!-- optional -->
+                                                <Note >STRTYPE</Note> <!-- optional -->
+                                        </VendorAddress>
+                                        <VendorAddressBlock> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                        </VendorAddressBlock>
+                                        <ShipAddress> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                                <City >STRTYPE</City> <!-- optional -->
+                                                <State >STRTYPE</State> <!-- optional -->
+                                                <PostalCode >STRTYPE</PostalCode> <!-- optional -->
+                                                <Country >STRTYPE</Country> <!-- optional -->
+                                                <Note >STRTYPE</Note> <!-- optional -->
+                                        </ShipAddress>
+                                        <Phone >STRTYPE</Phone> <!-- optional -->
+                                        <AltPhone >STRTYPE</AltPhone> <!-- optional -->
+                                        <Fax >STRTYPE</Fax> <!-- optional -->
+                                        <Email >STRTYPE</Email> <!-- optional -->
+                                        <Cc >STRTYPE</Cc> <!-- optional -->
+                                        <Contact >STRTYPE</Contact> <!-- optional -->
+                                        <AltContact >STRTYPE</AltContact> <!-- optional -->
+                                        <AdditionalContactRef> <!-- must occur 0 - 8 times -->
+                                                <ContactName >STRTYPE</ContactName> <!-- required -->
+                                                <ContactValue >STRTYPE</ContactValue> <!-- required -->
+                                        </AdditionalContactRef>
+                                        <ContactsRet> <!-- optional, may repeat -->
+                                                <ListID >IDTYPE</ListID> <!-- required -->
+                                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                                <TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+                                                <EditSequence >STRTYPE</EditSequence> <!-- required -->
+                                                <Contact >STRTYPE</Contact> <!-- optional -->
+                                                <Salutation >STRTYPE</Salutation> <!-- optional -->
+                                                <FirstName >STRTYPE</FirstName> <!-- required -->
+                                                <MiddleName >STRTYPE</MiddleName> <!-- optional -->
+                                                <LastName >STRTYPE</LastName> <!-- optional -->
+                                                <JobTitle >STRTYPE</JobTitle> <!-- optional -->
+                                                <AdditionalContactRef> <!-- must occur 0 - 5 times -->
+                                                        <ContactName >STRTYPE</ContactName> <!-- required -->
+                                                        <ContactValue >STRTYPE</ContactValue> <!-- required -->
+                                                </AdditionalContactRef>
+                                        </ContactsRet>
+                                        <NameOnCheck >STRTYPE</NameOnCheck> <!-- optional -->
+                                        <AccountNumber >STRTYPE</AccountNumber> <!-- optional -->
+                                        <Notes >STRTYPE</Notes> <!-- optional -->
+                                        <AdditionalNotesRet> <!-- optional, may repeat -->
+                                                <NoteID >INTTYPE</NoteID> <!-- required -->
+                                                <Date >DATETYPE</Date> <!-- required -->
+                                                <Note >STRTYPE</Note> <!-- required -->
+                                        </AdditionalNotesRet>
+                                        <VendorTypeRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </VendorTypeRef>
+                                        <TermsRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </TermsRef>
+                                        <CreditLimit >AMTTYPE</CreditLimit> <!-- optional -->
+                                        <VendorTaxIdent >STRTYPE</VendorTaxIdent> <!-- optional -->
+                                        <IsVendorEligibleFor1099 >BOOLTYPE</IsVendorEligibleFor1099> <!-- optional -->
+                                        <Balance >AMTTYPE</Balance> <!-- optional -->
+                                        <BillingRateRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </BillingRateRef>
+                                        <ExternalGUID >GUIDTYPE</ExternalGUID> <!-- optional -->
+                                        <SalesTaxCodeRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </SalesTaxCodeRef>
+                                        <!-- SalesTaxCountry may have one of the following values: Australia, Canada [DEFAULT], UK, US -->
+                                        <SalesTaxCountry >ENUMTYPE</SalesTaxCountry> <!-- optional -->
+                                        <IsSalesTaxAgency >BOOLTYPE</IsSalesTaxAgency> <!-- optional -->
+                                        <SalesTaxReturnRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </SalesTaxReturnRef>
+                                        <TaxRegistrationNumber >STRTYPE</TaxRegistrationNumber> <!-- optional -->
+                                        <!-- ReportingPeriod may have one of the following values: Monthly, Quarterly [DEFAULT] -->
+                                        <ReportingPeriod >ENUMTYPE</ReportingPeriod> <!-- optional -->
+                                        <IsTaxTrackedOnPurchases >BOOLTYPE</IsTaxTrackedOnPurchases> <!-- optional -->
+                                        <TaxOnPurchasesAccountRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </TaxOnPurchasesAccountRef>
+                                        <IsTaxTrackedOnSales >BOOLTYPE</IsTaxTrackedOnSales> <!-- optional -->
+                                        <TaxOnSalesAccountRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </TaxOnSalesAccountRef>
+                                        <IsTaxOnTax >BOOLTYPE</IsTaxOnTax> <!-- optional -->
+                                        <PrefillAccountRef> <!-- must occur 0 - 3 times -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </PrefillAccountRef>
+                                        <CurrencyRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </CurrencyRef>
+                                        <DataExtRet> <!-- optional, may repeat -->
+                                                <OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+                                                <DataExtName >STRTYPE</DataExtName> <!-- required -->
+                                                <!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+                                                <DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+                                                <DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+                                        </DataExtRet>
+                                </VendorRet>
+                        <!-- END OR -->
+                </EntityQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <BudgetSummaryReportQueryRq>
+                        <!-- BudgetSummaryReportType may have one of the following values: BalanceSheetBudgetOverview, BalanceSheetBudgetVsActual, ProfitAndLossBudgetOverview, ProfitAndLossBudgetPerformance, ProfitAndLossBudgetVsActual -->
+                        <BudgetSummaryReportType >ENUMTYPE</BudgetSummaryReportType> <!-- required -->
+                        <DisplayReport >BOOLTYPE</DisplayReport> <!-- optional -->
+                        <FiscalYear >INTTYPE</FiscalYear> <!-- required -->
+                        <!-- BudgetCriterion may have one of the following values: Accounts, AccountsAndClasses, AccountsAndCustomers -->
+                        <BudgetCriterion >ENUMTYPE</BudgetCriterion> <!-- optional -->
+                        <!-- BEGIN OR -->
+                                <ReportPeriod> <!-- optional -->
+                                        <FromReportDate >DATETYPE</FromReportDate> <!-- optional -->
+                                        <ToReportDate >DATETYPE</ToReportDate> <!-- optional -->
+                                </ReportPeriod>
+                        <!-- OR -->
+                                <!-- ReportDateMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisQuarter, ThisQuarterToDate, ThisYear, ThisYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastQuarter, LastQuarterToDate, LastYear, LastYearToDate, NextWeek, NextFourWeeks, NextMonth, NextQuarter, NextYear -->
+                                <ReportDateMacro >ENUMTYPE</ReportDateMacro> <!-- optional -->
+                        <!-- END OR -->
+                        <ReportClassFilter> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                <!-- OR -->
+                                        <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                <!-- END OR -->
+                        </ReportClassFilter>
+                        <!-- SummarizeBudgetColumnsBy may have one of the following values: Class, Customer, Date -->
+                        <SummarizeBudgetColumnsBy >ENUMTYPE</SummarizeBudgetColumnsBy> <!-- optional -->
+                        <!-- SummarizeBudgetRowsBy may have one of the following values: Account, Class, Customer -->
+                        <SummarizeBudgetRowsBy >ENUMTYPE</SummarizeBudgetRowsBy> <!-- optional -->
+                </BudgetSummaryReportQueryRq>
+
+                <BudgetSummaryReportQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+                        <ReportRet> <!-- optional -->
+                                <ReportTitle >STRTYPE</ReportTitle> <!-- required -->
+                                <ReportSubtitle >STRTYPE</ReportSubtitle> <!-- required -->
+                                <!-- ReportBasis may have one of the following values: Accrual, Cash, None [DEFAULT] -->
+                                <ReportBasis >ENUMTYPE</ReportBasis> <!-- optional -->
+                                <NumRows >INTTYPE</NumRows> <!-- required -->
+                                <NumColumns >INTTYPE</NumColumns> <!-- required -->
+                                <NumColTitleRows >INTTYPE</NumColTitleRows> <!-- required -->
+                                <ColDesc colID="INTTYPE" dataType="ENUMTYPE"> <!-- required, may repeat -->
+                                        <ColTitle titleRow="INTTYPE" value="STRTYPE"> <!-- required, may repeat -->
+                                        </ColTitle>
+                                        <!-- ColType may have one of the following values: Account, Addr1, Addr2, Addr3, Addr4, Addr5, Aging, Amount, AmountDifference, AverageCost, BilledDate, BillingStatus, Blank, CalculatedAmount, Class, ClearedStatus, CostPrice, CreateDate, Credit, CustomField, Date, Debit, DeliveryDate, DueDate, Duration, EarliestReceiptDate, EstimateActive, FOB, IncomeSubjectToTax, Invoiced, IsAdjustment, Item, ItemDesc, ItemVendor, Label, LastModifiedBy, LatestOrPriorState, Memo, ModifiedTime, Name, NameAccountNumber, NameAddress, NameCity, NameContact, NameEmail, NameFax, NamePhone, NameState, NameZip, OpenBalance, OriginalAmount, PaidAmount, PaidStatus, PaidThroughDate, PaymentMethod, PayrollItem, Percent, PercentChange, PercentOfTotalRetail, PercentOfTotalValue, PhysicalCount, PONumber, PrintStatus, ProgressAmount, ProgressPercent, Quantity, QuantityAvailable, QuantityOnHand, QuantityOnOrder, QuantityOnPendingBuild, QuantityOnSalesOrder, ReceivedQuantity, RefNumber, ReorderPoint, RetailValueOnHand, RunningBalance, SalesPerWeek, SalesRep, SalesTaxCode, ShipDate, ShipMethod, ShipToAddr1, ShipToAddr2, ShipToAddr3, ShipToAddr4, ShipToAddr5, SONumber, SourceName, SplitAccount, SSNOrTaxID, SuggestedReorder, TaxLine, TaxTableVersion, Terms, Total, TxnID, TxnNumber, TxnType, UnitPrice, UserEdit, ValueOnHand, WageBase, WageBaseTips -->
+                                        <ColType >ENUMTYPE</ColType> <!-- required -->
+                                </ColDesc>
+                                <ReportData> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <DataRow> <!-- optional -->
+                                                        <RowData rowType="ENUMTYPE" value="STRTYPE"> <!-- optional -->
+                                                        </RowData>
+                                                        <ColData colID="INTTYPE" value="STRTYPE" dataType="ENUMTYPE"> <!-- optional, may repeat -->
+                                                        </ColData>
+                                                </DataRow>
+                                        <!-- OR -->
+                                                <TextRow rowNumber="INTTYPE" value="STRTYPE"> <!-- optional -->
+                                                </TextRow>
+                                        <!-- OR -->
+                                                <SubtotalRow> <!-- optional -->
+                                                        <RowData rowType="ENUMTYPE" value="STRTYPE"> <!-- optional -->
+                                                        </RowData>
+                                                        <ColData colID="INTTYPE" value="STRTYPE" dataType="ENUMTYPE"> <!-- optional, may repeat -->
+                                                        </ColData>
+                                                </SubtotalRow>
+                                        <!-- OR -->
+                                                <TotalRow> <!-- optional -->
+                                                        <RowData rowType="ENUMTYPE" value="STRTYPE"> <!-- optional -->
+                                                        </RowData>
+                                                        <ColData colID="INTTYPE" value="STRTYPE" dataType="ENUMTYPE"> <!-- optional, may repeat -->
+                                                        </ColData>
+                                                </TotalRow>
+                                        <!-- END OR -->
+                                </ReportData>
+                        </ReportRet>
+                </BudgetSummaryReportQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

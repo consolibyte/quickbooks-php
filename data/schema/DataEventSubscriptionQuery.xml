@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLSubscriptionMsgsRq onError="stopOnError">
+                <DataEventSubscriptionQueryRq>
+                        <SubscriberID >GUIDTYPE</SubscriberID> <!-- required -->
+                </DataEventSubscriptionQueryRq>
+
+                <DataEventSubscriptionQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+                        <DataEventSubscriptionRet> <!-- optional -->
+                                <SubscriberID >GUIDTYPE</SubscriberID> <!-- required -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                <TimeLastProcessed >DATETIMETYPE</TimeLastProcessed> <!-- optional -->
+                                <COMCallbackInfo> <!-- required -->
+                                        <AppName >STRTYPE</AppName> <!-- required -->
+                                        <!-- BEGIN OR -->
+                                                <ProgID >STRTYPE</ProgID> <!-- optional -->
+                                        <!-- OR -->
+                                                <CLSID >GUIDTYPE</CLSID> <!-- optional -->
+                                        <!-- END OR -->
+                                </COMCallbackInfo>
+                                <!-- DeliveryPolicy may have one of the following values: DeliverAlways, DeliverOnlyIfRunning -->
+                                <DeliveryPolicy >ENUMTYPE</DeliveryPolicy> <!-- required -->
+                                <!-- TrackLostEvents may have one of the following values: All, None [DEFAULT] -->
+                                <TrackLostEvents >ENUMTYPE</TrackLostEvents> <!-- required -->
+                                <DeliverOwnEvents >BOOLTYPE</DeliverOwnEvents> <!-- optional -->
+                                <ListEventSubscription> <!-- optional, may repeat -->
+                                        <!-- ListEventType may have one of the following values: Account, Class, Customer, CustomerMsg, CustomerType, DateDrivenTerms, Employee, ItemDiscount, ItemFixedAsset, ItemGroup, ItemInventory, ItemInventoryAssembly, ItemNonInventory, ItemOtherCharge, ItemPayment, ItemSalesTax, ItemSalesTaxGroup, ItemService, ItemSubtotal, JobType, OtherName, PaymentMethod, PriceLevel, SalesRep, SalesTaxCode, ShipMethod, StandardTerms, ToDo, Vendor, VendorType -->
+                                        <ListEventType >ENUMTYPE</ListEventType> <!-- required, may repeat -->
+                                        <!-- ListEventOperation may have one of the following values: Add, Modify, Delete, Merge -->
+                                        <ListEventOperation >ENUMTYPE</ListEventOperation> <!-- required, may repeat -->
+                                </ListEventSubscription>
+                                <TxnEventSubscription> <!-- optional, may repeat -->
+                                        <!-- TxnEventType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, TimeTracking, VendorCredit -->
+                                        <TxnEventType >ENUMTYPE</TxnEventType> <!-- required, may repeat -->
+                                        <!-- TxnEventOperation may have one of the following values: Add, Modify, Delete -->
+                                        <TxnEventOperation >ENUMTYPE</TxnEventOperation> <!-- required, may repeat -->
+                                </TxnEventSubscription>
+                        </DataEventSubscriptionRet>
+                </DataEventSubscriptionQueryRs>
+        </QBXMLSubscriptionMsgsRq>
+</QBXML>

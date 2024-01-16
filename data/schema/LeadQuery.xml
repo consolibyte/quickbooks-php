@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <LeadQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+                        <!-- BEGIN OR -->
+                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <Name >STRTYPE</Name> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+                                <FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+                                <ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <NameFilter> <!-- optional -->
+                                                <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+                                                <MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+                                                <Name >STRTYPE</Name> <!-- required -->
+                                        </NameFilter>
+                                <!-- OR -->
+                                        <NameRangeFilter> <!-- optional -->
+                                                <FromName >STRTYPE</FromName> <!-- optional -->
+                                                <ToName >STRTYPE</ToName> <!-- optional -->
+                                        </NameRangeFilter>
+                                <!-- END OR -->
+                        <!-- END OR -->
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </LeadQueryRq>
+
+                <LeadQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+                        <LeadRet> <!-- optional, may repeat -->
+                                <ListID >IDTYPE</ListID> <!-- required -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                <TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+                                <EditSequence >STRTYPE</EditSequence> <!-- required -->
+                                <FullName >STRTYPE</FullName> <!-- required -->
+                                <!-- Status may have one of the following values: Hot [Default], Warm, Cold -->
+                                <Status >ENUMTYPE</Status> <!-- optional -->
+                                <CompanyName >STRTYPE</CompanyName> <!-- optional -->
+                                <MainPhone >STRTYPE</MainPhone> <!-- optional -->
+                                <AdditionalContactRef> <!-- must occur 0 - 3 times -->
+                                        <ContactName >STRTYPE</ContactName> <!-- required -->
+                                        <ContactValue >STRTYPE</ContactValue> <!-- required -->
+                                </AdditionalContactRef>
+                                <LocationsRet> <!-- optional, may repeat -->
+                                        <LocationID >INTTYPE</LocationID> <!-- required -->
+                                        <MainAddress >STRTYPE</MainAddress> <!-- required -->
+                                        <Location >STRTYPE</Location> <!-- required -->
+                                        <LeadAddress> <!-- optional -->
+                                                <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                                <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                                <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                                <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                                <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                        </LeadAddress>
+                                </LocationsRet>
+                                <LeadContactsRet> <!-- optional, may repeat -->
+                                        <LeadContactID >INTTYPE</LeadContactID> <!-- required -->
+                                        <Salutation >STRTYPE</Salutation> <!-- optional -->
+                                        <FirstName >STRTYPE</FirstName> <!-- required -->
+                                        <MiddleName >STRTYPE</MiddleName> <!-- optional -->
+                                        <LastName >STRTYPE</LastName> <!-- optional -->
+                                        <JobTitle >STRTYPE</JobTitle> <!-- optional -->
+                                        <AdditionalContactRef> <!-- must occur 0 - 5 times -->
+                                                <ContactName >STRTYPE</ContactName> <!-- required -->
+                                                <ContactValue >STRTYPE</ContactValue> <!-- required -->
+                                        </AdditionalContactRef>
+                                        <IsPrimaryContact >BOOLTYPE</IsPrimaryContact> <!-- optional -->
+                                </LeadContactsRet>
+                        </LeadRet>
+                </LeadQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLSubscriptionMsgsRq onError="stopOnError">
+                <UIEventSubscriptionQueryRq>
+                        <SubscriberID >GUIDTYPE</SubscriberID> <!-- required -->
+                </UIEventSubscriptionQueryRq>
+
+                <UIEventSubscriptionQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+                        <UIEventSubscriptionRet> <!-- optional -->
+                                <SubscriberID >GUIDTYPE</SubscriberID> <!-- required -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                <TimeLastProcessed >DATETIMETYPE</TimeLastProcessed> <!-- optional -->
+                                <COMCallbackInfo> <!-- required -->
+                                        <AppName >STRTYPE</AppName> <!-- required -->
+                                        <!-- BEGIN OR -->
+                                                <ProgID >STRTYPE</ProgID> <!-- optional -->
+                                        <!-- OR -->
+                                                <CLSID >GUIDTYPE</CLSID> <!-- optional -->
+                                        <!-- END OR -->
+                                </COMCallbackInfo>
+                                <!-- DeliveryPolicy may have one of the following values: DeliverAlways, DeliverOnlyIfRunning -->
+                                <DeliveryPolicy >ENUMTYPE</DeliveryPolicy> <!-- required -->
+                                <CompanyFileEventSubscription> <!-- required -->
+                                        <!-- CompanyFileEventOperation may have one of the following values: Close, Open -->
+                                        <CompanyFileEventOperation >ENUMTYPE</CompanyFileEventOperation> <!-- required, may repeat -->
+                                </CompanyFileEventSubscription>
+                        </UIEventSubscriptionRet>
+                </UIEventSubscriptionQueryRs>
+        </QBXMLSubscriptionMsgsRq>
+</QBXML>
