@@ -65,6 +65,9 @@ QuickBooks_Loader::load('/QuickBooks/Driver/Singleton.php');
  */
 class QuickBooks_Callbacks_SQL_Callbacks
 {
+	const GENERIC_REQUEST_EXTRAS = [
+		'BillToPay' => '<PayeeEntityRef><ListID></ListID></PayeeEntityRef>'
+	];
 	/**
 	 * Hook which gets called when the Web Connector authenticates to the server
 	 *
@@ -9876,9 +9879,11 @@ END;
 	{
 		// Remove 'Import' from the end of the action
 		$type = substr($action,0,-6);
+		$extraElem = self::GENERIC_REQUEST_EXTRAS[$type] ?? '';
 		$element = $type.'QueryRq';
 		$xml = "<$element requestID=\"$requestID\">" .
 					QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) .
+			                $extraElem .
 				"</$element>";
 
 		return self::xml($version,$locale,$xml);
