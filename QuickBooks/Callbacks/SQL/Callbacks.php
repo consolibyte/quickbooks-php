@@ -9871,6 +9871,26 @@ END;
 
 		return $List;
 	}
+
+	public static function CurrencyImportRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = array())
+	{
+		$xml = '<CurrencyQueryRq requestID="' . $requestID . '">
+						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
+					</CurrencyQueryRq>';
+
+		return self::xml($version,$locale,$xml);
+	}
+
+	public static function CurrencyImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = array() )
+	{
+		$List = self::_parseXML($xml, 'QBXML QBXMLMsgsRs CurrencyQueryRs');
+		if (!isset($extra['is_query_response']))
+		{
+			$extra['is_import_response'] = true;
+		}
+
+		QuickBooks_Callbacks_SQL_Callbacks::_QueryResponse('currency', $List, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents, $config);
+	}
 }
 
 /*
