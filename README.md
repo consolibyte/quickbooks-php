@@ -31,6 +31,14 @@ Almost anything you can do in the QuickBooks GUI, in QuickBooks Online Edition, 
 
 See the docs/ folder for more examples.
 
+### Using SQL Mirror
+
+Not all QuickBooks API actions are currently supported, but import actions can easily be added.  XML definitions are in `data/schema/*.xml`.
+Handlers are defined in `QuickBooks/Callbacks/SQL/Callbacks.php`, via pairs of methods ending in `Request` and `Response`.  A generic handler
+has been added that covers most cases (`QuickBooks_Callbacks_SQL_Callbacks::GenericImportRequest` and `QuickBooks_Callbacks_SQL_Callbacks::GenericImportResponse`).
+Handler mappings are added in the constructor method in `QuickBooks/WebConnector/Server/SQL.php`.  New actions must be added to the `quickbooks_queue` table separately
+to be used.
+
 ## OAuth 1.0 to OAuth 2.0 migration
 
 You can find information on how to migrate your app from OAuth v1.0 to OAuth v2.0 below. Consolibyte was also working on getting OpenID Connect and an automated token migration process ready.
@@ -57,8 +65,6 @@ There is additional documentation and additional examples on the legacy and new 
 
 - https://web.archive.org/web/20221209200524/http://wiki.consolibyte.com/wiki/doku.php/quickbooks     (legacy)
 - https://web.archive.org/web/20221129185859/http://www.consolibyte.com/docs/index.php/QuickBooks     (new wiki)
-
-
 
 
 -------------------------------------
