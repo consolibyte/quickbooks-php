@@ -214,15 +214,7 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
 		}
 
 		// map actions for generic import
-		$genericImportActions = [
-			'AgingReport', 'BillingRate', 'BillToPay', 'BudgetSummaryReport',
-			'BuildAssembly', 'Currency', 'CustomDetailReport', 'GeneralDetailReport',
-			'GeneralSummaryReport', 'InventorySite', 'ItemAssembliesCanBuild', 'ItemDiscount',
-			'ItemFixedAsset', 'ItemGroup', 'ItemOtherCharge', 'ItemPayment', 'ItemSites',
-			'ItemSubtotal', 'ReceivePaymentToDeposit', 'SalesTaxPayable', 'StandardTerms',
-			'Transaction', 'TransferInventory', 'Transfer'
-		];
-		foreach ($genericImportActions as $name) {
+		foreach (array_keys(QuickBooks_Callbacks_SQL_Callbacks::GENERIC_REQUEST_CONF) as $name) {
 			$sql_map[$name.'Import'] = [
 				'QuickBooks_Callbacks_SQL_Callbacks::GenericImportRequest',
 				'QuickBooks_Callbacks_SQL_Callbacks::GenericImportResponse'

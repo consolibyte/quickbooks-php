@@ -65,9 +65,32 @@ QuickBooks_Loader::load('/QuickBooks/Driver/Singleton.php');
  */
 class QuickBooks_Callbacks_SQL_Callbacks
 {
-	const GENERIC_REQUEST_EXTRAS = [
-		'BillToPay' => '<PayeeEntityRef><ListID></ListID></PayeeEntityRef>'
+	const FILTER_NONE = 0;
+	const FILTER_DEFAULT = 1;
+	const FILTER_WRAP = 2;
+	const FILTER_WRAP_WITH_PREFIX = 3;
+
+	const GENERIC_REQUEST_CONF = [
+		'BillingRate' => [],
+		'BillToPay' => [ 'extraXML' => '<PayeeEntityRef><ListID></ListID></PayeeEntityRef>', 'filter' => self::FILTER_NONE ],
+		'BuildAssembly' => [ 'filter' => self::FILTER_WRAP ],
+		'Currency' => [],
+		'InventorySite' => [],
+		'ItemDiscount' => [],
+		'ItemFixedAsset' => [],
+		'ItemGroup' => [],
+		'ItemOtherCharge' => [],
+		'ItemPayment' => [],
+		'ItemSites' => [ 'filter' => self::FILTER_NONE ],
+		'ItemSubtotal' => [],
+		'ReceivePaymentToDeposit' => [ 'filter' => self::FILTER_NONE ],
+		'SalesTaxPayable' => [ 'filter' => self::FILTER_NONE ],
+		'StandardTerms' => [],
+		'Transaction' => [ 'filter' => self::FILTER_WRAP_WITH_PREFIX ],
+		'Transfer' => [],
+		'TransferInventory' => [ 'filter' => self::FILTER_WRAP ]
 	];
+
 	/**
 	 * Hook which gets called when the Web Connector authenticates to the server
 	 *
@@ -9879,12 +9902,22 @@ END;
 	{
 		// Remove 'Import' from the end of the action
 		$type = substr($action,0,-6);
-		$extraElem = self::GENERIC_REQUEST_EXTRAS[$type] ?? '';
+		$config = self::GENERIC_REQUEST_CONF[$type] ?? [];
 		$element = $type.'QueryRq';
-		$xml = "<$element requestID=\"$requestID\">" .
-					QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) .
-			                $extraElem .
-				"</$element>";
+		$xml = "<$element requestID=\"$requestID\">";
+		$filter = $config['filter'] ?? self::FILTER_DEFAULT;
+		if ($filter != self::FILTER_NONE) {
+			$f = QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra);
+			if ($filter == self::FILTER_WRAP) {
+				$f = "<ModifiedDateRangeFilter>$f</ModifiedDateRangeFilter>";
+			}
+			elseif ($filter == self::FILTER_WRAP_WITH_PREFIX) {
+				$f = "<{$type}ModifiedDateRangeFilter>$f</{$type}ModifiedDateRangeFilter>";
+			}
+			$xml .= $f;
+		}
+		if (isset($config['extraXML'])) $xml .= $config['extraXML'];
+		$xml .= "</$element>";
 
 		return self::xml($version,$locale,$xml);
 	}
