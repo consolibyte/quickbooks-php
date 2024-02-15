@@ -3708,7 +3708,7 @@ END;
 				// This schema field doesn't map to anything in QuickBooks...
 				continue;
 			}
-			else if (!strlen($value))
+			else if (!strlen($value ?? ''))
 			{
 				// There's no value there, don't send it
 
@@ -3722,7 +3722,7 @@ END;
 				$begi = substr($field, 0, -5);
 				$last = substr($field, -5, 5);
 				if (($last == 'Addr2' or $last == 'Addr3' or $last == 'Addr4' or $last == 'Addr5') and
-					strlen($Object->get($begi . 'Addr1')))
+					strlen($Object->get($begi . 'Addr1') ?? ''))
 				{
 					// ... but don't allow 4 or 5 if they set the city, state, zip, or country?
 					//  EDIT: NEVER ALLOW ADDR4 OR ADDR5, IT JUST FUCKS SHIT UP! I HATE YOU INTUIT!
@@ -4167,7 +4167,7 @@ END;
 				//print_r($map);
 				//print("\n\n");
 
-				if (!$map or !strlen($value))
+				if (!$map or !strlen($value ?? ''))
 				{
 					continue;
 				}

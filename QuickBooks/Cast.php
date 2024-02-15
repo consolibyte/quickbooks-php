@@ -246,7 +246,7 @@ class QuickBooks_Cast
 	 */
 	static public function cast($type_or_action, $field, $value, $use_abbrevs = true, $htmlspecialchars = true)
 	{
-		$type_or_action = strtolower($type_or_action);
+		$type_or_action = strtolower($type_or_action ?? '');
 
 		static $files = array();
 
