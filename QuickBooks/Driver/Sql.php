@@ -3585,7 +3585,10 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			foreach ($part as $field => $value) {
 				$w = $field . " = '" . $this->_escape($value) . "' ";
 				if (!strncmp($field,'qbsql_',6)) {
-					if ($field == QUICKBOOKS_DRIVER_SQL_FIELD_ID) $qbsql_wheres[] = $w;
+					if ($field == QUICKBOOKS_DRIVER_SQL_FIELD_ID) {
+						$wheres[] = $w;
+						$qbsql_wheres[] = $w;
+					}
 					else {
 						error_log("ERROR: Cannot query by qbsql_ fields in update($table, ".
 							json_encode($object).", ".json_encode($where).")");
