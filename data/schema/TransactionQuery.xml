@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <TransactionQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+                        <!-- BEGIN OR -->
+                                <TxnID >IDTYPE</TxnID> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <RefNumber >STRTYPE</RefNumber> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <RefNumberCaseSensitive >STRTYPE</RefNumberCaseSensitive> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <RefNumberFilter> <!-- optional -->
+                                                <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+                                                <MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+                                                <RefNumber >STRTYPE</RefNumber> <!-- required -->
+                                        </RefNumberFilter>
+                                <!-- OR -->
+                                        <RefNumberRangeFilter> <!-- optional -->
+                                                <FromRefNumber >STRTYPE</FromRefNumber> <!-- optional -->
+                                                <ToRefNumber >STRTYPE</ToRefNumber> <!-- optional -->
+                                        </RefNumberRangeFilter>
+                                <!-- END OR -->
+                                <TransactionModifiedDateRangeFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+                                                <ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+                                        <!-- OR -->
+                                                <!-- DateMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisCalendarQuarter, ThisCalendarQuarterToDate, ThisFiscalQuarter, ThisFiscalQuarterToDate, ThisCalendarYear, ThisCalendarYearToDate, ThisFiscalYear, ThisFiscalYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastCalendarQuarter, LastCalendarQuarterToDate, LastFiscalQuarter, LastFiscalQuarterToDate, LastCalendarYear, LastCalendarYearToDate, LastFiscalYear, LastFiscalYearToDate, NextWeek, NextFourWeeks, NextMonth, NextCalendarQuarter, NextCalendarYear, NextFiscalQuarter, NextFiscalYear -->
+                                                <DateMacro >ENUMTYPE</DateMacro> <!-- optional -->
+                                        <!-- END OR -->
+                                </TransactionModifiedDateRangeFilter>
+                                <TransactionDateRangeFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <FromTxnDate >DATETYPE</FromTxnDate> <!-- optional -->
+                                                <ToTxnDate >DATETYPE</ToTxnDate> <!-- optional -->
+                                        <!-- OR -->
+                                                <!-- DateMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisCalendarQuarter, ThisCalendarQuarterToDate, ThisFiscalQuarter, ThisFiscalQuarterToDate, ThisCalendarYear, ThisCalendarYearToDate, ThisFiscalYear, ThisFiscalYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastCalendarQuarter, LastCalendarQuarterToDate, LastFiscalQuarter, LastFiscalQuarterToDate, LastCalendarYear, LastCalendarYearToDate, LastFiscalYear, LastFiscalYearToDate, NextWeek, NextFourWeeks, NextMonth, NextCalendarQuarter, NextCalendarYear, NextFiscalQuarter, NextFiscalYear -->
+                                                <DateMacro >ENUMTYPE</DateMacro> <!-- optional -->
+                                        <!-- END OR -->
+                                </TransactionDateRangeFilter>
+                                <TransactionEntityFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <!-- EntityTypeFilter may have one of the following values: Customer, Employee, OtherName, Vendor -->
+                                                <EntityTypeFilter >ENUMTYPE</EntityTypeFilter> <!-- optional -->
+                                        <!-- OR -->
+                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                        <!-- OR -->
+                                                <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                        <!-- END OR -->
+                                </TransactionEntityFilter>
+                                <TransactionAccountFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <!-- AccountTypeFilter may have one of the following values: AccountsPayable, AccountsReceivable, AllowedFor1099, APAndSalesTax, APOrCreditCard, ARAndAP, Asset, BalanceSheet, Bank, BankAndARAndAPAndUF, BankAndUF, CostOfSales, CreditCard, CurrentAsset, CurrentAssetAndExpense, CurrentLiability, Equity, EquityAndIncomeAndExpense, ExpenseAndOtherExpense, FixedAsset, IncomeAndExpense, IncomeAndOtherIncome, Liability, LiabilityAndEquity, LongTermLiability, NonPosting, OrdinaryExpense, OrdinaryIncome, OrdinaryIncomeAndCOGS, OrdinaryIncomeAndExpense, OtherAsset, OtherCurrentAsset, OtherCurrentLiability, OtherExpense, OtherIncome, OtherIncomeOrExpense -->
+                                                <AccountTypeFilter >ENUMTYPE</AccountTypeFilter> <!-- optional -->
+                                        <!-- OR -->
+                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                        <!-- OR -->
+                                                <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                        <!-- END OR -->
+                                </TransactionAccountFilter>
+                                <TransactionItemFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <!-- ItemTypeFilter may have one of the following values: AllExceptFixedAsset, Assembly, Discount, FixedAsset, Inventory, InventoryAndAssembly, NonInventory, OtherCharge, Payment, Sales, SalesTax, Service -->
+                                                <ItemTypeFilter >ENUMTYPE</ItemTypeFilter> <!-- optional -->
+                                        <!-- OR -->
+                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                        <!-- OR -->
+                                                <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                        <!-- END OR -->
+                                </TransactionItemFilter>
+                                <TransactionClassFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                        <!-- OR -->
+                                                <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                        <!-- END OR -->
+                                </TransactionClassFilter>
+                                <TransactionTypeFilter> <!-- optional -->
+                                        <!-- TxnTypeFilter may have one of the following values: All, ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+                                        <TxnTypeFilter >ENUMTYPE</TxnTypeFilter> <!-- required, may repeat -->
+                                </TransactionTypeFilter>
+                                <!-- TransactionDetailLevelFilter may have one of the following values: All, SummaryOnly [DEFAULT], AllExceptSummary -->
+                                <TransactionDetailLevelFilter >ENUMTYPE</TransactionDetailLevelFilter> <!-- optional -->
+                                <!-- TransactionPostingStatusFilter may have one of the following values: Either [DEFAULT], NonPosting, Posting -->
+                                <TransactionPostingStatusFilter >ENUMTYPE</TransactionPostingStatusFilter> <!-- optional -->
+                                <!-- TransactionPaidStatusFilter may have one of the following values: Either [DEFAULT], Closed, Open -->
+                                <TransactionPaidStatusFilter >ENUMTYPE</TransactionPaidStatusFilter> <!-- optional -->
+                                <CurrencyFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                        <!-- END OR -->
+                                </CurrencyFilter>
+                        <!-- END OR -->
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </TransactionQueryRq>
+
+                <TransactionQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+                        <TransactionRet> <!-- optional, may repeat -->
+                                <!-- TxnType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+                                <TxnType >ENUMTYPE</TxnType> <!-- optional -->
+                                <TxnID >IDTYPE</TxnID> <!-- optional -->
+                                <TxnLineID >IDTYPE</TxnLineID> <!-- optional -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- optional -->
+                                <TimeModified >DATETIMETYPE</TimeModified> <!-- optional -->
+                                <EntityRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </EntityRef>
+                                <AccountRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </AccountRef>
+                                <TxnDate >DATETYPE</TxnDate> <!-- optional -->
+                                <RefNumber >STRTYPE</RefNumber> <!-- optional -->
+                                <Amount >AMTTYPE</Amount> <!-- optional -->
+                                <CurrencyRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </CurrencyRef>
+                                <ExchangeRate >FLOATTYPE</ExchangeRate> <!-- optional -->
+                                <AmountInHomeCurrency >AMTTYPE</AmountInHomeCurrency> <!-- optional -->
+                                <Memo >STRTYPE</Memo> <!-- optional -->
+                        </TransactionRet>
+                </TransactionQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

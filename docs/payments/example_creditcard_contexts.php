@@ -5,31 +5,31 @@
  *
  * See also: https://developer.intuit.com/docs/api/payments/charges
  *
- * Specifically the section that talks about: 
- * 
+ * Specifically the section that talks about:
+ *
  * mobile:
  * required
- * boolean, default is false 
+ * boolean, default is false
  * Indicates whether the charge occurs on a mobile device. The card number can be keyed/swiped/dipped or tapped on the mPOS device of the merchant.
- * 
+ *
  * isEcommerce:
  * optional
- * boolean, default is false 
+ * boolean, default is false
  * Indicates whether the charge is from an eCommerce (internet) transaction.
- * 
+ *
  * recurring:
  * optional
- * boolean, default is false 
+ * boolean, default is false
  * This boolean value is set to true if the charge is recurring. This value ignored for capture and refund requests.
  *
  *
- * Intuit has made some security changes as of early Feb 1, 2018 which require that merchants 
+ * Intuit has made some security changes as of early Feb 1, 2018 which require that merchants
  * indicate the "context" of a transaction (e.g. if it's recurring, if it's from a mobile device, etc.)
  *
  * Other helpful links:
  * 	https://stackoverflow.com/questions/4117555/simplest-way-to-detect-a-mobile-device
  * 	https://stackoverflow.com/questions/3514784/what-is-the-best-way-to-detect-a-mobile-device-in-jquery
- * 
+ *
  */
 
 require_once dirname(__FILE__) . '/config.php';
@@ -67,7 +67,7 @@ $context = array(
 	'recurring' => true,    // defaults to FALSE
 
 	// This indicates it's an e-commerce payment (made online)
-	'isEcommerce' => true,  // defaults to FALSE 
+	'isEcommerce' => true,  // defaults to FALSE
 	);
 
 if ($Transaction = $Payments->charge($Context, $CreditCard, $amount, $currency, $context))

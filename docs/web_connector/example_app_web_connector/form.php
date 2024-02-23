@@ -3,10 +3,10 @@
 		<title>QuickBooks Web Connector example</title>
 	</head>
 	<body>
-	
+
 		<form method="post" action="handler.php">
 			<input type="hidden" name="submitted" value="1" />
-			
+
 			<table>
 				<tr>
 					<td>
@@ -33,10 +33,10 @@
 					</td>
 				</tr>
 			</table>
-			
+
 			<input type="submit" value="Queue up the customer!" />
-			
+
 		</form>
-		
+
 	</body>
 </html>

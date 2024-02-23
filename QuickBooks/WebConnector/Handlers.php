@@ -125,7 +125,7 @@ define('QUICKBOOKS_HANDLERS_HOOK_INTERACTIVEREJECTED', 'QuickBooks_Handlers::int
  *
  *
  */
-define('QUICKBOOKS_HANDLERS_HOOK_RECEIVERESPONSEXML', 'QuickBooks_HandlersS::receiveResponseXML');
+define('QUICKBOOKS_HANDLERS_HOOK_RECEIVERESPONSEXML', 'QuickBooks_Handlers::receiveResponseXML');
 
 /**
  *
@@ -544,7 +544,7 @@ class QuickBooks_WebConnector_Handlers
 		$customauth_wait_before_next_update = null;
 		$customauth_min_run_every_n_seconds = null;
 
-		if (is_array($override_dsn) or strlen($override_dsn)) 	// Custom autj
+		if (is_array($override_dsn) or ($override_dsn && strlen($override_dsn))) 	// Custom autj
 		{
 			//if ($auth->authenticate($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and
 
@@ -1038,7 +1038,16 @@ class QuickBooks_WebConnector_Handlers
 		if (false !== ($start = strpos($xml, ' statusCode="')) and
 			false !== ($end = strpos($xml, '"', $start + 13)))
 		{
-			return substr($xml, $start + 13, $end - $start - 13);
+			$code = substr($xml, $start + 13, $end - $start - 13);
+			if (empty($code) || $code === '1') {
+			  // Code 1 is informational only:
+			  //  statusSeverity="Info" statusMessage="A query request did not find a matching object in QuickBooks"
+			  //  Basically, it is how QB reports an empty result set.
+			  //  When this is treated as an error, some other actions fail to trigger.
+			  //  Ex: the -prev cfgval's never get updated when an empty result set is detected.
+			  return QUICKBOOKS_ERROR_OK;
+			}
+			return $code;
 		}
 
 		return QUICKBOOKS_ERROR_OK;

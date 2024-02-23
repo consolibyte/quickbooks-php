@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: BillAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_BillAddRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'BillAdd';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -91,10 +91,10 @@ class QuickBooks_QBXML_Schema_Object_BillAddRq extends QuickBooks_QBXML_Schema_O
   'ItemGroupLineAdd UnitOfMeasure' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -154,10 +154,10 @@ class QuickBooks_QBXML_Schema_Object_BillAddRq extends QuickBooks_QBXML_Schema_O
   'ItemGroupLineAdd UnitOfMeasure' => 31,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -218,7 +218,7 @@ class QuickBooks_QBXML_Schema_Object_BillAddRq extends QuickBooks_QBXML_Schema_O
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -278,10 +278,10 @@ class QuickBooks_QBXML_Schema_Object_BillAddRq extends QuickBooks_QBXML_Schema_O
   'ItemGroupLineAdd UnitOfMeasure' => 7,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -341,22 +341,22 @@ class QuickBooks_QBXML_Schema_Object_BillAddRq extends QuickBooks_QBXML_Schema_O
   'ItemGroupLineAdd UnitOfMeasure' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
@@ -388,7 +388,7 @@ class QuickBooks_QBXML_Schema_Object_BillAddRq extends QuickBooks_QBXML_Schema_O
   25 => 'ExpenseLineAdd SalesTaxCodeRef ListID',
   26 => 'ExpenseLineAdd SalesTaxCodeRef FullName',
   27 => 'ExpenseLineAdd BillableStatus',
-  28 => 'ItemLineAdd', 
+  28 => 'ItemLineAdd',
   29 => 'ItemLineAdd ItemRef ListID',
   30 => 'ItemLineAdd ItemRef FullName',
   31 => 'ItemLineAdd InventorySiteRef ListID',
@@ -419,7 +419,7 @@ class QuickBooks_QBXML_Schema_Object_BillAddRq extends QuickBooks_QBXML_Schema_O
   56 => 'ItemGroupLineAdd UnitOfMeasure',
   57 => 'IncludeRetElement',
 );
-			
+
 		return $paths;
 	}
 }

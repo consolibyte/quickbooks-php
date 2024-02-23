@@ -10,13 +10,13 @@ define('QUICKBOOKS_LOADER_AUTOLOADER', false);
 // Require the framework
 require_once dirname(__FILE__) . '/../../../QuickBooks.php';
 
-// A username and password you'll use in: 
+// A username and password you'll use in:
 //	a) Your .QWC file
 //	b) The Web Connector
 //	c) The QuickBooks framework
 //
-// 	NOTE: This has *no relationship* with QuickBooks usernames, Windows usernames, etc. 
-// 		It is *only* used for the Web Connector and SOAP server! 
+// 	NOTE: This has *no relationship* with QuickBooks usernames, Windows usernames, etc.
+// 		It is *only* used for the Web Connector and SOAP server!
 $config['quickbooks_user'] = 'quickbooks';
 $config['quickbooks_pass'] = '2398uakj3d';
 
@@ -25,7 +25,7 @@ $config['quickbooks_tz'] = 'America/New_York';
 
 //$config['quickbooks_loglevel'] = QUICKBOOKS_LOG_NORMAL;
 //$config['quickbooks_loglevel'] = QUICKBOOKS_LOG_VERBOSE;
-//$config['quickbooks_loglevel'] = QUICKBOOKS_LOG_DEBUG;				
+//$config['quickbooks_loglevel'] = QUICKBOOKS_LOG_DEBUG;
 $config['quickbooks_loglevel'] = QUICKBOOKS_LOG_DEVELOP;
 
 //  Memory limit

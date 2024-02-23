@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <ARRefundCreditCardQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+                        <!-- BEGIN OR -->
+                                <TxnID >IDTYPE</TxnID> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <RefNumber >STRTYPE</RefNumber> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <RefNumberCaseSensitive >STRTYPE</RefNumberCaseSensitive> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <ModifiedDateRangeFilter> <!-- optional -->
+                                                <FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+                                                <ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+                                        </ModifiedDateRangeFilter>
+                                <!-- OR -->
+                                        <TxnDateRangeFilter> <!-- optional -->
+                                                <!-- BEGIN OR -->
+                                                        <FromTxnDate >DATETYPE</FromTxnDate> <!-- optional -->
+                                                        <ToTxnDate >DATETYPE</ToTxnDate> <!-- optional -->
+                                                <!-- OR -->
+                                                        <!-- DateMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisCalendarQuarter, ThisCalendarQuarterToDate, ThisFiscalQuarter, ThisFiscalQuarterToDate, ThisCalendarYear, ThisCalendarYearToDate, ThisFiscalYear, ThisFiscalYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastCalendarQuarter, LastCalendarQuarterToDate, LastFiscalQuarter, LastFiscalQuarterToDate, LastCalendarYear, LastCalendarYearToDate, LastFiscalYear, LastFiscalYearToDate, NextWeek, NextFourWeeks, NextMonth, NextCalendarQuarter, NextCalendarYear, NextFiscalQuarter, NextFiscalYear -->
+                                                        <DateMacro >ENUMTYPE</DateMacro> <!-- optional -->
+                                                <!-- END OR -->
+                                        </TxnDateRangeFilter>
+                                <!-- END OR -->
+                                <EntityFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                        <!-- OR -->
+                                                <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                        <!-- END OR -->
+                                </EntityFilter>
+                                <AccountFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                        <!-- OR -->
+                                                <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                        <!-- END OR -->
+                                </AccountFilter>
+                                <!-- BEGIN OR -->
+                                        <RefNumberFilter> <!-- optional -->
+                                                <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+                                                <MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+                                                <RefNumber >STRTYPE</RefNumber> <!-- required -->
+                                        </RefNumberFilter>
+                                <!-- OR -->
+                                        <RefNumberRangeFilter> <!-- optional -->
+                                                <FromRefNumber >STRTYPE</FromRefNumber> <!-- optional -->
+                                                <ToRefNumber >STRTYPE</ToRefNumber> <!-- optional -->
+                                        </RefNumberRangeFilter>
+                                <!-- END OR -->
+                                <CurrencyFilter> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                        <!-- OR -->
+                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                        <!-- END OR -->
+                                </CurrencyFilter>
+                        <!-- END OR -->
+                        <IncludeLineItems >BOOLTYPE</IncludeLineItems> <!-- optional -->
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                        <OwnerID >GUIDTYPE</OwnerID> <!-- optional, may repeat -->
+                </ARRefundCreditCardQueryRq>
+
+                <ARRefundCreditCardQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+                        <ARRefundCreditCardRet> <!-- optional, may repeat -->
+                                <TxnID >IDTYPE</TxnID> <!-- optional -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- optional -->
+                                <TimeModified >DATETIMETYPE</TimeModified> <!-- optional -->
+                                <EditSequence >STRTYPE</EditSequence> <!-- optional -->
+                                <TxnNumber >INTTYPE</TxnNumber> <!-- optional -->
+                                <CustomerRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </CustomerRef>
+                                <RefundFromAccountRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </RefundFromAccountRef>
+                                <ARAccountRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </ARAccountRef>
+                                <TxnDate >DATETYPE</TxnDate> <!-- optional -->
+                                <RefNumber >STRTYPE</RefNumber> <!-- optional -->
+                                <TotalAmount >AMTTYPE</TotalAmount> <!-- optional -->
+                                <CurrencyRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </CurrencyRef>
+                                <ExchangeRate >FLOATTYPE</ExchangeRate> <!-- optional -->
+                                <TotalAmountInHomeCurrency >AMTTYPE</TotalAmountInHomeCurrency> <!-- optional -->
+                                <Address> <!-- optional -->
+                                        <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                        <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                        <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                        <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                        <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                        <City >STRTYPE</City> <!-- optional -->
+                                        <State >STRTYPE</State> <!-- optional -->
+                                        <PostalCode >STRTYPE</PostalCode> <!-- optional -->
+                                        <Country >STRTYPE</Country> <!-- optional -->
+                                        <Note >STRTYPE</Note> <!-- optional -->
+                                </Address>
+                                <AddressBlock> <!-- optional -->
+                                        <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                        <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                        <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                        <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                        <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                </AddressBlock>
+                                <PaymentMethodRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </PaymentMethodRef>
+                                <Memo >STRTYPE</Memo> <!-- optional -->
+                                <CreditCardTxnInfo> <!-- optional -->
+                                        <CreditCardTxnInputInfo> <!-- required -->
+                                                <CreditCardNumber >STRTYPE</CreditCardNumber> <!-- required -->
+                                                <ExpirationMonth >INTTYPE</ExpirationMonth> <!-- required -->
+                                                <ExpirationYear >INTTYPE</ExpirationYear> <!-- required -->
+                                                <NameOnCard >STRTYPE</NameOnCard> <!-- required -->
+                                                <CreditCardAddress >STRTYPE</CreditCardAddress> <!-- optional -->
+                                                <CreditCardPostalCode >STRTYPE</CreditCardPostalCode> <!-- optional -->
+                                                <CommercialCardCode >STRTYPE</CommercialCardCode> <!-- optional -->
+                                                <!-- TransactionMode may have one of the following values: CardNotPresent [DEFAULT], CardPresent -->
+                                                <TransactionMode >ENUMTYPE</TransactionMode> <!-- optional -->
+                                                <!-- CreditCardTxnType may have one of the following values: Authorization, Capture, Charge, Refund, VoiceAuthorization -->
+                                                <CreditCardTxnType >ENUMTYPE</CreditCardTxnType> <!-- optional -->
+                                        </CreditCardTxnInputInfo>
+                                        <CreditCardTxnResultInfo> <!-- required -->
+                                                <ResultCode >INTTYPE</ResultCode> <!-- required -->
+                                                <ResultMessage >STRTYPE</ResultMessage> <!-- required -->
+                                                <CreditCardTransID >STRTYPE</CreditCardTransID> <!-- required -->
+                                                <MerchantAccountNumber >STRTYPE</MerchantAccountNumber> <!-- required -->
+                                                <AuthorizationCode >STRTYPE</AuthorizationCode> <!-- optional -->
+                                                <!-- AVSStreet may have one of the following values: Pass, Fail, NotAvailable -->
+                                                <AVSStreet >ENUMTYPE</AVSStreet> <!-- optional -->
+                                                <!-- AVSZip may have one of the following values: Pass, Fail, NotAvailable -->
+                                                <AVSZip >ENUMTYPE</AVSZip> <!-- optional -->
+                                                <!-- CardSecurityCodeMatch may have one of the following values: Pass, Fail, NotAvailable -->
+                                                <CardSecurityCodeMatch >ENUMTYPE</CardSecurityCodeMatch> <!-- optional -->
+                                                <ReconBatchID >STRTYPE</ReconBatchID> <!-- optional -->
+                                                <PaymentGroupingCode >INTTYPE</PaymentGroupingCode> <!-- optional -->
+                                                <!-- PaymentStatus may have one of the following values: Unknown, Completed -->
+                                                <PaymentStatus >ENUMTYPE</PaymentStatus> <!-- required -->
+                                                <TxnAuthorizationTime >DATETIMETYPE</TxnAuthorizationTime> <!-- required -->
+                                                <TxnAuthorizationStamp >INTTYPE</TxnAuthorizationStamp> <!-- optional -->
+                                                <ClientTransID >STRTYPE</ClientTransID> <!-- optional -->
+                                        </CreditCardTxnResultInfo>
+                                </CreditCardTxnInfo>
+                                <ExternalGUID >GUIDTYPE</ExternalGUID> <!-- optional -->
+                                <RefundAppliedToTxnRet> <!-- optional, may repeat -->
+                                        <TxnID >IDTYPE</TxnID> <!-- required -->
+                                        <!-- TxnType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+                                        <TxnType >ENUMTYPE</TxnType> <!-- required -->
+                                        <TxnDate >DATETYPE</TxnDate> <!-- required -->
+                                        <RefNumber >STRTYPE</RefNumber> <!-- optional -->
+                                        <CreditRemaining >AMTTYPE</CreditRemaining> <!-- required -->
+                                        <RefundAmount >AMTTYPE</RefundAmount> <!-- required -->
+                                        <CreditRemainingInHomeCurrency >AMTTYPE</CreditRemainingInHomeCurrency> <!-- optional -->
+                                        <RefundAmountInHomeCurrency >AMTTYPE</RefundAmountInHomeCurrency> <!-- optional -->
+                                </RefundAppliedToTxnRet>
+                                <DataExtRet> <!-- optional, may repeat -->
+                                        <OwnerID >GUIDTYPE</OwnerID> <!-- optional -->
+                                        <DataExtName >STRTYPE</DataExtName> <!-- required -->
+                                        <!-- DataExtType may have one of the following values: AMTTYPE, DATETIMETYPE, INTTYPE, PERCENTTYPE, PRICETYPE, QUANTYPE, STR1024TYPE, STR255TYPE -->
+                                        <DataExtType >ENUMTYPE</DataExtType> <!-- required -->
+                                        <DataExtValue >STRTYPE</DataExtValue> <!-- required -->
+                                </DataExtRet>
+                        </ARRefundCreditCardRet>
+                </ARRefundCreditCardQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

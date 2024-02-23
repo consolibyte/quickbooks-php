@@ -378,9 +378,9 @@ class QuickBooks_IPP_Object
 					/*else if (substr($key, -2, 2) == 'Id')
 					{
 						$for_qbxml = false;
-						
+
 						$tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
-						
+
 						if ($tmp[0])
 						{
 							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
@@ -389,9 +389,9 @@ class QuickBooks_IPP_Object
 						{
 							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
 						}
-						
+
 						$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
-						$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;						
+						$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
 					}*/
 					else
 					{

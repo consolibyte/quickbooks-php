@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <ItemAssembliesCanBuildQueryRq>
+                        <ItemInventoryAssemblyRef> <!-- required -->
+                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                <FullName >STRTYPE</FullName> <!-- optional -->
+                        </ItemInventoryAssemblyRef>
+                        <TxnDate >DATETYPE</TxnDate> <!-- required -->
+                </ItemAssembliesCanBuildQueryRq>
+
+                <ItemAssembliesCanBuildQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+                        <ItemAssembliesCanBuildRet> <!-- optional -->
+                                <ItemInventoryAssemblyRef> <!-- required -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </ItemInventoryAssemblyRef>
+                                <TxnDate >DATETYPE</TxnDate> <!-- optional -->
+                                <QuantityCanBuild >QUANTYPE</QuantityCanBuild> <!-- required -->
+                        </ItemAssembliesCanBuildRet>
+                </ItemAssembliesCanBuildQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>
