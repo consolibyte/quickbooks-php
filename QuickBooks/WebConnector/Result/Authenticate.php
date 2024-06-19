@@ -43,12 +43,12 @@ class QuickBooks_WebConnector_Result_Authenticate extends QuickBooks_WebConnecto
 	{
 		$this->authenticateResult = array( $ticket, $status );
 		
-		if ((int) $wait_before_next_update)
+		if ((int) $wait_before_next_update !== 0)
 		{
 			$this->authenticateResult[] = (int) $wait_before_next_update;
 		}
 		
-		if ((int) $min_run_every_n_seconds)
+		if ((int) $min_run_every_n_seconds !== 0)
 		{
 			$this->authenticateResult[] = (int) $min_run_every_n_seconds;
 		}

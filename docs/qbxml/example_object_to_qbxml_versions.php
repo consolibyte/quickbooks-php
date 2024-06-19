@@ -23,7 +23,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
 // Require the QuickBooks libraries
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 /*
 // Create a new SalesReceipt object
@@ -69,17 +69,20 @@ $Customer->setFullName('Contractors:ConsoliBYTE, LLC:Keith Palmer');
 $Customer->setCustomerTypeFullName('Web:Direct');
 $Customer->setNotes('Test notes go here.');
 
-print('qbXML Customer for QuickBooks qbXML (latest version the framework supports): ' . "\r\n");
+print('qbXML Customer for QuickBooks qbXML (latest version the framework supports): 
+');
 print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER));
 
 print("\r\n\r\n");
 
-print('qbXML Customer for QuickBooks qbXML US editions: ' . "\r\n");
+print('qbXML Customer for QuickBooks qbXML US editions: 
+');
 print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER, null, QuickBooks_QBXML::LOCALE_UNITED_STATES));
 
 print("\r\n\r\n");
 
-print('qbXML Customer for QuickBooks qbXML Online Edition: ' . "\r\n");
+print('qbXML Customer for QuickBooks qbXML Online Edition: 
+');
 print($Customer->asQBXML(QUICKBOOKS_ADD_CUSTOMER, null, QuickBooks_QBXML::LOCALE_ONLINE_EDITION));
 
 print("\r\n\r\n");
@@ -87,5 +90,6 @@ print("\r\n\r\n");
 $Customer->setListID('1234');
 $Customer->setEditSequence('5678');
 
-print('qbXML Customer (modification) for QuickBooks qbXML Online Edition: ' . "\r\n");
+print('qbXML Customer (modification) for QuickBooks qbXML Online Edition: 
+');
 print($Customer->asQBXML(QUICKBOOKS_MOD_CUSTOMER, null, QuickBooks_QBXML::LOCALE_ONLINE_EDITION));

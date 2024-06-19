@@ -32,12 +32,11 @@ class QuickBooks_Loader
 	/**
 	 * 
 	 */
-	static public function load($file, $autoload = true)
+	static public function load(string $file, $autoload = true)
 	{
 		//print('loading file [' . $file . ']' . "\n");
 		
-		if ($autoload and 
-			QuickBooks_Loader::_autoload())
+		if ($autoload && QuickBooks_Loader::_autoload())
 		{
 			return true;
 		}
@@ -98,20 +97,19 @@ class QuickBooks_Loader
 	 */
 	static public function __autoload($name)
 	{
-		if (substr($name, 0, 10) == 'QuickBooks' && substr($name, 0, 16) != 'QuickBooksOnline')
+		if (substr($name, 0, 10) === 'QuickBooks' && substr($name, 0, 16) !== 'QuickBooksOnline')
 		{
 			$file = '/' . str_replace('_', DIRECTORY_SEPARATOR, $name) . '.php';
 			QuickBooks_Loader::load($file, false);
 		}
 	}
 	
-	/** 
-	 * Import (require_once) a bunch of PHP files from a particular PHP directory
-	 * 
-	 * @param string $dir
-	 * @return boolean
-	 */
-	static public function import($dir, $autoload = true)
+	/**
+  * Import (require_once) a bunch of PHP files from a particular PHP directory
+  *
+  * @return boolean
+  */
+ static public function import(string $dir, $autoload = true)
 	{
 		$dh = opendir(QUICKBOOKS_BASEDIR . $dir);
 		if ($dh)
@@ -119,8 +117,7 @@ class QuickBooks_Loader
 			while (false !== ($file = readdir($dh)))
 			{
 				$tmp = explode('.', $file);
-				if (end($tmp) == 'php' and 
-					!is_dir(QUICKBOOKS_BASEDIR . $dir . DIRECTORY_SEPARATOR . $file))
+				if (end($tmp) == 'php' && !is_dir(QUICKBOOKS_BASEDIR . $dir . DIRECTORY_SEPARATOR . $file))
 				{
 					QuickBooks_Loader::load($dir . DIRECTORY_SEPARATOR . $file, $autoload);
 					//require_once $dir . '/' . $file;

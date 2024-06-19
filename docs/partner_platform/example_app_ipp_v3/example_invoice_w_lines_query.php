@@ -20,7 +20,7 @@ $invoices = $InvoiceService->query($Context, $realm, "SELECT *, Line.* FROM Invo
 foreach ($invoices as $Invoice)
 {
 	$num_lines = $Invoice->countLine(); 		// How many line items are there?
-	for ($i = 0; $i < $num_lines; $i++)
+	for ($i = 0; $i < $num_lines; ++$i)
 	{
 		$Line = $Invoice->getLine($i);
 		

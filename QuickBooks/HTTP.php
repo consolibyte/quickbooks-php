@@ -49,13 +49,16 @@ define('QUICKBOOKS_HTTP_METHOD_HEAD', 'HEAD');
 class QuickBooks_HTTP
 {
 	const HTTP_400 = 400;
+ 
 	const HTTP_401 = 401;
+ 
 	const HTTP_404 = 404;
+ 
 	const HTTP_500 = 500;
 
 	protected $_url;
 
-	protected $_request_headers;
+	protected $_request_headers = array();
 
 	protected $_body;
 
@@ -67,37 +70,37 @@ class QuickBooks_HTTP
 
 	protected $_last_request;
 
-	protected $_last_duration;
+	protected $_last_duration = 0.0;
 
 	protected $_last_info;
 
-	protected $_last_responseheaders;
+	protected $_last_responseheaders = array();
 
 	protected $_errnum;
 
 	protected $_errmsg;
 
-	protected $_verify_peer;
+	protected $_verify_peer = true;
 
-	protected $_verify_host;
+	protected $_verify_host = true;
 
 	protected $_certificate;
 
-	protected $_masking;
+	protected $_masking = true;
 
-	protected $_log;
+	protected $_log = '';
 
-	protected $_debug;
+	protected $_debug = false;
 
-	protected $_test;
+	protected $_test = false;
 
-	protected $_return_headers;
+	protected $_return_headers = false;
 
 	/**
 	 * A variable indicating whether or not to make a synchronous request
 	 * @var boolean
 	 */
-	protected $_sync;
+	protected $_sync = true;
 
 	/**
 	 * Create a new QuickBooks_HTTP object instance to make HTTP requests to remote URLs
@@ -107,27 +110,6 @@ class QuickBooks_HTTP
 	public function __construct($url = null)
 	{
 		$this->_url = $url;
-
-		$this->_verify_peer = true;
-		$this->_verify_host = true;
-
-		$this->_masking = true;
-
-		$this->_log = '';
-
-		$this->_debug = false;
-		$this->_test = false;
-
-		$this->_sync = true;
-
-		$this->_request_headers = array();
-
-		$this->_return_headers = false;
-		$this->_last_responseheaders = array();
-
-		$this->_last_request = null;
-		$this->_last_response = null;
-		$this->_last_duration = 0.0;
 	}
 
 	/**
@@ -166,8 +148,7 @@ class QuickBooks_HTTP
 	{
 		foreach ($arr as $key => $value)
 		{
-			if (is_numeric($key) and
-				false !== ($pos = strpos($value, ':')))
+			if (is_numeric($key) && false !== ($pos = strpos($value, ':')))
 			{
 				// 0 => "Header: value" format
 
@@ -245,15 +226,11 @@ class QuickBooks_HTTP
 	 */
 	public function getRawBody()
 	{
-		if ($this->_body)
-		{
-			return $this->_body;
-		}
-		else if (is_array($this->_post) and
-			count($this->_post))
-		{
-			return http_build_query($this->_post);
-		}
+		if ($this->_body) {
+      return $this->_body;
+  } elseif (is_array($this->_post) && count($this->_post)) {
+      return http_build_query($this->_post);
+  }
 
 		return '';
 	}
@@ -495,14 +472,12 @@ class QuickBooks_HTTP
 
 		$query = '';
 
-		if (is_array($this->_get) and
-			count($this->_get))
+		if (is_array($this->_get) && count($this->_get))
 		{
 			$query = '?' . http_build_query($this->_get);
 		}
 
-		if ($qs = parse_url($url, PHP_URL_QUERY) and
-			false !== strpos($qs, ' '))
+		if (($qs = parse_url($url, PHP_URL_QUERY)) && false !== strpos($qs, ' '))
 		{
 			$url = str_replace($qs, str_replace(' ', '+', $qs), $url);
 		}
@@ -572,12 +547,14 @@ class QuickBooks_HTTP
 		{
 			$request .= 'GET ';
 		}
+  
 		$request .= $params[CURLOPT_URL] . ' HTTP/1.1' . "\r\n";
 
 		foreach ($headers as $header)
 		{
 			$request .= $header . "\r\n";
 		}
+  
 		$request .= "\r\n";
 		$request .= $this->getRawBody();
 
@@ -591,17 +568,16 @@ class QuickBooks_HTTP
 
 		$response_headers = array();
 		curl_setopt($ch, CURLOPT_HEADERFUNCTION,
-			function($curl, $header) use (&$response_headers)
-			{
-				$len = strlen($header);
-				$header = explode(':', $header, 2);
-				if (count($header) < 2) // ignore invalid headers
-					return $len;
-
-				$response_headers[strtolower(trim($header[0]))] = trim($header[1]);
-
-				return $len;
-			}
+			static function ($curl, $header) use (&$response_headers) {
+       $len = strlen($header);
+       $header = explode(':', $header, 2);
+       if (count($header) < 2) {
+           // ignore invalid headers
+           return $len;
+       }
+       $response_headers[strtolower(trim($header[0]))] = trim($header[1]);
+       return $len;
+   }
 		);
 
 		$response = curl_exec($ch);
@@ -612,7 +588,7 @@ class QuickBooks_HTTP
 
 		$this->_last_info = curl_getinfo($ch);
 		
-		if (curl_errno($ch))
+		if (curl_errno($ch) !== 0)
 		{
 			$errnum = curl_errno($ch);
 			$errmsg = curl_error($ch);

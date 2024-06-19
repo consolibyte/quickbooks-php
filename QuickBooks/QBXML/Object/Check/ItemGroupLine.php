@@ -125,6 +125,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
 	{
 		$this->getDesc();
 	}
+ 
 	// Path: Quantity, datatype: 
 	
 	/**

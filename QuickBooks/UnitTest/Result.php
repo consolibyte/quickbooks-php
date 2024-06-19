@@ -13,9 +13,13 @@
 class QuickBooks_UnitTest_Result
 {
 	protected $_name;
+ 
 	protected $_result;
+ 
 	protected $_msg;
+ 
 	protected $_actual;
+ 
 	protected $_expected;
 	
 	public function __construct($name, $result, $expected, $actual, $msg = null)

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 
 
@@ -17,5 +17,7 @@ $arr = array(
 
 foreach ($arr as $str)
 {
-	print("\n\n" . '{' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_INVOICE, 'InvoiceLineAdd Desc', html_entity_decode($str)) . '}' . "\n\n");
+	print('
+
+{' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_INVOICE, 'InvoiceLineAdd Desc', html_entity_decode($str)) . '}' . "\n\n");
 }

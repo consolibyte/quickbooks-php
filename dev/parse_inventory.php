@@ -261,7 +261,7 @@ class Testme
 		return false;
 	}
 	
-	static protected function _reportNextXML(&$xml, $find)
+	static protected function _reportNextXML(&$xml, string $find)
 	{
 		if (false !== ($sta = strpos($xml, $find)))
 		{

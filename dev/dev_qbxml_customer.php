@@ -1,6 +1,6 @@
 <?php
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 $Customer = new QuickBooks_QBXML_Object_Customer();
 

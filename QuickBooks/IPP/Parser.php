@@ -30,11 +30,6 @@ QuickBooks_Loader::load('/QuickBooks/XML/Parser.php');
  */
 class QuickBooks_IPP_Parser
 {
-	public function __construct()
-	{
-
-	}
-
 	public function parseIPP($xml, $method, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
 		// Massage it... *sigh*
@@ -42,7 +37,7 @@ class QuickBooks_IPP_Parser
 
 		//print($xml);
 
-		$Parser = new QuickBooks_XML_Parser($xml);
+		$quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
 		// Initial to success
 		$xml_errnum = QuickBooks_XML::ERROR_OK;
@@ -51,7 +46,7 @@ class QuickBooks_IPP_Parser
 		// Try to parse the XML IDS response
 		$errnum = QuickBooks_XML::ERROR_OK;
 		$errmsg = null;
-		if ($Doc = $Parser->parse($errnum, $errmsg))
+		if ($Doc = $quickBooksXMLParser->parse($errnum, $errmsg))
 		{
 			$Root = $Doc->getRoot();
 
@@ -97,9 +92,7 @@ class QuickBooks_IPP_Parser
 			$name = $Node->name();
 			$data = $Node->data();
 
-			if ($name == 'action' or
-				$name == 'errcode' or
-				$name == 'errtext')
+			if ($name == 'action' || $name == 'errcode' || $name == 'errtext')
 			{
 				continue;
 			}
@@ -266,7 +259,7 @@ class QuickBooks_IPP_Parser
 		*/
 
 		// Parse it
-		$Parser = new QuickBooks_XML_Parser($xml);
+		$quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
 		// Initial to success
 		$xml_errnum = QuickBooks_XML::ERROR_OK;
@@ -276,7 +269,7 @@ class QuickBooks_IPP_Parser
 		$errnum = QuickBooks_XML::ERROR_OK;
 		$errmsg = null;
 
-		if ($Doc = $Parser->parse($errnum, $errmsg))
+		if ($Doc = $quickBooksXMLParser->parse($errnum, $errmsg))
 		{
 			$Root = $Doc->getRoot();
 
@@ -290,34 +283,32 @@ class QuickBooks_IPP_Parser
 						);
 
 					$List = $Root->getChildAt('EntitlementsResponse');
-					foreach ($List->children() as $ObjList)
+					foreach ($List->children() as $quickBooksXMLNode)
 					{
-						if ($ObjList->name() == 'Entitlement')
+						if ($quickBooksXMLNode->name() == 'Entitlement')
 						{
 							$Entitlement = new QuickBooks_IPP_Entitlement(
-								$ObjList->getAttribute('id'),
-								$ObjList->getChildDataAt('Entitlement/name'),
-								$ObjList->getChildDataAt('Entitlement/term'));
+								$quickBooksXMLNode->getAttribute('id'),
+								$quickBooksXMLNode->getChildDataAt('Entitlement/name'),
+								$quickBooksXMLNode->getChildDataAt('Entitlement/term'));
 
 							$e['_e'][] = $Entitlement;
 						}
 						else
 						{
-							$e['_i'][$ObjList->name()] = $ObjList->data();
+							$e['_i'][$quickBooksXMLNode->name()] = $quickBooksXMLNode->data();
 						}
 					}
 
 					return $e;
-
-					break;
 				case QuickBooks_IPP_IDS::OPTYPE_CDC:
 
 					$types = array();
 
 					$List = $Root->getChildAt('IntuitResponse CDCResponse');
-					foreach ($List->children() as $ObjList)
+					foreach ($List->children() as $quickBooksXMLNode)
 					{
-						foreach ($ObjList->children() as $Child)
+						foreach ($quickBooksXMLNode->children() as $Child)
 						{
 							$type = $Child->name();
 							if (empty($types[$type]))
@@ -338,10 +329,7 @@ class QuickBooks_IPP_Parser
 					}
 
 					return $types;
-
-					break;
-				case QuickBooks_IPP_IDS::OPTYPE_ADD:	// Parse an ADD type response
-					return QuickBooks_IPP_IDS::buildIDType('', QuickBooks_XML::extractTagContents('Id', $xml));
+				case QuickBooks_IPP_IDS::OPTYPE_ADD:
 				case QuickBooks_IPP_IDS::OPTYPE_SEND:	// Parse a SEND type response
 					return QuickBooks_IPP_IDS::buildIDType('', QuickBooks_XML::extractTagContents('Id', $xml));
 				case QuickBooks_IPP_IDS::OPTYPE_MOD:
@@ -354,8 +342,7 @@ class QuickBooks_IPP_Parser
 
 					$attrs = $List->attributes();
 
-					if (!array_key_exists('startPosition', $attrs) and
-						array_key_exists('totalCount', $attrs))
+					if (!array_key_exists('startPosition', $attrs) && array_key_exists('totalCount', $attrs))
 					{
 						return $attrs['totalCount'];
 					}
@@ -386,15 +373,17 @@ class QuickBooks_IPP_Parser
 
 			return false;
 		}
+
+  return null;
 	}
 
-	protected function _parseIDS_v2($xml, $optype, $flavor, $version, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
+	protected function _parseIDS_v2($xml, string $optype, $flavor, $version, &$xml_errnum, &$xml_errmsg, &$err_code, &$err_desc, &$err_db)
 	{
 		// Massage it... *sigh*
 		$xml = $this->_massageQBOXML($xml, $optype);
 
 		// Parse it
-		$Parser = new QuickBooks_XML_Parser($xml);
+		$quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
 		// Initial to success
 		$xml_errnum = QuickBooks_XML::ERROR_OK;
@@ -403,7 +392,7 @@ class QuickBooks_IPP_Parser
 		// Try to parse the XML IDS response
 		$errnum = QuickBooks_XML::ERROR_OK;
 		$errmsg = null;
-		if ($Doc = $Parser->parse($errnum, $errmsg))
+		if ($Doc = $quickBooksXMLParser->parse($errnum, $errmsg))
 		{
 			$Root = $Doc->getRoot();
 			$List = current($Root->children());
@@ -412,25 +401,23 @@ class QuickBooks_IPP_Parser
 			{
 				case QuickBooks_IPP_IDS::OPTYPE_REPORT:		// Parse a REPORT type response
 
-					$Report = new QuickBooks_IPP_Object_Report('@todo Make sure we show the title of the report!');
+					$quickBooksIPPObjectReport = new QuickBooks_IPP_Object_Report('@todo Make sure we show the title of the report!');
 
-					foreach ($List->children() as $Child)
+					foreach ($List->children() as $quickBooksXMLNode)
 					{
-						$class = 'QuickBooks_IPP_Object_' . $Child->name();
+						$class = 'QuickBooks_IPP_Object_' . $quickBooksXMLNode->name();
 						$Object = new $class();
 
-						foreach ($Child->children() as $Data)
+						foreach ($quickBooksXMLNode->children() as $Data)
 						{
 							$this->_push($Data, $Object);
 						}
 
-						$method = 'add' . $Child->name();
-						$Report->$method($Object);
+						$method = 'add' . $quickBooksXMLNode->name();
+						$quickBooksIPPObjectReport->$method($Object);
 					}
 
-					return $Report;
-
-					break;
+					return $quickBooksIPPObjectReport;
 				case QuickBooks_IPP_IDS::OPTYPE_QUERY:		// Parse a QUERY type response
 				case QuickBooks_IPP_IDS::OPTYPE_FINDBYID:
 
@@ -441,8 +428,7 @@ class QuickBooks_IPP_Parser
 					//exit;
 
 					// Stupid QuickBooks Online... *sigh*
-					if ($optype == QuickBooks_IPP_IDS::OPTYPE_FINDBYID and
-						$flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE) //$Root->name() == 'CompanyMetaData')
+					if ($optype === QuickBooks_IPP_IDS::OPTYPE_FINDBYID && $flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE) //$Root->name() == 'CompanyMetaData')
 					{
 						$List = new QuickBooks_XML_Node(__CLASS__ . '__line_' . __LINE__);
 						$List->addChild($Root);
@@ -453,21 +439,20 @@ class QuickBooks_IPP_Parser
 
 					//  Normal parsing of query results
 					$list = array();
-					foreach ($List->children() as $Child)
+					foreach ($List->children() as $quickBooksXMLNode)
 					{
-						$class = 'QuickBooks_IPP_Object_' . $Child->name();
+						$class = 'QuickBooks_IPP_Object_' . $quickBooksXMLNode->name();
 						$Object = new $class();
 
-						foreach ($Child->children() as $Data)
+						foreach ($quickBooksXMLNode->children() as $Data)
 						{
 							$this->_push($Data, $Object);
 						}
 
 						$list[] = $Object;
 					}
+     
 					return $list;
-
-					break;
 				case QuickBooks_IPP_IDS::OPTYPE_ADD:	// Parse an ADD type response
 				case QuickBooks_IPP_IDS::OPTYPE_MOD:
 
@@ -495,9 +480,9 @@ class QuickBooks_IPP_Parser
 								'Success ObjectRef Id',   	// QuickBooks desktop, IDS v2
 								);
 
-							foreach ($checks as $xpath)
+							foreach ($checks as $check)
 							{
-								$IDNode = $List->getChildAt($xpath);
+								$IDNode = $List->getChildAt($check);
 
 								if ($IDNode)
 								{
@@ -520,8 +505,6 @@ class QuickBooks_IPP_Parser
 
 							return false;
 					}
-
-					break;
 				default:
 
 					$err_code = QuickBooks_IPP::ERROR_INTERNAL;
@@ -545,9 +528,7 @@ class QuickBooks_IPP_Parser
 		$name = $Node->name();
 		$data = $Node->data();
 
-		if (substr($name, -2, 2) == 'Id' or
-			$name == 'ExternalKey' or
-			substr($name, -3, 3) == 'Ref')
+		if (substr($name, -2, 2) === 'Id' || $name == 'ExternalKey' || substr($name, -3, 3) === 'Ref')
 		{
 			$data = QuickBooks_IPP_IDS::buildIDType($Node->getAttribute('idDomain'), $data);
 		}
@@ -569,7 +550,7 @@ class QuickBooks_IPP_Parser
 		}
 		else
 		{
-			if (true or isset($adds[$name]))
+			if (true || isset($adds[$name]))
 			{
 				$Object->{'add' . $name}($data);
 			}

@@ -56,7 +56,9 @@ QuickBooks_Loader::load('/QuickBooks/Payments/Token.php');
  */
 class Quickbooks_Payments
 {
-	/**
+	public $_last_intuittid;
+
+ /**
 	 * No error occurred
 	 * @var integer
 	 */
@@ -69,6 +71,7 @@ class Quickbooks_Payments
 	const ERROR_OK = QUICKBOOKS_ERROR_OK;
 
 	const ERROR_AUTH = -2000;
+ 
 	const ERROR_HTTP = -2001;
 
 	const ERROR_DECLINE = -2002;
@@ -76,31 +79,46 @@ class Quickbooks_Payments
 	const STATUS_DECLINED = 'DECLINED';
 
 	const URL_CHARGE = '/quickbooks/v4/payments/charges';
+ 
 	const URL_TOKEN = '/quickbooks/v4/payments/tokens';
+ 
 	//const URL_ACCOUNT = '/quickbooks/v4/customers/<id>/bank-accounts';
 	const URL_CARD = '/quickbooks/v4/customers/<id>/cards';
+ 
 	const URL_ECHECK = '/quickbooks/v4/payments/echecks';
+ 
 	const URL_REFUND = '/quickbooks/v4/payments/charges/<id>/refunds';
 
 	const BASE_SANDBOX = 'https://sandbox.api.intuit.com';
+ 
 	const BASE_PRODUCTION = 'https://api.intuit.com';
 
 	protected $_sandbox = false;
+ 
 	protected $_debug = false;
-	protected $_driver = null;
+ 
+	protected $_driver;
+ 
 	protected $_masking = false;
 
 	protected $_oauth_consumer_key;
+ 
 	protected $_oauth_consumer_secret;
 
 	protected $_last_request;
+ 
 	protected $_last_response;
+ 
 	protected $_last_httpinfo;
 
 	protected $_last_errnum;
+ 
 	protected $_last_errmsg;
+ 
 	protected $_last_errdetail;
+ 
 	protected $_last_errtype;
+ 
 	protected $_last_errinfolink;
 
 	public function __construct($oauth_consumer_key, $oauth_consumer_secret, $sandbox = false, $dsn = null, $log_level = QUICKBOOKS_LOG_NORMAL)
@@ -136,21 +154,15 @@ class Quickbooks_Payments
 			'paymentMode' => 'WEB',
 			);
 
-		if ($Object_or_token instanceof QuickBooks_Payments_CreditCard)
-		{
-			$this->_setError();
-			return false;
-		}
-		else if ($Object_or_token instanceof QuickBooks_Payments_BankAccount)
-		{
-			$payload['bankAccount'] = $Object_or_token->toArray();
-		}
-		else if ($Object_or_token instanceof QuickBooks_Payments_Token)
-		{
-			// It's a token
-			$payload['token'] = $Object_or_token->toString();
-		}
-		else
+		if ($Object_or_token instanceof QuickBooks_Payments_CreditCard) {
+      $this->_setError();
+      return false;
+  } elseif ($Object_or_token instanceof QuickBooks_Payments_BankAccount) {
+      $payload['bankAccount'] = $Object_or_token->toArray();
+  } elseif ($Object_or_token instanceof QuickBooks_Payments_Token) {
+      // It's a token
+      $payload['token'] = $Object_or_token->toString();
+  } else
 		{
 			// It's a string token
 			$payload['token'] = $Object_or_token;
@@ -235,22 +247,16 @@ class Quickbooks_Payments
 
 		$payload['context'] = array_merge($payload['context'], $context);
 
-		if ($Object_or_token instanceof QuickBooks_Payments_CreditCard)
-		{
-			$remove_empty_keys = true;
-			$payload['card'] = $Object_or_token->toArray($remove_empty_keys);
-		}
-		else if ($Object_or_token instanceof QuickBooks_Payments_BankAccount)
-		{
-			$this->_setError();
-			return false;
-		}
-		else if ($Object_or_token instanceof QuickBooks_Payments_Token)
-		{
-			// It's a token
-			$payload['token'] = $Object_or_token->toString();
-		}
-		else
+		if ($Object_or_token instanceof QuickBooks_Payments_CreditCard) {
+      $remove_empty_keys = true;
+      $payload['card'] = $Object_or_token->toArray($remove_empty_keys);
+  } elseif ($Object_or_token instanceof QuickBooks_Payments_BankAccount) {
+      $this->_setError();
+      return false;
+  } elseif ($Object_or_token instanceof QuickBooks_Payments_Token) {
+      // It's a token
+      $payload['token'] = $Object_or_token->toString();
+  } else
 		{
 			// It's a string card_id
 			$payload['cardOnFile'] = $Object_or_token;
@@ -280,19 +286,15 @@ class Quickbooks_Payments
 
 	public function tokenize($Context, $Object)
 	{
-		if ($Object instanceof QuickBooks_Payments_CreditCard)
-		{
-			$payload = array(
-				'card' => $Object->toArray()
-				);
-		}
-		else if ($Object instanceof QuickBooks_Payments_BankAccount)
-		{
-			$payload = array(
-				'bankAccount' => $Object->toArray()
-				);
-		}
-		else
+		if ($Object instanceof QuickBooks_Payments_CreditCard) {
+      $payload = array(
+   				'card' => $Object->toArray()
+   				);
+  } elseif ($Object instanceof QuickBooks_Payments_BankAccount) {
+      $payload = array(
+   				'bankAccount' => $Object->toArray()
+   				);
+  } else
 		{
 			$this->_setError();
 			return false;
@@ -319,7 +321,7 @@ class Quickbooks_Payments
 	 * @param  [type] $id      [description]
 	 * @return [type]          [description]
 	 */
-	public function getCharge($Context, $id)
+	public function getCharge($Context, string $id)
 	{
 		$resp = $this->_http($Context, QuickBooks_Payments::URL_CHARGE . '/' . $id, null);
 
@@ -340,7 +342,7 @@ class Quickbooks_Payments
 	 * @param  [type] $id [description]
 	 * @return [type]     [description]
 	 */
-	public function getDebit($Context, $id)
+	public function getDebit($Context, string $id)
 	{
 		$resp = $this->_http($Context, QuickBooks_Payments::URL_ECHECK . '/' . $id, null);
 
@@ -464,7 +466,7 @@ class Quickbooks_Payments
 	 *
 	 * @return QuickBooks_Payments_CreditCard
 	 */
-	public function getCard($Context, $id, $card_id)
+	public function getCard($Context, $id, string $card_id)
 	{
 		$id = str_replace(array('{', '}', '-'), '', $id);
 
@@ -518,7 +520,7 @@ class Quickbooks_Payments
 	 *
 	 * @return boolean
 	 */
-	public function deleteCard($Context, $id, $card_id)
+	public function deleteCard($Context, $id, string $card_id)
 	{
 		$id = str_replace(array('{', '}', '-'), '', $id);
 
@@ -527,13 +529,7 @@ class Quickbooks_Payments
 		$resp = $this->_http($Context, $url, null, 'DELETE');
 
 		$data = json_decode($resp, true);
-
-		if ($this->_handleError($data))
-		{
-			return false;
-		}
-
-		return true;
+  return !$this->_handleError($data);
 	}
 
 	/**
@@ -541,28 +537,23 @@ class Quickbooks_Payments
 	 *
 	 * @return boolean
 	 */
-	protected function _handleError($data, $ignore_declines = false)
+	protected function _handleError(array $data, $ignore_declines = false)
 	{
-		if (!$data)
+		if ($data === [])
 		{
 			// Check for 401/other errors
 			$info = $this->_last_httpinfo;
 
-			if ($info['http_code'] == QuickBooks_HTTP::HTTP_401)
-			{
-				$this->_setError($info['http_code'], 'Unauthorized.');
-				return true;
-			}
-			else if ($info['http_code'] == QuickBooks_HTTP::HTTP_404)
-			{
-				$this->_setError($info['http_code'], 'Not Found.');
-				return true;
-			}
-			else if ($info['http_code'] == QuickBooks_HTTP::HTTP_500)
-			{
-				$this->_setError($info['http_code'], 'Internal Server Error.');
-				return true;
-			}
+			if ($info['http_code'] == QuickBooks_HTTP::HTTP_401) {
+       $this->_setError($info['http_code'], 'Unauthorized.');
+       return true;
+   } elseif ($info['http_code'] == QuickBooks_HTTP::HTTP_404) {
+       $this->_setError($info['http_code'], 'Not Found.');
+       return true;
+   } elseif ($info['http_code'] == QuickBooks_HTTP::HTTP_500) {
+       $this->_setError($info['http_code'], 'Internal Server Error.');
+       return true;
+   }
 		}
 
 		if (isset($data['errors']))
@@ -580,16 +571,10 @@ class Quickbooks_Payments
 			return true;
 		}
 
-		if (!$ignore_declines)
-		{
-			if (isset($data['status']) and
-				$data['status'] == self::STATUS_DECLINED)
-			{
-				$this->_setError(self::ERROR_DECLINE, 'This transaction was declined.');
-
-				return true;
-			}
-		}
+		if (!$ignore_declines && (isset($data['status']) && $data['status'] == self::STATUS_DECLINED)) {
+      $this->_setError(self::ERROR_DECLINE, 'This transaction was declined.');
+      return true;
+  }
 
 		return false;
 	}
@@ -712,7 +697,7 @@ class Quickbooks_Payments
 	 * @param  $operation
 	 * @return boolean
 	 */
-	protected function _http($Context, $url_path, $raw_body = null, $operation = null)
+	protected function _http($Context, string $url_path, $raw_body = null, $operation = null)
 	{
 		if ($operation !== null)
 		{
@@ -743,42 +728,36 @@ class Quickbooks_Payments
 			$auth_str = 'Bearer ' . $authcreds['oauth_access_token'];
 		}
 
-		$HTTP = new QuickBooks_HTTP($url);
+		$quickBooksHTTP = new QuickBooks_HTTP($url);
 
 		$headers = array(
 			'Content-Type' => 'application/json',
 			'Request-Id' => QuickBooks_Utilities::GUID(),
 			'Authorization' => $auth_str,
 			);
-		$HTTP->setHeaders($headers);
+		$quickBooksHTTP->setHeaders($headers);
 
 		// Turn on debugging for the HTTP object if it's been enabled in the payment processor
-		$HTTP->useDebugMode($this->_debug);
+		$quickBooksHTTP->useDebugMode($this->_debug);
 
 		//
-		$HTTP->setRawBody($raw_body);
+		$quickBooksHTTP->setRawBody($raw_body);
 
-		$HTTP->verifyHost(false);
-		$HTTP->verifyPeer(false);
+		$quickBooksHTTP->verifyHost(false);
+		$quickBooksHTTP->verifyPeer(false);
 
-		if ($method == 'POST')
-		{
-			$return = $HTTP->POST();
-		}
-		else if ($method == 'GET')
-		{
-			$return = $HTTP->GET();
-		}
-		else if ($method == 'DELETE')
-		{
-			$return = $HTTP->DELETE();
-		}
-		else
+		if ($method == 'POST') {
+      $return = $quickBooksHTTP->POST();
+  } elseif ($method == 'GET') {
+      $return = $quickBooksHTTP->GET();
+  } elseif ($method == 'DELETE') {
+      $return = $quickBooksHTTP->DELETE();
+  } else
 		{
 			$return = null;  // ERROR
 		}
 
-		$info = $HTTP->lastInfo();
+		$info = $quickBooksHTTP->lastInfo();
 		$this->_last_httpinfo = $info;
 
 		if ($info['http_code'] == 401)
@@ -792,42 +771,37 @@ class Quickbooks_Payments
 				// Set the new header
 				$headers['Authorization'] = 'Bearer ' . $authcreds['oauth_access_token'];
 				$headers['Request-Id'] = QuickBooks_Utilities::GUID();                    // Generate a new unique Request-Id
-				$HTTP->setHeaders($headers);
+				$quickBooksHTTP->setHeaders($headers);
 
 				// Retry the request
-				if ($method == 'POST')
-				{
-					$return = $HTTP->POST();
-				}
-				else if ($method == 'GET')
-				{
-					$return = $HTTP->GET();
-				}
-				else if ($method == 'DELETE')
-				{
-					$return = $HTTP->DELETE();
-				}
+				if ($method == 'POST') {
+        $return = $quickBooksHTTP->POST();
+    } elseif ($method == 'GET') {
+        $return = $quickBooksHTTP->GET();
+    } elseif ($method == 'DELETE') {
+        $return = $quickBooksHTTP->DELETE();
+    }
 
-				$info = $HTTP->lastInfo();
+				$info = $quickBooksHTTP->lastInfo();
 				$this->_last_httpinfo = $info;
 			}
 		}
 
-		$this->_last_request = $HTTP->lastRequest();
-		$this->_last_response = $HTTP->lastResponse();
+		$this->_last_request = $quickBooksHTTP->lastRequest();
+		$this->_last_response = $quickBooksHTTP->lastResponse();
 
 		//
-		$this->log($HTTP->getLog(), QUICKBOOKS_LOG_DEBUG);
+		$this->log($quickBooksHTTP->getLog(), QUICKBOOKS_LOG_DEBUG);
 
 		$this->_last_intuittid = '';
-		$response_headers = $HTTP->lastResponseHeaders();
+		$response_headers = $quickBooksHTTP->lastResponseHeaders();
 		if (!empty($response_headers['intuit_tid']))
 		{
 			$this->_last_intuittid = $response_headers['intuit_tid'];
 		}
 
-		$errnum = $HTTP->errorNumber();
-		$errmsg = $HTTP->errorMessage();
+		$errnum = $quickBooksHTTP->errorNumber();
+		$errmsg = $quickBooksHTTP->errorMessage();
 
 		if ($errnum)
 		{

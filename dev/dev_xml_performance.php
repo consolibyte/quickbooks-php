@@ -9,7 +9,7 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalm
 /**
  * QuickBooks classes
  */
-require_once 'QuickBooks.php';
+require_once __DIR__ . '/QuickBooks.php';
 
 $start = microtime(true);
 	

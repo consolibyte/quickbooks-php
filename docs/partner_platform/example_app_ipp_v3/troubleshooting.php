@@ -12,7 +12,7 @@ $urls = array(
 	QuickBooks_IPP_IntuitAnywhere::URL_DISCOVERY_PRODUCTION,
 	);
 
-for ($i = 0; $i <= 1; $i++)
+for ($i = 0; $i <= 1; ++$i)
 {
 	foreach ($urls as $url)
 	{

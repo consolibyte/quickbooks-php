@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_SalesReceipt_DiscountLine extends QuickBooks_QBXML
 		// Discount amounts are always negative in QuickBooks 
 		if ($amount > 0)
 		{
-			$amount = $amount * -1.0;
+			$amount *= -1.0;
 		}
 		
 		return $this->setAmountType('Amount', $amount);

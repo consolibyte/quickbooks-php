@@ -56,14 +56,11 @@ class QuickBooks_Utilities
 		$parse['user'] = urldecode($parse['user']);
 		$parse['pass'] = urldecode($parse['pass']);
 		
-		if (is_null($part))
-		{
-			return $parse;
-		}
-		else if (isset($parse[$part]))
-		{
-			return $parse[$part];
-		}
+		if (is_null($part)) {
+      return $parse;
+  } elseif (isset($parse[$part])) {
+      return $parse[$part];
+  }
 			
 		return null;
 	}
@@ -85,18 +82,11 @@ class QuickBooks_Utilities
 			'<strPassword>', 
 			);
 		
-		foreach ($masks as $key)
-		{
-			if (substr($key, 0, 1) == '<')
-			{
-				// It's an XML tag
-				$contents = QuickBooks_Utilities::_extractTagContents(trim($key, '<> '), $message);
-				
-				$masked = str_repeat('x', min(strlen($contents), 12)) . substr($contents, 12);
-				
-				$message = str_replace($key . $contents . '</' . trim($key, '<> ') . '>', $key . $masked . '</' . trim($key, '<> ') . '>', $message);
-			}
-		}
+		foreach ($masks as $mask) {
+      $contents = QuickBooks_Utilities::_extractTagContents(trim($mask, '<> '), $message);
+      $masked = str_repeat('x', min(strlen($contents), 12)) . substr($contents, 12);
+      $message = str_replace($mask . $contents . '</' . trim($mask, '<> ') . '>', $mask . $masked . '</' . trim($mask, '<> ') . '>', $message);
+  }
 		
 		return $message;
 	}
@@ -106,8 +96,7 @@ class QuickBooks_Utilities
 	 */
 	static protected function _extractTagContents($tag, $data)
 	{
-		$tmp = QuickBooks_XML::extractTagContents($tag, $data);
-		return $tmp;
+		return QuickBooks_XML::extractTagContents($tag, $data);
 	}
 	
 	/**
@@ -163,12 +152,7 @@ class QuickBooks_Utilities
 	 */
 	static public function extractRequestID($xml)
 	{
-		$look = array(
-			
-			);
-		
-		if (false !== ($start = strpos($xml, ' requestID="')) and 
-			false !== ($end = strpos($xml, '"', $start + 12)))
+		if (false !== ($start = strpos($xml, ' requestID="')) && false !== ($end = strpos($xml, '"', $start + 12)))
 		{
 			return substr($xml, $start + 12, $end - $start - 12);
 		}
@@ -177,13 +161,12 @@ class QuickBooks_Utilities
 	}
 	
 	/**
-	 * Create a requestID string from action and ident parts
-	 * 
-	 * @param string $action
-	 * @param mixed $ident
-	 * @return string
-	 */
-	static public function constructRequestID($action, $ident)
+  * Create a requestID string from action and ident parts
+  *
+  * @param mixed $ident
+  * @return string
+  */
+ static public function constructRequestID(string $action, string $ident)
 	{
 		return base64_encode($action . '|' . $ident);
 	}
@@ -299,9 +282,9 @@ class QuickBooks_Utilities
 				
 			$justletters = true;
 			$count = strlen($interval);
-			for ($i = 0; $i < $count; $i++)
+			for ($i = 0; $i < $count; ++$i)
 			{
-				if (ord($interval[$i]) < 97 or ord($interval[$i]) > 122)
+				if (ord($interval[$i]) < 97 || ord($interval[$i]) > 122)
 				{
 					$justletters = false;
 				}
@@ -336,7 +319,7 @@ class QuickBooks_Utilities
 	{
 		$remoteaddr_long = ip2long($remoteaddr);
 		
-		list ($net, $mask) = split('/', $CIDR);
+		list ($net, $mask) = explode('/', $CIDR);
 		$ip_net = ip2long($net);
 		$ip_mask = ~((1 << (32 - $mask)) - 1);
 		
@@ -357,33 +340,28 @@ class QuickBooks_Utilities
 	{
 		$allowed = true;
 		
-		if (count($arr_allow))
+		if (count($arr_allow) > 0)
 		{
 			// only allow these addresses
 			$allowed = false;
 			
 			foreach ($arr_allow as $allow)
 			{
-				if (false !== strpos($allow, '/'))
-				{
-					// CIDR notation
-					
-					if (QuickBooks_Utilities::_checkCIDR($remoteaddr, $allow))
-					{
-						$allowed = true;
-						break;
-					}
-				}
-				else if (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $allow))
-				{
-					// IPv4 address
-					
-					if ($remoteaddr == $allow)
-					{
-						$allowed = true;
-						break;
-					}
-				}
+				if (false !== strpos($allow, '/')) {
+        // CIDR notation
+        if (QuickBooks_Utilities::_checkCIDR($remoteaddr, $allow))
+   					{
+   						$allowed = true;
+   						break;
+   					}
+    } elseif (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $allow)) {
+        // IPv4 address
+        if ($remoteaddr == $allow)
+   					{
+   						$allowed = true;
+   						break;
+   					}
+    }
 			}
 			
 			if (!$allowed)
@@ -392,29 +370,24 @@ class QuickBooks_Utilities
 			}
 		}
 		
-		if (count($arr_deny))
+		if (count($arr_deny) > 0)
 		{
 			// do *not* allow these addresses
 			foreach ($arr_deny as $deny)
 			{
-				if (false !== strpos($deny, '/'))
-				{
-					// CIDR notation
-					
-					if (QuickBooks_Utilities::_checkCIDR($remoteaddr, $deny))
-					{
-						return false;
-					}
-				}
-				else if (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $deny))
-				{
-					// IPv4 address
-					
-					if ($remoteaddr == $deny)
-					{
-						return false;
-					}
-				}
+				if (false !== strpos($deny, '/')) {
+        // CIDR notation
+        if (QuickBooks_Utilities::_checkCIDR($remoteaddr, $deny))
+   					{
+   						return false;
+   					}
+    } elseif (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $deny)) {
+        // IPv4 address
+        if ($remoteaddr == $deny)
+   					{
+   						return false;
+   					}
+    }
 			}
 		}
 		
@@ -507,14 +480,9 @@ class QuickBooks_Utilities
 	 * 
 	 */
 	public static function hasApplicationID($dsn, $user, $object_type, $TxnID_or_ListID)
-	{
-		if (QuickBooks_Utilities::fetchApplicationID($dsn, $user, $object_type, $TxnID_or_ListID))
-		{
-			return true;
-		}
-		
-		return false;
-	}
+ {
+     return (bool) QuickBooks_Utilities::fetchApplicationID($dsn, $user, $object_type, $TxnID_or_ListID);
+ }
 	
 	/**
 	 * 
@@ -590,14 +558,9 @@ class QuickBooks_Utilities
 	 * @return boolean
 	 */
 	public static function hasQuickBooksID($dsn, $user, $object_type, $app_ID)
-	{
-		if (QuickBooks_Utilities::fetchQuickBooksID($dsn, $user, $object_type, $app_ID))
-		{
-			return true;
-		}
-		
-		return false;
-	}
+ {
+     return (bool) QuickBooks_Utilities::fetchQuickBooksID($dsn, $user, $object_type, $app_ID);
+ }
 	
 	/**
 	 * Initialize the backend driver
@@ -638,8 +601,7 @@ class QuickBooks_Utilities
 	{
 		if ($date)
 		{
-			if (is_numeric($date) and 
-				strlen($date) > 6)
+			if (is_numeric($date) && strlen($date) > 6)
 			{
 				return date('Y-m-d', $date);
 			}
@@ -659,8 +621,7 @@ class QuickBooks_Utilities
 	{
 		if ($datetime)
 		{
-			if (is_numeric($datetime) and 
-				strlen($datetime) > 6)
+			if (is_numeric($datetime) && strlen($datetime) > 6)
 			{
 				return date('Y-m-d', $datetime) . 'T' . date('H:i:s', $datetime);
 			}
@@ -715,8 +676,7 @@ class QuickBooks_Utilities
 			
 		foreach (get_defined_constants() as $constant => $value)
 		{
-			if (substr($constant, 0, strlen('QUICKBOOKS_OBJECT_')) == 'QUICKBOOKS_OBJECT_' and 
-				substr_count($constant, '_') == 2)
+			if (substr($constant, 0, strlen('QUICKBOOKS_OBJECT_')) === 'QUICKBOOKS_OBJECT_' && substr_count($constant, '_') == 2)
 			{
 				if (!$return_keys)
 				{
@@ -740,7 +700,9 @@ class QuickBooks_Utilities
 		if ($order_for_mapping)
 		{
 			// Sort with the very longest values first, to the shortest values last
-			usort($constants, function($a, $b){ return strlen($a) > strlen($b) ? -1 : 1; });
+			usort($constants, static function ($a, $b) {
+       return strlen($a) > strlen($b) ? -1 : 1;
+   });
 		}
 		else
 		{
@@ -793,15 +755,13 @@ class QuickBooks_Utilities
 	 */
 	static public function GUID()
 	{
-		$guid = sprintf('%04x%04x-%04x-%03x4-%04x-%04x%04x%04x',
+		return sprintf('%04x%04x-%04x-%03x4-%04x-%04x%04x%04x',
 			mt_rand(0, 65535), mt_rand(0, 65535), 
 			mt_rand(0, 65535), 
 			mt_rand(0, 4095),  
 			bindec(substr_replace(sprintf('%016b', mt_rand(0, 65535)), '01', 6, 2)),
 			mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535)
-			);  	
-			
-		return $guid;	
+			);	
 	}	
 		
 	/**
@@ -1066,7 +1026,7 @@ class QuickBooks_Utilities
 		if (!$wiggled)
 		{
 			$count = count($priorities);
-			for ($i = $count - 1; $i >= 0; $i--)
+			for ($i = $count - 1; $i >= 0; --$i)
 			{
 				$priorities[$i * $wiggle] = $priorities[$i];
 				unset($priorities[$i]);
@@ -1127,18 +1087,13 @@ class QuickBooks_Utilities
 		}
 		
 		// Check for dependency priorities
-		if ($dependency and 
-			isset($dependencies[$action]) and 
-			isset($dependencies[$action][$dependency]))
-		{			
-			// Dependency modified priority
-			return $dependencies[$action][$dependency];
-		}
-		else if ($key = array_search($action, $priorities))
-		{
-			// Regular priority
-			return $key;
-		}
+		if ($dependency && isset($dependencies[$action]) && isset($dependencies[$action][$dependency])) {
+      // Dependency modified priority
+      return $dependencies[$action][$dependency];
+  } elseif ($key = array_search($action, $priorities, true)) {
+      // Regular priority
+      return $key;
+  }
 		
 		// Default priority
 		return 999;		
@@ -1194,7 +1149,7 @@ class QuickBooks_Utilities
 		{
 			foreach ($startswith as $start)
 			{
-				if (substr($constant, 0, strlen($start)) == $start)
+				if (substr($constant, 0, strlen($start)) === $start)
 				{
 					if (!$return_keys)
 					{
@@ -1282,23 +1237,21 @@ class QuickBooks_Utilities
 	}
 			
 	/**
-	 * Converts an action to a request (example: "CustomerAdd" to "CustomerAddRq")
-	 * 
-	 * @param string $action
-	 * @return string
-	 */
-	static public function actionToRequest($action)
+  * Converts an action to a request (example: "CustomerAdd" to "CustomerAddRq")
+  *
+  * @return string
+  */
+ static public function actionToRequest(string $action)
 	{
 		return $action . 'Rq';
 	}
 		
 	/**
-	 * Converts an action to a response (example: "CustomerAdd" to "CustomerAddRs")
-	 * 
-	 * @param string $action
-	 * @return string
-	 */
-	static public function actionToResponse($action)
+  * Converts an action to a response (example: "CustomerAdd" to "CustomerAddRs")
+  *
+  * @return string
+  */
+ static public function actionToResponse(string $action)
 	{
 		return $action . 'Rs';
 	}
@@ -1320,7 +1273,7 @@ class QuickBooks_Utilities
 	 * @param string $action
 	 * @return string
 	 */
-	static public function objectToXMLElement($object)
+	static public function objectToXMLElement(string $object)
 	{
 		return $object . 'Ret';
 	}

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 
 /**
  * QuickBooks Kohana Integration Example
@@ -38,8 +38,7 @@ class Model_Qbdata extends ORM {
 	 */
 	public function GetLogs(){
 		$query = DB::select()->from('quickbooks_logs');
-		$logentries = $this->_db->query(Database::SELECT, $query, FALSE)->as_array();
-		return $logentries; 
+		return $this->_db->query(Database::SELECT, $query, FALSE)->as_array(); 
 	}
 
 	/* 
@@ -55,11 +54,13 @@ class Model_Qbdata extends ORM {
 		$qentry = $this->_db->query(Database::SELECT, $query, FALSE)->as_array();
 
 		foreach ($qentry as $entry) {
-			if($entry['qb_action'] == 'CustomerAdd')
-				$metrics['custadd']++;
-			elseif($entry['qb_action'] == 'CustomerMod')
-				$metrics['custmod']++;
+			if ($entry['qb_action'] == 'CustomerAdd') {
+       ++$metrics['custadd'];
+   } elseif ($entry['qb_action'] == 'CustomerMod') {
+       ++$metrics['custmod'];
+   }
 		}
+  
 		return $metrics;
 	}
 
@@ -67,10 +68,10 @@ class Model_Qbdata extends ORM {
 	/* 
 	 * Uses the details of the action and ident to find additional information
 	 */
-	private function FetchDetails($errorset)
-	{
-		//if you'd like to check the queue to find more details you can do so here
-		//for instance, of the action is CustomerAdd and it failed, you can pull the customer
-		//using the details from the queue
-	}
+	private function FetchDetails()
+ {
+     //if you'd like to check the queue to find more details you can do so here
+     //for instance, of the action is CustomerAdd and it failed, you can pull the customer
+     //using the details from the queue
+ }
 }

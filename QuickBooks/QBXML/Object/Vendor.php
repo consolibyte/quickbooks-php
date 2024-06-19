@@ -173,9 +173,9 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
 		return $this->_setXYZAddress('Vendor', '', $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note);	
 	}
 	
-	protected function _setXYZAddress($pre, $post, $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note)
+	protected function _setXYZAddress(string $pre, string $post, $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note)
 	{
-		for ($i = 1; $i <= 5; $i++)
+		for ($i = 1; $i <= 5; ++$i)
 		{
 			$this->set($pre . 'Address' . $post . ' Addr' . $i, ${'addr' . $i});
 		}
@@ -187,7 +187,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
 		$this->set($pre . 'Address' . $post . ' Note', $note);		
 	}
 	
-	protected function _getXYZAddress($pre, $post, $part = null, $defaults = array())
+	protected function _getXYZAddress(string $pre, string $post, $part = null, $defaults = array())
 	{
 		if (!is_null($part))
 		{

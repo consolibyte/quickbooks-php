@@ -220,8 +220,7 @@ class QuickBooks_XML
 	{
 		$tag = trim($tag, '<> ');
 		
-		if (false !== strpos($data, '<' . $tag . '>') and 
-			false !== strpos($data, '</' . $tag . '>'))
+		if (false !== strpos($data, '<' . $tag . '>') && false !== strpos($data, '</' . $tag . '>'))
 		{
 			$data = strstr($data, '<' . $tag . '>');
 			$end = strpos($data, '</' . $tag . '>');
@@ -254,8 +253,7 @@ class QuickBooks_XML
 			$data = substr($data, $spos + strlen($attr));
 		}
 		
-		if (false !== ($spos = strpos($data, $attr . '="')) and 
-			false !== ($epos = strpos($data, '"', $spos + strlen($attr) + 2)))
+		if (false !== ($spos = strpos($data, $attr . '="')) && false !== ($epos = strpos($data, '"', $spos + strlen($attr) + 2)))
 		{
 			//print('start: ' . $spos . "\n");
 			//print('end: ' . $epos . "\n");
@@ -307,50 +305,29 @@ class QuickBooks_XML
 			$expect_key = false;
 			$expect_value = false;
 			
-			for ($i = 0; $i < $length; $i++)
+			for ($i = 0; $i < $length; ++$i)
 			{
-				if ($attrs[$i] == '=')
-				{
-					$in_key = false;
-					$in_value = false;
-					$expect_value = true;
-				}
-				/*
-				else if ($attrs{$i} == '"' and $expect_value)
-				{
-					$in_value = true;
-					$expect_value = false;
-				}
-				*/
-				/*else if ($attrs{$i} == '"' and $in_value)*/
-				else if (($attrs[$i] == '"' or $attrs[$i] == '\'') and $expect_value)
-				{
-					$in_value = true;
-					$expect_value = false;
-				}
-				else if (($attrs[$i] == '"' or $attrs[$i] == '\'') and $in_value)
-				{
-					$attributes[trim($key)] = $value;
-					
-					$key = '';
-					$value = '';
-					
-					$in_value = false;
-					$expect_key = true;
-				}
-				else if ($attrs[$i] == ' ' and $expect_key)
-				{
-					$expect_key = false;
-					$in_key = true;
-				}
-				else if ($in_key)
-				{
-					$key .= $attrs[$i];
-				}
-				else if ($in_value)
-				{
-					$value .= $attrs[$i];
-				}
+				if ($attrs[$i] === '=') {
+        $in_key = false;
+        $in_value = false;
+        $expect_value = true;
+    } elseif (($attrs[$i] === '"' || $attrs[$i] === "'") && $expect_value) {
+        $in_value = true;
+        $expect_value = false;
+    } elseif (($attrs[$i] === '"' || $attrs[$i] === "'") && $in_value) {
+        $attributes[trim($key)] = $value;
+        $key = '';
+        $value = '';
+        $in_value = false;
+        $expect_key = true;
+    } elseif ($attrs[$i] === ' ' && $expect_key) {
+        $expect_key = false;
+        $in_key = true;
+    } elseif ($in_key) {
+        $key .= $attrs[$i];
+    } elseif ($in_value) {
+        $value .= $attrs[$i];
+    }
 			}
 			
 			/*
@@ -404,7 +381,7 @@ class QuickBooks_XML
 		if (!$double_encode)
 		{
 			$fix = array();
-			foreach ($transform as $raw => $encoded)
+			foreach ($transform as $encoded)
 			{
 				$fix[str_replace('&', '&amp;', $encoded)] = $encoded;
 			}
@@ -429,7 +406,7 @@ class QuickBooks_XML
 		$transform = array(
 			'&lt;' => '<', 
 			'&gt;' => '>', 
-			'&apos;' => '\'', 
+			'&apos;' => "'", 
 			'&quot;' => '"', 
 			'&amp;' => '&', 		// Make sure that this is *the last* transformation to run, otherwise we end up double-un-encoding things
 			);

@@ -19,7 +19,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
 // QuickBooks framework classes
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 
 // Create the new invoice object

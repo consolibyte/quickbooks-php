@@ -24,6 +24,7 @@ class QuickBooks_IPP_Entitlement
 	protected $_term;
 
 	const TERM_ON = 'On';
+ 
 	const TERM_OFF = 'Off';
 	
 	public function __construct($entitlement_id, $name, $term)

@@ -250,12 +250,12 @@ class QuickBooks_Cast
 		
 		static $files = array();
 		
-		if (!count($files))
+		if (count($files) === 0)
 		{
 			$dh = opendir(dirname(__FILE__) . '/QBXML/Schema/Object');
 			while (false !== ($file = readdir($dh)))
 			{
-				if ($file{0} == '.' or substr($file, -6, 6) != 'Rq.php')
+				if ($file{0} === '.' || substr($file, -6, 6) !== 'Rq.php')
 				{
 					continue;
 				}
@@ -326,24 +326,22 @@ class QuickBooks_Cast
 		$class = null;
 		$schema = null;
 		
-		if (isset($types[$type_or_action]))
-		{
-			QuickBooks_Loader::load('/QuickBooks/QBXML/Schema/Object/' . $types[$type_or_action] . '.php');
-			$class = 'QuickBooks_QBXML_Schema_Object_' . $types[$type_or_action];
-			$schema = new $class();
-		}
-		else if (isset($types3[$type_or_action]))		// substr -3
-		{
-			QuickBooks_Loader::load('/QuickBooks/QBXML/Schema/Object/' . $types3[$type_or_action] . '.php');
-			$class = 'QuickBooks_QBXML_Schema_Object_' . $types3[$type_or_action];
-			$schema = new $class();
-		}
-		else if (isset($types5[$type_or_action]))		// substr -5
-		{
-			QuickBooks_Loader::load('/QuickBooks/QBXML/Schema/Object/' . $types5[$type_or_action] . '.php');
-			$class = 'QuickBooks_QBXML_Schema_Object_' . $types5[$type_or_action];
-			$schema = new $class();
-		}
+		if (isset($types[$type_or_action])) {
+      QuickBooks_Loader::load('/QuickBooks/QBXML/Schema/Object/' . $types[$type_or_action] . '.php');
+      $class = 'QuickBooks_QBXML_Schema_Object_' . $types[$type_or_action];
+      $schema = new $class();
+  } elseif (isset($types3[$type_or_action])) {
+      // substr -3
+      QuickBooks_Loader::load('/QuickBooks/QBXML/Schema/Object/' . $types3[$type_or_action] . '.php');
+      $class = 'QuickBooks_QBXML_Schema_Object_' . $types3[$type_or_action];
+      $schema = new $class();
+  } elseif (isset($types5[$type_or_action])) {
+      // substr -5
+      QuickBooks_Loader::load('/QuickBooks/QBXML/Schema/Object/' . $types5[$type_or_action] . '.php');
+      $class = 'QuickBooks_QBXML_Schema_Object_' . $types5[$type_or_action];
+      $schema = new $class();
+  }
+  
 		//else
 		//{
 		//	return $value;
@@ -351,9 +349,9 @@ class QuickBooks_Cast
 		
 		//print('	casting using schema: ' . get_class($schema) . "\n");
 		
-		if ($class and $schema)
+		if ($class && $schema)
 		{
-			if (!$schema->exists($field) and false !== strpos($field, '_'))
+			if (!$schema->exists($field) && false !== strpos($field, '_'))
 			{
 				$field = str_replace('_', ' ', $field);
 			}
@@ -370,7 +368,7 @@ class QuickBooks_Cast
 						//$value = QuickBooks_Cast::_castCharset($value);
 						
 						// Make sure it'll fit in the allocated field length
-						if (is_int($maxlength) and $maxlength > 0)
+						if (is_int($maxlength) && $maxlength > 0)
 						{
 							$value = QuickBooks_Cast::_castTruncate($value, $maxlength, $use_abbrevs);
 						}
@@ -381,16 +379,16 @@ class QuickBooks_Cast
 						{
 							$value = date('Y-m-d', strtotime($value));
 						}
+      
 						break;
 					case QUICKBOOKS_DATATYPE_DATETIME:
 						if ($value)
 						{
 							$value = date('Y-m-d', strtotime($value)) . 'T' . date('H:i:s', strtotime($value));
 						}
+      
 						break;
 					case QUICKBOOKS_DATATYPE_ENUM:
-						// do nothing
-						break;
 					case QUICKBOOKS_DATATYPE_ID:
 						// do nothing
 						break;
@@ -399,14 +397,7 @@ class QuickBooks_Cast
 						break;
 					case QUICKBOOKS_DATATYPE_BOOLEAN:
 						
-						if ($value and $value !== 'false')
-						{
-							$value = 'true';
-						}
-						else
-						{
-							$value = 'false';
-						}
+						$value = $value && $value !== 'false' ? 'true' : 'false';
 						
 						break;
 					case QUICKBOOKS_DATATYPE_INTEGER:
@@ -477,16 +468,9 @@ class QuickBooks_Cast
 	 */
 	static protected function _is8Bit($string, $charset = '') 
 	{
-		if (preg_match("/^iso-8859/i", $charset)) 
-		{
-			$needle = '/\240|[\241-\377]/';
-		} 
-		else 
-		{
-			$needle = '/[\200-\237]|\240|[\241-\377]/';
-		}
+		$needle = preg_match("/^iso-8859/i", $charset) ? '/\240|[\241-\377]/' : '/[\200-\237]|\240|[\241-\377]/';
 		
-		return preg_match("$needle", $string);
+		return preg_match($needle, $string);
 	}
 		
 	/**
@@ -502,11 +486,10 @@ class QuickBooks_Cast
 		{
 			return $string;
 		}
-		
-		$string = preg_replace("/&#([0-9]+);/e", "QuickBooks_Cast_unicodetoutf8('\\1')", $string);
+  
 		// $string=preg_replace("/&#[xX]([0-9A-F]+);/e","unicodetoutf8(hexdec('\\1'))",$string);
 		
-		return $string;
+		return preg_replace("/&#([0-9]+);/e", "QuickBooks_Cast_unicodetoutf8('\\1')", $string);
 	}
 	
 	/**
@@ -525,29 +508,26 @@ class QuickBooks_Cast
 		
 		// decode four byte unicode characters
 		$string = preg_replace_callback("/([\360-\367])([\200-\277])([\200-\277])([\200-\277])/",
-		function($arr)
-		{
-		    $val = ((ord($arr[1])-240)*262144+(ord($arr[2])-128)*4096+(ord($arr[3])-128)*64+(ord($arr[4])-128));
-		    return "&#" . $val . ";";
-		}, $string);
+		static function ($arr) {
+      $val = ((ord($arr[1])-240)*262144+(ord($arr[2])-128)*4096+(ord($arr[3])-128)*64+(ord($arr[4])-128));
+      return "&#" . $val . ";";
+  }, $string);
 			
 	
 		// decode three byte unicode characters
 		$string = preg_replace_callback("/([\340-\357])([\200-\277])([\200-\277])/",
-		function($arr)
-		{
-		    $val = ((ord($arr[1])-224)*4096+(ord($arr[2])-128)*64+(ord($arr[3])-128));
-		    return "&#" . $val . ";";
-		}, $string);
+		static function ($arr) {
+      $val = ((ord($arr[1])-224)*4096+(ord($arr[2])-128)*64+(ord($arr[3])-128));
+      return "&#" . $val . ";";
+  }, $string);
 			
 	
 		// decode two byte unicode characters
 		$string = preg_replace_callback("/([\300-\337])([\200-\277])/",
-		function($arr)
-		{
-		    $val = ((ord($arr[1])-192)*64+(ord($arr[2])-128));
-		    return "&#" . $val . ";";
-		}, $string);
+		static function ($arr) {
+      $val = ((ord($arr[1])-192)*64+(ord($arr[2])-128));
+      return "&#" . $val . ";";
+  }, $string);
 	
 		// remove broken unicode
 		$string = preg_replace("/[\200-\237]|\240|[\241-\377]/", '?', $string);
@@ -564,86 +544,69 @@ class QuickBooks_Cast
  */
 function QuickBooks_Cast_unicodetoutf8($var) 
 {
-	if ($var < 128) 
-	{
-		$ret = chr ($var);
-	} 
-	else if ($var < 2048) 
-	{
-		// Two byte utf-8
-		$binVal = str_pad (decbin ($var), 11, '0', STR_PAD_LEFT);
-		$binPart1 = substr ($binVal, 0, 5);
-		$binPart2 = substr ($binVal, 5);
-
-		$char1 = chr (192 + bindec ($binPart1));
-		$char2 = chr (128 + bindec ($binPart2));
-		$ret = $char1 . $char2;
-	} 
-	else if ($var < 65536) 
-	{
-		// Three byte utf-8
-		$binVal = str_pad (decbin ($var), 16, '0', STR_PAD_LEFT);
-		$binPart1 = substr ($binVal, 0, 4);
-		$binPart2 = substr ($binVal, 4, 6);
-		$binPart3 = substr ($binVal, 10);
-
-		$char1 = chr (224 + bindec ($binPart1));
-		$char2 = chr (128 + bindec ($binPart2));
-		$char3 = chr (128 + bindec ($binPart3));
-		$ret = $char1 . $char2 . $char3;
-	} 
-	else if ($var < 2097152) 
-	{
-		// Four byte utf-8
-		$binVal = str_pad (decbin ($var), 21, '0', STR_PAD_LEFT);
-		$binPart1 = substr ($binVal, 0, 3);
-		$binPart2 = substr ($binVal, 3, 6);
-		$binPart3 = substr ($binVal, 9, 6);
-		$binPart4 = substr ($binVal, 15);
-
-		$char1 = chr (240 + bindec ($binPart1));
-		$char2 = chr (128 + bindec ($binPart2));
-		$char3 = chr (128 + bindec ($binPart3));
-		$char4 = chr (128 + bindec ($binPart4));
-		$ret = $char1 . $char2 . $char3 . $char4;
-	} 
-	else if ($var < 67108864) 
-	{
-		// Five byte utf-8
-		$binVal = str_pad (decbin ($var), 26, '0', STR_PAD_LEFT);
-		$binPart1 = substr ($binVal, 0, 2);
-		$binPart2 = substr ($binVal, 2, 6);
-		$binPart3 = substr ($binVal, 8, 6);
-		$binPart4 = substr ($binVal, 14,6);
-		$binPart5 = substr ($binVal, 20);
-
-		$char1 = chr (248 + bindec ($binPart1));
-		$char2 = chr (128 + bindec ($binPart2));
-		$char3 = chr (128 + bindec ($binPart3));
-		$char4 = chr (128 + bindec ($binPart4));
-		$char5 = chr (128 + bindec ($binPart5));
-		$ret = $char1 . $char2 . $char3 . $char4 . $char5;
-	} 
-	else if ($var < 2147483648) 
-	{
-		// Six byte utf-8
-		$binVal = str_pad(decbin($var), 31, '0', STR_PAD_LEFT);
-		$binPart1 = substr($binVal, 0, 1);
-		$binPart2 = substr($binVal, 1, 6);
-		$binPart3 = substr($binVal, 7, 6);
-		$binPart4 = substr($binVal, 13,6);
-		$binPart5 = substr($binVal, 19,6);
-		$binPart6 = substr($binVal, 25);
-
-		$char1 = chr(252 + bindec($binPart1));
-		$char2 = chr(128 + bindec($binPart2));
-		$char3 = chr(128 + bindec($binPart3));
-		$char4 = chr(128 + bindec($binPart4));
-		$char5 = chr(128 + bindec($binPart5));
-		$char6 = chr(128 + bindec($binPart6));
-		$ret = $char1 . $char2 . $char3 . $char4 . $char5 . $char6;
-	} 
-	else 
+	if ($var < 128) {
+     $ret = chr ($var);
+ } elseif ($var < 2048) {
+     // Two byte utf-8
+     $binVal = str_pad (decbin ($var), 11, '0', STR_PAD_LEFT);
+     $binPart1 = substr ($binVal, 0, 5);
+     $binPart2 = substr ($binVal, 5);
+     $char1 = chr (192 + bindec ($binPart1));
+     $char2 = chr (128 + bindec ($binPart2));
+     $ret = $char1 . $char2;
+ } elseif ($var < 65536) {
+     // Three byte utf-8
+     $binVal = str_pad (decbin ($var), 16, '0', STR_PAD_LEFT);
+     $binPart1 = substr ($binVal, 0, 4);
+     $binPart2 = substr ($binVal, 4, 6);
+     $binPart3 = substr ($binVal, 10);
+     $char1 = chr (224 + bindec ($binPart1));
+     $char2 = chr (128 + bindec ($binPart2));
+     $char3 = chr (128 + bindec ($binPart3));
+     $ret = $char1 . $char2 . $char3;
+ } elseif ($var < 2097152) {
+     // Four byte utf-8
+     $binVal = str_pad (decbin ($var), 21, '0', STR_PAD_LEFT);
+     $binPart1 = substr ($binVal, 0, 3);
+     $binPart2 = substr ($binVal, 3, 6);
+     $binPart3 = substr ($binVal, 9, 6);
+     $binPart4 = substr ($binVal, 15);
+     $char1 = chr (240 + bindec ($binPart1));
+     $char2 = chr (128 + bindec ($binPart2));
+     $char3 = chr (128 + bindec ($binPart3));
+     $char4 = chr (128 + bindec ($binPart4));
+     $ret = $char1 . $char2 . $char3 . $char4;
+ } elseif ($var < 67108864) {
+     // Five byte utf-8
+     $binVal = str_pad (decbin ($var), 26, '0', STR_PAD_LEFT);
+     $binPart1 = substr ($binVal, 0, 2);
+     $binPart2 = substr ($binVal, 2, 6);
+     $binPart3 = substr ($binVal, 8, 6);
+     $binPart4 = substr ($binVal, 14,6);
+     $binPart5 = substr ($binVal, 20);
+     $char1 = chr (248 + bindec ($binPart1));
+     $char2 = chr (128 + bindec ($binPart2));
+     $char3 = chr (128 + bindec ($binPart3));
+     $char4 = chr (128 + bindec ($binPart4));
+     $char5 = chr (128 + bindec ($binPart5));
+     $ret = $char1 . $char2 . $char3 . $char4 . $char5;
+ } elseif ($var < 2147483648) {
+     // Six byte utf-8
+     $binVal = str_pad(decbin($var), 31, '0', STR_PAD_LEFT);
+     $binPart1 = substr($binVal, 0, 1);
+     $binPart2 = substr($binVal, 1, 6);
+     $binPart3 = substr($binVal, 7, 6);
+     $binPart4 = substr($binVal, 13,6);
+     $binPart5 = substr($binVal, 19,6);
+     $binPart6 = substr($binVal, 25);
+     $char1 = chr(252 + bindec($binPart1));
+     $char2 = chr(128 + bindec($binPart2));
+     $char3 = chr(128 + bindec($binPart3));
+     $char4 = chr(128 + bindec($binPart4));
+     $char5 = chr(128 + bindec($binPart5));
+     $char6 = chr(128 + bindec($binPart6));
+     $ret = $char1 . $char2 . $char3 . $char4 . $char5 . $char6;
+ } else 
 	{
 		// there is no such symbol in utf-8
 		$ret = '?';

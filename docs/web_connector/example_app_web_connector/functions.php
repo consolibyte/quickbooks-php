@@ -15,12 +15,12 @@
 /**
  * Generate a qbXML response to add a particular customer to QuickBooks
  */
-function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+function _quickbooks_customer_add_request(string $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
 	// Grab the data from our MySQL database
 	$arr = mysql_fetch_assoc(mysql_query("SELECT * FROM my_customer_table WHERE id = " . (int) $ID));
 	
-	$xml = '<?xml version="1.0" encoding="utf-8"?>
+	return '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="2.0"?>
 		<QBXML>
 			<QBXMLMsgsRq onError="stopOnError">
@@ -34,14 +34,12 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 				</CustomerAddRq>
 			</QBXMLMsgsRq>
 		</QBXML>';
-	
-	return $xml;
 }
 
 /**
  * Receive a response from QuickBooks 
  */
-function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
+function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, array $idents)
 {	
 	mysql_query("
 		UPDATE 

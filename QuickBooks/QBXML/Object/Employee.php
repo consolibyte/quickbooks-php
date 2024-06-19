@@ -58,11 +58,9 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
    */
   public function getName()
   {
-    if (!$this->exists('Name'))
+    if (!$this->exists('Name') && (!is_null($this->getFirstName()) || !is_null($this->getLastName())))
     {    
-      if (!is_null($this->getFirstName()) || !is_null($this->getLastName())) {
-        $this->setNameAsFirstLast();
-      }    
+      $this->setNameAsFirstLast();    
     }    
     
     return $this->get('Name');

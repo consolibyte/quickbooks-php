@@ -17,16 +17,18 @@
 
 class QuickBooks_IPP_OAuthv1
 {
-	private $_secrets;
-
 	protected $_oauth_consumer_key;
+ 
 	protected $_oauth_consumer_secret;
 
 	protected $_oauth_access_token;
+ 
 	protected $_oauth_access_token_secret;
 
-	protected $_version = null;
-	protected $_signature = null;
+	protected $_version = self::DEFAULT_VERSION;
+ 
+	protected $_signature = self::DEFAULT_SIGNATURE;
+ 
 	protected $_keyfile;
 
 	/**
@@ -35,15 +37,21 @@ class QuickBooks_IPP_OAuthv1
 	const NONCE = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 	const METHOD_POST = 'POST';
+ 
 	const METHOD_GET = 'GET';
+ 
 	const METHOD_PUT = 'PUT';
+ 
 	const METHOD_DELETE = 'DELETE';
 
 	const DEFAULT_VERSION = '1.0';
+ 
 	const DEFAULT_SIGNATURE = 'HMAC-SHA1';
 
 	const SIGNATURE_PLAINTEXT = 'PLAINTEXT';
+ 
 	const SIGNATURE_HMAC = 'HMAC-SHA1';
+ 
 	const SIGNATURE_RSA = 'RSA-SHA1';
 
 	/**
@@ -53,9 +61,6 @@ class QuickBooks_IPP_OAuthv1
 	{
 		$this->_oauth_consumer_key = $oauth_consumer_key;
 		$this->_oauth_consumer_secret = $oauth_consumer_secret;
-
-		$this->_version = self::DEFAULT_VERSION;
-		$this->_signature = self::DEFAULT_SIGNATURE;
 	}
 
 	/**
@@ -140,7 +145,7 @@ class QuickBooks_IPP_OAuthv1
 			);
 	}
 
-	protected function _generateHeader($params, $normalized)
+	protected function _generateHeader(array $params, $normalized)
 	{
 		// oauth_signature="' . $this->_escape($params['oauth_signature']) . '",
 
@@ -210,7 +215,7 @@ class QuickBooks_IPP_OAuthv1
 				{
 					$sort = $value;
 					sort($sort);
-					foreach ($sort as $subkey => $subvalue)
+					foreach ($sort as $subvalue)
 					{
 						$normalized[] = $this->_escape($key) . '=' . $this->_escape($subvalue);
 					}
@@ -318,7 +323,7 @@ class QuickBooks_IPP_OAuthv1
 		*/
 
 		$signature = null;
-		$retr = openssl_sign($sbs, $signature, $res);
+		openssl_sign($sbs, $signature, $res);
 
 		openssl_free_key($res);
 
@@ -335,7 +340,7 @@ class QuickBooks_IPP_OAuthv1
 	$signature = base64_encode(hash_hmac("sha1", $base_string, $key, true));
 	*/
 
-	protected function _generateSignature_HMAC($sbs, $method, $url, $params = array())
+	protected function _generateSignature_HMAC($sbs, $method, $url, array $params = array())
 	{
 		$secret = $this->_escape($this->_oauth_consumer_secret);
 

@@ -78,6 +78,7 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
 	{
 		$this->getTxnDate($format = null);
 	}
+ 
 	// Path: RefNumber, datatype: STRTYPE
 	
 	/**

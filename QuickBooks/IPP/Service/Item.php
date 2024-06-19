@@ -45,13 +45,13 @@ class QuickBooks_IPP_Service_Item extends QuickBooks_IPP_Service
 		
 		if ($IPP->flavor() == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
 		{
-			for ($i = 0; $i < 999; $i++)
+			for ($i = 0; $i < 999; ++$i)
 			{
 				$list = $this->findAll($Context, $realmID, $name, $i, 50);
 				
 				foreach ($list as $Item)
 				{
-					if (strtolower($Item->getName()) == strtolower($name))
+					if (strtolower($Item->getName()) === strtolower($name))
 					{
 						return $Item;
 					}

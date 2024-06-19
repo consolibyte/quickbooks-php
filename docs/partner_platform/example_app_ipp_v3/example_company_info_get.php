@@ -31,7 +31,7 @@ $email = $Info->getEmail()->getAddress();
 print('Address: ' . $email . "\n");
 
 $count = $Info->countNameValue();
-for ($i = 0; $i < $count; $i++)
+for ($i = 0; $i < $count; ++$i)
 {
 	$NameValue = $Info->getNameValue($i);
 	//print_r($NameValue);

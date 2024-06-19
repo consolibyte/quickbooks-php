@@ -1,6 +1,6 @@
 <?php
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 $data = '<QBXML><something>stuff</something><CustomerQueryRs iteratorRemainingCount="364q34" iteratorID="{1234-1234-1234}">...</CustomerQueryRs></QBXML>';
 

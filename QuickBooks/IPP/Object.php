@@ -77,7 +77,7 @@ class QuickBooks_IPP_Object
 		return null;
 	}
 
-	public function get($field)
+	public function get(string $field)
 	{
 		/*
 		if (isset($this->_data[$field]))
@@ -92,7 +92,7 @@ class QuickBooks_IPP_Object
 		return $this->__call('get' . $field, $args);
 	}
 
-	public function set($field, $value)
+	public function set(string $field, $value)
 	{
 		//$this->_data[$field] = $value;
 
@@ -132,123 +132,93 @@ class QuickBooks_IPP_Object
 		}
 	}
 
-	public function __call($name, $args)
+	public function __call(string $name, $args)
 	{
-		if (substr($name, 0, 3) == 'set')
-		{
-			//print('called: ' . $name . ' with args: ' . print_r($args, true) . "\n");
+		if (substr($name, 0, 3) === 'set') {
+      //print('called: ' . $name . ' with args: ' . print_r($args, true) . "\n");
+      $field = substr($name, 3);
+      $tmp = null;
+      if (count($args) == 1)
+   			{
+   				$tmp = current($args);
+   				$this->_data[$field] = $tmp;
+   			}
+   			else
+   			{
+   
+   			}
 
-			$field = substr($name, 3);
+      return $tmp;
+  } elseif (substr($name, 0, 3) === 'get') {
+      $field = substr($name, 3);
+      //print('getting field: [' . $field . ']' . "\n");
+      //print_r($this->_data);
+      if (isset($this->_data[$field]))
+   			{
+   				if (isset($args[0]) && is_numeric($args[0])) {
+           // Trying to fetch a repeating element
+           if (isset($this->_data[$field][$args[0]]))
+      					{
+      						return $this->_data[$field][$args[0]];
+      					}
 
-			$tmp = null;
-			if (count($args) == 1)
-			{
-				$tmp = current($args);
-				$this->_data[$field] = $tmp;
-			}
-			else
-			{
+           return null;
+       } elseif (!count($args) && isset($this->_data[$field]) && is_array($this->_data[$field])) {
+           return $this->_data[$field][0];
+       } else
+   				{
+   					// Normal data
+   					return $this->_data[$field];
+   				}
+   			}
 
-			}
+      return null;
+  } elseif (substr($name, 0, 5) === 'count') {
+      $field = substr($name, 5);
+      if (isset($this->_data[$field]) && is_array($this->_data[$field])) {
+          return count($this->_data[$field]);
+      } elseif (isset($this->_data[$field])) {
+          return 1;
+      } else
+   			{
+   				return 0;
+   			}
+  } elseif (substr($name, 0, 3) === 'add') {
+      $field = substr($name, 3);
+      if (!isset($this->_data[$field]))
+   			{
+   				$this->_data[$field] = array();
+   			}
 
-			return $tmp;
-		}
-		else if (substr($name, 0, 3) == 'get')
-		{
-			$field = substr($name, 3);
-
-			//print('getting field: [' . $field . ']' . "\n");
-			//print_r($this->_data);
-
-
-			if (isset($this->_data[$field]))
-			{
-				if (isset($args[0]) and
-					is_numeric($args[0]))
-				{
-					// Trying to fetch a repeating element
-					if (isset($this->_data[$field][$args[0]]))
-					{
-						return $this->_data[$field][$args[0]];
-					}
-
-					return null;
-				}
-				else if (!count($args) and
-					isset($this->_data[$field]) and
-					is_array($this->_data[$field]))
-				{
-					return $this->_data[$field][0];
-				}
-				else
-				{
-					// Normal data
-					return $this->_data[$field];
-				}
-			}
-
-			return null;
-		}
-		else if (substr($name, 0, 5) == 'count')
-		{
-			$field = substr($name, 5);
-
-			if (isset($this->_data[$field]) and
-				is_array($this->_data[$field]))
-			{
-				return count($this->_data[$field]);
-			}
-			else if (isset($this->_data[$field]))
-			{
-				return 1;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		else if (substr($name, 0, 3) == 'add')
-		{
-			$field = substr($name, 3);
-
-			if (!isset($this->_data[$field]))
-			{
-				$this->_data[$field] = array();
-			}
-
-			$tmp = current($args);
-			$this->_data[$field][] = $tmp;
-
-			return $tmp;
-		}
-		else if (substr($name, 0, 5) == 'unset')
-		{
-			$field = substr($name, 5);
-
-			if (isset($this->_data[$field]))
-			{
-				if (isset($args[0]) and
-					is_numeric($args[0]))
-				{
-					// Trying to fetch a repeating element
-					if (isset($this->_data[$field][$args[0]]))
-					{
-						unset($this->_data[$field][$args[0]]);
-					}
-
-					return true;
-				}
-				else
-				{
-					unset($this->_data[$field]);
-				}
-			}
-		}
-		else
+      $tmp = current($args);
+      $this->_data[$field][] = $tmp;
+      return $tmp;
+  } elseif (substr($name, 0, 5) === 'unset') {
+      $field = substr($name, 5);
+      if (isset($this->_data[$field]))
+   			{
+   				if (isset($args[0]) && is_numeric($args[0]))
+   				{
+   					// Trying to fetch a repeating element
+   					if (isset($this->_data[$field][$args[0]]))
+   					{
+   						unset($this->_data[$field][$args[0]]);
+   					}
+   
+   					return true;
+   				}
+   				else
+   				{
+   					unset($this->_data[$field]);
+   				}
+   			}
+  } else
 		{
 			trigger_error('Call to undefined method $' . get_class($this) . '->' . $name . '(...)', E_USER_ERROR);
 			return false;
 		}
+
+  return null;
 	}
 
 	public function resource()
@@ -275,7 +245,7 @@ class QuickBooks_IPP_Object
 		return array();
 	}
 
-	protected function _reorder($data, $base = '')
+	protected function _reorder(array $data, $base = '')
 	{
 		$order = $this->_order();
 
@@ -291,7 +261,7 @@ class QuickBooks_IPP_Object
 
 		$diff = array_diff_key($data, $order);
 
-		if (count($diff))
+		if ($diff !== [])
 		{
 			// Some keys got left behind!
 			$retr = array_merge($retr, $diff);
@@ -313,25 +283,21 @@ class QuickBooks_IPP_Object
 
 		foreach ($this->_data as $key => $value)
 		{
-			if (is_object($value))
-			{
-				$value->walk($callback);
-			}
-			else if (is_array($value))
-			{
-				foreach ($value as $skey => $svalue)
-				{
-					if (is_object($svalue))
-					{
-						$svalue->walk($callback);
-					}
-					else
-					{
-						$this->_data[$key][$skey] = call_user_func($callback, $this->resource(), $key, $svalue);
-					}
-				}
-			}
-			else
+			if (is_object($value)) {
+       $value->walk($callback);
+   } elseif (is_array($value)) {
+       foreach ($value as $skey => $svalue)
+   				{
+   					if (is_object($svalue))
+   					{
+   						$svalue->walk($callback);
+   					}
+   					else
+   					{
+   						$this->_data[$key][$skey] = call_user_func($callback, $this->resource(), $key, $svalue);
+   					}
+   				}
+   } else
 			{
 				$this->_data[$key] = call_user_func($callback, $this->resource(), $key, $value);
 			}
@@ -360,130 +326,70 @@ class QuickBooks_IPP_Object
 		// Go through the data, creating XML out of it
 		foreach ($data as $key => $value)
 		{
-			if (is_object($value))
-			{
-				// If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
-				$xml .= $value->_asXML_v3($indent + 1, null, null, $flavor);
-			}
-			else if (is_array($value))
-			{
-				foreach ($value as $skey => $svalue)
-				{
-					//print('converting array: [' . $key . ' >> ' . $skey . ']');
-
-					if (is_object($svalue))
-					{
-						$xml .= $svalue->_asXML_v3($indent + 1, $key, null, $flavor);
-					}
-					/*else if (substr($key, -2, 2) == 'Id')
-					{
-						$for_qbxml = false;
-						
-						$tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
-						
-						if ($tmp[0])
-						{
-							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
-						}
-						else
-						{
-							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
-						}
-						
-						$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
-						$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;						
-					}*/
-					else
-					{
-						//$for_qbxml = false;
-						//
-						//$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
-						//$xml .= QuickBooks_XML::encode($value, $for_qbxml);
-						//$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
-
-						if ($svalue and
-							substr($key, -3, 3) == 'Ref' and
-							$svalue[0] == '{')
-						{
-							$svalue = trim($svalue, '{}-');
-						}
-						else if ($svalue and
-							$key == 'Id' and
-							$svalue[0] == '{')
-						{
-							$svalue = trim($svalue, '{}-');
-						}
-						else if ($svalue and
-							$key == 'DefinitionId' and
-							$svalue[0] == '{')
-						{
-							$svalue = trim($svalue, '{}-');
-						}
-						else if ($svalue and
-							$key == 'TxnId' and
-							$svalue[0] == '{')
-						{
-							$svalue = trim($svalue, '{}-');
-						}
-
-						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
-					}
-				}
-			}
-			/*else if (substr($key, -2, 2) == 'Id')
+			if (is_object($value)) {
+       // If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
+       $xml .= $value->_asXML_v3($indent + 1, null, null, $flavor);
+   } elseif (is_array($value)) {
+       foreach ($value as $svalue)
+   				{
+   					//print('converting array: [' . $key . ' >> ' . $skey . ']');
+   
+   					if (is_object($svalue))
+   					{
+   						$xml .= $svalue->_asXML_v3($indent + 1, $key, null, $flavor);
+   					}
+   					/*else if (substr($key, -2, 2) == 'Id')
+   					{
+   						$for_qbxml = false;
+   						
+   						$tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
+   						
+   						if ($tmp[0])
+   						{
+   							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+   						}
+   						else
+   						{
+   							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+   						}
+   						
+   						$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
+   						$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;						
+   					}*/
+   					else
+   					{
+   						//$for_qbxml = false;
+   						//
+   						//$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+   						//$xml .= QuickBooks_XML::encode($value, $for_qbxml);
+   						//$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+   
+   						if ($svalue && substr($key, -3, 3) === 'Ref' && $svalue[0] == '{') {
+             $svalue = trim($svalue, '{}-');
+         } elseif ($svalue && $key == 'Id' && $svalue[0] == '{') {
+             $svalue = trim($svalue, '{}-');
+         } elseif ($svalue && $key == 'DefinitionId' && $svalue[0] == '{') {
+             $svalue = trim($svalue, '{}-');
+         } elseif ($svalue && $key == 'TxnId' && $svalue[0] == '{') {
+             $svalue = trim($svalue, '{}-');
+         }
+   
+   						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
+   					}
+   				}
+   } else
 			{
 				$for_qbxml = false;
 
-				$tmp = QuickBooks_IPP_IDS::parseIdType($value);
-
-				if ($tmp[0])
-				{
-					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
-				}
-				else
-				{
-					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
-				}
-
-				$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
-				$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
-			}*/
-			else
-			{
-				$for_qbxml = false;
-
-				if ($value and
-					substr($key, -3, 3) == 'Ref' and
-					strlen($value) > 0 and
-					is_string($value) and
-					$value[0] == '{')
-				{
-					$value = trim($value . '', '{}-');
-				}
-				else if ($value and
-					$key == 'Id' and
-					strlen($value) > 0 and
-					is_string($value) and
-					$value[0] == '{')
-				{
-					$value = trim($value . '', '{}-');
-				}
-				else if ($value and
-					$key == 'DefinitionId' and
-					strlen($value) > 0 and
-					is_string($value) and
-					$value[0] == '{')
-				{
-					$value = trim($value . '', '{}-');
-				}
-				else if ($value and
-					$key == 'TxnId' and
-					strlen($value) > 0 and
-					is_string($value) and
-					$value[0] == '{')
-				{
-					$value = trim($value . '', '{}-');
-				}
+				if ($value && substr($key, -3, 3) === 'Ref' && strlen($value) > 0 && is_string($value) && $value[0] === '{') {
+        $value = trim($value . '', '{}-');
+    } elseif ($value && $key == 'Id' && strlen($value) > 0 && is_string($value) && $value[0] === '{') {
+        $value = trim($value . '', '{}-');
+    } elseif ($value && $key == 'DefinitionId' && strlen($value) > 0 && is_string($value) && $value[0] === '{') {
+        $value = trim($value . '', '{}-');
+    } elseif ($value && $key == 'TxnId' && strlen($value) > 0 && is_string($value) && $value[0] === '{') {
+        $value = trim($value . '', '{}-');
+    }
 
 				$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
 				$xml .= QuickBooks_XML::encode($value, $for_qbxml);
@@ -491,9 +397,7 @@ class QuickBooks_IPP_Object
 			}
 		}
 
-		$xml .= str_repeat("\t", $indent) . '</' . $this->resource() . '>' . QUICKBOOKS_CRLF;
-
-		return $xml;
+		return $xml . (str_repeat("\t", $indent) . '</' . $this->resource() . '>' . QUICKBOOKS_CRLF);
 	}
 
 	public function asIDSXML($indent = 0, $parent = null, $optype = null, $flavor = null)
@@ -506,25 +410,21 @@ class QuickBooks_IPP_Object
 			$parent = $this->resource();
 		}
 
-		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)
-		{
-			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
-			{
-				$xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' xmlns="http://www.intuit.com/sb/cdm/v2" xmlns:ns2="http://www.intuit.com/sb/cdm/qbopayroll/v1" xmlns:ns3="http://www.intuit.com/sb/cdm/qbo">' . QUICKBOOKS_CRLF;
-			}
-			else
-			{
-				$xml = str_repeat("\t", $indent) . '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
-			}
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD || $optype == QuickBooks_IPP_IDS::OPTYPE_MOD) {
+      if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
+   			{
+   				$xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' xmlns="http://www.intuit.com/sb/cdm/v2" xmlns:ns2="http://www.intuit.com/sb/cdm/qbopayroll/v1" xmlns:ns3="http://www.intuit.com/sb/cdm/qbo">' . QUICKBOOKS_CRLF;
+   			}
+   			else
+   			{
+   				$xml = str_repeat("\t", $indent) . '<Object xsi:type="' . $this->resource() . '">' . QUICKBOOKS_CRLF;
+   			}
 
-			// Merge in the defaults for this object type
-			$data = array_merge($this->_defaults(), $data);
-		}
-		else if ($parent == 'CustomField')
-		{
-			$xml = str_repeat("\t", $indent) . '<' . $parent . ' xsi:type="StringTypeCustomField">' . QUICKBOOKS_CRLF;
-		}
-		else
+      // Merge in the defaults for this object type
+      $data = array_merge($this->_defaults(), $data);
+  } elseif ($parent == 'CustomField') {
+      $xml = str_repeat("\t", $indent) . '<' . $parent . ' xsi:type="StringTypeCustomField">' . QUICKBOOKS_CRLF;
+  } else
 		{
 			$xml = str_repeat("\t", $indent) . '<' . $parent . '>' . QUICKBOOKS_CRLF;
 		}
@@ -535,70 +435,56 @@ class QuickBooks_IPP_Object
 		// Go through the data, creating XML out of it
 		foreach ($data as $key => $value)
 		{
-			if (is_object($value))
-			{
-				// If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
-				$xml .= $value->asIDSXML($indent + 1, null, null, $flavor);
-			}
-			else if (is_array($value))
-			{
-				foreach ($value as $skey => $svalue)
-				{
-					//print('converting array: [' . $key . ' >> ' . $skey . ']');
+			if (is_object($value)) {
+       // If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
+       $xml .= $value->asIDSXML($indent + 1, null, null, $flavor);
+   } elseif (is_array($value)) {
+       foreach ($value as $svalue)
+   				{
+   					//print('converting array: [' . $key . ' >> ' . $skey . ']');
+   
+   					if (is_object($svalue)) {
+            $xml .= $svalue->asIDSXML($indent + 1, $key, null, $flavor);
+        } elseif (substr($key, -2, 2) === 'Id') {
+            $for_qbxml = false;
+            $tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
+            if ($tmp[0])
+      						{
+      							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+      						}
+      						else
+      						{
+      							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+      						}
 
-					if (is_object($svalue))
-					{
-						$xml .= $svalue->asIDSXML($indent + 1, $key, null, $flavor);
-					}
-					else if (substr($key, -2, 2) == 'Id')
-					{
-						$for_qbxml = false;
+            $xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
+            $xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+        } else
+   					{
+   						//$for_qbxml = false;
+   						//
+   						//$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+   						//$xml .= QuickBooks_XML::encode($value, $for_qbxml);
+   						//$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+   
+   						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
+   					}
+   				}
+   } elseif (substr($key, -2, 2) === 'Id') {
+       $for_qbxml = false;
+       $tmp = QuickBooks_IPP_IDS::parseIdType($value);
+       if ($tmp[0])
+   				{
+   					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
+   				}
+   				else
+   				{
+   					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
+   				}
 
-						$tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
-
-						if ($tmp[0])
-						{
-							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
-						}
-						else
-						{
-							$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
-						}
-
-						$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
-						$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
-					}
-					else
-					{
-						//$for_qbxml = false;
-						//
-						//$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
-						//$xml .= QuickBooks_XML::encode($value, $for_qbxml);
-						//$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
-
-						$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
-					}
-				}
-			}
-			else if (substr($key, -2, 2) == 'Id')
-			{
-				$for_qbxml = false;
-
-				$tmp = QuickBooks_IPP_IDS::parseIdType($value);
-
-				if ($tmp[0])
-				{
-					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . ' idDomain="' . $tmp[0] . '">';
-				}
-				else
-				{
-					$xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>';
-				}
-
-				$xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
-				$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
-			}
-			else
+       $xml .= QuickBooks_XML::encode($tmp[1], $for_qbxml);
+       $xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
+   } else
 			{
 				$for_qbxml = false;
 
@@ -608,7 +494,7 @@ class QuickBooks_IPP_Object
 			}
 		}
 
-		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)
+		if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD || $optype == QuickBooks_IPP_IDS::OPTYPE_MOD)
 		{
 			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
 			{

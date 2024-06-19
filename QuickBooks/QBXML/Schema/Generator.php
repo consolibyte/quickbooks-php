@@ -31,7 +31,7 @@ class QuickBooks_QBXML_Schema_Generator
 	
 	public function saveAll($dir)
 	{
-		$Parser = new QuickBooks_XML($this->_xml);
+		$quickBooksXML = new QuickBooks_XML($this->_xml);
 		
 		$arr_actions_adds = QuickBooks_Utilities::listActions('*Add', false);
 		$arr_actions_mods = QuickBooks_Utilities::listActions('*Mod', false);
@@ -43,14 +43,14 @@ class QuickBooks_QBXML_Schema_Generator
 		
 		$errnum = 0;
 		$errmsg = '';
-		if ($Doc = $Parser->parse($errnum, $errmsg))
+		if ($Doc = $quickBooksXML->parse($errnum, $errmsg))
 		{
 			$children = $Doc->children();
 			$children = $children[0]->children();
 			
-			foreach ($children as $Action)
+			foreach ($children as $child)
 			{
-				print('Action name is: ' . $Action->name() . "\n");
+				print('Action name is: ' . $child->name() . "\n");
 				
 				//if ($Action->name() != 'VendorAddRq')
 				//{
@@ -59,21 +59,20 @@ class QuickBooks_QBXML_Schema_Generator
 				
 				//print_r($Action);
 				
-				$section = $this->_extractSectionForTag($this->_xml, $Action->name());
+				$section = $this->_extractSectionForTag($this->_xml, $child->name());
 				
 				//print($section);
 				
 				$wrapper = '';
-				if ($Action->hasChildren())
+				if ($child->hasChildren())
 				{
-					$first = $Action->getChild(0);
+					$first = $child->getChild(0);
 					
 					//print_r($first);
 					
 					
 					
-					if (in_array($first->name(), $arr_actions_mods) or 
-						in_array($first->name(), $arr_actions_adds))
+					if (in_array($first->name(), $arr_actions_mods) || in_array($first->name(), $arr_actions_adds))
 					{
 						$wrapper = $first->name();
 						
@@ -92,7 +91,7 @@ class QuickBooks_QBXML_Schema_Generator
 				
 				//$curdepth = 0;
 				$lastdepth = 0;
-				$paths = $Action->asArray(QUICKBOOKS_XML_ARRAY_PATHS);
+				$paths = $child->asArray(QUICKBOOKS_XML_ARRAY_PATHS);
 				foreach ($paths as $path => $datatype)
 				{
 					$tmp = explode(' ', $path);
@@ -104,10 +103,9 @@ class QuickBooks_QBXML_Schema_Generator
 					//print_r($parse);
 					//print("\n");
 					
-					$path = trim(substr($path, strlen($Action->name())));
+					$path = trim(substr($path, strlen($child->name())));
 					
-					if (strlen($wrapper) and 
-						substr($path, 0, strlen($wrapper)) == $wrapper)
+					if (strlen($wrapper) && substr($path, 0, strlen($wrapper)) == $wrapper)
 					{
 						$path = substr($path, strlen($wrapper) + 1);
 					}
@@ -122,11 +120,13 @@ class QuickBooks_QBXML_Schema_Generator
 					if ($curdepth - $lastdepth > 1)
 					{
 						$tmp2 = explode(' ', $path);
-						for ($i = 1; $i < count($tmp2); $i++)
+      $counter = count($tmp2);
+						for ($i = 1; $i < $counter; ++$i)
 						{
 							$paths_reorder[] = implode(' ', array_slice($tmp2, 0, $i));
 						}
 					}
+     
 					$lastdepth = substr_count($path, ' ');
 					
 					$paths_reorder[] = $path;
@@ -141,16 +141,16 @@ class QuickBooks_QBXML_Schema_Generator
 				
 				$contents = file_get_contents('/home/asdg/QuickBooks/QBXML/Schema/Object/Template.php');
 				
-				$contents = str_replace('Template', $Action->name(), $contents);
-				$contents = str_replace('\'_qbxmlWrapper\'', var_export($wrapper, true), $contents);
-				$contents = str_replace('\'_dataTypePaths\'', var_export($paths_datatype, true), $contents);
-				$contents = str_replace('\'_maxLengthPaths\'', var_export($paths_maxlength, true), $contents);
-				$contents = str_replace('\'_isOptionalPaths\'', var_export($paths_isoptional, true), $contents);
-				$contents = str_replace('\'_sinceVersionPaths\'', var_export($paths_sinceversion, true), $contents);
-				$contents = str_replace('\'_isRepeatablePaths\'', var_export($paths_isrepeatable, true), $contents);
-				$contents = str_replace('\'_reorderPaths\'', var_export($paths_reorder, true), $contents);
+				$contents = str_replace('Template', $child->name(), $contents);
+				$contents = str_replace("'_qbxmlWrapper'", var_export($wrapper, true), $contents);
+				$contents = str_replace("'_dataTypePaths'", var_export($paths_datatype, true), $contents);
+				$contents = str_replace("'_maxLengthPaths'", var_export($paths_maxlength, true), $contents);
+				$contents = str_replace("'_isOptionalPaths'", var_export($paths_isoptional, true), $contents);
+				$contents = str_replace("'_sinceVersionPaths'", var_export($paths_sinceversion, true), $contents);
+				$contents = str_replace("'_isRepeatablePaths'", var_export($paths_isrepeatable, true), $contents);
+				$contents = str_replace("'_reorderPaths'", var_export($paths_reorder, true), $contents);
 				
-				$fp = fopen('/home/adg/QuickBooks/tmp/' . $Action->name() . '.php', 'w+');
+				$fp = fopen('/home/adg/QuickBooks/tmp/' . $child->name() . '.php', 'w+');
 				fwrite($fp, $contents);
 				fclose($fp);
 				
@@ -161,7 +161,7 @@ class QuickBooks_QBXML_Schema_Generator
 					exit;
 				}
 				
-				$i++;
+				++$i;
 			}
 		}
 	}
@@ -198,11 +198,9 @@ class QuickBooks_QBXML_Schema_Generator
 		return $defaults;
 	}
 	
-	protected function _extractCommentForTag($section, $tag)
+	protected function _extractCommentForTag($section, string $tag)
 	{
-		if (false !== ($start_open = strpos($section, '<' . $tag)) and 
-			false !== ($start_close = strpos($section, '>', $start_open)) and 
-			false !== ($stop_open = strpos($section, '</' . $tag . '>')))
+		if (false !== ($start_open = strpos($section, '<' . $tag)) && false !== ($start_close = strpos($section, '>', $start_open)) && false !== ($stop_open = strpos($section, '</' . $tag . '>')))
 		{
 			$str = substr($section, $stop_open + strlen($tag) + 3);
 			$arr = explode("\n", $str);
@@ -215,11 +213,9 @@ class QuickBooks_QBXML_Schema_Generator
 		return '';
 	}
 	
-	protected function _extractSectionForTag($xml, $tag)
+	protected function _extractSectionForTag($xml, string $tag)
 	{
-		if (false !== ($start_open = strpos($xml, '<' . $tag)) and
-			false !== ($start_close = strpos($xml, '>', $start_open)) and  
-			false !== ($stop_open = strpos($xml, '</' . $tag . '>')))
+		if (false !== ($start_open = strpos($xml, '<' . $tag)) && false !== ($start_close = strpos($xml, '>', $start_open)) && false !== ($stop_open = strpos($xml, '</' . $tag . '>')))
 		{
 			return substr($xml, $start_open, $stop_open - $start_open + strlen($tag) + 3);
 		}

@@ -259,16 +259,13 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 	 */
 	public function setCreditCardInfo($cardno, $expmonth, $expyear, $name, $address, $postalcode)
 	{
-		// should probably do better checking here for failed sets.
-		$b = FALSE;
 		$b = $this->set('CreditCardInfo CreditCardNumber', $cardno);
 		$b = $this->set('CreditCardInfo ExpirationMonth', $expmonth);
 		$b = $this->set('CreditCardInfo ExpirationYear', $expyear);
 		$b = $this->set('CreditCardInfo NameOnCard', $name);
-		$b = $this->set('CreditCardInfo CreditCardAddress', $address);
-		$b = $this->set('CreditCardInfo CreditCardPostalCode', $postalcode);
+		$this->set('CreditCardInfo CreditCardAddress', $address);
 		
-		return $b;
+		return $this->set('CreditCardInfo CreditCardPostalCode', $postalcode);
 	}
 
 	/**
@@ -306,7 +303,7 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 	 */
 	public function setAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $province = '', $postalcode = '', $country = '', $note = '')
 	{
-		for ($i = 1; $i <= 5; $i++)
+		for ($i = 1; $i <= 5; ++$i)
 		{
 			$this->set('Address Addr' . $i, ${'addr' . $i});
 		}

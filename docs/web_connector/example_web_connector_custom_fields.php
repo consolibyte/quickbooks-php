@@ -39,7 +39,7 @@ if (function_exists('date_default_timezone_set'))
 }
 
 // Require the framework
-require_once '../QuickBooks.php'; 
+require_once __DIR__ . '/../QuickBooks.php'; 
 
 // Web Connector username/password
 $user = 'user';
@@ -109,16 +109,16 @@ $response = $Server->handle(true, true);
 function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_data, $callback_config)
 {
 	// Fetch the queue instance
-	$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
+	$quickBooksWebConnectorQueue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 		
 	// Queue request
-	$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1);
+	$quickBooksWebConnectorQueue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1);
 }
 
 /**
  * Build a request to import customers already in QuickBooks into our application
  */
-function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+function _quickbooks_customer_import_request($requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, string $version, $locale)
 {
 	// Iterator support (break the result set into small chunks)
 	$attr_iteratorID = '';
@@ -183,7 +183,7 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
 /** 
  * Handle a response from QuickBooks 
  */
-function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
+function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, array $idents)
 {	
 	if (!empty($idents['iteratorRemainingCount']))
 	{
@@ -209,20 +209,19 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/CustomerQueryRs');
 		
-		foreach ($List->children() as $Customer)
+		foreach ($List->children() as $quickBooksXMLNode)
 		{
 			$values = array(
-				'ListID' => $Customer->getChildDataAt('CustomerRet ListID'),
-				'FullName' => $Customer->getChildDataAt('CustomerRet FullName'),
-				'FirstName' => $Customer->getChildDataAt('CustomerRet FirstName'),
-				'LastName' => $Customer->getChildDataAt('CustomerRet LastName'),
+				'ListID' => $quickBooksXMLNode->getChildDataAt('CustomerRet ListID'),
+				'FullName' => $quickBooksXMLNode->getChildDataAt('CustomerRet FullName'),
+				'FirstName' => $quickBooksXMLNode->getChildDataAt('CustomerRet FirstName'),
+				'LastName' => $quickBooksXMLNode->getChildDataAt('CustomerRet LastName'),
 				);
 				
-			foreach ($Customer->children() as $Node)
+			foreach ($quickBooksXMLNode->children() as $Node)
 			{
 				// Be careful! Custom field names are case sensitive! 
-				if ($Node->name() === 'DataExtRet' and 
-					$Node->getChildDataAt('DataExtRet DataExtName') == 'Your Custom Field Name Goes Here')
+				if ($Node->name() === 'DataExtRet' && $Node->getChildDataAt('DataExtRet DataExtName') == 'Your Custom Field Name Goes Here')
 				{
 					$values['Your Custom Field Names Goes Here'] = $Node->getChildDataAt('DataExtRet DataExtValue');
 				}
@@ -246,29 +245,21 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
  */
 function _quickbooks_error_e500_notfound($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)
 {
-	if ($action == QUICKBOOKS_IMPORT_CUSTOMER)
-	{
-		return true;
-	}
-	
-	return false;
+    return $action == QUICKBOOKS_IMPORT_CUSTOMER;
 }
 
 
 /**
  * Catch any errors that occur
- * 
- * @param string $requestID			
- * @param string $action
+ *
  * @param mixed $ID
  * @param mixed $extra
  * @param string $err
  * @param string $xml
  * @param mixed $errnum
- * @param string $errmsg
  * @return void
  */
-function _quickbooks_error_catchall($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)
+function _quickbooks_error_catchall(string $requestID, string $user, string $action, string $ID, $extra, &$err, $xml, string $errnum, string $errmsg)
 {
 	$message = '';
 	$message .= 'Request ID: ' . $requestID . "\r\n";

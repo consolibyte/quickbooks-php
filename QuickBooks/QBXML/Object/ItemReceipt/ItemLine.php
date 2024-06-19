@@ -249,19 +249,10 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 			$object = $this->_object;
 		}
 		
-		switch ($parent)
-		{
-			case QUICKBOOKS_ADD_ITEMRECEIPT:
-				$root = 'ItemLineAdd';
-				$parent = null;
-				break;
-// Currently unimplemented
-/*
-			case QUICKBOOKS_QUERY_INVENTORYADJUSTMENT:
-				$root = 'ExpenseLineQuery';
-				break;
-*/
-		}
+		if ($parent === QUICKBOOKS_ADD_ITEMRECEIPT) {
+      $root = 'ItemLineAdd';
+      $parent = null;
+  }
 
 		return parent::asXML($root, $parent, $object);
 	}

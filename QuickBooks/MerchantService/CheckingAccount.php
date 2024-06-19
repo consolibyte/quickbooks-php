@@ -23,18 +23,25 @@
 class QuickBooks_MerchantService_CheckingAccount
 {
 	const INFO_PERSONAL = 'personal';
+ 
 	const INFO_BUSINESS = 'business';
 	
 	const TYPE_CHECKING = 'Checking';
+ 
 	const TYPE_SAVINGS = 'Savings';
 	
 	protected $_routing;
+ 
 	protected $_account;
 	
 	protected $_info;
+ 
 	protected $_type;
+ 
 	protected $_first_name;
+ 
 	protected $_last_name;
+ 
 	protected $_phone;
 	
 	/**
@@ -54,8 +61,7 @@ class QuickBooks_MerchantService_CheckingAccount
 		$this->_last_name = $last_name;
 		
 		$phone = trim(str_replace(array('(', ')', '+', ' ', '.', '-'), '', $phone));
-		if (strlen($phone) == 11 and 
-			$phone{0} == '1')
+		if (strlen($phone) == 11 && $phone{0} === '1')
 		{
 			$phone = substr($phone, 1);
 		}

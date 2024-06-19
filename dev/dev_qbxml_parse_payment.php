@@ -1,6 +1,6 @@
 <?php
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 $qbxml='<ReceivePaymentRet>
     <TxnID>4ECE-1360116101</TxnID>

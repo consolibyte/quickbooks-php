@@ -99,19 +99,10 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemGroupLine extends QuickBooks_QBXML
 			$object = $this->_object;
 		}
 		
-		switch ($parent)
-		{
-			case QUICKBOOKS_ADD_ITEMRECEIPT:
-				$root = 'ItemGroupLineAdd';
-				$parent = null;
-				break;
-// Currently unimplemented
-/*
-			case QUICKBOOKS_QUERY_INVENTORYADJUSTMENT:
-				$root = 'ExpenseLineQuery';
-				break;
-*/
-		}
+		if ($parent === QUICKBOOKS_ADD_ITEMRECEIPT) {
+      $root = 'ItemGroupLineAdd';
+      $parent = null;
+  }
 
 		return parent::asXML($root, $parent, $object);
 	}

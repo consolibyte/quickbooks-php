@@ -39,7 +39,7 @@ if (function_exists('date_default_timezone_set'))
 }
 
 // Require the framework
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 // A username and password you'll use in: 
 //	a) Your .QWC file
@@ -175,12 +175,12 @@ if (!QuickBooks_Utilities::initialized($dsn))
 		$contents = file_get_contents($file);	
 		foreach (explode(';', $contents) as $sql)
 		{
-			if (!trim($sql))
+			if (trim($sql) === '' || trim($sql) === '0')
 			{
 				continue;
 			}
 			
-			mysql_query($sql) or die(trigger_error(mysql_error()));
+			mysql_query($sql) || die(trigger_error(mysql_error()));
 		}
 	}
 	else
@@ -221,7 +221,7 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
 	// For new users, we need to set up a few things
 
 	// Fetch the queue instance
-	$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
+	$quickBooksWebConnectorQueue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 	$date = '1983-01-02 12:01:01';
 	
 	// Set up the invoice imports
@@ -252,8 +252,8 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
 	// Make sure the requests get queued up
 	//$Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, 1, QB_PRIORITY_SALESORDER, null, $user);
 	//$Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, 1, QB_PRIORITY_INVOICE, null, $user);
-	$Queue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, 1, QB_PRIORITY_PURCHASEORDER, null, $user);
-	$Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1, QB_PRIORITY_CUSTOMER, null, $user);
+	$quickBooksWebConnectorQueue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, 1, QB_PRIORITY_PURCHASEORDER, null, $user);
+	$quickBooksWebConnectorQueue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1, QB_PRIORITY_CUSTOMER, null, $user);
 	//$Queue->enqueue(QUICKBOOKS_IMPORT_ITEM, 1, QB_PRIORITY_ITEM, null, $user);
 }
 
@@ -263,7 +263,7 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
  * @param string $user		The web connector username 
  * @return string			A date/time in this format: "yyyy-mm-dd hh:ii:ss"
  */
-function _quickbooks_get_last_run($user, $action)
+function _quickbooks_get_last_run($user, string $action)
 {
 	$type = null;
 	$opts = null;
@@ -276,7 +276,7 @@ function _quickbooks_get_last_run($user, $action)
  * @param string $user
  * @return boolean
  */
-function _quickbooks_set_last_run($user, $action, $force = null)
+function _quickbooks_set_last_run($user, string $action, $force = null)
 {
 	$value = date('Y-m-d') . 'T' . date('H:i:s');
 	
@@ -292,7 +292,7 @@ function _quickbooks_set_last_run($user, $action, $force = null)
  * 
  * 
  */
-function _quickbooks_get_current_run($user, $action)
+function _quickbooks_get_current_run($user, string $action)
 {
 	$type = null;
 	$opts = null;
@@ -303,7 +303,7 @@ function _quickbooks_get_current_run($user, $action)
  * 
  * 
  */
-function _quickbooks_set_current_run($user, $action, $force = null)
+function _quickbooks_set_current_run($user, string $action, $force = null)
 {
 	$value = date('Y-m-d') . 'T' . date('H:i:s');
 	
@@ -318,7 +318,7 @@ function _quickbooks_set_current_run($user, $action, $force = null)
 /**
  * Build a request to import invoices already in QuickBooks into our application
  */
-function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+function _quickbooks_invoice_import_request(string $requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, string $version, $locale)
 {
 	// Iterator support (break the result set into small chunks)
 	$attr_iteratorID = '';
@@ -363,7 +363,7 @@ function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $ex
 /** 
  * Handle a response from QuickBooks 
  */
-function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
+function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, array $idents)
 {	
 	if (!empty($idents['iteratorRemainingCount']))
 	{
@@ -390,21 +390,21 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/InvoiceQueryRs');
 		
-		foreach ($List->children() as $Invoice)
+		foreach ($List->children() as $quickBooksXMLNode)
 		{
 			$arr = array(
-				'TxnID' => $Invoice->getChildDataAt('InvoiceRet TxnID'),
-				'TimeCreated' => $Invoice->getChildDataAt('InvoiceRet TimeCreated'),
-				'TimeModified' => $Invoice->getChildDataAt('InvoiceRet TimeModified'),
-				'RefNumber' => $Invoice->getChildDataAt('InvoiceRet RefNumber'),
-				'Customer_ListID' => $Invoice->getChildDataAt('InvoiceRet CustomerRef ListID'),
-				'Customer_FullName' => $Invoice->getChildDataAt('InvoiceRet CustomerRef FullName'),
-				'ShipAddress_Addr1' => $Invoice->getChildDataAt('InvoiceRet ShipAddress Addr1'),
-				'ShipAddress_Addr2' => $Invoice->getChildDataAt('InvoiceRet ShipAddress Addr2'),
-				'ShipAddress_City' => $Invoice->getChildDataAt('InvoiceRet ShipAddress City'),
-				'ShipAddress_State' => $Invoice->getChildDataAt('InvoiceRet ShipAddress State'),
-				'ShipAddress_PostalCode' => $Invoice->getChildDataAt('InvoiceRet ShipAddress PostalCode'),
-				'BalanceRemaining' => $Invoice->getChildDataAt('InvoiceRet BalanceRemaining'),
+				'TxnID' => $quickBooksXMLNode->getChildDataAt('InvoiceRet TxnID'),
+				'TimeCreated' => $quickBooksXMLNode->getChildDataAt('InvoiceRet TimeCreated'),
+				'TimeModified' => $quickBooksXMLNode->getChildDataAt('InvoiceRet TimeModified'),
+				'RefNumber' => $quickBooksXMLNode->getChildDataAt('InvoiceRet RefNumber'),
+				'Customer_ListID' => $quickBooksXMLNode->getChildDataAt('InvoiceRet CustomerRef ListID'),
+				'Customer_FullName' => $quickBooksXMLNode->getChildDataAt('InvoiceRet CustomerRef FullName'),
+				'ShipAddress_Addr1' => $quickBooksXMLNode->getChildDataAt('InvoiceRet ShipAddress Addr1'),
+				'ShipAddress_Addr2' => $quickBooksXMLNode->getChildDataAt('InvoiceRet ShipAddress Addr2'),
+				'ShipAddress_City' => $quickBooksXMLNode->getChildDataAt('InvoiceRet ShipAddress City'),
+				'ShipAddress_State' => $quickBooksXMLNode->getChildDataAt('InvoiceRet ShipAddress State'),
+				'ShipAddress_PostalCode' => $quickBooksXMLNode->getChildDataAt('InvoiceRet ShipAddress PostalCode'),
+				'BalanceRemaining' => $quickBooksXMLNode->getChildDataAt('InvoiceRet BalanceRemaining'),
 				);
 			
 			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing invoice #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
@@ -422,13 +422,13 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 					" . implode(", ", array_keys($arr)) . "
 				) VALUES (
 					'" . implode("', '", array_values($arr)) . "'
-				)") or die(trigger_error(mysql_error()));
+				)") || die(trigger_error(mysql_error()));
 			
 			// Remove any old line items
-			mysql_query("DELETE FROM qb_example_invoice_lineitem WHERE TxnID = '" . mysql_real_escape_string($arr['TxnID']) . "' ") or die(trigger_error(mysql_error()));
+			mysql_query("DELETE FROM qb_example_invoice_lineitem WHERE TxnID = '" . mysql_real_escape_string($arr['TxnID']) . "' ") || die(trigger_error(mysql_error()));
 			
 			// Process the line items
-			foreach ($Invoice->children() as $Child)
+			foreach ($quickBooksXMLNode->children() as $Child)
 			{
 				if ($Child->name() == 'InvoiceLineRet')
 				{
@@ -457,7 +457,7 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 							" . implode(", ", array_keys($lineitem)) . "
 						) VALUES (
 							'" . implode("', '", array_values($lineitem)) . "'
-						) ") or die(trigger_error(mysql_error()));
+						) ") || die(trigger_error(mysql_error()));
 				}
 			}
 		}
@@ -469,7 +469,7 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 /**
  * Build a request to import customers already in QuickBooks into our application
  */
-function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+function _quickbooks_customer_import_request(string $requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, string $version, $locale)
 {
 	// Iterator support (break the result set into small chunks)
 	$attr_iteratorID = '';
@@ -511,7 +511,7 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
 /** 
  * Handle a response from QuickBooks 
  */
-function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
+function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, array $idents)
 {	
 	if (!empty($idents['iteratorRemainingCount']))
 	{
@@ -538,23 +538,23 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/CustomerQueryRs');
 		
-		foreach ($List->children() as $Customer)
+		foreach ($List->children() as $quickBooksXMLNode)
 		{
 			$arr = array(
-				'ListID' => $Customer->getChildDataAt('CustomerRet ListID'),
-				'TimeCreated' => $Customer->getChildDataAt('CustomerRet TimeCreated'),
-				'TimeModified' => $Customer->getChildDataAt('CustomerRet TimeModified'),
-				'Name' => $Customer->getChildDataAt('CustomerRet Name'),
-				'FullName' => $Customer->getChildDataAt('CustomerRet FullName'),
-				'FirstName' => $Customer->getChildDataAt('CustomerRet FirstName'),
-				'MiddleName' => $Customer->getChildDataAt('CustomerRet MiddleName'),
-				'LastName' => $Customer->getChildDataAt('CustomerRet LastName'),
-				'Contact' => $Customer->getChildDataAt('CustomerRet Contact'),
-				'ShipAddress_Addr1' => $Customer->getChildDataAt('CustomerRet ShipAddress Addr1'),
-				'ShipAddress_Addr2' => $Customer->getChildDataAt('CustomerRet ShipAddress Addr2'),
-				'ShipAddress_City' => $Customer->getChildDataAt('CustomerRet ShipAddress City'),
-				'ShipAddress_State' => $Customer->getChildDataAt('CustomerRet ShipAddress State'),
-				'ShipAddress_PostalCode' => $Customer->getChildDataAt('CustomerRet ShipAddress PostalCode'),
+				'ListID' => $quickBooksXMLNode->getChildDataAt('CustomerRet ListID'),
+				'TimeCreated' => $quickBooksXMLNode->getChildDataAt('CustomerRet TimeCreated'),
+				'TimeModified' => $quickBooksXMLNode->getChildDataAt('CustomerRet TimeModified'),
+				'Name' => $quickBooksXMLNode->getChildDataAt('CustomerRet Name'),
+				'FullName' => $quickBooksXMLNode->getChildDataAt('CustomerRet FullName'),
+				'FirstName' => $quickBooksXMLNode->getChildDataAt('CustomerRet FirstName'),
+				'MiddleName' => $quickBooksXMLNode->getChildDataAt('CustomerRet MiddleName'),
+				'LastName' => $quickBooksXMLNode->getChildDataAt('CustomerRet LastName'),
+				'Contact' => $quickBooksXMLNode->getChildDataAt('CustomerRet Contact'),
+				'ShipAddress_Addr1' => $quickBooksXMLNode->getChildDataAt('CustomerRet ShipAddress Addr1'),
+				'ShipAddress_Addr2' => $quickBooksXMLNode->getChildDataAt('CustomerRet ShipAddress Addr2'),
+				'ShipAddress_City' => $quickBooksXMLNode->getChildDataAt('CustomerRet ShipAddress City'),
+				'ShipAddress_State' => $quickBooksXMLNode->getChildDataAt('CustomerRet ShipAddress State'),
+				'ShipAddress_PostalCode' => $quickBooksXMLNode->getChildDataAt('CustomerRet ShipAddress PostalCode'),
 				);
 			
 			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing customer ' . $arr['FullName'] . ': ' . print_r($arr, true));
@@ -572,7 +572,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 					" . implode(", ", array_keys($arr)) . "
 				) VALUES (
 					'" . implode("', '", array_values($arr)) . "'
-				)") or die(trigger_error(mysql_error()));
+				)") || die(trigger_error(mysql_error()));
 		}
 	}
 	
@@ -582,7 +582,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 /**
  * Build a request to import sales orders already in QuickBooks into our application
  */
-function _quickbooks_salesorder_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+function _quickbooks_salesorder_import_request(string $requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, string $version, $locale)
 {
 	// Iterator support (break the result set into small chunks)
 	$attr_iteratorID = '';
@@ -627,7 +627,7 @@ function _quickbooks_salesorder_import_request($requestID, $user, $action, $ID, 
 /** 
  * Handle a response from QuickBooks 
  */
-function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
+function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, array $idents)
 {	
 	if (!empty($idents['iteratorRemainingCount']))
 	{
@@ -654,21 +654,21 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/SalesOrderQueryRs');
 		
-		foreach ($List->children() as $SalesOrder)
+		foreach ($List->children() as $quickBooksXMLNode)
 		{
 			$arr = array(
-				'TxnID' => $SalesOrder->getChildDataAt('SalesOrderRet TxnID'),
-				'TimeCreated' => $SalesOrder->getChildDataAt('SalesOrderRet TimeCreated'),
-				'TimeModified' => $SalesOrder->getChildDataAt('SalesOrderRet TimeModified'),
-				'RefNumber' => $SalesOrder->getChildDataAt('SalesOrderRet RefNumber'),
-				'Customer_ListID' => $SalesOrder->getChildDataAt('SalesOrderRet CustomerRef ListID'),
-				'Customer_FullName' => $SalesOrder->getChildDataAt('SalesOrderRet CustomerRef FullName'),
-				'ShipAddress_Addr1' => $SalesOrder->getChildDataAt('SalesOrderRet ShipAddress Addr1'),
-				'ShipAddress_Addr2' => $SalesOrder->getChildDataAt('SalesOrderRet ShipAddress Addr2'),
-				'ShipAddress_City' => $SalesOrder->getChildDataAt('SalesOrderRet ShipAddress City'),
-				'ShipAddress_State' => $SalesOrder->getChildDataAt('SalesOrderRet ShipAddress State'),
-				'ShipAddress_PostalCode' => $SalesOrder->getChildDataAt('SalesOrderRet ShipAddress PostalCode'),
-				'BalanceRemaining' => $SalesOrder->getChildDataAt('SalesOrderRet BalanceRemaining'),
+				'TxnID' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet TxnID'),
+				'TimeCreated' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet TimeCreated'),
+				'TimeModified' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet TimeModified'),
+				'RefNumber' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet RefNumber'),
+				'Customer_ListID' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet CustomerRef ListID'),
+				'Customer_FullName' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet CustomerRef FullName'),
+				'ShipAddress_Addr1' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet ShipAddress Addr1'),
+				'ShipAddress_Addr2' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet ShipAddress Addr2'),
+				'ShipAddress_City' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet ShipAddress City'),
+				'ShipAddress_State' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet ShipAddress State'),
+				'ShipAddress_PostalCode' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet ShipAddress PostalCode'),
+				'BalanceRemaining' => $quickBooksXMLNode->getChildDataAt('SalesOrderRet BalanceRemaining'),
 				);
 			
 			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing sales order #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
@@ -686,13 +686,13 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 					" . implode(", ", array_keys($arr)) . "
 				) VALUES (
 					'" . implode("', '", array_values($arr)) . "'
-				)") or die(trigger_error(mysql_error()));
+				)") || die(trigger_error(mysql_error()));
 			
 			// Remove any old line items
-			mysql_query("DELETE FROM qb_example_salesorder_lineitem WHERE TxnID = '" . mysql_real_escape_string($arr['TxnID']) . "' ") or die(trigger_error(mysql_error()));
+			mysql_query("DELETE FROM qb_example_salesorder_lineitem WHERE TxnID = '" . mysql_real_escape_string($arr['TxnID']) . "' ") || die(trigger_error(mysql_error()));
 			
 			// Process the line items
-			foreach ($SalesOrder->children() as $Child)
+			foreach ($quickBooksXMLNode->children() as $Child)
 			{
 				if ($Child->name() == 'SalesOrderLineRet')
 				{
@@ -721,7 +721,7 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 							" . implode(", ", array_keys($lineitem)) . "
 						) VALUES (
 							'" . implode("', '", array_values($lineitem)) . "'
-						) ") or die(trigger_error(mysql_error()));
+						) ") || die(trigger_error(mysql_error()));
 				}
 			}
 		}
@@ -733,7 +733,7 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 /**
  * Build a request to import customers already in QuickBooks into our application
  */
-function _quickbooks_item_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+function _quickbooks_item_import_request(string $requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, string $version, $locale)
 {
 	// Iterator support (break the result set into small chunks)
 	$attr_iteratorID = '';
@@ -775,7 +775,7 @@ function _quickbooks_item_import_request($requestID, $user, $action, $ID, $extra
 /** 
  * Handle a response from QuickBooks 
  */
-function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
+function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, array $idents)
 {	
 	if (!empty($idents['iteratorRemainingCount']))
 	{
@@ -794,30 +794,30 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/ItemQueryRs');
 		
-		foreach ($List->children() as $Item)
+		foreach ($List->children() as $quickBooksXMLNode)
 		{
-			$type = substr(substr($Item->name(), 0, -3), 4);
-			$ret = $Item->name();
+			$type = substr(substr($quickBooksXMLNode->name(), 0, -3), 4);
+			$ret = $quickBooksXMLNode->name();
 			
 			$arr = array(
-				'ListID' => $Item->getChildDataAt($ret . ' ListID'),
-				'TimeCreated' => $Item->getChildDataAt($ret . ' TimeCreated'),
-				'TimeModified' => $Item->getChildDataAt($ret . ' TimeModified'),
-				'Name' => $Item->getChildDataAt($ret . ' Name'),
-				'FullName' => $Item->getChildDataAt($ret . ' FullName'),
+				'ListID' => $quickBooksXMLNode->getChildDataAt($ret . ' ListID'),
+				'TimeCreated' => $quickBooksXMLNode->getChildDataAt($ret . ' TimeCreated'),
+				'TimeModified' => $quickBooksXMLNode->getChildDataAt($ret . ' TimeModified'),
+				'Name' => $quickBooksXMLNode->getChildDataAt($ret . ' Name'),
+				'FullName' => $quickBooksXMLNode->getChildDataAt($ret . ' FullName'),
 				'Type' => $type, 
-				'Parent_ListID' => $Item->getChildDataAt($ret . ' ParentRef ListID'),
-				'Parent_FullName' => $Item->getChildDataAt($ret . ' ParentRef FullName'),
-				'ManufacturerPartNumber' => $Item->getChildDataAt($ret . ' ManufacturerPartNumber'), 
-				'SalesTaxCode_ListID' => $Item->getChildDataAt($ret . ' SalesTaxCodeRef ListID'), 
-				'SalesTaxCode_FullName' => $Item->getChildDataAt($ret . ' SalesTaxCodeRef FullName'), 
-				'BuildPoint' => $Item->getChildDataAt($ret . ' BuildPoint'), 
-				'ReorderPoint' => $Item->getChildDataAt($ret . ' ReorderPoint'), 
-				'QuantityOnHand' => $Item->getChildDataAt($ret . ' QuantityOnHand'), 
-				'AverageCost' => $Item->getChildDataAt($ret . ' AverageCost'), 
-				'QuantityOnOrder' => $Item->getChildDataAt($ret . ' QuantityOnOrder'), 
-				'QuantityOnSalesOrder' => $Item->getChildDataAt($ret . ' QuantityOnSalesOrder'),  
-				'TaxRate' => $Item->getChildDataAt($ret . ' TaxRate'),  
+				'Parent_ListID' => $quickBooksXMLNode->getChildDataAt($ret . ' ParentRef ListID'),
+				'Parent_FullName' => $quickBooksXMLNode->getChildDataAt($ret . ' ParentRef FullName'),
+				'ManufacturerPartNumber' => $quickBooksXMLNode->getChildDataAt($ret . ' ManufacturerPartNumber'), 
+				'SalesTaxCode_ListID' => $quickBooksXMLNode->getChildDataAt($ret . ' SalesTaxCodeRef ListID'), 
+				'SalesTaxCode_FullName' => $quickBooksXMLNode->getChildDataAt($ret . ' SalesTaxCodeRef FullName'), 
+				'BuildPoint' => $quickBooksXMLNode->getChildDataAt($ret . ' BuildPoint'), 
+				'ReorderPoint' => $quickBooksXMLNode->getChildDataAt($ret . ' ReorderPoint'), 
+				'QuantityOnHand' => $quickBooksXMLNode->getChildDataAt($ret . ' QuantityOnHand'), 
+				'AverageCost' => $quickBooksXMLNode->getChildDataAt($ret . ' AverageCost'), 
+				'QuantityOnOrder' => $quickBooksXMLNode->getChildDataAt($ret . ' QuantityOnOrder'), 
+				'QuantityOnSalesOrder' => $quickBooksXMLNode->getChildDataAt($ret . ' QuantityOnSalesOrder'),  
+				'TaxRate' => $quickBooksXMLNode->getChildDataAt($ret . ' TaxRate'),  
 				);
 			
 			$look_for = array(
@@ -838,7 +838,7 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 				
 				foreach ($look_here as $look)
 				{
-					$arr[$field] = $Item->getChildDataAt($ret . ' ' . $look);
+					$arr[$field] = $quickBooksXMLNode->getChildDataAt($ret . ' ' . $look);
 				}
 			}
 			
@@ -860,7 +860,7 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 					" . implode(", ", array_keys($arr)) . "
 				) VALUES (
 					'" . implode("', '", array_values($arr)) . "'
-				)") or die(trigger_error(mysql_error()));
+				)") || die(trigger_error(mysql_error()));
 		}
 	}
 	
@@ -870,7 +870,7 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 /**
  * Build a request to import invoices already in QuickBooks into our application
  */
-function _quickbooks_purchaseorder_import_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+function _quickbooks_purchaseorder_import_request(string $requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, string $version, $locale)
 {
 	// Iterator support (break the result set into small chunks)
 	$attr_iteratorID = '';
@@ -915,7 +915,7 @@ function _quickbooks_purchaseorder_import_request($requestID, $user, $action, $I
 /** 
  * Handle a response from QuickBooks 
  */
-function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
+function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, array $idents)
 {	
 	if (!empty($idents['iteratorRemainingCount']))
 	{
@@ -942,15 +942,15 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 		$Root = $Doc->getRoot();
 		$List = $Root->getChildAt('QBXML/QBXMLMsgsRs/PurchaseOrderQueryRs');
 		
-		foreach ($List->children() as $PurchaseOrder)
+		foreach ($List->children() as $quickBooksXMLNode)
 		{
 			$arr = array(
-				'TxnID' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TxnID'),
-				'TimeCreated' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TimeCreated'),
-				'TimeModified' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TimeModified'),
-				'RefNumber' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet RefNumber'),
-				'Customer_ListID' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet CustomerRef ListID'),
-				'Customer_FullName' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet CustomerRef FullName'),
+				'TxnID' => $quickBooksXMLNode->getChildDataAt('PurchaseOrderRet TxnID'),
+				'TimeCreated' => $quickBooksXMLNode->getChildDataAt('PurchaseOrderRet TimeCreated'),
+				'TimeModified' => $quickBooksXMLNode->getChildDataAt('PurchaseOrderRet TimeModified'),
+				'RefNumber' => $quickBooksXMLNode->getChildDataAt('PurchaseOrderRet RefNumber'),
+				'Customer_ListID' => $quickBooksXMLNode->getChildDataAt('PurchaseOrderRet CustomerRef ListID'),
+				'Customer_FullName' => $quickBooksXMLNode->getChildDataAt('PurchaseOrderRet CustomerRef FullName'),
 				);
 			
 			QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing purchase order #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
@@ -961,39 +961,30 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 			}
 			
 			// Process all child elements of the Purchase Order
-			foreach ($PurchaseOrder->children() as $Child)
+			foreach ($quickBooksXMLNode->children() as $Child)
 			{
-				if ($Child->name() == 'PurchaseOrderLineRet')
-				{
-					// Loop through line items
-					
-					$PurchaseOrderLine = $Child;
-					
-					$lineitem = array( 
-						'TxnID' => $arr['TxnID'], 
-						'TxnLineID' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet TxnLineID'), 
-						'Item_ListID' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet ItemRef ListID'), 
-						'Item_FullName' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet ItemRef FullName'), 
-						'Descrip' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Desc'), 
-						'Quantity' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Quantity'),
-						'Rate' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Rate'), 
-						);
-					
-					QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - line item #' . $lineitem['TxnLineID'] . ': ' . print_r($lineitem, true));
-				}
-				else if ($Child->name() == 'DataExtRet')
-				{
-					// Loop through custom fields
-					
-					$DataExt = $Child;
-					
-					$dataext = array(
-						'DataExtName' => $Child->getChildDataAt('DataExtRet DataExtName'), 
-						'DataExtValue' => $Child->getChildDataAt('DataExtRet DataExtValue'), 
-						);
-					
-					QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - custom field "' . $dataext['DataExtName'] . '": ' . $dataext['DataExtValue']);
-				}
+				if ($Child->name() == 'PurchaseOrderLineRet') {
+        // Loop through line items
+        $PurchaseOrderLine = $Child;
+        $lineitem = array( 
+   						'TxnID' => $arr['TxnID'], 
+   						'TxnLineID' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet TxnLineID'), 
+   						'Item_ListID' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet ItemRef ListID'), 
+   						'Item_FullName' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet ItemRef FullName'), 
+   						'Descrip' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Desc'), 
+   						'Quantity' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Quantity'),
+   						'Rate' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Rate'), 
+   						);
+        QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - line item #' . $lineitem['TxnLineID'] . ': ' . print_r($lineitem, true));
+    } elseif ($Child->name() == 'DataExtRet') {
+        // Loop through custom fields
+        $DataExt = $Child;
+        $dataext = array(
+   						'DataExtName' => $Child->getChildDataAt('DataExtRet DataExtName'), 
+   						'DataExtValue' => $Child->getChildDataAt('DataExtRet DataExtValue'), 
+   						);
+        QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - custom field "' . $dataext['DataExtName'] . '": ' . $dataext['DataExtValue']);
+    }
 			}
 		}
 	}
@@ -1010,28 +1001,19 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
  */
 function _quickbooks_error_e500_notfound($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)
 {
-	$Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
+	QuickBooks_WebConnector_Queue_Singleton::getInstance();
 	
-	if ($action == QUICKBOOKS_IMPORT_INVOICE)
-	{
-		return true;
-	}
-	else if ($action == QUICKBOOKS_IMPORT_CUSTOMER)
-	{
-		return true;
-	}
-	else if ($action == QUICKBOOKS_IMPORT_SALESORDER)
-	{
-		return true;
-	}
-	else if ($action == QUICKBOOKS_IMPORT_ITEM)
-	{
-		return true;
-	}
-	else if ($action == QUICKBOOKS_IMPORT_PURCHASEORDER)
-	{
-		return true;
-	}
+	if ($action == QUICKBOOKS_IMPORT_INVOICE) {
+     return true;
+ } elseif ($action == QUICKBOOKS_IMPORT_CUSTOMER) {
+     return true;
+ } elseif ($action == QUICKBOOKS_IMPORT_SALESORDER) {
+     return true;
+ } elseif ($action == QUICKBOOKS_IMPORT_ITEM) {
+     return true;
+ } elseif ($action == QUICKBOOKS_IMPORT_PURCHASEORDER) {
+     return true;
+ }
 	
 	return false;
 }
@@ -1039,18 +1021,15 @@ function _quickbooks_error_e500_notfound($requestID, $user, $action, $ID, $extra
 
 /**
  * Catch any errors that occur
- * 
- * @param string $requestID			
- * @param string $action
+ *
  * @param mixed $ID
  * @param mixed $extra
  * @param string $err
  * @param string $xml
  * @param mixed $errnum
- * @param string $errmsg
  * @return void
  */
-function _quickbooks_error_catchall($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)
+function _quickbooks_error_catchall(string $requestID, string $user, string $action, string $ID, $extra, &$err, $xml, string $errnum, string $errmsg)
 {
 	$message = '';
 	$message .= 'Request ID: ' . $requestID . "\r\n";

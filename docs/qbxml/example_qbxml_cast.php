@@ -1,6 +1,6 @@
 <?php
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 header('Content-Type: text/html; charset=utf-8'); 
 
@@ -44,7 +44,7 @@ $fields = array(
 print("\n");
 foreach ($fields as $field)
 {	
-	foreach ($arr as $key => $value)
+	foreach ($arr as $value)
 	{
 		$cast = QuickBooks_Cast::cast(QUICKBOOKS_ADD_CUSTOMER, str_replace('_', ' ', $field), ucfirst($value));
 
@@ -53,6 +53,7 @@ foreach ($fields as $field)
 	
 	print("\n");
 }
+
 print("\n");
 
 

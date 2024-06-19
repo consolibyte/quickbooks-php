@@ -24,7 +24,7 @@ ini_set('display_errors', 1);
 /**
  * QuickBooks classes
  */
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 $start = microtime(true);
 
@@ -119,7 +119,7 @@ else
 	print('XML validation failed: [' . $errnum . ': ' . $errmsg . ']');
 }
 
-$value = 'Keith & Shannon went to Kurt\'s store!';
+$value = "Keith & Shannon went to Kurt's store!";
 
 print("\n");
 print('Double encoded: ' . QuickBooks_XML::encode(QuickBooks_XML::encode($value)) . "\n");

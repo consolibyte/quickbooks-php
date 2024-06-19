@@ -13,6 +13,7 @@ QuickBooks_Loader::load('/QuickBooks/XML/Document.php');
 class QuickBooks_XML_Backend_Simplexml implements QuickBooks_XML_Backend
 {
 	protected $_xml;
+ 
 	protected $_root;
 	
 	public function __construct($xml)
@@ -41,8 +42,7 @@ class QuickBooks_XML_Backend_Simplexml implements QuickBooks_XML_Backend
 		$errs = libxml_get_errors();
 
 		$pcdata_chars = 'PCDATA invalid Char';
-		if (count($errs) > 0 and 
-			substr($errs[0]->message, 0, strlen($pcdata_chars)) == $pcdata_chars)
+		if ($errs !== [] && substr($errs[0]->message, 0, strlen($pcdata_chars)) === $pcdata_chars)
 		{
 			// Try to remove special chars, and try again
 			libxml_clear_errors();
@@ -61,8 +61,7 @@ class QuickBooks_XML_Backend_Simplexml implements QuickBooks_XML_Backend
 		libxml_clear_errors();
 		libxml_use_internal_errors($previous);
 		
-		if (is_array($errs) and 
-			count($errs))
+		if ($errs !== [])
 		{
 			$errnum = QuickBooks_XML::ERROR_INTERNAL;
 			
@@ -72,6 +71,7 @@ class QuickBooks_XML_Backend_Simplexml implements QuickBooks_XML_Backend
 			{
 				$tmp[] = '{' . $err->code . ': ' . trim($err->message) . ' on line ' . $err->line . '}';
 			}
+   
 			$errmsg = implode(', ', $tmp);
 			
 			return false;

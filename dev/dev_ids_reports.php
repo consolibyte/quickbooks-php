@@ -3,7 +3,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 // 
 $username = 'keith@consolibyte.com';
@@ -47,16 +47,16 @@ print("\n\n");
 print('report has [' . $Report->getColumnCount() . '] columns and [' . $Report->getRowCount() . '] rows' . "\n\n");
 
 // Print the columns
-for ($i = 0; $i < $Report->getColumnCount(); $i++)
+for ($i = 0; $i < $Report->getColumnCount(); ++$i)
 {
 	print(str_pad($Report->getColDesc($i)->getColTitle(), 25));
 }
 
 print("\n");
 	
-for ($i = 0; $i < $Report->getRowCount(); $i++)
+for ($i = 0; $i < $Report->getRowCount(); ++$i)
 {
-	for ($j = 0; $j < $Report->getColumnCount(); $j++)
+	for ($j = 0; $j < $Report->getColumnCount(); ++$j)
 	{
 		print(str_pad($Report->getData()->getDataRow($i)->getColumnData($j), 25));
 	}

@@ -25,7 +25,9 @@
  */
 class QuickBooks_XML_Node
 {
-	/**
+	public $_root;
+
+ /**
 	 * Tag name
 	 * @var string
 	 */
@@ -41,7 +43,7 @@ class QuickBooks_XML_Node
 	 * An associative array of attributes for this tag
 	 * @var array
 	 */
-	protected $_attributes;
+	protected $_attributes = array();
 
 	/**
 	 * A string containing comments that were found immediately after this tag
@@ -53,7 +55,7 @@ class QuickBooks_XML_Node
 	 * An array of child tags within this tag
 	 * @var QuickBooks_XML_Node[]
 	 */
-	protected $_children;
+	protected $_children = array();
 
 	/**
 	 * Create a new XML node
@@ -66,8 +68,6 @@ class QuickBooks_XML_Node
 		$this->_name = $name;
 
 		$this->_data = $data;
-		$this->_children = array();
-		$this->_attributes = array();
 	}
 
 	/**
@@ -175,22 +175,19 @@ class QuickBooks_XML_Node
 	 */
 	public function setChildAttributeAt($path, $attr, $value, $create = false)
 	{
-		if ($child = $this->getChildAt($path))
-		{
-			if ($child->attributeExists($attr))
-			{
-				$child->setAttribute($attr, $value);
-			}
-			else
-			{
-				$child->addAttribute($attr, $value);
-			}
-		}
-		else if ($create)
-		{
-			$this->setChildDataAt($path, null, true);
-			return $this->setChildAttributeAt($path, $attr, $value, false);
-		}
+		if ($child = $this->getChildAt($path)) {
+      if ($child->attributeExists($attr))
+   			{
+   				$child->setAttribute($attr, $value);
+   			}
+   			else
+   			{
+   				$child->addAttribute($attr, $value);
+   			}
+  } elseif ($create) {
+      $this->setChildDataAt($path, null, true);
+      return $this->setChildAttributeAt($path, $attr, $value, false);
+  }
 
 		return false;
 	}
@@ -204,7 +201,7 @@ class QuickBooks_XML_Node
 	 */
 	protected function _getChildAtHelper($root, $path)
 	{
-		if (false !== strpos($path, ' ') and false === strpos($path, '/'))
+		if (false !== strpos($path, ' ') && false === strpos($path, '/'))
 		{
 			$path = str_replace(' ', '/', $path);
 		}
@@ -214,22 +211,18 @@ class QuickBooks_XML_Node
 		$current = array_shift($explode);
 		$next = current($explode);
 
-		if ($path == $root->name())
-		{
-			return $root;
-		}
-		else if ($current == $root->name())
-		{
-			$path = implode('/', $explode);
-
-			foreach ($root->children() as $child)
-			{
-				if ($child->name() == $next)
-				{
-					return $this->_getChildAtHelper($child, $path);
-				}
-			}
-		}
+		if ($path == $root->name()) {
+      return $root;
+  } elseif ($current == $root->name()) {
+      $path = implode('/', $explode);
+      foreach ($root->children() as $quickBooksXMLNode)
+   			{
+   				if ($quickBooksXMLNode->name() == $next)
+   				{
+   					return $this->_getChildAtHelper($quickBooksXMLNode, $path);
+   				}
+   			}
+  }
 
 		return false;
 	}
@@ -269,8 +262,8 @@ class QuickBooks_XML_Node
 	 */
 	public function childExistsAt($path)
 	{
-		$child = $this->getChildAt($path);
-		return is_object($child);
+		$quickBooksXMLNode = $this->getChildAt($path);
+		return is_object($quickBooksXMLNode);
 	}
 
 	/**
@@ -297,14 +290,14 @@ class QuickBooks_XML_Node
 	 */
 	protected function _addChildAtHelper(&$root, $path, $node, $create = false)
 	{
-		if (false !== strpos($path, ' ') and false === strpos($path, '/'))
+		if (false !== strpos($path, ' ') && false === strpos($path, '/'))
 		{
 			$path = str_replace(' ', '/', $path);
 		}
 
 		$explode = explode('/', $path);
 		/*$explode = explode(' ', $path);*/
-		$current = array_shift($explode);
+		array_shift($explode);
 		$next = current($explode);
 
 		if ($path == $root->name())
@@ -315,11 +308,11 @@ class QuickBooks_XML_Node
 		{
 			$path = implode('/', $explode);
 
-			foreach ($root->children() as $child)
+			foreach ($root->children() as $quickBooksXMLNode)
 			{
-				if ($child->name() == $next)
+				if ($quickBooksXMLNode->name() == $next)
 				{
-					return $this->_addChildAtHelper($child, $path, $node, $create);
+					return $this->_addChildAtHelper($quickBooksXMLNode, $path, $node, $create);
 				}
 			}
 		}
@@ -327,11 +320,11 @@ class QuickBooks_XML_Node
 		if ($create)
 		{
 			$root->addChild(new QuickBooks_XML_Node($next));
-			foreach ($root->children() as $child)
+			foreach ($root->children() as $quickBooksXMLNode)
 			{
-				if ($child->name() == $next)
+				if ($quickBooksXMLNode->name() == $next)
 				{
-					return $this->_addChildAtHelper($child, $path, $node, $create);
+					return $this->_addChildAtHelper($quickBooksXMLNode, $path, $node, $create);
 				}
 			}
 		}
@@ -341,7 +334,7 @@ class QuickBooks_XML_Node
 
 	public function setChildDataAt($path, $data, $create = false)
 	{
-		if (false !== strpos($path, ' ') and false === strpos($path, '/'))
+		if (false !== strpos($path, ' ') && false === strpos($path, '/'))
 		{
 			$path = str_replace(' ', '/', $path);
 		}
@@ -358,7 +351,7 @@ class QuickBooks_XML_Node
 
 		$child = $this->getChildAt($path);
 
-		if (!$child and $create)
+		if (!$child && $create)
 		{
 			$this->addChildAt($allbutend, new QuickBooks_XML_Node($end), true);
 			$child = $this->getChildAt($path);
@@ -448,11 +441,11 @@ class QuickBooks_XML_Node
 		{
 			$list = array();
 
-			foreach ($this->_children as $Child)
+			foreach ($this->_children as $_child)
 			{
-				if ($this->_fnmatch($pattern, $Child->name()))
+				if ($this->_fnmatch($pattern, $_child->name()))
 				{
-					$list[] = $Child;
+					$list[] = $_child;
 				}
 			}
 
@@ -655,65 +648,47 @@ class QuickBooks_XML_Node
 	{
 		$xml = '';
 
-		if ($node->childCount())
-		{
-			$xml .= str_repeat($indent, $tabs) . '<' . $node->name();
+		if ($node->childCount()) {
+      $xml .= str_repeat($indent, $tabs) . '<' . $node->name();
+      foreach ($node->attributes() as $key => $value)
+   			{
+   				// Make sure double-encode is *off*
+   				//$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value, true, false) . '"';
+   				$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value) . '"';
+   			}
 
-			foreach ($node->attributes() as $key => $value)
-			{
-				// Make sure double-encode is *off*
-				//$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value, true, false) . '"';
-				$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value) . '"';
-			}
+      $xml .= '>' . "\n";
+      foreach ($node->children() as $quickBooksXMLNode)
+   			{
+   				$xml .= $this->_asXMLHelper($quickBooksXMLNode, $tabs + 1, $empty, $indent);
+   			}
 
-			$xml .= '>' . "\n";
-			foreach ($node->children() as $child)
-			{
-				$xml .= $this->_asXMLHelper($child, $tabs + 1, $empty, $indent);
-			}
-			$xml .= str_repeat($indent, $tabs) . '</' . $node->name() . '>' . "\n";
-		}
-		else
-		{
-			if ($node->hasAttributes())		// if the node has attributes, we'll build the whole thing no matter what
-			{
-				$xml .= str_repeat($indent, $tabs) . '<' . $node->name();
+      $xml .= str_repeat($indent, $tabs) . '</' . $node->name() . '>' . "\n";
+  } elseif ($node->hasAttributes()) {
+      // if the node has attributes, we'll build the whole thing no matter what
+      $xml .= str_repeat($indent, $tabs) . '<' . $node->name();
+      foreach ($node->attributes() as $key => $value)
+  				{
+  					// Double-encode is *off*
+  					//$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value, true, false) . '"';
+  					$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value) . '"';
+  				}
 
-				foreach ($node->attributes() as $key => $value)
-				{
-					// Double-encode is *off*
-					//$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value, true, false) . '"';
-					$xml .= ' ' . $key . '="' . QuickBooks_XML::encode($value) . '"';
-				}
-
-				// Double-encode is *off*
-				//$xml .= '>' . QuickBooks_XML::encode($node->data(), true, false) . '</' . $node->name() . '>' . "\n";
-				$xml .= '>' . QuickBooks_XML::encode($node->data()) . '</' . $node->name() . '>' . "\n";
-			}
-			else
-			{
-				if ($node->data() == '__EMPTY__')		// ick, bad hack
-				{
-					$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '></' . $node->name() . '>' . "\n";
-				}
-				else if ($node->hasData() or $empty == QuickBooks_XML::XML_PRESERVE)
-				{
-					// Double-encode is *off*
-					//$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '>' . QuickBooks_XML::encode($node->data(), true, false) . '</' . $node->name() . '>' . "\n";
-					$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '>' . QuickBooks_XML::encode($node->data()) . '</' . $node->name() . '>' . "\n";
-				}
-				else if ($empty == QuickBooks_XML::XML_COMPRESS)
-				{
-					$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . ' />' . "\n";
-				}
-				else if ($empty == QuickBooks_XML::XML_DROP)
-				{
-					; // do nothing, drop the empty element
-				}
-			}
-
-
-		}
+      // Double-encode is *off*
+      //$xml .= '>' . QuickBooks_XML::encode($node->data(), true, false) . '</' . $node->name() . '>' . "\n";
+      $xml .= '>' . QuickBooks_XML::encode($node->data()) . '</' . $node->name() . '>' . "\n";
+  } elseif ($node->data() == '__EMPTY__') {
+      // ick, bad hack
+      $xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '></' . $node->name() . '>' . "\n";
+  } elseif ($node->hasData() || $empty == QuickBooks_XML::XML_PRESERVE) {
+      // Double-encode is *off*
+      //$xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '>' . QuickBooks_XML::encode($node->data(), true, false) . '</' . $node->name() . '>' . "\n";
+      $xml .= str_repeat($indent, $tabs) . '<' . $node->name() . '>' . QuickBooks_XML::encode($node->data()) . '</' . $node->name() . '>' . "\n";
+  } elseif ($empty == QuickBooks_XML::XML_COMPRESS) {
+      $xml .= str_repeat($indent, $tabs) . '<' . $node->name() . ' />' . "\n";
+  } elseif ($empty == QuickBooks_XML::XML_DROP) {
+      // do nothing, drop the empty element
+  }
 
 		return $xml;
 	}
@@ -737,7 +712,7 @@ class QuickBooks_XML_Node
 	{
 		$json = '';
 
-		if ($node->childCount() or $node->attributeCount())	// container elements surrounded with { ... }
+		if ($node->childCount() || $node->attributeCount())	// container elements surrounded with { ... }
 		{
 			$json .= str_repeat($indent, $tabs) . $node->name() . ':{' . "\n";
 
@@ -800,26 +775,21 @@ class QuickBooks_XML_Node
 	}
 
 	/**
-	 * Helper function for converting to an array mapping paths to tag values
-	 *
-	 * @param QuickBooks_XML_Node $node
-	 * @param string $current
-	 * @param array $paths
-	 * @return void
-	 */
-	protected function _asArrayPathsHelper($node, $current, &$paths)
+  * Helper function for converting to an array mapping paths to tag values
+  *
+  * @param QuickBooks_XML_Node $node
+  * @return void
+  */
+ protected function _asArrayPathsHelper($node, string $current, array &$paths)
 	{
-		if ($node->hasChildNodes())
-		{
-			foreach ($node->children() as $child)
-			{
-				$this->_asArrayPathsHelper($child, $current . ' ' . $node->name(), $paths);
-			}
-		}
-		else if ($node->hasData())
-		{
-			$paths[trim($current . ' ' . $node->name())] = $node->data();
-		}
+		if ($node->hasChildNodes()) {
+      foreach ($node->children() as $quickBooksXMLNode)
+   			{
+   				$this->_asArrayPathsHelper($quickBooksXMLNode, $current . ' ' . $node->name(), $paths);
+   			}
+  } elseif ($node->hasData()) {
+      $paths[trim($current . ' ' . $node->name())] = $node->data();
+  }
 	}
 
 	/**

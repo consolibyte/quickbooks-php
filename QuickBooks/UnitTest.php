@@ -13,17 +13,17 @@ QuickBooks_Loader::load('/QuickBooks/UnitTest/Result.php');
 
 class QuickBooks_UnitTest
 {
-	protected $__result;
+	public $__lastError;
+
+ protected $__result;
 	
 	protected $__lastStatus;
+ 
 	protected $__lastMessage;
+ 
 	protected $__lastActual;
+ 
 	protected $__lastExpected;
-	
-	public function __construct()
-	{
-		
-	}
 	
 	final public function markTestSkipped()
 	{
@@ -47,7 +47,7 @@ class QuickBooks_UnitTest
 		
 		foreach ($methods as $method)
 		{
-			if (strtolower(substr($method, 0, 4)) == 'test')
+			if (strtolower(substr($method, 0, 4)) === 'test')
 			{
 				$this->__clearLastStatus();
 				
@@ -93,7 +93,7 @@ class QuickBooks_UnitTest
 			else
 			{
 				print($class . '->' . $Result->name() . ' FAILED! ' . "\n");
-				print("\t\t" . 'Expected: ' . $Result->expected() . ', Actual: ' . $Result->actual() . "\n");
+				print('		Expected: ' . $Result->expected() . ', Actual: ' . $Result->actual() . "\n");
 				print("\t\t" . $Result->message() . "\n");
 			}
 		}
@@ -165,18 +165,12 @@ class QuickBooks_UnitTest
 	
 	final public function assertEquals($expected, $actual, $strict_types = false)
 	{
-		if (is_array($expected))
-		{
-			
-		}
-		else if (is_object($expected))
-		{
-			
-		}
-		else if ($strict_types)
-		{
-			$this->__setLastStatus($expected === $actual);
-		}
+		if (is_array($expected)) {
+  } elseif (is_object($expected)) {
+
+  } elseif ($strict_types) {
+      $this->__setLastStatus($expected === $actual);
+  }
 		
 		$this->__setLastStatus($expected == $actual);
 	}
@@ -205,8 +199,7 @@ class QuickBooks_UnitTest
 		$this->__setLastActual($actual);
 		
 		$this->__setLastStatus(
-			is_null($actual) or 
-			($or_blank and strlen($actual) == 0));
+			is_null($actual) || $or_blank && strlen($actual) == 0);
 	}
 	
 	final public function assertTrue($actual, $strict = false)
@@ -225,14 +218,12 @@ class QuickBooks_UnitTest
 	}
 	
 	public function setUp()
-	{
-		return;
-	}
+ {
+ }
 	
 	public function tearDown()
-	{
-		return;
-	}
+ {
+ }
 }
 
 ?>
