@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 
 $start = microtime(true);
 
-require_once 'QuickBooks/Frameworks.php';
+require_once __DIR__ . '/QuickBooks/Frameworks.php';
 
 // Include *just* items neccessary for a traditional Web Connector integration
 //define('QUICKBOOKS_FRAMEWORKS', QUICKBOOKS_FRAMEWORK_WEBCONNECTOR);
@@ -20,7 +20,7 @@ require_once 'QuickBooks/Frameworks.php';
 // Include *just* stuff we need to queue actions up
 define('QUICKBOOKS_FRAMEWORKS', QUICKBOOKS_FRAMEWORK_QUEUE);
 
-require_once 'QuickBooks.php';
+require_once __DIR__ . '/QuickBooks.php';
 
 print('TIME: ' . (microtime(true) - $start) . "\n\n");
 

@@ -31,7 +31,7 @@ abstract class QuickBooks_Encryption
 	 * 
 	 * 
 	 */
-	public function prefix($str)
+	public function prefix(string $str)
 	{
 		return '{' . strlen(get_class($this)) . ':' . strtolower(get_class($this)) . '}' . $str;
 	}
@@ -44,14 +44,12 @@ abstract class QuickBooks_Encryption
 	 * @param bool $hex 	
 	 * @return string
 	 */
-	static function salt()
+	public static function salt()
 	{
 		$tmp = array_merge(range('a', 'z'), range('A', 'Z'), range(0, 9));
 		shuffle($tmp);
 			
-		$salt = substr(implode('', $tmp), 0, 32);
-			
-		return $salt;
+		return substr(implode('', $tmp), 0, 32);
 	}	
 }
 

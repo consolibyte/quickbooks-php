@@ -183,6 +183,7 @@ class QuickBooks_IPP_IDS
 	const RESOURCE_SALESTERM = 'Sales-Term';
 
 	const RESOURCE_UOM = 'UOM';
+ 
 	const RESOURCE_UNITOFMEASURE = 'UOM';
 
 	const RESOURCE_VENDOR = 'Vendor';
@@ -241,7 +242,7 @@ class QuickBooks_IPP_IDS
 		return array( 0 => '', 'domain' => '', 1 => $str, 'ID' => $str );
 	}
 
-	static public function buildIDType($domain, $ID)
+	static public function buildIDType(string $domain, string $ID)
 	{
 		return '{' . $domain . '-' . $ID . '}';
 	}

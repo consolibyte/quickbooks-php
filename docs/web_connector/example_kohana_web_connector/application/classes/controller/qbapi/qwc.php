@@ -16,7 +16,7 @@ ini_set('display_errors', 1);
 /**
  * Require the utilities class
  */
-require_once 'framework/QuickBooks.php';
+require_once __DIR__ . '/framework/QuickBooks.php';
 
 // A name for your server (make it whatever you want)
 $name = 'QBServer';				

@@ -108,15 +108,11 @@ class QuickBooks_XML_Parser
 
 		$this->_xml = $xml_or_file;
 
-		if (is_null($use_backend) and
-			function_exists('simplexml_load_string'))
-		{
-			$use_backend = QuickBooks_XML::PARSER_SIMPLEXML;
-		}
-		else if (is_null($use_backend))
-		{
-			$use_backend = QuickBooks_XML::PARSER_BUILTIN;
-		}
+		if (is_null($use_backend) && function_exists('simplexml_load_string')) {
+      $use_backend = QuickBooks_XML::PARSER_SIMPLEXML;
+  } elseif (is_null($use_backend)) {
+      $use_backend = QuickBooks_XML::PARSER_BUILTIN;
+  }
 
 		$class = 'QuickBooks_XML_Backend_' . ucfirst(strtolower($use_backend));
 		$this->_backend = new $class($xml_or_file);
@@ -130,33 +126,24 @@ class QuickBooks_XML_Parser
 	 */
 	protected function _read($mixed)
 	{
-		if (empty($mixed))
-		{
-			return '';
-		}
-		else if (is_resource($mixed) and
-			get_resource_type($mixed) == 'stream')
-		{
-			$buffer = '';
-			$tmp = '';
-			while ($tmp = fread($mixed, 8192))
-			{
-				$buffer .= $tmp;
-			}
+		if (empty($mixed)) {
+      return '';
+  } elseif (is_resource($mixed) && get_resource_type($mixed) === 'stream') {
+      $buffer = '';
+      $tmp = '';
+      while ($tmp = fread($mixed, 8192))
+   			{
+   				$buffer .= $tmp;
+   			}
 
-			return $buffer;
-		}
-		else if (substr(trim($mixed), 0, 6) == '{"warn')
-		{
-			// Intuit has a bug where some of their services return JSON erors 
-			// instead of XML, so we catch these here... 
-			
-			return '';
-		}
-		else if (substr(trim($mixed), 0, 1) != '<')
-		{
-			return file_get_contents($mixed);
-		}
+      return $buffer;
+  } elseif (substr(trim($mixed), 0, 6) === '{"warn') {
+      // Intuit has a bug where some of their services return JSON erors
+      // instead of XML, so we catch these here...
+      return '';
+  } elseif (substr(trim($mixed), 0, 1) !== '<') {
+      return file_get_contents($mixed);
+  }
 
 		return $mixed;
 	}
@@ -202,7 +189,7 @@ class QuickBooks_XML_Parser
 
 		$Node = $this->parse($errnum, $errmsg);
 
-		if (!$errnum and is_object($Node))
+		if (!$errnum && is_object($Node))
 		{
 			return $Node->asXML($compress_empty_elements);
 		}
@@ -223,7 +210,7 @@ class QuickBooks_XML_Parser
 	 */
 	public function parse(&$errnum, &$errmsg)
 	{
-		if (!strlen($this->_xml))
+		if ((string) $this->_xml === '')
 		{
 			$errnum = QuickBooks_XML::ERROR_CONTENT;
 			$errmsg = 'No XML content to parse.';

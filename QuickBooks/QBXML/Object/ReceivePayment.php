@@ -413,7 +413,7 @@ class QuickBooks_QBXML_Object_ReceivePayment extends QuickBooks_QBXML_Object
 	 */
 	public function setIsAutoApply($isautoapply)
 	{
-		if ($isautoapply and strtolower($isautoapply) != 'false')
+		if ($isautoapply && strtolower($isautoapply) !== 'false')
 		{
 			return $this->set('IsAutoApply', 'true');
 		}
@@ -495,7 +495,7 @@ class QuickBooks_QBXML_Object_ReceivePayment extends QuickBooks_QBXML_Object
 
 				if ($this->exists('AppliedToTxnAdd'))
 				{
-					foreach ($object['AppliedToTxnAdd'] as $key => $obj)
+					foreach ($object['AppliedToTxnAdd'] as $obj)
 					{
 						$obj->setOverride('AppliedToTxnAdd');
 					}
@@ -506,7 +506,7 @@ class QuickBooks_QBXML_Object_ReceivePayment extends QuickBooks_QBXML_Object
 
 				if ($this->exists('AppliedToTxnMod'))
 				{
-					foreach ($object['AppliedToTxnMod'] as $key => $obj)
+					foreach ($object['AppliedToTxnMod'] as $obj)
 					{
 						$obj->setOverride('AppliedToTxnMod');
 					}

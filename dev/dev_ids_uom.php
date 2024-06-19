@@ -7,7 +7,7 @@ error_reporting(E_ALL | E_STRICT);
 
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 // 
 $username = 'keith@consolibyte.com';
@@ -30,11 +30,12 @@ $list = $Service->findAll($Context, $realmID);
 foreach ($list as $UOM)
 {
 	print('Unit of measure [' . $UOM->getName() . '] of type [' . $UOM->getBaseType() . ']' . "\n");
-	for ($i = 0; $i < $UOM->countConvUnit(); $i++)
+	for ($i = 0; $i < $UOM->countConvUnit(); ++$i)
 	{
 		$ConvUnit = $UOM->getConvUnit($i);
 		
 		print("\t" . $ConvUnit->getName() . ', ' . $ConvUnit->getConvRatio() . "\n");
 	}
+ 
 	print("\n");
 }

@@ -65,23 +65,26 @@ class QuickBooks_Payments_CreditCard
 			}
 			*/
 
-			if (empty($retr['address']['region']) and
-				empty($retr['address']['postalCode']))
+			if (empty($retr['address']['region']) && empty($retr['address']['postalCode']))
 			{
 				unset($retr['address']);
 			}
 			else
 			{
-				$retr['address'] = array_filter($retr['address'], function($value) { return $value != ''; });
+				$retr['address'] = array_filter($retr['address'], static function ($value) {
+        return $value != '';
+    });
 			}
 
-			$retr = array_filter($retr, function($value) { return $value != ''; });
+			$retr = array_filter($retr, static function ($value) {
+       return $value != '';
+   });
 		}
 
 		return $retr;
 	}
 
-	static public function fromArray($data)
+	static public function fromArray(array $data)
 	{
 		return new QuickBooks_Payments_CreditCard($data['name'], $data['number'], $data['expYear'], $data['expMonth'], @$data['address']['streetAddress'], @$data['address']['city'], @$data['address']['region'], @$data['address']['postalCode'], @$data['address']['country']);
 	}

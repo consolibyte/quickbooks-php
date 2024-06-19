@@ -517,16 +517,9 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 
 	public function asList($request)
 	{
-		switch ($request)
-		{
-			case QUICKBOOKS_ADD_INVENTORYADJUSTMENT . 'Rq':
-
-				if (isset($this->_object['InventoryAdjustmentLine']))
-				{
-					$this->_object['InventoryAdjustmentLineAdd'] = $this->_object['InventoryAdjustmentLine'];
-				}
-				break;
-		}
+		if ($request === QUICKBOOKS_ADD_INVENTORYADJUSTMENT . 'Rq' && isset($this->_object['InventoryAdjustmentLine'])) {
+      $this->_object['InventoryAdjustmentLineAdd'] = $this->_object['InventoryAdjustmentLine'];
+  }
 
 		return parent::asList($request);
 	}
@@ -548,19 +541,18 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 			$object = $this->_object;
 		}
 		
-		switch ($root)
-		{
-			case QUICKBOOKS_ADD_INVENTORYADJUSTMENT:
-				foreach ($object['InventoryAdjustmentLineAdd'] as $key => $obj)
-				{
-					$obj->setOverride('InventoryAdjustmentLineAdd');
-				}
-				$parent = null;
-				break;
-		}
+		if ($root === QUICKBOOKS_ADD_INVENTORYADJUSTMENT) {
+      foreach ($object['InventoryAdjustmentLineAdd'] as $obj)
+  				{
+  					$obj->setOverride('InventoryAdjustmentLineAdd');
+  				}
+
+      $parent = null;
+  }
 
 		return parent::asXML($root, $parent, $object);
 	}
+ 
 	/**
 	 * Convert this object to a valid qbXML request
 	 *

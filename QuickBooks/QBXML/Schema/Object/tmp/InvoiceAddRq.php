@@ -13,12 +13,12 @@
 /**
  * 
  */
-require_once 'QuickBooks.php';
+require_once __DIR__ . '/QuickBooks.php';
 
 /**
  * 
  */
-require_once 'QuickBooks/QBXML/Schema/Object.php';
+require_once __DIR__ . '/QuickBooks/QBXML/Schema/Object.php';
 
 /**
  * 
@@ -641,8 +641,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   52 => 'LinkToTxnID',
   //53 => 'InvoiceLineAdd ItemRef ListID',
   53 => 'InvoiceLineAdd', 
-  54 => 'InvoiceLineAdd ItemRef ListID', 
-  55 => 'InvoiceLineAdd ItemRef FullName',
+  54 => 'InvoiceLineAdd ItemRef ListID',
   55 => 'InvoiceLineAdd Desc',
   56 => 'InvoiceLineAdd Quantity',
   57 => 'InvoiceLineAdd UnitOfMeasure',

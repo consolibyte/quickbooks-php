@@ -310,8 +310,7 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 	 */
 	public function setShipAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $postalcode = '', $country = '', $note = '')
 	{
-    $b = FALSE;
-		for ($i = 1; $i <= 5; $i++)
+    for ($i = 1; $i <= 5; ++$i)
 		{
 			$this->set('ShipAddress Addr' . $i, ${'addr' . $i});
 		}
@@ -357,7 +356,7 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 	 */
 	public function setBillAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $postalcode = '', $country = '', $note = '')
 	{
-		for ($i = 1; $i <= 5; $i++)
+		for ($i = 1; $i <= 5; ++$i)
 		{
 			$this->set('BillAddress Addr' . $i, ${'addr' . $i});
 		}
@@ -379,18 +378,13 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		if ($this->exists('IsPending'))
 		{ 
 			$pending = $this->get('IsPending');
-			if (is_bool($pending))
-			{
-				return $pending;
-			}
-			else if ($pending == 'false')
-			{
-				return false;
-			}
-			else if ($pending == 'true')
-			{
-				return true;
-			}
+			if (is_bool($pending)) {
+       return $pending;
+   } elseif ($pending == 'false') {
+       return false;
+   } elseif ($pending == 'true') {
+       return true;
+   }
 		}
 		
 		return null;
@@ -745,7 +739,7 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		{
 			case QUICKBOOKS_ADD_SALESORDER:
 				
-				foreach ($object['SalesOrderLineAdd'] as $key => $obj)
+				foreach ($object['SalesOrderLineAdd'] as $obj)
 				{
 					$obj->setOverride('SalesOrderLineAdd');
 				}
@@ -757,6 +751,7 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 				{
 					$object['SalesOrderLineMod'] = $object['SalesOrderLine'];
 				}
+    
 				break;
 		}
 		

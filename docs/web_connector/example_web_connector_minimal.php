@@ -28,7 +28,7 @@ if (function_exists('date_default_timezone_set'))
 }
 
 // Require the framework
-require_once '../../QuickBooks.php';
+require_once __DIR__ . '/../../QuickBooks.php';
 
 // A username and password you'll use in: 
 //	a) Your .QWC file
@@ -77,7 +77,7 @@ $response = $Server->handle(true, true);
 /**
  * Generate a qbXML response to add a particular customer to QuickBooks
  */
-function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+function _quickbooks_customer_add_request(string $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
 	// We're just testing, so we'll just use a static test request:
 	 
@@ -117,5 +117,4 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
  */
 function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-	return;	
 }

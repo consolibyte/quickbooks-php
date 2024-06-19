@@ -14,12 +14,12 @@
 /**
  *
  */
-require_once 'QuickBooks.php';
+require_once __DIR__ . '/QuickBooks.php';
 
 /**
  *
  */
-require_once 'QuickBooks/QBXML/Schema/Object.php';
+require_once __DIR__ . '/QuickBooks/QBXML/Schema/Object.php';
 
 /**
  *

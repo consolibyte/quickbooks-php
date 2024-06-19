@@ -22,7 +22,9 @@ define('BASEPATH', dirname(__FILE__));
 class CI_Controller
 {
 	protected $load;
+ 
 	protected $config;
+ 
 	protected $db;
 	
 	public function __construct()
@@ -34,13 +36,7 @@ class CI_Controller
 	
 	static public function instance()
 	{
-		$CI = null;
-		if (is_null($CI))
-		{
-			$CI = new CI_Controller();
-		}
-		
-		return $CI;
+		return new CI_Controller();
 	}
 	
 	public function model($name, $Model)
@@ -51,10 +47,6 @@ class CI_Controller
 
 class CI_Model
 {
-	public function __construct()
-	{
-		
-	}
 }
 
 class Loader
@@ -66,7 +58,7 @@ class Loader
 		$this->_controller = $Controller;
 	}
 	
-	public function config($file)
+	public function config(string $file)
 	{
 		$Config = Config::instance();
 		
@@ -74,8 +66,6 @@ class Loader
 		require_once dirname(__FILE__) . '/config/' . $file . '.php';
 		
 		$Config->merge($config);
-		
-		return;
 	}
 	
 	public function model($model)
@@ -91,12 +81,11 @@ class Loader
 
 class Config
 {
-	protected $_data;
+	protected $_data = array();
 	
 	protected function __construct()
-	{
-		$this->_data = array();
-	}
+ {
+ }
 	
 	static public function instance()
 	{
@@ -122,16 +111,11 @@ class Config
 
 class Database
 {
-	public $username;
-	public $password;
-	public $hostname;
-	public $database;
-	
-	public function __construct()
-	{
-		$this->username = 'root';
-		$this->password = 'root';
-		$this->hostname = 'localhost';
-		$this->database = 'citest';
-	}
+	public $username = 'root';
+ 
+	public $password = 'root';
+ 
+	public $hostname = 'localhost';
+ 
+	public $database = 'citest';
 }

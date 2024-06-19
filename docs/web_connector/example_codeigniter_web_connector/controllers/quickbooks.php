@@ -28,10 +28,14 @@
  */
 class QuickBooks extends CI_Controller
 {
-	public function __construct()
+	public $load;
+
+ public $config;
+
+ public $db;
+
+ public function __construct()
 	{
-		parent::__construct();
-		
 		// QuickBooks config
 		$this->load->config('quickbooks');
 		
@@ -64,8 +68,8 @@ class QuickBooks extends CI_Controller
 		$run_every_n_seconds = 600; // Run every 600 seconds (10 minutes)
 
 		// Generate the XML file
-		$QWC = new QuickBooks_WebConnector_QWC($name, $descrip, $appurl, $appsupport, $username, $fileid, $ownerid, $qbtype, $readonly, $run_every_n_seconds);
-		$xml = $QWC->generate();
+		$quickBooksWebConnectorQWC = new QuickBooks_WebConnector_QWC($name, $descrip, $appurl, $appsupport, $username, $fileid, $ownerid, $qbtype, $readonly, $run_every_n_seconds);
+		$xml = $quickBooksWebConnectorQWC->generate();
 
 		// Send as a file download
 		header('Content-type: text/xml');
@@ -150,14 +154,14 @@ class QuickBooks extends CI_Controller
 		
 		// Create a new server and tell it to handle the requests
 		// __construct($dsn_or_conn, $map, $errmap = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_PHP, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array(), $callback_options = array()
-		$Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
-		$response = $Server->handle(true, true);
+		$quickBooksWebConnectorServer = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
+		$quickBooksWebConnectorServer->handle(true, true);
 	}
 	
 	/**
 	 * Issue a request to QuickBooks to add a customer
 	 */
-	public function _addCustomerRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+	public function _addCustomerRequest(string $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 	{
 		// Do something here to load data using your model
 		//$data = $this->yourmodel->getCustomerData($ID);

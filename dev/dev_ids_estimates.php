@@ -3,7 +3,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 // 
 $username = 'keith@consolibyte.com';
@@ -37,7 +37,7 @@ foreach ($list as $Estimate)
 	
 	print("\n");
 	
-	for ($i = 0; $i < 10; $i++)
+	for ($i = 0; $i < 10; ++$i)
 	{
 		$Line = $Estimate->getLine($i);
 		

@@ -41,14 +41,14 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
 		$key_length = strlen($key);
 		$data_length = strlen($data);
 
-		for ($i = 0; $i < 256; $i++)
+		for ($i = 0; $i < 256; ++$i)
 		{
 			$keys[$i] = ord($key[$i % $key_length]);
 			$boxs[$i] = $i;
 		}
 		
 		$j = 0;
-		for ($i = 0; $i < 256; $i++)
+		for ($i = 0; $i < 256; ++$i)
 		{
 			$j = ($j + $boxs[$i] + $keys[$i]) % 256;
 			$tmp = $boxs[$i];
@@ -58,7 +58,7 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
 		
 		$a = 0; 
 		$j = 0;
-		for ($i = 0; $i < $data_length; $i++)
+		for ($i = 0; $i < $data_length; ++$i)
 		{
 			$a = ($a + 1) % 256;
 			$j = ($j + $boxs[$a]) % 256;

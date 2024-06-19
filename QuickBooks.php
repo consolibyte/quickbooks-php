@@ -37,7 +37,6 @@ define('QUICKBOOKS_BASEDIR', dirname(__FILE__));
 
 /**
  * Path separator for file paths/include/require paths
- * @var string
  */
 define('QUICKBOOKS_DIRECTORY_SEPARATOR', PATH_SEPARATOR);
 
@@ -48,9 +47,7 @@ if (function_exists('date_default_timezone_get'))
 {
 	@date_default_timezone_get();
 	
-	if (function_exists('error_get_last') and 
-		$arrerr = error_get_last() and 
-		substr($arrerr['message'], 0, strlen('date_default_timezone_get')) == 'date_default_timezone_get')
+	if (function_exists('error_get_last') && ($arrerr = error_get_last()) && substr($arrerr['message'], 0, strlen('date_default_timezone_get')) === 'date_default_timezone_get')
 	{
 		// Ooops, they never set their time-zone and PHP is warning them about 
 		// 	this! Let's try to auto-set their timezone, and set a flag so that 
@@ -75,120 +72,104 @@ if (!defined('QUICKBOOKS_TIMEZONE_AUTOSET'))
 
 /**
  * The package author
- * @var string
  */
 define('QUICKBOOKS_PACKAGE_AUTHOR', '"Keith Palmer" <keith@consolibyte.com>');
 
 /**
  * The URL for the package
- * @var string
  */
 define('QUICKBOOKS_PACKAGE_WEBSITE', 'http://www.ConsoliBYTE.com/');
 
 /**
  * The name of the package
- * @var string
  */
 define('QUICKBOOKS_PACKAGE_NAME', 'QuickBooks PHP DevKit');
 
 /**
- * The version of this QuickBooks package 
- * @var string
+ * The version of this QuickBooks package
  */
 define('QUICKBOOKS_PACKAGE_VERSION', '3.0');
 
 if (!defined('QUICKBOOKS_CRLF'))
 {
 	/**
-	 * The carraige-return line-feed sequence to use
-	 * @var string
-	 */
-	define('QUICKBOOKS_CRLF', "\r\n");
+  * The carraige-return line-feed sequence to use
+  */
+ define('QUICKBOOKS_CRLF', "\r\n");
 }
 
 if (!defined('QUICKBOOKS_SALT'))
 {
 	/**
-	 * Salt value for hashing passwords
-	 * @var string
-	 */
-	define('QUICKBOOKS_SALT', 'andB@++3ry');
+  * Salt value for hashing passwords
+  */
+ define('QUICKBOOKS_SALT', 'andB@++3ry');
 }
 
 if (!defined('QUICKBOOKS_HASH'))
 {
 	/**
-	 * The name of a function to use for hashing passwords
-	 * @var string
-	 */
-	define('QUICKBOOKS_HASH', 'sha1');
+  * The name of a function to use for hashing passwords
+  */
+ define('QUICKBOOKS_HASH', 'sha1');
 }
 
 if (!defined('QUICKBOOKS_TIMEOUT'))
 {
 	/**
-	 * The number of seconds without any activity a session can stay open before automatically closed
-	 * @var integer
-	 */
-	define('QUICKBOOKS_TIMEOUT', 1800);
+  * The number of seconds without any activity a session can stay open before automatically closed
+  */
+ define('QUICKBOOKS_TIMEOUT', 1800);
 }
 
 if (!defined('QUICKBOOKS_WSDL'))
 {
 	/**
-	 * Path to the QuickBooks WSDL file (the default WSDL is included with this package, you shouldn't need to override this generally) 
-	 * @var string
-	 */
-	define('QUICKBOOKS_WSDL', dirname(__FILE__) . '/QuickBooks/QBWebConnectorSvc.wsdl');
+  * Path to the QuickBooks WSDL file (the default WSDL is included with this package, you shouldn't need to override this generally)
+  */
+ define('QUICKBOOKS_WSDL', dirname(__FILE__) . '/QuickBooks/QBWebConnectorSvc.wsdl');
 }
 
 if (!defined('QUICKBOOKS_DEBUG'))
 {
 	/**
-	 * Whether or not to turn on debugging (unsupported for now...?)
-	 * @var boolean
-	 */
-	define('QUICKBOOKS_DEBUG', true);
+  * Whether or not to turn on debugging (unsupported for now...?)
+  */
+ define('QUICKBOOKS_DEBUG', true);
 }
 
 if (!defined('QUICKBOOKS_LOG'))
 {
 	/**
-	 * Debug log (unsupported?)
-	 * 
-	 * @deprecated
-	 * @var string
-	 */
-	define('QUICKBOOKS_LOG', '/tmp/qb-debug.log');
+  * Debug log (unsupported?)
+  *
+  * @deprecated
+  */
+ define('QUICKBOOKS_LOG', '/tmp/qb-debug.log');
 }
 
 /**
  * Developer logging (this is designed just for developing, you probably don't want to use this debug level...)
- * @var integer
  */
 define('QUICKBOOKS_LOG_DEVELOP', 4);
 
 /**
  * Debug logging (too much data is logged... generally only useful for debugging)
- * @var integer
  */
 define('QUICKBOOKS_LOG_DEBUG', 3);
 
 /**
  * Verbose logging (lots of data is logged)
- * @var integer
  */
 define('QUICKBOOKS_LOG_VERBOSE', 2);
 
 /**
  * Normal logging (minimal data is logged)
- * @var integer
  */
 define('QUICKBOOKS_LOG_NORMAL', 1);
 
 /**
  * No logging at all (you probably should not use this...)
- * @var integer
  */
 define('QUICKBOOKS_LOG_NONE', 0);
 
@@ -361,7 +342,6 @@ define('QUICKBOOKS_OBJECT_COMPANY', 'Company');
 
 /**
  * QuickBooks request to query a company for meta-data
- * @var string
  */
 define('QUICKBOOKS_QUERY_COMPANY', 'CompanyQuery');
 define('QUICKBOOKS_IMPORT_COMPANY', 'CompanyImport');
@@ -402,25 +382,21 @@ define('QUICKBOOKS_IMPORT_CURRENCY', 'CurrencyImport');
 
 /**
  * QuickBooks company object (company file meta-data)
- * @var string
  */
 define('QUICKBOOKS_OBJECT_CUSTOMER', 'Customer');
 
 /**
  * QuickBooks request to add a customer record
- * @var string
  */
 define('QUICKBOOKS_ADD_CUSTOMER', 'CustomerAdd');
 
 /**
  * QuickBooks request to modify a customer record
- * @var string
  */
 define('QUICKBOOKS_MOD_CUSTOMER', 'CustomerMod');
 
 /**
  * QuickBooks request to search for/query for customer records
- * @var string
  */
 define('QUICKBOOKS_QUERY_CUSTOMER', 'CustomerQuery');
 define('QUICKBOOKS_IMPORT_CUSTOMER', 'CustomerImport');
@@ -506,11 +482,10 @@ define('QUICKBOOKS_IMPORT_INVENTORYADJUSTMENT', 'InventoryAdjustmentImport');
 
 /**
  * Job constant in QuickBooks
- * 
- * In actuality, there are no such thing as "Jobs" in QuickBooks. Jobs in 
- * QuickBooks are handled as customers with parent customers. 
- * 
- * @var string
+ *
+ * In actuality, there are no such thing as "Jobs" in QuickBooks. Jobs in
+ * QuickBooks are handled as customers with parent customers.
+ *
  */
 define('QUICKBOOKS_OBJECT_JOB', 'Job');
 define('QUICKBOOKS_ADD_JOB', 'JobAdd');
@@ -637,19 +612,16 @@ define('QUICKBOOKS_OBJECT_INVOICE', 'Invoice');
 
 /**
  * QuickBooks request to create an invoice
- * @var string
  */
 define('QUICKBOOKS_ADD_INVOICE', 'InvoiceAdd');
 
 /**
  * QuickBooks request to modify an invoice
- * @var string
  */
 define('QUICKBOOKS_MOD_INVOICE', 'InvoiceMod');
 
 /**
  * QuickBooks request to run a query for invoices
- * @var string
  */
 define('QUICKBOOKS_QUERY_INVOICE', 'InvoiceQuery');
 define('QUICKBOOKS_IMPORT_INVOICE', 'InvoiceImport');
@@ -660,7 +632,6 @@ define('QUICKBOOKS_OBJECT_RECEIVEPAYMENT', 'ReceivePayment');
 
 /**
  * QuickBooks request to register a payment as received
- * @var string
  */
 define('QUICKBOOKS_ADD_RECEIVEPAYMENT', 'ReceivePaymentAdd');
 define('QUICKBOOKS_MOD_RECEIVEPAYMENT', 'ReceivePaymentMod');
@@ -770,7 +741,6 @@ define('QUICKBOOKS_OBJECT_TRANSACTION', 'Transaction');
 
 /**
  * QuickBooks request to delete a transaction
- * @var string
  */
 define('QUICKBOOKS_DELETE_TRANSACTION', 'TxnDel');
 define('QUICKBOOKS_DEL_TRANSACTION', QUICKBOOKS_DELETE_TRANSACTION);
@@ -826,16 +796,13 @@ define('QUICKBOOKS_QUERY_UNITOFMEASURESET', 'UnitOfMeasureSetQuery');
 define('QUICKBOOKS_IMPORT_UNITOFMEASURESET', 'UnitOfMeasureSetImport');
 
 /**
- * An always-present QuickBooks constant for "TAXABLE" items to embed in "SalesTaxCodeRef FullName" qbXML values 
- * 
- * @var string
+ * An always-present QuickBooks constant for "TAXABLE" items to embed in "SalesTaxCodeRef FullName" qbXML values
+ *
  */
 define('QUICKBOOKS_TAXABLE', 'TAX');
 
 /**
  * An always-present QuickBooks constant for "NON-TAXABLE" items to embed in "SalesTaxCodeRef FullName" qbXML values
- * 
- * @var string
  */
 define('QUICKBOOKS_NONTAXABLE', 'NON');
 
@@ -910,85 +877,71 @@ define('QUICKBOOKS_STATUS_QUEUED', 'q');
 
 /**
  * QuickBooks status for queued QuickBooks transactions - was queued, then SUCCESSFULLY PROCESSED
- * @var char
  */
 define('QUICKBOOKS_STATUS_SUCCESS', 's');
 
 /**
  * QuickBooks status for queued QuickBooks transactions - was queued, an ERROR OCCURED when processing it
- * @var char
  */
 define('QUICKBOOKS_STATUS_ERROR', 'e');
 
 /**
  * QuickBooks status for items that have been dequeued and are being processed by QuickBooks (we assume) but we havn't received a response back about them yet
- * @var char
  */
 define('QUICKBOOKS_STATUS_PROCESSING', 'i');
 
 /**
  * QuickBooks status for items that were dequeued, had an error occured, and then the error was handled by an error handler
- * @var char
  */
 define('QUICKBOOKS_STATUS_HANDLED', 'h');
 
 /**
  * QuickBooks status for items that were cancelled
- * @var char
  */
 define('QUICKBOOKS_STATUS_CANCELLED', 'c');
 
 /**
  * QuickBooks status for items that were forcibly removed from the queue
- * @var char
  */
 define('QUICKBOOKS_STATUS_REMOVED', 'r');
 
 /**
  * QuickBooks status for items that were NoOp
- * @var char
  */
 define('QUICKBOOKS_STATUS_NOOP', 'n');
 
 /**
- * Error code for errors that are not really errors... 
- * @var integer
+ * Error code for errors that are not really errors...
  */
 define('QUICKBOOKS_ERROR_OK', 0);
 
 /**
  * Error code for SOAP server errors that occur internally (misc. errors)
- * @var integer
  */
 define('QUICKBOOKS_ERROR_INTERNAL', -1);
 
 /**
  * Error code for errors that occur within function handlers
- * @var integer
  */
 define('QUICKBOOKS_ERROR_HANDLER', -2);
 
 /**
  * Error code for errors that occur within driver classes
- * @var integer
  */
 define('QUICKBOOKS_ERROR_DRIVER', -3);
 
 /**
  * Error code for errors that are reported by hook classes
- * @var integer
  */
 define('QUICKBOOKS_ERROR_HOOK', -4);
 
 /**
  * Status for an enabled user
- * @var char
  */
 define('QUICKBOOKS_USER_ENABLED', 'e');
 
 /**
  * Status for a disabled user
- * @var char
  */
 define('QUICKBOOKS_USER_DISABLED', 'd');
 
@@ -1015,21 +968,19 @@ if (!defined('QUICKBOOKS_FRAMEWORKS'))
 	$constants = get_defined_constants(true);
 	foreach ($constants['user'] as $constant => $value)
 	{
-		if (substr($constant, 0, 21) == 'QUICKBOOKS_FRAMEWORK_')
+		if (substr($constant, 0, 21) === 'QUICKBOOKS_FRAMEWORK_')
 		{
-			$all = $all | $value;
+			$all |= $value;
 		}
 	}
 	
 	/**
-	 * Determines which frameworks are included (if not defined, this defines it to include *everything*)
-	 * @var integer
-	 */
-	define('QUICKBOOKS_FRAMEWORKS', $all);
+  * Determines which frameworks are included (if not defined, this defines it to include *everything*)
+  */
+ define('QUICKBOOKS_FRAMEWORKS', $all);
 }
 
-if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_QUEUE or 
-	QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_WEBCONNECTOR)
+if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_QUEUE || QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_WEBCONNECTOR)
 {
 	/**
 	 * Queue class for QuickBooks queueing 
@@ -1037,7 +988,7 @@ if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_QUEUE or
 	QuickBooks_Loader::load('/QuickBooks/WebConnector/Queue.php');
 }
 
-if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_WEBCONNECTOR)
+if ((QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_WEBCONNECTOR) !== 0)
 {
 	/**
 	 * SOAP server for QuickBooks web services
@@ -1055,7 +1006,7 @@ if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_WEBCONNECTOR)
 	QuickBooks_Loader::load('/QuickBooks/Utilities.php');
 }
 
-if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_IPP)
+if ((QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_IPP) !== 0)
 {
 	/**
 	 * 
@@ -1063,9 +1014,7 @@ if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_IPP)
 	QuickBooks_Loader::load('/QuickBooks/IPP.php');
 }
 
-if (QUICKBOOKS_FRAMEWORK_MISCELLANEOUS & QUICKBOOKS_FRAMEWORKS or 
-	QUICKBOOKS_FRAMEWORK_ONLINEEDITION & QUICKBOOKS_FRAMEWORKS or 
-	QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS)
+if (QUICKBOOKS_FRAMEWORK_MISCELLANEOUS & QUICKBOOKS_FRAMEWORKS || QUICKBOOKS_FRAMEWORK_ONLINEEDITION & QUICKBOOKS_FRAMEWORKS || QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS)
 {
 	/**
 	 * Encryption/decryption classes
@@ -1081,7 +1030,7 @@ if (QUICKBOOKS_FRAMEWORK_CONSTANTS != QUICKBOOKS_FRAMEWORKS)
 	QuickBooks_Loader::load('/QuickBooks/Callbacks.php');
 }
 
-if (QUICKBOOKS_FRAMEWORK_MISCELLANEOUS & QUICKBOOKS_FRAMEWORKS)
+if ((QUICKBOOKS_FRAMEWORK_MISCELLANEOUS & QUICKBOOKS_FRAMEWORKS) !== 0)
 {
 	/**
 	 * Utilities for ensuring values fit into qbXML fields 
@@ -1089,7 +1038,7 @@ if (QUICKBOOKS_FRAMEWORK_MISCELLANEOUS & QUICKBOOKS_FRAMEWORKS)
 	QuickBooks_Loader::load('/QuickBooks/Cast.php');
 }
 
-if (QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS)
+if ((QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS) !== 0)
 {
 	/**
 	 * QuickBooks Merchant Service support
@@ -1097,13 +1046,13 @@ if (QUICKBOOKS_FRAMEWORK_MERCHANTSERVICE & QUICKBOOKS_FRAMEWORKS)
 	QuickBooks_Loader::load('/QuickBooks/MerchantService.php');
 }
 
-if (QUICKBOOKS_FRAMEWORK_WEBCONNECTOR & QUICKBOOKS_FRAMEWORKS)
+if ((QUICKBOOKS_FRAMEWORK_WEBCONNECTOR & QUICKBOOKS_FRAMEWORKS) !== 0)
 {
 	// Other servers
 	QuickBooks_Loader::import('/QuickBooks/WebConnector/Server');
 }
 
-if (QUICKBOOKS_FRAMEWORK_QBXML & QUICKBOOKS_FRAMEWORKS)
+if ((QUICKBOOKS_FRAMEWORK_QBXML & QUICKBOOKS_FRAMEWORKS) !== 0)
 {
 	// Objects for the API
 	QuickBooks_Loader::import('/QuickBooks/QBXML/Object');

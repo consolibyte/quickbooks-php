@@ -86,23 +86,22 @@ class QuickBooks_Status_Report
 	}
 	
 	/**
-	 * Get information about the status of a connection to QuickBooks
-	 * 
-	 * The returned array will look something like this:
-	 * <pre>
-	 * Array ( 
-	 * 	[0] => danger 					// This is a constant, one of the QuickBooks_Status_Report::STATUS_* constants
-	 * 	[1] => ERROR: A connection has not been made in 54 days, 1 hours and 46 minutes! Contact support to get this issue resolved! 
-	 * 	[2] => 2010-03-19 12:26:41 		// This is the last time the given user logged in
-	 * 	[3] => 2010-03-19 12:26:41 		// This is the last time the given user performed any action 
-	 * )
-	 * </pre>
-	 * 
-	 * @param string $user
-	 * @param array $levels
-	 * @return array			An array of status information 
-	 */
-	public function status($user = null, $levels = array())
+  * Get information about the status of a connection to QuickBooks
+  *
+  * The returned array will look something like this:
+  * <pre>
+  * Array (
+  * 	[0] => danger 					// This is a constant, one of the QuickBooks_Status_Report::STATUS_* constants
+  * 	[1] => ERROR: A connection has not been made in 54 days, 1 hours and 46 minutes! Contact support to get this issue resolved!
+  * 	[2] => 2010-03-19 12:26:41 		// This is the last time the given user logged in
+  * 	[3] => 2010-03-19 12:26:41 		// This is the last time the given user performed any action
+  * )
+  * </pre>
+  *
+  * @param string $user
+  * @return array			An array of status information
+  */
+ public function status($user = null, array $levels = array())
 	{
 		$Driver = $this->_driver;
 		
@@ -111,7 +110,7 @@ class QuickBooks_Status_Report
 			$user = $Driver->authDefault();
 		}
 		
-		if (!count($levels))
+		if ($levels === [])
 		{
 			$levels = array(
 				60 * 60 * 12 => array( QuickBooks_Status_Report::STATUS_NOTICE, 'Notice: A connection has not been made in %d days, %d hours and %d minutes.' ),  
@@ -201,21 +200,17 @@ class QuickBooks_Status_Report
 			QUICKBOOKS_STATUS_NOOP => 'No operation occurred', 
 			);
 
-		foreach ($list as $key => $arr)
+		foreach ($list as $arr)
 		{
 			$errnum = '';
 			$errmsg = '';
-			if ($arr['msg'] and 
-				$pos = strpos($arr['msg'], ':'))
-			{
-				$errnum = substr($arr['msg'], 0, $pos);
-				$errmsg = substr($arr['msg'], $pos + 2);
-			}
-			else if ($arr['msg'])
-			{
-				$errnum = '?';
-				$errmsg = $arr['msg'];
-			}
+			if ($arr['msg'] && ($pos = strpos($arr['msg'], ':'))) {
+       $errnum = substr($arr['msg'], 0, $pos);
+       $errmsg = substr($arr['msg'], $pos + 2);
+   } elseif ($arr['msg']) {
+       $errnum = '?';
+       $errmsg = $arr['msg'];
+   }
 			
 			$record = array(
 				$arr['quickbooks_queue_id'], 
@@ -259,8 +254,7 @@ class QuickBooks_Status_Report
 			
 			//print('checking object [' . $object . ']' . "<br />");
 			
-			if ($do_restrict and 
-				!in_array($object, $restrict))
+			if ($do_restrict && !in_array($object, $restrict))
 			{
 				continue;
 			}
@@ -274,8 +268,7 @@ class QuickBooks_Status_Report
 			
 			//print_r($table_and_field);
 			
-			if (!empty($table_and_field[0]) and 
-				!empty($table_and_field[1]))
+			if (!empty($table_and_field[0]) && !empty($table_and_field[1]))
 			{
 				$sql = "
 					SELECT 
@@ -293,14 +286,12 @@ class QuickBooks_Status_Report
 					$sql .= " 1 ";
 				}
 
-				if ($timestamp = strtotime($date_from) and 
-					$timestamp > 0)
+				if (($timestamp = strtotime($date_from)) && $timestamp > 0)
 				{
 					$sql .= " AND TimeCreated >= '" . date('Y-m-d H:i:s', $timestamp) . "' ";
 				}
 				
-				if ($timestamp = strtotime($date_to) and 
-					$timestamp > 0)
+				if (($timestamp = strtotime($date_to)) && $timestamp > 0)
 				{
 					$sql .= " AND TimeCreated <= '" . date('Y-m-d H:i:s', $timestamp) . "' ";
 				}
@@ -320,18 +311,13 @@ class QuickBooks_Status_Report
 						$record = $arr;
 					}
 					
-					if ($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER])
-					{
-						$details = QuickBooks_Status_Report::describe($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER], $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE]);
-					}
-					else if ($arr[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC] == $arr[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY])
-					{
-						$details = 'Synced successfully.';
-					}
-					else if ($arr[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY] > $arr[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC])
-					{
-						$details = 'Waiting to sync.';
-					}
+					if ($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER]) {
+         $details = QuickBooks_Status_Report::describe($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER], $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_MESSAGE]);
+     } elseif ($arr[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC] == $arr[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY]) {
+         $details = 'Synced successfully.';
+     } elseif ($arr[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY] > $arr[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC]) {
+         $details = 'Waiting to sync.';
+     }
 					
 					$report[$pretty][] = array(
 						$arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], 
@@ -352,7 +338,7 @@ class QuickBooks_Status_Report
 		return $report;
 	}
 	
-	protected function _fetchSomeField($arr, $fields)
+	protected function _fetchSomeField(array $arr, $fields)
 	{
 		foreach ($fields as $field)
 		{
@@ -374,12 +360,12 @@ class QuickBooks_Status_Report
 		//$constant = str_replace('Import', '', $constant);
 		
 		$strlen = strlen($constant);
-		for ($i = 1; $i < $strlen; $i++)
+		for ($i = 1; $i < $strlen; ++$i)
 		{
 			if (strtoupper($constant[$i]) == $constant[$i])
 			{
 				$constant = substr($constant, 0, $i) . ' ' . substr($constant, $i);
-				$i = $i + 2;
+				$i += 2;
 			}
 		}
 		
@@ -441,9 +427,8 @@ class QuickBooks_Status_Report
 		}
 			
 		$html .= '	</tbody>' . QUICKBOOKS_CRLF;
-		$html .= '</table>' . QUICKBOOKS_CRLF;
 		
-		return $html;
+		return $html . ('</table>' . QUICKBOOKS_CRLF);
 	}
 	
 	protected function _htmlForMirror($report, $skip_empties)
@@ -452,8 +437,7 @@ class QuickBooks_Status_Report
 		
 		foreach ($report as $type => $records)
 		{
-			if ($skip_empties and 
-				!count($records))
+			if ($skip_empties && !count($records))
 			{
 				continue;	
 			}

@@ -13,12 +13,12 @@
 /**
  * 
  */
-require_once 'QuickBooks.php';
+require_once __DIR__ . '/QuickBooks.php';
 
 /**
  * 
  */
-require_once 'QuickBooks/QBXML/Schema/Object.php';
+require_once __DIR__ . '/QuickBooks/QBXML/Schema/Object.php';
 
 /**
  * 
@@ -358,7 +358,6 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   45 => 'ItemGroupLineAdd',
   46 => 'ItemGroupLineAdd ItemGroupRef ListID',
   47 => 'ItemGroupLineAdd ItemGroupRef FullName',
-  48 => 'ItemGroupLineAdd Desc',
   48 => 'ItemGroupLineAdd Quantity',
   49 => 'ItemGroupLineAdd UnitOfMeasure',
   50 => 'IncludeRetElement',

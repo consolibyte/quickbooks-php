@@ -389,7 +389,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
 				
 				if ($this->exists('AppliedToTxnAdd'))
 				{
-					foreach ($object['AppliedToTxnAdd'] as $key => $obj)
+					foreach ($object['AppliedToTxnAdd'] as $obj)
 					{
 						$obj->setOverride('AppliedToTxnAdd');
 					}

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 
 /**
  * QuickBooks Kohana Integration Example
@@ -20,7 +20,7 @@ class Controller_Quickbooks extends Controller_Website {
 		//init the qbdata model
 		$qbdata = ORM::factory('qbdata');
 		//get the metrics from it
-		$metrics = $qbdata->GetQueueBreakdown();
+		$qbdata->GetQueueBreakdown();
 	}
 
 	public function action_errors() {
@@ -31,7 +31,7 @@ class Controller_Quickbooks extends Controller_Website {
 		//init the qbdata model
 		$qbdata = ORM::factory('qbdata');
 		//call the method to get errors
-		$errors = $qbdata->GetErrors();
+		$qbdata->GetErrors();
 	}
 
 	public function action_help() {

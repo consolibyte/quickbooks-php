@@ -23,11 +23,17 @@
 class QuickBooks_MerchantService_CreditCard 
 {
 	protected $_name;
+ 
 	protected $_number;
+ 
 	protected $_expyear;
+ 
 	protected $_expmonth;
+ 
 	protected $_address;
+ 
 	protected $_postalcode;
+ 
 	protected $_cvv;
 	
 	protected $_lodging;

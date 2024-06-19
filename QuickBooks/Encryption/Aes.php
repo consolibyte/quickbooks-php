@@ -22,7 +22,7 @@ QuickBooks_Loader::load('/QuickBooks/Encryption.php');
  */
 class QuickBooks_Encryption_Aes extends QuickBooks_Encryption
 {
-	static function encrypt($key, $plain, $salt = null)
+	public static function encrypt($key, $plain, $salt = null)
 	{
 		if (is_null($salt))
 		{
@@ -33,8 +33,7 @@ class QuickBooks_Encryption_Aes extends QuickBooks_Encryption
 		
 		$crypt = mcrypt_module_open('rijndael-256', '', 'ofb', '');
 
-		if (false !== stripos(PHP_OS, 'win') and 
-			version_compare(PHP_VERSION, '5.3.0')  == -1) 
+		if (false !== stripos(PHP_OS, 'win') && version_compare(PHP_VERSION, '5.3.0')  == -1) 
 		{
 			$iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($crypt), MCRYPT_RAND);	
 		}
@@ -54,7 +53,7 @@ class QuickBooks_Encryption_Aes extends QuickBooks_Encryption
 		return $encrypted;
 	}
 	
-	static function decrypt($key, $encrypted)
+	public static function decrypt($key, $encrypted)
 	{
 		$crypt = mcrypt_module_open('rijndael-256', '', 'ofb', '');
 		$iv_size = mcrypt_enc_get_iv_size($crypt);
@@ -80,8 +79,7 @@ class QuickBooks_Encryption_Aes extends QuickBooks_Encryption
 		//print('**]]');
 			
 		$tmp = unserialize($decrypted);
-		$decrypted = current($tmp);
 		
-		return $decrypted;
+		return current($tmp);
 	}
 }

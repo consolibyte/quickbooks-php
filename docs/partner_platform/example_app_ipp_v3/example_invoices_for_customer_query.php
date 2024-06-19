@@ -17,7 +17,7 @@ $customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer W
 
 //print_r($customers);
 
-if (count($customers))
+if (count($customers) > 0)
 {
 	foreach ($customers as $Customer)
 	{
@@ -34,7 +34,7 @@ if (count($customers))
 		exit;
 		*/
 		
-		if (count($invoices))
+		if (count($invoices) > 0)
 		{
 			foreach ($invoices as $Invoice)
 			{

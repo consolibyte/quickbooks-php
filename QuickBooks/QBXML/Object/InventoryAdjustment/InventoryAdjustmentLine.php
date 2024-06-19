@@ -91,6 +91,7 @@ class QuickBooks_QBXML_Object_InventoryAdjustment_InventoryAdjustmentLine extend
 	{
 		return $this->set('ValueAdjustment NewValue', $value);
 	}
+ 
 	/**
 	 *
 	 *
@@ -118,19 +119,10 @@ class QuickBooks_QBXML_Object_InventoryAdjustment_InventoryAdjustmentLine extend
 			$object = $this->_object;
 		}
 		
-		switch ($parent)
-		{
-			case QUICKBOOKS_ADD_INVENTORYADJUSTMENT:
-				$root = 'InventoryAdjustmentLineAdd';
-				$parent = null;
-				break;
-// Currently unimplemented
-/*
-			case QUICKBOOKS_QUERY_INVENTORYADJUSTMENT:
-				$root = 'InventoryAdjustmentLineQuery';
-				break;
-*/
-		}
+		if ($parent === QUICKBOOKS_ADD_INVENTORYADJUSTMENT) {
+      $root = 'InventoryAdjustmentLineAdd';
+      $parent = null;
+  }
 
 		return parent::asXML($root, $parent, $object);
 	}

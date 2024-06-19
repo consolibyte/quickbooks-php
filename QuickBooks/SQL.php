@@ -15,7 +15,9 @@
  */
 class QuickBooks_SQL
 {
-	/**
+	public $_driver;
+
+ /**
 	 * Hook which occurs every time a new record is INSERTed into the SQL mirror
 	 */
 	const HOOK_SQL_INSERT = 'QuickBooks_SQL sql-insert';
@@ -107,18 +109,12 @@ class QuickBooks_SQL
 			{
 				$tmp = trim(strtoupper($sql));
 				
-				if ($this->_startsWith($sql, 'UPDATE '))
-				{
-					
-				}
-				else if ($this->_startsWith($sql, 'INSERT INTO '))
-				{
-					
-				}
-				else if ($this->_startsWith($sql, 'DELETE FROM '))
-				{
-					
-				}
+				if ($this->_startsWith($sql, 'UPDATE ')) {
+    } elseif ($this->_startsWith($sql, 'INSERT INTO ')) {
+
+    } elseif ($this->_startsWith($sql, 'DELETE FROM ')) {
+
+    }
 			}
 			
 			return $this->_driver->query($sql);

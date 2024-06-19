@@ -7,7 +7,7 @@ error_reporting(E_ALL | E_STRICT);
 
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/kpalmer/Projects/QuickBooks/');
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 // 
 $username = 'support@consolibyte.com';

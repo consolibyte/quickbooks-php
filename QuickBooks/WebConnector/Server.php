@@ -245,9 +245,7 @@ class QuickBooks_WebConnector_Server
 			'masking' => true, 
 			);
 		
-		$arr = array_merge($defaults, $arr);
-		
-		return $arr;
+		return array_merge($defaults, $arr);
 	}
 
 	/**
@@ -312,15 +310,11 @@ class QuickBooks_WebConnector_Server
 	 */
 	protected function _headers()
 	{
-		if ($_SERVER['REQUEST_METHOD'] == 'POST')
-		{
-			header('Content-Type: text/xml');
-		}
-		else if (isset($_GET['wsdl']) or isset($_GET['WSDL']))
-		{
-			header('Content-Type: text/xml');
-		}
-		else
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      header('Content-Type: text/xml');
+  } elseif (isset($_GET['wsdl']) || isset($_GET['WSDL'])) {
+      header('Content-Type: text/xml');
+  } else
 		{
 			header('Content-Type: text/plain');
 		}
@@ -363,110 +357,95 @@ class QuickBooks_WebConnector_Server
 		$input = $this->_input;
 		
 		// 
-		if ($_SERVER['REQUEST_METHOD'] == 'POST')
-		{
-			$this->_headers();
-			
-			$output_buffering = false;
-			
-			/*
-			if (isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_PREHANDLE]))
-			{
-				foreach ($this->_hooks[QUICKBOOKS_SERVER_HOOK_PREHANDLE] as $func)
-				{
-					$func($input, $this->_callback_config);
-				}
-			}
-			*/
-			
-			$hook_data = array(
-				'input' => $input, 			   
-				);
-			
-			$err = '';
-			$this->_callHooks(QUICKBOOKS_SERVER_HOOK_PREHANDLE, null, null, null, $err, $hook_data);
-			//QuickBooks_Callbacks::callHook($this->_driver, $this->_hooks, QUICKBOOKS_SERVER_HOOK_PREHANDLE, null, null, null, $err, $hook_data, $this->_callback_config, __FILE__, __LINE__);
-			
-			if ($this->_loglevel >= QUICKBOOKS_LOG_DEVELOP)
-			{
-				if (function_exists('apache_request_headers'))
-				{
-					$headers = '';
-					foreach (apache_request_headers() as $header => $value)
-					{
-						$headers .= $header . ': ' . $value . "\n"; 
-					}
-					
-					//$this->_driver->log('Incoming HTTP Headers: ' . $headers, null, QUICKBOOKS_LOG_DEVELOP);
-					$this->_log('Incoming HTTP Headers: ' . $headers, null, QUICKBOOKS_LOG_DEVELOP);
-				}
-				
-				//$this->_driver->log('Incoming SOAP Request: ' . $input, null, QUICKBOOKS_LOG_DEVELOP);
-				$this->_log('Incoming SOAP Request: ' . $input, null, QUICKBOOKS_LOG_DEVELOP);
-			}
-			
-			if ($return or isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE]))
-			{
-				$output_buffering = true;
-				ob_start();
-			}
-			
-			$this->_server->handle($input);
-			
-			if ($return or 
-				isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE]) or 
-				$this->_loglevel >= QUICKBOOKS_LOG_DEVELOP)
-			{
-				$output = '';
-				if ($output_buffering)
-				{
-					$output = ob_get_contents();
-					ob_end_flush();
-				}
-				
-				/*
-				if (isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE]))
-				{
-					foreach ($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE] as $func)
-					{
-						$func($output, $this->_callback_config);
-					}
-				}
-				*/
-				
-				$hook_data = array(
-					'input' => $input,
-					'output' => $output, 
-					);
-				
-				$err = '';
-				$this->_callHooks(QUICKBOOKS_SERVER_HOOK_POSTHANDLE, null, null, null, $err, $hook_data);
-				//QuickBooks_Callbacks::callHook($this->_driver, $this->_hooks, QUICKBOOKS_SERVER_HOOK_POSTHANDLE, null, null, null, $err, $hook_data, $this->_callback_config);
-				
-				if ($this->_loglevel >= QUICKBOOKS_LOG_DEVELOP)
-				{
-					//$this->_driver->log('Outgoing SOAP Response: ' . $output, null, QUICKBOOKS_LOG_DEVELOP);
-					$this->_log('Outgoing SOAP Response: ' . $output, null, QUICKBOOKS_LOG_DEVELOP);
-				}
-				
-				if ($return)
-				{
-					return $output;
-				}
-			}
-			
-			return;
-		}
-		else if (isset($_GET['WSDL']) or isset($_GET['wsdl']))
-		{
-			if ($contents = file_get_contents($this->_wsdl))
-			{
-				$this->_headers();
-				print($contents);
-				exit;
-			}
-		}
-		else
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $this->_headers();
+      $output_buffering = false;
+      /*
+      if (isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_PREHANDLE]))
+      {
+      	foreach ($this->_hooks[QUICKBOOKS_SERVER_HOOK_PREHANDLE] as $func)
+      	{
+      		$func($input, $this->_callback_config);
+      	}
+      }
+      */
+      $hook_data = array(
+   				'input' => $input, 			   
+   				);
+      $err = '';
+      $this->_callHooks(QUICKBOOKS_SERVER_HOOK_PREHANDLE, null, null, null, $err, $hook_data);
+      //QuickBooks_Callbacks::callHook($this->_driver, $this->_hooks, QUICKBOOKS_SERVER_HOOK_PREHANDLE, null, null, null, $err, $hook_data, $this->_callback_config, __FILE__, __LINE__);
+      if ($this->_loglevel >= QUICKBOOKS_LOG_DEVELOP)
+   			{
+   				if (function_exists('apache_request_headers'))
+   				{
+   					$headers = '';
+   					foreach (apache_request_headers() as $header => $value)
+   					{
+   						$headers .= $header . ': ' . $value . "\n"; 
+   					}
+   					
+   					//$this->_driver->log('Incoming HTTP Headers: ' . $headers, null, QUICKBOOKS_LOG_DEVELOP);
+   					$this->_log('Incoming HTTP Headers: ' . $headers, null, QUICKBOOKS_LOG_DEVELOP);
+   				}
+   				
+   				//$this->_driver->log('Incoming SOAP Request: ' . $input, null, QUICKBOOKS_LOG_DEVELOP);
+   				$this->_log('Incoming SOAP Request: ' . $input, null, QUICKBOOKS_LOG_DEVELOP);
+   			}
+      if ($return || isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE]))
+   			{
+   				$output_buffering = true;
+   				ob_start();
+   			}
+      $this->_server->handle($input);
+      if ($return || isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE]) || $this->_loglevel >= QUICKBOOKS_LOG_DEVELOP)
+   			{
+   				$output = '';
+   				if ($output_buffering)
+   				{
+   					$output = ob_get_contents();
+   					ob_end_flush();
+   				}
+   				
+   				/*
+   				if (isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE]))
+   				{
+   					foreach ($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE] as $func)
+   					{
+   						$func($output, $this->_callback_config);
+   					}
+   				}
+   				*/
+   				
+   				$hook_data = array(
+   					'input' => $input,
+   					'output' => $output, 
+   					);
+   				
+   				$err = '';
+   				$this->_callHooks(QUICKBOOKS_SERVER_HOOK_POSTHANDLE, null, null, null, $err, $hook_data);
+   				//QuickBooks_Callbacks::callHook($this->_driver, $this->_hooks, QUICKBOOKS_SERVER_HOOK_POSTHANDLE, null, null, null, $err, $hook_data, $this->_callback_config);
+   				
+   				if ($this->_loglevel >= QUICKBOOKS_LOG_DEVELOP)
+   				{
+   					//$this->_driver->log('Outgoing SOAP Response: ' . $output, null, QUICKBOOKS_LOG_DEVELOP);
+   					$this->_log('Outgoing SOAP Response: ' . $output, null, QUICKBOOKS_LOG_DEVELOP);
+   				}
+   				
+   				if ($return)
+   				{
+   					return $output;
+   				}
+   			}
+      return null;
+  } elseif (isset($_GET['WSDL']) || isset($_GET['wsdl'])) {
+      if ($contents = file_get_contents($this->_wsdl))
+   			{
+   				$this->_headers();
+   				print($contents);
+   				exit;
+   			}
+  } else
 		{
 			$this->_headers();
 
@@ -537,8 +516,9 @@ class QuickBooks_WebConnector_Server
 				print(' - ' . date('Y-m-d H:i:s') . ' -- process ' . round(microtime(true) - QUICKBOOKS_TIMESTAMP, 5) . "\n");
 			}
 			
-			return;
+			return null;
 		}
+  return null;
 	}
 	
 	/**

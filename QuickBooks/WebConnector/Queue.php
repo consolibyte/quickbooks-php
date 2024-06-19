@@ -55,7 +55,9 @@ QuickBooks_Loader::load('/QuickBooks/WebConnector/Queue/Singleton.php');
  */
 class QuickBooks_WebConnector_Queue
 {
-	/**
+	public $_driver;
+
+ /**
 	 * The default username to use when queueing items
 	 * @var string
 	 */
@@ -159,7 +161,7 @@ class QuickBooks_WebConnector_Queue
 	{
 		$run_every = QuickBooks_Utilities::intervalToSeconds($run_every);
 		
-		if (!strlen($ident))
+		if ((string) $ident === '')
 		{
 			$tmp = array_merge(array('a', 'z'), range(0, 9));
 			shuffle($tmp);
@@ -207,7 +209,7 @@ class QuickBooks_WebConnector_Queue
 	 */	
 	public function enqueue($action, $ident = null, $priority = 0, $extra = null, $user = null, $qbxml = null, $replace = true)
 	{
-		if (!strlen($ident))
+		if ((string) $ident === '')
 		{
 			// If they didn't provide an $ident, generate a random, unique one
 			

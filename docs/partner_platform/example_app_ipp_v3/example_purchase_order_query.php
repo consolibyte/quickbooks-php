@@ -16,11 +16,11 @@ $pos = $PurchaseOrderService->query($Context, $realm, "SELECT * FROM PurchaseOrd
 
 //print_r($terms);
 
-foreach ($pos as $PurchaseOrder)
+foreach ($pos as $po)
 {
 	//print_r($Term);
 
-	print('PurchaseOrder Id=' . $PurchaseOrder->getId() . ' is named: ' . $PurchaseOrder->getDocNumber() . '<br>');
+	print('PurchaseOrder Id=' . $po->getId() . ' is named: ' . $po->getDocNumber() . '<br>');
 }
 
 /*

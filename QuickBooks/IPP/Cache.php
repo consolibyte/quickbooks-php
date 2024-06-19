@@ -21,7 +21,7 @@ class QuickBooks_IPP_Cache
 	
 	protected $_context;
 	
-	public function __construct($Context, $dsn, $map = QuickBooks_IPP_Cache::MAP_IPP, $map_dsn)
+	public function __construct($Context)
 	{
 		$this->_context = $Context;
 	}

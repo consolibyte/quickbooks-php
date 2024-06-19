@@ -25,7 +25,7 @@ class QuickBooks_ErrorHandler
 	/**
 	 * 
 	 */
-	static public function handle($errno, $errstr, $errfile, $errline)
+	static public function handle(string $errno, string $errstr, string $errfile, string $errline)
 	{
 		print('
 			ERROR: [' . $errno . '] ' . $errstr . '

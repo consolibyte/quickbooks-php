@@ -32,7 +32,7 @@ error_reporting(E_ALL | E_STRICT);
 //define('QUICKBOOKS_DRIVER_SQL_MYSQLI_PREFIX', 'myqb_');
 
 // Require the framework
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 // A username and password you'll use in: 
 //	a) Your .QWC file
@@ -73,17 +73,25 @@ $obj = new My_Class_Name($my_example_var1, $my_example_var2);
 
 // Map QuickBooks actions to handler functions
 $map = array(
-	QUICKBOOKS_ADD_CUSTOMER => array( array( $obj, 'addCustomerRequest' ), array( $obj, 'addCustomerResponse' ) ), 
+	QUICKBOOKS_ADD_CUSTOMER => array( static function ($requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale) use ($obj) {
+     return $obj->addCustomerRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale);
+ }, static function ($requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, $xml, array $idents) use ($obj) {
+     $obj->addCustomerResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents);
+ } ), 
 	);
 
 // This is entirely optional, use it to trigger actions when an error is returned by QuickBooks
 $errmap = array(
-	500 => array( $obj, 'handleError500' ), 
+	500 => static function ($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg) use ($obj) {
+     $obj->handleError500($requestID, $user, $action, $ID, $extra, $err, $xml, $errnum, $errmsg);
+ }, 
 	);
 
 // An array of callback hooks
 $hooks = array(
-	QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS => array( array( $obj, 'hookLoginSuccess' ) ), 
+	QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS => array( static function ($requestID, $user, $hook, &$err, array $hook_data, array $callback_config) use ($obj) {
+     return $obj->hookLoginSuccess($requestID, $user, $hook, $err, $hook_data, $callback_config);
+ } ), 
 	);
 
 /**
@@ -102,14 +110,6 @@ class My_Class_Name
 	 * DSN-style connection string
 	 */
 	protected $_dsn;
-	
-	/**
-	 * Class constructor
-	 */
-	public function __construct($my_example_var1, $my_example_var2)
-	{
-		
-	}
 	
 	/**
 	 * Set our DSN-style connection string
@@ -220,19 +220,18 @@ class My_Class_Name
 	}
 	
 	/**
-	 * Catch and handle a 500 error from QuickBooks
-	 * 
-	 * @param string $requestID			
-	 * @param string $action
-	 * @param mixed $ID
-	 * @param mixed $extra
-	 * @param string $err
-	 * @param string $xml
-	 * @param mixed $errnum
-	 * @param string $errmsg
-	 * @return void
-	 */
-	public function handleError500($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)
+  * Catch and handle a 500 error from QuickBooks
+  *
+  * @param string $requestID			
+  * @param string $action
+  * @param mixed $ID
+  * @param mixed $extra
+  * @param string $err
+  * @param string $xml
+  * @param mixed $errnum
+  * @return void
+  */
+ public function handleError500($requestID, $user, $action, $ID, $extra, &$err, $xml, string $errnum, string $errmsg)
 	{
 		mail('your-email@your-domain.com', 
 			'QuickBooks error occured!', 
@@ -242,18 +241,17 @@ class My_Class_Name
 		return false;			// If you return FALSE, it will stop processing requests
 	}
 	
-	/** 
-	 * Example of a login success hook implemented as an object method 
-	 * 
-	 * @param string $requestID
-	 * @param string $user
-	 * @param string $hook
-	 * @param string $err
-	 * @param array $hook_data
-	 * @param array $callback_config
-	 * @return boolean
-	 */
-	public function hookLoginSuccess($requestID, $user, $hook, &$err, $hook_data, $callback_config)
+	/**
+  * Example of a login success hook implemented as an object method
+  *
+  * @param string $requestID
+  * @param string $hook
+  * @param string $err
+  * @param array $hook_data
+  * @param array $callback_config
+  * @return boolean
+  */
+ public function hookLoginSuccess($requestID, string $user, $hook, &$err, $hook_data, $callback_config)
 	{
 		if ($this->_dsn)
 		{

@@ -16,7 +16,7 @@ ini_set('display_errors', 1);
 /**
  * Require the utilities class
  */
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 $name = 'My QuickBooks SOAP Server';				// A name for your server (make it whatever you want)
 $descrip = 'An example QuickBooks SOAP Server';		// A description of your server 

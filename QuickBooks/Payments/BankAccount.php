@@ -25,6 +25,7 @@ class QuickBooks_Payments_BankAccount
 	protected $_data;
 
 	const TYPE_PERSONAL_CHECKING = 'PERSONAL_CHECKING';
+ 
 	const TYPE_PERSONAL_SAVINGS = 'PERSONAL_SAVINGS';
 
 	public function __construct($name, $number, $routing, $type, $phone)
@@ -48,7 +49,7 @@ class QuickBooks_Payments_BankAccount
 		return $this->_data;
 	}
 
-	static public function fromArray($data)
+	static public function fromArray(array $data)
 	{
 		return new QuickBooks_Payments_BankAccount($data['name'], $data['accountNumber'], $data['routingNumber'], $data['accountType'], $data['phone']);
 	}

@@ -38,7 +38,7 @@ class QuickBooks_IPP_Service_PayrollItem extends QuickBooks_IPP_Service
 		
 		foreach ($list as $Item)
 		{
-			if (strtolower($Item->getName()) == strtolower($name))
+			if (strtolower($Item->getName()) === strtolower($name))
 			{
 				return $Item;
 			}

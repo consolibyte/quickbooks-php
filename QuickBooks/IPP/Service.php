@@ -37,7 +37,7 @@ abstract class QuickBooks_IPP_Service
 	 *
 	 * @var unknown_type
 	 */
-	protected $_last_debug;
+	protected $_last_debug = array();
 
 	/**
 	 *
@@ -48,7 +48,7 @@ abstract class QuickBooks_IPP_Service
 	 * The last error code
 	 * @var string
 	 */
-	protected $_errcode;
+	protected $_errcode = QuickBooks_IPP::ERROR_OK;
 
 	/**
 	 * The last error message
@@ -68,13 +68,7 @@ abstract class QuickBooks_IPP_Service
 	 */
 	public function __construct()
 	{
-		$this->_errcode = QuickBooks_IPP::ERROR_OK;
-
-		$this->_last_request = null;
-		$this->_last_response = null;
-		$this->_last_debug = array();
-
-		$this->_flavor = null;		// auto-detect
+		// auto-detect
 	}
 
 	public function useIDSParser($Context, $true_or_false)
@@ -138,17 +132,14 @@ abstract class QuickBooks_IPP_Service
 	protected function _syncStatus($Context, $realmID, $resource, $IDType)
 	{
 		$IPP = $Context->IPP();
+  if ($IPP->version() === QuickBooks_IPP_IDS::VERSION_2) {
+      return $this->_syncStatus_v2($Context, $realmID, $resource, $IDType);
+  }
 
-		switch ($IPP->version())
-		{
-			case QuickBooks_IPP_IDS::VERSION_2:
-				return $this->_syncStatus_v2($Context, $realmID, $resource, $IDType);
-				break;
-			return false;
-		}
+  return null;
 	}
 
-	protected function _syncStatus_v2($Context, $realmID, $resource, $IDType)
+	protected function _syncStatus_v2($Context, $realmID, string $resource, $IDType)
 	{
 		$IPP = $Context->IPP();
 
@@ -177,7 +168,7 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 
-	protected function _report($Context, $realmID, $resource, $xml = '')
+	protected function _report($Context, $realmID, string $resource, $xml = '')
 	{
 		$IPP = $Context->IPP();
 
@@ -242,7 +233,7 @@ abstract class QuickBooks_IPP_Service
 	 */
 	public function rawQuery($Context, $realmID, $xml, $resource = null)
 	{
-		$IPP = $Context->IPP();
+		$Context->IPP();
 
 		if (!$resource)
 		{
@@ -307,7 +298,7 @@ abstract class QuickBooks_IPP_Service
 	 *   Supported array keys for QuickBooks Online are:
 	 *     (none yet)
 	 */
-	protected function _findAll($Context, $realmID, $resource, $query = null, $sort = null, $page = 1, $size = 50, $xml = '', $options = array())
+	protected function _findAll($Context, $realmID, string $resource, $query = null, $sort = null, $page = 1, $size = 50, $xml = '', $options = array())
 	{
 		$IPP = $Context->IPP();
 		$flavor = $IPP->flavor();
@@ -315,42 +306,39 @@ abstract class QuickBooks_IPP_Service
 		//print('flavor [' . $flavor . ']');
 		//exit;
 
-		if ($flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
-		{
-			if (!$xml)
+		if ($flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP) {
+      if (!$xml)
+   			{
+   				$options_string = '';
+   				//$options_string = ' ErroredObjectsOnly="true" ';
+   
+   				/*if (!empty($options['ActiveOnly']))
+   				{
+   					$options_string = 'ActiveOnly="false" ';
+   				}
+   				else if (!empty($options['DeletedObjects']))
+   				{
+   					$options_string = 'DeletedObjects="true" ';
+   				}*/
+   
+   				$xml = '';
+   				$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+   				$xml .= '<' . $resource . 'Query ' . $options_string . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+   
+   				if ($size)
+   				{
+   					$xml .= '	<StartPage>' . (int) $page . '</StartPage>' . QUICKBOOKS_CRLF;
+   					$xml .= '	<ChunkSize>' . (int) $size . '</ChunkSize>' . QUICKBOOKS_CRLF;
+   				}
+   
+   				$xml .= $query;
+   
+   				$xml .= '</' . $resource . 'Query>';
+   			}
+  } elseif ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE) {
+      if (!$xml)
 			{
-				$options_string = '';
-				//$options_string = ' ErroredObjectsOnly="true" ';
-
-				/*if (!empty($options['ActiveOnly']))
-				{
-					$options_string = 'ActiveOnly="false" ';
-				}
-				else if (!empty($options['DeletedObjects']))
-				{
-					$options_string = 'DeletedObjects="true" ';
-				}*/
-
-				$xml = '';
-				$xml .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-				$xml .= '<' . $resource . 'Query ' . $options_string . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
-
-				if ($size)
-				{
-					$xml .= '	<StartPage>' . (int) $page . '</StartPage>' . QUICKBOOKS_CRLF;
-					$xml .= '	<ChunkSize>' . (int) $size . '</ChunkSize>' . QUICKBOOKS_CRLF;
-				}
-
-				$xml .= $query;
-
-				$xml .= '</' . $resource . 'Query>';
-			}
-		}
-		else if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
-		{
-		    if (!$xml)
-			{
-				if (is_array($query) and count($query) > 0)
+				if (is_array($query) && $query !== [])
 				{
 					$xml = http_build_query(array_merge(array(
 						'PageNum' => (int) $page,
@@ -359,15 +347,12 @@ abstract class QuickBooks_IPP_Service
 				}
 				else
 				{
-					$xml = http_build_query(array_merge(array(
-						'PageNum' => (int) $page,
-						'ResultsPerPage' => (int) $size,
-						)));
+					$xml = http_build_query(['PageNum' => (int) $page, 'ResultsPerPage' => (int) $size]);
 
 					$xml .= $query;
 				}
 			}
-		}
+  }
 
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_QUERY, $xml);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
@@ -387,15 +372,14 @@ abstract class QuickBooks_IPP_Service
 	}
 
 	/**
-	 * Get an IDS object by Name (i.e. get a customer by the QuickBooks Name field)
-	 *
-	 * @param QuickBooks_IPP_Context $Context
-	 * @param integer $realmID
-	 * @param string $resource
-	 * @param string $xml
-	 * @return QuickBooks_IPP_Object
-	 */
-	protected function _findByName($Context, $realmID, $resource, $name, $xml = '')
+  * Get an IDS object by Name (i.e. get a customer by the QuickBooks Name field)
+  *
+  * @param QuickBooks_IPP_Context $Context
+  * @param integer $realmID
+  * @param string $xml
+  * @return QuickBooks_IPP_Object
+  */
+ protected function _findByName($Context, $realmID, string $resource, string $name, $xml = '')
 	{
 		$IPP = $Context->IPP();
 
@@ -419,7 +403,7 @@ abstract class QuickBooks_IPP_Service
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 
-		if (count($return))
+		if (count($return) > 0)
 		{
 			return $return[0];
 		}
@@ -447,6 +431,8 @@ abstract class QuickBooks_IPP_Service
 			case QuickBooks_IPP_IDS::VERSION_3:
 				return $this->_add_v3($Context, $realmID, $resource, $Object);
 		}
+
+  return null;
 	}
 
 	protected function _add_v3($Context, $realmID, $resource, $Object)
@@ -483,7 +469,7 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 
-	protected function _add_v2($Context, $realmID, $resource, $Object)
+	protected function _add_v2($Context, string $realmID, $resource, $Object)
 	{
 		$IPP = $Context->IPP();
 
@@ -550,7 +536,7 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 
-	protected function _delete($Context, $realmID, $resource, $ID)
+	protected function _delete($Context, $realmID, string $resource, $ID)
 	{
 		// v3 only
 		$IPP = $Context->IPP();
@@ -560,8 +546,7 @@ abstract class QuickBooks_IPP_Service
 		//	want to delete... *sigh*
 		$objects = $this->_query($Context, $realmID, "SELECT * FROM " . $resource . " WHERE Id = '" . QuickBooks_IPP_IDS::usableIDType($ID) . "' ");
 
-		if (isset($objects[0]) and
-			is_object($objects[0]))
+		if (isset($objects[0]) && is_object($objects[0]))
 		{
 			$Object = $objects[0];
 
@@ -606,7 +591,7 @@ abstract class QuickBooks_IPP_Service
 		return false;
 	}
 
-	protected function _void($Context, $realmID, $resource, $ID)
+	protected function _void($Context, $realmID, string $resource, $ID)
 	{
 		// v3 only
 		$IPP = $Context->IPP();
@@ -616,8 +601,7 @@ abstract class QuickBooks_IPP_Service
 		//	want to delete... *sigh*
 		$objects = $this->_query($Context, $realmID, "SELECT * FROM " . $resource . " WHERE Id = '" . QuickBooks_IPP_IDS::usableIDType($ID) . "' ");
 
-		if (isset($objects[0]) and
-			is_object($objects[0]))
+		if (isset($objects[0]) && is_object($objects[0]))
 		{
 			$Object = $objects[0];
 
@@ -769,7 +753,7 @@ abstract class QuickBooks_IPP_Service
 		return $return;
 	}
 
-	protected function _update_v2($Context, $realmID, $resource, $Object, $ID)
+	protected function _update_v2($Context, string $realmID, $resource, $Object, $ID)
 	{
 		$IPP = $Context->IPP();
 
@@ -840,7 +824,7 @@ abstract class QuickBooks_IPP_Service
 	 *
 	 *
 	 */
-	protected function _findById($Context, $realmID, $resource, $IDType, $xml_or_IDType = '', $query = null)
+	protected function _findById($Context, $realmID, string $resource, $IDType, $xml_or_IDType = '', $query = null)
 	{
 		$IPP = $Context->IPP();
 
@@ -848,40 +832,35 @@ abstract class QuickBooks_IPP_Service
 
 		if (!$xml_or_IDType)
 		{
-			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP)
-			{
-				$parse = QuickBooks_IPP_IDS::parseIDType($IDType);
+			if ($flavor == QuickBooks_IPP_IDS::FLAVOR_DESKTOP) {
+       $parse = QuickBooks_IPP_IDS::parseIDType($IDType);
+       $xml_or_IDType = '';
+       $xml_or_IDType .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
+       $xml_or_IDType .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+       if ($resource === QuickBooks_IPP_IDS::RESOURCE_CUSTOMER)
+   				{
+   					$xml_or_IDType .= '<CustomFieldEnable>true</CustomFieldEnable>';
+   				}
 
-				$xml_or_IDType = '';
-				$xml_or_IDType .= '<?xml version="1.0" encoding="UTF-8"?>' . QUICKBOOKS_CRLF;
-				$xml_or_IDType .= '<' . $resource . 'Query xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.intuit.com/sb/cdm/' . $IPP->version() . '">' . QUICKBOOKS_CRLF;
+       if ($query)
+   				{
+   					$xml_or_IDType .= $query;
+   				}
 
-				if ($resource == QuickBooks_IPP_IDS::RESOURCE_CUSTOMER)
-				{
-					$xml_or_IDType .= '<CustomFieldEnable>true</CustomFieldEnable>';
-				}
-
-				if ($query)
-				{
-					$xml_or_IDType .= $query;
-				}
-
-				$xml_or_IDType .= '	<' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
-				$xml_or_IDType .= '		<Id idDomain="' . $parse['domain'] . '">' . $parse['ID'] . '</Id>' . QUICKBOOKS_CRLF;
-				$xml_or_IDType .= '	</' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
-				$xml_or_IDType .= '</' . $resource . 'Query>';
-			}
-			else if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE)
-			{
-				$xml_or_IDType = $IDType;
-			}
+       $xml_or_IDType .= '	<' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
+       $xml_or_IDType .= '		<Id idDomain="' . $parse['domain'] . '">' . $parse['ID'] . '</Id>' . QUICKBOOKS_CRLF;
+       $xml_or_IDType .= '	</' . QuickBooks_IPP_IDS::resourceToKeyType($resource) . 'Set>' . QUICKBOOKS_CRLF;
+       $xml_or_IDType .= '</' . $resource . 'Query>';
+   } elseif ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE) {
+       $xml_or_IDType = $IDType;
+   }
 		}
 
 		$return = $IPP->IDS($Context, $realmID, $resource, QuickBooks_IPP_IDS::OPTYPE_FINDBYID, $xml_or_IDType);
 		$this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
 		$this->_setLastDebug($Context->lastDebug());
 
-		if (count($return))
+		if (count($return) > 0)
 		{
 			return $return[0];
 		}

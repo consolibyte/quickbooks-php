@@ -27,8 +27,7 @@ QuickBooks_Loader::load('/QuickBooks/WebConnector/Result.php');
 class QuickBooks_WebConnector_Result_GetInteractiveURL extends QuickBooks_WebConnector_Result
 {
 	
-	public function __construct($url)
-	{
-		
-	}
+	public function __construct()
+ {
+ }
 }

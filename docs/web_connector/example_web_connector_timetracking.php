@@ -1,6 +1,6 @@
 <?php
 
-function _quickbooks_timetracking_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
+function _quickbooks_timetracking_add_request(string $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, string $version, $locale)
 {
 	$data = array(
 		'TxnDate' => date('Y-m-d'), 
@@ -13,7 +13,7 @@ function _quickbooks_timetracking_add_request($requestID, $user, $action, $ID, $
 		'BillableStatus' => 'Billable', 
 		);
 
-	$xml = '<?xml version="1.0" encoding="utf-8"?>
+	return '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="' . $version . '"?>
 		<QBXML>
 		  <QBXMLMsgsRq onError="stopOnError">
@@ -48,8 +48,6 @@ function _quickbooks_timetracking_add_request($requestID, $user, $action, $ID, $
 		    </TimeTrackingAddRq>
 		  </QBXMLMsgsRq>
 		</QBXML>';
-
-	return $xml;
 }
 
 function _quickbooks_timetracking_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)

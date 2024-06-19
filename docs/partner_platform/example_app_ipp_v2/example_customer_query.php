@@ -60,7 +60,7 @@ if ($Context = $IPP->context())
 			print('&bull; ' . $Customer->getId() . ' => ' . $Customer->getName() . '<br>' . "\n\n");
 		}
 		
-		$page++;
+		++$page;
 	}
 	while (count($list) >= $perpage);
 	

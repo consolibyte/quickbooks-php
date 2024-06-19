@@ -20,7 +20,7 @@ ini_set('display_errors', true);
 header('Content-Type: text/plain');
 
 // Include the QuickBooks files
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 // If you want to log requests/responses to a database, you can provide a 
 //	database DSN-style connection string here
@@ -55,23 +55,7 @@ $dsn = null;
 //$path_to_private_key_and_certificate = '/path/doesnt/exist.pem'; 		// This should trigger an error
 //$path_to_private_key_and_certificate = null;							// If you're using the DESKTOP model
 $path_to_private_key_and_certificate = null;
-
-// This is your login ID that Intuit assignes you during the application 
-//	registration process.
-//$application_login = 'test.www.academickeys.com';
-$application_login = 'test.foxycart.com';
 $application_login = 'qbms.consolibyte.com';
-
-// This is the connection ticket assigned to you during the application 
-//	registration process. To conform to Intuit security practices, you are 
-//	*required* to store this key *encrypted* and not in plain-text. 
-//	
-//	The ticket below is provided as an example, you should *not* store your 
-//	connection ticket in plain text as shown below. You should store it in your 
-//	database or in a separate file, outside of the web server document root, 
-//	encrypted with a crypto library such as {@link http://www.php.net/mcrypt}.
-//$connection_ticket = 'TGT-152-LWGj1YQUufTAlSW8DK1c6A';
-$connection_ticket = 'TGT-145-niiEL2kCFoOTYHvkwBarmg';
 $connection_ticket = 'TGT-157-p3PyZPoH3DtieLSh4ykp6Q';
 
 // Create an instance of the MerchantService object 
@@ -237,37 +221,5 @@ else
 }
 
 exit;
-
-
-
-// If you didn't want to do a two-part authorize + capture, you can just do a 
-//	single call to ->charge() to charge the credit card right away. 
-if ($Transaction = $MS->charge($Card, $amount))
-{
-	print('Card charged!' . "\n");
-	print_r($Transaction);
-	
-	print('Transaction array: ' . "\n");
-	print_r($Transaction->toArray());
-	
-	print("\n");
-}
-else
-{
-	print('An error occured during charge: ' . $MS->errorNumber() . ': ' . $MS->errorMessage() . "\n");
-}
-
-
-
-// We can issue refunds too... 
-if ($Transaction = $MS->refund($Card, $amount))
-{
-	print('Card refunded $' . $amount . ' dollars!' . "\n");
-	print_r($Transaction);
-}
-else
-{
-	print('An error occured during refund: ' . $MS->errorNumber() . ': ' . $MS->errorMessage() . "\n");
-}
 
 

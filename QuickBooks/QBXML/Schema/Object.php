@@ -71,20 +71,17 @@ abstract class QuickBooks_QBXML_Schema_Object
 		
 		$paths = $this->_dataTypePaths();
 		
-		if (isset($paths[$path]))
-		{
-			return $paths[$path];
-		}
-		else if ($case_doesnt_matter)
-		{
-			foreach ($paths as $dtpath => $datatype)
-			{
-				if (strtolower($dtpath) == strtolower($path))
-				{
-					return $datatype;
-				}
-			}
-		}
+		if (isset($paths[$path])) {
+      return $paths[$path];
+  } elseif ($case_doesnt_matter) {
+      foreach ($paths as $dtpath => $datatype)
+   			{
+   				if (strtolower($dtpath) === strtolower($path))
+   				{
+   					return $datatype;
+   				}
+   			}
+  }
 		
 		return null;
 	}
@@ -110,20 +107,17 @@ abstract class QuickBooks_QBXML_Schema_Object
 		
 		$paths = $this->_maxLengthPaths();
 			
-		if (isset($paths[$path]))
-		{
-			return $paths[$path];
-		}
-		else if ($case_doesnt_matter)
-		{
-			foreach ($paths as $mlpath => $maxlength)
-			{
-				if (strtolower($mlpath) == strtolower($path))
-				{
-					return $paths[$mlpath];
-				}
-			}
-		}
+		if (isset($paths[$path])) {
+      return $paths[$path];
+  } elseif ($case_doesnt_matter) {
+      foreach ($paths as $mlpath => $maxlength)
+   			{
+   				if (strtolower($mlpath) === strtolower($path))
+   				{
+   					return $paths[$mlpath];
+   				}
+   			}
+  }
 		
 		return 0;
 	}
@@ -208,20 +202,17 @@ abstract class QuickBooks_QBXML_Schema_Object
 	{
 		$ordered_paths = $this->_reorderPathsPaths();
 		
-		if (in_array($path, $ordered_paths))
-		{
-			return true;
-		}
-		else if ($case_doesnt_matter)
-		{
-			foreach ($ordered_paths as $ordered_path)
-			{
-				if (strtolower($path) == strtolower($ordered_path))
-				{
-					return true;
-				}
-			}
-		}
+		if (in_array($path, $ordered_paths)) {
+      return true;
+  } elseif ($case_doesnt_matter) {
+      foreach ($ordered_paths as $ordered_path)
+   			{
+   				if (strtolower($path) === strtolower($ordered_path))
+   				{
+   					return true;
+   				}
+   			}
+  }
 		
 		return false;
 	}
@@ -323,6 +314,7 @@ abstract class QuickBooks_QBXML_Schema_Object
 			{
 				$tmp[$key] = $path;
 			}
+   
 			/*else if (substr($path, -6) == 'ListID' and $allow_application_id)
 			{
 				// Modify and add:  (so that application IDs are supported and in the correct place)

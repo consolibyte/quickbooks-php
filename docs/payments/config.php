@@ -76,8 +76,7 @@ if (!QuickBooks_Utilities::initialized($dsn))
 $IntuitAnywhere = new QuickBooks_IPP_IntuitAnywhere($dsn, $encryption_key, $oauth_consumer_key, $oauth_consumer_secret, $quickbooks_oauth_url, $quickbooks_success_url);
 
 // Are they connected to QuickBooks right now? 
-if ($IntuitAnywhere->check($the_username, $the_tenant) and 
-	$IntuitAnywhere->test($the_username, $the_tenant))
+if ($IntuitAnywhere->check($the_username, $the_tenant) && $IntuitAnywhere->test($the_username, $the_tenant))
 {
 	// Yes, they are 
 	$quickbooks_is_connected = true;
@@ -94,11 +93,7 @@ if ($IntuitAnywhere->check($the_username, $the_tenant) and
 		$the_username, 
 		$creds);
 
-	if ($sandbox)
-	{
-		// Turn on sandbox mode/URLs 
-		$IPP->sandbox(true);
-	}
+	$IPP->sandbox(true);
 
 	// Print the credentials we're using
 	//print_r($creds);

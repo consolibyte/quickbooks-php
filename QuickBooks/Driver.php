@@ -28,43 +28,28 @@ define('QUICKBOOKS_DRIVER_HOOK_AUTHCHECK', 'QuickBooks_Driver::authCheck');
 
 /**
  * Hook called by the ->authCreate() method
- * @var string
  */
 define('QUICKBOOKS_DRIVER_HOOK_AUTHCREATE', 'QuickBooks_Driver::authCreate');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_AUTHDEFAULT', 'QuickBooks_Driver::authDefault');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_AUTHLOGIN', 'QuickBooks_Driver::authLogin');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_AUTHLOGOUT', 'QuickBooks_Driver::authLogout');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_AUTHRESOLVE', 'QuickBooks_Driver::authResolve');
 
 /**
  * Hook called by the ->authDisable() method
- * @var string
  */
 define('QUICKBOOKS_DRIVER_HOOK_AUTHDISABLE', 'QuickBooks_Driver::authDisable');
 
 /**
  * Hook called by the ->authEnable() method
- * @var string
  */
 define('QUICKBOOKS_DRIVER_HOOK_AUTHENABLE', 'QuickBooks_Driver::authEnable');
 
@@ -93,19 +78,16 @@ define('QUICKBOOKS_DRIVER_HOOK_NOOP', 'QuickBooks_Driver::noop');
 
 /**
  * Hook called by the ->errorLog() method
- * @var string
  */
 define('QUICKBOOKS_DRIVER_HOOK_ERRORLOG', 'QuickBooks_Driver::errorLog');
 
 /**
  * Hook called by the ->errorLast() method
- * @var string
  */
 define('QUICKBOOKS_DRIVER_HOOK_ERRORLAST', 'QuickBooks_Driver::errorLast');
 
 /**
  * Hook called by the ->log() method
- * @var string
  */
 define('QUICKBOOKS_DRIVER_HOOK_LOG', 'QuickBooks_Driver::log');
 
@@ -135,14 +117,10 @@ define('QUICKBOOKS_DRIVER_HOOK_IDENTTOAPPLICATION', 'QuickBooks_Driver::identToA
 
 /**
  * Hook called by the ->identToQuickBooks() method
- * @var string
  */
 define('QUICKBOOKS_DRIVER_HOOK_IDENTTOQUICKBOOKS', 'QuickBooks_Driver::identToQuickBooks');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_IDENTMAP', 'QuickBooks_Driver::identMap');
 
 //define('QUICKBOOKS_DRIVER_HOOK_IDENTVIEW', 'QuickBooks_Driver::identView');
@@ -157,28 +135,16 @@ define('QUICKBOOKS_DRIVER_HOOK_QUEUEEXISTS', 'QuickBooks_Driver::queueExists');
 
 define('QUICKBOOKS_DRIVER_HOOK_QUEUEREMOVE', 'QuickBooks_Driver::queueRemove');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_QUEUEACTIONLAST', 'QuickBooks_Driver::queueActionLast');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_QUEUEACTIONIDENTLAST', 'QuickBooks_Driver::queueActionIdentLast');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_QUEUEDEQUEUE', 'QuickBooks_Driver::queueDequeue');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_QUEUEENQUEUE', 'QuickBooks_Driver::queueEnqueue');
 
 /**
@@ -195,10 +161,7 @@ define('QUICKBOOKS_DRIVER_HOOK_QUEUEFETCH', 'QuickBooks_Driver::queueFetch');
  */
 define('QUICKBOOKS_DRIVER_HOOK_QUEUEPROCESSED', 'QuickBooks_Driver::queueProcessed');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_QUEUEPROCESSING', 'QuickBooks_Driver::queueProcessing');
 
 /**
@@ -213,16 +176,10 @@ define('QUICKBOOKS_DRIVER_HOOK_QUEUEPROCESSING', 'QuickBooks_Driver::queueProces
  */
 define('QUICKBOOKS_DRIVER_HOOK_QUEUESTATUS', 'QuickBooks_Driver::queueStatus');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_RECURDEQUEUE', 'QuickBooks_Driver::recurDequeue');
 
-/**
- *
- * @var string
- */
+
 define('QUICKBOOKS_DRIVER_HOOK_RECURENQUEUE', 'QuickBooks_Driver::recurEnqueue');
 
 /**
@@ -538,7 +495,7 @@ abstract class QuickBooks_Driver
 	 */
 	final public function queueEnqueue($user, $action, $ident, $replace = true, $priority = 0, $extra = null, $qbxml = null)
 	{
-		if (!strlen($ident))
+		if ((string) $ident === '')
 		{
 			// If they didn't provide an $ident, generate a random, unique one
 
@@ -1057,10 +1014,6 @@ abstract class QuickBooks_Driver
 	 */
 	final public function errorLog($ticket, $errno, $errstr)
 	{
-		$hookdata = array(
-			'errno' => $errno,
-			'errstr' => $errstr,
-			);
 		$hookerr = '';
 		$this->_callHook(QUICKBOOKS_DRIVER_HOOK_AUTHRESOLVE, $ticket, $hookerr, array());
 
@@ -1505,7 +1458,7 @@ abstract class QuickBooks_Driver
 		$this->_callHook(QUICKBOOKS_DRIVER_HOOK_LOG, $ticket, $err, $hookdata);
 		*/
 
-		if (is_null($lvl) or $this->_loglevel >= $lvl)
+		if (is_null($lvl) || $this->_loglevel >= $lvl)
 		{
 			return $this->_log($msg, $ticket, $lvl);
 		}
@@ -1519,54 +1472,49 @@ abstract class QuickBooks_Driver
 	abstract protected function _log($msg, $ticket = null, $lvl = QUICKBOOKS_LOG_NORMAL);
 
 	/**
-	 *
-	 *
-	 * @param integer $offset
-	 * @param integer $limit
-	 * @param string $match
-	 * @return QuickBooks_Iterator
-	 */
-	/*final public function logView($offset, $limit, $match = '')
-	{
-		$offset = max(0, (int) $offset);
-		$limit = max(1, (int) $limit);
-
-		$hookdata = array(
-			'offset' => $offset,
-			'limit' => $limit,
-			'match' => $match,
-			);
-		$err = '';
-		$this->_callHook(QUICKBOOKS_DRIVER_HOOK_LOGVIEW, null, $err, $hookdata);
-
-		return $this->_logView($offset, $limit, $match);
-	}*/
-
-	/**
-	 * @see QuickBooks_Utilities::logView()
-	 */
-	/*abstract protected function _logView($offset, $limit, $match);*/
-
-	/*final public function logSize($match = '')
-	{
-		$hookdata = array(
-			'match' => $match,
-			);
-		$err = '';
-		$this->_callHook(QUICKBOOKS_DRIVER_HOOK_LOGSIZE, null, $err, $hookdata);
-
-		return $this->_logSize($match);
-	}*/
-
-	/*abstract protected function _logSize($match);*/
-
-	/**
-	 * One-way hash a password for storage in the database
-	 *
-	 * @param string $password
-	 * @return string
-	 */
-	final protected function _hash($password)
+  *
+  *
+  * @param integer $offset
+  * @param integer $limit
+  * @param string $match
+  * @return QuickBooks_Iterator
+  */
+ /*final public function logView($offset, $limit, $match = '')
+ 	{
+ 		$offset = max(0, (int) $offset);
+ 		$limit = max(1, (int) $limit);
+ 
+ 		$hookdata = array(
+ 			'offset' => $offset,
+ 			'limit' => $limit,
+ 			'match' => $match,
+ 			);
+ 		$err = '';
+ 		$this->_callHook(QUICKBOOKS_DRIVER_HOOK_LOGVIEW, null, $err, $hookdata);
+ 
+ 		return $this->_logView($offset, $limit, $match);
+ 	}*/
+ /**
+  * @see QuickBooks_Utilities::logView()
+  */
+ /*abstract protected function _logView($offset, $limit, $match);*/
+ /*final public function logSize($match = '')
+ 	{
+ 		$hookdata = array(
+ 			'match' => $match,
+ 			);
+ 		$err = '';
+ 		$this->_callHook(QUICKBOOKS_DRIVER_HOOK_LOGSIZE, null, $err, $hookdata);
+ 
+ 		return $this->_logSize($match);
+ 	}*/
+ /*abstract protected function _logSize($match);*/
+ /**
+  * One-way hash a password for storage in the database
+  *
+  * @return string
+  */
+ final protected function _hash(string $password)
 	{
 		$func = QUICKBOOKS_HASH;
 		return $func($password . QUICKBOOKS_SALT);
@@ -1586,7 +1534,7 @@ abstract class QuickBooks_Driver
 	 * @param array $hook_data		An array of hook data
 	 * @return boolean
 	 */
-	final protected function _callHook($hook, $ticket, &$err, $hook_data)
+	final protected function _callHook($hook, $ticket, &$err, array $hook_data)
 	{
 		$user = '';
 		if ($ticket)

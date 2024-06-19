@@ -158,27 +158,17 @@ class QuickBooks_Callbacks_Integrator_Errors
 	 * @param string $requestID
 	 * @return boolean
 	 */
-	static public function e0x80040400_foundanerror($requestID, $user, $action, $ident, $extra, &$err, $xml, $errnum, $errmsg, $config)
-	{
-		if ($action == QUICKBOOKS_QUERY_UNITOFMEASURESET)
-		{
-			// Some versions don't support this query, so ignore this error
-			return true;
-		}
-		
-		return false;
-	}
+	public static function e0x80040400_foundanerror($requestID, $user, $action, $ident, $extra, &$err, $xml, $errnum, $errmsg, $config)
+ {
+     // Some versions don't support this query, so ignore this error
+     return $action == QUICKBOOKS_QUERY_UNITOFMEASURESET;
+ }
 	
-	static public function e3250_featurenotenabled($requestID, $user, $action, $ident, $extra, &$err, $xml, $errnum, $errmsg, $config)
-	{
-		if ($action == QUICKBOOKS_QUERY_UNITOFMEASURESET)
-		{
-			// Some versions don't support UnitOfMeasureSetQuery
-			return true;
-		}
-
-		return false;
-	}
+	public static function e3250_featurenotenabled($requestID, $user, $action, $ident, $extra, &$err, $xml, $errnum, $errmsg, $config)
+ {
+     // Some versions don't support UnitOfMeasureSetQuery
+     return $action == QUICKBOOKS_QUERY_UNITOFMEASURESET;
+ }
 	
 	/**
 	 * 

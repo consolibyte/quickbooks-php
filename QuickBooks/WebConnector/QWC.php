@@ -23,37 +23,63 @@
 class QuickBooks_WebConnector_QWC
 {
 	protected $_name;
+ 
 	protected $_descrip;
+ 
 	protected $_appurl;
+ 
 	protected $_appsupport;
+ 
 	protected $_username;
+ 
 	protected $_fileid;
+ 
 	protected $_ownerid;
+ 
 	protected $_qbtype;
+ 
 	protected $_readonly;
+ 
 	protected $_run_every_n_seconds;
+ 
 	protected $_personaldata;
+ 
 	protected $_unattendedmode;
+ 
 	protected $_authflags;
+ 
 	protected $_notify;
+ 
 	protected $_appdisplayname;
+ 
 	protected $_appuniquename;
+ 
 	protected $_appid;
 	
 	const SUPPORTED_DEFAULT = '';
+ 
 	const SUPPORTED_ALL = '0x0';
-	const SUPPORTED_SIMPLESTART = '0x1'; 
-	const SUPPORTED_PRO = '0x2'; 
-	const SUPPORTED_PREMIER = '0x4'; 
+ 
+	const SUPPORTED_SIMPLESTART = '0x1';
+  
+	const SUPPORTED_PRO = '0x2';
+  
+	const SUPPORTED_PREMIER = '0x4';
+  
 	const SUPPORTED_ENTERPRISE = '0x8';
 
 	const PERSONALDATA_DEFAULT = '';
+ 
 	const PERSONALDATA_NOTNEEDED = 'pdpNotNeeded';
+ 
 	const PERSONALDATA_OPTIONAL = 'pdpOptional';
+ 
 	const PERSONALDATA_REQUIRED = 'pdpRequired';
 
 	const UNATTENDEDMODE_DEFAULT = '';
+ 
 	const UNATTENDEDMODE_REQUIRED = 'umpRequired';
+ 
 	const UNATTENDEDMODE_OPTIONAL = 'umpOptional';
 	
 	/**
@@ -116,7 +142,7 @@ class QuickBooks_WebConnector_QWC
 		$this->_appid = $appid;
 	}
 	
-	public function http($filename = 'quickbooks.qwc')
+	public function http(string $filename = 'quickbooks.qwc')
 	{
 		header('Content-type: text/xml');
 		header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -176,8 +202,7 @@ class QuickBooks_WebConnector_QWC
 		CertURL
 		*/ 
 		
-		if ($run_every_n_seconds and 
-			!is_numeric($run_every_n_seconds))
+		if ($run_every_n_seconds && !is_numeric($run_every_n_seconds))
 		{
 			$run_every_n_seconds = QuickBooks_Utilities::intervalToSeconds($run_every_n_seconds);
 		}
@@ -189,70 +214,67 @@ class QuickBooks_WebConnector_QWC
 		
 		$xml .= '<?xml version="1.0"?>' . QUICKBOOKS_CRLF;
 		$xml .= '<QBWCXML>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<AppName>' . htmlspecialchars($name) . '</AppName>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<AppID>' . htmlspecialchars($appid) . '</AppID>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<AppURL>' . htmlspecialchars($appurl) . '</AppURL>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<AppDescription>' . htmlspecialchars($descrip) . '</AppDescription>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<AppSupport>' . htmlspecialchars($appsupport) . '</AppSupport>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<UserName>' . htmlspecialchars($username) . '</UserName>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<OwnerID>' . $ownerid . '</OwnerID>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<FileID>' . $fileid . '</FileID>' . QUICKBOOKS_CRLF;
-		$xml .= "\t" . '<QBType>' . $qbtype . '</QBType>' . QUICKBOOKS_CRLF;
+		$xml .= '	<AppName>' . htmlspecialchars($name) . '</AppName>' . QUICKBOOKS_CRLF;
+		$xml .= '	<AppID>' . htmlspecialchars($appid) . '</AppID>' . QUICKBOOKS_CRLF;
+		$xml .= '	<AppURL>' . htmlspecialchars($appurl) . '</AppURL>' . QUICKBOOKS_CRLF;
+		$xml .= '	<AppDescription>' . htmlspecialchars($descrip) . '</AppDescription>' . QUICKBOOKS_CRLF;
+		$xml .= '	<AppSupport>' . htmlspecialchars($appsupport) . '</AppSupport>' . QUICKBOOKS_CRLF;
+		$xml .= '	<UserName>' . htmlspecialchars($username) . '</UserName>' . QUICKBOOKS_CRLF;
+		$xml .= '	<OwnerID>' . $ownerid . '</OwnerID>' . QUICKBOOKS_CRLF;
+		$xml .= '	<FileID>' . $fileid . '</FileID>' . QUICKBOOKS_CRLF;
+		$xml .= '	<QBType>' . $qbtype . '</QBType>' . QUICKBOOKS_CRLF;
 			
 		if ($personaldata != QuickBooks_WebConnector_QWC::PERSONALDATA_DEFAULT)
 		{
-			$xml .= "\t" . '<PersonalDataPref>' . $personaldata . '</PersonalDataPref>' . QUICKBOOKS_CRLF;
+			$xml .= '	<PersonalDataPref>' . $personaldata . '</PersonalDataPref>' . QUICKBOOKS_CRLF;
 		}
 			
 		if ($unattendedmode != QuickBooks_WebConnector_QWC::UNATTENDEDMODE_DEFAULT)
 		{
-			$xml .= "\t" . '<UnattendedModePref>' . $unattendedmode . '</UnattendedModePref>' . QUICKBOOKS_CRLF;
+			$xml .= '	<UnattendedModePref>' . $unattendedmode . '</UnattendedModePref>' . QUICKBOOKS_CRLF;
 		}
 			
 		if ($authflags != QuickBooks_WebConnector_QWC::SUPPORTED_DEFAULT)
 		{
-			$xml .= "\t" . '<AuthFlags>' . $authflags . '</AuthFlags>' . QUICKBOOKS_CRLF;
+			$xml .= '	<AuthFlags>' . $authflags . '</AuthFlags>' . QUICKBOOKS_CRLF;
 		}
 			
 		if ($notify)
 		{
-			$xml .= "\t" . '<Notify>true</Notify>' . QUICKBOOKS_CRLF;
+			$xml .= '	<Notify>true</Notify>' . QUICKBOOKS_CRLF;
 		}
 		else
 		{
-			$xml .= "\t" . '<Notify>false</Notify>' . QUICKBOOKS_CRLF;
+			$xml .= '	<Notify>false</Notify>' . QUICKBOOKS_CRLF;
 		}
 			
 		if ($appdisplayname)
 		{
-			$xml .= "\t" . '<AppDisplayName>' . $appdisplayname . '</AppDisplayName>' . QUICKBOOKS_CRLF;
+			$xml .= '	<AppDisplayName>' . $appdisplayname . '</AppDisplayName>' . QUICKBOOKS_CRLF;
 		}
 			
 		if ($appuniquename)
 		{
-			$xml .= "\t" . '<AppUniqueName>' . $appuniquename . '</AppUniqueName>' . QUICKBOOKS_CRLF;
+			$xml .= '	<AppUniqueName>' . $appuniquename . '</AppUniqueName>' . QUICKBOOKS_CRLF;
 		}
 			
-		if ((int) $run_every_n_seconds > 0 and (int) $run_every_n_seconds < 60)
-		{
-			$xml .= "\t" . '<Scheduler>' . QUICKBOOKS_CRLF;
-			$xml .= "\t" . "\t" . '<RunEveryNSeconds>' . (int) $run_every_n_seconds . '</RunEveryNSeconds>' . QUICKBOOKS_CRLF;
-			$xml .= "\t" . '</Scheduler>' . QUICKBOOKS_CRLF;
-		}
-		else if ((int) $run_every_n_seconds >= 60)
-		{
-			$xml .= "\t" . '<Scheduler>' . QUICKBOOKS_CRLF;
-			$xml .= "\t" . "\t" . '<RunEveryNMinutes>' . floor($run_every_n_seconds / 60) . '</RunEveryNMinutes>' . QUICKBOOKS_CRLF;
-			$xml .= "\t" . '</Scheduler>' . QUICKBOOKS_CRLF;
-		}
+		if ((int) $run_every_n_seconds > 0 && (int) $run_every_n_seconds < 60) {
+      $xml .= '	<Scheduler>' . QUICKBOOKS_CRLF;
+      $xml .= '		<RunEveryNSeconds>' . (int) $run_every_n_seconds . '</RunEveryNSeconds>' . QUICKBOOKS_CRLF;
+      $xml .= '	</Scheduler>' . QUICKBOOKS_CRLF;
+  } elseif ((int) $run_every_n_seconds >= 60) {
+      $xml .= '	<Scheduler>' . QUICKBOOKS_CRLF;
+      $xml .= '		<RunEveryNMinutes>' . floor($run_every_n_seconds / 60) . '</RunEveryNMinutes>' . QUICKBOOKS_CRLF;
+      $xml .= '	</Scheduler>' . QUICKBOOKS_CRLF;
+  }
 			
 		if ($readonly)
 		{
-			$xml .= "\t" . '<IsReadOnly>true</IsReadOnly>' . QUICKBOOKS_CRLF;
+			$xml .= '	<IsReadOnly>true</IsReadOnly>' . QUICKBOOKS_CRLF;
 		}
 		else
 		{
-			$xml .= "\t" . '<IsReadOnly>false</IsReadOnly>' . QUICKBOOKS_CRLF;
+			$xml .= '	<IsReadOnly>false</IsReadOnly>' . QUICKBOOKS_CRLF;
 		}
 			
 		$xml .= '</QBWCXML>';

@@ -20,7 +20,7 @@ error_reporting(E_ALL | E_STRICT);
 /**  
  * Require the QuickBooks framework code
  */
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 /*
 // Our qbXML string
