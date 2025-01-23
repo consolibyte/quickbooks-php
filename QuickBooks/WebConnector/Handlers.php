@@ -544,7 +544,8 @@ class QuickBooks_WebConnector_Handlers
 		$customauth_wait_before_next_update = null;
 		$customauth_min_run_every_n_seconds = null;
 
-		if (is_array($override_dsn) or strlen($override_dsn ?? '')) 	// Custom autj
+		// MM PHP 8 compatibility fix
+		if (is_array($override_dsn) or strlen(isset($override_dsn) ? $override_dsn : '')) 	// Custom autj
 		{
 			//if ($auth->authenticate($obj->strUserName, $obj->strPassword, $customauth_company_file, $customauth_wait_before_next_update, $customauth_min_run_every_n_seconds) and
 
