@@ -376,7 +376,7 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
 				$Node->addAttribute($key, $value);
 			}
 			
-			if (false !== strpos(isset($payload) ? $payload : '', '<')) // MM PHP 8 compatibility fix
+			if (false !== strpos(isset($payload) ? $payload : '', '<'))
 			{
 				// The tag contains child tags 
 				
