@@ -437,4 +437,3 @@ class QuickBooks_XML
 		return str_replace(array_keys($transform), array_values($transform), isset($str) ? $str : '');
 	}
 }
-
