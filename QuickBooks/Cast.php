@@ -255,7 +255,7 @@ class QuickBooks_Cast
 			$dh = opendir(dirname(__FILE__) . '/QBXML/Schema/Object');
 			while (false !== ($file = readdir($dh)))
 			{
-				if ($file{0} == '.' or substr($file, -6, 6) != 'Rq.php')
+				if ($file[0] == '.' or substr($file, -6, 6) != 'Rq.php')
 				{
 					continue;
 				}
