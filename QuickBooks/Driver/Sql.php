@@ -1111,7 +1111,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 
 		if ($by_priority)
 		{
-			$sql .= ' ORDER BY priority DESC ';
+			$sql .= ' ORDER BY priority DESC, enqueue_datetime ASC, quickbooks_recur_id ASC ';
 		}
 
 		if ($arr = $this->_fetch($this->_query($sql . ' ', $errnum, $errmsg, 0, 1)))
@@ -1430,7 +1430,8 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 
 		if ($by_priority)
 		{
-			$sql .= ' ORDER BY priority DESC, ident ASC ';
+		  // Run highest priority first, then preference older queue entries. In case datetime is the same use queue ID to infer earlier entry.
+			$sql .= ' ORDER BY priority DESC, enqueue_datetime ASC, quickbooks_queue_id ASC ';
 		}
 
 		return $this->_fetch($this->_query($sql, $errnum, $errmsg, 0, 1));
