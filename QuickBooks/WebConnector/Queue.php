@@ -60,8 +60,13 @@ class QuickBooks_WebConnector_Queue
 	 * @var string
 	 */
 	protected $_user;
-	
-	/**
+
+    /**
+     * @var object|null
+     */
+    private $_driver;
+
+    /**
 	 * Create a new QuickBooks queue instance
 	 * 
 	 * @param mixed $dsn_or_conn	A DSN-style connection string (i.e.: mysq://root:pass@locahost/database) or a database connection (if you wish to re-use an existing database connection)

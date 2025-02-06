@@ -12,7 +12,9 @@
  */
 class Model_Qbdata extends ORM {
 
-	public function __construct()
+    private $_db;
+
+    public function __construct()
 	{
 		//link up this model to our qb_data database
 		$this->_db = Database::instance('qb_data');
