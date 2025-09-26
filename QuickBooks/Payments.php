@@ -82,6 +82,8 @@ class Quickbooks_Payments
 	const URL_ECHECK = '/quickbooks/v4/payments/echecks';
 	const URL_REFUND = '/quickbooks/v4/payments/charges/<id>/refunds';
 
+	const URL_ECHECK_REFUND = '/quickbooks/v4/payments/echecks/<echeck_id>/refunds';
+
 	const BASE_SANDBOX = 'https://sandbox.api.intuit.com';
 	const BASE_PRODUCTION = 'https://api.intuit.com';
 
@@ -368,6 +370,11 @@ class Quickbooks_Payments
 	{
 		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_REFUND);
 
+		if ($context['is_ach_refund'])
+		{
+			$url = str_replace('<echeck_id>', $id, QuickBooks_Payments::URL_ECHECK_REFUND);
+		}
+		
 		$payload = array(
 			'amount' => $amount,
 			'context' => array(
