@@ -366,11 +366,11 @@ class Quickbooks_Payments
 	 * @param  array  $context [description]
 	 * @return [type]          [description]
 	 */
-	public function refund($Context, $id, $amount, $context = array())
+	public function refund($Context, $id, $amount, $context = array(), $is_ach_refund = false)
 	{
 		$url = str_replace('<id>', $id, QuickBooks_Payments::URL_REFUND);
 
-		if ($context['is_ach_refund'])
+		if ($is_ach_refund)
 		{
 			$url = str_replace('<echeck_id>', $id, QuickBooks_Payments::URL_ECHECK_REFUND);
 		}
