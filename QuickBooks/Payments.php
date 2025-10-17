@@ -104,8 +104,9 @@ class Quickbooks_Payments
 	protected $_last_errdetail;
 	protected $_last_errtype;
 	protected $_last_errinfolink;
+    private mixed $_last_intuittid;
 
-	public function __construct($oauth_consumer_key, $oauth_consumer_secret, $sandbox = false, $dsn = null, $log_level = QUICKBOOKS_LOG_NORMAL)
+    public function __construct($oauth_consumer_key, $oauth_consumer_secret, $sandbox = false, $dsn = null, $log_level = QUICKBOOKS_LOG_NORMAL)
 	{
 		$this->_oauth_consumer_key = $oauth_consumer_key;
 		$this->_oauth_consumer_secret = $oauth_consumer_secret;

@@ -90,7 +90,12 @@ class QuickBooks_Utilities
 			if (substr($key, 0, 1) == '<')
 			{
 				// It's an XML tag
-				$contents = QuickBooks_Utilities::_extractTagContents(trim($key, '<> '), $message);
+				$contents = QuickBooks_XML::extractTagContents(trim($key, '<> '), $message);
+
+				// Clears type coercion warning in PHP 8+
+				if (!$contents) {
+				  $contents = '';
+        }
 				
 				$masked = str_repeat('x', min(strlen($contents), 12)) . substr($contents, 12);
 				
@@ -99,15 +104,6 @@ class QuickBooks_Utilities
 		}
 		
 		return $message;
-	}
-	
-	/**
-	 * @deprecated		Use QuickBooks_XML::extractTagContents() instead
-	 */
-	static protected function _extractTagContents($tag, $data)
-	{
-		$tmp = QuickBooks_XML::extractTagContents($tag, $data);
-		return $tmp;
 	}
 	
 	/**
