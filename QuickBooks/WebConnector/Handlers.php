@@ -1038,7 +1038,16 @@ class QuickBooks_WebConnector_Handlers
 		if (false !== ($start = strpos($xml, ' statusCode="')) and
 			false !== ($end = strpos($xml, '"', $start + 13)))
 		{
-			return substr($xml, $start + 13, $end - $start - 13);
+			$code = substr($xml, $start + 13, $end - $start - 13);
+			if (empty($code) || $code === '1') {
+			  // Code 1 is informational only:
+			  //  statusSeverity="Info" statusMessage="A query request did not find a matching object in QuickBooks"
+			  //  Basically, it is how QB reports an empty result set.
+			  //  When this is treated as an error, some other actions fail to trigger.
+			  //  Ex: the -prev cfgval's never get updated when an empty result set is detected.
+			  return QUICKBOOKS_ERROR_OK;
+			}
+			return $code;
 		}
 
 		return QUICKBOOKS_ERROR_OK;

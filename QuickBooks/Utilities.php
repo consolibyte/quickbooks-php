@@ -374,7 +374,7 @@ class QuickBooks_Utilities
 						break;
 					}
 				}
-				else if (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $allow))
+				else if (preg_match('@^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$@s', $allow))
 				{
 					// IPv4 address
 					
@@ -406,7 +406,7 @@ class QuickBooks_Utilities
 						return false;
 					}
 				}
-				else if (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $deny))
+				else if (preg_match('@^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$@s', $deny))
 				{
 					// IPv4 address
 					
