@@ -1057,7 +1057,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
 			}
 		}
 
-		if ($extra)
+		if (is_array($extra) || is_object($extra))
 		{
 			$extra = serialize($extra);
 		}
