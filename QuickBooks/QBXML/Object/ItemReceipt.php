@@ -469,7 +469,7 @@ class QuickBooks_QBXML_Object_ItemReceipt extends QuickBooks_QBXML_Object
 	 */
 	public function object()
 	{
-		return QUICKBOOKS_OBJECT_RECEIPTITEM;
+		return QUICKBOOKS_OBJECT_ITEMRECEIPT;
 	}
 }
 

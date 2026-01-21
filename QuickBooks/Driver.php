@@ -420,7 +420,7 @@ abstract class QuickBooks_Driver
 					QUICKBOOKS_OBJECT_SALESTAXITEM,
 					QUICKBOOKS_OBJECT_OTHERCHARGEITEM,
 					QUICKBOOKS_OBJECT_INVENTORYASSEMBLYITEM,
-					// QUICKBOOKS_OBJECT_RECEIPTITEM, 		// This is *not* a type of item, it's a type of transaction!
+					// QUICKBOOKS_OBJECT_ITEMRECEIPT, 		// This is *not* a type of item, it's a type of transaction!
 					);
 
 				foreach ($arr as $type)
