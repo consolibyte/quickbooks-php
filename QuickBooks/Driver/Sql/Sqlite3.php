@@ -248,15 +248,12 @@ class QuickBooks_Driver_Sql_Sqlite3 extends QuickBooks_Driver_Sql
     protected function _initialized()
     {
         $required = array(
-            $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_IDENTTABLE) => false,
             $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_TICKETTABLE) => false,
             $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_USERTABLE) => false,
             $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_RECURTABLE) => false,
             $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_QUEUETABLE) => false,
             $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_LOGTABLE) => false,
             $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONFIGTABLE) => false,
-            $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE) => false,
-            $this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE) => false,
         );
 
         $errnum = 0;
