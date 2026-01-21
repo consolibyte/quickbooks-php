@@ -19,8 +19,9 @@ class QuickBooks_UnitTest
 	protected $__lastMessage;
 	protected $__lastActual;
 	protected $__lastExpected;
-	
-	public function __construct()
+    private mixed $__lastError;
+
+    public function __construct()
 	{
 		
 	}

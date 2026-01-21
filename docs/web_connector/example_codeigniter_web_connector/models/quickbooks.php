@@ -2,7 +2,9 @@
 
 class Quickbooks extends CI_Model
 {
-	public function __construct()
+    private $_dsn;
+
+    public function __construct()
 	{
 		parent::__construct();
 	}

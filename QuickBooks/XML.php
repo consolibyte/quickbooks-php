@@ -214,7 +214,7 @@ class QuickBooks_XML
 	 * 
 	 * @param string $tag		The XML tag to extract the contents from 
 	 * @param string $data		The XML document
-	 * @return string			The contents of the tag
+	 * @return string|null			The contents of the tag
 	 */	
 	static public function extractTagContents($tag, $data)
 	{

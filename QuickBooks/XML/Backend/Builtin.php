@@ -364,6 +364,11 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
 			$length = $node[3];
 			$payload = $node[4];
 
+			// Force type coercion for PHP 8.1 warnings but also compatible with PHP 5.0
+			if ($payload === null) {
+			  $payload = '';
+      }
+
 			$tmp = '';
 			$attributes = array();
 			$this->_extractAttributes($tag_w_attrs, $tmp, $attributes);
@@ -371,6 +376,10 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
 			$Node = new QuickBooks_XML_Node($tag);
 			foreach ($attributes as $key => $value)
 			{
+        // Force type coercion for PHP 8.1 warnings but also compatible with PHP 5.0
+			  if ($value === null) {
+			    $value = '';
+        }
 				$value = QuickBooks_XML::decode($value, true);
 				
 				$Node->addAttribute($key, $value);
