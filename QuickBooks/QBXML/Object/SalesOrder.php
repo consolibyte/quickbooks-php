@@ -774,23 +774,6 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
 		
 		return parent::asArray($request, $nest);
 	}
-
-	/**
-	 *
-	 *
-	 * @param        $request
-	 * @param null   $version
-	 * @param null   $locale
-	 * @param string $root
-	 *
-	 * @return string
-	 */
-	public function asQBXML($request, $version = null, $locale = null, $root = null)
-	{
-		$this->_cleanup();
-		
-		return parent::asQBXML($request, $version, $locale, $root);
-	}
 	
 	/**
 	 * Tell the type of object this is
