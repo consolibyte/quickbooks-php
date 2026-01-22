@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: EstimateAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'EstimateAdd';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => 'STRTYPE',
   'BillAddress City' => 'STRTYPE',
   'BillAddress State' => 'STRTYPE',
-  'BillAddress Province' => 'STRTYPE', 
+  'BillAddress Province' => 'STRTYPE',
   'BillAddress PostalCode' => 'STRTYPE',
   'BillAddress Country' => 'STRTYPE',
   'BillAddress Note' => 'STRTYPE',
@@ -61,7 +61,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => 'STRTYPE',
   'ShipAddress City' => 'STRTYPE',
   'ShipAddress State' => 'STRTYPE',
-  'ShipAddress Province' => 'STRTYPE', 
+  'ShipAddress Province' => 'STRTYPE',
   'ShipAddress PostalCode' => 'STRTYPE',
   'ShipAddress Country' => 'STRTYPE',
   'ShipAddress Note' => 'STRTYPE',
@@ -93,8 +93,8 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineAdd ClassRef ListID' => 'IDTYPE',
   'EstimateLineAdd ClassRef FullName' => 'STRTYPE',
   'EstimateLineAdd Amount' => 'AMTTYPE',
-  'EstimateLineAdd InventorySiteRef ListID' => 'IDTYPE', 
-  'EstimateLineAdd InventorySiteRef FullName' => 'STRTYPE', 
+  'EstimateLineAdd InventorySiteRef ListID' => 'IDTYPE',
+  'EstimateLineAdd InventorySiteRef FullName' => 'STRTYPE',
   'EstimateLineAdd SalesTaxCodeRef ListID' => 'IDTYPE',
   'EstimateLineAdd SalesTaxCodeRef FullName' => 'STRTYPE',
   'EstimateLineAdd MarkupRate' => 'PRICETYPE',
@@ -118,10 +118,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtValue' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -140,7 +140,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => 41,
   'BillAddress City' => 31,
   'BillAddress State' => 21,
-  'BillAddress Province' => 21, 
+  'BillAddress Province' => 21,
   'BillAddress PostalCode' => 13,
   'BillAddress Country' => 31,
   'BillAddress Note' => 41,
@@ -151,7 +151,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => 41,
   'ShipAddress City' => 31,
   'ShipAddress State' => 21,
-  'ShipAddress Province' => 21, 
+  'ShipAddress Province' => 21,
   'ShipAddress PostalCode' => 13,
   'ShipAddress Country' => 31,
   'ShipAddress Note' => 41,
@@ -208,10 +208,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtValue' => 0,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -230,7 +230,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => true,
   'BillAddress City' => true,
   'BillAddress State' => true,
-  'BillAddress Province' => true, 
+  'BillAddress Province' => true,
   'BillAddress PostalCode' => true,
   'BillAddress Country' => true,
   'BillAddress Note' => true,
@@ -241,7 +241,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => true,
   'ShipAddress City' => true,
   'ShipAddress State' => true,
-  'ShipAddress Province' => true, 
+  'ShipAddress Province' => true,
   'ShipAddress PostalCode' => true,
   'ShipAddress Country' => true,
   'ShipAddress Note' => true,
@@ -299,7 +299,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -318,7 +318,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => 6,
   'BillAddress City' => 999.99,
   'BillAddress State' => 999.99,
-  'BillAddress Province' => 999.99, 
+  'BillAddress Province' => 999.99,
   'BillAddress PostalCode' => 999.99,
   'BillAddress Country' => 999.99,
   'BillAddress Note' => 6,
@@ -329,7 +329,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => 6,
   'ShipAddress City' => 999.99,
   'ShipAddress State' => 999.99,
-  'ShipAddress Province' => 999.99, 
+  'ShipAddress Province' => 999.99,
   'ShipAddress PostalCode' => 999.99,
   'ShipAddress Country' => 999.99,
   'ShipAddress Note' => 6,
@@ -386,10 +386,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtValue' => 999.99,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -408,7 +408,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => false,
   'BillAddress City' => false,
   'BillAddress State' => false,
-  'BillAddress Province' => false, 
+  'BillAddress Province' => false,
   'BillAddress PostalCode' => false,
   'BillAddress Country' => false,
   'BillAddress Note' => false,
@@ -419,7 +419,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => false,
   'ShipAddress City' => false,
   'ShipAddress State' => false,
-  'ShipAddress Province' => false, 
+  'ShipAddress Province' => false,
   'ShipAddress PostalCode' => false,
   'ShipAddress Country' => false,
   'ShipAddress Note' => false,
@@ -476,22 +476,22 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtValue' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
@@ -510,7 +510,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
 			'BillAddress Addr5',
 			'BillAddress City',
 			'BillAddress State',
-			'BillAddress Province', 
+			'BillAddress Province',
 			'BillAddress PostalCode',
 			'BillAddress Country',
 			'BillAddress Note',
@@ -521,7 +521,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
 			'ShipAddress Addr5',
 			'ShipAddress City',
 			'ShipAddress State',
-			'ShipAddress Province', 
+			'ShipAddress Province',
 			'ShipAddress PostalCode',
 			'ShipAddress Country',
 			'ShipAddress Note',
@@ -570,7 +570,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
 			'EstimateLineAdd DataExt OwnerID',
 			'EstimateLineAdd DataExt DataExtName',
 			'EstimateLineAdd DataExt DataExtValue',
-			'EstimateLineGroupAdd', 
+			'EstimateLineGroupAdd',
 			'EstimateLineGroupAdd ItemGroupRef ListID',
 			'EstimateLineGroupAdd ItemGroupRef FullName',
 			'EstimateLineGroupAdd Desc',
@@ -581,7 +581,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
 			'EstimateLineGroupAdd DataExt DataExtValue',
 			'IncludeRetElement',
 		);
-		
+
 		return $paths;
 	}
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <BarCodeQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+                        <BarCodeValue >STRTYPE</BarCodeValue> <!-- optional, may repeat -->
+                </BarCodeQueryRq>
+
+                <BarCodeQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+                        <BarCodeRet> <!-- optional, may repeat -->
+                                <!-- ListType may have one of the following values: Account, Class, Customer, CustomerMsg, CustomerType, DateDrivenTerms, Employee, ItemDiscount, ItemFixedAsset, ItemGroup, ItemInventory, ItemInventoryAssembly, ItemNonInventory, ItemOtherCharge, ItemPayment, ItemSalesTax, ItemSalesTaxGroup, ItemService, ItemSubtotal, JobType, OtherName, PaymentMethod, PriceLevel, SalesRep, SalesTaxCode, ShipMethod, StandardTerms, ToDo, Vendor, VendorType -->
+                                <ListType >ENUMTYPE</ListType> <!-- required -->
+                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                <FullName >STRTYPE</FullName> <!-- optional -->
+                        </BarCodeRet>
+                </BarCodeQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

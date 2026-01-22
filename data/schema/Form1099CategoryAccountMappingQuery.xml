@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <Form1099CategoryAccountMappingQueryRq>
+                        <FormType>STRTYPE</FormType> <!-- optional -->
+                        <!-- MappingCategory may have one of the following values: BOX1, BOX2, BOX3, BOX4, BOX5, BOX6, BOX7, BOX8, BOX9, BOX10, BOX13, BOX14, BOX15 -->
+                        <MappingCategory >ENUMTYPE</MappingCategory> <!-- optional, may repeat -->
+                </Form1099CategoryAccountMappingQueryRq>
+
+                <Form1099CategoryAccountMappingQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+                        <Form1099CategoryAccountMappingRet> <!-- optional -->
+                                <IsFiling1099Misc >BOOLTYPE</IsFiling1099Misc> <!-- required -->
+                                <FormType>STRTYPE</FormType> <!-- optional -->
+                                <CategoryAccountMapping> <!-- optional, may repeat -->
+                                        <!-- MappingCategory may have one of the following values: BOX1, BOX2, BOX3, BOX4, BOX5, BOX6, BOX7, BOX8, BOX9, BOX10, BOX14, BOX16 -->
+                                        <MappingCategory >ENUMTYPE</MappingCategory> <!-- required -->
+                                        <AccountRef> <!-- optional, may repeat -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </AccountRef>
+                                        <Threshold >AMTTYPE</Threshold> <!-- optional -->
+                                </CategoryAccountMapping>
+                        </Form1099CategoryAccountMappingRet>
+                </Form1099CategoryAccountMappingQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

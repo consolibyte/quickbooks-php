@@ -12,16 +12,16 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $CDCService = new QuickBooks_IPP_Service_ChangeDataCapture();
 
-// What types of objects do you want to get? 
-$objects = array( 
-	'Customer', 
-	'Invoice', 
+// What types of objects do you want to get?
+$objects = array(
+	'Customer',
+	'Invoice',
 	);
 
-// The date they should have been updated after 
+// The date they should have been updated after
 $timestamp = QuickBooks_Utilities::datetime('-5 years');
 
-$cdc = $CDCService->cdc($Context, $realm, 
+$cdc = $CDCService->cdc($Context, $realm,
 	$objects,
 	$timestamp);
 

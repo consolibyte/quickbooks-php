@@ -1,7 +1,7 @@
 <?php
 
 require_once '../QuickBooks.php';
- 
+
 // Create our customer object
 $Customer = new QuickBooks_IPP_Object_Customer();
 

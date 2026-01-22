@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: EstimateModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'EstimateMod';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -55,7 +55,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'BillAddress PostalCode' => 'STRTYPE',
   'BillAddress Country' => 'STRTYPE',
   'BillAddress Note' => 'STRTYPE',
-  'ShipAddress Addr1' => 'STRTYPE',			// This OSR says this is supported, but it's actually not... 
+  'ShipAddress Addr1' => 'STRTYPE',			// This OSR says this is supported, but it's actually not...
   'ShipAddress Addr2' => 'STRTYPE',
   'ShipAddress Addr3' => 'STRTYPE',
   'ShipAddress Addr4' => 'STRTYPE',
@@ -137,10 +137,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupMod EstimateLineMod Other2' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -246,10 +246,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupMod EstimateLineMod Other2' => 29,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -356,7 +356,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -462,10 +462,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupMod EstimateLineMod Other2' => 6,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -571,22 +571,22 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupMod EstimateLineMod Other2' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
@@ -639,7 +639,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
 			'CustomerSalesTaxCodeRef ListID',
 			'CustomerSalesTaxCodeRef FullName',
 			'Other',
-			'EstimateLineMod', 
+			'EstimateLineMod',
 			'EstimateLineMod TxnLineID',
 			'EstimateLineMod ItemRef ListID',
 			'EstimateLineMod ItemRef FullName',
@@ -663,7 +663,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
 			'EstimateLineMod PriceLevelRef FullName',
 			'EstimateLineMod Other1',
 			'EstimateLineMod Other2',
-			'EstimateLineGroupMod', 
+			'EstimateLineGroupMod',
 			'EstimateLineGroupMod TxnLineID',
 			'EstimateLineGroupMod ItemGroupRef ListID',
 			'EstimateLineGroupMod ItemGroupRef FullName',
@@ -694,7 +694,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
 			'EstimateLineGroupMod EstimateLineMod Other2',
 			'IncludeRetElement',
 		);
-		
+
 		return $paths;
 	}
 }

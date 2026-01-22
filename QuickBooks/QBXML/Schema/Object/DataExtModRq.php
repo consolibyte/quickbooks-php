@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: DataExtModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_DataExtModRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'DataExtMod';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -46,10 +46,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtModRq extends QuickBooks_QBXML_Schem
   'OtherDataExtType' => 'ENUMTYPE',
   'DataExtValue' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -64,10 +64,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtModRq extends QuickBooks_QBXML_Schem
   'OtherDataExtType' => 0,
   'DataExtValue' => 0,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -83,7 +83,7 @@ class QuickBooks_QBXML_Schema_Object_DataExtModRq extends QuickBooks_QBXML_Schem
   'DataExtValue' => false,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -98,10 +98,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtModRq extends QuickBooks_QBXML_Schem
   'OtherDataExtType' => 999.99,
   'DataExtValue' => 999.99,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -116,22 +116,22 @@ class QuickBooks_QBXML_Schema_Object_DataExtModRq extends QuickBooks_QBXML_Schem
   'OtherDataExtType' => false,
   'DataExtValue' => false,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
@@ -146,7 +146,7 @@ class QuickBooks_QBXML_Schema_Object_DataExtModRq extends QuickBooks_QBXML_Schem
   8 => 'OtherDataExtType',
   9 => 'DataExtValue',
 );
-			
+
 		return $paths;
 	}
 }

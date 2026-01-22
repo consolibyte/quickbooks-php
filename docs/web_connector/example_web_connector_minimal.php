@@ -2,21 +2,21 @@
 
 /**
  * Example QuickBooks Web Connector web service
- * 
- * This is a minimal example of using the QuickBooks Web Connector. Make sure 
- * you look at docs/example_web_connector.php for more details. 
- * 
+ *
+ * This is a minimal example of using the QuickBooks Web Connector. Make sure
+ * you look at docs/example_web_connector.php for more details.
+ *
  * MAKE SURE YOU READ OUR QUICK-START GUIDE:
  * 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks_integration_php_consolibyte_webconnector_quickstart
  * 	http://wiki.consolibyte.com/wiki/doku.php/quickbooks
- * 
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
 
-// I always program in E_STRICT error mode... 
+// I always program in E_STRICT error mode...
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', true);
 
@@ -30,7 +30,7 @@ if (function_exists('date_default_timezone_set'))
 // Require the framework
 require_once '../../QuickBooks.php';
 
-// A username and password you'll use in: 
+// A username and password you'll use in:
 //	a) Your .QWC file
 //	b) The Web Connector
 //	c) The QuickBooks framework
@@ -59,10 +59,10 @@ if (!QuickBooks_Utilities::initialized($dsn))
 {
 	// Initialize creates the neccessary database schema for queueing up requests and logging
 	QuickBooks_Utilities::initialize($dsn);
-	
+
 	// This creates a username and password which is used by the Web Connector to authenticate
 	QuickBooks_Utilities::createUser($dsn, $user, $pass);
-	
+
 	// Queueing up a test request
 	$primary_key_of_your_customer = 5;
 	$Queue = new QuickBooks_WebConnector_Queue($dsn);
@@ -80,7 +80,7 @@ $response = $Server->handle(true, true);
 function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
 	// We're just testing, so we'll just use a static test request:
-	 
+
 	$xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="2.0"?>
 		<QBXML>
@@ -108,14 +108,14 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 				</CustomerAddRq>
 			</QBXMLMsgsRq>
 		</QBXML>';
-	
+
 	return $xml;
 }
 
 /**
- * Receive a response from QuickBooks 
+ * Receive a response from QuickBooks
  */
 function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-	return;	
+	return;
 }

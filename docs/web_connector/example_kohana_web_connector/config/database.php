@@ -2,13 +2,13 @@
 
 
 /**
- * THIS FILE IS NOT THE REAL DATABASE.PHP 
- * 
+ * THIS FILE IS NOT THE REAL DATABASE.PHP
+ *
  * This is a small snippet to demonstrate adding the
  * qb_data database to your kohana configuration file
- * 
+ *
  * @author Jayson Lindsley <jay.lindsley@gmail.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
@@ -29,7 +29,7 @@ return array
 		'charset'      => 'utf8',
 		'caching'      => FALSE,
 		'profiling'    => FALSE,
-	), 
+	),
 );
 
 ?>

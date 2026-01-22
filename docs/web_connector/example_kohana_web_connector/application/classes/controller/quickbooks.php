@@ -2,11 +2,11 @@
 
 /**
  * QuickBooks Kohana Integration Example
- * 
+ *
  * A simple controller to present data using the qbdata model
- * 
+ *
  * @author Jayson Lindsley <jay.lindsley@gmail.com>
- * 
+ *
  */
 
 class Controller_Quickbooks extends Controller_Website {

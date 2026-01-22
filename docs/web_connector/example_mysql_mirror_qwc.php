@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Example of generating QuickBooks *.QWC files 
- * 
+ * Example of generating QuickBooks *.QWC files
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
@@ -19,7 +19,7 @@ ini_set('display_errors', 1);
 require_once '../../QuickBooks.php';
 
 $name = 'QuickBooks SQL Mirror - ' . $_SERVER['HTTP_HOST'];			// A name for your server (make it whatever you want)
-$descrip = 'QuickBooks SQL Mirror - ' . $_SERVER['HTTP_HOST'];		// A description of your server 
+$descrip = 'QuickBooks SQL Mirror - ' . $_SERVER['HTTP_HOST'];		// A description of your server
 
 //$appurl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];		// This *must* be httpS:// (path to your QuickBooks SOAP server)
 //$appsupport = 'https://' . $_SERVER['HTTP_HOST'] . '/store/quickbooks/server.php?support=1'; 		// This *must* be httpS:// and the domain name must match the domain name above
@@ -31,7 +31,7 @@ if (false !== strpos($_SERVER['HTTP_HOST'], 'localhost'))
 	$appurl = str_replace('https://', 'http://', $appurl);
 }
 
-$appsupport = $appurl . '?support=1'; 
+$appsupport = $appurl . '?support=1';
 if (false !== strpos($appurl, '?'))
 {
 	// This *must* be httpS:// and the domain name must match the domain name above

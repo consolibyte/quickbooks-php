@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <ItemSitesQueryRq metaData="ENUMTYPE" iterator="ENUMTYPE" iteratorID="UUIDTYPE">
+                        <!-- BEGIN OR -->
+                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <!-- BEGIN OR -->
+                                        <!-- ItemTypeFilter may have one of the following values: AllExceptFixedAsset, Assembly, Discount, FixedAsset, Inventory, InventoryAndAssembly, NonInventory, OtherCharge, Payment, Sales, SalesTax, Service -->
+                                        <ItemTypeFilter >ENUMTYPE</ItemTypeFilter> <!-- optional -->
+                                <!-- OR -->
+                                        <ItemSiteFilter> <!-- optional -->
+                                                <ItemFilter> <!-- optional -->
+                                                        <!-- BEGIN OR -->
+                                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                                        <!-- OR -->
+                                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                                        <!-- OR -->
+                                                                <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                                        <!-- OR -->
+                                                                <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                                        <!-- END OR -->
+                                                </ItemFilter>
+                                                <SiteFilter> <!-- optional -->
+                                                        <!-- BEGIN OR -->
+                                                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                                        <!-- OR -->
+                                                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                                        <!-- END OR -->
+                                                </SiteFilter>
+                                        </ItemSiteFilter>
+                                <!-- END OR -->
+                        <!-- END OR -->
+                        <MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+                        <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+                        <ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </ItemSitesQueryRq>
+
+                <ItemSitesQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE" iteratorRemainingCount="INTTYPE" iteratorID="UUIDTYPE">
+                        <ItemSitesRet> <!-- optional, may repeat -->
+                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- optional -->
+                                <TimeModified >DATETIMETYPE</TimeModified> <!-- optional -->
+                                <EditSequence >STRTYPE</EditSequence> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <ItemInventoryAssemblyRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </ItemInventoryAssemblyRef>
+                                <!-- OR -->
+                                        <ItemInventoryRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </ItemInventoryRef>
+                                <!-- END OR -->
+                                <InventorySiteRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </InventorySiteRef>
+                                <InventorySiteLocationRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </InventorySiteLocationRef>
+                                <ReorderLevel >QUANTYPE</ReorderLevel> <!-- optional -->
+                                <QuantityOnHand >QUANTYPE</QuantityOnHand> <!-- optional -->
+                                <QuantityOnPurchaseOrders >QUANTYPE</QuantityOnPurchaseOrders> <!-- optional -->
+                                <QuantityOnSalesOrders >QUANTYPE</QuantityOnSalesOrders> <!-- optional -->
+                                <QuantityToBeBuiltByPendingBuildTxns >QUANTYPE</QuantityToBeBuiltByPendingBuildTxns> <!-- optional -->
+                                <QuantityRequiredByPendingBuildTxns >QUANTYPE</QuantityRequiredByPendingBuildTxns> <!-- optional -->
+                                <QuantityOnPendingTransfers >QUANTYPE</QuantityOnPendingTransfers> <!-- optional -->
+                                <AssemblyBuildPoint >QUANTYPE</AssemblyBuildPoint> <!-- optional -->
+                        </ItemSitesRet>
+                </ItemSitesQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

@@ -10,7 +10,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 <?php
 
-// Jobs are really just Customers, so we can use the CustomerService and Customer query methods to do this 
+// Jobs are really just Customers, so we can use the CustomerService and Customer query methods to do this
 $CustomerService = new QuickBooks_IPP_Service_Customer();
 
 // Get all jobs that have a parent customer "Derrick Huckleberry"

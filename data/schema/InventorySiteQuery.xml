@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <InventorySiteQueryRq metaData="ENUMTYPE">
+                        <!-- BEGIN OR -->
+                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+                                <ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+                                <FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+                                <ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <NameFilter> <!-- optional -->
+                                                <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+                                                <MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+                                                <Name >STRTYPE</Name> <!-- required -->
+                                        </NameFilter>
+                                <!-- OR -->
+                                        <NameRangeFilter> <!-- optional -->
+                                                <FromName >STRTYPE</FromName> <!-- optional -->
+                                                <ToName >STRTYPE</ToName> <!-- optional -->
+                                        </NameRangeFilter>
+                                <!-- END OR -->
+                        <!-- END OR -->
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </InventorySiteQueryRq>
+
+                <InventorySiteQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+                        <InventorySiteRet> <!-- optional, may repeat -->
+                                <ListID >IDTYPE</ListID> <!-- required -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                <TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+                                <EditSequence >STRTYPE</EditSequence> <!-- required -->
+                                <Name >STRTYPE</Name> <!-- optional -->
+                                <IsActive >BOOLTYPE</IsActive> <!-- optional -->
+                                <ParentSiteRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </ParentSiteRef>
+                                <IsDefaultSite >BOOLTYPE</IsDefaultSite> <!-- optional -->
+                                <SiteDesc >STRTYPE</SiteDesc> <!-- optional -->
+                                <Contact >STRTYPE</Contact> <!-- optional -->
+                                <Phone >STRTYPE</Phone> <!-- optional -->
+                                <Fax >STRTYPE</Fax> <!-- optional -->
+                                <Email >STRTYPE</Email> <!-- optional -->
+                                <SiteAddress> <!-- optional -->
+                                        <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                        <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                        <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                        <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                        <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                        <City >STRTYPE</City> <!-- optional -->
+                                        <State >STRTYPE</State> <!-- optional -->
+                                        <PostalCode >STRTYPE</PostalCode> <!-- optional -->
+                                        <Country >STRTYPE</Country> <!-- optional -->
+                                </SiteAddress>
+                                <SiteAddressBlock> <!-- optional -->
+                                        <Addr1 >STRTYPE</Addr1> <!-- optional -->
+                                        <Addr2 >STRTYPE</Addr2> <!-- optional -->
+                                        <Addr3 >STRTYPE</Addr3> <!-- optional -->
+                                        <Addr4 >STRTYPE</Addr4> <!-- optional -->
+                                        <Addr5 >STRTYPE</Addr5> <!-- optional -->
+                                </SiteAddressBlock>
+                        </InventorySiteRet>
+                </InventorySiteQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

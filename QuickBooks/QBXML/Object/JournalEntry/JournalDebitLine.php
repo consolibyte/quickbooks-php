@@ -1,13 +1,13 @@
-<?php 
+<?php
 /**
- * JournalEntry class for QuickBooks 
- * 
+ * JournalEntry class for QuickBooks
+ *
  * @author Keith Palmer Jr. <keith@ConsoliBYTE.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage Object
- */ 
+ */
 
 /**
  * QuickBooks object base class
@@ -15,13 +15,13 @@
 QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_JournalEntry_JournalDebitLine object
-	 * 
+	 *
 	 * @param array $arr
 	 */
 	public function __construct($arr = array())
@@ -29,11 +29,11 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 		parent::__construct($arr);
 	}
 
-	// Path: TxnLineID, datatype: 
-	
+	// Path: TxnLineID, datatype:
+
 	/**
 	 * Set the TxnLineID for the JournalEntry
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -44,7 +44,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the TxnLineID for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getTxnLineID()
@@ -52,11 +52,11 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 		return $this->get('TxnLineID');
 	}
 
-	// Path: AccountRef ListID, datatype: 
-	
+	// Path: AccountRef ListID, datatype:
+
 	/**
 	 * Set the AccountRef ListID for the JournalEntry
-	 * 
+	 *
 	 * @param string $ListID		The ListID of the record to reference
 	 * @return boolean
 	 */
@@ -67,7 +67,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the AccountRef ListID for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getAccountListID()
@@ -77,7 +77,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Set the primary key for the related record within your own application for the JournalEntry
-	 * 
+	 *
 	 * @param mixed $value			The primary key within your own application
 	 * @return string
 	 */
@@ -86,11 +86,11 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 		return $this->set('AccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
 	}
 
-	// Path: AccountRef FullName, datatype: 
-	
+	// Path: AccountRef FullName, datatype:
+
 	/**
 	 * Set the AccountRef FullName for the JournalEntry
-	 * 
+	 *
 	 * @param string $FullName		The FullName of the record to reference
 	 * @return boolean
 	 */
@@ -101,7 +101,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the AccountRef FullName for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getAccountName()
@@ -109,11 +109,11 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 		return $this->get('AccountRef FullName');
 	}
 
-	// Path: Amount, datatype: 
-	
+	// Path: Amount, datatype:
+
 	/**
 	 * Set the Amount for the JournalEntry
-	 * 
+	 *
 	 * @param float $value
 	 * @return boolean
 	 */
@@ -124,7 +124,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the Amount for the JournalEntry
-	 * 
+	 *
 	 * @return float
 	 */
 	public function getAmount()
@@ -133,10 +133,10 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 	}
 
 	// Path: Memo, datatype: STRTYPE
-	
+
 	/**
 	 * Set the Memo for the JournalEntry
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -147,7 +147,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the Memo for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getMemo()
@@ -156,10 +156,10 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 	}
 
 	// Path: EntityRef ListID, datatype: STRTYPE
-	
+
 	/**
 	 * Set the EntityRef ListID for the JournalEntry
-	 * 
+	 *
 	 * @param string $ListID		The ListID of the record to reference
 	 * @return boolean
 	 */
@@ -170,7 +170,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the EntityRef ListID for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getEntityListID()
@@ -180,7 +180,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Set the primary key for the related record within your own application for the JournalEntry
-	 * 
+	 *
 	 * @param mixed $value			The primary key within your own application
 	 * @return string
 	 */
@@ -190,10 +190,10 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 	}
 
 	// Path: EntityRef FullName, datatype: STRTYPE
-	
+
 	/**
 	 * Set the EntityRef FullName for the JournalEntry
-	 * 
+	 *
 	 * @param string $FullName		The FullName of the record to reference
 	 * @return boolean
 	 */
@@ -204,7 +204,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the EntityRef FullName for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getEntityName()
@@ -213,10 +213,10 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 	}
 
 	// Path: ClassRef ListID, datatype: STRTYPE
-	
+
 	/**
 	 * Set the ClassRef ListID for the JournalEntry
-	 * 
+	 *
 	 * @param string $ListID		The ListID of the record to reference
 	 * @return boolean
 	 */
@@ -227,7 +227,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the ClassRef ListID for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getClassListID()
@@ -237,7 +237,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Set the primary key for the related record within your own application for the JournalEntry
-	 * 
+	 *
 	 * @param mixed $value			The primary key within your own application
 	 * @return string
 	 */
@@ -247,10 +247,10 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 	}
 
 	// Path: ClassRef FullName, datatype: STRTYPE
-	
+
 	/**
 	 * Set the ClassRef FullName for the JournalEntry
-	 * 
+	 *
 	 * @param string $FullName		The FullName of the record to reference
 	 * @return boolean
 	 */
@@ -261,7 +261,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the ClassRef FullName for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getClassName()
@@ -270,10 +270,10 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 	}
 
 	// Path: ItemSalesTaxRef ListID, datatype: STRTYPE
-	
+
 	/**
 	 * Set the ItemSalesTaxRef ListID for the JournalEntry
-	 * 
+	 *
 	 * @param string $ListID		The ListID of the record to reference
 	 * @return boolean
 	 */
@@ -284,7 +284,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the ItemSalesTaxRef ListID for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getItemSalesTaxListID()
@@ -294,7 +294,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Set the primary key for the related record within your own application for the JournalEntry
-	 * 
+	 *
 	 * @param mixed $value			The primary key within your own application
 	 * @return string
 	 */
@@ -304,10 +304,10 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 	}
 
 	// Path: ItemSalesTaxRef FullName, datatype: STRTYPE
-	
+
 	/**
 	 * Set the ItemSalesTaxRef FullName for the JournalEntry
-	 * 
+	 *
 	 * @param string $FullName		The FullName of the record to reference
 	 * @return boolean
 	 */
@@ -318,7 +318,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the ItemSalesTaxRef FullName for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getItemSalesTaxName()
@@ -326,11 +326,11 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 		return $this->get('ItemSalesTaxRef FullName');
 	}
 
-	// Path: BillableStatus, datatype: 
-	
+	// Path: BillableStatus, datatype:
+
 	/**
 	 * Set the BillableStatus for the JournalEntry
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -341,17 +341,17 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalDebitLine extends QuickBooks_Q
 
 	/**
 	 * Get the BillableStatus for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getBillableStatus()
 	{
 		return $this->get('BillableStatus');
 	}
-		
+
 	/**
 	 * Tell the type of object this is
-	 * 
+	 *
 	 * @return string
 	 */
 	public function object()

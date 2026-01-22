@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <ToDoQueryRq metaData="ENUMTYPE">
+                        <!-- BEGIN OR -->
+                                <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                        <!-- OR -->
+                                <MaxReturned >INTTYPE</MaxReturned> <!-- optional -->
+                                <!-- ActiveStatus may have one of the following values: ActiveOnly [DEFAULT], InactiveOnly, All -->
+                                <ActiveStatus >ENUMTYPE</ActiveStatus> <!-- optional -->
+                                <FromModifiedDate >DATETIMETYPE</FromModifiedDate> <!-- optional -->
+                                <ToModifiedDate >DATETIMETYPE</ToModifiedDate> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <NameFilter> <!-- optional -->
+                                                <!-- MatchCriterion may have one of the following values: StartsWith, Contains, EndsWith -->
+                                                <MatchCriterion >ENUMTYPE</MatchCriterion> <!-- required -->
+                                                <Name >STRTYPE</Name> <!-- required -->
+                                        </NameFilter>
+                                <!-- OR -->
+                                        <NameRangeFilter> <!-- optional -->
+                                                <FromName >STRTYPE</FromName> <!-- optional -->
+                                                <ToName >STRTYPE</ToName> <!-- optional -->
+                                        </NameRangeFilter>
+                                <!-- END OR -->
+                                <!-- DoneStatus may have one of the following values: NotDoneOnly [DEFAULT], DoneOnly, All -->
+                                <DoneStatus >ENUMTYPE</DoneStatus> <!-- optional -->
+                        <!-- END OR -->
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </ToDoQueryRq>
+
+                <ToDoQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+                        <ToDoRet> <!-- optional, may repeat -->
+                                <ListID >IDTYPE</ListID> <!-- required -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                <TimeModified >DATETIMETYPE</TimeModified> <!-- required -->
+                                <EditSequence >STRTYPE</EditSequence> <!-- required -->
+                                <Notes >STRTYPE</Notes> <!-- required -->
+                                <IsActive >BOOLTYPE</IsActive> <!-- optional -->
+                                <!-- Type may have one of the following values: Task [DEFAULT], Call, Fax, Email, Meeting, Appointment -->
+                                <Type >ENUMTYPE</Type> <!-- optional -->
+                                <!-- Priority may have one of the following values: Low [DEFAULT], Medium, High -->
+                                <Priority >ENUMTYPE</Priority> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <CustomerRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </CustomerRef>
+                                <!-- OR -->
+                                        <EmployeeRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </EmployeeRef>
+                                <!-- OR -->
+                                        <LeadRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </LeadRef>
+                                <!-- OR -->
+                                        <VendorRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </VendorRef>
+                                <!-- END OR -->
+                                <IsDone >BOOLTYPE</IsDone> <!-- required -->
+                                <ReminderDate >DATETYPE</ReminderDate> <!-- required -->
+                                <ReminderTime >TIMEINTERVALTYPE</ReminderTime> <!-- optional -->
+                        </ToDoRet>
+                </ToDoQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

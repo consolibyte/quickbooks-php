@@ -2,18 +2,18 @@
 
 /**
  * Example of building qbXML for specific versions of QuickBooks using the QuickBooks_Object_* classes
- * 
- * Certain versions of QuickBooks may or may not support certain different 
- * features of the qbXML specification. For instance, Online Edition may not 
- * support the 'Customer Type' field. The use of locale constants allows us to 
- * build qbXML requests from objects, tailoring those requests to the specific 
- * qbXML version and locale we want to send the request to. 
- * 
+ *
+ * Certain versions of QuickBooks may or may not support certain different
+ * features of the qbXML specification. For instance, Online Edition may not
+ * support the 'Customer Type' field. The use of locale constants allows us to
+ * build qbXML requests from objects, tailoring those requests to the specific
+ * qbXML version and locale we want to send the request to.
+ *
  * @author Keith Palmer <keith@consolibyte.com>
  *
  * @package QuickBooks
  * @subpackage Documentation
- */ 
+ */
 
 // Plain text output
 header('Content-Type: text/plain');

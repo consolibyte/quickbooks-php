@@ -37,7 +37,7 @@ print('Request [' . $IPP->lastRequest() . ']');
 print("\n\n\n\n");
 print('Response [' . $IPP->lastResponse() . ']');
 print("\n\n\n\n\n\n\n\n\n");
-	
+
 ?>
 
 </pre>

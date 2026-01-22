@@ -538,7 +538,7 @@ abstract class QuickBooks_Driver
 	 */
 	final public function queueEnqueue($user, $action, $ident, $replace = true, $priority = 0, $extra = null, $qbxml = null)
 	{
-		if (!strlen($ident))
+		if (!$ident)
 		{
 			// If they didn't provide an $ident, generate a random, unique one
 
@@ -1604,5 +1604,24 @@ abstract class QuickBooks_Driver
 		}
 
 		return true;
+	}
+
+	/** Get external location from which QuickBooks_Driver method was called.
+	 **/
+	protected static function getCaller (): string {
+		$bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+		$thisFile = __FILE__;
+		$location = '';
+		$foundThis = false;   // skip subclass files until $thisFile is found
+		// Find the location from which the first function in $thisFile was called.
+		foreach ($bt as $call) {
+			if ($call['file'] === $thisFile) $foundThis = true;
+			elseif ($foundThis) {
+				$location = '@[' . $call['file'] . ':' . $call['line'] . ']';
+				break;
+			}
+		}
+
+		return $location;
 	}
 }

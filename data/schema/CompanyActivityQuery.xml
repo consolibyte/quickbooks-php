@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <CompanyActivityQueryRq>
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </CompanyActivityQueryRq>
+
+                <CompanyActivityQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+                        <CompanyActivityRet> <!-- optional -->
+                                <LastRestoreTime >DATETIMETYPE</LastRestoreTime> <!-- required -->
+                                <LastCondenseTime >DATETIMETYPE</LastCondenseTime> <!-- required -->
+                        </CompanyActivityRet>
+                </CompanyActivityQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

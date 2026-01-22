@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $ItemService = new QuickBooks_IPP_Service_Item();
 
-// Get the existing item 
+// Get the existing item
 $items = $ItemService->query($Context, $realm, "SELECT * FROM Item WHERE Id = '2' ");
 $Item = $items[0];
 

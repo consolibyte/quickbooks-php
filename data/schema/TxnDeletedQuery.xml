@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <TxnDeletedQueryRq metaData="ENUMTYPE">
+                        <!-- TxnDelType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, PayrollLiabilityAdjustment [PRIVATE], PayrollPriorPayment [PRIVATE], PayrollYearToDateAdjustment [PRIVATE], PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, TimeTracking, TransferInventory, VehicleMileage, VendorCredit -->
+                        <TxnDelType >ENUMTYPE</TxnDelType> <!-- required, may repeat -->
+                        <DeletedDateRangeFilter> <!-- optional -->
+                                <FromDeletedDate >DATETIMETYPE</FromDeletedDate> <!-- optional -->
+                                <ToDeletedDate >DATETIMETYPE</ToDeletedDate> <!-- optional -->
+                        </DeletedDateRangeFilter>
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </TxnDeletedQueryRq>
+
+                <TxnDeletedQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+                        <TxnDeletedRet> <!-- optional, may repeat -->
+                                <!-- TxnDelType may have one of the following values: ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, PayrollLiabilityAdjustment [PRIVATE], PayrollPriorPayment [PRIVATE], PayrollYearToDateAdjustment [PRIVATE], PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, TimeTracking, TransferInventory, VehicleMileage, VendorCredit -->
+                                <TxnDelType >ENUMTYPE</TxnDelType> <!-- required -->
+                                <TxnID >IDTYPE</TxnID> <!-- required -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                <TimeDeleted >DATETIMETYPE</TimeDeleted> <!-- required -->
+                                <RefNumber >STRTYPE</RefNumber> <!-- optional -->
+                        </TxnDeletedRet>
+                </TxnDeletedQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

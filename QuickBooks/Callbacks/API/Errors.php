@@ -1,23 +1,23 @@
 <?php
 
 /**
- * 
- * 
+ *
+ *
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.opensource.org/licenses/eclipse-1.0.php
- * 
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * @license LICENSE.txt 
- * 
+ * @license LICENSE.txt
+ *
  * @package QuickBooks
  * @subpackage Callbacks
  */
 
 /**
- * 
+ *
  */
 class QuickBooks_Callbacks_API_Errors
 {
@@ -28,17 +28,17 @@ class QuickBooks_Callbacks_API_Errors
 	{
 		return QuickBooks_Callbacks_API_Errors::e500_notfound($requestID, $user, $action, $ident, $extra, $err, $xml, $errnum, $errmsg, $config);
 	}
-	
+
 	/**
 	 * Handle a QuickBooks error indicating that nothing matched a search
-	 * 
-	 * For whatever strange reason, instead of returning an empty result set 
-	 * when you do a search that returns no results, QuickBooks instead returns 
-	 * an error message. The error message code might be either 1 or 500 
-	 * depending on what filters you use in your query.  
-	 * 
+	 *
+	 * For whatever strange reason, instead of returning an empty result set
+	 * when you do a search that returns no results, QuickBooks instead returns
+	 * an error message. The error message code might be either 1 or 500
+	 * depending on what filters you use in your query.
+	 *
 	 * @TODO This should use the QuickBooks_Callbacks class, and not it's own custom callback code
-	 * 
+	 *
 	 * @param string $requestID
 	 * @param string $user
 	 * @param string $action
@@ -55,50 +55,50 @@ class QuickBooks_Callbacks_API_Errors
 	{
 		//$requestID, $user, $action, $ident, $extra, $errerr, $xml, $errnum, $errmsg, $this->_callback_config
 		// Not found, *still call the callback!*
-		
+
 		/*
 		$extra['callbacks'], $method, $action, $ID, $err, $qbxml, $qbobject, $qbres
 		*/
-		
+
 		// Get the driver instance
 		$Driver = QuickBooks_Driver_Singleton::getInstance();
-		
+
 		if (!isset($extra['callbacks']))
 		{
 			$extra['callbacks'] = array();
-		} 
-		
+		}
+
 		if (!is_array($extra['callbacks']))
 		{
 			$extra['callbacks'] = array( $extra['callbacks'] );
 		}
-		
+
 		$method = null;
 		if (isset($extra['method']))
 		{
 			$method = $extra['method'];
 		}
-		
+
 		$err = '';
-		
+
 		$qbobject = new QuickBooks_Iterator(array());
 		$qbres = null;
-		
+
 		foreach ($extra['callbacks'] as $func)
 		{
-			if (false !== strpos($func, '::') and 
+			if (false !== strpos($func, '::') and
 				true) // method_exists()) 	// is this safe to do?
 			{
 				// Callback *static method*
-				
+
 				$tmp = explode('::', $func);
-				
+
 				$return = call_user_func(array( $tmp[0], $tmp[1] ), $method, $action, $ident, $err, $xml, $qbobject, $qbres);
 			}
 			else if (function_exists($func))
 			{
-				// Callback *function* 
-				
+				// Callback *function*
+
 				$return = call_user_func($func, $method, $action, $ident, $err, $xml, $qbobject, $qbres);
 			}
 			else
@@ -107,24 +107,24 @@ class QuickBooks_Callbacks_API_Errors
 				$Driver->log('API: ' . $err, null, QUICKBOOKS_LOG_NORMAL);
 				return false;
 			}
-			
+
 			if (!$return)
 			{
 				break;
 			}
 		}
-		
+
 		if ($err)
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	static public function catchall($requestID, $user, $action, $ident, $extra, &$err, $xml, $errnum, $errmsg, $config)
 	{
-		
+
 		return false;
 	}
 }

@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <pre>
 
 <?php
-	
+
 $BillPaymentService = new QuickBooks_IPP_Service_BillPayment();
 
 $billpayments = $BillPaymentService->query($Context, $realm, "SELECT * FROM BillPayment ");
@@ -19,7 +19,7 @@ $billpayments = $BillPaymentService->query($Context, $realm, "SELECT * FROM Bill
 foreach ($billpayments as $BillPayment)
 {
 	print('Bill Payment # ' . $BillPayment->getDocNumber() . ' has a total of $' . $BillPayment->getTotalAmt() . "\n");
-	
+
 	print_r($BillPayment);
 }
 

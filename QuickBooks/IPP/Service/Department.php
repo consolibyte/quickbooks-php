@@ -1,17 +1,17 @@
 <?php
 
 /**
- * 
- * 
+ *
+ *
  * Copyright (c) 2010 Keith Palmer / ConsoliBYTE, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.opensource.org/licenses/eclipse-1.0.php
- * 
+ *
  * @license LICENSE.txt
  * @author Thomas Rientjes
- * 
+ *
  * @package QuickBooks
  * @subpackage IPP
  */
@@ -40,7 +40,7 @@ class QuickBooks_IPP_Service_Department extends QuickBooks_IPP_Service
 		$xml = null;
 		return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_DEPARTMENT, $IDType, $xml);
 	}
-	
+
 	/**
 	 * Add a new department to QuickBooks
 	 *

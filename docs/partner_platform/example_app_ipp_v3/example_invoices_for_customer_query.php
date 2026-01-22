@@ -33,7 +33,7 @@ if (count($customers))
 		print("\n\n\n\n");
 		exit;
 		*/
-		
+
 		if (count($invoices))
 		{
 			foreach ($invoices as $Invoice)

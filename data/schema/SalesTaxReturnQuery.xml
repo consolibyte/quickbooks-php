@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <SalesTaxReturnQueryRq metaData="ENUMTYPE">
+                </SalesTaxReturnQueryRq>
+
+                <SalesTaxReturnQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+                        <SalesTaxReturnRet> <!-- optional, may repeat -->
+                                <ListID >IDTYPE</ListID> <!-- required -->
+                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                <Desc >STRTYPE</Desc> <!-- optional -->
+                        </SalesTaxReturnRet>
+                </SalesTaxReturnQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

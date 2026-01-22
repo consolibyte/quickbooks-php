@@ -36,7 +36,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('ItemRef ListID');
 	}
-	
+
 	public function setItemListID($ListID)
 	{
 		return $this->set('ItemRef ListID', $ListID);
@@ -46,7 +46,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('ItemRef FullName');
 	}
-	
+
 	public function setItemName($Name)
 	{
 		return $this->set('ItemRef FullName', $Name);
@@ -56,7 +56,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('Desc');
 	}
-	
+
 	public function setDescription($Desc)
 	{
 		return $this->set('Desc', $Desc);
@@ -66,7 +66,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('Quantity');
 	}
-	
+
 	public function setQuantity($Quantity)
 	{
 		return $this->set('Quantity', (float) $Quantity);
@@ -76,7 +76,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('UnitOfMeasure');
 	}
-	
+
 	public function setUnitOfMeasure($UnitOfMeasure)
 	{
 		return $this->set('UnitOfMeasure', $UnitOfMeasure);
@@ -86,7 +86,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('Cost');
 	}
-	
+
 	public function setCost($Cost)
 	{
 		return $this->set('Cost', $Cost);
@@ -96,7 +96,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('Amount');
 	}
-	
+
 	public function setAmount($Amount)
 	{
 		return $this->set('Amount', $Amount);
@@ -106,7 +106,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('TaxAmount');
 	}
-	
+
 	public function setTaxAmount($TaxAmount)
 	{
 		return $this->set('TaxAmount', $TaxAmount);
@@ -126,7 +126,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('CustomerRef FullName');
 	}
-	
+
 	public function setCustomerName($Name)
 	{
 		return $this->set('CustomerRef FullName', $Name);
@@ -136,7 +136,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('ClassRef ListID');
 	}
-	
+
 	public function setClassListID($ListID)
 	{
 		return $this->set('ClassRef ListID', $ListID);
@@ -146,7 +146,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('ClassRef FullName');
 	}
-	
+
 	public function setClassName($Name)
 	{
 		return $this->set('ClassRef FullName', $Name);
@@ -156,7 +156,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('SalesTaxCodeRef ListID');
 	}
-	
+
 	public function setSalesTaxCodeListID($ListID)
 	{
 		return $this->set('SalesTaxCodeRef ListID', $ListID);
@@ -166,7 +166,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('SalesTaxCodeRef FullName');
 	}
-	
+
 	public function setSalesTaxCodeName($Name)
 	{
 		return $this->set('SalesTaxCodeRef FullName', $Name);
@@ -176,7 +176,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('BillableStatus');
 	}
-	
+
 	public function setBillableStatus($BillableStatus)
 	{
 		return $this->set('BillableStatus', $BillableStatus);
@@ -186,7 +186,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('OverrideItemAccountRef ListID');
 	}
-	
+
 	public function setOverrideItemAccountListID($ListID)
 	{
 		return $this->set('OverrideItemAccountRef ListID', $ListID);
@@ -196,7 +196,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('OverrideItemAccountRef FullName');
 	}
-	
+
 	public function setOverrideItemAccountName($Name)
 	{
 		return $this->set('OverrideItemAccountRef FullName', $Name);
@@ -206,7 +206,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->getLinkToTxn('LinkToTxn TxnID');
 	}
-	
+
 	public function setLinkToTxnID($TxnID)
 	{
 		return $this->set('LinkToTxn TxnID', $TxnID);
@@ -216,12 +216,12 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 	{
 		return $this->get('LinkToTxn TxnLineID');
 	}
-	
+
 	public function setLinkToTxnLineID($TxnLineID)
 	{
 		return $this->set('LinkToTxn TxnLineID', $TxnLineID);
 	}
-	
+
 	/**
 	 *
 	 *
@@ -248,7 +248,7 @@ class QuickBooks_QBXML_Object_ItemReceipt_ItemLine extends QuickBooks_QBXML_Obje
 		{
 			$object = $this->_object;
 		}
-		
+
 		switch ($parent)
 		{
 			case QUICKBOOKS_ADD_ITEMRECEIPT:

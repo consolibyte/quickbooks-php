@@ -1,14 +1,14 @@
-<?php 
+<?php
 
 /**
- * Bill class for QuickBooks 
- * 
+ * Bill class for QuickBooks
+ *
  * @author Keith Palmer Jr. <keith@ConsoliBYTE.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage Object
- */ 
+ */
 
 
 /**
@@ -27,13 +27,13 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Bill/ItemLine.php');
 QuickBooks_Loader::load('/QuickBooks/QBXML/Object/Bill/ExpenseLine.php');
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_JournalEntry object
-	 * 
+	 *
 	 * @param array $arr
 	 */
 	public function __construct($arr = array())
@@ -43,7 +43,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 
 	/**
 	 * Set the customer ListID
-	 * 
+	 *
 	 * @param string $ListID
 	 * @return boolean
 	 */
@@ -51,10 +51,10 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 	{
 		return $this->set('VendorRef ListID' , $ListID);
 	}
-	
+
 	/**
 	 * Set the customer ApplicationID (auto-replaced by the API with a ListID)
-	 * 
+	 *
 	 * @param mixed $value
 	 * @return boolean
 	 */
@@ -62,10 +62,10 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 	{
 		return $this->set('VendorRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_VENDOR, QUICKBOOKS_LISTID, $value));
 	}
-	
+
 	/**
 	 * Set the customer name
-	 * 
+	 *
 	 * @param string $name
 	 * @return boolean
 	 */
@@ -73,10 +73,10 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 	{
 		return $this->set('VendorRef FullName', $name);
 	}
-	
+
 	/**
 	 * Get the customer ListID
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getVendorListID()
@@ -86,7 +86,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the customer application ID
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function getVendorApplicationID()
@@ -95,10 +95,10 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 	}
 
 	// Path: TxnDate, datatype: DATETYPE
-	
+
 	/**
 	 * Set the TxnDate for the JournalEntry
-	 * 
+	 *
 	 * @param string $date
 	 * @return boolean
 	 */
@@ -109,7 +109,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the TxnDate for the JournalEntry
-	 * 
+	 *
 	 * @param ? $format = null
 	 * @return string
 	 */
@@ -123,7 +123,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 	 */
 	public function setTransactionDate($date)
 	{
-		return $this->setTxnDate($date); 
+		return $this->setTxnDate($date);
 	}
 
 	/**
@@ -134,20 +134,20 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 		$this->getTxnDate($format = null);
 	}
 	// Path: RefNumber, datatype: STRTYPE
-	
+
 	public function setDueDate($date)
 	{
 		return $this->setDateType('DueDate', $date);
 	}
-	
+
 	public function getDueDate($format = 'Y-m-d')
 	{
 		return $this->getDateType('DueDate', $format);
 	}
-	
+
 	/**
 	 * Set the RefNumber for the JournalEntry
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -158,7 +158,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the RefNumber for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getRefNumber()
@@ -167,10 +167,10 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 	}
 
 	// Path: Memo, datatype: STRTYPE
-	
+
 	/**
 	 * Set the Memo for the JournalEntry
-	 * 
+	 *
 	 * @param string $value
 	 * @return boolean
 	 */
@@ -181,48 +181,48 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 
 	/**
 	 * Get the Memo for the JournalEntry
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getMemo()
 	{
 		return $this->get('Memo');
 	}
-	
+
 	public function addExpenseLine($obj)
 	{
 		return $this->addListItem('ExpenseLine', $obj);
 	}
-	
+
 	public function addItemLine($obj)
 	{
-		return $this->addListItem('ItemLine', $obj);	
+		return $this->addListItem('ItemLine', $obj);
 	}
-	
-	
+
+
 	public function asList($request)
 	{
 		switch ($request)
 		{
 			case 'BillAddRq':
-				
+
 				if (isset($this->_object['ItemLine']))
 				{
 					$this->_object['ItemLineAdd'] = $this->_object['ItemLine'];
 				}
-				
+
 				if (isset($this->_object['ExpenseLine']))
 				{
 					$this->_object['ExpenseLineAdd'] = $this->_object['ExpenseLine'];
 				}
-				
+
 				break;
 			case 'BillModRq':
-				
-				
+
+
 				break;
 		}
-		
+
 		return parent::asList($request);
 	}
 
@@ -232,11 +232,11 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 		{
 			$object = $this->_object;
 		}
-		
+
 		switch ($root)
 		{
 			case QUICKBOOKS_ADD_BILL:
-				
+
 				if (!empty($object['ItemLineAdd']))
 				{
 					foreach ($object['ItemLineAdd'] as $key => $obj)
@@ -244,18 +244,18 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 						$obj->setOverride('ItemLineAdd');
 					}
 				}
-				
+
 				if (!empty($object['ExpenseLineAdd']))
 				{
 					foreach ($object['ExpenseLineAdd'] as $key => $obj)
 					{
 						$obj->setOverride('ExpenseLineAdd');
-					}				
+					}
 				}
-					
+
 				break;
 			case QUICKBOOKS_MOD_BILL:
-				
+
 				if (!empty($object['ItemLineMod']))
 				{
 					foreach ($object['ItemLineMod'] as $key => $obj)
@@ -263,29 +263,29 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
 						$obj->setOverride('ItemLineMod');
 					}
 				}
-				
+
 				if (!empty($object['ExpenseLineMod']))
 				{
 					foreach ($object['ExpenseLineMod'] as $key => $obj)
 					{
 						$obj->setOverride('ExpenseLineMod');
-					}				
+					}
 				}
-				
+
 				break;
 		}
-		
+
 		return parent::asXML($root, $parent, $object);
 	}
 
 	/**
 	 * Tell the type of object this is
-	 * 
+	 *
 	 * @return string
 	 */
 	public function object()
 	{
 		return QUICKBOOKS_OBJECT_BILL;
-	}		
+	}
 }
 

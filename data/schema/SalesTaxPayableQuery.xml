@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <SalesTaxPayableQueryRq metaData="ENUMTYPE">
+                        <AsOfDate >DATETYPE</AsOfDate> <!-- optional -->
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </SalesTaxPayableQueryRq>
+
+                <SalesTaxPayableQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+                        <SalesTaxPayableRet> <!-- optional, may repeat -->
+                                <PayeeEntityRef> <!-- optional -->
+                                        <ListID >IDTYPE</ListID> <!-- optional -->
+                                        <FullName >STRTYPE</FullName> <!-- optional -->
+                                </PayeeEntityRef>
+                                <Amount >AMTTYPE</Amount> <!-- optional -->
+                                <SalesTaxPayableLineRet> <!-- optional, may repeat -->
+                                        <ItemSalesTaxRef> <!-- optional -->
+                                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                        </ItemSalesTaxRef>
+                                        <Amount >AMTTYPE</Amount> <!-- required -->
+                                </SalesTaxPayableLineRet>
+                        </SalesTaxPayableRet>
+                </SalesTaxPayableQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

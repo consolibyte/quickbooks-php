@@ -11,8 +11,8 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <?php
 
 // THIS IS NOT A VALID CREDIT CARD NUMBER, SO IT SHOULD FAIL!
-$number = '4111 1234 1234 1234';    
-// 
+$number = '4111 1234 1234 1234';
+//
 
 $name = 'Keith Palmer';
 $expyear = 2020;

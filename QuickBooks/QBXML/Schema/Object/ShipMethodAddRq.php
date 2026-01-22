@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: ShipMethodAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ShipMethodAddRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'ShipMethodAdd';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -39,10 +39,10 @@ class QuickBooks_QBXML_Schema_Object_ShipMethodAddRq extends QuickBooks_QBXML_Sc
   'IsActive' => 'BOOLTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -50,10 +50,10 @@ class QuickBooks_QBXML_Schema_Object_ShipMethodAddRq extends QuickBooks_QBXML_Sc
   'IsActive' => 0,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -62,7 +62,7 @@ class QuickBooks_QBXML_Schema_Object_ShipMethodAddRq extends QuickBooks_QBXML_Sc
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -70,10 +70,10 @@ class QuickBooks_QBXML_Schema_Object_ShipMethodAddRq extends QuickBooks_QBXML_Sc
   'IsActive' => 999.99,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -81,22 +81,22 @@ class QuickBooks_QBXML_Schema_Object_ShipMethodAddRq extends QuickBooks_QBXML_Sc
   'IsActive' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
@@ -104,7 +104,7 @@ class QuickBooks_QBXML_Schema_Object_ShipMethodAddRq extends QuickBooks_QBXML_Sc
   1 => 'IsActive',
   2 => 'IncludeRetElement',
 );
-			
+
 		return $paths;
 	}
 }

@@ -2,7 +2,7 @@
 
 /**
  * Examples of converting qbXML to QuickBooks_Object_* classes, and vice-versa
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
@@ -17,7 +17,7 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . '/Users/keith
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
-/**  
+/**
  * Require the QuickBooks framework code
  */
 require_once '../QuickBooks.php';
@@ -123,14 +123,14 @@ $Parser = new QuickBooks_XML_Parser($qbxml);
 if ($Doc = $Parser->parse($errnum, $errmsg))
 {
 	$Root = $Doc->getRoot();
-	
+
 	$Object = QuickBooks_Object::fromXML($Root);
-	
+
 	// Print it out
 	print_r($Object);
 }
 
-// Another test... 
+// Another test...
 $qbxml = '
 	<CustomerRet>
 		<ListID>10006-1211236622</ListID>
@@ -181,7 +181,7 @@ $Object = QuickBooks_Object::fromQBXML($qbxml);
 // Print it out
 print_r($Object);
 
-// Does it work for qbXML ADD requests too? 
+// Does it work for qbXML ADD requests too?
 $qbxml = '
 	<CustomerAdd>
 		<Name>20706 - Eastern XYZ University</Name>
@@ -270,7 +270,7 @@ $Object = QuickBooks_Object::fromQBXML($qbxml);
 // Print it...
 print_r($Object);
 
-// ... and some qbXML for good measure! 
+// ... and some qbXML for good measure!
 print('[' . $Object->object() . ']: ' . $Object->asQBXML(QUICKBOOKS_ADD_SALESTAXGROUPITEM));
 */
 

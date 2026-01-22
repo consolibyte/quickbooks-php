@@ -2,9 +2,9 @@
 
 /**
  * Example of using QuickBooks Merchant Services 'Payment Wallet' support
- * 
+ *
  * Make sure you look at docs/example_merchant_service.php first!
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
@@ -12,7 +12,7 @@
 // Plain text output
 header('Content-Type: text/plain');
 
-// I always program in E_STRICT error mode... 
+// I always program in E_STRICT error mode...
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', true);
 
@@ -31,14 +31,14 @@ $application_login = 'test.foxycart.com';
 $connection_ticket = 'TGT-145-niiEL2kCFoOTYHvkwBarmg';
 //$connection_ticket = 'TGT-152-LWGj1YQUufTAlSW8DK1c6A';
 
-// Create an instance of the MerchantService object 
+// Create an instance of the MerchantService object
 $MS = new QuickBooks_MerchantService(
-	$dsn, 
-	$path_to_private_key_and_certificate, 
+	$dsn,
+	$path_to_private_key_and_certificate,
 	$application_login,
 	$connection_ticket);
 
-// If you're using a Intuit QBMS development account, you must set this to true! 
+// If you're using a Intuit QBMS development account, you must set this to true!
 $MS->useTestEnvironment(true);
 
 // If you want to see the full XML input/output, you can turn on debug mode
@@ -145,4 +145,4 @@ else
 	print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
 }
 
-// 
+//

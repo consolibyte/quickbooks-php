@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLSubscriptionMsgsRq onError="stopOnError">
+                <UIExtensionSubscriptionQueryRq>
+                        <SubscriberID >GUIDTYPE</SubscriberID> <!-- required -->
+                </UIExtensionSubscriptionQueryRq>
+
+                <UIExtensionSubscriptionQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+                        <UIExtensionSubscriptionRet> <!-- optional -->
+                                <SubscriberID >GUIDTYPE</SubscriberID> <!-- required -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                <TimeLastProcessed >DATETIMETYPE</TimeLastProcessed> <!-- optional -->
+                                <COMCallbackInfo> <!-- required -->
+                                        <AppName >STRTYPE</AppName> <!-- required -->
+                                        <!-- BEGIN OR -->
+                                                <ProgID >STRTYPE</ProgID> <!-- optional -->
+                                        <!-- OR -->
+                                                <CLSID >GUIDTYPE</CLSID> <!-- optional -->
+                                        <!-- END OR -->
+                                </COMCallbackInfo>
+                                <MenuExtensionSubscription> <!-- required -->
+                                        <!-- AddToMenu may have one of the following values: File, Company, Customers, Vendors, Employees, Banking -->
+                                        <AddToMenu >ENUMTYPE</AddToMenu> <!-- required -->
+                                        <!-- BEGIN OR -->
+                                                <Submenu> <!-- optional -->
+                                                        <DisplayCondition> <!-- optional -->
+                                                                <!-- VisibleIf may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                <VisibleIf >ENUMTYPE</VisibleIf> <!-- optional, may repeat -->
+                                                                <!-- VisibleIfNot may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                <VisibleIfNot >ENUMTYPE</VisibleIfNot> <!-- optional, may repeat -->
+                                                                <!-- EnabledIf may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                <EnabledIf >ENUMTYPE</EnabledIf> <!-- optional, may repeat -->
+                                                                <!-- EnabledIfNot may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                <EnabledIfNot >ENUMTYPE</EnabledIfNot> <!-- optional, may repeat -->
+                                                        </DisplayCondition>
+                                                        <MenuItem> <!-- required, may repeat -->
+                                                                <MenuText >STRTYPE</MenuText> <!-- required -->
+                                                                <EventTag >STRTYPE</EventTag> <!-- required -->
+                                                                <DisplayCondition> <!-- optional -->
+                                                                        <!-- VisibleIf may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                        <VisibleIf >ENUMTYPE</VisibleIf> <!-- optional, may repeat -->
+                                                                        <!-- VisibleIfNot may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                        <VisibleIfNot >ENUMTYPE</VisibleIfNot> <!-- optional, may repeat -->
+                                                                        <!-- EnabledIf may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                        <EnabledIf >ENUMTYPE</EnabledIf> <!-- optional, may repeat -->
+                                                                        <!-- EnabledIfNot may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                        <EnabledIfNot >ENUMTYPE</EnabledIfNot> <!-- optional, may repeat -->
+                                                                </DisplayCondition>
+                                                        </MenuItem>
+                                                </Submenu>
+                                        <!-- OR -->
+                                                <MenuItem> <!-- optional -->
+                                                        <MenuText >STRTYPE</MenuText> <!-- required -->
+                                                        <EventTag >STRTYPE</EventTag> <!-- required -->
+                                                        <DisplayCondition> <!-- optional -->
+                                                                <!-- VisibleIf may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                <VisibleIf >ENUMTYPE</VisibleIf> <!-- optional, may repeat -->
+                                                                <!-- VisibleIfNot may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                <VisibleIfNot >ENUMTYPE</VisibleIfNot> <!-- optional, may repeat -->
+                                                                <!-- EnabledIf may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                <EnabledIf >ENUMTYPE</EnabledIf> <!-- optional, may repeat -->
+                                                                <!-- EnabledIfNot may have one of the following values: AccountantCopyExists, AssemblyItemsEnabled, ClassesEnabled, EstimatesEnabled, HasCustomers, HasVendors, InventoryEnabled, IsAccountantCopy, MultiUserMode, PayrollEnabled, PriceLevelsEnabled, SalesOrdersEnabled, SalesTaxEnabled, TimeTrackingEnabled -->
+                                                                <EnabledIfNot >ENUMTYPE</EnabledIfNot> <!-- optional, may repeat -->
+                                                        </DisplayCondition>
+                                                </MenuItem>
+                                        <!-- END OR -->
+                                </MenuExtensionSubscription>
+                        </UIExtensionSubscriptionRet>
+                </UIExtensionSubscriptionQueryRs>
+        </QBXMLSubscriptionMsgsRq>
+</QBXML>

@@ -2,9 +2,9 @@
 
 /**
  * Intuit Partner Platform configuration variables
- * 
- * See the scripts that use these variables for more details. 
- * 
+ *
+ * See the scripts that use these variables for more details.
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
@@ -20,13 +20,13 @@ require_once dirname(__FILE__) . '/../../QuickBooks.php';
 $token = '4e9da499ba070b411dbab8abf6d02c616402';
 
 // Your OAuth consumer key and secret (Intuit will give you both of these when you register an Intuit app)
-// 
+//
 // IMPORTANT:
-//	To pass your tech review with Intuit, you'll have to AES encrypt these and 
-//	store them somewhere safe. 
-// 
-// The OAuth request/access tokens will be encrypted and stored for you by the 
-//	PHP DevKit IntuitAnywhere classes automatically. 
+//	To pass your tech review with Intuit, you'll have to AES encrypt these and
+//	store them somewhere safe.
+//
+// The OAuth request/access tokens will be encrypted and stored for you by the
+//	PHP DevKit IntuitAnywhere classes automatically.
 $oauth_consumer_key = 'qyprdlGJ4gWv4sMW0syilH2o4KirQe';
 $oauth_consumer_secret = '49ou99QiG47KhvY6AaMPSnHhXXNMAJxLv7QXNm4L';
 
@@ -36,13 +36,13 @@ $quickbooks_oauth_url = 'http://example.com/trunk/docs/example_app_ipp_v2/oauth.
 // This is the URL to forward the user to after they have connected to IPP/IDS via OAuth
 $quickbooks_success_url = 'http://example.com/trunk/docs/example_app_ipp_v2/success.php';
 
-// This is the menu URL script 
+// This is the menu URL script
 $quickbooks_menu_url = 'http://example.com/trunk/docs/example_app_ipp_v2/menu.php';
 
-// This is a database connection string that will be used to store the OAuth credentials 
+// This is a database connection string that will be used to store the OAuth credentials
 // $dsn = 'pgsql://username:password@hostname/database';
 // $dsn = 'mysql://username:password@hostname/database';
-$dsn = 'mysqli://root:root@localhost/example_app_ipp_v3';		
+$dsn = 'mysqli://root:root@localhost/example_app_ipp_v3';
 
 // You should set this to an encryption key specific to your app
 $encryption_key = 'bcde1234';
@@ -60,22 +60,22 @@ if (!QuickBooks_Utilities::initialized($dsn))
 	QuickBooks_Utilities::initialize($dsn);
 }
 
-// Instantiate our Intuit Anywhere auth handler 
-// 
+// Instantiate our Intuit Anywhere auth handler
+//
 // The parameters passed to the constructor are:
-//	$dsn					
+//	$dsn
 //	$oauth_consumer_key		Intuit will give this to you when you create a new Intuit Anywhere application at AppCenter.Intuit.com
 //	$oauth_consumer_secret	Intuit will give this to you too
 //	$this_url				This is the full URL (e.g. http://path/to/this/file.php) of THIS SCRIPT
 //	$that_url				After the user authenticates, they will be forwarded to this URL
-// 
+//
 $IntuitAnywhere = new QuickBooks_IPP_IntuitAnywhere($dsn, $encryption_key, $oauth_consumer_key, $oauth_consumer_secret, $quickbooks_oauth_url, $quickbooks_success_url);
 
-// Are they connected to QuickBooks right now? 
-if ($IntuitAnywhere->check($the_username, $the_tenant) and 
+// Are they connected to QuickBooks right now?
+if ($IntuitAnywhere->check($the_username, $the_tenant) and
 	$IntuitAnywhere->test($the_username, $the_tenant))
 {
-	// Yes, they are 
+	// Yes, they are
 	$quickbooks_is_connected = true;
 }
 else

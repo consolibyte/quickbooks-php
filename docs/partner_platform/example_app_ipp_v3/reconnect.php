@@ -47,7 +47,7 @@ else if ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_UNKNOWN)
 		<div style="text-align: center; font-family: sans-serif; font-weight: bold; color: green">
 			RECONNECTED! (refreshed OAuth tokens)
 		</div>
-		
+
 	<?php else: ?>
 
 		<div style="text-align: center; font-family: sans-serif; font-weight: bold; color: red">
@@ -55,7 +55,7 @@ else if ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_UNKNOWN)
 		</div>
 
 	<?php endif; ?>
-			
+
 <?php
 
 require_once dirname(__FILE__) . '/views/footer.tpl.php';

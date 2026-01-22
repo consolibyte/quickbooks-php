@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <ListDeletedQueryRq metaData="ENUMTYPE">
+                        <!-- ListDelType may have one of the following values: Account, BillingRate, Class, Currency, Customer, CustomerMsg, CustomerType, DateDrivenTerms, Employee, InventorySite, ItemDiscount, ItemFixedAsset, ItemGroup, ItemInventory, ItemInventoryAssembly, ItemNonInventory, ItemOtherCharge, ItemPayment, ItemSalesTax, ItemSalesTaxGroup, ItemService, ItemSubtotal, JobType, OtherName, PaymentMethod, PayrollItemNonWage, PayrollItemWage, PriceLevel, SalesRep, SalesTaxCode, ShipMethod, StandardTerms, ToDo, UnitOfMeasureSet, Vehicle, Vendor, VendorType, WorkersCompCode -->
+                        <ListDelType >ENUMTYPE</ListDelType> <!-- required, may repeat -->
+                        <DeletedDateRangeFilter> <!-- optional -->
+                                <FromDeletedDate >DATETIMETYPE</FromDeletedDate> <!-- optional -->
+                                <ToDeletedDate >DATETIMETYPE</ToDeletedDate> <!-- optional -->
+                        </DeletedDateRangeFilter>
+                        <IncludeRetElement >STRTYPE</IncludeRetElement> <!-- optional, may repeat -->
+                </ListDeletedQueryRq>
+
+                <ListDeletedQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+                        <ListDeletedRet> <!-- optional, may repeat -->
+                                <!-- ListDelType may have one of the following values: Account, BillingRate, Class, Currency, Customer, CustomerMsg, CustomerType, DateDrivenTerms, Employee, InventorySite, ItemDiscount, ItemFixedAsset, ItemGroup, ItemInventory, ItemInventoryAssembly, ItemNonInventory, ItemOtherCharge, ItemPayment, ItemSalesTax, ItemSalesTaxGroup, ItemService, ItemSubtotal, JobType, OtherName, PaymentMethod, PayrollItemNonWage, PayrollItemWage, PriceLevel, SalesRep, SalesTaxCode, ShipMethod, StandardTerms, ToDo, UnitOfMeasureSet, Vehicle, Vendor, VendorType, WorkersCompCode -->
+                                <ListDelType >ENUMTYPE</ListDelType> <!-- required -->
+                                <ListID >IDTYPE</ListID> <!-- required -->
+                                <TimeCreated >DATETIMETYPE</TimeCreated> <!-- required -->
+                                <TimeDeleted >DATETIMETYPE</TimeDeleted> <!-- required -->
+                                <FullName >STRTYPE</FullName> <!-- optional -->
+                        </ListDeletedRet>
+                </ListDeletedQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

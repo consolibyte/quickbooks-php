@@ -19,7 +19,7 @@ $salesreceipts = $SalesReceiptService->query($Context, $realm, "SELECT * FROM Sa
 foreach ($salesreceipts as $SalesReceipt)
 {
 	print('Receipt # ' . $SalesReceipt->getDocNumber() . ' has a total of $' . $SalesReceipt->getTotalAmt() . "\n");
-	
+
 }
 
 /*

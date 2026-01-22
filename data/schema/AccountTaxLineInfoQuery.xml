@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+    <QBXMLMsgsRq onError="stopOnError">
+        <AccountTaxLineInfoQueryRq>
+        </AccountTaxLineInfoQueryRq>
+
+        <AccountTaxLineInfoQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+            <AccountTaxLineInfoRet> <!-- optional, may repeat -->
+                <TaxLineID >INTTYPE</TaxLineID> <!-- optional -->
+                <TaxLineName >STRTYPE</TaxLineName> <!-- optional -->
+            </AccountTaxLineInfoRet>
+        </AccountTaxLineInfoQueryRs>
+    </QBXMLMsgsRq>
+</QBXML>

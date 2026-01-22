@@ -2,14 +2,14 @@
 
 /**
  * Example XML parsing
- * 
- * I've decided to include a simple XML parser as I've had some 
- * requests/concerns from people who don't have PHP XML support built in or 
- * just didn't care for the PHP simplexml or DOM extensions. In any case, this 
- * might make it easier for some people to parse the result qbXML responses. 
- * 
+ *
+ * I've decided to include a simple XML parser as I've had some
+ * requests/concerns from people who don't have PHP XML support built in or
+ * just didn't care for the PHP simplexml or DOM extensions. In any case, this
+ * might make it easier for some people to parse the result qbXML responses.
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
@@ -31,16 +31,16 @@ $start = microtime(true);
 // Our test XML tag
 $xml = '
 	<Tag1>
-		<NestedTag age="25" gender="male" 
+		<NestedTag age="25" gender="male"
 			note="Keith &quot;Worminator&quot; Palmer">
 			<AnotherTag>Keith</AnotherTag>
 		</NestedTag>
 	</Tag1>';
-	
+
 $use_parser = null;			// Auto-detect the best choice
 //$use_parser = QuickBooks_XML::PARSER_BUILTIN;		// Use the built in XML parser
 //$use_parser = QuickBooks_XML::PARSER_SIMPLEXML;		// Use the PHP simpleXML extension
-	
+
 // Create the new object
 $Parser = new QuickBooks_XML_Parser($xml, $use_parser);
 
@@ -54,13 +54,13 @@ if ($Parser->validate($errnum, $errmsg))
 {
 	// Parse it into a document
 	$Doc = $Parser->parse($errnum, $errmsg);
-		
+
 	// Get the root node from the document
 	$Root = $Doc->getRoot();
-	
+
 	// Now fetch some stuff from the parsed document
 	print('Hello there ' . $Root->getChildDataAt('Tag1 NestedTag AnotherTag') . "\n");
-	
+
 	print_r($Root->getChildAttributesAt('Tag1 NestedTag'));
 	print("\n");
 	print('Root tag name is: ' . $Root->name() . "\n");
@@ -104,15 +104,15 @@ if ($Parser->validate($errnum, $errmsg))
 {
 	$Doc = $Parser->parse($errnum, $errmsg);
 	$Root = $Doc->getRoot();
-	
+
 	$List = $Root->getChildAt('Animals');
-	
+
 	foreach ($List->children() as $Animal)
 	{
 		$name = $Animal->getChildDataAt('Animal Name');
 		$note = $Animal->getChildDataAt('Animal Note');
 		print("\t" . $name . ' (' . $note . ')' . "\n");
-	}	
+	}
 }
 else
 {

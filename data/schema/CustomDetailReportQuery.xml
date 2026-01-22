@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <CustomDetailReportQueryRq>
+                        <!-- CustomDetailReportType may have one of the following values: CustomTxnDetail -->
+                        <CustomDetailReportType >ENUMTYPE</CustomDetailReportType> <!-- required -->
+                        <DisplayReport >BOOLTYPE</DisplayReport> <!-- optional -->
+                        <!-- BEGIN OR -->
+                                <ReportPeriod> <!-- optional -->
+                                        <FromReportDate >DATETYPE</FromReportDate> <!-- optional -->
+                                        <ToReportDate >DATETYPE</ToReportDate> <!-- optional -->
+                                </ReportPeriod>
+                        <!-- OR -->
+                                <!-- ReportDateMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisQuarter, ThisQuarterToDate, ThisYear, ThisYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastQuarter, LastQuarterToDate, LastYear, LastYearToDate, NextWeek, NextFourWeeks, NextMonth, NextQuarter, NextYear -->
+                                <ReportDateMacro >ENUMTYPE</ReportDateMacro> <!-- optional -->
+                        <!-- END OR -->
+                        <ReportAccountFilter> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <!-- AccountTypeFilter may have one of the following values: AccountsPayable, AccountsReceivable, AllowedFor1099, APAndSalesTax, APOrCreditCard, ARAndAP, Asset, BalanceSheet, Bank, BankAndARAndAPAndUF, BankAndUF, CostOfSales, CreditCard, CurrentAsset, CurrentAssetAndExpense, CurrentLiability, Equity, EquityAndIncomeAndExpense, ExpenseAndOtherExpense, FixedAsset, IncomeAndExpense, IncomeAndOtherIncome, Liability, LiabilityAndEquity, LongTermLiability, NonPosting, OrdinaryExpense, OrdinaryIncome, OrdinaryIncomeAndCOGS, OrdinaryIncomeAndExpense, OtherAsset, OtherCurrentAsset, OtherCurrentLiability, OtherExpense, OtherIncome, OtherIncomeOrExpense -->
+                                        <AccountTypeFilter >ENUMTYPE</AccountTypeFilter> <!-- optional -->
+                                <!-- OR -->
+                                        <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                <!-- OR -->
+                                        <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                <!-- END OR -->
+                        </ReportAccountFilter>
+                        <ReportEntityFilter> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <!-- EntityTypeFilter may have one of the following values: Customer, Employee, OtherName, Vendor -->
+                                        <EntityTypeFilter >ENUMTYPE</EntityTypeFilter> <!-- optional -->
+                                <!-- OR -->
+                                        <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                <!-- OR -->
+                                        <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                <!-- END OR -->
+                        </ReportEntityFilter>
+                        <ReportItemFilter> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <!-- ItemTypeFilter may have one of the following values: AllExceptFixedAsset, Assembly, Discount, FixedAsset, Inventory, InventoryAndAssembly, NonInventory, OtherCharge, Payment, Sales, SalesTax, Service -->
+                                        <ItemTypeFilter >ENUMTYPE</ItemTypeFilter> <!-- optional -->
+                                <!-- OR -->
+                                        <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                <!-- OR -->
+                                        <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                <!-- END OR -->
+                        </ReportItemFilter>
+                        <ReportClassFilter> <!-- optional -->
+                                <!-- BEGIN OR -->
+                                        <ListID >IDTYPE</ListID> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <FullName >STRTYPE</FullName> <!-- optional, may repeat -->
+                                <!-- OR -->
+                                        <ListIDWithChildren >IDTYPE</ListIDWithChildren> <!-- optional -->
+                                <!-- OR -->
+                                        <FullNameWithChildren >STRTYPE</FullNameWithChildren> <!-- optional -->
+                                <!-- END OR -->
+                        </ReportClassFilter>
+                        <ReportTxnTypeFilter> <!-- optional -->
+                                <!-- TxnTypeFilter may have one of the following values: All, ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, LiabilityAdjustment, Paycheck, PayrollLiabilityCheck, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, Transfer, VendorCredit, YTDAdjustment -->
+                                <TxnTypeFilter >ENUMTYPE</TxnTypeFilter> <!-- required, may repeat -->
+                        </ReportTxnTypeFilter>
+                        <!-- BEGIN OR -->
+                                <ReportModifiedDateRangeFilter> <!-- optional -->
+                                        <FromReportModifiedDate >DATETYPE</FromReportModifiedDate> <!-- optional -->
+                                        <ToReportModifiedDate >DATETYPE</ToReportModifiedDate> <!-- optional -->
+                                </ReportModifiedDateRangeFilter>
+                        <!-- OR -->
+                                <!-- ReportModifiedDateRangeMacro may have one of the following values: All, Today, ThisWeek, ThisWeekToDate, ThisMonth, ThisMonthToDate, ThisQuarter, ThisQuarterToDate, ThisYear, ThisYearToDate, Yesterday, LastWeek, LastWeekToDate, LastMonth, LastMonthToDate, LastQuarter, LastQuarterToDate, LastYear, LastYearToDate, NextWeek, NextFourWeeks, NextMonth, NextQuarter, NextYear -->
+                                <ReportModifiedDateRangeMacro >ENUMTYPE</ReportModifiedDateRangeMacro> <!-- optional -->
+                        <!-- END OR -->
+                        <!-- ReportDetailLevelFilter may have one of the following values: All [DEFAULT], AllExceptSummary, SummaryOnly -->
+                        <ReportDetailLevelFilter >ENUMTYPE</ReportDetailLevelFilter> <!-- optional -->
+                        <!-- ReportPostingStatusFilter may have one of the following values: Either, NonPosting, Posting -->
+                        <ReportPostingStatusFilter >ENUMTYPE</ReportPostingStatusFilter> <!-- optional -->
+                        <!-- SummarizeRowsBy may have one of the following values: Account, BalanceSheet, Class, Customer, CustomerType, Day, Employee, FourWeek, HalfMonth, IncomeStatement, ItemDetail, ItemType, Month, Payee, PaymentMethod, PayrollItemDetail, PayrollYtdDetail, Quarter, SalesRep, SalesTaxCode, ShipMethod, TaxLine, Terms, TotalOnly, TwoWeek, Vendor, VendorType, Week, Year -->
+                        <SummarizeRowsBy >ENUMTYPE</SummarizeRowsBy> <!-- required -->
+                        <!-- IncludeColumn may have one of the following values: Account, Aging, Amount, AmountDifference, AverageCost, BilledDate, BillingStatus, CalculatedAmount, Class, ClearedStatus, CostPrice, Credit, Currency, Date, Debit, DeliveryDate, DueDate, EstimateActive, ExchangeRate, FOB, IncomeSubjectToTax, Invoiced, Item, ItemDesc, LastModifiedBy, LatestOrPriorState, Memo, ModifiedTime, Name, NameAccountNumber, NameAddress, NameCity, NameContact, NameEmail, NameFax, NamePhone, NameState, NameZip, OpenBalance, OriginalAmount, PaidAmount, PaidStatus, PaidThroughDate, PaymentMethod, PayrollItem, PONumber, PrintStatus, ProgressAmount, ProgressPercent, Quantity, QuantityAvailable, QuantityOnHand, QuantityOnSalesOrder, ReceivedQuantity, RefNumber, RunningBalance, SalesRep, SalesTaxCode, SerialOrLotNumber, ShipDate, ShipMethod, SourceName, SplitAccount, SSNOrTaxID, TaxLine, TaxTableVersion, Terms, TxnID, TxnNumber, TxnType, UnitPrice, UserEdit, ValueOnHand, WageBase, WageBaseTips -->
+                        <IncludeColumn >ENUMTYPE</IncludeColumn> <!-- required, may repeat -->
+                        <!-- IncludeAccounts may have one of the following values: All, InUse -->
+                        <IncludeAccounts >ENUMTYPE</IncludeAccounts> <!-- optional -->
+                        <!-- ReportOpenBalanceAsOf may have one of the following values: ReportEndDate, Today [DEFAULT] -->
+                        <ReportOpenBalanceAsOf >ENUMTYPE</ReportOpenBalanceAsOf> <!-- optional -->
+                        <!-- ReportBasis may have one of the following values: Accrual, Cash, None [DEFAULT] -->
+                        <ReportBasis >ENUMTYPE</ReportBasis> <!-- optional -->
+                </CustomDetailReportQueryRq>
+
+                <CustomDetailReportQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE">
+                        <ReportRet> <!-- optional -->
+                                <ReportTitle >STRTYPE</ReportTitle> <!-- required -->
+                                <ReportSubtitle >STRTYPE</ReportSubtitle> <!-- required -->
+                                <!-- ReportBasis may have one of the following values: Accrual, Cash, None [DEFAULT] -->
+                                <ReportBasis >ENUMTYPE</ReportBasis> <!-- optional -->
+                                <NumRows >INTTYPE</NumRows> <!-- required -->
+                                <NumColumns >INTTYPE</NumColumns> <!-- required -->
+                                <NumColTitleRows >INTTYPE</NumColTitleRows> <!-- required -->
+                                <ColDesc colID="INTTYPE" dataType="ENUMTYPE"> <!-- required, may repeat -->
+                                        <ColTitle titleRow="INTTYPE" value="STRTYPE"> <!-- required, may repeat -->
+                                        </ColTitle>
+                                        <!-- ColType may have one of the following values: Account, Addr1, Addr2, Addr3, Addr4, Addr5, Aging, Amount, AmountDifference, AverageCost, BilledDate, BillingStatus, Blank, CalculatedAmount, Class, ClearedStatus, CostPrice, CreateDate, Credit, CustomField, Date, Debit, DeliveryDate, DueDate, Duration, EarliestReceiptDate, EstimateActive, FOB, IncomeSubjectToTax, Invoiced, IsAdjustment, Item, ItemDesc, ItemVendor, Label, LastModifiedBy, LatestOrPriorState, Memo, ModifiedTime, Name, NameAccountNumber, NameAddress, NameCity, NameContact, NameEmail, NameFax, NamePhone, NameState, NameZip, OpenBalance, OriginalAmount, PaidAmount, PaidStatus, PaidThroughDate, PaymentMethod, PayrollItem, Percent, PercentChange, PercentOfTotalRetail, PercentOfTotalValue, PhysicalCount, PONumber, PrintStatus, ProgressAmount, ProgressPercent, Quantity, QuantityAvailable, QuantityOnHand, QuantityOnOrder, QuantityOnPendingBuild, QuantityOnSalesOrder, ReceivedQuantity, RefNumber, ReorderPoint, RetailValueOnHand, RunningBalance, SalesPerWeek, SalesRep, SalesTaxCode, ShipDate, ShipMethod, ShipToAddr1, ShipToAddr2, ShipToAddr3, ShipToAddr4, ShipToAddr5, SONumber, SourceName, SplitAccount, SSNOrTaxID, SuggestedReorder, TaxLine, TaxTableVersion, Terms, Total, TxnID, TxnNumber, TxnType, UnitPrice, UserEdit, ValueOnHand, WageBase, WageBaseTips -->
+                                        <ColType >ENUMTYPE</ColType> <!-- required -->
+                                </ColDesc>
+                                <ReportData> <!-- optional -->
+                                        <!-- BEGIN OR -->
+                                                <DataRow> <!-- optional -->
+                                                        <RowData rowType="ENUMTYPE" value="STRTYPE"> <!-- optional -->
+                                                        </RowData>
+                                                        <ColData colID="INTTYPE" value="STRTYPE" dataType="ENUMTYPE"> <!-- optional, may repeat -->
+                                                        </ColData>
+                                                </DataRow>
+                                        <!-- OR -->
+                                                <TextRow rowNumber="INTTYPE" value="STRTYPE"> <!-- optional -->
+                                                </TextRow>
+                                        <!-- OR -->
+                                                <SubtotalRow> <!-- optional -->
+                                                        <RowData rowType="ENUMTYPE" value="STRTYPE"> <!-- optional -->
+                                                        </RowData>
+                                                        <ColData colID="INTTYPE" value="STRTYPE" dataType="ENUMTYPE"> <!-- optional, may repeat -->
+                                                        </ColData>
+                                                </SubtotalRow>
+                                        <!-- OR -->
+                                                <TotalRow> <!-- optional -->
+                                                        <RowData rowType="ENUMTYPE" value="STRTYPE"> <!-- optional -->
+                                                        </RowData>
+                                                        <ColData colID="INTTYPE" value="STRTYPE" dataType="ENUMTYPE"> <!-- optional, may repeat -->
+                                                        </ColData>
+                                                </TotalRow>
+                                        <!-- END OR -->
+                                </ReportData>
+                        </ReportRet>
+                </CustomDetailReportQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

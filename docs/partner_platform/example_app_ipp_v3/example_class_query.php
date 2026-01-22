@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <pre>
 
 <?php
-	
+
 $ClassService = new QuickBooks_IPP_Service_Class();
 
 $classes = $ClassService->query($Context, $realm, "SELECT * FROM Class");
@@ -27,7 +27,7 @@ print('Request [' . $ClassService->lastRequest() . ']');
 print("\n\n\n\n");
 print('Response [' . $ClassService->lastResponse() . ']');
 print("\n\n\n\n");
-	
+
 ?>
 
 </pre>

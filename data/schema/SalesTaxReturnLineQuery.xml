@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?qbxml version="16.0"?>
+<QBXML>
+        <QBXMLMsgsRq onError="stopOnError">
+                <SalesTaxReturnLineQueryRq metaData="ENUMTYPE">
+                        <TaxAgencyVendorRef> <!-- required, may repeat -->
+                                <ListID >IDTYPE</ListID> <!-- optional -->
+                                <FullName >STRTYPE</FullName> <!-- optional -->
+                        </TaxAgencyVendorRef>
+                </SalesTaxReturnLineQueryRq>
+
+                <SalesTaxReturnLineQueryRs statusCode="INTTYPE" statusSeverity="STRTYPE" statusMessage="STRTYPE" retCount="INTTYPE">
+                        <SalesTaxReturnLineRet> <!-- optional, may repeat -->
+                                <ListID >IDTYPE</ListID> <!-- required -->
+                                <FullName >STRTYPE</FullName> <!-- optional -->
+                                <!-- LineType may have one of the following values: ECPurchases, ECSales, Purchases, Sales, SubTotal, TaxOnPurchases, TaxOnSales, Total -->
+                                <LineType >ENUMTYPE</LineType> <!-- optional -->
+                        </SalesTaxReturnLineRet>
+                </SalesTaxReturnLineQueryRs>
+        </QBXMLMsgsRq>
+</QBXML>

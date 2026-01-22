@@ -1,3 +1,5 @@
+Forked to fix issues in PHP 8 and improve the code.
+
 QuickBooks PHP DevKit
 =====================
 
@@ -17,25 +19,31 @@ The package you've downloaded contains code and documentation for connecting var
 
 Almost anything you can do in the QuickBooks GUI, in QuickBooks Online Edition, and with QuickBooks Merchant Service can be accomplished via this framework.
 
-## Quick Start Guides
+## Quick Start Guides & Examples
 
-* QuickBooks FOR WINDOWS (via QuickBooks Web Connector) - read the [quick start guide for the Web Connector/QuickBooks for Windows](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)
+* QuickBooks FOR WINDOWS (via QuickBooks Web Connector)
+  - Read the [quick start guide for the Web Connector/QuickBooks for Windows](https://github.com/mc2contributor/quickbooks-php/blob/master/QuickStart-Windows.md)
+  - Examples: docs/web_connector/
 
-* QuickBooks ONLINE (via Intuit Partner Platform/Intuit Anywhere) - read the [quick start guide for Intuit Partner Platform/QuickBooks Online] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
+* QuickBooks ONLINE (via Intuit Partner Platform/Intuit Anywhere)
+  - Read the [quick start guide for Intuit Partner Platform/QuickBooks Online](https://github.com/mc2contributor/quickbooks-php/blob/master/QuickStart-Online.md)
+  - Examples: docs/partner_platform/example_app_ipp_v3/
 
+See the docs/ folder for more examples.
+
+### Using SQL Mirror
+
+Not all QuickBooks API actions are currently supported, but import actions can easily be added.  XML definitions are in `data/schema/*.xml`.
+Handlers are defined in `QuickBooks/Callbacks/SQL/Callbacks.php`, via pairs of methods ending in `Request` and `Response`.  A generic handler
+has been added that covers most cases (`QuickBooks_Callbacks_SQL_Callbacks::GenericImportRequest` and `QuickBooks_Callbacks_SQL_Callbacks::GenericImportResponse`).
+Handler mappings are added in the constructor method in `QuickBooks/WebConnector/Server/SQL.php`.  New actions must be added to the `quickbooks_queue` table separately
+to be used.
 
 ## OAuth 1.0 to OAuth 2.0 migration
 
-You can find information on how to migrate your app from OAuth v1.0 to OAuth v2.0 below. We are also working on getting OpenID Connect and an automated token migration process ready -- coming soon.
+You can find information on how to migrate your app from OAuth v1.0 to OAuth v2.0 below. Consolibyte was also working on getting OpenID Connect and an automated token migration process ready.
 
 * <https://github.com/consolibyte/quickbooks-php/blob/master/README_OAUTHV1_TO_OAUTHV2.md>
-
-## Updates and Improvements
-
-Please follow me on Twitter to be notified about updates/improvements:
-
-- https://twitter.com/keith_palmer_jr
-
 
 ## Support
 
@@ -51,43 +59,14 @@ Please follow me on Twitter to be notified about updates/improvements:
 - StackOverflow: <https://stackoverflow.com/questions/tagged/quickbooks> (This is the best place to get support)
 - Intuit Dev Forums: <https://help.developer.intuit.com/s/>
 
-### Bugs/pull requests 
-
-- GitHub: <https://github.com/consolibyte/quickbooks-php>
-
-## Examples
-
-You will find examples in the docs/ folder.
-
-
-### Examples for QuickBooks ONLINE
-
-If you are using *QuickBooks ONLINE*, then you need to look in this folder for examples:
-
-* docs/partner_platform/example_app_ipp_v3/
-
-Make sure you look at the [quick start guide for Intuit Partner Platform/QuickBooks Online] (http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Intuit_Partner_Platform_Quick-Start)
-
-
-### Examples for QuickBooks FOR WINDOWS
-
-If you are using *QuickBooks FOR WINDOWS*, then you need to look in this folder for examples:
-
-* docs/web_connector/
-
-Make sure you look at the [quick start guide for the Web Connector/QuickBooks for Windows](http://www.consolibyte.com/docs/index.php/PHP_DevKit_for_QuickBooks_-_Quick-Start)
-
-
 ### Additional Info
 
-There is additional documentation and additional examples on our legacy and new wikis:
+There is additional documentation and additional examples on the legacy and new wikis:
 
-- http://wiki.consolibyte.com/wiki/doku.php/quickbooks     (legacy)
-- http://www.consolibyte.com/docs/index.php/QuickBooks     (new wiki)
-
-
+- https://web.archive.org/web/20221209200524/http://wiki.consolibyte.com/wiki/doku.php/quickbooks     (legacy)
+- https://web.archive.org/web/20221129185859/http://www.consolibyte.com/docs/index.php/QuickBooks     (new wiki)
 
 
 -------------------------------------
 ###Keith Palmer###
-- Follow me on Twitter for updates: https://twitter.com/keith_palmer_jr
+- Find the original author on Twitter at https://twitter.com/keith_palmer_jr

@@ -2,36 +2,36 @@
 
 /**
  * Schema object for: SalesReceiptAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_SalesReceiptAddRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'SalesReceiptAdd';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -185,10 +185,10 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptAddRq extends QuickBooks_QBXML_
   'ShippingLineAdd AccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -342,10 +342,10 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptAddRq extends QuickBooks_QBXML_
   'ShippingLineAdd AccountRef FullName' => 209,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -500,7 +500,7 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptAddRq extends QuickBooks_QBXML_
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -654,10 +654,10 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptAddRq extends QuickBooks_QBXML_
   'ShippingLineAdd AccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -811,184 +811,184 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptAddRq extends QuickBooks_QBXML_
   'ShippingLineAdd AccountRef FullName' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
-	
+
 	protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'SalesTaxLineAdd Amount' => array( 'QBUS' ), 
-			'ShipMethodRef FullName' => array( 'QBOE' ), 
-			'ItemSalesTaxRef FullName' => array( 'QBOE' ), 
-			'SalesReceiptLineAdd SalesTaxCodeRef FullName' => array( 'QBOE' ), 
+			'SalesTaxLineAdd Amount' => array( 'QBUS' ),
+			'ShipMethodRef FullName' => array( 'QBOE' ),
+			'ItemSalesTaxRef FullName' => array( 'QBOE' ),
+			'SalesReceiptLineAdd SalesTaxCodeRef FullName' => array( 'QBOE' ),
 			);
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
-	'CustomerRef ListID', 
-	'CustomerRef FullName', 
-	'ClassRef ListID', 
-	'ClassRef FullName', 
-	'TemplateRef ListID', 
-	'TemplateRef FullName', 
-	'TxnDate', 
-	'RefNumber', 
-	'BillAddress Addr1', 
-	'BillAddress Addr2', 
-	'BillAddress Addr3', 
-	'BillAddress Addr4', 
-	'BillAddress Addr5', 
-	'BillAddress City', 
-	'BillAddress State', 
-	'BillAddress County', 
-	'BillAddress Province', 
-	'BillAddress PostalCode', 
-	'BillAddress Country', 
-	'BillAddress Note', 
-	'ShipAddress Addr1', 
-	'ShipAddress Addr2', 
-	'ShipAddress Addr3', 
-	'ShipAddress Addr4', 
-	'ShipAddress Addr5', 
-	'ShipAddress City', 
-	'ShipAddress State', 
-	'ShipAddress County', 
-	'ShipAddress Province', 
-	'ShipAddress PostalCode', 
-	'ShipAddress Country', 
-	'ShipAddress Note', 
-	'IsPending', 
-	'CheckNumber', 
-	'PaymentMethodRef ListID', 
-	'PaymentMethodRef FullName', 
-	'DueDate', 
-	'SalesRepRef ListID', 
-	'SalesRepRef FullName', 
-	'ShipDate', 
-	'ShipMethodRef ListID', 
-	'ShipMethodRef FullName', 
-	'FOB', 
-	'ItemSalesTaxRef ListID', 
-	'ItemSalesTaxRef FullName', 
-	'Memo', 
-	'CustomerMsgRef ListID', 
-	'CustomerMsgRef FullName', 
-	'IsToBePrinted', 
-	'IsToBeEmailed', 
-	'IsTaxIncluded', 
-	'CustomerSalesTaxCodeRef ListID', 
-	'CustomerSalesTaxCodeRef FullName', 
-	'DepositToAccountRef ListID', 
-	'DepositToAccountRef FullName', 
-	'CreditCardTxnInfo CreditCardTxnInputInfo CreditCardNumber', 
-	'CreditCardTxnInfo CreditCardTxnInputInfo ExpirationMonth', 
-	'CreditCardTxnInfo CreditCardTxnInputInfo ExpirationYear', 
-	'CreditCardTxnInfo CreditCardTxnInputInfo NameOnCard', 
-	'CreditCardTxnInfo CreditCardTxnInputInfo CreditCardAddress', 
-	'CreditCardTxnInfo CreditCardTxnInputInfo CreditCardPostalCode', 
-	'CreditCardTxnInfo CreditCardTxnInputInfo CommercialCardCode', 
-	'CreditCardTxnInfo CreditCardTxnInputInfo TransactionMode', 
-	'CreditCardTxnInfo CreditCardTxnInputInfo CreditCardTxnType', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo ResultCode', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo ResultMessage', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo CreditCardTransID', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo MerchantAccountNumber', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo AuthorizationCode', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo AVSStreet', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo AVSZip', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo CardSecurityCodeMatch', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo ReconBatchID', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo PaymentGroupingCode', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo PaymentStatus', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo TxnAuthorizationTime', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo TxnAuthorizationStamp', 
-	'CreditCardTxnInfo CreditCardTxnResultInfo ClientTransID', 
-	'Other', 
-	'SalesReceiptLineAdd', 
-	'SalesReceiptLineAdd ItemRef', 
-	'SalesReceiptLineAdd ItemRef ListID', 
-	'SalesReceiptLineAdd ItemRef FullName', 
-	'SalesReceiptLineAdd Desc', 
-	'SalesReceiptLineAdd Quantity', 
-	'SalesReceiptLineAdd UnitOfMeasure', 
-	'SalesReceiptLineAdd Rate', 
-	'SalesReceiptLineAdd RatePercent', 
-	'SalesReceiptLineAdd PriceLevelRef ListID', 
-	'SalesReceiptLineAdd PriceLevelRef FullName', 
-	'SalesReceiptLineAdd ClassRef ListID', 
-	'SalesReceiptLineAdd ClassRef FullName', 
-	'SalesReceiptLineAdd Amount', 
-	'SalesReceiptLineAdd InventorySiteRef ListID', 
-	'SalesReceiptLineAdd InventorySiteRef FullName', 
-	'SalesReceiptLineAdd ServiceDate', 
-	'SalesReceiptLineAdd SalesTaxCodeRef ListID', 
-	'SalesReceiptLineAdd SalesTaxCodeRef FullName', 
-	'SalesReceiptLineAdd IsTaxable', 
-	'SalesReceiptLineAdd OverrideItemAccountRef ListID', 
-	'SalesReceiptLineAdd OverrideItemAccountRef FullName', 
-	'SalesReceiptLineAdd Other1', 
-	'SalesReceiptLineAdd Other2', 
-	'SalesReceiptLineAdd', 
-	'SalesReceiptLineAdd CreditCardTxnInfo', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CreditCardNumber', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo ExpirationMonth', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo ExpirationYear', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo NameOnCard', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CreditCardAddress', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CreditCardPostalCode', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CommercialCardCode', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo TransactionMode', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CreditCardTxnType', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo ResultCode', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo ResultMessage', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo CreditCardTransID', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo MerchantAccountNumber', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo AuthorizationCode', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo AVSStreet', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo AVSZip', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo CardSecurityCodeMatch', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo ReconBatchID', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo PaymentGroupingCode', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo PaymentStatus', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo TxnAuthorizationTime', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo TxnAuthorizationStamp', 
-	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo ClientTransID', 
-	'SalesReceiptLineAdd DataExt OwnerID', 
-	'SalesReceiptLineAdd DataExt DataExtName', 
-	'SalesReceiptLineAdd DataExt DataExtValue', 
-	'SalesReceiptLineGroupAdd ItemGroupRef ListID', 
-	'SalesReceiptLineGroupAdd ItemGroupRef FullName', 
-	'SalesReceiptLineGroupAdd Desc', 
-	'SalesReceiptLineGroupAdd Quantity', 
-	'SalesReceiptLineGroupAdd UnitOfMeasure', 
-	'SalesReceiptLineGroupAdd ServiceDate', 
-	'SalesReceiptLineGroupAdd DataExt OwnerID', 
-	'SalesReceiptLineGroupAdd DataExt DataExtName', 
-	'SalesReceiptLineGroupAdd DataExt DataExtValue', 
-	'DiscountLineAdd', 
-	'DiscountLineAdd Amount', 
-	'DiscountLineAdd RatePercent', 
-	'DiscountLineAdd IsTaxable', 
-	'DiscountLineAdd AccountRef ListID', 
-	'DiscountLineAdd AccountRef FullName', 
-	'SalesTaxLineAdd', 
-	'SalesTaxLineAdd Amount', 
-	'SalesTaxLineAdd RatePercent', 
-	'SalesTaxLineAdd AccountRef ListID', 
-	'SalesTaxLineAdd AccountRef FullName', 
-	'ShippingLineAdd', 
-	'ShippingLineAdd Amount', 
-	'ShippingLineAdd AccountRef ListID', 
-	'ShippingLineAdd AccountRef FullName', 
-	'IncludeRetElement', 
+	'CustomerRef ListID',
+	'CustomerRef FullName',
+	'ClassRef ListID',
+	'ClassRef FullName',
+	'TemplateRef ListID',
+	'TemplateRef FullName',
+	'TxnDate',
+	'RefNumber',
+	'BillAddress Addr1',
+	'BillAddress Addr2',
+	'BillAddress Addr3',
+	'BillAddress Addr4',
+	'BillAddress Addr5',
+	'BillAddress City',
+	'BillAddress State',
+	'BillAddress County',
+	'BillAddress Province',
+	'BillAddress PostalCode',
+	'BillAddress Country',
+	'BillAddress Note',
+	'ShipAddress Addr1',
+	'ShipAddress Addr2',
+	'ShipAddress Addr3',
+	'ShipAddress Addr4',
+	'ShipAddress Addr5',
+	'ShipAddress City',
+	'ShipAddress State',
+	'ShipAddress County',
+	'ShipAddress Province',
+	'ShipAddress PostalCode',
+	'ShipAddress Country',
+	'ShipAddress Note',
+	'IsPending',
+	'CheckNumber',
+	'PaymentMethodRef ListID',
+	'PaymentMethodRef FullName',
+	'DueDate',
+	'SalesRepRef ListID',
+	'SalesRepRef FullName',
+	'ShipDate',
+	'ShipMethodRef ListID',
+	'ShipMethodRef FullName',
+	'FOB',
+	'ItemSalesTaxRef ListID',
+	'ItemSalesTaxRef FullName',
+	'Memo',
+	'CustomerMsgRef ListID',
+	'CustomerMsgRef FullName',
+	'IsToBePrinted',
+	'IsToBeEmailed',
+	'IsTaxIncluded',
+	'CustomerSalesTaxCodeRef ListID',
+	'CustomerSalesTaxCodeRef FullName',
+	'DepositToAccountRef ListID',
+	'DepositToAccountRef FullName',
+	'CreditCardTxnInfo CreditCardTxnInputInfo CreditCardNumber',
+	'CreditCardTxnInfo CreditCardTxnInputInfo ExpirationMonth',
+	'CreditCardTxnInfo CreditCardTxnInputInfo ExpirationYear',
+	'CreditCardTxnInfo CreditCardTxnInputInfo NameOnCard',
+	'CreditCardTxnInfo CreditCardTxnInputInfo CreditCardAddress',
+	'CreditCardTxnInfo CreditCardTxnInputInfo CreditCardPostalCode',
+	'CreditCardTxnInfo CreditCardTxnInputInfo CommercialCardCode',
+	'CreditCardTxnInfo CreditCardTxnInputInfo TransactionMode',
+	'CreditCardTxnInfo CreditCardTxnInputInfo CreditCardTxnType',
+	'CreditCardTxnInfo CreditCardTxnResultInfo ResultCode',
+	'CreditCardTxnInfo CreditCardTxnResultInfo ResultMessage',
+	'CreditCardTxnInfo CreditCardTxnResultInfo CreditCardTransID',
+	'CreditCardTxnInfo CreditCardTxnResultInfo MerchantAccountNumber',
+	'CreditCardTxnInfo CreditCardTxnResultInfo AuthorizationCode',
+	'CreditCardTxnInfo CreditCardTxnResultInfo AVSStreet',
+	'CreditCardTxnInfo CreditCardTxnResultInfo AVSZip',
+	'CreditCardTxnInfo CreditCardTxnResultInfo CardSecurityCodeMatch',
+	'CreditCardTxnInfo CreditCardTxnResultInfo ReconBatchID',
+	'CreditCardTxnInfo CreditCardTxnResultInfo PaymentGroupingCode',
+	'CreditCardTxnInfo CreditCardTxnResultInfo PaymentStatus',
+	'CreditCardTxnInfo CreditCardTxnResultInfo TxnAuthorizationTime',
+	'CreditCardTxnInfo CreditCardTxnResultInfo TxnAuthorizationStamp',
+	'CreditCardTxnInfo CreditCardTxnResultInfo ClientTransID',
+	'Other',
+	'SalesReceiptLineAdd',
+	'SalesReceiptLineAdd ItemRef',
+	'SalesReceiptLineAdd ItemRef ListID',
+	'SalesReceiptLineAdd ItemRef FullName',
+	'SalesReceiptLineAdd Desc',
+	'SalesReceiptLineAdd Quantity',
+	'SalesReceiptLineAdd UnitOfMeasure',
+	'SalesReceiptLineAdd Rate',
+	'SalesReceiptLineAdd RatePercent',
+	'SalesReceiptLineAdd PriceLevelRef ListID',
+	'SalesReceiptLineAdd PriceLevelRef FullName',
+	'SalesReceiptLineAdd ClassRef ListID',
+	'SalesReceiptLineAdd ClassRef FullName',
+	'SalesReceiptLineAdd Amount',
+	'SalesReceiptLineAdd InventorySiteRef ListID',
+	'SalesReceiptLineAdd InventorySiteRef FullName',
+	'SalesReceiptLineAdd ServiceDate',
+	'SalesReceiptLineAdd SalesTaxCodeRef ListID',
+	'SalesReceiptLineAdd SalesTaxCodeRef FullName',
+	'SalesReceiptLineAdd IsTaxable',
+	'SalesReceiptLineAdd OverrideItemAccountRef ListID',
+	'SalesReceiptLineAdd OverrideItemAccountRef FullName',
+	'SalesReceiptLineAdd Other1',
+	'SalesReceiptLineAdd Other2',
+	'SalesReceiptLineAdd',
+	'SalesReceiptLineAdd CreditCardTxnInfo',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CreditCardNumber',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo ExpirationMonth',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo ExpirationYear',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo NameOnCard',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CreditCardAddress',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CreditCardPostalCode',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CommercialCardCode',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo TransactionMode',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnInputInfo CreditCardTxnType',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo ResultCode',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo ResultMessage',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo CreditCardTransID',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo MerchantAccountNumber',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo AuthorizationCode',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo AVSStreet',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo AVSZip',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo CardSecurityCodeMatch',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo ReconBatchID',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo PaymentGroupingCode',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo PaymentStatus',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo TxnAuthorizationTime',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo TxnAuthorizationStamp',
+	'SalesReceiptLineAdd CreditCardTxnInfo CreditCardTxnResultInfo ClientTransID',
+	'SalesReceiptLineAdd DataExt OwnerID',
+	'SalesReceiptLineAdd DataExt DataExtName',
+	'SalesReceiptLineAdd DataExt DataExtValue',
+	'SalesReceiptLineGroupAdd ItemGroupRef ListID',
+	'SalesReceiptLineGroupAdd ItemGroupRef FullName',
+	'SalesReceiptLineGroupAdd Desc',
+	'SalesReceiptLineGroupAdd Quantity',
+	'SalesReceiptLineGroupAdd UnitOfMeasure',
+	'SalesReceiptLineGroupAdd ServiceDate',
+	'SalesReceiptLineGroupAdd DataExt OwnerID',
+	'SalesReceiptLineGroupAdd DataExt DataExtName',
+	'SalesReceiptLineGroupAdd DataExt DataExtValue',
+	'DiscountLineAdd',
+	'DiscountLineAdd Amount',
+	'DiscountLineAdd RatePercent',
+	'DiscountLineAdd IsTaxable',
+	'DiscountLineAdd AccountRef ListID',
+	'DiscountLineAdd AccountRef FullName',
+	'SalesTaxLineAdd',
+	'SalesTaxLineAdd Amount',
+	'SalesTaxLineAdd RatePercent',
+	'SalesTaxLineAdd AccountRef ListID',
+	'SalesTaxLineAdd AccountRef FullName',
+	'ShippingLineAdd',
+	'ShippingLineAdd Amount',
+	'ShippingLineAdd AccountRef ListID',
+	'ShippingLineAdd AccountRef FullName',
+	'IncludeRetElement',
 );
-			
+
 		return $paths;
 	}
 }

@@ -2,15 +2,15 @@
 
 /**
  * Example QuickBooks SOAP Server / Web Service for QuickBooks Point of Sale
- * 
- * This is an example Web Service which adds test dummy customers to QuickBooks 
- * Point of Sale via the Web Connector. 
- * 
- * You should probably also look through docs/example_web_connector.php for 
- * some additional documentation about what things do.  
- * 
+ *
+ * This is an example Web Service which adds test dummy customers to QuickBooks
+ * Point of Sale via the Web Connector.
+ *
+ * You should probably also look through docs/example_web_connector.php for
+ * some additional documentation about what things do.
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
@@ -30,7 +30,7 @@ ini_set('display_errors', true);
 // Require the framework
 require_once '../QuickBooks.php';
 
-// A username and password you'll use in: 
+// A username and password you'll use in:
 //	a) Your .QWC file
 //	b) The Web Connector
 //	c) The QuickBooks framework
@@ -54,10 +54,10 @@ $hooks = array(
 // Logging level
 //$log_level = QUICKBOOKS_LOG_NORMAL;
 //$log_level = QUICKBOOKS_LOG_VERBOSE;
-//$log_level = QUICKBOOKS_LOG_DEBUG;				
+//$log_level = QUICKBOOKS_LOG_DEBUG;
 $log_level = QUICKBOOKS_LOG_DEVELOP;		// Use this level until you're sure everything works!!!
 
-// What SOAP server you're using 
+// What SOAP server you're using
 //$soapserver = QUICKBOOKS_SOAPSERVER_PHP;			// The PHP SOAP extension, see: www.php.net/soap
 $soapserver = QUICKBOOKS_SOAPSERVER_BUILTIN;		// A pure-PHP SOAP server (no PHP ext/soap extension required, also makes debugging easier)
 
@@ -65,8 +65,8 @@ $soap_options = array(		// See http://www.php.net/soap
 	);
 
 $handler_options = array(
-	'deny_concurrent_logins' => false, 
-	'deny_reallyfast_logins' => false, 
+	'deny_concurrent_logins' => false,
+	'deny_reallyfast_logins' => false,
 	);		// See the comments in the QuickBooks/Server/Handlers.php file
 
 $driver_options = array(		// See the comments in the QuickBooks/Driver/<YOUR DRIVER HERE>.php file ( i.e. 'Mysql.php', etc. )
@@ -82,10 +82,10 @@ if (!QuickBooks_Utilities::initialized($dsn))
 {
 	// Initialize creates the neccessary database schema for queueing up requests and logging
 	QuickBooks_Utilities::initialize($dsn);
-	
+
 	// This creates a username and password which is used by the Web Connector to authenticate
 	QuickBooks_Utilities::createUser($dsn, $user, $pass);
-	
+
 	// We're going to queue up a request to add a customer, just as a test...
 	$primary_key_of_your_customer = 5;
 
@@ -135,23 +135,23 @@ function _quickbooks_pos_customer_add_request($requestID, $user, $action, $ID, $
 				</CustomerAddRq>
 			</QBPOSXMLMsgsRq>
 		</QBPOSXML>';
-	
+
 	return $xml;
 }
 
 /**
- * Receive a response from QuickBooks 
+ * Receive a response from QuickBooks
  */
 function _quickbooks_pos_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
-{	
-	// Great, customer $ID has been added to QuickBooks with a QuickBooks 
+{
+	// Great, customer $ID has been added to QuickBooks with a QuickBooks
 	//	ListID value of: $idents['ListID']
-	// 
-	// We probably want to store that ListID in our database, so we can use it 
-	//	later. (You'll need to refer to the customer by either ListID or Name 
-	//	in other requests, say, to update the customer or to add an invoice for 
-	//	the customer. 
-	
+	//
+	// We probably want to store that ListID in our database, so we can use it
+	//	later. (You'll need to refer to the customer by either ListID or Name
+	//	in other requests, say, to update the customer or to add an invoice for
+	//	the customer.
+
 	/*
 	mysql_query("UPDATE your_customer_table SET quickbooks_listid = '" . mysql_escape_string($idents['ListID']) . "' WHERE your_customer_ID_field = " . (int) $ID);
 	*/

@@ -2,16 +2,16 @@
 
 /**
  * Example QuickBooks Web Connector web service with custom authentication
- * 
- * This example shows how to use a custom authentication function to 
- * 
+ *
+ * This example shows how to use a custom authentication function to
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
 
-// I always program in E_STRICT error mode... 
+// I always program in E_STRICT error mode...
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', true);
 
@@ -26,7 +26,7 @@ if (function_exists('date_default_timezone_set'))
 //require_once '../QuickBooks.php';
 require_once '/Users/kpalmer/Projects/QuickBooks/QuickBooks.php';
 
-// A username and password you'll use in: 
+// A username and password you'll use in:
 //	a) Your .QWC file
 //	b) The Web Connector
 //	c) The QuickBooks framework
@@ -59,19 +59,19 @@ $dsn = 'mysql://root:root@localhost/quickbooks_auth';
 
 // Handler options
 $handler_options = array(
-	'authenticate' => '_quickbooks_custom_auth', 
+	'authenticate' => '_quickbooks_custom_auth',
 	//'authenticate' => '_QuickBooksClass::theStaticMethod',
-	'deny_concurrent_logins' => false, 
+	'deny_concurrent_logins' => false,
 	);
 
 if (!QuickBooks_Utilities::initialized($dsn))
 {
 	// Initialize creates the neccessary database schema for queueing up requests and logging
 	QuickBooks_Utilities::initialize($dsn);
-	
+
 	// This creates a username and password which is used by the Web Connector to authenticate
 	QuickBooks_Utilities::createUser($dsn, $user, $pass);
-	
+
 	// Queueing up a test request
 	$primary_key_of_your_customer = 5;
 	$Queue = new QuickBooks_WebConnector_Queue($dsn);
@@ -88,15 +88,15 @@ $response = $Server->handle(true, true);
  */
 function _quickbooks_custom_auth($username, $password, &$qb_company_file)
 {
-	if ($username == 'keith' and 
+	if ($username == 'keith' and
 		$password == 'rocks')
 	{
 		// Use this company file and auth successfully
 		$qb_company_file = 'C:\path\to\the\file-function.QBW';
-		
+
 		return true;
 	}
-	
+
 	// Login failure
 	return false;
 }
@@ -110,18 +110,18 @@ class _QuickBooksClass
 	static public function theStaticMethod($username, $password, &$qb_company_file)
 	{
 		//print('username [' . $username . '] [' . $password . ']');
-		
-		if ($username == 'keith' and 
+
+		if ($username == 'keith' and
 			$password == 'rocks')
 		{
 			// Use this company file and auth successfully
 			$qb_company_file = 'C:\path\to\the\file-staticmethod.QBW';
-			
+
 			//print('returning true...');
-			
+
 			return true;
 		}
-		
+
 		// Login failure
 		return false;
 	}
@@ -134,7 +134,7 @@ class _QuickBooksClass
 function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
 	// We're just testing, so we'll just use a static test request:
-	 
+
 	$xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="2.0"?>
 		<QBXML>
@@ -162,14 +162,14 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 				</CustomerAddRq>
 			</QBXMLMsgsRq>
 		</QBXML>';
-	
+
 	return $xml;
 }
 
 /**
- * Receive a response from QuickBooks 
+ * Receive a response from QuickBooks
  */
 function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-	return;	
+	return;
 }

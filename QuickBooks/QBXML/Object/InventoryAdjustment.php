@@ -236,7 +236,7 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 	{
 		return $this->get('TxnID');
 	}
-	
+
 	public function setTxnID($TxnID)
 	{
 		return $this->set('TxnID', $TxnID);
@@ -246,17 +246,17 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 	{
 		return $this->get('RefNumberCaseSensitive');
 	}
-	
+
 	public function setRefNumberCaseSensitive($value)
 	{
 		return $this->set('RefNumberCaseSensitive', $value);
 	}
-	
+
 	public function getMaxReturned()
 	{
 		return $this->get('MaxReturned');
 	}
-	
+
 	public function setMaxReturned($max)
 	{
 		return $this->set('MaxReturned', $max);
@@ -266,47 +266,47 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 	{
 		return $this->get('ModifiedDateRangeFilter FromModifiedDate');
 	}
-	
+
 	public function setFromModifiedDate($date)
 	{
 		return $this->set('ModifiedDateRangeFilter FromModifiedDate', $date);
 	}
-	
+
 	public function getToModifiedDate()
 	{
 		return $this->get('ModifiedDateRangeFilter ToModifiedDate');
 	}
-	
+
 	public function setToModifiedDate($date)
 	{
 		return $this->set('ModifiedDateRangeFilter ToModifiedDate', $date);
 	}
-	
+
 	public function getFromTxnDate()
 	{
 		return $this->get('TxnDateRangeFilter FromTxnDate');
 	}
-	
+
 	public function setFromTxnDate($date)
 	{
 		return $this->set('TxnDateRangeFilter FromTxnDate', $date);
 	}
-	
+
 	public function getToTxnDate()
 	{
 		return $this->get('TxnDateRangeFilter ToTxnDate');
 	}
-	
+
 	public function setToTxnDate($date)
 	{
 		return $this->set('TxnDateRangeFilter ToTxnDate', $date);
 	}
-	
+
 	public function getDateMacro()
 	{
 		return $this->get('TxnDateRangeFilter DateMacro');
 	}
-	
+
 	public function setDateMacro($macro)
 	{
 		return $this->set('TxnDateRangeFilter DateMacro', $macro);
@@ -316,37 +316,37 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 	{
 		return $this->get('EntityFilter ListID');
 	}
-	
+
 	public function setEntityListID($listid)
 	{
 		return $this->set('EntityFilter ListID', $listid);
 	}
-	
+
 	public function getEntityFullName()
 	{
 		return $this->get('EntityFilter FullName');
 	}
-	
+
 	public function setEntityFullName($name)
 	{
 		return $this->set('EntityFilter FullName', $name);
 	}
-	
+
 	public function getEntityListIDWithChildren()
 	{
 		return $this->get('EntityFilter ListIDWithChildren');
 	}
-	
+
 	public function setEntityListIDWithChildren($listid)
 	{
 		return $this->set('EntityFilter ListIDWithChildren', $listid);
 	}
-	
+
 	public function getEntityFullNameWithChildren()
 	{
 		return $this->get('EntityFilter FullNameWithChildren');
 	}
-	
+
 	public function setEntityFullNameWithChildren($name)
 	{
 		return $this->set('EntityFilter FullNameWithChildren', $name);
@@ -356,37 +356,37 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 	{
 		return $this->get('AccountFilter ListID');
 	}
-	
+
 	public function setFilterAccountListID($listid)
 	{
 		return $this->set('AccountFilter ListID', $listid);
 	}
-	
+
 	public function getFilterAccountFullName()
 	{
 		return $this->get('AccountFilter FullName');
 	}
-	
+
 	public function setFilterAccountFullName($name)
 	{
 		return $this->set('AccountFilter FullName', $name);
 	}
-	
+
 	public function getFilterAccountListIDWithChildren()
 	{
 		return $this->get('AccountFilter ListIDWithChildren');
 	}
-	
+
 	public function setFilterAccountListIDWithChildren($listid)
 	{
 		return $this->set('AccountFilter ListIDWithChildren', $listid);
 	}
-	
+
 	public function getFilterAccountFullNameWithChildren()
 	{
 		return $this->get('AccountFilter FullNameWithChildren');
 	}
-	
+
 	public function setFilterAccountFullNameWithChildren($name)
 	{
 		return $this->set('AccountFilter FullNameWithChildren', $name);
@@ -396,37 +396,37 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 	{
 		return $this->get('ItemFilter ListID');
 	}
-	
+
 	public function setFilterItemListID($listid)
 	{
 		return $this->set('ItemFilter ListID', $listid);
 	}
-	
+
 	public function getFilterItemName()
 	{
 		return $this->get('ItemFilter FullName');
 	}
-	
+
 	public function setFilterItemName($name)
 	{
 		return $this->set('ItemFilter FullName', $name);
 	}
-	
+
 	public function getFilterItemListIDWithChildren()
 	{
 		return $this->get('ItemFilter ListIDWithChildren');
 	}
-	
+
 	public function setFilterItemListIDWithChildren($listid)
 	{
 		return $this->set('ItemFilter ListIDWithChildren', $listid);
 	}
-	
+
 	public function getFilterItemFullNameWithChildren()
 	{
 		return $this->get('ItemFilter FullNameWithChildren');
 	}
-	
+
 	public function setFilterItemFullNameWithChildren($name)
 	{
 		return $this->set('ItemFilter FullNameWithChildren', $name);
@@ -436,37 +436,37 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 	{
 		return $this->get('RefNumberFilter MatchCriterion');
 	}
-	
+
 	public function setFilterRefNumberMatchCriterion($refnumber)
 	{
 		return $this->set('RefNumberFilter MatchCriterion', $refnumber);
 	}
-	
+
 	public function getFilterRefNumberRefNumber()
 	{
 		return $this->get('RefNumberFilter RefNumber');
 	}
-	
+
 	public function setFilterRefNumberRefNumber($refnumber)
 	{
 		return $this->set('RefNumberFilter RefNumber', $refnumber);
 	}
-	
+
 	public function getFilterRefNumberRangeFromRefNumber()
 	{
 		return $this->get('RefNumberRangeFilter FromRefNumber');
 	}
-	
+
 	public function setFilterRefNumberRangeFromRefNumber($refnumber)
 	{
 		return $this->set('RefNumberRangeFilter FromRefNumber', $refnumber);
 	}
-	
+
 	public function getFilterRefNumberRangeToRefNumber()
 	{
 		return $this->get('RefNumberRangeFilter ToRefNumber');
 	}
-	
+
 	public function setFilterRefNumberRangeToRefNumber($refnumber)
 	{
 		return $this->set('RefNumberRangeFilter ToRefNumber', $refnumber);
@@ -478,27 +478,27 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 	{
 		return $this->get('IncludeLineItems');
 	}
-	
+
 	public function setIncludeLineItems($)
 	{
 		return $this->set('IncludeLineItems', $);
 	}
-	
+
 	public function getIncludeRetElement()
 	{
 		return $this->get('IncludeRetElement');
 	}
-	
+
 	public function setIncludeRetElement($)
 	{
 		return $this->set('IncludeRetElement', $);
 	}
-	
+
 	public function getOwnerID()
 	{
 		return $this->get('OwnerID');
 	}
-	
+
 	public function setOwnerID($)
 	{
 		return $this->set('OwnerID', $);
@@ -547,7 +547,7 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
 		{
 			$object = $this->_object;
 		}
-		
+
 		switch ($root)
 		{
 			case QUICKBOOKS_ADD_INVENTORYADJUSTMENT:

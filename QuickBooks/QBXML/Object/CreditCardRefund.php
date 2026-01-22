@@ -2,12 +2,12 @@
 
 /**
  * QuickBooks CreditCardRefund object
- * 
+ *
  * @author Jayson Lindsley <jay.lindsley@gmail.com>
  * @author Keith Palmer <keith@consolibyte.com>
  *
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage Object
  */
@@ -25,7 +25,7 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
  {
  	/**
 	 * Create a new QuickBooks_Object_Customer object
-	 * 
+	 *
 	 * @param array $arr
 	 */
 
@@ -68,17 +68,17 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 	{
 		return $this->set('ARAccountRef ListID', $ListID);
 	}
-	
+
 	public function setARAccountName($name)
 	{
 		return $this->set('ARAccountRef FullName', $name);
 	}
-	
+
 	public function getARAccountListID()
 	{
 		return $this->get('ARAccountRef ListID');
 	}
-	
+
 	public function getARAccountName()
 	{
 		return $this->get('ARAccountRef FullName');
@@ -88,17 +88,17 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 	{
 		return $this->set('PaymentMethodRef FullName', $name);
 	}
-	
+
 	public function getPaymentMethodName()
 	{
 		return $this->get('PaymentMethodRef FullName');
 	}
-	
+
 	public function setPaymentMethodListID($ListID)
 	{
 		return $this->set('PaymentMethodRef ListID', $ListID);
 	}
-	
+
 	public function getPaymentMethodListID()
 	{
 		return $this->get('PaymentMethodRef ListID');
@@ -128,13 +128,13 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 	{
 		return $this->set('Memo', $memo);
 	}
-	
+
 	public function getMemo()
 	{
 		return $this->get('Memo');
 	}
-	
-	public function setRefundAppliedToTxnID($ID) 
+
+	public function setRefundAppliedToTxnID($ID)
 	{
 		return $this->set('RefundAppliedToTxnAdd TxnID', $ID);
 	}
@@ -248,10 +248,10 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 	/**
 	 * Set the credit card information for this refund
-	 * 
+	 *
 	 * @param string $cardno		The credit card number
 	 * @param integer $expmonth		The expiration month (1 is January, 2 is February, etc.)
-	 * @param integer $expyear		The expiration year 
+	 * @param integer $expyear		The expiration year
 	 * @param string $name			The name on the credit card
 	 * @param string $address		The billing address for the credit card
 	 * @param string $postalcode	The postal code for the credit card
@@ -267,13 +267,13 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 		$b = $this->set('CreditCardInfo NameOnCard', $name);
 		$b = $this->set('CreditCardInfo CreditCardAddress', $address);
 		$b = $this->set('CreditCardInfo CreditCardPostalCode', $postalcode);
-		
+
 		return $b;
 	}
 
 	/**
 	 * Get credit card information from the refund
-	 * 
+	 *
 	 * @param string $part		If you just want a specific part of the card info, specify it here
 	 * @param array $defaults	Defaults for the card data if you want the entire array
 	 * @return mixed			If you specify a part, a string part is returned, otherwise an array of card data
@@ -284,13 +284,13 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 		{
 			return $this->get('CreditCardInfo ' . $part);
 		}
-		
-		return $this->getArray('CreditCardInfo *', $defaults);		
+
+		return $this->getArray('CreditCardInfo *', $defaults);
 	}
 
 	/**
 	 * Set the address for the refund (optional)
-	 * 
+	 *
 	 * @param string $addr1			Address line 1
 	 * @param string $addr2			Address line 2
 	 * @param string $addr3			Address line 3
@@ -310,18 +310,18 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 		{
 			$this->set('Address Addr' . $i, ${'addr' . $i});
 		}
-		
+
 		$this->set('Address City', $city);
 		$this->set('Address State', $state);
 		$this->set('Address Province', $province);
 		$this->set('Address PostalCode', $postalcode);
 		$this->set('Address Country', $country);
-		$this->set('Address Note', $note);  
+		$this->set('Address Note', $note);
 	}
 
 	/**
-	 * Get the address 
-	 * 
+	 * Get the address
+	 *
 	 * @param string $part			A specific portion of the address to get (i.e. "Addr1" or "State")
 	 * @param array $defaults		Default values if a value isn't filled in
 	 * @return array				The address
@@ -332,13 +332,13 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 		{
 			return $this->get('Address ' . $part);
 		}
-		
+
 		return $this->getArray('Address *', $defaults);
 	}
 
 	/**
 	 * Set the transaction date
-	 * 
+	 *
 	 * @param string $date
 	 * @return boolean
 	 */
@@ -349,7 +349,7 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 
 	/**
 	 * Get the transaction date
-	 * 
+	 *
 	 * @param string $format	The format you want the date in (as for {@link http://www.php.net/date})
 	 * @return string
 	 */
@@ -370,10 +370,10 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 		$this->_cleanup();
 		return parent::asArray($request, $nest);
 	}
-	
+
 	/**
 	 * Convert this object to a valid qbXML request
-	 * 
+	 *
 	 * @param string $request						The type of request to convert this to (ARRefundCreditCardAddRq, or ARRefundCreditCardQuery)
 	 * @param boolean $todo_for_empty_elements		A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
 	 * @param string $indent
@@ -383,7 +383,7 @@ QuickBooks_Loader::load('/QuickBooks/QBXML/Object.php');
 	public function asQBXML($request, $todo_for_empty_elements = NULL, $indent = "\t", $root = null)
 	{
 		$this->_cleanup();
-		
+
 		return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
 	}
 

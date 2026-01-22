@@ -2,31 +2,31 @@
 
 /**
  * Schema object for: VendorAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 QuickBooks_Loader::load('/QuickBooks/QBXML/Schema/Object.php');
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_VendorAddRq extends QuickBooks_QBXML_Schema_Object
 {
 	protected function &_qbxmlWrapper()
 	{
 		static $wrapper = 'VendorAdd';
-		
+
 		return $wrapper;
 	}
-	
+
 	protected function &_dataTypePaths()
 	{
 		static $paths = array (
@@ -72,10 +72,10 @@ class QuickBooks_QBXML_Schema_Object_VendorAddRq extends QuickBooks_QBXML_Schema
   'BillingRateRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_maxLengthPaths()
 	{
 		static $paths = array (
@@ -121,10 +121,10 @@ class QuickBooks_QBXML_Schema_Object_VendorAddRq extends QuickBooks_QBXML_Schema
   'BillingRateRef FullName' => 159,
   'IncludeRetElement' => 50,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isOptionalPaths()
 	{
 		static $paths = array (
@@ -171,7 +171,7 @@ class QuickBooks_QBXML_Schema_Object_VendorAddRq extends QuickBooks_QBXML_Schema
   'IncludeRetElement' => true,
 );
 	}
-	
+
 	protected function &_sinceVersionPaths()
 	{
 		static $paths = array (
@@ -217,10 +217,10 @@ class QuickBooks_QBXML_Schema_Object_VendorAddRq extends QuickBooks_QBXML_Schema
   'BillingRateRef FullName' => 999.99,
   'IncludeRetElement' => 4,
 );
-		
+
 		return $paths;
 	}
-	
+
 	protected function &_isRepeatablePaths()
 	{
 		static $paths = array (
@@ -266,22 +266,22 @@ class QuickBooks_QBXML_Schema_Object_VendorAddRq extends QuickBooks_QBXML_Schema
   'BillingRateRef FullName' => false,
   'IncludeRetElement' => true,
 );
-			
+
 		return $paths;
 	}
-	
+
 	/*
 	abstract protected function &_inLocalePaths()
 	{
 		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
+			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
 			);
-		
+
 		return $paths;
 	}
 	*/
-	
+
 	protected function &_reorderPathsPaths()
 	{
 		static $paths = array (
@@ -327,7 +327,7 @@ class QuickBooks_QBXML_Schema_Object_VendorAddRq extends QuickBooks_QBXML_Schema
   39 => 'BillingRateRef FullName',
   40 => 'IncludeRetElement',
 );
-			
+
 		return $paths;
 	}
 }

@@ -1,10 +1,10 @@
 <?php
 /**
  * QuickBooks SalesRep object container
- * 
+ *
  * @author Adam Heinz <amh@metricwise.net>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage Object
  */
@@ -21,7 +21,7 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
 {
 	/**
 	 * Create a new QuickBooks_Object_SalesRep object
-	 * 
+	 *
 	 * @param array $arr
 	 */
 	public function __construct($arr = array())
@@ -39,7 +39,7 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
 	{
 		return $this->set('Initial', $value);
 	}
-	
+
 	/**
 	 * Get the initials of this sales rep
 	 *
@@ -49,7 +49,7 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
 	{
 		return $this->get('Initial');
 	}
-	
+
 	/**
 	 * Set this sales rep active or not
 	 *
@@ -60,7 +60,7 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
 	{
 		return $this->set('IsActive', (boolean) $value);
 	}
-	
+
 	/**
 	 * Get whether or not this sales rep is active
 	 *
@@ -79,7 +79,7 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
 	{
 		return $this->set('SalesRepEntityRef ListID', $lid);
 	}
-	
+
 	/**
 	 * @param string $name
 	 * @return boolean
@@ -97,13 +97,13 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
 	public function asArray($request, $nest = true)
 	{
 		$this->_cleanup();
-		
+
 		return parent::asArray($request, $nest);
 	}
-	
+
 	/**
 	 * Convert this object to a valid qbXML request
-	 * 
+	 *
 	 * @param string $request The type of request to convert this to (examples: CustomerAddRq, CustomerModRq, CustomerQueryRq)
 	 * @param boolean $todo_for_empty_elements A constant, one of: QUICKBOOKS_XML_XML_COMPRESS, QUICKBOOKS_XML_XML_DROP, QUICKBOOKS_XML_XML_PRESERVE
 	 * @param string $indent
@@ -113,13 +113,13 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
 	public function asQBXML($request, $version = null, $locale = null, $root = null)
 	{
 		$this->_cleanup();
-		
+
 		return parent::asQBXML($request, $version = null, $locale = null, $root);
 	}
-	
+
 	/**
-	 * Tell what type of object this is 
-	 * 
+	 * Tell what type of object this is
+	 *
 	 * @return string
 	 */
 	public function object()

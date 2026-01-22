@@ -154,6 +154,42 @@ CREATE TABLE IF NOT EXISTS qb_example_item (
 
 -- --------------------------------------------------------
 
+
+--
+-- Table structure for table 'qb_example_purchaseorder'
+--
+
+CREATE TABLE IF NOT EXISTS qb_example_purchaseorder (
+  TxnID varchar(40) NOT NULL,
+  TimeCreated datetime NOT NULL,
+  TimeModified datetime NOT NULL,
+  RefNumber varchar(16) NOT NULL DEFAULT '',
+  Customer_ListID varchar(40) NOT NULL DEFAULT '',
+  Customer_FullName varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (TxnID)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+
+--
+-- Table structure for table 'qb_example_purchaseorder_lineitem'
+--
+
+CREATE TABLE IF NOT EXISTS qb_example_purchaseorder_lineitem (
+  TxnID varchar(40) NOT NULL,
+  TxnLineID varchar(40) NOT NULL,
+  Item_ListID varchar(40) NOT NULL DEFAULT '',
+  Item_FullName varchar(255) NOT NULL DEFAULT '',
+  Descrip text NOT NULL,
+  Quantity int(10) unsigned NOT NULL,
+  Rate float NOT NULL,
+  PRIMARY KEY (TxnID,TxnLineID)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+
 --
 -- Table structure for table 'qb_example_salesorder'
 --
