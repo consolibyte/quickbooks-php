@@ -1425,7 +1425,6 @@ class QuickBooks_Utilities
 			
 		$phpOffset = (int) date('Z');
 			
-		//mail("grgisme@gmail.com","Offsets","MysqlOffset: ".($mysqlOffset)."\n\n\nPHPOffset: ".$phpOffset);
 			
 		$timezoneDiff = $mysqlOffset - $phpOffset;
 			
@@ -1442,7 +1441,6 @@ class QuickBooks_Utilities
 			
 		$newMysqlTime = $mysql_t - $timezoneDiff;
 			
-		//mail("grgisme@gmail.com","TimeZone Diff","TimeZone Diff: ".($timezoneDiff));
 			
 		return $tempTime[0]." ".date("H:i:s", $newMysqlTime);
 		
@@ -1471,7 +1469,6 @@ class QuickBooks_Utilities
 		$mysql_t = mktime($mysqlTime[0], $mysqlTime[1], $mysqlTime[2], $tempTime[1], $tempTime[2], $tempTime[0], 0);
 		$QBTime = strtotime($QBTime);
 			
-		//mail("grgisme@gmail.com","QBTime","QBTime: ".($QBTime)."\n\n\nSQLTime: ".$mysql_t."\n\n\n".$SQLTime."\n\n\nDaylight Savings?: ".date('I'));
 			
 		if ($QBTime < $mysql_t)
 			return -1;
