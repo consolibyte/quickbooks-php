@@ -33,7 +33,7 @@
  * 	No registered handler for: ItemServiceQuery
  * 
  * @author Keith Palmer <keith@consolibyte.com>
- * @author Garrett Griffin <grgisme@gmail.com>
+ * @author Garrett Griffin
  * @license LICENSE.txt 
  * 
  * @package QuickBooks

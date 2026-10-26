@@ -7,7 +7,7 @@
  * Extra special thanks go out to Garrett at Space Coast IC for putting gobs of 
  * time and effort into completing this schema for a project for his company.  
  * 
- * @author Keith Palmer <keith@consolibyte.com>, Garrett <grgisme@gmail.com>
+ * @author Keith Palmer <keith@consolibyte.com>, Garrett
  * @license LICENSE.txt 
  * 
  * @package QuickBooks

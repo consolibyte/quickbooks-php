@@ -13,7 +13,7 @@
  * database abstraction and scheme generating functions for SQL back-ends.
  *
  * @author Keith Palmer <keith@consolibyte.com>
- * @author Garrett Griffin <grgisme@gmail.com>
+ * @author Garrett Griffin
  * @license LICENSE.txt
  *
  * @package QuickBooks
